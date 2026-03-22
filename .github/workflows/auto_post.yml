@@ -1,0 +1,48 @@
+name: Threads Auto Post
+
+on:
+  schedule:
+    # 30分おきに実行（GitHub ActionsはUTC、スクリプト側でJST 7:00-22:00を判定）
+    - cron: '0,30 * * * *'
+  workflow_dispatch:  # 手動実行も可能
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    env:
+      TZ: Asia/Tokyo  # datetime.now() がJSTを返すようにする
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Create .env from secrets
+        run: |
+          cat > .env << 'EOF'
+          THREADS_APP_ID=${{ secrets.THREADS_APP_ID }}
+          THREADS_APP_SECRET=${{ secrets.THREADS_APP_SECRET }}
+          THREADS_ACCESS_TOKEN_TRUTH=${{ secrets.THREADS_ACCESS_TOKEN_TRUTH }}
+          THREADS_USER_ID_TRUTH=${{ secrets.THREADS_USER_ID_TRUTH }}
+          THREADS_ACCESS_TOKEN_MASA=${{ secrets.THREADS_ACCESS_TOKEN_MASA }}
+          THREADS_USER_ID_MASA=${{ secrets.THREADS_USER_ID_MASA }}
+          EOF
+
+      - name: Run auto post
+        run: python3 auto_post.py
+
+      - name: Commit updated log files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add log_truth.jsonl log_masa.jsonl log_truth_posted.jsonl log_masa_posted.jsonl \
+                  insights_truth.json insights_masa.json past_posts.json past_posts_masa.json \
+                  2>/dev/null || true
+          git diff --cached --quiet || git commit -m "chore: update post logs [skip ci]"
+          git push || true

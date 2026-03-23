@@ -17,11 +17,16 @@ LOG_FILE = BASE / "log_truth.jsonl"
 
 TODAY = date.today().strftime("%Y-%m-%d")
 
-# ── テーマリスト ──────────────────────────────────
-THEMES = [
-    "肩こり", "頭痛", "水分不足", "姿勢", "食いしばり",
-    "年齢のせいにしない", "根本改善", "自己投資", "ワーママの体", "睡眠と体"
-]
+# ── myfilesから素材を読み込む（失敗時はデフォルト使用）──────────
+try:
+    from myfiles_loader import load_truth_materials, load_masa_materials
+    _truth_mat = load_truth_materials()
+    _masa_mat = load_masa_materials()
+    _MYFILES_LOADED = True
+except Exception:
+    _MYFILES_LOADED = False
+    _truth_mat = {}
+    _masa_mat = {}
 
 # ── 投稿パターン定義 ──────────────────────────────
 # 各パターンは (冒頭テンプレ, 中間テンプレ, 締めテンプレ) のリスト
@@ -92,25 +97,27 @@ PATTERNS = {
     },
 }
 
-# ── 素材 ──────────────────────────────────────────
-SYMPTOMS = ["肩こり", "頭痛", "首こり", "肩の重さ", "慢性的な肩こり", "頭の重さ"]
-CAUSES = [
+# ── 素材（myfilesロード済みならそちらを優先）────────────────────
+SYMPTOMS = _truth_mat.get("symptoms") or [
+    "肩こり", "頭痛", "首こり", "肩の重さ", "慢性的な肩こり", "頭の重さ"
+]
+CAUSES = _truth_mat.get("causes") or [
     "水分不足", "口呼吸", "食いしばり", "姿勢の歪み",
     "スマホの見すぎ", "デスクワーク", "運動不足", "睡眠不足"
 ]
 # 動詞句（〜したい、〜できないに続く形）
-LIFE_SCENES_VERB = [
+LIFE_SCENES_VERB = _truth_mat.get("life_scenes_verb") or [
     "子どもと思いっきり遊び", "休日を元気に過ごし", "仕事に集中し",
     "朝すっきり起き", "家族と笑って過ごし", "趣味を楽しみ",
     "料理や家事をこなし", "子どもの行事に参加し"
 ]
 # 名詞句（〜が変わる、〜を楽しむに続く形）
-LIFE_SCENES_NOUN = [
+LIFE_SCENES_NOUN = _truth_mat.get("life_scenes_noun") or [
     "子どもとの時間", "休日の過ごし方", "仕事への集中力",
     "朝の時間の使い方", "家族との時間", "趣味の時間",
     "日常の家事", "子どもの行事"
 ]
-HABITS = [
+HABITS = _truth_mat.get("habits") or [
     "口呼吸になっている", "食いしばりがある", "水分が足りていない",
     "スマホを長時間見ている", "猫背で座っている", "運動習慣がない",
     "睡眠が浅い", "呼吸が浅くなっている"
@@ -181,7 +188,7 @@ def generate_30_posts() -> list[str]:
 
 LOG_FILE_MASA = BASE / "log_masa.jsonl"
 
-MASA_TOPICS = [
+MASA_TOPICS = _masa_mat.get("topics") or [
     "動画集客", "Instagram運用", "LINE集客", "広告費の考え方",
     "プロフィール設計", "コンテンツ設計", "動画広告", "MEO対策",
     "フォロワーより導線", "売上につながる投稿"
@@ -210,7 +217,7 @@ MASA_PATTERNS = {
     ],
 }
 
-MASA_POINTS = [
+MASA_POINTS = _masa_mat.get("insights") or [
     "ターゲットを絞ることが最優先です",
     "まず「誰に」「何を」伝えるかを決めること",
     "完璧を目指さず、まず公開することが大事",
@@ -223,7 +230,7 @@ MASA_POINTS = [
     "広告は「コスト」ではなく「投資」として考える",
 ]
 
-MASA_TIPS = [
+MASA_TIPS = _masa_mat.get("tips") or [
     "ターゲットを明確にする",
     "一貫したメッセージを発信する",
     "行動喚起を入れる",

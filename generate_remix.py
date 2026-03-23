@@ -124,15 +124,47 @@ HABITS = _truth_mat.get("habits") or [
 ]
 
 
-def fill(template: str) -> str:
+URL_KATAKORI = "https://beauty.hotpepper.jp/CSP/kr/reserve/?storeId=H000596246&couponId=CP00000008152494&add=0"
+URL_ZUTSUU   = "https://beauty.hotpepper.jp/CSP/kr/reserve/?storeId=H000596246&couponId=CP00000008707618&add=0"
+
+SYMPTOMS_KATAKORI = ["肩こり", "肩の重さ", "首こり", "慢性的な肩こり", "肩の張り"]
+SYMPTOMS_ZUTSUU   = ["頭痛", "頭の重さ", "慢性頭痛", "頭がズキズキする", "頭が重い"]
+
+CTA_KATAKORI_TEMPLATES = [
+    "肩こりで毎日がしんどいあなたへ。\n\n{cause}を変えるだけで、\n体が驚くほど楽になります。\n\n▶ 肩こり専門の施術はこちら\n{url}",
+    "「肩こり、もう諦めてた」\n\nそんな方こそ来てほしい。\n\n{cause}が原因のことが多く、\n根本から変えられます。\n\n▶ 予約はこちら\n{url}",
+    "肩こりを「年齢のせい」にする前に、\n一度試してみてください。\n\n改善率93.7%、施術実績1万人。\n根本から整えます。\n\n▶ {url}",
+    "慢性的な肩こりで\n{life_scene_n}が思い切り楽しめていない方へ。\n\n体を整えると、日常が変わります。\n\n▶ 肩こり改善の予約はこちら\n{url}",
+]
+
+CTA_ZUTSUU_TEMPLATES = [
+    "週に何度も頭痛薬を飲んでいませんか？\n\n薬は一時しのぎ。\n{cause}を根本から変えると、\n頭痛の頻度が下がります。\n\n▶ 頭痛専門の施術はこちら\n{url}",
+    "「また頭痛だ」が口癖になっているなら、\n一度体を診てもらってください。\n\n原因を探ると、意外なところにあります。\n\n▶ 予約はこちら\n{url}",
+    "頭痛を「仕方ない」と思っている方へ。\n\n{cause}を整えると、\n頭痛が出にくい体になります。\n\n▶ {url}",
+    "頭痛があると、\n{life_scene_n}が半減しますよね。\n\n根本から改善した方が\n長い目でみてずっと楽です。\n\n▶ 頭痛改善の予約はこちら\n{url}",
+]
+
+def fill(template: str, symptom: str = None) -> str:
+    s = symptom or random.choice(SYMPTOMS)
     return (template
-            .replace("{symptom}", random.choice(SYMPTOMS))
+            .replace("{symptom}", s)
             .replace("{cause}", random.choice(CAUSES))
             .replace("{life_scene_v}", random.choice(LIFE_SCENES_VERB))
             .replace("{life_scene_n}", random.choice(LIFE_SCENES_NOUN))
             .replace("{habit1}", random.choice(HABITS))
             .replace("{habit2}", random.choice(HABITS))
             .replace("{habit3}", random.choice(HABITS)))
+
+def generate_cta_post(target: str) -> str:
+    """target: 'katakori' or 'zutsuu'"""
+    if target == "katakori":
+        tmpl = random.choice(CTA_KATAKORI_TEMPLATES)
+        symptom = random.choice(SYMPTOMS_KATAKORI)
+        return fill(tmpl.replace("{url}", URL_KATAKORI), symptom=symptom)
+    else:
+        tmpl = random.choice(CTA_ZUTSUU_TEMPLATES)
+        symptom = random.choice(SYMPTOMS_ZUTSUU)
+        return fill(tmpl.replace("{url}", URL_ZUTSUU), symptom=symptom)
 
 
 def generate_post(pattern_key: str) -> str:
@@ -159,27 +191,36 @@ def generate_post(pattern_key: str) -> str:
 
 
 def generate_30_posts() -> list[str]:
-    # 分布: 共感8・インサイト8・教育6・ストーリー5・ワーママ3
+    # 分布: 共感7・インサイト7・教育6・ストーリー5・ワーママ3 + CTA(肩こり2・頭痛2)
     plan = (
-        ["quote_empathy"] * 8 +
-        ["insight"] * 8 +
+        ["quote_empathy"] * 7 +
+        ["insight"] * 7 +
         ["education"] * 6 +
-        ["story"] * 5 +
-        ["workmom"] * 3
+        ["story"] * 4 +
+        ["workmom"] * 2
     )
     random.shuffle(plan)
 
     posts = []
     seen = set()
     for pk in plan:
-        for _ in range(10):  # 重複回避リトライ
+        for _ in range(10):
             post = generate_post(pk)
             if post not in seen:
                 seen.add(post)
                 posts.append(post)
                 break
 
-    return posts
+    # 肩こりCTA 2本・頭痛CTA 2本をランダムな位置に差し込む
+    cta_posts = (
+        [generate_cta_post("katakori") for _ in range(2)] +
+        [generate_cta_post("zutsuu")   for _ in range(2)]
+    )
+    for cta in cta_posts:
+        pos = random.randint(0, len(posts))
+        posts.insert(pos, cta)
+
+    return posts[:30]
 
 
 # ══════════════════════════════════════════════

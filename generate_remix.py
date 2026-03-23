@@ -212,12 +212,29 @@ MASA_PATTERNS = {
         "集客に悩んでいる方へ。\n\n{point}\n\n{topic}は手段です。ゴールから逆算して設計してください。",
     ],
     "cta": [
-        "{topic}について相談したい方は、\nプロフィールのリンクからLINE登録してください。\n\n{point}\n\n一緒に仕組みを作りましょう。",
-        "無料で{topic}の相談に乗っています。\n\n{point}\n\nまずは話だけでも、お気軽にどうぞ。",
+        "{topic}で悩んでいる方、\nLINEで気軽に相談してください。\n\n{point}\n\n👉 https://lin.ee/8PsIHHC",
+        "無料でインスタ集客の相談に乗っています。\n\n{point}\n\nLINEからどうぞ 👉 https://lin.ee/8PsIHHC",
+        "「{topic}、何から始めればいい？」\nそんな方はLINEに登録してみてください。\n\n一緒に整理しましょう。\n👉 https://lin.ee/8PsIHHC",
+        "集客の仕組みを作りたい方へ。\n\n{point}\n\n詳しくはLINEで話しましょう。\n👉 https://lin.ee/8PsIHHC",
+    ],
+    # LINE誘導をさりげなく含む通常投稿（ハードCTAなし）
+    "soft_line": [
+        "{topic}について深掘りした内容を\nLINEで配信しています。\n\n{point}\n\n気になる方はプロフィールから。",
+        "この投稿が参考になったら、\nLINEでもっと詳しい話を読んでみてください。\n\n{point}",
+        "{topic}の実践ノウハウは\nLINEでこっそり共有しています。\n\n{point}",
     ],
 }
 
-MASA_POINTS = _masa_mat.get("insights") or [
+# テーブル行・長すぎる行を除外してクリーンなinsightsだけ使う
+_raw_insights = _masa_mat.get("insights") or []
+import re as _re
+_clean_insights = [
+    s for s in _raw_insights
+    if not _re.search(r'\s{2,}|[←→]|ステップ|チェックポイント|収益性', s)
+    and len(s) <= 35
+]
+
+MASA_POINTS = _clean_insights or [
     "ターゲットを絞ることが最優先です",
     "まず「誰に」「何を」伝えるかを決めること",
     "完璧を目指さず、まず公開することが大事",
@@ -254,11 +271,13 @@ def generate_masa_post(pattern_key: str) -> str:
 
 
 def generate_30_masa_posts() -> list[str]:
+    # 配分: 価値提供20本 / さりげないLINE誘導5本 / 直接CTA3本 / ストーリー2本
     plan = (
         ["insight"] * 10 +
-        ["education"] * 10 +
-        ["story"] * 7 +
-        ["cta"] * 3
+        ["education"] * 8 +
+        ["story"] * 4 +
+        ["soft_line"] * 5 +  # さりげないLINE言及（URL不記載）
+        ["cta"] * 3          # 直接LINE URL付きCTA（30本中3本のみ）
     )
     random.shuffle(plan)
 

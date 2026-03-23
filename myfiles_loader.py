@@ -139,37 +139,35 @@ _MASA_TIPS_BASE = [
 ]
 
 def _load_masa_extra_insights() -> list[str]:
-    """マーケティング書籍から洞察を追加抽出"""
+    """マーケティング書籍から自然な洞察フレーズを抽出"""
     results = []
     mkt_path = MYFILES_PATH / "マーケティング"
     for f in mkt_path.glob("*.md"):
         text = _read(f)
         for line in text.splitlines():
             c = _clean_line(line)
-            # 「〜が大切」「〜が重要」等のアドバイス行
-            if re.search(r'(大切|重要|必要|ポイント|本質|差|違い|まず)', c):
-                if 12 <= len(c) <= 40 and not c.startswith("http"):
+            # 記号・英数字・特殊表記が多い行を除外
+            if re.search(r'[←→「」『』（）【】]', c):
+                continue
+            if re.search(r'[A-Za-z]{3,}', c):
+                continue
+            # テーブル行・複数スペース行を除外
+            if re.search(r'\s{2,}', c):
+                continue
+            # 自然な日本語アドバイス行のみ
+            if re.search(r'(大切|重要|ポイント|本質|まず|一番|最優先)', c):
+                if 14 <= len(c) <= 35:
                     results.append(c)
-    return list(dict.fromkeys(results))[:10]
+    return list(dict.fromkeys(results))[:8]
 
 def load_masa_materials() -> dict:
     """myfilesを参照しつつ固定素材でフォールバック"""
     extra_insights = _load_masa_extra_insights()
     insights = list(dict.fromkeys(_MASA_INSIGHTS_BASE + extra_insights))
 
-    # アカウントプロフィールからトピック追加
-    profile_text = _read(MYFILES_PATH / "SNS・Threads" / "masahide_takahashi_" / "まとめ（プロフィール・インプ）.md")
-    extra_topics = []
-    for line in profile_text.splitlines():
-        c = _clean_line(line)
-        if any(kw in c for kw in ["集客", "Instagram", "動画", "LINE", "リール"]):
-            if 5 <= len(c) <= 18:
-                extra_topics.append(c)
-
-    topics = list(dict.fromkeys(_MASA_TOPICS_BASE + extra_topics[:8]))
-
+    # トピックは固定リストのみ使用（プロフィール行は混入しやすいため除外）
     return {
-        "topics": topics[:20],
+        "topics": _MASA_TOPICS_BASE,
         "insights": insights[:20],
         "tips": _MASA_TIPS_BASE,
     }

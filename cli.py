@@ -123,17 +123,25 @@ def cmd_generate(acct: str):
 
 
 def cmd_status(acct: str):
-    name = ACCOUNTS[acct]["name"]
-    posts = get_today_posts(acct)
-    posted = get_posted_indices(acct)
-
-    print(f"\n📊 {name} の今日の投稿状況 ({TODAY})")
-    if not posts:
-        print("  生成データなし → python3 cli.py generate で生成してください")
-        return
-    print(f"  生成数:   {len(posts)}本")
-    print(f"  投稿済み: {len(posted)}本")
-    print(f"  残り:     {len(posts) - len(posted)}本")
+    """ダッシュボード表示 + Obsidianレポートを更新"""
+    import subprocess
+    # report.py のダッシュボード表示を使う
+    result = subprocess.run(
+        [sys.executable, str(BASE / "report.py")],
+        capture_output=False
+    )
+    if result.returncode != 0:
+        # フォールバック: シンプル表示
+        name  = ACCOUNTS[acct]["name"]
+        posts = get_today_posts(acct)
+        posted = get_posted_indices(acct)
+        print(f"\n📊 {name} の今日の状況 ({TODAY})")
+        if not posts:
+            print("  生成データなし → python3 cli.py generate で生成してください")
+            return
+        print(f"  生成数:   {len(posts)}本")
+        print(f"  投稿済み: {len(posted)}本")
+        print(f"  残り:     {len(posts) - len(posted)}本")
 
 
 def cmd_post(acct: str, mode: str = "one"):
@@ -299,7 +307,7 @@ if __name__ == "__main__":
 
     if cmd == "generate":
         cmd_generate(acct)
-    elif cmd == "status":
+    elif cmd in ("status", "report", "dashboard"):
         cmd_status(acct)
     elif cmd == "post":
         mode = "all" if "all" in args[1:] else "one"

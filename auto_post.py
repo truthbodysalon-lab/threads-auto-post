@@ -258,6 +258,13 @@ def main():
         time.sleep(5)
         run_account("masa")
 
+    # 投稿後にObsidianレポートを自動更新
+    try:
+        subprocess.run([sys.executable, str(BASE / "report.py")],
+                       capture_output=True, timeout=30)
+    except Exception:
+        pass
+
 
 if __name__ == "__main__":
     main()

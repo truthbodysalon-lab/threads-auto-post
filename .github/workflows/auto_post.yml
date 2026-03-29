@@ -2,11 +2,10 @@ name: Threads Auto Post
 
 on:
   schedule:
-    # 30分おきに実行（GitHub ActionsはUTC、スクリプト側でJST 7:00-22:00を判定）
+    # 30分おきに実行（UTC）。スクリプト側でJST 7:00-23:00を判定
     - cron: '0,30 * * * *'
-  workflow_dispatch:  # 手動実行も可能
+  workflow_dispatch:
 
-# 同時実行を防ぐ（前のジョブが終わるまで次のジョブをキュー待ち）
 concurrency:
   group: threads-auto-post
   cancel-in-progress: false
@@ -15,44 +14,54 @@ jobs:
   post:
     runs-on: ubuntu-latest
     env:
-      TZ: Asia/Tokyo  # datetime.now() がJSTを返すようにする
+      TZ: Asia/Tokyo
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 1
+          token: ${{ secrets.GH_PAT }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
+      - name: Install dependencies
+        run: pip install PyNaCl --quiet
+
       - name: Create .env from secrets
         run: |
-          cat > .env << 'EOF'
+          cat > .env << EOF
           THREADS_APP_ID=${{ secrets.THREADS_APP_ID }}
           THREADS_APP_SECRET=${{ secrets.THREADS_APP_SECRET }}
           THREADS_ACCESS_TOKEN_TRUTH=${{ secrets.THREADS_ACCESS_TOKEN_TRUTH }}
           THREADS_USER_ID_TRUTH=${{ secrets.THREADS_USER_ID_TRUTH }}
           THREADS_ACCESS_TOKEN_MASA=${{ secrets.THREADS_ACCESS_TOKEN_MASA }}
           THREADS_USER_ID_MASA=${{ secrets.THREADS_USER_ID_MASA }}
+          GH_PAT=${{ secrets.GH_PAT }}
+          GH_REPO=${{ github.repository }}
           EOF
 
       - name: Run auto post
         run: python3 auto_post.py
 
+      - name: Sync refreshed tokens to GitHub Secrets
+        run: python3 token_manager.py --sync-secrets
+        continue-on-error: true
+
       - name: Commit updated log files
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add log_truth.jsonl log_masa.jsonl log_truth_posted.jsonl log_masa_posted.jsonl \
-                  insights_truth.json insights_masa.json past_posts.json past_posts_masa.json \
-                  2>/dev/null || true
-          git diff --cached --quiet || git commit -m "chore: update post logs [skip ci]"
-          # リトライ付きプッシュ（競合時はpullしてリベース後に再プッシュ）
+          git add log_truth.jsonl log_masa.jsonl \
+                  log_truth_posted.jsonl log_masa_posted.jsonl \
+                  insights_truth.json insights_masa.json \
+                  feedback.json 2>/dev/null || true
+          git diff --cached --quiet || git commit -m "chore: update logs [skip ci]"
           for i in 1 2 3; do
             git push && break
-            echo "Push failed (attempt $i), pulling and retrying..."
+            echo "Push failed (attempt $i), retrying..."
             git pull --rebase origin main
           done

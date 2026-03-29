@@ -173,21 +173,9 @@ def cmd_post(acct: str, mode: str = "one"):
 
 
 def cmd_feedback():
-    print("\n📝 フィードバックを入力（空行で終了）:")
-    lines = []
-    while True:
-        line = input()
-        if not line:
-            break
-        lines.append(line)
-    if not lines:
-        print("キャンセル")
-        return
-    ts = datetime.now().strftime("%Y-%m-%d %H:%M")
-    entry = f"\n### {ts}\n" + "\n".join(lines) + "\n"
-    content = FEEDBACK_FILE.read_text() if FEEDBACK_FILE.exists() else ""
-    FEEDBACK_FILE.write_text(content + entry)
-    print("✓ フィードバックを保存しました")
+    """フィードバックマネージャーを起動（パターン重み・NGワード・テンプレ管理）"""
+    import subprocess
+    subprocess.run([sys.executable, str(BASE / "feedback_manager.py")])
 
 
 def cmd_log(acct: str, n: int = 10):
@@ -203,6 +191,22 @@ def cmd_log(acct: str, n: int = 10):
         i = e["index"]
         text = (posts[i][:50].replace("\n", " ") + "...") if i < len(posts) else "（不明）"
         print(f"  [{e['date']}] #{i+1}: {text}")
+
+
+def cmd_review(days: int = 2):
+    import subprocess
+    subprocess.run(
+        [sys.executable, str(BASE / "review.py"), "--days", str(days)],
+        cwd=str(BASE)
+    )
+
+
+def cmd_tune(acct: str = "all"):
+    import subprocess
+    args = [sys.executable, str(BASE / "analyze_and_tune.py")]
+    if acct != "all":
+        args.append(acct)
+    subprocess.run(args, cwd=str(BASE))
 
 
 def cmd_analyze(acct: str):
@@ -253,9 +257,11 @@ def cmd_menu():
     print("  status   [truth|masa]  - 投稿状況確認")
     print("  post     [truth|masa]  - 次の1本を投稿")
     print("  post all [truth|masa]  - 残りを全部投稿")
-    print("  analyze  [truth|masa]  - インサイト取得・分析")
+    print("  review   [N日]         - 投稿をレビュー・評価 (例: review 3)")
+    print("  tune     [truth|masa]  - 分析＆生成パターン重み調整")
+    print("  analyze  [truth|masa]  - インサイト取得・分析（API）")
     print("  show     [truth|masa]  - 保存済みインサイト表示")
-    print("  feedback               - フィードバック記録")
+    print("  feedback               - メモ記録")
     print("  log      [truth|masa]  - 投稿履歴")
     print("  q                      - 終了")
     print()
@@ -278,6 +284,11 @@ def cmd_menu():
             mode = "all" if len(raw) > 1 and raw[1] == "all" else "one"
             a = resolve_account(raw[2] if len(raw) > 2 else raw[1] if len(raw) > 1 else "truth")
             cmd_post(a, mode)
+        elif cmd == "review":
+            days = int(raw[1]) if len(raw) > 1 and raw[1].isdigit() else 2
+            cmd_review(days)
+        elif cmd == "tune":
+            cmd_tune(arg if arg in ("truth", "masa") else "all")
         elif cmd == "analyze":
             cmd_analyze(acct)
         elif cmd == "show":
@@ -312,6 +323,11 @@ if __name__ == "__main__":
     elif cmd == "post":
         mode = "all" if "all" in args[1:] else "one"
         cmd_post(acct, mode)
+    elif cmd == "review":
+        days = int(args[1]) if len(args) > 1 and args[1].isdigit() else 2
+        cmd_review(days)
+    elif cmd == "tune":
+        cmd_tune(acct_arg if acct_arg in ("truth", "masa") else "all")
     elif cmd == "analyze":
         cmd_analyze(acct)
     elif cmd == "show":

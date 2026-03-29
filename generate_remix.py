@@ -19,7 +19,17 @@ TODAY = date.today().strftime("%Y-%m-%d")
 
 
 def _load_weights(acct: str) -> dict:
-    """weights_*.json から生成比率を読み込む。なければデフォルト値を返す。"""
+    """feedback.json → weights_*.json の順でパターン重みを読み込む"""
+    # feedback.json を優先
+    fb_file = BASE / "feedback.json"
+    if fb_file.exists():
+        try:
+            fb = json.loads(fb_file.read_text())
+            w = fb.get("pattern_weights", {})
+            if w:
+                return w
+        except Exception:
+            pass
     wfile = BASE / f"weights_{acct}.json"
     if wfile.exists():
         try:
@@ -27,6 +37,31 @@ def _load_weights(acct: str) -> dict:
         except Exception:
             pass
     return {}
+
+def _load_ng_words() -> list[str]:
+    """feedback.json からNGワードを読み込む"""
+    fb_file = BASE / "feedback.json"
+    if fb_file.exists():
+        try:
+            return json.loads(fb_file.read_text()).get("ng_words", [])
+        except Exception:
+            pass
+    return []
+
+def _load_extra_templates(acct: str) -> list[str]:
+    """feedback.json から追加テンプレを読み込む"""
+    fb_file = BASE / "feedback.json"
+    if fb_file.exists():
+        try:
+            return json.loads(fb_file.read_text()).get("extra_templates", {}).get(acct, [])
+        except Exception:
+            pass
+    return []
+
+def _is_ng(text: str) -> bool:
+    """NGワードを含む投稿を除外"""
+    ng = _load_ng_words()
+    return any(w in text for w in ng)
 
 # ── myfilesから素材を読み込む（失敗時はデフォルト使用）──────────
 try:
@@ -172,28 +207,40 @@ PATTERNS = {
 
 # ── 素材（myfilesロード済みならそちらを優先）────────────────────
 SYMPTOMS = _truth_mat.get("symptoms") or [
-    "肩こり", "頭痛", "首こり", "肩の重さ", "慢性的な肩こり", "頭の重さ"
+    "肩こり", "頭痛", "首こり", "肩の重さ", "慢性的な肩こり", "頭の重さ",
+    "眼精疲労", "背中のこり", "腰の重さ", "首の張り", "慢性疲労", "呼吸の浅さ",
+    "体のだるさ", "睡眠の浅さ", "顎の疲れ"
 ]
 CAUSES = _truth_mat.get("causes") or [
     "水分不足", "口呼吸", "食いしばり", "姿勢の歪み",
-    "スマホの見すぎ", "デスクワーク", "運動不足", "睡眠不足"
+    "スマホの見すぎ", "デスクワーク", "運動不足", "睡眠不足",
+    "呼吸の浅さ", "顎の緊張", "ストレス過多", "血流の悪さ",
+    "寝姿勢の悪さ", "首の前傾", "深夜のスマホ操作"
 ]
 # 動詞句（〜したい、〜できないに続く形）
 LIFE_SCENES_VERB = _truth_mat.get("life_scenes_verb") or [
     "子どもと思いっきり遊び", "休日を元気に過ごし", "仕事に集中し",
     "朝すっきり起き", "家族と笑って過ごし", "趣味を楽しみ",
-    "料理や家事をこなし", "子どもの行事に参加し"
+    "料理や家事をこなし", "子どもの行事に参加し",
+    "ぐっすり眠り", "仕事終わりに余裕を持って過ごし",
+    "休日に外出し", "好きな音楽を楽しみ"
 ]
 # 名詞句（〜が変わる、〜を楽しむに続く形）
 LIFE_SCENES_NOUN = _truth_mat.get("life_scenes_noun") or [
     "子どもとの時間", "休日の過ごし方", "仕事への集中力",
     "朝の時間の使い方", "家族との時間", "趣味の時間",
-    "日常の家事", "子どもの行事"
+    "日常の家事", "子どもの行事",
+    "夜の睡眠の質", "仕事後のリラックス時間",
+    "週末の外出", "自分だけのリフレッシュ時間"
 ]
 HABITS = _truth_mat.get("habits") or [
     "口呼吸になっている", "食いしばりがある", "水分が足りていない",
     "スマホを長時間見ている", "猫背で座っている", "運動習慣がない",
-    "睡眠が浅い", "呼吸が浅くなっている"
+    "睡眠が浅い", "呼吸が浅くなっている",
+    "枕の高さが合っていない", "寝る直前までスマホを見ている",
+    "デスクワークが1日6時間以上ある", "顎に力が入りやすい",
+    "休憩なしで集中し続けている", "水を1日1L以下しか飲んでいない",
+    "ストレッチを全くしていない", "同じ姿勢で2時間以上作業している"
 ]
 
 
@@ -302,16 +349,20 @@ def generate_30_posts() -> list[str]:
     posts = []
     seen = set()
     for pk in plan:
-        for _ in range(30):
+        for _ in range(50):
             post = generate_post(pk)
-            key = post[:60]  # 先頭60文字で重複判定（完全一致より緩く）
-            if key not in seen:
+            key = post[:100]
+            if key not in seen and not _is_ng(post):
                 seen.add(key)
                 posts.append(post)
                 break
-        else:
-            # 30回試みても重複回避できない場合は強制追加
-            posts.append(generate_post(pk))
+
+    # feedback の追加テンプレを先頭に差し込む
+    for tmpl in _load_extra_templates("truth"):
+        try:
+            posts.insert(0, fill(tmpl))
+        except Exception:
+            pass
 
     # 肩こりCTA 2本・頭痛CTA 2本をランダムな位置に差し込む
     cta_posts = (
@@ -491,13 +542,18 @@ def generate_30_masa_posts() -> list[str]:
     for pk in plan:
         for _ in range(30):
             post = generate_masa_post(pk)
-            key = post[:60]  # 先頭60文字で重複判定
-            if key not in seen:
+            key = post[:60]
+            if key not in seen and not _is_ng(post):
                 seen.add(key)
                 posts.append(post)
                 break
-        else:
-            posts.append(generate_masa_post(pk))
+
+    # feedback の追加テンプレを先頭に差し込む
+    for tmpl in _load_extra_templates("masa"):
+        try:
+            posts.insert(0, generate_masa_post.__wrapped__(tmpl) if hasattr(generate_masa_post, "__wrapped__") else tmpl)
+        except Exception:
+            posts.insert(0, tmpl)
 
     return posts[:45]
 

@@ -154,13 +154,32 @@ def get_next_post(acct: str, today: str):
     today_entries = [e for e in entries if e.get("date") == today]
     if not today_entries:
         return None, -1
-    posts = today_entries[-1].get("posts", [])
-    posted_indices = get_posted_indices(acct, today)
+
+    # 全バッチから候補を収集（テキスト先頭80文字で重複排除）
+    seen_keys = set()
+    all_posts = []
+    for entry in today_entries:
+        for post in entry.get("posts", []):
+            clean, _ = extract_url_and_cta(post)
+            key = clean[:80]
+            if key not in seen_keys:
+                seen_keys.add(key)
+                all_posts.append(post)
+
+    # 投稿済みテキスト（新フォーマット: text フィールドあり）
     posted_texts = get_posted_texts(acct)
-    for i, text in enumerate(posts):
-        # インデックスでもテキストでも重複チェック
+
+    # 旧フォーマット対応: インデックス→テキスト変換（最終バッチ基準）
+    last_batch = today_entries[-1].get("posts", [])
+    old_posted_keys = set()
+    for idx in get_posted_indices(acct, today):
+        if idx < len(last_batch):
+            clean, _ = extract_url_and_cta(last_batch[idx])
+            old_posted_keys.add(clean[:80])
+
+    for i, text in enumerate(all_posts):
         clean, _ = extract_url_and_cta(text)
-        if i not in posted_indices and clean not in posted_texts:
+        if clean not in posted_texts and clean[:80] not in old_posted_keys:
             return text, i
     return None, -1
 

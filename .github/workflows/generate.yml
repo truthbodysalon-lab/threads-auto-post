@@ -1,0 +1,69 @@
+name: Threads Daily Generate
+
+on:
+  schedule:
+    # 毎日 7:00 JST (22:00 UTC 前日)
+    - cron: '0 22 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: threads-generate
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    env:
+      TZ: Asia/Tokyo
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          token: ${{ secrets.GH_PAT }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Create .env from secrets
+        run: |
+          cat > .env << EOF
+          THREADS_APP_ID=${{ secrets.THREADS_APP_ID }}
+          THREADS_APP_SECRET=${{ secrets.THREADS_APP_SECRET }}
+          THREADS_ACCESS_TOKEN_TRUTH=${{ secrets.THREADS_ACCESS_TOKEN_TRUTH }}
+          THREADS_USER_ID_TRUTH=${{ secrets.THREADS_USER_ID_TRUTH }}
+          THREADS_ACCESS_TOKEN_MASA=${{ secrets.THREADS_ACCESS_TOKEN_MASA }}
+          THREADS_USER_ID_MASA=${{ secrets.THREADS_USER_ID_MASA }}
+          GH_PAT=${{ secrets.GH_PAT }}
+          GH_REPO=${{ github.repository }}
+          EOF
+
+      - name: Run insights
+        run: python3 insights.py
+
+      - name: Run analyze and tune weights
+        run: python3 analyze_and_tune.py
+
+      - name: Generate posts for @truth_body_salon
+        run: python3 generate_remix.py truth
+
+      - name: Generate posts for @masahide_takahashi_
+        run: python3 generate_remix.py masa
+
+      - name: Commit generated posts and updated weights
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add log_truth.jsonl log_masa.jsonl \
+                  insights_truth.json insights_masa.json \
+                  past_posts.json past_posts_masa.json \
+                  weights_truth.json weights_masa.json 2>/dev/null || true
+          git diff --cached --quiet || git commit -m "chore: daily generate & tune [skip ci]"
+          for i in 1 2 3; do
+            git push && break
+            echo "Push failed (attempt $i), retrying..."
+            git pull --rebase origin main
+          done

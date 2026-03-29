@@ -6,6 +6,11 @@ on:
     - cron: '0,30 * * * *'
   workflow_dispatch:  # 手動実行も可能
 
+# 同時実行を防ぐ（前のジョブが終わるまで次のジョブをキュー待ち）
+concurrency:
+  group: threads-auto-post
+  cancel-in-progress: false
+
 jobs:
   post:
     runs-on: ubuntu-latest
@@ -45,4 +50,9 @@ jobs:
                   insights_truth.json insights_masa.json past_posts.json past_posts_masa.json \
                   2>/dev/null || true
           git diff --cached --quiet || git commit -m "chore: update post logs [skip ci]"
-          git push || true
+          # リトライ付きプッシュ（競合時はpullしてリベース後に再プッシュ）
+          for i in 1 2 3; do
+            git push && break
+            echo "Push failed (attempt $i), pulling and retrying..."
+            git pull --rebase origin main
+          done

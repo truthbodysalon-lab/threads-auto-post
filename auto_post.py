@@ -11,8 +11,11 @@ launchd から30分おきに呼ばれ、両アカウントに1本ずつ投稿す
   - レート制限      → 60秒待機後リトライ
 """
 
+from __future__ import annotations
+
 import json
 import os
+import re
 import subprocess
 import sys
 import time
@@ -184,6 +187,53 @@ def api_request(url: str, data: bytes = None, retry: int = 0) -> dict:
         raise e
 
 
+_URL_RE = re.compile(r'https?://\S+')
+
+def extract_url_and_cta(text: str) -> tuple[str, str | None]:
+    """
+    本文からURLとその直前のCTAラベル行を切り出す。
+    戻り値: (URL除去済み本文, CTAブロック文字列 or None)
+    例: CTAブロック = "▶ 予約はこちら\nhttps://beauty.hotpepper.jp/..."
+    """
+    match = _URL_RE.search(text)
+    if not match:
+        return text, None
+
+    lines = text.split('\n')
+    url_idx = next(i for i, l in enumerate(lines) if _URL_RE.search(l))
+
+    # URLの直前に空でない行があればCTAラベルとして含める
+    cta_start = url_idx
+    if url_idx > 0 and lines[url_idx - 1].strip():
+        cta_start = url_idx - 1
+
+    # 本文末尾の空行を除去
+    body_end = cta_start
+    while body_end > 0 and not lines[body_end - 1].strip():
+        body_end -= 1
+
+    body = '\n'.join(lines[:body_end])
+    cta_block = '\n'.join(lines[cta_start:url_idx + 1])
+    return body, cta_block
+
+
+def post_reply_to_threads(acct: str, reply_to_id: str, text: str) -> str:
+    """指定投稿へのコメント（返信）を投稿してpost IDを返す"""
+    token = os.environ[ACCOUNTS[acct]["token_key"]]
+    user_id = os.environ[ACCOUNTS[acct]["uid_key"]]
+
+    data = urllib.parse.urlencode({
+        "media_type": "TEXT",
+        "text": text,
+        "reply_to_id": reply_to_id,
+        "access_token": token,
+    }).encode()
+    container_id = api_request(f"{BASE_URL}/{user_id}/threads", data)["id"]
+    time.sleep(2)
+    data2 = urllib.parse.urlencode({"creation_id": container_id, "access_token": token}).encode()
+    return api_request(f"{BASE_URL}/{user_id}/threads_publish", data2)["id"]
+
+
 def post_to_threads(acct: str, text: str) -> str:
     token = os.environ[ACCOUNTS[acct]["token_key"]]
     user_id = os.environ[ACCOUNTS[acct]["uid_key"]]
@@ -208,12 +258,28 @@ def run_account(acct: str):
         log_info(acct, f"{name} 今日の投稿完了")
         return
 
-    log_info(acct, f"{name} [{index+1}本目]: {text[:40].replace(chr(10), ' ')}...")
+    # URLをメイン本文から除去し、3本目のコメントに回す
+    clean_text, cta_block = extract_url_and_cta(text)
+
+    log_info(acct, f"{name} [{index+1}本目]: {clean_text[:40].replace(chr(10), ' ')}...")
 
     try:
-        post_id = post_to_threads(acct, text)
+        post_id = post_to_threads(acct, clean_text)
         mark_posted(acct, today, index, post_id)
         log_info(acct, f"{name} ✓ 完了 (ID: {post_id})")
+
+        # URLがある場合は3本目のコメントに投稿
+        if cta_block:
+            try:
+                time.sleep(3)
+                post_reply_to_threads(acct, post_id, ".")
+                time.sleep(2)
+                post_reply_to_threads(acct, post_id, ".")
+                time.sleep(2)
+                post_reply_to_threads(acct, post_id, cta_block)
+                log_info(acct, f"{name} ✓ 3本目コメントにURL投稿完了")
+            except Exception as ce:
+                log_error(f"{name} コメント投稿失敗: {ce}")
 
     except urllib.error.HTTPError as e:
         body = e.read().decode()
@@ -225,9 +291,20 @@ def run_account(acct: str):
             log_info(acct, f"{name} トークン期限切れ → 自動リフレッシュ...")
             if refresh_token(acct):
                 try:
-                    post_id = post_to_threads(acct, text)
+                    post_id = post_to_threads(acct, clean_text)
                     mark_posted(acct, today, index, post_id)
                     log_info(acct, f"{name} ✓ 完了（リフレッシュ後） (ID: {post_id})")
+                    if cta_block:
+                        try:
+                            time.sleep(3)
+                            post_reply_to_threads(acct, post_id, ".")
+                            time.sleep(2)
+                            post_reply_to_threads(acct, post_id, ".")
+                            time.sleep(2)
+                            post_reply_to_threads(acct, post_id, cta_block)
+                            log_info(acct, f"{name} ✓ 3本目コメントにURL投稿完了（リフレッシュ後）")
+                        except Exception as ce:
+                            log_error(f"{name} コメント投稿失敗（リフレッシュ後）: {ce}")
                 except Exception as e2:
                     log_error(f"{name} リフレッシュ後も失敗 → 手動で auth.py を実行してください: {e2}")
             else:

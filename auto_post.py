@@ -2,7 +2,7 @@
 """
 自動投稿スクリプト（確認なし・自動エラー修正）
 launchd から30分おきに呼ばれ、両アカウントに1本ずつ投稿する。
-投稿時間帯: 7:00〜22:00
+投稿時間帯: 7:00〜23:00
 
 自動エラー対処:
   - 投稿データなし  → 自動生成して続行
@@ -13,6 +13,7 @@ launchd から30分おきに呼ばれ、両アカウントに1本ずつ投稿す
 
 from __future__ import annotations
 
+import fcntl
 import json
 import os
 import re
@@ -26,8 +27,9 @@ from pathlib import Path
 
 BASE = Path(__file__).parent
 ERROR_LOG = BASE / "error.log"
+LOCK_FILE = BASE / ".autopost.lock"
 POST_HOUR_START = 7
-POST_HOUR_END = 22
+POST_HOUR_END = 23
 MAX_RETRY = 3
 
 ACCOUNTS = {
@@ -38,6 +40,7 @@ ACCOUNTS = {
         "token_key": "THREADS_ACCESS_TOKEN_TRUTH",
         "uid_key": "THREADS_USER_ID_TRUTH",
         "autopost_log": BASE / "autopost_truth.log",
+        "bridge_text": "ご予約・詳細はこちらから 👇",
     },
     "masa": {
         "name": "@masahide_takahashi_",
@@ -46,6 +49,7 @@ ACCOUNTS = {
         "token_key": "THREADS_ACCESS_TOKEN_MASA",
         "uid_key": "THREADS_USER_ID_MASA",
         "autopost_log": BASE / "autopost_masa.log",
+        "bridge_text": "詳しくはこちら 👇",
     },
 }
 BASE_URL = "https://graph.threads.net/v1.0"
@@ -125,9 +129,22 @@ def get_posted_indices(acct: str, today: str) -> set:
         if l.strip() and json.loads(l).get("date") == today
     }
 
-def mark_posted(acct: str, today: str, index: int, post_id: str):
+def mark_posted(acct: str, today: str, index: int, post_id: str, text: str = ""):
     with open(ACCOUNTS[acct]["posted"], "a") as f:
-        f.write(json.dumps({"date": today, "index": index, "post_id": post_id}, ensure_ascii=False) + "\n")
+        f.write(json.dumps({"date": today, "index": index, "post_id": post_id, "text": text}, ensure_ascii=False) + "\n")
+
+def get_posted_texts(acct: str) -> set:
+    """全期間の投稿済みテキスト一覧（重複防止用）"""
+    pfile = ACCOUNTS[acct]["posted"]
+    if not pfile.exists():
+        return set()
+    texts = set()
+    for l in pfile.read_text().splitlines():
+        if l.strip():
+            entry = json.loads(l)
+            if entry.get("text"):
+                texts.add(entry["text"])
+    return texts
 
 def get_next_post(acct: str, today: str):
     log_file = ACCOUNTS[acct]["log"]
@@ -138,9 +155,12 @@ def get_next_post(acct: str, today: str):
     if not today_entries:
         return None, -1
     posts = today_entries[-1].get("posts", [])
-    posted = get_posted_indices(acct, today)
+    posted_indices = get_posted_indices(acct, today)
+    posted_texts = get_posted_texts(acct)
     for i, text in enumerate(posts):
-        if i not in posted:
+        # インデックスでもテキストでも重複チェック
+        clean, _ = extract_url_and_cta(text)
+        if i not in posted_indices and clean not in posted_texts:
             return text, i
     return None, -1
 
@@ -189,7 +209,7 @@ def api_request(url: str, data: bytes = None, retry: int = 0) -> dict:
 
 _URL_RE = re.compile(r'https?://\S+')
 
-def extract_url_and_cta(text: str) -> tuple[str, str | None]:
+def extract_url_and_cta(text: str):
     """
     本文からURLとその直前のCTAラベル行を切り出す。
     戻り値: (URL除去済み本文, CTAブロック文字列 or None)
@@ -265,19 +285,18 @@ def run_account(acct: str):
 
     try:
         post_id = post_to_threads(acct, clean_text)
-        mark_posted(acct, today, index, post_id)
+        mark_posted(acct, today, index, post_id, clean_text)
         log_info(acct, f"{name} ✓ 完了 (ID: {post_id})")
 
-        # URLがある場合は3本目のコメントに投稿
+        # URLがある場合は2本目コメントに橋渡し文、3本目にURLを投稿
         if cta_block:
             try:
+                bridge = ACCOUNTS[acct].get("bridge_text", "詳しくはこちら 👇")
                 time.sleep(3)
-                post_reply_to_threads(acct, post_id, ".")
+                r1 = post_reply_to_threads(acct, post_id, bridge)
                 time.sleep(2)
-                post_reply_to_threads(acct, post_id, ".")
-                time.sleep(2)
-                post_reply_to_threads(acct, post_id, cta_block)
-                log_info(acct, f"{name} ✓ 3本目コメントにURL投稿完了")
+                post_reply_to_threads(acct, r1, cta_block)
+                log_info(acct, f"{name} ✓ コメントにURL投稿完了")
             except Exception as ce:
                 log_error(f"{name} コメント投稿失敗: {ce}")
 
@@ -292,17 +311,16 @@ def run_account(acct: str):
             if refresh_token(acct):
                 try:
                     post_id = post_to_threads(acct, clean_text)
-                    mark_posted(acct, today, index, post_id)
+                    mark_posted(acct, today, index, post_id, clean_text)
                     log_info(acct, f"{name} ✓ 完了（リフレッシュ後） (ID: {post_id})")
                     if cta_block:
                         try:
+                            bridge = ACCOUNTS[acct].get("bridge_text", "詳しくはこちら 👇")
                             time.sleep(3)
-                            post_reply_to_threads(acct, post_id, ".")
+                            r1 = post_reply_to_threads(acct, post_id, bridge)
                             time.sleep(2)
-                            post_reply_to_threads(acct, post_id, ".")
-                            time.sleep(2)
-                            post_reply_to_threads(acct, post_id, cta_block)
-                            log_info(acct, f"{name} ✓ 3本目コメントにURL投稿完了（リフレッシュ後）")
+                            post_reply_to_threads(acct, r1, cta_block)
+                            log_info(acct, f"{name} ✓ コメントにURL投稿完了（リフレッシュ後）")
                         except Exception as ce:
                             log_error(f"{name} コメント投稿失敗（リフレッシュ後）: {ce}")
                 except Exception as e2:
@@ -324,6 +342,23 @@ def main():
         print(f"[{now.strftime('%H:%M')}] 投稿時間外 → スキップ")
         return
 
+    # 並行実行防止（launchd が重なった場合にスキップ）
+    lock_fd = open(LOCK_FILE, "w")
+    try:
+        fcntl.flock(lock_fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except BlockingIOError:
+        print(f"[{now.strftime('%H:%M')}] 別プロセスが実行中 → スキップ")
+        lock_fd.close()
+        return
+
+    try:
+        _run_main()
+    finally:
+        fcntl.flock(lock_fd, fcntl.LOCK_UN)
+        lock_fd.close()
+
+
+def _run_main():
     target = sys.argv[1].lower() if len(sys.argv) > 1 else "all"
 
     if target == "truth":

@@ -1,13 +1,12 @@
 {
-  "updated_at": "2026-03-29",
+  "updated_at": "2026-03-30",
   "pattern_weights": {
-    "insight": 10,
-    "education": 9,
-    "story": 5,
-    "soft_line": 6,
-    "cta": 4,
-    "ranking": 6,
-    "question": 5
+    "insight": 7,
+    "education": 6,
+    "story": 3,
+    "cta": 3,
+    "ranking": 4,
+    "question": 3
   },
   "feedback_scores": {},
   "api_scores": {}

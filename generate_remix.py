@@ -17,6 +17,17 @@ LOG_FILE = BASE / "log_truth.jsonl"
 
 TODAY = date.today().strftime("%Y-%m-%d")
 
+
+def _load_weights(acct: str) -> dict:
+    """weights_*.json から生成比率を読み込む。なければデフォルト値を返す。"""
+    wfile = BASE / f"weights_{acct}.json"
+    if wfile.exists():
+        try:
+            return json.loads(wfile.read_text()).get("pattern_weights", {})
+        except Exception:
+            pass
+    return {}
+
 # ── myfilesから素材を読み込む（失敗時はデフォルト使用）──────────
 try:
     from myfiles_loader import load_truth_materials, load_masa_materials
@@ -31,6 +42,31 @@ except Exception:
 # ── 投稿パターン定義 ──────────────────────────────
 # 各パターンは (冒頭テンプレ, 中間テンプレ, 締めテンプレ) のリスト
 PATTERNS = {
+    "hook_one_line": {
+        "desc": "1行フック系（超短・引き）",
+        "templates": [
+            "{symptom}の本当の原因、知ってますか？",
+            "揉んでも治らない理由があります。",
+            "整体より大事なこと、あります。",
+            "{symptom}は{cause}の問題です。",
+            "{symptom}が治らない人の共通点。",
+            "薬より先にやることがある。",
+            "根本改善と対症療法は違います。",
+            "体が楽になると、人生が変わります。",
+            "改善率93.7%のワケ、話します。",
+            "{symptom}を「年齢のせい」にしている間は変わりません。",
+        ],
+    },
+    "gyakusetsu": {
+        "desc": "逆説・反骨系（意外性フック）",
+        "templates": [
+            "{symptom}は、{symptom}じゃないところが原因です。\n\n{cause}が乱れると\n全身に影響が出ます。\n\nどこを揉んでも変わらないのは、そのため。",
+            "整体に通っても変わらない人には\n共通点があります。\n\n{cause}を変えていない。\n\n施術で緩めても\n同じ生活を続けると元に戻る。\n根本は生活習慣にあります。",
+            "「高い整体より薬の方が早い」\nそれは本当でしょうか。\n\n薬は痛みを消す。\n整体は原因を変える。\n\n目的が違います。",
+            "マッサージは気持ちいい。\nでも{symptom}は変わらない。\n\n筋肉を揉んでも\n{cause}は変わらないから。\n\n必要なのは根本へのアプローチ。",
+            "技術より大事なことがあります。\n\n日常の{cause}を変えること。\n\n週1の施術より\n毎日の習慣が体を変えます。",
+        ],
+    },
     "quote_empathy": {
         "desc": "共感引用系（「〜」で始まる）",
         "openers": [
@@ -95,6 +131,24 @@ PATTERNS = {
             "「自分にお金をかけていいのかな」\nって思うワーママ、多いです。\n\nでも聞いてください。\n\n{symptom}があると、仕事も家事も{life_scene_n}も\nすべての効率が下がります。\n\n自分の体への投資は、家族への投資でもある。",
         ],
     },
+    "ranking": {
+        "desc": "ランキング・TOP形式（内山式）",
+        "templates": [
+            "{symptom}を悪化させる習慣 TOP3\n\n1位：{habit1}\n2位：{habit2}\n3位：{habit3}\n\n心当たりある人、多いはず。",
+            "整体師が見てきた\n{symptom}が治らない人の共通点3つ\n\n① {habit1}\n② {habit2}\n③ {habit3}\n\nこのどれかに当てはまっていませんか？",
+            "体が楽になった人がやめたこと\n\n▶ {habit1}\n▶ {habit2}\n▶ {habit3}\n\nたったこれだけで変わる人が多いです。",
+            "{symptom}に効果があった習慣 3選\n\n1）{cause}を意識する\n2）{cause}を見直す\n3）{cause}から改善する\n\n全部無料でできます。",
+        ],
+    },
+    "question": {
+        "desc": "問いかけ・コメント誘導系（内山式）",
+        "templates": [
+            "正直に聞きます。\n\n{symptom}、今どのくらいひどいですか？\n\nA：毎日ある\nB：週に数回\nC：たまにある\n\nコメントで教えてください。",
+            "{symptom}の原因、知ってますか？\n\nほとんどの人が答えられないんですよ。\n\n実は{cause}が一番の原因です。\n\n知らなかった人、「知らなかった」ってコメントしてみて。",
+            "これ、あなたの体に当てはまりますか？\n\n□ {habit1}\n□ {habit2}\n□ {habit3}\n\n2つ以上当てはまったら、\n今すぐ{symptom}のケアを始めてください。",
+            "質問です。\n\n{symptom}が続いているのに、\nなぜ放置してしまうんだと思いますか？\n\n「お金」「時間」「めんどくさい」\n……どれですか？",
+        ],
+    },
 }
 
 # ── 素材（myfilesロード済みならそちらを優先）────────────────────
@@ -146,14 +200,16 @@ CTA_ZUTSUU_TEMPLATES = [
 
 def fill(template: str, symptom: str = None) -> str:
     s = symptom or random.choice(SYMPTOMS)
+    habits = random.sample(HABITS, min(3, len(HABITS)))
+    causes = random.sample(CAUSES, min(3, len(CAUSES)))
     return (template
             .replace("{symptom}", s)
-            .replace("{cause}", random.choice(CAUSES))
+            .replace("{cause}", causes[0])
             .replace("{life_scene_v}", random.choice(LIFE_SCENES_VERB))
             .replace("{life_scene_n}", random.choice(LIFE_SCENES_NOUN))
-            .replace("{habit1}", random.choice(HABITS))
-            .replace("{habit2}", random.choice(HABITS))
-            .replace("{habit3}", random.choice(HABITS)))
+            .replace("{habit1}", habits[0])
+            .replace("{habit2}", habits[1])
+            .replace("{habit3}", habits[2]))
 
 def generate_cta_post(target: str) -> str:
     """target: 'katakori' or 'zutsuu'"""
@@ -184,32 +240,54 @@ def generate_post(pattern_key: str) -> str:
         body = fill(random.choice(p["bodies"]))
         return opener + body
 
-    elif pattern_key in ("story", "workmom"):
+    elif pattern_key in ("story", "workmom", "ranking", "question",
+                          "hook_one_line", "gyakusetsu"):
         return fill(random.choice(p["templates"]))
 
     return ""
 
 
 def generate_30_posts() -> list[str]:
-    # 分布: 共感7・インサイト7・教育6・ストーリー5・ワーママ3 + CTA(肩こり2・頭痛2)
+    w = _load_weights("truth")
+    # 45本生成: 共感9・インサイト7・教育7・ストーリー4・ワーママ3・ランキング6・問いかけ5 + CTA4 = 45本
+    defaults = {
+        "hook_one_line": 5,   # 1行フック（新）
+        "gyakusetsu": 4,       # 逆説・反骨（新）
+        "quote_empathy": 6,
+        "insight": 5,
+        "education": 5,
+        "story": 3,
+        "workmom": 2,
+        "ranking": 4,
+        "question": 2,
+    }
+    merged = {k: w.get(k, v) for k, v in defaults.items()}
     plan = (
-        ["quote_empathy"] * 7 +
-        ["insight"] * 7 +
-        ["education"] * 6 +
-        ["story"] * 4 +
-        ["workmom"] * 2
+        ["hook_one_line"] * merged["hook_one_line"] +
+        ["gyakusetsu"] * merged["gyakusetsu"] +
+        ["quote_empathy"] * merged["quote_empathy"] +
+        ["insight"] * merged["insight"] +
+        ["education"] * merged["education"] +
+        ["story"] * merged["story"] +
+        ["workmom"] * merged["workmom"] +
+        ["ranking"] * merged["ranking"] +
+        ["question"] * merged["question"]
     )
     random.shuffle(plan)
 
     posts = []
     seen = set()
     for pk in plan:
-        for _ in range(10):
+        for _ in range(30):
             post = generate_post(pk)
-            if post not in seen:
-                seen.add(post)
+            key = post[:60]  # 先頭60文字で重複判定（完全一致より緩く）
+            if key not in seen:
+                seen.add(key)
                 posts.append(post)
                 break
+        else:
+            # 30回試みても重複回避できない場合は強制追加
+            posts.append(generate_post(pk))
 
     # 肩こりCTA 2本・頭痛CTA 2本をランダムな位置に差し込む
     cta_posts = (
@@ -220,7 +298,7 @@ def generate_30_posts() -> list[str]:
         pos = random.randint(0, len(posts))
         posts.insert(pos, cta)
 
-    return posts[:30]
+    return posts[:45]
 
 
 # ══════════════════════════════════════════════
@@ -236,6 +314,22 @@ MASA_TOPICS = _masa_mat.get("topics") or [
 ]
 
 MASA_PATTERNS = {
+    "hook_one_line": [
+        "フォロワーが増えても売上は増えない。",
+        "良い動画より大事なことがある。",
+        "集客で詰まる人には、共通点があります。",
+        "{topic}だけやっても集客できない理由。",
+        "正直に言います。{topic}は手段です。",
+        "売れる人と売れない人、違いは1つです。",
+        "月商が変わった人は、ここを変えていた。",
+        "努力より設計の問題です。",
+    ],
+    "gyakusetsu": [
+        "フォロワーを増やすより先にやることがある。\n\n{point}\n\n順番を間違えると、どれだけ発信しても集客できません。",
+        "{topic}を頑張っているのに結果が出ない。\n\nその理由はシンプルです。\n\n{point}\n\nツールの問題じゃなく、設計の問題。",
+        "コンサルに高いお金を払う前に、\nまず自分でやってみてください。\n\n{point}\n\n知識より実践の数が成果を決めます。",
+        "SNSより先に整えるべきものがあります。\n\n{point}\n\nこれがないまま発信しても、反応は取れません。",
+    ],
     "insight": [
         "「{topic}」を難しく考えすぎていませんか？\n\nやることはシンプルです。\n{point}\n\nまずは一歩踏み出すことが大切。",
         "{topic}で結果が出ない人の共通点。\n\n{point}\n\nここを変えるだけで、大きく変わります。",
@@ -263,6 +357,17 @@ MASA_PATTERNS = {
         "{topic}について深掘りした内容を\nLINEで配信しています。\n\n{point}\n\n気になる方はプロフィールから。",
         "この投稿が参考になったら、\nLINEでもっと詳しい話を読んでみてください。\n\n{point}",
         "{topic}の実践ノウハウは\nLINEでこっそり共有しています。\n\n{point}",
+    ],
+    "ranking": [
+        "集客できない店舗の共通点 TOP3\n\n1位：{tip1}\n2位：{tip2}\n3位：{tip3}\n\n正直、どれか当てはまってませんか？",
+        "{topic}で成果が出ない人がやっていること3選\n\n① {tip1}\n② {tip2}\n③ {tip3}\n\nこれを直すだけで変わります。",
+        "フォロワー1万人超えの人が共通してやっていること\n\n▶ {tip1}\n▶ {tip2}\n▶ {tip3}\n\n難しいことは何もない。",
+        "集客に成功している店舗が最初にやること 3つ\n\n① {tip1}\n② {tip2}\n③ {tip3}\n\n順番が大事です。",
+    ],
+    "question": [
+        "正直に聞きます。\n\n{topic}、今どれくらい本気でやってますか？\n\nA：毎日やってる\nB：週数回\nC：なんとなく\n\nコメントで教えてください。",
+        "あなたの{topic}、何が原因で伸びてないと思いますか？\n\n「コンテンツ」「継続」「設計」\n\nどれだと思う？\nコメントで教えてほしいです。",
+        "これ、当てはまりますか？\n\n□ {tip1}できていない\n□ {tip2}が曖昧\n□ {tip3}を後回しにしてる\n\n1つでも当てはまったら、\n今すぐ{topic}を見直してください。",
     ],
 }
 
@@ -303,36 +408,57 @@ MASA_TIPS = _masa_mat.get("tips") or [
 def generate_masa_post(pattern_key: str) -> str:
     templates = MASA_PATTERNS[pattern_key]
     tmpl = random.choice(templates)
+    tips = random.sample(MASA_TIPS, min(3, len(MASA_TIPS)))
     return (tmpl
             .replace("{topic}", random.choice(MASA_TOPICS))
             .replace("{point}", random.choice(MASA_POINTS))
-            .replace("{tip1}", random.choice(MASA_TIPS))
-            .replace("{tip2}", random.choice(MASA_TIPS))
-            .replace("{tip3}", random.choice(MASA_TIPS)))
+            .replace("{tip1}", tips[0])
+            .replace("{tip2}", tips[1] if len(tips) > 1 else tips[0])
+            .replace("{tip3}", tips[2] if len(tips) > 2 else tips[0]))
 
 
 def generate_30_masa_posts() -> list[str]:
-    # 配分: 価値提供20本 / さりげないLINE誘導5本 / 直接CTA3本 / ストーリー2本
+    w = _load_weights("masa")
+    # 45本生成: フック5・逆説4・インサイト7・教育7・ストーリー4・LINE誘導6・CTA4・ランキング5・問いかけ3 = 45本
+    defaults = {
+        "hook_one_line": 5,
+        "gyakusetsu": 4,
+        "insight": 7,
+        "education": 7,
+        "story": 4,
+        "soft_line": 6,
+        "cta": 4,
+        "ranking": 5,
+        "question": 3,
+    }
+    merged = {k: w.get(k, v) for k, v in defaults.items()}
     plan = (
-        ["insight"] * 10 +
-        ["education"] * 8 +
-        ["story"] * 4 +
-        ["soft_line"] * 5 +  # さりげないLINE言及（URL不記載）
-        ["cta"] * 3          # 直接LINE URL付きCTA（30本中3本のみ）
+        ["hook_one_line"] * merged["hook_one_line"] +
+        ["gyakusetsu"] * merged["gyakusetsu"] +
+        ["insight"] * merged["insight"] +
+        ["education"] * merged["education"] +
+        ["story"] * merged["story"] +
+        ["soft_line"] * merged["soft_line"] +
+        ["cta"] * merged["cta"] +
+        ["ranking"] * merged["ranking"] +
+        ["question"] * merged["question"]
     )
     random.shuffle(plan)
 
     posts = []
     seen = set()
     for pk in plan:
-        for _ in range(10):
+        for _ in range(30):
             post = generate_masa_post(pk)
-            if post not in seen:
-                seen.add(post)
+            key = post[:60]  # 先頭60文字で重複判定
+            if key not in seen:
+                seen.add(key)
                 posts.append(post)
                 break
+        else:
+            posts.append(generate_masa_post(pk))
 
-    return posts
+    return posts[:45]
 
 
 # ══════════════════════════════════════════════

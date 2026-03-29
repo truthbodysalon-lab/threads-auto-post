@@ -28,7 +28,7 @@ from pathlib import Path
 BASE = Path(__file__).parent
 ERROR_LOG = BASE / "error.log"
 LOCK_FILE = BASE / ".autopost.lock"
-POST_HOUR_START = 7
+POST_HOUR_START = 6
 POST_HOUR_END = 23
 MAX_RETRY = 3
 

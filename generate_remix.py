@@ -67,6 +67,25 @@ PATTERNS = {
             "技術より大事なことがあります。\n\n日常の{cause}を変えること。\n\n週1の施術より\n毎日の習慣が体を変えます。",
         ],
     },
+    # ── 小川式：1行謎かけ → 箇条書き解説 → 1行断言 ──
+    "aoi_style": {
+        "desc": "小川式（謎かけ→箇条書き→断言）",
+        "templates": [
+            "{symptom}が改善する人はここが違う。\n\n原因を特定している。\n\n・どこが歪んでいるのか\n・どの習慣が悪いのか\n\nこの2つが分かるだけで\nアプローチが変わります。\n\n原因を知ること。\nこれが改善の第一歩。",
+            "リピートされる整体師はここが違う。\n\n施術後に何を伝えるか決まっている。\n\n・なぜ体が変わったのか\n・何を続ければ維持できるか\n\nこの説明があるだけで\n信頼感は大きく変わります。\n\n信頼される理由。\nこれを作ることが大事。",
+            "薬で治らない{symptom}はここが違う。\n\n根本の原因が残っている。\n\n・{cause}が続いている\n・体の使い方を変えていない\n\nここを変えないと\n何度通っても元に戻ります。\n\n習慣を変えること。\nこれが根本改善。",
+            "{symptom}が長引く人はここが違う。\n\nセルフケアが足りていない。\n\n・施術の間に何もしていない\n・{cause}を放置している\n\nプロの施術と日常習慣の両輪が\n体を変えます。\n\nケアは毎日。\nこれを忘れないでほしい。",
+        ],
+    },
+    # ── 堀式：逆説1行 → 数字実績 → 口語断定 ──
+    "hori_style": {
+        "desc": "堀式（逆説→数字実績→口語断定）",
+        "templates": [
+            "{symptom}の壁って、施術の回数じゃないです。\n\n{cause}を変えた人は\n\n週1通院 → 3回で改善\nマッサージだけ → 根本改善\n\nみんな体は同じでした。\n変えたのは「日常習慣」だけです。\n\n正直、知ってるか知らないかの差だけですよ。",
+            "{symptom}は、もう諦めなくていい。\n\n長岡の整体院でこんな変化が起きています。\n\n週3の頭痛 → ほぼゼロ\n5年続いた肩こり → 2ヶ月で改善\n慢性疲労 → 朝すっきり起きられるように\n\nやったことは生活習慣の見直しだけ。\n\n根本から変えると、体は想像以上に変わります。",
+            "整体より先にやることがあります。\n\n施術実績1万人を超えて気づいたこと。\n\n改善が早い人 → {cause}をすぐ変える\n改善が遅い人 → 施術だけ頼る\n\n施術で緩めるだけでは元に戻る。\n生活習慣を変えた人だけが、本当に楽になります。\n\n正直、これだけの話です。",
+        ],
+    },
     "quote_empathy": {
         "desc": "共感引用系（「〜」で始まる）",
         "openers": [
@@ -241,7 +260,8 @@ def generate_post(pattern_key: str) -> str:
         return opener + body
 
     elif pattern_key in ("story", "workmom", "ranking", "question",
-                          "hook_one_line", "gyakusetsu"):
+                          "hook_one_line", "gyakusetsu",
+                          "aoi_style", "hori_style"):
         return fill(random.choice(p["templates"]))
 
     return ""
@@ -251,8 +271,10 @@ def generate_30_posts() -> list[str]:
     w = _load_weights("truth")
     # 45本生成: 共感9・インサイト7・教育7・ストーリー4・ワーママ3・ランキング6・問いかけ5 + CTA4 = 45本
     defaults = {
-        "hook_one_line": 5,   # 1行フック（新）
-        "gyakusetsu": 4,       # 逆説・反骨（新）
+        "hook_one_line": 4,
+        "aoi_style": 5,    # 小川式：謎かけ→箇条書き→断言
+        "hori_style": 4,   # 堀式：逆説→数字実績→口語断定
+        "gyakusetsu": 3,
         "quote_empathy": 6,
         "insight": 5,
         "education": 5,
@@ -264,6 +286,8 @@ def generate_30_posts() -> list[str]:
     merged = {k: w.get(k, v) for k, v in defaults.items()}
     plan = (
         ["hook_one_line"] * merged["hook_one_line"] +
+        ["aoi_style"] * merged["aoi_style"] +
+        ["hori_style"] * merged["hori_style"] +
         ["gyakusetsu"] * merged["gyakusetsu"] +
         ["quote_empathy"] * merged["quote_empathy"] +
         ["insight"] * merged["insight"] +
@@ -323,6 +347,19 @@ MASA_PATTERNS = {
         "売れる人と売れない人、違いは1つです。",
         "月商が変わった人は、ここを変えていた。",
         "努力より設計の問題です。",
+    ],
+    # ── 小川式：謎かけ → 箇条書き → 断言 ──
+    "aoi_style": [
+        "集客できる人はここが違う。\n\n投稿の目的が明確。\n\n・誰に届けるのか\n・何を変えてほしいのか\n\nこの2つが決まっているだけで\n反応率は大きく変わります。\n\n届く投稿。\nこれを作ることが大事。",
+        "フォロワーが増えない人はここが違う。\n\n発信の軸がブレている。\n\n・今日はこれ、明日はあれ\n・ターゲットが毎回違う\n\nこれをやると\n誰にも刺さらない投稿になります。\n\n一貫性。\nこれだけで変わります。",
+        "問い合わせが来る人はここが違う。\n\n行動のハードルを下げている。\n\n・次に何をすればいいか明確\n・連絡先が分かりやすい\n・最初の一歩が簡単\n\nこれがないと\n見てもらっても動いてもらえません。\n\n導線設計。\nこれを作ることが大事。",
+        "売上が伸びる人はここが違う。\n\n{topic}の目的が明確。\n\n・集客なのか\n・信頼構築なのか\n・販売なのか\n\n目的によってやることが変わります。\n\n目的から逆算すること。\nこれが成果の出る設計。",
+    ],
+    # ── 堀式：逆説1行 → 数字実績 → 口語断定 ──
+    "hori_style": [
+        "フォロワー数より大事なものがある。\n\nインスタ集客を支援してきて気づいたこと。\n\nフォロワー200人 → 月商80万\nフォロワー3000人 → 月商20万\n\nどっちが伸びているかは明らかです。\n\n変えたのは「導線設計」だけ。\n\n正直、設計を知ってるか知らないかの差だけですよ。",
+        "{topic}の壁は、センスじゃないです。\n\nサポートしたお客様の変化。\n\n月0件 → 月20件の問い合わせ\n反応ゼロ → フォロワー500人増\n\nみんなコンテンツの質は最初から変わってない。\n変えたのは「仕組み」だけです。\n\n正直、やり方を知ってるか知らないかの話です。",
+        "SNSを頑張っても結果が出ないのは、\n才能の話じゃないです。\n\nビフォーアフターを見てください。\n\n投稿しても無反応 → 毎日コメントが来る\n半年フォロワー50人 → 3ヶ月で1000人\n\nやったことは設計を変えただけ。\n\n知識より仕組み。\nこれだけです。",
     ],
     "gyakusetsu": [
         "フォロワーを増やすより先にやることがある。\n\n{point}\n\n順番を間違えると、どれだけ発信しても集客できません。",
@@ -419,21 +456,25 @@ def generate_masa_post(pattern_key: str) -> str:
 
 def generate_30_masa_posts() -> list[str]:
     w = _load_weights("masa")
-    # 45本生成: フック5・逆説4・インサイト7・教育7・ストーリー4・LINE誘導6・CTA4・ランキング5・問いかけ3 = 45本
+    # 45本生成: フック4・小川式5・堀式4・逆説3・インサイト6・教育6・ストーリー3・LINE誘導5・CTA4・ランキング3・問いかけ2 = 45本
     defaults = {
-        "hook_one_line": 5,
-        "gyakusetsu": 4,
-        "insight": 7,
-        "education": 7,
-        "story": 4,
-        "soft_line": 6,
+        "hook_one_line": 4,
+        "aoi_style": 5,
+        "hori_style": 4,
+        "gyakusetsu": 3,
+        "insight": 6,
+        "education": 6,
+        "story": 3,
+        "soft_line": 5,
         "cta": 4,
-        "ranking": 5,
-        "question": 3,
+        "ranking": 3,
+        "question": 2,
     }
     merged = {k: w.get(k, v) for k, v in defaults.items()}
     plan = (
         ["hook_one_line"] * merged["hook_one_line"] +
+        ["aoi_style"] * merged["aoi_style"] +
+        ["hori_style"] * merged["hori_style"] +
         ["gyakusetsu"] * merged["gyakusetsu"] +
         ["insight"] * merged["insight"] +
         ["education"] * merged["education"] +

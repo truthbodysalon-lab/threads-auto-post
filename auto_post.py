@@ -31,6 +31,7 @@ LOCK_FILE = BASE / ".autopost.lock"
 POST_HOUR_START = 6
 POST_HOUR_END = 23
 MAX_RETRY = 3
+POSTS_PER_RUN = 2  # 1回の実行で投稿する本数
 
 ACCOUNTS = {
     "truth": {
@@ -286,20 +287,10 @@ def post_to_threads(acct: str, text: str) -> str:
 
 # ── アカウント実行 ────────────────────────────────────
 
-def run_account(acct: str):
-    today = date.today().strftime("%Y-%m-%d")
+def _post_one(acct: str, today: str, text: str, index: int) -> bool:
+    """1本投稿して成功したらTrueを返す"""
     name = ACCOUNTS[acct]["name"]
-
-    ensure_generated(acct, today)
-
-    text, index = get_next_post(acct, today)
-    if text is None:
-        log_info(acct, f"{name} 今日の投稿完了")
-        return
-
-    # URLをメイン本文から除去し、3本目のコメントに回す
     clean_text, cta_block = extract_url_and_cta(text)
-
     log_info(acct, f"{name} [{index+1}本目]: {clean_text[:40].replace(chr(10), ' ')}...")
 
     try:
@@ -307,7 +298,6 @@ def run_account(acct: str):
         mark_posted(acct, today, index, post_id, clean_text)
         log_info(acct, f"{name} ✓ 完了 (ID: {post_id})")
 
-        # URLがある場合は2本目コメントに橋渡し文、3本目にURLを投稿
         if cta_block:
             try:
                 bridge = ACCOUNTS[acct].get("bridge_text", "詳しくはこちら 👇")
@@ -318,13 +308,13 @@ def run_account(acct: str):
                 log_info(acct, f"{name} ✓ コメントにURL投稿完了")
             except Exception as ce:
                 log_error(f"{name} コメント投稿失敗: {ce}")
+        return True
 
     except urllib.error.HTTPError as e:
         body = e.read().decode()
         err_data = json.loads(body) if body.startswith("{") else {}
         code = err_data.get("error", {}).get("code", 0)
 
-        # トークン期限切れ → 自動リフレッシュして再投稿
         if code == 190:
             log_info(acct, f"{name} トークン期限切れ → 自動リフレッシュ...")
             if refresh_token(acct):
@@ -342,6 +332,7 @@ def run_account(acct: str):
                             log_info(acct, f"{name} ✓ コメントにURL投稿完了（リフレッシュ後）")
                         except Exception as ce:
                             log_error(f"{name} コメント投稿失敗（リフレッシュ後）: {ce}")
+                    return True
                 except Exception as e2:
                     log_error(f"{name} リフレッシュ後も失敗 → 手動で auth.py を実行してください: {e2}")
             else:
@@ -351,6 +342,28 @@ def run_account(acct: str):
 
     except Exception as e:
         log_error(f"{name} 予期しないエラー: {e}")
+    return False
+
+
+def run_account(acct: str):
+    today = date.today().strftime("%Y-%m-%d")
+    name = ACCOUNTS[acct]["name"]
+
+    ensure_generated(acct, today)
+
+    for n in range(POSTS_PER_RUN):
+        text, index = get_next_post(acct, today)
+        if text is None:
+            log_info(acct, f"{name} 今日の投稿完了")
+            return
+
+        success = _post_one(acct, today, text, index)
+        if not success:
+            return  # エラー時は次の投稿を試みない
+
+        # 連続投稿の間隔（レート制限回避）
+        if n < POSTS_PER_RUN - 1:
+            time.sleep(10)
 
 
 # ── メイン ────────────────────────────────────────────

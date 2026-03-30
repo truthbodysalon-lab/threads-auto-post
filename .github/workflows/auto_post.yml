@@ -2,8 +2,8 @@ name: Threads Auto Post
 
 on:
   schedule:
-    # 30分おきに実行（UTC）。スクリプト側でJST 7:00-23:00を判定
-    - cron: '0,30 * * * *'
+    # 15分おきに実行（UTC）。スクリプト側でJST 6:00-23:00を判定
+    - cron: '*/15 * * * *'
   workflow_dispatch:
 
 concurrency:

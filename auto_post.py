@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
 自動投稿スクリプト（確認なし・自動エラー修正）
-launchd から30分おきに呼ばれ、両アカウントに1本ずつ投稿する。
-投稿時間帯: 7:00〜23:00
+launchd / GitHub Actions から30分おきに呼ばれ、両アカウントに POSTS_PER_RUN 本ずつ投稿する。
+投稿時間帯: 6:00〜23:00  ×  2本/回  →  1日50本以上
 
 自動エラー対処:
   - 投稿データなし  → 自動生成して続行
@@ -31,6 +31,8 @@ LOCK_FILE = BASE / ".autopost.lock"
 POST_HOUR_START = 6
 POST_HOUR_END = 23
 MAX_RETRY = 3
+POSTS_PER_RUN = 2          # 1回の実行で各アカウント何本投稿するか
+INTER_POST_DELAY = 30      # 同一アカウント内の投稿間隔（秒）
 
 ACCOUNTS = {
     "truth": {
@@ -286,16 +288,14 @@ def post_to_threads(acct: str, text: str) -> str:
 
 # ── アカウント実行 ────────────────────────────────────
 
-def run_account(acct: str):
-    today = date.today().strftime("%Y-%m-%d")
+def _post_one(acct: str, today: str) -> bool:
+    """1本投稿して成功なら True、投稿なしなら False を返す"""
     name = ACCOUNTS[acct]["name"]
-
-    ensure_generated(acct, today)
 
     text, index = get_next_post(acct, today)
     if text is None:
         log_info(acct, f"{name} 今日の投稿完了")
-        return
+        return False
 
     # URLをメイン本文から除去し、3本目のコメントに回す
     clean_text, cta_block = extract_url_and_cta(text)
@@ -318,6 +318,7 @@ def run_account(acct: str):
                 log_info(acct, f"{name} ✓ コメントにURL投稿完了")
             except Exception as ce:
                 log_error(f"{name} コメント投稿失敗: {ce}")
+        return True
 
     except urllib.error.HTTPError as e:
         body = e.read().decode()
@@ -342,6 +343,7 @@ def run_account(acct: str):
                             log_info(acct, f"{name} ✓ コメントにURL投稿完了（リフレッシュ後）")
                         except Exception as ce:
                             log_error(f"{name} コメント投稿失敗（リフレッシュ後）: {ce}")
+                    return True
                 except Exception as e2:
                     log_error(f"{name} リフレッシュ後も失敗 → 手動で auth.py を実行してください: {e2}")
             else:
@@ -351,6 +353,19 @@ def run_account(acct: str):
 
     except Exception as e:
         log_error(f"{name} 予期しないエラー: {e}")
+
+    return False
+
+
+def run_account(acct: str):
+    today = date.today().strftime("%Y-%m-%d")
+    ensure_generated(acct, today)
+
+    for n in range(POSTS_PER_RUN):
+        if not _post_one(acct, today):
+            break
+        if n < POSTS_PER_RUN - 1:
+            time.sleep(INTER_POST_DELAY)
 
 
 # ── メイン ────────────────────────────────────────────

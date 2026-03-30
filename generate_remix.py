@@ -316,19 +316,19 @@ def generate_post(pattern_key: str) -> str:
 
 def generate_30_posts() -> list[str]:
     w = _load_weights("truth")
-    # 45本生成: 共感9・インサイト7・教育7・ストーリー4・ワーママ3・ランキング6・問いかけ5 + CTA4 = 45本
+    # 60本生成: 1日50投稿以上に対応
     defaults = {
-        "hook_one_line": 4,
-        "aoi_style": 5,    # 小川式：謎かけ→箇条書き→断言
-        "hori_style": 4,   # 堀式：逆説→数字実績→口語断定
-        "gyakusetsu": 3,
-        "quote_empathy": 6,
-        "insight": 5,
-        "education": 5,
-        "story": 3,
-        "workmom": 2,
-        "ranking": 4,
-        "question": 2,
+        "hook_one_line": 6,
+        "aoi_style": 7,    # 小川式：謎かけ→箇条書き→断言
+        "hori_style": 6,   # 堀式：逆説→数字実績→口語断定
+        "gyakusetsu": 4,
+        "quote_empathy": 8,
+        "insight": 7,
+        "education": 7,
+        "story": 4,
+        "workmom": 3,
+        "ranking": 5,
+        "question": 3,
     }
     merged = {k: w.get(k, v) for k, v in defaults.items()}
     plan = (
@@ -373,7 +373,7 @@ def generate_30_posts() -> list[str]:
         pos = random.randint(0, len(posts))
         posts.insert(pos, cta)
 
-    return posts[:45]
+    return posts[:60]
 
 
 # ══════════════════════════════════════════════
@@ -507,19 +507,19 @@ def generate_masa_post(pattern_key: str) -> str:
 
 def generate_30_masa_posts() -> list[str]:
     w = _load_weights("masa")
-    # 45本生成: フック4・小川式5・堀式4・逆説3・インサイト6・教育6・ストーリー3・LINE誘導5・CTA4・ランキング3・問いかけ2 = 45本
+    # 60本生成: 1日50投稿以上に対応
     defaults = {
-        "hook_one_line": 4,
-        "aoi_style": 5,
-        "hori_style": 4,
-        "gyakusetsu": 3,
-        "insight": 6,
-        "education": 6,
-        "story": 3,
-        "soft_line": 5,
-        "cta": 4,
-        "ranking": 3,
-        "question": 2,
+        "hook_one_line": 6,
+        "aoi_style": 7,
+        "hori_style": 6,
+        "gyakusetsu": 4,
+        "insight": 8,
+        "education": 8,
+        "story": 4,
+        "soft_line": 7,
+        "cta": 5,
+        "ranking": 4,
+        "question": 3,
     }
     merged = {k: w.get(k, v) for k, v in defaults.items()}
     plan = (
@@ -555,7 +555,7 @@ def generate_30_masa_posts() -> list[str]:
         except Exception:
             posts.insert(0, tmpl)
 
-    return posts[:45]
+    return posts[:60]
 
 
 # ══════════════════════════════════════════════

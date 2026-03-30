@@ -42,10 +42,11 @@ jobs:
           THREADS_USER_ID_MASA=${{ secrets.THREADS_USER_ID_MASA }}
           GH_PAT=${{ secrets.GH_PAT }}
           GH_REPO=${{ github.repository }}
+          ANTHROPIC_API_KEY=${{ secrets.ANTHROPIC_API_KEY }}
           EOF
 
-      - name: Run auto post
-        run: python3 auto_post.py
+      - name: Run orchestrator
+        run: python3 orchestrator.py
 
       - name: Sync refreshed tokens to GitHub Secrets
         run: python3 token_manager.py --sync-secrets

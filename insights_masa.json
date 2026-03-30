@@ -1,6 +1,6 @@
 {
   "account": "@masahide_takahashi_",
-  "updated_at": "2026-03-30 08:03",
+  "updated_at": "2026-03-30 06:00",
   "total_posts": 200,
   "total_likes": 0,
   "total_views": 0,
@@ -10,20 +10,6 @@
   "recent_7days_count": 200,
   "recent_7days_avg_likes": 0.0,
   "top10_by_likes": [
-    {
-      "text": "動画広告で大切な3つのこと。\n\n① プロフィールを最適化する\n② 行動喚起（CTA）を入れる\n③ お客様の実績・声を見せる\n\nこの順番で整えると、結果が出やすく",
-      "likes": 0,
-      "views": 0,
-      "replies": 0,
-      "date": "2026-03-29"
-    },
-    {
-      "text": "売れる人と売れない人、違いは1つです。",
-      "likes": 0,
-      "views": 0,
-      "replies": 0,
-      "date": "2026-03-29"
-    },
     {
       "text": "良い動画より大事なことがある。",
       "likes": 0,
@@ -79,21 +65,35 @@
       "views": 0,
       "replies": 0,
       "date": "2026-03-29"
+    },
+    {
+      "text": "LINE集客の実践ノウハウは\nLINEでこっそり共有しています。\n\n行動喚起（CTA）を必ず入れること",
+      "likes": 0,
+      "views": 0,
+      "replies": 0,
+      "date": "2026-03-29"
+    },
+    {
+      "text": "これ、当てはまりますか？\n\n□ ターゲットを明確にするできていない\n□ 感情に訴えるストーリーを使うが曖昧\n□ 継続して発信するを後回しにしてる\n\n1つでも当て",
+      "likes": 0,
+      "views": 0,
+      "replies": 0,
+      "date": "2026-03-29"
     }
   ],
   "performance_by_length": {
+    "〜50字": {
+      "count": 12,
+      "avg_likes": 0.0,
+      "avg_views": 0.0
+    },
     "50〜100字": {
       "count": 128,
       "avg_likes": 0.0,
       "avg_views": 0.0
     },
-    "〜50字": {
-      "count": 13,
-      "avg_likes": 0.0,
-      "avg_views": 0.0
-    },
     "100〜150字": {
-      "count": 50,
+      "count": 51,
       "avg_likes": 0.0,
       "avg_views": 0.0
     },

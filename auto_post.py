@@ -28,7 +28,7 @@ from pathlib import Path
 BASE = Path(__file__).parent
 ERROR_LOG = BASE / "error.log"
 LOCK_FILE = BASE / ".autopost.lock"
-POST_HOUR_START = 6
+POST_HOUR_START = 5
 POST_HOUR_END = 23
 MAX_RETRY = 3
 POSTS_PER_RUN = 2  # 1回の実行で投稿する本数
@@ -227,7 +227,17 @@ def api_request(url: str, data: bytes = None, retry: int = 0) -> dict:
         raise e
 
 
+FOLLOWUP_SEP = "===FOLLOWUP==="
+
 _URL_RE = re.compile(r'https?://\S+')
+
+def extract_followup(text: str):
+    """本文からフォローアップコメントを分離する。
+    戻り値: (メイン本文, フォローアップ文 or None)"""
+    if FOLLOWUP_SEP in text:
+        parts = text.split(FOLLOWUP_SEP, 1)
+        return parts[0].rstrip(), parts[1].strip()
+    return text, None
 
 def extract_url_and_cta(text: str):
     """
@@ -287,27 +297,49 @@ def post_to_threads(acct: str, text: str) -> str:
 
 # ── アカウント実行 ────────────────────────────────────
 
+def _post_replies(acct: str, post_id: str, followup: str | None, cta_block: str | None):
+    """メイン投稿の後にフォローアップコメントとCTAを投稿する"""
+    name = ACCOUNTS[acct]["name"]
+    last_id = post_id
+
+    # フォローアップコメント（解説・考え方など）
+    if followup:
+        try:
+            time.sleep(3)
+            last_id = post_reply_to_threads(acct, post_id, followup)
+            log_info(acct, f"{name} ✓ フォローアップコメント投稿完了")
+        except Exception as ce:
+            log_error(f"{name} フォローアップコメント投稿失敗: {ce}")
+
+    # CTA（URL付き）
+    if cta_block:
+        try:
+            bridge = ACCOUNTS[acct].get("bridge_text", "詳しくはこちら 👇")
+            time.sleep(3)
+            r1 = post_reply_to_threads(acct, last_id, bridge)
+            time.sleep(2)
+            post_reply_to_threads(acct, r1, cta_block)
+            log_info(acct, f"{name} ✓ コメントにURL投稿完了")
+        except Exception as ce:
+            log_error(f"{name} コメント投稿失敗: {ce}")
+
+
 def _post_one(acct: str, today: str, text: str, index: int) -> bool:
     """1本投稿して成功したらTrueを返す"""
     name = ACCOUNTS[acct]["name"]
-    clean_text, cta_block = extract_url_and_cta(text)
+
+    # フォローアップコメントを分離
+    main_text, followup = extract_followup(text)
+    # URLをメイン本文から除去し、コメントに回す
+    clean_text, cta_block = extract_url_and_cta(main_text)
+
     log_info(acct, f"{name} [{index+1}本目]: {clean_text[:40].replace(chr(10), ' ')}...")
 
     try:
         post_id = post_to_threads(acct, clean_text)
         mark_posted(acct, today, index, post_id, clean_text)
         log_info(acct, f"{name} ✓ 完了 (ID: {post_id})")
-
-        if cta_block:
-            try:
-                bridge = ACCOUNTS[acct].get("bridge_text", "詳しくはこちら 👇")
-                time.sleep(3)
-                r1 = post_reply_to_threads(acct, post_id, bridge)
-                time.sleep(2)
-                post_reply_to_threads(acct, r1, cta_block)
-                log_info(acct, f"{name} ✓ コメントにURL投稿完了")
-            except Exception as ce:
-                log_error(f"{name} コメント投稿失敗: {ce}")
+        _post_replies(acct, post_id, followup, cta_block)
         return True
 
     except urllib.error.HTTPError as e:
@@ -322,16 +354,7 @@ def _post_one(acct: str, today: str, text: str, index: int) -> bool:
                     post_id = post_to_threads(acct, clean_text)
                     mark_posted(acct, today, index, post_id, clean_text)
                     log_info(acct, f"{name} ✓ 完了（リフレッシュ後） (ID: {post_id})")
-                    if cta_block:
-                        try:
-                            bridge = ACCOUNTS[acct].get("bridge_text", "詳しくはこちら 👇")
-                            time.sleep(3)
-                            r1 = post_reply_to_threads(acct, post_id, bridge)
-                            time.sleep(2)
-                            post_reply_to_threads(acct, r1, cta_block)
-                            log_info(acct, f"{name} ✓ コメントにURL投稿完了（リフレッシュ後）")
-                        except Exception as ce:
-                            log_error(f"{name} コメント投稿失敗（リフレッシュ後）: {ce}")
+                    _post_replies(acct, post_id, followup, cta_block)
                     return True
                 except Exception as e2:
                     log_error(f"{name} リフレッシュ後も失敗 → 手動で auth.py を実行してください: {e2}")

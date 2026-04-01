@@ -99,6 +99,58 @@ def log_error(msg: str):
         f.write(line)
 
 
+# ── Claude APIで2本目コメント生成 ───────────────────────────
+
+ACCOUNT_PERSONAS = {
+    "truth": "整体院（truth body salon）のアカウント。首・肩・腰・頭痛など体の不調を根本から改善する整体サロン。",
+    "masa": "整体サロンのオーナー・masahide_takahashiの個人アカウント。集客・SNS運用・動画マーケティングについて発信。",
+}
+
+def generate_bridge_comment(clean_text: str, acct: str) -> str:
+    """メイン投稿の内容をもとにClaude APIで補足説明コメントを生成する。失敗時はデフォルトテキストを返す。"""
+    api_key = os.environ.get("ANTHROPIC_API_KEY", "")
+    if not api_key:
+        return ACCOUNTS[acct].get("bridge_text", "詳しくはこちら 👇")
+
+    persona = ACCOUNT_PERSONAS.get(acct, "")
+    prompt = (
+        f"あなたは{persona}\n\n"
+        "以下のThreads投稿（1/3）に続く、2/3のコメントを書いてください。\n"
+        "【条件】\n"
+        "- 投稿内容の原因・メカニズム・具体的な補足情報を解説する\n"
+        "- 100〜180文字程度\n"
+        "- 自然な話し言葉。絵文字は1〜2個まで\n"
+        "- URLや「ご予約はこちら」などの案内は絶対に含めない\n"
+        "- コメント本文のみを出力（前置き・説明不要）\n\n"
+        f"【投稿内容】\n{clean_text}"
+    )
+
+    payload = json.dumps({
+        "model": "claude-haiku-4-5-20251001",
+        "max_tokens": 300,
+        "messages": [{"role": "user", "content": prompt}]
+    }, ensure_ascii=False).encode()
+
+    req = urllib.request.Request(
+        "https://api.anthropic.com/v1/messages",
+        data=payload,
+        headers={
+            "x-api-key": api_key,
+            "anthropic-version": "2023-06-01",
+            "content-type": "application/json",
+        },
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=20) as r:
+            result = json.loads(r.read())
+        return result["content"][0]["text"].strip()
+    except Exception as e:
+        # API失敗時はデフォルトにフォールバック
+        print(f"[generate_bridge_comment] fallback: {e}", file=sys.stderr)
+        return ACCOUNTS[acct].get("bridge_text", "詳しくはこちら 👇")
+
+
 # ── トークン自動リフレッシュ ──────────────────────────────
 
 def refresh_token(acct: str) -> bool:
@@ -297,22 +349,43 @@ def run_account(acct: str):
         log_info(acct, f"{name} 今日の投稿完了")
         return
 
-    # URLをメイン本文から除去し、3本目のコメントに回す
+    # URLをメイン本文から除去し、コメントに回す
     clean_text, cta_block = extract_url_and_cta(text)
 
+    # フック投稿の続き本文を分離（【続き】マーカー）
+    CONTINUATION_MARKER = "\n\n【続き】\n"
+    continuation = None
+    if CONTINUATION_MARKER in clean_text:
+        parts = clean_text.split(CONTINUATION_MARKER, 1)
+        clean_text = parts[0]
+        continuation = parts[1]
+
     log_info(acct, f"{name} [{index+1}本目]: {clean_text[:40].replace(chr(10), ' ')}...")
+
+    # URLがある場合のみ補足説明コメントをAIで事前生成（投稿前に準備）
+    bridge = generate_bridge_comment(clean_text, acct) if cta_block else None
 
     try:
         post_id = post_to_threads(acct, clean_text)
         mark_posted(acct, today, index, post_id, clean_text)
         log_info(acct, f"{name} ✓ 完了 (ID: {post_id})")
 
-        # URLがある場合は2本目コメントに橋渡し文、3本目にURLを投稿
+        # 続き本文をコメント1番目に投稿
+        last_reply_id = post_id
+        if continuation:
+            try:
+                time.sleep(3)
+                last_reply_id = post_reply_to_threads(acct, post_id, continuation)
+                log_info(acct, f"{name} ✓ 続きコメント投稿完了")
+            except Exception as ce:
+                log_error(f"{name} 続きコメント投稿失敗: {ce}")
+
+        # URLがある場合は橋渡し文 → URL の順でコメント投稿
         if cta_block:
             try:
-                bridge = ACCOUNTS[acct].get("bridge_text", "詳しくはこちら 👇")
+                bridge = bridge or ACCOUNTS[acct].get("bridge_text", "詳しくはこちら 👇")
                 time.sleep(3)
-                r1 = post_reply_to_threads(acct, post_id, bridge)
+                r1 = post_reply_to_threads(acct, last_reply_id, bridge)
                 time.sleep(2)
                 post_reply_to_threads(acct, r1, cta_block)
                 log_info(acct, f"{name} ✓ コメントにURL投稿完了")
@@ -332,11 +405,18 @@ def run_account(acct: str):
                     post_id = post_to_threads(acct, clean_text)
                     mark_posted(acct, today, index, post_id, clean_text)
                     log_info(acct, f"{name} ✓ 完了（リフレッシュ後） (ID: {post_id})")
+                    last_reply_id2 = post_id
+                    if continuation:
+                        try:
+                            time.sleep(3)
+                            last_reply_id2 = post_reply_to_threads(acct, post_id, continuation)
+                        except Exception as ce:
+                            log_error(f"{name} 続きコメント投稿失敗（リフレッシュ後）: {ce}")
                     if cta_block:
                         try:
-                            bridge = ACCOUNTS[acct].get("bridge_text", "詳しくはこちら 👇")
+                            bridge = bridge or ACCOUNTS[acct].get("bridge_text", "詳しくはこちら 👇")
                             time.sleep(3)
-                            r1 = post_reply_to_threads(acct, post_id, bridge)
+                            r1 = post_reply_to_threads(acct, last_reply_id2, bridge)
                             time.sleep(2)
                             post_reply_to_threads(acct, r1, cta_block)
                             log_info(acct, f"{name} ✓ コメントにURL投稿完了（リフレッシュ後）")

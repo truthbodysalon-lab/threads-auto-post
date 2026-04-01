@@ -277,6 +277,19 @@ def fill(template: str, symptom: str = None) -> str:
             .replace("{habit2}", habits[1])
             .replace("{habit3}", habits[2]))
 
+HOOK_CONTINUATION_MARKER = "\n\n【続き】\n"
+
+HOOK_BODIES = [
+    "{symptom}が治らない人に共通しているのは\n{cause}を放置していること。\n\n施術で一時的に楽になっても\n原因を変えなければまた戻ります。\n\n小さな習慣が、体を根本から変えます。",
+    "それは「原因ではなく症状」だけを治そうとしていること。\n\n{cause}が続く限り\n{symptom}は何度でも戻ってきます。\n\n根本から変えると、体は想像以上に楽になります。",
+    "共通点は3つ。\n\n▶ {habit1}\n▶ {habit2}\n▶ {habit3}\n\nどれか1つ変えるだけで\n体の状態は変わり始めます。",
+    "{cause}を見直していないこと。\n\nどれだけ揉んでも\n{cause}が続く限り{symptom}は戻ります。\n\n施術と習慣の両輪が大事です。",
+    "「治った」と思った翌日にまた辛くなる。\nその繰り返しをしていること。\n\n原因は{cause}にあります。\n\nここを変えると、体が根本から楽になります。",
+    "自分の体のことを「年齢のせい」にしていること。\n\n{symptom}は年齢より\n{cause}による影響の方が大きい。\n\n習慣を変えれば、何歳からでも変われます。",
+    "週1で整体に来ても\n日常の{cause}を変えていないこと。\n\n施術は「リセット」。\n日常が「積み上げ」です。\n\n両方揃って体は変わります。",
+    "「痛くなったら行く」が習慣になっていること。\n\n{symptom}は出てからでは時間がかかります。\n\n「出る前に整える」が\n根本改善への近道です。",
+]
+
 def generate_cta_post(target: str) -> str:
     """target: 'katakori' or 'zutsuu'"""
     if target == "katakori":
@@ -306,9 +319,13 @@ def generate_post(pattern_key: str) -> str:
         body = fill(random.choice(p["bodies"]))
         return opener + body
 
+    elif pattern_key == "hook_one_line":
+        hook = fill(random.choice(p["templates"]))
+        body = fill(random.choice(HOOK_BODIES))
+        return hook + HOOK_CONTINUATION_MARKER + body
+
     elif pattern_key in ("story", "workmom", "ranking", "question",
-                          "hook_one_line", "gyakusetsu",
-                          "aoi_style", "hori_style"):
+                          "gyakusetsu", "aoi_style", "hori_style"):
         return fill(random.choice(p["templates"]))
 
     return ""
@@ -398,6 +415,12 @@ MASA_PATTERNS = {
         "売れる人と売れない人、違いは1つです。",
         "月商が変わった人は、ここを変えていた。",
         "努力より設計の問題です。",
+        "SNSを頑張っても集客できない本当の理由。",
+        "コンテンツより先に整えるべきものがある。",
+        "バズる必要はない。刺さればいい。",
+        "フォロワー0でも集客できる仕組みがある。",
+        "SNSを「何となく」やっている限り結果は出ない。",
+        "投稿の頻度より、投稿の設計が大事。",
     ],
     # ── 小川式：謎かけ → 箇条書き → 断言 ──
     "aoi_style": [
@@ -433,29 +456,38 @@ MASA_PATTERNS = {
         "先日、お客様から\n「{topic}を見直したら問い合わせが増えた」\nと連絡をもらいました。\n\n{point}\n\n小さな改善が、大きな結果につながります。",
         "正直に言います。\n\n{topic}は魔法じゃない。\n{point}\n\n地道にやり続けた人だけが、結果を手にします。",
         "集客に悩んでいる方へ。\n\n{point}\n\n{topic}は手段です。ゴールから逆算して設計してください。",
+        "SNSを始めて3ヶ月、ほぼ無反応でした。\n\n変えたのは1つだけ。\n\n{point}\n\nそこから問い合わせが来るようになりました。",
+        "半年間コンテンツを出し続けたのに\n集客ゼロだった方がいます。\n\n問題はコンテンツの量ではなく\n{point}でした。\n\n設計を変えた翌月、問い合わせが来ました。",
     ],
     "cta": [
         "{topic}で悩んでいる方、\nLINEで気軽に相談してください。\n\n{point}\n\n👉 https://lin.ee/8PsIHHC",
-        "無料でインスタ集客の相談に乗っています。\n\n{point}\n\nLINEからどうぞ 👉 https://lin.ee/8PsIHHC",
+        "無料でSNS集客の相談に乗っています。\n\n{point}\n\nLINEからどうぞ 👉 https://lin.ee/8PsIHHC",
         "「{topic}、何から始めればいい？」\nそんな方はLINEに登録してみてください。\n\n一緒に整理しましょう。\n👉 https://lin.ee/8PsIHHC",
         "集客の仕組みを作りたい方へ。\n\n{point}\n\n詳しくはLINEで話しましょう。\n👉 https://lin.ee/8PsIHHC",
+        "SNS集客を整えたい方、\n今なら無料で相談できます。\n\n{point}\n\nプロフィールのリンクからどうぞ。\n👉 https://lin.ee/8PsIHHC",
     ],
     # LINE誘導をさりげなく含む通常投稿（ハードCTAなし）
     "soft_line": [
         "{topic}について深掘りした内容を\nLINEで配信しています。\n\n{point}\n\n気になる方はプロフィールから。",
         "この投稿が参考になったら、\nLINEでもっと詳しい話を読んでみてください。\n\n{point}",
         "{topic}の実践ノウハウは\nLINEでこっそり共有しています。\n\n{point}",
+        "SNS集客の設計について\nLINEで無料配信しています。\n\n{point}\n\nプロフィールから登録できます。",
+        "「{topic}って結局どうすればいいの？」\nその答えをLINEで話しています。\n\n{point}",
     ],
     "ranking": [
         "集客できない店舗の共通点 TOP3\n\n1位：{tip1}\n2位：{tip2}\n3位：{tip3}\n\n正直、どれか当てはまってませんか？",
         "{topic}で成果が出ない人がやっていること3選\n\n① {tip1}\n② {tip2}\n③ {tip3}\n\nこれを直すだけで変わります。",
-        "フォロワー1万人超えの人が共通してやっていること\n\n▶ {tip1}\n▶ {tip2}\n▶ {tip3}\n\n難しいことは何もない。",
+        "SNSで結果が出ている人が共通してやっていること\n\n▶ {tip1}\n▶ {tip2}\n▶ {tip3}\n\n難しいことは何もない。",
         "集客に成功している店舗が最初にやること 3つ\n\n① {tip1}\n② {tip2}\n③ {tip3}\n\n順番が大事です。",
+        "SNS運用で絶対にやってはいけないこと3選\n\n① {tip1}していない\n② {tip2}が曖昧\n③ {tip3}を後回しにしている\n\n1つでも当てはまったら今すぐ見直してください。",
+        "月商が上がった人が変えたこと TOP3\n\n① {tip1}\n② {tip2}\n③ {tip3}\n\nコンテンツの質より「設計」が変わった。",
     ],
     "question": [
         "正直に聞きます。\n\n{topic}、今どれくらい本気でやってますか？\n\nA：毎日やってる\nB：週数回\nC：なんとなく\n\nコメントで教えてください。",
         "あなたの{topic}、何が原因で伸びてないと思いますか？\n\n「コンテンツ」「継続」「設計」\n\nどれだと思う？\nコメントで教えてほしいです。",
         "これ、当てはまりますか？\n\n□ {tip1}できていない\n□ {tip2}が曖昧\n□ {tip3}を後回しにしてる\n\n1つでも当てはまったら、\n今すぐ{topic}を見直してください。",
+        "SNS運用、今どこで詰まっていますか？\n\nA：発信ネタが思いつかない\nB：フォロワーが増えない\nC：投稿しても問い合わせが来ない\nD：何から始めればいいか分からない\n\nコメントで教えてください。",
+        "あなたのSNS集客、何が一番の課題ですか？\n\n「時間がない」「続かない」「反応がない」\n\n一番当てはまるものを教えてください。",
     ],
 }
 

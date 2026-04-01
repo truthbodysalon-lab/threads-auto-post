@@ -1,13 +1,13 @@
 {
-  "updated_at": "2026-03-30",
+  "updated_at": "2026-04-01",
   "pattern_weights": {
-    "quote_empathy": 6,
-    "insight": 5,
-    "education": 5,
-    "story": 3,
-    "workmom": 2,
-    "ranking": 4,
-    "question": 3
+    "quote_empathy": 9,
+    "insight": 7,
+    "education": 7,
+    "story": 4,
+    "workmom": 3,
+    "ranking": 6,
+    "question": 5
   },
   "feedback_scores": {},
   "api_scores": {}

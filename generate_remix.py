@@ -375,7 +375,9 @@ def generate_30_posts() -> list[str]:
     for pk in plan:
         for _ in range(50):
             post = generate_post(pk)
-            key = post[:100]
+            # メイン本文だけで重複判定（フォローアップ違いの同一フック防止）
+            main_part = post.split(FOLLOWUP_SEP)[0].rstrip() if FOLLOWUP_SEP in post else post
+            key = main_part[:100]
             if key not in seen and not _is_ng(post):
                 seen.add(key)
                 posts.append(post)
@@ -584,7 +586,9 @@ def generate_30_masa_posts() -> list[str]:
     for pk in plan:
         for _ in range(30):
             post = generate_masa_post(pk)
-            key = post[:60]
+            # メイン本文だけで重複判定（フォローアップ違いの同一フック防止）
+            main_part = post.split(FOLLOWUP_SEP)[0].rstrip() if FOLLOWUP_SEP in post else post
+            key = main_part[:60]
             if key not in seen and not _is_ng(post):
                 seen.add(key)
                 posts.append(post)

@@ -147,6 +147,13 @@ def get_posted_texts(acct: str) -> set:
                 texts.add(entry["text"])
     return texts
 
+def _extract_main_text(post: str) -> str:
+    """投稿テキストからメイン本文のみを取り出す（フォローアップ・URL除去）"""
+    main, _ = extract_followup(post)
+    clean, _ = extract_url_and_cta(main)
+    return clean
+
+
 def get_next_post(acct: str, today: str):
     log_file = ACCOUNTS[acct]["log"]
     if not log_file.exists():
@@ -156,13 +163,12 @@ def get_next_post(acct: str, today: str):
     if not today_entries:
         return None, -1
 
-    # 全バッチから候補を収集（テキスト先頭80文字で重複排除）
+    # 全バッチから候補を収集（メイン本文で重複排除）
     seen_keys = set()
     all_posts = []
     for entry in today_entries:
         for post in entry.get("posts", []):
-            clean, _ = extract_url_and_cta(post)
-            key = clean[:80]
+            key = _extract_main_text(post)[:80]
             if key not in seen_keys:
                 seen_keys.add(key)
                 all_posts.append(post)
@@ -175,12 +181,11 @@ def get_next_post(acct: str, today: str):
     old_posted_keys = set()
     for idx in get_posted_indices(acct, today):
         if idx < len(last_batch):
-            clean, _ = extract_url_and_cta(last_batch[idx])
-            old_posted_keys.add(clean[:80])
+            old_posted_keys.add(_extract_main_text(last_batch[idx])[:80])
 
     for i, text in enumerate(all_posts):
-        clean, _ = extract_url_and_cta(text)
-        if clean not in posted_texts and clean[:80] not in old_posted_keys:
+        main_text = _extract_main_text(text)
+        if main_text not in posted_texts and main_text[:80] not in old_posted_keys:
             return text, i
     return None, -1
 

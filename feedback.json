@@ -1,9 +1,6 @@
 {
-  "pattern_weights": {
-    "other": 1,
-    "hook_one_line": 1,
-    "aoi_style": 1,
-    "hori_style": 1
-  },
-  "updated_at": "2026-03-30 21:34"
+  "pattern_weights": {},
+  "ng_words": [],
+  "extra_templates": [],
+  "updated_at": "2026-04-01"
 }

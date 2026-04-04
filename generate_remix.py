@@ -102,6 +102,41 @@ PATTERNS = {
             "技術より大事なことがあります。\n\n日常の{cause}を変えること。\n\n週1の施術より\n毎日の習慣が体を変えます。",
         ],
     },
+    # ── PASONA法則：Problem→Affinity→Solution→Offer→NarrowDown→Action ──
+    "pasona": {
+        "desc": "PASONA法則（小川教材コア）",
+        "templates": [
+            # P: 痛みを言い当てる → A: 共感 → S: 解決策 → O: 提案 → N: 今すぐ感 → A: 行動
+            "「{symptom}、もう仕方ない」\nそう諦めていませんか？\n\n気持ちすごく分かります。\n薬を飲んでも、マッサージに行っても\nまた繰り返す。疲れますよね。\n\n実は{symptom}の多くは\n{cause}が根本原因です。\nそこを変えると、体は劇的に変わります。\n\n施術実績1万人・改善率93.7%の\nインナー整体で根本から整えます。\n\n今なら初回カウンセリング無料。\n体を変えたいと思ったその気持ち、\n今すぐ行動に変えてください。",
+
+            "毎日{symptom}があると\n仕事も育児も本当に辛いですよね。\n\n私もそういう患者さんをたくさん見てきました。\n「もう歳だから」と諦めてしまう方も多い。\n\nでも違います。\n{symptom}は{cause}の問題。\n年齢とは関係ありません。\n\n当院では原因を特定して\n根本から改善するアプローチをとっています。\n改善率93.7%、実績1万人。\n\n{life_scene_n}を取り戻したい方、\n一度ご相談ください。",
+
+            "「{symptom}で{life_scene_n}が楽しめない」\nそんな思いをずっと抱えていませんか？\n\n同じ悩みを抱えていた方が\n当院に来られています。\n\n{cause}を整えることで\n多くの方が3回以内に変化を実感されています。\n\n週3の頭痛 → ほぼゼロ\n5年続いた肩こり → 2ヶ月で改善\n\n今だけ初回特別価格でご提供しています。\n体を後回しにするのは、今日でおしまいにしましょう。",
+        ],
+    },
+    # ── PRBREP法：結論→理由→根拠→反論への反論→事例→結論 ──
+    "prbrep": {
+        "desc": "PRBREP法（根拠+事例で説得力UP）",
+        "templates": [
+            # P結論 → R理由 → B根拠（数字） → R反論への反論 → E事例 → P結論
+            "{symptom}は、薬では治りません。\n\nなぜなら薬は「痛みを消す」だけで\n「原因を取り除く」ものではないから。\n\n実際、厚生労働省のデータでも\n鎮痛剤の常用は症状を慢性化させるリスクがあると示されています。\n\n「でも整体って高いし効果が出るか分からない」\nそう思う気持ちも分かります。\nでも薬代が月3,000円×12ヶ月なら3万6千円。\n根本改善にかける費用より高くなることも多い。\n\n当院で5年続いた肩こりが2ヶ月で改善した方がいます。\n\n{symptom}は変えられます。\n根本から整えると、薬も必要なくなります。",
+
+            "{cause}が{symptom}の主な原因です。\n\nなぜなら{cause}が続くと\n筋肉が常に緊張状態になるから。\n\nこれは整体師として1万人以上を診て\n繰り返し確認してきた事実です。\n\n「でも{cause}って気をつけても直らない」\nはい、習慣を変えるのは簡単ではない。\nでもコツを知ると驚くほど短期間で変わります。\n\n実際に{cause}の習慣を変えるだけで\n3週間で{symptom}がほぼ消えた方もいます。\n\n小さな習慣の変化が\n体を根本から変えていきます。",
+
+            "{symptom}を「歳のせい」にするのは\n早すぎます。\n\nなぜなら{symptom}の本当の原因は\n年齢ではなく「体の使い方」にあるから。\n\n30代の方でも生活習慣が悪ければ\n症状は出ます。逆に50代でも\n体の使い方を変えた方は劇的に改善します。\n\n「もう歳だから仕方ない」\nその考えが一番の敵です。\n\n先日、52歳のお客様が\n30年続いた首こりから解放されました。\n\n年齢は関係ない。\n今からでも、必ず変わります。",
+        ],
+    },
+    # ── 等価交換型：情報提供→信頼獲得（煽りなし） ──
+    "touka_koukan": {
+        "desc": "等価交換（情報提供→信頼）",
+        "templates": [
+            "今日は{symptom}を楽にするための\n5つのセルフケアをお伝えします。\n\n① 寝る前に首を左右にゆっくり倒す（各30秒）\n② 水を1日1.5L以上飲む\n③ スマホを見る時間を1時間ごとに5分休憩\n④ 肩を前後に大きく回す（各10回）\n⑤ 深呼吸を1日3回意識する\n\nどれも今日からできることばかり。\nまずは1つだけ試してみてください。",
+
+            "{symptom}が悪化しやすい習慣を知っていますか？\n\n① 長時間同じ姿勢でいる\n② 口で呼吸している\n③ 食いしばっている（特に睡眠中）\n④ 水分が足りていない\n⑤ 枕の高さが合っていない\n\n心当たりはありましたか？\n\nこの中の1つを変えるだけで\n体の変化を感じる方がほとんどです。\n\n情報が体を変える第一歩。\n気づいた今がチャンスです。",
+
+            "なぜ「マッサージに通っても{symptom}が治らないのか」\n仕組みをお話しします。\n\nマッサージは筋肉の緊張をほぐすもの。\nでも緊張の「原因」は残ったまま。\n\n原因は大きく3つ：\n・{cause}による姿勢の歪み\n・深部筋の硬さ（表面だけほぐしても届かない）\n・自律神経の乱れ\n\nこの3つにアプローチしないと\n何度通っても元に戻ります。\n\n「なぜ治らないのか」を知ることが\n本当の改善への第一歩です。",
+        ],
+    },
     # ── 小川式：1行謎かけ → 箇条書き解説 → 1行断言 ──
     "aoi_style": {
         "desc": "小川式（謎かけ→箇条書き→断言）",
@@ -325,7 +360,8 @@ def generate_post(pattern_key: str) -> str:
         return hook + HOOK_CONTINUATION_MARKER + body
 
     elif pattern_key in ("story", "workmom", "ranking", "question",
-                          "gyakusetsu", "aoi_style", "hori_style"):
+                          "gyakusetsu", "aoi_style", "hori_style",
+                          "pasona", "prbrep", "touka_koukan"):
         return fill(random.choice(p["templates"]))
 
     return ""
@@ -333,14 +369,20 @@ def generate_post(pattern_key: str) -> str:
 
 def generate_30_posts() -> list[str]:
     w = _load_weights("truth")
-    # 45本生成: 共感9・インサイト7・教育7・ストーリー4・ワーママ3・ランキング6・問いかけ5 + CTA4 = 45本
+    # 小川教材 7:2:1 比率 — 情報提供7・日常/共感2・宣伝1
+    # 45本生成: 情報系(touka_koukan3+prbrep3+education5+insight4+aoi_style4+hori_style3+hook_one_line4+gyakusetsu3)=29
+    #           日常/共感系(quote_empathy5+story3+workmom2+question2+ranking4)=16 ← 合計45に調整
+    #           宣伝(pasona)=4本 ← CTA別に4本追加で合計49→45本カット
     defaults = {
+        "touka_koukan": 3,  # 等価交換（情報提供→信頼）
+        "prbrep": 3,        # PRBREP（根拠+事例で説得力）
+        "pasona": 3,        # PASONA（問題→共感→解決→提案→行動）
         "hook_one_line": 4,
-        "aoi_style": 5,    # 小川式：謎かけ→箇条書き→断言
-        "hori_style": 4,   # 堀式：逆説→数字実績→口語断定
+        "aoi_style": 4,    # 小川式：謎かけ→箇条書き→断言
+        "hori_style": 3,   # 堀式：逆説→数字実績→口語断定
         "gyakusetsu": 3,
-        "quote_empathy": 6,
-        "insight": 5,
+        "quote_empathy": 5,
+        "insight": 4,
         "education": 5,
         "story": 3,
         "workmom": 2,
@@ -349,6 +391,9 @@ def generate_30_posts() -> list[str]:
     }
     merged = {k: w.get(k, v) for k, v in defaults.items()}
     plan = (
+        ["touka_koukan"] * merged["touka_koukan"] +
+        ["prbrep"] * merged["prbrep"] +
+        ["pasona"] * merged["pasona"] +
         ["hook_one_line"] * merged["hook_one_line"] +
         ["aoi_style"] * merged["aoi_style"] +
         ["hori_style"] * merged["hori_style"] +
@@ -475,19 +520,43 @@ MASA_PATTERNS = {
         "「{topic}って結局どうすればいいの？」\nその答えをLINEで話しています。\n\n{point}",
     ],
     "ranking": [
-        "集客できない店舗の共通点 TOP3\n\n1位：{tip1}\n2位：{tip2}\n3位：{tip3}\n\n正直、どれか当てはまってませんか？",
-        "{topic}で成果が出ない人がやっていること3選\n\n① {tip1}\n② {tip2}\n③ {tip3}\n\nこれを直すだけで変わります。",
+        "集客できない店舗の共通点 TOP3\n\n1位：{bad1}\n2位：{bad2}\n3位：{bad3}\n\n正直、どれか当てはまってませんか？",
+        "{topic}で成果が出ない人がやっていること3選\n\n① {bad1}\n② {bad2}\n③ {bad3}\n\nこれを直すだけで変わります。",
         "SNSで結果が出ている人が共通してやっていること\n\n▶ {tip1}\n▶ {tip2}\n▶ {tip3}\n\n難しいことは何もない。",
         "集客に成功している店舗が最初にやること 3つ\n\n① {tip1}\n② {tip2}\n③ {tip3}\n\n順番が大事です。",
-        "SNS運用で絶対にやってはいけないこと3選\n\n① {tip1}していない\n② {tip2}が曖昧\n③ {tip3}を後回しにしている\n\n1つでも当てはまったら今すぐ見直してください。",
+        "SNS運用で絶対にやってはいけないこと3選\n\n① {bad1}\n② {bad2}\n③ {bad3}\n\n1つでも当てはまったら今すぐ見直してください。",
         "月商が上がった人が変えたこと TOP3\n\n① {tip1}\n② {tip2}\n③ {tip3}\n\nコンテンツの質より「設計」が変わった。",
     ],
     "question": [
         "正直に聞きます。\n\n{topic}、今どれくらい本気でやってますか？\n\nA：毎日やってる\nB：週数回\nC：なんとなく\n\nコメントで教えてください。",
         "あなたの{topic}、何が原因で伸びてないと思いますか？\n\n「コンテンツ」「継続」「設計」\n\nどれだと思う？\nコメントで教えてほしいです。",
-        "これ、当てはまりますか？\n\n□ {tip1}できていない\n□ {tip2}が曖昧\n□ {tip3}を後回しにしてる\n\n1つでも当てはまったら、\n今すぐ{topic}を見直してください。",
+        "これ、当てはまりますか？\n\n□ {bad1}\n□ {bad2}\n□ {bad3}\n\n1つでも当てはまったら、\n今すぐ{topic}を見直してください。",
         "SNS運用、今どこで詰まっていますか？\n\nA：発信ネタが思いつかない\nB：フォロワーが増えない\nC：投稿しても問い合わせが来ない\nD：何から始めればいいか分からない\n\nコメントで教えてください。",
         "あなたのSNS集客、何が一番の課題ですか？\n\n「時間がない」「続かない」「反応がない」\n\n一番当てはまるものを教えてください。",
+    ],
+    # ── PASONA法則（マーケ版）：Problem→Affinity→Solution→Offer→NarrowDown→Action ──
+    "pasona": [
+        "「{topic}を頑張っているのに\nなぜ結果が出ないんだろう」\nそう悩んでいませんか？\n\n気持ちよく分かります。\n毎日投稿してもフォロワーが増えない。\nいいねはつくのに問い合わせが来ない。\n本当に辛いですよね。\n\n実はその原因は「設計」にあります。\nコンテンツの質より先に\n導線と見せ方を整えることが大事。\n\n今なら無料でLINE相談を受け付けています。\n悩んでいる今が、変えるタイミングです。",
+
+        "「SNSに時間をかけているのに\n集客できない」\nそんな状態が続いていませんか？\n\n同じ悩みを抱えていた方が\n私のLINEに集まっています。\n\n{topic}で集客できない本当の理由は\n「誰に」「何を」伝えるかが曖昧なこと。\nそこを整えるだけで、反応は変わります。\n\n無料LINEでは集客設計の基礎を配信中。\n今すぐプロフィールから登録できます。",
+
+        "集客できないのは、あなたのせいじゃない。\n\n正しいやり方を知らないだけです。\n\n私がサポートした方の変化：\n月0件 → 月20件の問い合わせ\nフォロワー100人 → 6ヶ月で1000人\n\nやったことは{topic}の「設計を変えた」だけ。\n\n今ならLINE登録で\n集客設計の全体像を無料で学べます。\nまずは一歩、行動してみてください。",
+    ],
+    # ── PRBREP法（マーケ版）：結論→理由→根拠→反論→事例→結論 ──
+    "prbrep": [
+        "{topic}だけやっても集客はできません。\n\nなぜなら{topic}は「手段」であって\n「目的」ではないから。\n\n実際、フォロワー数と売上の相関は\nほぼないというデータもあります。\n\n「でも他の人はSNSで結果出してるじゃん」\nはい。でもその人たちは{topic}の裏に\n必ず「導線設計」があります。\n\n私が支援した店舗はフォロワー300人で\n月商80万を達成しました。\n\n{topic}は手段。\n目的から逆算した設計が、結果を作ります。",
+
+        "SNSを頑張るより先に整えるべきことがある。\n\nなぜなら設計なしの発信は\nザルで水を汲むようなもの。\n\nこれは100店舗以上の集客を支援して\n繰り返し確認してきた事実です。\n\n「でも発信量が足りないんじゃないか」\nいいえ。毎日投稿して0件の人も\n月3本の投稿で月商100万の人もいる。\n\n変えたのは発信の「量」ではなく「設計」。\n\n正しく設計した発信は\n少ない投稿でも確実に集客につながります。",
+
+        "広告費をかけなくても集客できます。\n\nなぜなら信頼を先に積み上げれば\nお客様は自然に来るから。\n\nこれは「等価交換の法則」と呼ばれるもので\n情報を先に与えることで\n見込み客の信頼を獲得する手法です。\n\n「でも無料で情報を出したら競合に真似される」\nはい。でも真似されても「信頼」は真似できない。\n\n実際にこの方法で\n広告費ゼロで月20件の問い合わせを実現した方がいます。\n\n集客は「信頼の積み上げ」が本質です。",
+    ],
+    # ── 等価交換型（マーケ版）：情報提供→信頼獲得 ──
+    "touka_koukan": [
+        "{topic}で結果を出す人がやっている\n3つの習慣をお伝えします。\n\n① {tip1}\n② {tip2}\n③ {tip3}\n\nどれも今日から実践できることばかり。\nまずは1つだけ取り入れてみてください。",
+
+        "集客できない人がやりがちな\n5つの間違いを解説します。\n\n① {bad1}\n② {bad2}\n③ {bad3}\n④ ターゲットを決めずに全員に向けて発信\n⑤ 継続をやめてしまう\n\nこれを避けるだけで\n反応率は大きく変わります。\n\n知識が行動を変えます。",
+
+        "今日は「なぜSNSで集客できないのか」\nの本質をお話しします。\n\n多くの人が「コンテンツの質が低い」と思っている。\nでも実際の原因はほぼこの3つ：\n\n・誰に届けたいか不明確\n・投稿後の導線がない\n・信頼を積み上げる前に売ろうとしている\n\nこの3つを整えると\n発信量が同じでも結果は変わります。\n\n設計を知っているかどうかの差です。",
     ],
 }
 
@@ -524,37 +593,70 @@ MASA_TIPS = _masa_mat.get("tips") or [
     "数値で結果を示す",
 ]
 
+# 集客できない・失敗する人の「悪い行動・共通点」（ネガティブ系テンプレート用）
+MASA_BAD_HABITS = [
+    "ターゲットを決めずに全員に向けて発信している",
+    "投稿の目的がバラバラで一貫性がない",
+    "フォロワー数だけを気にして導線を作っていない",
+    "良いコンテンツを作れば売れると思っている",
+    "毎回違うことを発信して軸がブレている",
+    "プロフィールに何をしている人か書いていない",
+    "投稿に行動喚起（CTA）が一切ない",
+    "反応がないとすぐやめてしまう",
+    "競合の真似ばかりで自分の強みを発信していない",
+    "お客様の声・実績を出すのを遠慮している",
+    "完璧を目指して投稿できない日が続く",
+    "LINEやDMへの導線を作っていない",
+    "数字を全く確認せず感覚で運用している",
+    "広告費をコストだと思って一切使わない",
+    "フォロワーが増えないと設計より発信量を増やす",
+]
+
 
 def generate_masa_post(pattern_key: str) -> str:
-    templates = MASA_PATTERNS[pattern_key]
+    entry = MASA_PATTERNS[pattern_key]
+    # 新パターン(pasona/prbrep/touka_koukan)はリスト直接、旧パターンはdictのtemplatesキー
+    templates = entry if isinstance(entry, list) else entry["templates"] if isinstance(entry, dict) and "templates" in entry else entry
     tmpl = random.choice(templates)
     tips = random.sample(MASA_TIPS, min(3, len(MASA_TIPS)))
+    bads = random.sample(MASA_BAD_HABITS, min(3, len(MASA_BAD_HABITS)))
     return (tmpl
             .replace("{topic}", random.choice(MASA_TOPICS))
             .replace("{point}", random.choice(MASA_POINTS))
             .replace("{tip1}", tips[0])
             .replace("{tip2}", tips[1] if len(tips) > 1 else tips[0])
-            .replace("{tip3}", tips[2] if len(tips) > 2 else tips[0]))
+            .replace("{tip3}", tips[2] if len(tips) > 2 else tips[0])
+            .replace("{bad1}", bads[0])
+            .replace("{bad2}", bads[1] if len(bads) > 1 else bads[0])
+            .replace("{bad3}", bads[2] if len(bads) > 2 else bads[0]))
 
 
 def generate_30_masa_posts() -> list[str]:
     w = _load_weights("masa")
-    # 45本生成: フック4・小川式5・堀式4・逆説3・インサイト6・教育6・ストーリー3・LINE誘導5・CTA4・ランキング3・問いかけ2 = 45本
+    # 小川教材 7:2:1 比率 — 情報提供7・日常/共感2・宣伝1
+    # 45本: 情報系(touka_koukan3+prbrep3+education5+insight4+aoi_style4+hori_style3+hook_one_line4+gyakusetsu3)=29
+    #       日常/共感(story3+soft_line4+ranking4+question2)=13  宣伝(pasona3+cta2)=5 → 合計47→45カット
     defaults = {
+        "touka_koukan": 3,  # 等価交換（情報提供→信頼・小川教材コア）
+        "prbrep": 3,        # PRBREP（根拠+事例で説得力）
+        "pasona": 3,        # PASONA（問題→共感→解決→LINE誘導）
         "hook_one_line": 4,
-        "aoi_style": 5,
-        "hori_style": 4,
+        "aoi_style": 4,
+        "hori_style": 3,
         "gyakusetsu": 3,
-        "insight": 6,
-        "education": 6,
+        "insight": 4,
+        "education": 5,
         "story": 3,
-        "soft_line": 5,
-        "cta": 4,
-        "ranking": 3,
+        "soft_line": 4,
+        "cta": 2,
+        "ranking": 4,
         "question": 2,
     }
     merged = {k: w.get(k, v) for k, v in defaults.items()}
     plan = (
+        ["touka_koukan"] * merged["touka_koukan"] +
+        ["prbrep"] * merged["prbrep"] +
+        ["pasona"] * merged["pasona"] +
         ["hook_one_line"] * merged["hook_one_line"] +
         ["aoi_style"] * merged["aoi_style"] +
         ["hori_style"] * merged["hori_style"] +
@@ -572,13 +674,18 @@ def generate_30_masa_posts() -> list[str]:
     posts = []
     seen = set()
     for pk in plan:
+        added = False
         for _ in range(30):
             post = generate_masa_post(pk)
             key = post[:60]
             if key not in seen and not _is_ng(post):
                 seen.add(key)
                 posts.append(post)
+                added = True
                 break
+        if not added:
+            # 重複でもスロットを埋める
+            posts.append(generate_masa_post(pk))
 
     # feedback の追加テンプレを先頭に差し込む
     for tmpl in _load_extra_templates("masa"):

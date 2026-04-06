@@ -329,6 +329,9 @@ def _post_replies(acct: str, post_id: str, followup: str | None, cta_block: str 
             log_error(f"{name} コメント投稿失敗: {ce}")
 
 
+SHORT_POST_MAX_LINES = 3  # これ以下の行数はフォローアップ必須
+
+
 def _post_one(acct: str, today: str, text: str, index: int) -> bool:
     """1本投稿して成功したらTrueを返す"""
     name = ACCOUNTS[acct]["name"]
@@ -337,6 +340,13 @@ def _post_one(acct: str, today: str, text: str, index: int) -> bool:
     main_text, followup = extract_followup(text)
     # URLをメイン本文から除去し、コメントに回す
     clean_text, cta_block = extract_url_and_cta(main_text)
+
+    # 短文投稿はフォローアップ必須（コメントなしの短文はスキップ）
+    line_count = len([l for l in clean_text.split('\n') if l.strip()])
+    if line_count <= SHORT_POST_MAX_LINES and not followup and not cta_block:
+        log_info(acct, f"{name} [{index+1}本目] 短文でコメントなし → スキップ: {clean_text[:30]}...")
+        mark_posted(acct, today, index, "skipped", clean_text)
+        return True  # スキップして次へ進む
 
     log_info(acct, f"{name} [{index+1}本目]: {clean_text[:40].replace(chr(10), ' ')}...")
 

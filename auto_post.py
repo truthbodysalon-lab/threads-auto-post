@@ -233,6 +233,8 @@ def api_request(url: str, data: bytes = None, retry: int = 0) -> dict:
 
 
 FOLLOWUP_SEP = "===FOLLOWUP==="
+LONG_POST_LINE_THRESHOLD = 7    # これ以上の非空行は「長文」と判定
+LONG_POST_CHAR_THRESHOLD = 280  # またはこれ以上の文字数
 
 _URL_RE = re.compile(r'https?://\S+')
 
@@ -243,6 +245,35 @@ def extract_followup(text: str):
         parts = text.split(FOLLOWUP_SEP, 1)
         return parts[0].rstrip(), parts[1].strip()
     return text, None
+
+
+def auto_split_long_post(text: str) -> tuple:
+    """長文投稿をメイン（冒頭パラグラフ）と解説（残り）に自動分割。
+    戻り値: (メイン本文, 解説 or None)
+    短文の場合は分割せずそのまま返す。"""
+    non_empty_lines = [l for l in text.split('\n') if l.strip()]
+    if len(non_empty_lines) < LONG_POST_LINE_THRESHOLD and len(text) < LONG_POST_CHAR_THRESHOLD:
+        return text, None
+
+    # 空行（\n\n）でパラグラフに分割
+    paragraphs = re.split(r'\n\s*\n', text.strip())
+    if len(paragraphs) < 2:
+        return text, None  # 分割不可
+
+    # 最初の1パラグラフ（または2行以内に収まる範囲）をメインに
+    main = paragraphs[0].strip()
+    # メインが長すぎる場合は先頭行のみをメインにする
+    main_lines = [l for l in main.split('\n') if l.strip()]
+    if len(main_lines) > 3:
+        main = '\n'.join(main_lines[:2])
+        # 残りはメインの後半＋残りのパラグラフ
+        remaining_first = '\n'.join(main_lines[2:])
+        rest = remaining_first + '\n\n' + '\n\n'.join(p.strip() for p in paragraphs[1:])
+    else:
+        rest = '\n\n'.join(p.strip() for p in paragraphs[1:])
+
+    return main.strip(), rest.strip()
+
 
 def extract_url_and_cta(text: str):
     """
@@ -340,6 +371,14 @@ def _post_one(acct: str, today: str, text: str, index: int) -> bool:
     main_text, followup = extract_followup(text)
     # URLをメイン本文から除去し、コメントに回す
     clean_text, cta_block = extract_url_and_cta(main_text)
+
+    # 長文は自動分割（メイン冒頭 + 解説をコメントに）
+    # 既にフォローアップがある場合はスキップ
+    if not followup:
+        clean_text, auto_followup = auto_split_long_post(clean_text)
+        if auto_followup:
+            followup = auto_followup
+            log_info(acct, f"{name} [{index+1}本目] 長文を自動分割 → 解説をコメントへ")
 
     # 短文投稿はフォローアップ必須（コメントなしの短文はスキップ）
     line_count = len([l for l in clean_text.split('\n') if l.strip()])

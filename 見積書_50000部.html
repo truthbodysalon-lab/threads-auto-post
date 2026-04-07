@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>見積書</title>
+<style>
+  @page { size: A4; margin: 20mm; }
+  body {
+    font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
+    color: #000;
+    font-size: 13px;
+    margin: 0;
+    padding: 20px;
+  }
+  .title {
+    text-align: center;
+    font-size: 28px;
+    letter-spacing: 1em;
+    margin-bottom: 10px;
+    padding-left: 1em;
+  }
+  .date {
+    text-align: right;
+    margin-bottom: 20px;
+  }
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+  }
+  .to {
+    width: 55%;
+  }
+  .to .name {
+    font-size: 18px;
+    border-bottom: 2px solid #000;
+    padding-bottom: 4px;
+    margin-bottom: 10px;
+  }
+  .greeting {
+    font-size: 12px;
+    line-height: 1.8;
+  }
+  .from {
+    width: 40%;
+    position: relative;
+  }
+  .from .company {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 6px;
+  }
+  .from .info {
+    font-size: 12px;
+    line-height: 1.7;
+  }
+  .stamp {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 70px;
+    height: 70px;
+    border: 2px solid #c00;
+    border-radius: 50%;
+    color: #c00;
+    text-align: center;
+    font-size: 9px;
+    line-height: 1.2;
+    padding-top: 18px;
+    box-sizing: border-box;
+    transform: rotate(-8deg);
+  }
+  .conditions {
+    display: flex;
+    border-top: 1px solid #000;
+    border-bottom: 1px solid #000;
+    margin: 20px 0;
+  }
+  .cond-cell {
+    flex: 1;
+    padding: 10px 8px;
+    border-right: 1px solid #000;
+  }
+  .cond-cell:last-child { border-right: none; }
+  .cond-label {
+    font-size: 12px;
+    margin-bottom: 6px;
+  }
+  .cond-value {
+    font-size: 14px;
+    padding-left: 1em;
+  }
+  .amount {
+    font-size: 18px;
+    font-weight: bold;
+  }
+  table.detail {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  table.detail th, table.detail td {
+    border: 1px solid #000;
+    padding: 10px 8px;
+    font-size: 12px;
+    vertical-align: top;
+  }
+  table.detail th {
+    background: #f5f5f5;
+    text-align: center;
+    font-weight: normal;
+    letter-spacing: 0.3em;
+  }
+  table.detail td.num { text-align: right; }
+  table.detail td.center { text-align: center; }
+  .content-cell { line-height: 1.7; }
+  .totals {
+    margin-top: 0;
+  }
+  .totals tr td {
+    border: 1px solid #000;
+    padding: 8px;
+    font-size: 13px;
+  }
+  .totals .label {
+    text-align: center;
+    background: #f5f5f5;
+    width: 120px;
+  }
+  .totals .value {
+    text-align: right;
+    width: 150px;
+  }
+</style>
+</head>
+<body>
+
+<div class="title">見　積　書</div>
+<div class="date">2026年02月18日</div>
+
+<div class="header">
+  <div class="to">
+    <div class="name">株式会社minetown　御中　　髙橋雅英　様</div>
+    <div class="greeting">
+      平素は格別のお引き立てを賜り厚くお礼申し上げます。<br>
+      ご依頼いただきました件、次の通り御見積申し上げます。<br>
+      何卒よろしくお願い申し上げます
+    </div>
+  </div>
+  <div class="from">
+    <div class="company">株式会社プリントパック</div>
+    <div class="info">
+      〒617-0003<br>
+      京都府向日市森本町野田3-1<br>
+      TEL 0120-977-920<br>
+      FAX 075-935-6890
+    </div>
+    <div class="stamp">株式会社<br>プリント<br>パック</div>
+  </div>
+</div>
+
+<div class="conditions">
+  <div class="cond-cell">
+    <div class="cond-label">お支払条件</div>
+    <div class="cond-value">　</div>
+  </div>
+  <div class="cond-cell">
+    <div class="cond-label">納品場所</div>
+    <div class="cond-value">ご指定場所</div>
+  </div>
+</div>
+
+<div class="conditions">
+  <div class="cond-cell">
+    <div class="cond-label">御請求金額</div>
+    <div class="cond-value amount">119,980円（税込）</div>
+  </div>
+  <div class="cond-cell">
+    <div class="cond-label">納品期日</div>
+    <div class="cond-value">7営業日</div>
+  </div>
+</div>
+
+<table class="detail">
+  <thead>
+    <tr>
+      <th style="width:18%;">ご注文番号</th>
+      <th>内　　　容</th>
+      <th style="width:8%;">数量</th>
+      <th style="width:14%;">単　価</th>
+      <th style="width:14%;">金　額</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="center">PAC46818667</td>
+      <td class="content-cell">
+        品名：頭痛チラシ（イヴ）<br>
+        A4／片面4色／マットコート110／50,000部×1種類／<br>
+        加工1：トンボ仕上がり断裁（ご注文サイズでお納め）<br>
+        加工2：
+      </td>
+      <td class="center">1</td>
+      <td class="num">109,073</td>
+      <td class="num">109,073</td>
+    </tr>
+    <tr>
+      <td colspan="2" style="border:none;"></td>
+      <td colspan="2" class="center" style="background:#f5f5f5;">小計（税抜）</td>
+      <td class="num">109,073</td>
+    </tr>
+    <tr>
+      <td colspan="2" style="border:none;"></td>
+      <td colspan="2" class="center" style="background:#f5f5f5;">消費税（10%）</td>
+      <td class="num">10,907</td>
+    </tr>
+    <tr>
+      <td colspan="2" style="border:none;"></td>
+      <td colspan="2" class="center" style="background:#f5f5f5;"><strong>合計（税込）</strong></td>
+      <td class="num"><strong>119,980</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+</body>
+</html>

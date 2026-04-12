@@ -137,6 +137,35 @@ PATTERNS = {
             "なぜ「マッサージに通っても{symptom}が治らないのか」\n仕組みをお話しします。\n\nマッサージは筋肉の緊張をほぐすもの。\nでも緊張の「原因」は残ったまま。\n\n原因は大きく3つ：\n・{cause}による姿勢の歪み\n・深部筋の硬さ（表面だけほぐしても届かない）\n・自律神経の乱れ\n\nこの3つにアプローチしないと\n何度通っても元に戻ります。\n\n「なぜ治らないのか」を知ることが\n本当の改善への第一歩です。",
         ],
     },
+    # ── 放置リスク系：問題提起→放置の末路→解決CTA（本文3〜4行＋コメント分割） ──
+    "hochi_risk": {
+        "desc": "放置リスク（問題提起→放置の末路→改善→CTA）",
+        "templates": [
+            # 肩こり放置 → 自律神経・うつ・睡眠障害
+            "{nagaoka}\n\n「肩こりくらい」と放置していたら\n眠れなくなった。\n\n実は肩こりと自律神経は直結しています。\n[COMMENT]\n肩まわりの筋肉が緊張し続けると\n交感神経が過剰に働き始めます。\n\n・眠りが浅くなる\n・気分が落ち込みやすくなる\n・疲れが抜けない\n\n「ただの肩こり」じゃないんです。\n[COMMENT]\n肩こりの根本原因は{cause}にあります。\n\nマッサージで一時的に楽になっても\n原因を変えなければ何度でも戻ります。\n\n{cause}から整えると\n自律神経も安定してきます。\n[COMMENT]\nプロフィールから予約できます。\n「肩こり・自律神経が気になる」とお気軽にご相談ください。",
+
+            # 頭痛放置 → 慢性化・薬依存・集中力低下
+            "{nagaoka}\n\n「また頭痛薬飲めばいいか」\nそれ、続けると危険です。\n[COMMENT]\n鎮痛剤を週3回以上飲み続けると\n「薬物乱用頭痛」になるリスクがあります。\n\n薬が効かなくなる→量が増える→悪化する\n\nこのスパイラルにはまっている方が\n実はとても多い。\n[COMMENT]\n頭痛の原因の多くは{cause}です。\n\n・水分が足りていない\n・頸椎（首の骨）がずれている\n・{habit1}\n\nここを整えると\n頭痛薬がいらない日が増えてきます。\n[COMMENT]\n頭痛でお悩みの方はプロフィールから。\n根本から整える施術で、薬に頼らない体へ。",
+
+            # 猫背放置 → 内臓圧迫・呼吸が浅い・老け見え
+            "{nagaoka}\n\n猫背の方が増えています。\n「姿勢が悪いだけ」じゃないんです。\n放置すると体の中が変わります。\n[COMMENT]\n猫背が続くと：\n\n・肺が圧迫されて呼吸が浅くなる\n・内臓が下がって消化が悪くなる\n・顔が前に出て老け顔に見える\n\n{symptom}が出やすくなるのもそのせいです。\n[COMMENT]\n猫背の根本原因は{cause}にあります。\n\n姿勢を「直そう」とするより\n{cause}を整えると\n自然に背筋が伸びてきます。\n\n体の使い方を変えることが大切。\n[COMMENT]\n姿勢・猫背が気になる方、\nプロフィールからご相談ください。",
+
+            # 眼精疲労 → めまい・吐き気スパイラル
+            "{nagaoka}\n\n目の疲れを訴える方が急増しています。\n「スマホ疲れかな」で済ませていませんか？\n放置すると全身に影響が出ます。\n[COMMENT]\n眼精疲労が続くと：\n\n・首・肩の筋肉が慢性的に緊張\n・めまい・吐き気が起きやすくなる\n・頭痛が常態化する\n\n目の疲れは体全体のサインです。\n[COMMENT]\n目の奥の疲れには{cause}が関係しています。\n\n①スマホ・PC作業後の首こり\n②{habit1}\n③眼周りの筋肉の緊張\n\nここをほぐすと\nめまいや頭痛も楽になることが多い。\n[COMMENT]\n眼精疲労・めまいが気になる方、\nプロフィールから気軽にご相談ください。",
+
+            # 睡眠不足 → ホルモン崩壊・免疫低下
+            "{nagaoka}\n\nよく聞く「体がダルい」という声。\n睡眠不足を侮ってはいけません。\n放置すると体の根幹が崩れます。\n[COMMENT]\n睡眠不足が続くと：\n\n・成長ホルモンが出ない→回復できない\n・コルチゾール過多→免疫力低下\n・{symptom}が慢性化しやすくなる\n\n「忙しいから仕方ない」は\n体には通じません。\n[COMMENT]\n実は{cause}が睡眠の質を下げています。\n\n眠れない夜は\n・{habit1}\n・首・肩の緊張\nが原因のことが多い。\n\n体を整えると\n睡眠の質が変わる方が多いです。\n[COMMENT]\nぐっすり眠れる体を作りたい方、\nプロフィールからご予約ください。",
+        ],
+    },
+    # ── 悩み共感→改善実績系：「○○で△△できない」→来院→Before/After ──
+    "nayami_kyokan": {
+        "desc": "悩み共感→改善実績（「○○で△△できない」→CTA）",
+        "templates": [
+            "{symptom}があって\n{life_scene_v}たかったのにできない。\n\n{nagaoka}\nよく聞く言葉です。\n[COMMENT]\n{symptom}の原因の多くは{cause}。\n\n揉んでも治らないのは\n「症状」だけ見ていて\n「原因」を変えていないから。\n[COMMENT]\n当院では{cause}から根本改善します。\n\n・週3あった{symptom} → ほぼゼロ\n・5年続いた症状 → 2ヶ月で改善\n\n諦めないでください。\n変われます。\n[COMMENT]\nプロフィールから予約できます。\n「{symptom}で困っている」とお気軽に。",
+
+            "{nagaoka}\n\n{symptom}のせいで\n{life_scene_v}きれない。\n\nそんなお声が増えています。\n[COMMENT]\n「年齢のせい」「仕方ない」\nそう諦めていませんか？\n\n実は年齢より{cause}の影響の方が\nはるかに大きいです。\n[COMMENT]\n根本から整えた方の変化：\n\n□ {symptom}がほぼゼロになった\n□ {life_scene_n}が変わった\n□ 朝すっきり起きられるようになった\n\n体は変えられます。\n[COMMENT]\nプロフィールリンクから予約できます。\n初回カウンセリング無料です。",
+        ],
+    },
     # ── 小川式：1行謎かけ → 箇条書き解説 → 1行断言 ──
     "aoi_style": {
         "desc": "小川式（謎かけ→箇条書き→断言）",
@@ -299,6 +328,15 @@ CTA_ZUTSUU_TEMPLATES = [
     "頭痛があると、\n{life_scene_n}が半減しますよね。\n\n根本から改善した方が\n長い目でみてずっと楽です。\n\n▶ 頭痛改善の予約はこちら\n{url}",
 ]
 
+NAGAOKA_PHRASES = [
+    "長岡市で整体師をしているまぁです。",
+    "長岡市で整体院を営んでいます。",
+    "長岡市で1万人を施術してきました。",
+    "長岡市の整体院にお越しの方へ。",
+    "長岡市のワーママさんからよく聞く悩みです。",
+    "長岡市で整体師として気づいたことがあります。",
+]
+
 def fill(template: str, symptom: str = None) -> str:
     s = symptom or random.choice(SYMPTOMS)
     habits = random.sample(HABITS, min(3, len(HABITS)))
@@ -310,7 +348,8 @@ def fill(template: str, symptom: str = None) -> str:
             .replace("{life_scene_n}", random.choice(LIFE_SCENES_NOUN))
             .replace("{habit1}", habits[0])
             .replace("{habit2}", habits[1])
-            .replace("{habit3}", habits[2]))
+            .replace("{habit3}", habits[2])
+            .replace("{nagaoka}", random.choice(NAGAOKA_PHRASES)))
 
 HOOK_CONTINUATION_MARKER = "\n\n【続き】\n"
 
@@ -361,7 +400,8 @@ def generate_post(pattern_key: str) -> str:
 
     elif pattern_key in ("story", "workmom", "ranking", "question",
                           "gyakusetsu", "aoi_style", "hori_style",
-                          "pasona", "prbrep", "touka_koukan"):
+                          "pasona", "prbrep", "touka_koukan",
+                          "hochi_risk", "nayami_kyokan"):
         return fill(random.choice(p["templates"]))
 
     return ""
@@ -370,23 +410,25 @@ def generate_post(pattern_key: str) -> str:
 def generate_30_posts() -> list[str]:
     w = _load_weights("truth")
     # 小川教材 7:2:1 比率 — 情報提供7・日常/共感2・宣伝1
-    # 45本生成: 情報系(touka_koukan3+prbrep3+education5+insight4+aoi_style4+hori_style3+hook_one_line4+gyakusetsu3)=29
-    #           日常/共感系(quote_empathy5+story3+workmom2+question2+ranking4)=16 ← 合計45に調整
-    #           宣伝(pasona)=4本 ← CTA別に4本追加で合計49→45本カット
+    # 45本: 情報系(touka_koukan3+prbrep3+education4+insight4+aoi_style4+hori_style3+hook_one_line3+gyakusetsu3)=27
+    #       宣伝/問題提起(pasona3+hochi_risk4+nayami_kyokan3)=10
+    #       日常/共感(quote_empathy4+story3+workmom2+question2+ranking3)=14 → 合計51→45カット
     defaults = {
-        "touka_koukan": 3,  # 等価交換（情報提供→信頼）
-        "prbrep": 3,        # PRBREP（根拠+事例で説得力）
-        "pasona": 3,        # PASONA（問題→共感→解決→提案→行動）
-        "hook_one_line": 4,
-        "aoi_style": 4,    # 小川式：謎かけ→箇条書き→断言
-        "hori_style": 3,   # 堀式：逆説→数字実績→口語断定
+        "touka_koukan": 3,   # 等価交換（情報提供→信頼）
+        "prbrep": 3,         # PRBREP（根拠+事例で説得力）
+        "pasona": 3,         # PASONA（問題→共感→解決→提案→行動）
+        "hochi_risk": 4,     # 放置リスク（問題提起→末路→改善）
+        "nayami_kyokan": 2,  # 悩み共感→改善実績
+        "hook_one_line": 3,
+        "aoi_style": 4,      # 小川式
+        "hori_style": 3,     # 堀式
         "gyakusetsu": 3,
-        "quote_empathy": 5,
+        "quote_empathy": 4,
         "insight": 4,
-        "education": 5,
+        "education": 4,
         "story": 3,
         "workmom": 2,
-        "ranking": 4,
+        "ranking": 3,
         "question": 2,
     }
     merged = {k: w.get(k, v) for k, v in defaults.items()}
@@ -394,6 +436,8 @@ def generate_30_posts() -> list[str]:
         ["touka_koukan"] * merged["touka_koukan"] +
         ["prbrep"] * merged["prbrep"] +
         ["pasona"] * merged["pasona"] +
+        ["hochi_risk"] * merged["hochi_risk"] +
+        ["nayami_kyokan"] * merged["nayami_kyokan"] +
         ["hook_one_line"] * merged["hook_one_line"] +
         ["aoi_style"] * merged["aoi_style"] +
         ["hori_style"] * merged["hori_style"] +

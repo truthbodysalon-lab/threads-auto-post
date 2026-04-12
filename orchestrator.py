@@ -162,9 +162,35 @@ def phase_generate(acct: str) -> list[str]:
     return posts
 
 
+def _parse_sections(text: str) -> list[str]:
+    """[COMMENT] マーカーで本文とコメントセクションに分割する"""
+    import re as _re
+    sections = [s.strip() for s in _re.split(r"\[COMMENT\]", text) if s.strip()]
+    return sections
+
+
+def _post_reply(acct: str, reply_text: str, parent_id: str) -> str:
+    """指定投稿へのコメント返信を投稿してIDを返す"""
+    token   = os.environ[ACCOUNTS[acct]["token_key"]]
+    user_id = os.environ[ACCOUNTS[acct]["uid_key"]]
+    d = urllib.parse.urlencode({
+        "media_type": "TEXT", "text": reply_text,
+        "reply_to_id": parent_id, "access_token": token
+    }).encode()
+    with urllib.request.urlopen(
+        urllib.request.Request(f"{BASE_URL}/{user_id}/threads", d), timeout=30
+    ) as r:
+        cid = json.loads(r.read())["id"]
+    time.sleep(2)
+    dp = urllib.parse.urlencode({"creation_id": cid, "access_token": token}).encode()
+    with urllib.request.urlopen(
+        urllib.request.Request(f"{BASE_URL}/{user_id}/threads_publish", dp), timeout=30
+    ) as r:
+        return json.loads(r.read())["id"]
+
+
 def phase_post(acct: str, posts: list[str]):
-    """Phase 3: PostingAgent — 次の1本を投稿"""
-    name = ACCOUNTS[acct]["name"]
+    """Phase 3: PostingAgent — 次の1本を投稿（[COMMENT]分割→返信スレッド対応）"""
     posted_idx   = get_posted_indices(acct)
     posted_texts = get_posted_texts(acct)
 
@@ -180,55 +206,80 @@ def phase_post(acct: str, posts: list[str]):
         log(f"[{acct}] 今日の投稿完了")
         return
 
-    idx, text = target
-    # URL を本文から除外して投稿（URLはコメント返信に）
+    idx, full_text = target
+
+    # [COMMENT] マーカーで分割（あれば本文+コメント、なければ旧ロジック）
     import re
-    url_match = re.search(r"https?://\S+", text)
-    if url_match:
-        url = url_match.group()
-        clean_text = re.sub(r"\n*https?://\S+", "", text).strip()
-        # CTA行も除去
-        lines = clean_text.splitlines()
-        if lines and re.search(r"(予約|LINE|こちら)", lines[-1]):
-            clean_text = "\n".join(lines[:-1]).strip()
+    sections = _parse_sections(full_text)
+
+    if len(sections) > 1:
+        # 新フォーマット: 本文 → コメント1 → コメント2 → ... の順でスレッド投稿
+        main_body = sections[0]
+        # URL抽出（本文またはコメントに含まれる場合）
+        all_urls = re.findall(r"https?://\S+", full_text)
+        # 本文からURLを除去
+        main_body_clean = re.sub(r"\n*https?://\S+", "", main_body).strip()
+
+        log(f"[{acct}] Phase3: 投稿 #{idx+1}（{len(sections)}セクション）— {main_body_clean[:40].replace(chr(10),' ')}...")
+
+        try:
+            post_id = api_post(acct, main_body_clean)
+            mark_posted(acct, idx, post_id, main_body_clean)
+            log(f"[{acct}] ✓ 本文投稿完了 (ID: {post_id})")
+
+            # コメントを返信スレッドとして順番に投稿
+            parent_id = post_id
+            for ci, comment_text in enumerate(sections[1:], 1):
+                comment_clean = re.sub(r"\n*https?://\S+", "", comment_text).strip()
+                # 最後のコメントにURLがある場合は追記
+                is_last = (ci == len(sections) - 1)
+                if is_last and all_urls:
+                    comment_clean = comment_clean + "\n" + all_urls[-1]
+                try:
+                    time.sleep(3)
+                    parent_id = _post_reply(acct, comment_clean, parent_id)
+                    log(f"[{acct}] ✓ コメント{ci}投稿完了 (ID: {parent_id})")
+                except Exception as ce:
+                    log(f"[{acct}] コメント{ci}失敗（前投稿は成功）: {ce}")
+                    break
+
+        except Exception as e:
+            log(f"[{acct}] ✗ 投稿失敗: {e}")
+
     else:
-        clean_text = text
-        url = None
+        # 旧フォーマット: URLをコメントに分離する従来ロジック
+        text = full_text
+        url_match = re.search(r"https?://\S+", text)
+        if url_match:
+            url = url_match.group()
+            clean_text = re.sub(r"\n*https?://\S+", "", text).strip()
+            lines = clean_text.splitlines()
+            if lines and re.search(r"(予約|LINE|こちら)", lines[-1]):
+                clean_text = "\n".join(lines[:-1]).strip()
+        else:
+            clean_text = text
+            url = None
 
-    log(f"[{acct}] Phase3: 投稿 #{idx+1} — {clean_text[:40].replace(chr(10),' ')}...")
+        log(f"[{acct}] Phase3: 投稿 #{idx+1} — {clean_text[:40].replace(chr(10),' ')}...")
 
-    try:
-        post_id = api_post(acct, clean_text)
-        mark_posted(acct, idx, post_id, clean_text)
-        log(f"[{acct}] ✓ 投稿完了 (ID: {post_id})")
+        try:
+            post_id = api_post(acct, clean_text)
+            mark_posted(acct, idx, post_id, clean_text)
+            log(f"[{acct}] ✓ 投稿完了 (ID: {post_id})")
 
-        # URLがある場合はコメントに追加
-        if url:
-            try:
-                token   = os.environ[ACCOUNTS[acct]["token_key"]]
-                user_id = os.environ[ACCOUNTS[acct]["uid_key"]]
-                bridge  = "ご予約・詳細はこちら 👇" if acct == "truth" else "詳しくはこちら 👇"
-                time.sleep(3)
-                d1 = urllib.parse.urlencode({"media_type":"TEXT","text":bridge,"reply_to_id":post_id,"access_token":token}).encode()
-                with urllib.request.urlopen(urllib.request.Request(f"{BASE_URL}/{user_id}/threads", d1)) as r:
-                    r1id = json.loads(r.read())["id"]
-                time.sleep(2)
-                d1p = urllib.parse.urlencode({"creation_id":r1id,"access_token":token}).encode()
-                with urllib.request.urlopen(urllib.request.Request(f"{BASE_URL}/{user_id}/threads_publish", d1p)) as r:
-                    r1pid = json.loads(r.read())["id"]
-                time.sleep(2)
-                d2 = urllib.parse.urlencode({"media_type":"TEXT","text":url,"reply_to_id":r1pid,"access_token":token}).encode()
-                with urllib.request.urlopen(urllib.request.Request(f"{BASE_URL}/{user_id}/threads", d2)) as r:
-                    r2id = json.loads(r.read())["id"]
-                d2p = urllib.parse.urlencode({"creation_id":r2id,"access_token":token}).encode()
-                with urllib.request.urlopen(urllib.request.Request(f"{BASE_URL}/{user_id}/threads_publish", d2p)):
-                    pass
-                log(f"[{acct}] ✓ URLコメント投稿完了")
-            except Exception as ce:
-                log(f"[{acct}] URLコメント失敗（本投稿は成功）: {ce}")
+            if url:
+                try:
+                    bridge = "ご予約・詳細はこちら 👇" if acct == "truth" else "詳しくはこちら 👇"
+                    time.sleep(3)
+                    r1pid = _post_reply(acct, bridge, post_id)
+                    time.sleep(2)
+                    _post_reply(acct, url, r1pid)
+                    log(f"[{acct}] ✓ URLコメント投稿完了")
+                except Exception as ce:
+                    log(f"[{acct}] URLコメント失敗（本投稿は成功）: {ce}")
 
-    except Exception as e:
-        log(f"[{acct}] ✗ 投稿失敗: {e}")
+        except Exception as e:
+            log(f"[{acct}] ✗ 投稿失敗: {e}")
 
 
 def phase_analyze(acct: str):

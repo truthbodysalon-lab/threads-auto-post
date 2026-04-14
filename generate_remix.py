@@ -337,6 +337,19 @@ NAGAOKA_PHRASES = [
     "長岡市で整体師として気づいたことがあります。",
 ]
 
+def _ensure_nagaoka(text: str) -> str:
+    """truth_body_salon の投稿には必ず「長岡市」を含める"""
+    if "長岡市" in text:
+        return text
+    phrase = random.choice(NAGAOKA_PHRASES)
+    # CONTINUATION_MARKER があれば本文の末尾（マーカー直前）に追加
+    marker = "\n\n【続き】\n"
+    if marker in text:
+        main, rest = text.split(marker, 1)
+        return main + "\n\n" + phrase + marker + rest
+    return text + "\n\n" + phrase
+
+
 def fill(template: str, symptom: str = None) -> str:
     s = symptom or random.choice(SYMPTOMS)
     habits = random.sample(HABITS, min(3, len(HABITS)))
@@ -456,7 +469,7 @@ def generate_30_posts() -> list[str]:
     seen = set()
     for pk in plan:
         for _ in range(50):
-            post = generate_post(pk)
+            post = _ensure_nagaoka(generate_post(pk))
             key = post[:100]
             if key not in seen and not _is_ng(post):
                 seen.add(key)
@@ -466,20 +479,20 @@ def generate_30_posts() -> list[str]:
     # feedback の追加テンプレを先頭に差し込む
     for tmpl in _load_extra_templates("truth"):
         try:
-            posts.insert(0, fill(tmpl))
+            posts.insert(0, _ensure_nagaoka(fill(tmpl)))
         except Exception:
             pass
 
     # 肩こりCTA 2本・頭痛CTA 2本をランダムな位置に差し込む
     cta_posts = (
-        [generate_cta_post("katakori") for _ in range(2)] +
-        [generate_cta_post("zutsuu")   for _ in range(2)]
+        [_ensure_nagaoka(generate_cta_post("katakori")) for _ in range(2)] +
+        [_ensure_nagaoka(generate_cta_post("zutsuu"))   for _ in range(2)]
     )
     for cta in cta_posts:
         pos = random.randint(0, len(posts))
         posts.insert(pos, cta)
 
-    return posts[:45]
+    return posts[:65]
 
 
 # ══════════════════════════════════════════════

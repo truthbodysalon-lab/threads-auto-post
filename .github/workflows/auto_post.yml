@@ -54,7 +54,7 @@ jobs:
           today = date.today().strftime('%Y-%m-%d')
           def has_today(f):
               if not Path(f).exists(): return False
-              return any(json.loads(l).get('date')==today for l in Path(f).read_text().splitlines() if l.strip())
+              return any(json.loads(l).get('date')==today and json.loads(l).get('posts') for l in Path(f).read_text().splitlines() if l.strip())
           if not has_today('log_truth.jsonl'):
               print('truth: キューなし → generate_remix で生成')
               subprocess.run([sys.executable, 'generate_remix.py', 'truth'], check=False)

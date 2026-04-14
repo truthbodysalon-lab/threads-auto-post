@@ -239,7 +239,8 @@ def ensure_generated(acct: str, today: str):
     log_file = ACCOUNTS[acct]["log"]
     if log_file.exists():
         entries = [json.loads(l) for l in log_file.read_text().splitlines() if l.strip()]
-        if any(e.get("date") == today for e in entries):
+        # posts が空配列のエントリーは「生成済み」とみなさない
+        if any(e.get("date") == today and e.get("posts") for e in entries):
             return
     log_info(acct, "投稿データなし → 自動生成中...")
     result = subprocess.run(
@@ -359,6 +360,15 @@ def run_account(acct: str):
         parts = clean_text.split(CONTINUATION_MARKER, 1)
         clean_text = parts[0]
         continuation = parts[1]
+    else:
+        # マーカーなしの長文は最初の段落区切り（\n\n）で分割し
+        # 2行目以降をコメントへ回す
+        if "\n\n" in clean_text:
+            first_para, rest = clean_text.split("\n\n", 1)
+            rest = rest.strip()
+            if rest:
+                clean_text = first_para.rstrip()
+                continuation = rest
 
     log_info(acct, f"{name} [{index+1}本目]: {clean_text[:40].replace(chr(10), ' ')}...")
 

@@ -446,7 +446,7 @@ def generate_30_posts() -> list[str]:
         "ranking": 3,
         "question": 2,
     }
-    merged = {k: w.get(k, v) for k, v in defaults.items()}
+    merged = {k: int(w.get(k, v)) for k, v in defaults.items()}
     plan = (
         ["touka_koukan"] * merged["touka_koukan"] +
         ["prbrep"] * merged["prbrep"] +
@@ -711,7 +711,7 @@ def generate_30_masa_posts() -> list[str]:
         "ranking": 4,
         "question": 2,
     }
-    merged = {k: w.get(k, v) for k, v in defaults.items()}
+    merged = {k: int(w.get(k, v)) for k, v in defaults.items()}
     plan = (
         ["touka_koukan"] * merged["touka_koukan"] +
         ["prbrep"] * merged["prbrep"] +

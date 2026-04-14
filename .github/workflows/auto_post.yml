@@ -2,8 +2,8 @@ name: Threads Auto Post
 
 on:
   schedule:
-    # 30分おきに実行（UTC）。スクリプト側でJST 7:00-23:00を判定
-    - cron: '0,30 * * * *'
+    # 20分おきに実行（UTC）。スクリプト側でJST 6:00-23:00を判定
+    - cron: '0,20,40 * * * *'
   workflow_dispatch:
 
 concurrency:
@@ -45,8 +45,40 @@ jobs:
           ANTHROPIC_API_KEY=${{ secrets.ANTHROPIC_API_KEY }}
           EOF
 
+      - name: Prefill post queue if empty
+        run: |
+          python3 -c "
+          import json, subprocess, sys
+          from pathlib import Path
+          from datetime import date
+          today = date.today().strftime('%Y-%m-%d')
+          def has_today(f):
+              if not Path(f).exists(): return False
+              return any(json.loads(l).get('date')==today for l in Path(f).read_text().splitlines() if l.strip())
+          if not has_today('log_truth.jsonl'):
+              print('truth: キューなし → generate_remix で生成')
+              subprocess.run([sys.executable, 'generate_remix.py', 'truth'], check=False)
+          if not has_today('log_masa.jsonl'):
+              print('masa: キューなし → generate_remix で生成')
+              subprocess.run([sys.executable, 'generate_remix.py', 'masa'], check=False)
+          "
+
       - name: Run orchestrator
+        id: orchestrator
         run: python3 orchestrator.py
+        continue-on-error: true
+
+      - name: Fallback to auto_post if orchestrator skipped
+        run: |
+          # orchestrator が失敗・スキップした場合のみ auto_post でフォールバック
+          BEFORE=$(wc -l < log_truth_posted.jsonl 2>/dev/null || echo 0)
+          python3 auto_post.py all || true
+          AFTER=$(wc -l < log_truth_posted.jsonl 2>/dev/null || echo 0)
+          if [ "$BEFORE" = "$AFTER" ]; then
+            echo "投稿なし（両方スキップ）"
+          else
+            echo "auto_post でフォールバック投稿完了"
+          fi
 
       - name: Sync refreshed tokens to GitHub Secrets
         run: python3 token_manager.py --sync-secrets

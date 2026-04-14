@@ -337,9 +337,11 @@ NAGAOKA_PHRASES = [
     "長岡市で整体師として気づいたことがあります。",
 ]
 
-def _ensure_nagaoka(text: str) -> str:
-    """truth_body_salon の投稿には必ず「長岡市」を含める"""
+def _ensure_nagaoka(text: str, ratio: float = 0.6) -> str:
+    """truth_body_salon の投稿の約60%に「長岡市」を含める"""
     if "長岡市" in text:
+        return text
+    if random.random() > ratio:
         return text
     phrase = random.choice(NAGAOKA_PHRASES)
     # CONTINUATION_MARKER があれば本文の末尾（マーカー直前）に追加

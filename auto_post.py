@@ -353,54 +353,59 @@ def run_account(acct: str):
     # URLをメイン本文から除去し、コメントに回す
     clean_text, cta_block = extract_url_and_cta(text)
 
-    # フック投稿の続き本文を分離（【続き】マーカー）
-    CONTINUATION_MARKER = "\n\n【続き】\n"
-    continuation = None
-    if CONTINUATION_MARKER in clean_text:
-        parts = clean_text.split(CONTINUATION_MARKER, 1)
-        clean_text = parts[0]
-        continuation = parts[1]
-    else:
-        # マーカーなしの長文は最初の段落区切り（\n\n）で分割し
-        # 2行目以降をコメントへ回す
-        if "\n\n" in clean_text:
-            first_para, rest = clean_text.split("\n\n", 1)
-            rest = rest.strip()
-            if rest:
-                clean_text = first_para.rstrip()
-                continuation = rest
+    # テキストをコメント部分に分割する
+    # 優先順位: [COMMENT] タグ → 【続き】マーカー → \n\n 段落区切り
+    comment_parts: list[str] = []
+
+    if "\n[COMMENT]\n" in clean_text:
+        # [COMMENT] で複数コメントに分割
+        segments = clean_text.split("\n[COMMENT]\n")
+        clean_text = segments[0].strip()
+        comment_parts = [s.strip() for s in segments[1:] if s.strip()]
+    elif "\n\n【続き】\n" in clean_text:
+        parts = clean_text.split("\n\n【続き】\n", 1)
+        clean_text = parts[0].strip()
+        if parts[1].strip():
+            comment_parts = [parts[1].strip()]
+    elif "\n\n" in clean_text:
+        # マーカーなし長文 → 最初の段落のみ本文、残りをコメントへ
+        first_para, rest = clean_text.split("\n\n", 1)
+        rest = rest.strip()
+        if rest:
+            clean_text = first_para.rstrip()
+            comment_parts = [rest]
 
     log_info(acct, f"{name} [{index+1}本目]: {clean_text[:40].replace(chr(10), ' ')}...")
 
     # URLがある場合のみ補足説明コメントをAIで事前生成（投稿前に準備）
     bridge = generate_bridge_comment(clean_text, acct) if cta_block else None
 
+    def _post_comments(post_id: str, suffix: str = ""):
+        """コメント部分→CTAを順番に投稿するヘルパー"""
+        last_id = post_id
+        for part in comment_parts:
+            try:
+                time.sleep(3)
+                last_id = post_reply_to_threads(acct, last_id, part)
+                log_info(acct, f"{name} ✓ コメント投稿完了{suffix}")
+            except Exception as ce:
+                log_error(f"{name} コメント投稿失敗{suffix}: {ce}")
+        if cta_block:
+            try:
+                b = bridge or ACCOUNTS[acct].get("bridge_text", "詳しくはこちら 👇")
+                time.sleep(3)
+                r1 = post_reply_to_threads(acct, last_id, b)
+                time.sleep(2)
+                post_reply_to_threads(acct, r1, cta_block)
+                log_info(acct, f"{name} ✓ コメントにURL投稿完了{suffix}")
+            except Exception as ce:
+                log_error(f"{name} URL投稿失敗{suffix}: {ce}")
+
     try:
         post_id = post_to_threads(acct, clean_text)
         mark_posted(acct, today, index, post_id, clean_text)
         log_info(acct, f"{name} ✓ 完了 (ID: {post_id})")
-
-        # 続き本文をコメント1番目に投稿
-        last_reply_id = post_id
-        if continuation:
-            try:
-                time.sleep(3)
-                last_reply_id = post_reply_to_threads(acct, post_id, continuation)
-                log_info(acct, f"{name} ✓ 続きコメント投稿完了")
-            except Exception as ce:
-                log_error(f"{name} 続きコメント投稿失敗: {ce}")
-
-        # URLがある場合は橋渡し文 → URL の順でコメント投稿
-        if cta_block:
-            try:
-                bridge = bridge or ACCOUNTS[acct].get("bridge_text", "詳しくはこちら 👇")
-                time.sleep(3)
-                r1 = post_reply_to_threads(acct, last_reply_id, bridge)
-                time.sleep(2)
-                post_reply_to_threads(acct, r1, cta_block)
-                log_info(acct, f"{name} ✓ コメントにURL投稿完了")
-            except Exception as ce:
-                log_error(f"{name} コメント投稿失敗: {ce}")
+        _post_comments(post_id)
 
     except urllib.error.HTTPError as e:
         body = e.read().decode()
@@ -415,23 +420,7 @@ def run_account(acct: str):
                     post_id = post_to_threads(acct, clean_text)
                     mark_posted(acct, today, index, post_id, clean_text)
                     log_info(acct, f"{name} ✓ 完了（リフレッシュ後） (ID: {post_id})")
-                    last_reply_id2 = post_id
-                    if continuation:
-                        try:
-                            time.sleep(3)
-                            last_reply_id2 = post_reply_to_threads(acct, post_id, continuation)
-                        except Exception as ce:
-                            log_error(f"{name} 続きコメント投稿失敗（リフレッシュ後）: {ce}")
-                    if cta_block:
-                        try:
-                            bridge = bridge or ACCOUNTS[acct].get("bridge_text", "詳しくはこちら 👇")
-                            time.sleep(3)
-                            r1 = post_reply_to_threads(acct, last_reply_id2, bridge)
-                            time.sleep(2)
-                            post_reply_to_threads(acct, r1, cta_block)
-                            log_info(acct, f"{name} ✓ コメントにURL投稿完了（リフレッシュ後）")
-                        except Exception as ce:
-                            log_error(f"{name} コメント投稿失敗（リフレッシュ後）: {ce}")
+                    _post_comments(post_id, "（リフレッシュ後）")
                 except Exception as e2:
                     log_error(f"{name} リフレッシュ後も失敗 → 手動で auth.py を実行してください: {e2}")
             else:

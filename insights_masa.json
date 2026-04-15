@@ -1,104 +1,104 @@
 {
   "account": "@masahide_takahashi_",
-  "updated_at": "2026-04-15 07:42",
+  "updated_at": "2026-04-16 07:39",
   "total_posts": 200,
   "total_likes": 0,
   "total_views": 0,
   "total_replies": 0,
   "avg_likes": 0.0,
   "avg_views": 0.0,
-  "recent_7days_count": 148,
+  "recent_7days_count": 170,
   "recent_7days_avg_likes": 0.0,
   "top10_by_likes": [
     {
-      "text": "SNS集客の設計について\nLINEで無料配信しています。",
+      "text": "月商が上がった人が変えたこと TOP3",
       "likes": 0,
       "views": 0,
       "replies": 0,
-      "date": "2026-04-14"
+      "date": "2026-04-15"
     },
     {
-      "text": "コンサルに高いお金を払う前に、\nまず自分でやってみてください。\n\nエンゲージメントが上がると自然に露出が増える\n\n知識より実践の数が成果を決めます。",
+      "text": "「SNS運用を頑張っているのに\nなぜ結果が出ないんだろう」\nそう悩んでいませんか？",
       "likes": 0,
       "views": 0,
       "replies": 0,
-      "date": "2026-04-14"
+      "date": "2026-04-15"
+    },
+    {
+      "text": "ファン化戦略で大切な3つのこと。",
+      "likes": 0,
+      "views": 0,
+      "replies": 0,
+      "date": "2026-04-15"
+    },
+    {
+      "text": "「SNS×LINE導線をやっているのに集客できない」",
+      "likes": 0,
+      "views": 0,
+      "replies": 0,
+      "date": "2026-04-15"
+    },
+    {
+      "text": "SNS運用で絶対にやってはいけないこと3選\n\n① 数字を全く確認せず感覚で運用している\n② LINEやDMへの導線を作っていない\n③ 完璧を目指して投稿できない",
+      "likes": 0,
+      "views": 0,
+      "replies": 0,
+      "date": "2026-04-15"
+    },
+    {
+      "text": "売れる広告費の使い方と売れない広告費の使い方の違い。",
+      "likes": 0,
+      "views": 0,
+      "replies": 0,
+      "date": "2026-04-15"
+    },
+    {
+      "text": "「SNSに時間をかけているのに\n集客できない」\nそんな状態が続いていませんか？",
+      "likes": 0,
+      "views": 0,
+      "replies": 0,
+      "date": "2026-04-15"
     },
     {
       "text": "コンサルに高いお金を払う前に、\nまず自分でやってみてください。",
       "likes": 0,
       "views": 0,
       "replies": 0,
-      "date": "2026-04-14"
+      "date": "2026-04-15"
     },
     {
-      "text": "投稿ネタの見つけ方で大切な3つのこと。",
+      "text": "動画広告を頑張っているのに結果が出ない。",
       "likes": 0,
       "views": 0,
       "replies": 0,
-      "date": "2026-04-14"
+      "date": "2026-04-15"
     },
     {
-      "text": "これ、当てはまりますか？",
+      "text": "LINE集客で結果を出す人がやっている\n3つの習慣をお伝えします。",
       "likes": 0,
       "views": 0,
       "replies": 0,
-      "date": "2026-04-14"
-    },
-    {
-      "text": "集客できない人がやりがちな\n5つの間違いを解説します。",
-      "likes": 0,
-      "views": 0,
-      "replies": 0,
-      "date": "2026-04-14"
-    },
-    {
-      "text": "あなたのバズる投稿の法則、何が原因で伸びてないと思いますか？\n\n「コンテンツ」「継続」「設計」\n\nどれだと思う？\nコメントで教えてほしいです。",
-      "likes": 0,
-      "views": 0,
-      "replies": 0,
-      "date": "2026-04-14"
-    },
-    {
-      "text": "ファン化戦略を始める前に確認してほしいこと。",
-      "likes": 0,
-      "views": 0,
-      "replies": 0,
-      "date": "2026-04-14"
-    },
-    {
-      "text": "売れる教育コンテンツの作り方と売れない教育コンテンツの作り方の違い。",
-      "likes": 0,
-      "views": 0,
-      "replies": 0,
-      "date": "2026-04-14"
-    },
-    {
-      "text": "お客様の声の集め方を始める前に確認してほしいこと。",
-      "likes": 0,
-      "views": 0,
-      "replies": 0,
-      "date": "2026-04-14"
+      "date": "2026-04-15"
     }
   ],
   "performance_by_length": {
     "〜50字": {
-      "count": 32,
-      "avg_likes": 0.0,
-      "avg_views": 0.0
-    },
-    "50〜100字": {
-      "count": 109,
-      "avg_likes": 0.0,
-      "avg_views": 0.0
-    },
-    "150字以上": {
-      "count": 34,
+      "count": 65,
       "avg_likes": 0.0,
       "avg_views": 0.0
     },
     "100〜150字": {
-      "count": 25,
+      "count": 22,
+      "avg_likes": 0.0,
+      "avg_views": 0.0
+    },
+    "50〜100字": {
+      "count": 89,
+      "avg_likes": 0.0,
+      "avg_views": 0.0
+    },
+    "150字以上": {
+      "count": 24,
       "avg_likes": 0.0,
       "avg_views": 0.0
     }

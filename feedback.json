@@ -5,7 +5,12 @@
     "aoi_style": 1.0,
     "hori_style": 1.0
   },
-  "ng_words": [],
+  "ng_words": [
+    "100店舗以上",
+    "1000店舗",
+    "500店舗",
+    "200店舗"
+  ],
   "extra_templates": [],
   "updated_at": "2026-04-12 17:04"
 }

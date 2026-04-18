@@ -23,6 +23,10 @@ ACCOUNTS = {
         "token_key": "THREADS_ACCESS_TOKEN_TRUTH",
         "uid_key":   "THREADS_USER_ID_TRUTH",
     },
+    "nagaoka": {
+        "token_key": "THREADS_ACCESS_TOKEN_NAGAOKA",
+        "uid_key":   "THREADS_USER_ID_NAGAOKA",
+    },
     "masa": {
         "token_key": "THREADS_ACCESS_TOKEN_MASA",
         "uid_key":   "THREADS_USER_ID_MASA",

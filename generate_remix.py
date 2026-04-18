@@ -14,6 +14,7 @@ from pathlib import Path
 BASE = Path(__file__).parent
 PAST_FILE = BASE / "past_posts.json"
 LOG_FILE = BASE / "log_truth.jsonl"
+LOG_FILE_NAGAOKA = BASE / "log_nagaoka.jsonl"
 
 TODAY = date.today().strftime("%Y-%m-%d")
 
@@ -769,6 +770,12 @@ def main():
         with open(LOG_FILE_MASA, "a") as f:
             f.write(json.dumps(entry, ensure_ascii=False) + "\n")
         print(f"✓ {len(posts)}本生成 → log_masa.jsonl に保存")
+    elif "nagaoka" in account.lower():
+        posts = generate_30_posts()   # truthと同じテンプレを流用
+        entry = {"account": "@truth_nagaoka", "theme": "リミックス生成", "date": TODAY, "posts": posts}
+        with open(LOG_FILE_NAGAOKA, "a") as f:
+            f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+        print(f"✓ {len(posts)}本生成 → log_nagaoka.jsonl に保存")
     else:
         posts = generate_30_posts()
         entry = {"account": "@truth_body_salon", "theme": "リミックス生成", "date": TODAY, "posts": posts}

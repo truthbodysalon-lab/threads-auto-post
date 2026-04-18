@@ -42,6 +42,13 @@ ACCOUNTS = {
         "token_key": "THREADS_ACCESS_TOKEN_TRUTH",
         "uid_key":   "THREADS_USER_ID_TRUTH",
     },
+    "nagaoka": {
+        "name":      "@truth_nagaoka",
+        "log":       BASE / "log_nagaoka.jsonl",
+        "posted":    BASE / "log_nagaoka_posted.jsonl",
+        "token_key": "THREADS_ACCESS_TOKEN_NAGAOKA",
+        "uid_key":   "THREADS_USER_ID_NAGAOKA",
+    },
     "masa": {
         "name":      "@masahide_takahashi_",
         "log":       BASE / "log_masa.jsonl",
@@ -321,10 +328,14 @@ def main():
 
     if target == "truth":
         run_account("truth")
+    elif target == "nagaoka":
+        run_account("nagaoka")
     elif target == "masa":
         run_account("masa")
     else:
         run_account("truth")
+        time.sleep(5)
+        run_account("nagaoka")
         time.sleep(5)
         run_account("masa")
 

@@ -24,6 +24,18 @@ BRAND_RULES = {
         "max_len": 500,
         "required_tone": [],  # チェック項目（将来拡張用）
     },
+    "nagaoka": {
+        "ng_patterns": [
+            r"ステップ\s+英語",
+            r"チェックポイント",
+            r"←|→",
+            r"\s{3,}",
+            r"http\S+.*http\S+",
+        ],
+        "min_len": 20,
+        "max_len": 500,
+        "required_tone": [],
+    },
     "masa": {
         "ng_patterns": [
             r"ステップ\s+英語",

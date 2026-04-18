@@ -336,7 +336,55 @@ NAGAOKA_PHRASES = [
     "長岡市の整体院にお越しの方へ。",
     "長岡市のワーママさんからよく聞く悩みです。",
     "長岡市で整体師として気づいたことがあります。",
+    "長岡市で整体師をして10年以上経ちます。",
+    "長岡市にいると、こういう悩みを持つ方が多いです。",
 ]
+
+# ── 軽症者・まだ我慢できる人ターゲット（@truth_nagaoka 専用）──────────
+NAGAOKA_PATTERNS = {
+    "keisei_target": {
+        "desc": "軽症者・まだ我慢できる人へのアプローチ（早期来院促進）",
+        "templates": [
+            "「まだ薬を飲むほどじゃないけど\n{symptom}が気になる」\n\nそういう方にこそ来てほしいです。\n\n{nagaoka}\n軽いうちに根本から整えると\n驚くほど早く楽になります。",
+
+            "「たまに{symptom}があるけど\nまだ我慢できる」\n\nその「まだ我慢できる」が\n1年後には「毎日ある」に変わります。\n\n{nagaoka}\n軽症のうちが一番早く根本改善できます。",
+
+            "「週に1〜2回くらい{symptom}がある」\nそのくらい放置しがちですよね。\n\n{nagaoka}\nでもそれ、体の最初のSOSです。\n\n軽いうちに来てください。\n根本から変わります。",
+
+            "慢性化する前のサイン\n\n□ 夕方になると{symptom}が出る\n□ 天気が悪いと悪化する\n□ 疲れると{symptom}になる\n□ 朝は大丈夫だけど夜はしんどい\n\n{nagaoka}\n1つでも当てはまったら、今が来るタイミングです。",
+
+            "{nagaoka}\n\n「まだ大丈夫かな」\nって思っている間に\n{symptom}は蓄積しています。\n\n軽い今こそ来てほしい。\nケアのベストタイミングは「軽症のうち」です。",
+
+            "「{symptom}、我慢できないほどじゃない」\n\nその言葉、よく聞きます。\n{nagaoka}\n\nでも考えてみてください。\n\n今よりひどくなってから来た方が\n時間もお金もかかります。\n\n軽症のうちに整えるのが、一番お得です。",
+
+            "「{symptom}があるけど\n仕事や家事には支障ない」\n\nそういう方が実は一番多いです。\n\n{nagaoka}\n「支障はないけどしんどい」を\n解消できる体を作りませんか。",
+
+            "{nagaoka}\n\n整体に来るのは\n「もう限界」になってからじゃなくていい。\n\n「なんか気になる」くらいで来るのが\n一番理想的です。\n\n{symptom}が軽いうちが\n根本改善の絶好のタイミングです。",
+        ]
+    },
+    "keisei_risk": {
+        "desc": "軽症放置リスク（慢性化の怖さ＋早期介入のすすめ）[COMMENT]形式",
+        "templates": [
+            "{nagaoka}\n\n「月に2〜3回{symptom}がある」\nそのくらいなら放置していませんか？\n[COMMENT]\nそのレベルが1年後には\n「毎日ある」に変わることがほとんどです。\n\n症状は放置するほど積み重なります。\n今が一番回復が早い時期。\n[COMMENT]\n軽症のうちに原因を見つけると\n3〜5回の施術で根本から変わります。\n\n慢性化してからは\n時間も回数もかかります。\n[COMMENT]\nプロフィールからご予約できます。\n「まだ軽いけど気になる」でも全然大丈夫です。",
+
+            "{nagaoka}\n\n「まだ薬を飲むほどじゃない」\nその{symptom}、放置は禁物です。\n[COMMENT]\n軽い症状の段階では\n体は「SOSサイン」を出しています。\n\nここで無視すると\n体はもっと強いサインを出します。\n\nそれが「慢性化」です。\n[COMMENT]\n今なら1〜2ヶ月で根本改善できます。\n慢性化してからだと\n半年以上かかることも。\n\n早い方が、絶対に良いです。\n[COMMENT]\n気になり始めた今が来るタイミング。\nプロフィールからお気軽にどうぞ。",
+
+            "{nagaoka}\n\n「{symptom}、我慢できる範囲」\nその感覚が危険です。\n[COMMENT]\n我慢できる痛みを放置し続けると\n体はその状態に「慣れて」しまいます。\n\n慣れる＝改善されているわけではありません。\n慢性化のサインです。\n[COMMENT]\n整体師として1万人を見てきて\n「もっと早く来ればよかった」\nという言葉を本当によく聞きます。\n\n軽症のうちが一番ラクに根本改善できます。\n[COMMENT]\n「まだ我慢できる{symptom}」がある方、\n一度ご相談ください。",
+        ]
+    },
+    "keisei_kyokan": {
+        "desc": "軽症者への共感・来院の背中を押す系",
+        "templates": [
+            "「{symptom}くらいで整体に行くのは大げさかな」\n\nそんなことないです。\n{nagaoka}\n\n大げさなくらいで来てくれた方が\n私たちは嬉しいです。",
+
+            "「忙しくて{symptom}を後回しにしてる」\n\nその気持ち、すごく分かります。\n\n{nagaoka}\nでも体は正直です。\n後回しにした分だけ\nケアに時間がかかります。",
+
+            "「{symptom}があるけど、病院に行くほどでもない...」\n\nそういう方のために整体があります。\n\n{nagaoka}\n病院と自分でケアの間、\nちょうどそこが私の守備範囲です。",
+
+            "{nagaoka}\n\n「整体って、もっとひどくなってから行くところ」\n\nそう思っていませんか？\n\n実は逆です。\n軽症のうちに来る人が\n一番短期間で楽になります。",
+        ]
+    },
+}
 
 def _ensure_nagaoka(text: str, ratio: float = 0.6) -> str:
     """truth_body_salon の投稿の約60%に「長岡市」を含める"""
@@ -379,6 +427,15 @@ HOOK_BODIES = [
     "週1で整体に来ても\n日常の{cause}を変えていないこと。\n\n施術は「リセット」。\n日常が「積み上げ」です。\n\n両方揃って体は変わります。",
     "「痛くなったら行く」が習慣になっていること。\n\n{symptom}は出てからでは時間がかかります。\n\n「出る前に整える」が\n根本改善への近道です。",
 ]
+
+def generate_nagaoka_post(pattern_key: str) -> str:
+    """nagaoka専用パターンまたは共通パターンで投稿生成"""
+    if pattern_key in NAGAOKA_PATTERNS:
+        p = NAGAOKA_PATTERNS[pattern_key]
+        return fill(random.choice(p["templates"]))
+    else:
+        return generate_post(pattern_key)
+
 
 def generate_cta_post(target: str) -> str:
     """target: 'katakori' or 'zutsuu'"""
@@ -496,6 +553,69 @@ def generate_30_posts() -> list[str]:
         posts.insert(pos, cta)
 
     return posts[:65]
+
+
+def generate_40_nagaoka_posts() -> list[str]:
+    """@truth_nagaoka 専用: 軽症者・まだ我慢できる人ターゲット 40本生成（7:2:1比率）"""
+    w = _load_weights("nagaoka")
+
+    # 7:2:1 比率 — 情報提供28本・日常/共感8本・宣伝4本 = 40本
+    defaults = {
+        # 情報提供系 (28本)
+        "touka_koukan": 3,
+        "prbrep":        2,
+        "keisei_target": 7,    # 軽症者特化（メイン）
+        "education":     3,
+        "insight":       3,
+        "aoi_style":     3,
+        "hori_style":    2,
+        "hook_one_line": 3,
+        "nayami_kyokan": 2,
+        # 日常/共感系 (8本)
+        "quote_empathy": 3,
+        "story":         2,
+        "ranking":       2,
+        "keisei_kyokan": 1,    # 軽症者共感
+        # 宣伝/CTA系 (4本)
+        "hochi_risk":    2,
+        "keisei_risk":   2,    # 軽症放置リスク
+    }
+    merged = {k: int(w.get(k, v)) for k, v in defaults.items()}
+
+    plan = []
+    for pk, cnt in merged.items():
+        plan.extend([pk] * cnt)
+    random.shuffle(plan)
+
+    posts = []
+    seen = set()
+    for pk in plan:
+        for _ in range(50):
+            post = generate_nagaoka_post(pk)
+            post = _ensure_nagaoka(post, ratio=1.0)  # nagaoka は100%長岡市を含める
+            key = post[:100]
+            if key not in seen and not _is_ng(post):
+                seen.add(key)
+                posts.append(post)
+                break
+
+    # feedback の追加テンプレを先頭に差し込む
+    for tmpl in _load_extra_templates("nagaoka"):
+        try:
+            posts.insert(0, _ensure_nagaoka(fill(tmpl), ratio=1.0))
+        except Exception:
+            pass
+
+    # CTA: 肩こり2本・頭痛1本
+    cta_posts = (
+        [_ensure_nagaoka(generate_cta_post("katakori")) for _ in range(2)] +
+        [_ensure_nagaoka(generate_cta_post("zutsuu"))   for _ in range(1)]
+    )
+    for cta in cta_posts:
+        pos = random.randint(0, len(posts))
+        posts.insert(pos, cta)
+
+    return posts[:40]
 
 
 # ══════════════════════════════════════════════
@@ -771,8 +891,8 @@ def main():
             f.write(json.dumps(entry, ensure_ascii=False) + "\n")
         print(f"✓ {len(posts)}本生成 → log_masa.jsonl に保存")
     elif "nagaoka" in account.lower():
-        posts = generate_30_posts()   # truthと同じテンプレを流用
-        entry = {"account": "@truth_nagaoka", "theme": "リミックス生成", "date": TODAY, "posts": posts}
+        posts = generate_40_nagaoka_posts()   # 軽症者ターゲット40本専用生成
+        entry = {"account": "@truth_nagaoka", "theme": "軽症者ターゲット40本生成", "date": TODAY, "posts": posts}
         with open(LOG_FILE_NAGAOKA, "a") as f:
             f.write(json.dumps(entry, ensure_ascii=False) + "\n")
         print(f"✓ {len(posts)}本生成 → log_nagaoka.jsonl に保存")

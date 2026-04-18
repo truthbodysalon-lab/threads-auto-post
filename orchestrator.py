@@ -158,7 +158,9 @@ def api_post(acct: str, text: str) -> str:
 def phase_generate(acct: str) -> list[str]:
     """Phase 1: GeneratorAgent → QualityAgent"""
     log(f"[{acct}] Phase1: 生成開始 (GeneratorAgent)")
-    raw = gen_posts(acct, count=30)
+    # nagaoka は軽症者ターゲット40本生成、他は30本
+    count = 40 if acct == "nagaoka" else 30
+    raw = gen_posts(acct, count=count)
     log(f"[{acct}] 生成: {len(raw)}本")
 
     log(f"[{acct}] Phase2: 品質チェック (QualityAgent)")

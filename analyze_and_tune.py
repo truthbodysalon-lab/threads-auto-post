@@ -44,6 +44,26 @@ ACCOUNTS = {
             "question": 3,
         },
     },
+    "nagaoka": {
+        "name": "@truth_nagaoka",
+        "log": BASE / "log_nagaoka.jsonl",
+        "posted": BASE / "log_nagaoka_posted.jsonl",
+        "insights": BASE / "insights_nagaoka.json",
+        "weights": BASE / "weights_nagaoka.json",
+        "patterns": ["keisei_target", "keisei_risk", "keisei_kyokan", "quote_empathy", "insight", "education", "story", "ranking", "question", "hochi_risk"],
+        "default_weights": {
+            "keisei_target": 7,   # 軽症者ターゲット（メイン）
+            "keisei_risk":   5,   # 軽症放置リスク
+            "keisei_kyokan": 4,   # 軽症者共感
+            "quote_empathy": 5,
+            "insight":       5,
+            "education":     4,
+            "story":         3,
+            "ranking":       4,
+            "question":      3,
+            "hochi_risk":    5,
+        },
+    },
     "masa": {
         "name": "@masahide_takahashi_",
         "log": BASE / "log_masa.jsonl",
@@ -68,7 +88,30 @@ FEEDBACK_FILE = BASE / "feedback.jsonl"
 # ── パターン検出 ───────────────────────────────────
 
 def detect_pattern(text: str, acct: str) -> str:
-    if acct == "truth":
+    if acct == "nagaoka":
+        if any(w in text for w in ["まだ我慢できる", "軽症のうち", "軽いうちに", "まだ大丈夫", "まだ薬を飲む"]):
+            return "keisei_target"
+        if any(w in text for w in ["慢性化する前", "放置は禁物", "月に2〜3回", "我慢できる範囲"]) and "[COMMENT]" in text:
+            return "keisei_risk"
+        if any(w in text for w in ["大げさかな", "後回しにして", "病院に行くほど", "整体に来るのは"]):
+            return "keisei_kyokan"
+        if any(w in text for w in ["TOP3", "3選", "3つ", "1位", "2位"]):
+            return "ranking"
+        if any(w in text for w in ["コメントで教えて", "当てはまりますか", "A：", "B："]):
+            return "question"
+        if text.startswith("「"):
+            return "quote_empathy"
+        if "[COMMENT]" in text and any(w in text for w in ["放置", "自律神経", "慢性化"]):
+            return "hochi_risk"
+        lines = [l for l in text.split("\n") if l.strip()]
+        if len(lines) <= 2:
+            return "insight"
+        if any(c in text for c in ["▶", "◎", "①", "②"]):
+            return "education"
+        if any(w in text for w in ["長岡", "先日", "お客様"]):
+            return "story"
+        return "insight"
+    elif acct == "truth":
         if any(w in text for w in ["TOP3", "3選", "3つ", "1位", "2位", "1）", "2）"]):
             return "ranking"
         if any(w in text for w in ["コメントで教えて", "当てはまりますか", "A：", "B："]):
@@ -134,7 +177,9 @@ def load_api_scores(acct: str) -> dict:
         return {}
 
     # past_posts.json から各投稿のパターンを特定してスコア付け
-    past_file = BASE / ("past_posts.json" if acct == "truth" else "past_posts_masa.json")
+    past_file = ACCOUNTS[acct].get("past_posts_file") or BASE / f"past_posts_{acct}.json"
+    if acct == "truth":
+        past_file = BASE / "past_posts.json"
     if not past_file.exists():
         return {}
 
@@ -285,10 +330,13 @@ def main():
 
     if target == "truth":
         report_lines += run("truth")
+    elif target == "nagaoka":
+        report_lines += run("nagaoka")
     elif target == "masa":
         report_lines += run("masa")
     else:
         report_lines += run("truth")
+        report_lines += run("nagaoka")
         report_lines += run("masa")
 
     save_obsidian_report(report_lines)

@@ -33,6 +33,13 @@ ACCOUNTS = {
         "insights_file": BASE / "insights_truth.json",
         "past_posts_file": BASE / "past_posts.json",
     },
+    "nagaoka": {
+        "name": "@truth_nagaoka",
+        "token": os.environ.get("THREADS_ACCESS_TOKEN_NAGAOKA", ""),
+        "user_id": os.environ.get("THREADS_USER_ID_NAGAOKA", ""),
+        "insights_file": BASE / "insights_nagaoka.json",
+        "past_posts_file": BASE / "past_posts_nagaoka.json",
+    },
     "masa": {
         "name": "@masahide_takahashi_",
         "token": os.environ.get("THREADS_ACCESS_TOKEN_MASA", ""),
@@ -192,10 +199,14 @@ def main():
     target = sys.argv[1].lower() if len(sys.argv) > 1 else "all"
     if target == "truth":
         run("truth")
+    elif target == "nagaoka":
+        run("nagaoka")
     elif target == "masa":
         run("masa")
     else:
         run("truth")
+        print()
+        run("nagaoka")
         print()
         run("masa")
 

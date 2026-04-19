@@ -35,6 +35,8 @@ jobs:
           THREADS_APP_SECRET=${{ secrets.THREADS_APP_SECRET }}
           THREADS_ACCESS_TOKEN_TRUTH=${{ secrets.THREADS_ACCESS_TOKEN_TRUTH }}
           THREADS_USER_ID_TRUTH=${{ secrets.THREADS_USER_ID_TRUTH }}
+          THREADS_ACCESS_TOKEN_NAGAOKA=${{ secrets.THREADS_ACCESS_TOKEN_NAGAOKA }}
+          THREADS_USER_ID_NAGAOKA=${{ secrets.THREADS_USER_ID_NAGAOKA }}
           THREADS_ACCESS_TOKEN_MASA=${{ secrets.THREADS_ACCESS_TOKEN_MASA }}
           THREADS_USER_ID_MASA=${{ secrets.THREADS_USER_ID_MASA }}
           GH_PAT=${{ secrets.GH_PAT }}
@@ -50,6 +52,9 @@ jobs:
       - name: Generate posts for @truth_body_salon
         run: python3 generate_remix.py truth
 
+      - name: Generate posts for @truth_nagaoka
+        run: python3 generate_remix.py nagaoka
+
       - name: Generate posts for @masahide_takahashi_
         run: python3 generate_remix.py masa
 
@@ -57,10 +62,10 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add log_truth.jsonl log_masa.jsonl \
-                  insights_truth.json insights_masa.json \
-                  past_posts.json past_posts_masa.json \
-                  weights_truth.json weights_masa.json 2>/dev/null || true
+          git add log_truth.jsonl log_nagaoka.jsonl log_masa.jsonl \
+                  insights_truth.json insights_nagaoka.json insights_masa.json \
+                  past_posts.json past_posts_nagaoka.json past_posts_masa.json \
+                  weights_truth.json weights_nagaoka.json weights_masa.json 2>/dev/null || true
           git diff --cached --quiet || git commit -m "chore: daily generate & tune [skip ci]"
           for i in 1 2 3; do
             git push && break

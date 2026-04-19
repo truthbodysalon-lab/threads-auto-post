@@ -95,7 +95,8 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add log_truth.jsonl log_masa.jsonl log_nagaoka.jsonl \
                   log_truth_posted.jsonl log_masa_posted.jsonl log_nagaoka_posted.jsonl \
-                  insights_truth.json insights_masa.json \
+                  insights_truth.json insights_nagaoka.json insights_masa.json \
+                  weights_truth.json weights_nagaoka.json weights_masa.json \
                   feedback.json 2>/dev/null || true
           git diff --cached --quiet || git commit -m "chore: update logs [skip ci]"
           for i in 1 2 3; do

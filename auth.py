@@ -140,9 +140,67 @@ def get_user_id(access_token: str) -> str:
 # ── メイン ────────────────────────────────────────
 
 
+ACCOUNT_CONFIG = {
+    "truth":   {"token_key": "THREADS_ACCESS_TOKEN_TRUTH",   "uid_key": "THREADS_USER_ID_TRUTH",   "name": "@truth_body_salon"},
+    "masa":    {"token_key": "THREADS_ACCESS_TOKEN_MASA",    "uid_key": "THREADS_USER_ID_MASA",    "name": "@masahide_takahashi_"},
+    "nagaoka": {"token_key": "THREADS_ACCESS_TOKEN_NAGAOKA", "uid_key": "THREADS_USER_ID_NAGAOKA", "name": "@truth_nagaoka"},
+}
+
+
+def push_to_github_secrets(env: dict, token_key: str, uid_key: str):
+    """取得したトークン・UIDをGitHub Secretsに自動登録"""
+    try:
+        from nacl.public import PublicKey, SealedBox
+        from base64 import b64decode, b64encode
+    except ImportError:
+        print("  PyNaCl未インストール → GitHub Secrets自動登録スキップ")
+        return
+
+    pat  = env.get("GH_PAT", "")
+    repo = env.get("GH_REPO", "")
+    if not pat or not repo:
+        print("  GH_PAT/GH_REPO未設定 → GitHub Secrets自動登録スキップ")
+        return
+
+    import urllib.request as _req
+    def _api(path, method="GET", body=None):
+        url = f"https://api.github.com{path}"
+        data = json.dumps(body).encode() if body else None
+        r = _req.Request(url, data=data, method=method, headers={
+            "Authorization": f"token {pat}",
+            "Accept": "application/vnd.github+json",
+            "X-GitHub-Api-Version": "2022-11-28",
+            "Content-Type": "application/json",
+        })
+        try:
+            with _req.urlopen(r) as resp:
+                return json.loads(resp.read()) if resp.status != 204 else {}
+        except Exception as e:
+            print(f"  GitHub API エラー: {e}")
+            return None
+
+    pub_data = _api(f"/repos/{repo}/actions/secrets/public-key")
+    if not pub_data:
+        return
+
+    key_id  = pub_data["key_id"]
+    pub_key = pub_data["key"]
+
+    def _put_secret(name, value):
+        pub = PublicKey(b64decode(pub_key))
+        encrypted = b64encode(SealedBox(pub).encrypt(value.encode())).decode()
+        ok = _api(f"/repos/{repo}/actions/secrets/{name}", "PUT",
+                  {"encrypted_value": encrypted, "key_id": key_id})
+        print(f"  GitHub Secret [{name}]: {'✓ 登録完了' if ok is not None else '失敗'}")
+
+    _put_secret(token_key, env[token_key])
+    _put_secret(uid_key,   env[uid_key])
+
+
 def main():
     account = sys.argv[1] if len(sys.argv) > 1 else "truth"
-    is_masa = "masa" in account.lower()
+    acct_key = "masa" if "masa" in account.lower() else "nagaoka" if "nagaoka" in account.lower() else "truth"
+    cfg = ACCOUNT_CONFIG[acct_key]
 
     env = load_env()
 
@@ -163,25 +221,19 @@ def main():
     print(f"\n  {callback_url}\n")
     print(f"{'='*50}")
     print("↑ このURLを Meta Developer Console の")
-    print("  「コールバックURLをリダイレクト」に貼り付けて保存してください。")
+    print("  「コールバックURLをリダイレクト」に追加して保存してください。")
     input("\n保存したら Enter を押してください...")
 
     # 認証URL生成
-    params = urllib.parse.urlencode(
-        {
-            "client_id": app_id,
-            "redirect_uri": callback_url,
-            "scope": SCOPE,
-            "response_type": "code",
-        }
-    )
+    params = urllib.parse.urlencode({
+        "client_id": app_id,
+        "redirect_uri": callback_url,
+        "scope": SCOPE,
+        "response_type": "code",
+    })
     auth_url = f"{AUTH_URL}?{params}"
 
-    print(f"\n--- Threads OAuth 認証 ---")
-    if is_masa:
-        print("アカウント: @masahide_takahashi_")
-    else:
-        print("アカウント: @truth_body_salon")
+    print(f"\n--- Threads OAuth 認証: {cfg['name']} ---")
     print(f"ブラウザで認証ページを開きます...")
     webbrowser.open(auth_url)
 
@@ -216,18 +268,16 @@ def main():
     # .env に保存
     env["THREADS_APP_ID"] = app_id
     env["THREADS_APP_SECRET"] = app_secret
-
-    if is_masa:
-        env["THREADS_ACCESS_TOKEN_MASA"] = long_token
-        env["THREADS_USER_ID_MASA"] = user_id
-        print(f"\n✓ @masahide_takahashi_ のトークンを保存しました")
-    else:
-        env["THREADS_ACCESS_TOKEN_TRUTH"] = long_token
-        env["THREADS_USER_ID_TRUTH"] = user_id
-        print(f"\n✓ @truth_body_salon のトークンを保存しました")
-
+    env[cfg["token_key"]] = long_token
+    env[cfg["uid_key"]] = user_id
     save_env(env)
-    print("\n認証完了！次は post.py を実行して投稿できます。")
+    print(f"\n✓ {cfg['name']} のトークンを.envに保存しました")
+
+    # GitHub Secrets に自動登録
+    print("\nGitHub Secretsに自動登録中...")
+    push_to_github_secrets(env, cfg["token_key"], cfg["uid_key"])
+
+    print(f"\n✓ 認証完了！{cfg['name']} の自動投稿が有効になりました。")
 
 
 if __name__ == "__main__":

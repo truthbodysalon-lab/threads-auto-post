@@ -330,14 +330,14 @@ CTA_ZUTSUU_TEMPLATES = [
 ]
 
 NAGAOKA_PHRASES = [
-    "長岡市で整体師をしているまぁです。",
+    "長岡市の整体師です。",
     "長岡市で整体院を営んでいます。",
+    "長岡市で10年以上施術してきました。",
+    "長岡市の整体師まぁです。",
     "長岡市で1万人を施術してきました。",
-    "長岡市の整体院にお越しの方へ。",
-    "長岡市のワーママさんからよく聞く悩みです。",
-    "長岡市で整体師として気づいたことがあります。",
-    "長岡市で整体師をして10年以上経ちます。",
-    "長岡市にいると、こういう悩みを持つ方が多いです。",
+    "長岡市在住の方へ。",
+    "長岡市の整体院より。",
+    "長岡市で整体師として気づいたこと。",
 ]
 
 # ── 軽症者・まだ我慢できる人ターゲット（@truth_nagaoka 専用）──────────
@@ -345,55 +345,68 @@ NAGAOKA_PATTERNS = {
     "keisei_target": {
         "desc": "軽症者・まだ我慢できる人へのアプローチ（早期来院促進）",
         "templates": [
-            "「まだ薬を飲むほどじゃないけど\n{symptom}が気になる」\n\nそういう方にこそ来てほしいです。\n\n{nagaoka}\n軽いうちに根本から整えると\n驚くほど早く楽になります。",
+            "「{symptom}、まだ我慢できる」\n\n1年後には毎日になります。\n軽症のうちに来てください。",
 
-            "「たまに{symptom}があるけど\nまだ我慢できる」\n\nその「まだ我慢できる」が\n1年後には「毎日ある」に変わります。\n\n{nagaoka}\n軽症のうちが一番早く根本改善できます。",
+            "「たまに{symptom}がある」\nそのくらいで来ていいです。\n\n長岡市の整体院、軽症の方大歓迎です。",
 
-            "「週に1〜2回くらい{symptom}がある」\nそのくらい放置しがちですよね。\n\n{nagaoka}\nでもそれ、体の最初のSOSです。\n\n軽いうちに来てください。\n根本から変わります。",
+            "「{symptom}があるけど仕事には支障ない」\n\nそれ、慢性化の手前です。\n今が来るタイミングです。",
 
-            "慢性化する前のサイン\n\n□ 夕方になると{symptom}が出る\n□ 天気が悪いと悪化する\n□ 疲れると{symptom}になる\n□ 朝は大丈夫だけど夜はしんどい\n\n{nagaoka}\n1つでも当てはまったら、今が来るタイミングです。",
+            "まだ軽いうちが\n一番早く根本改善できます。\n\n「{symptom}が気になる」程度で来てください。",
 
-            "{nagaoka}\n\n「まだ大丈夫かな」\nって思っている間に\n{symptom}は蓄積しています。\n\n軽い今こそ来てほしい。\nケアのベストタイミングは「軽症のうち」です。",
+            "「{symptom}、まだ薬を飲むほどじゃない」\n\nそのレベルが一番変わりやすいです。\n長岡市で10年施術してきた実感です。",
 
-            "「{symptom}、我慢できないほどじゃない」\n\nその言葉、よく聞きます。\n{nagaoka}\n\nでも考えてみてください。\n\n今よりひどくなってから来た方が\n時間もお金もかかります。\n\n軽症のうちに整えるのが、一番お得です。",
+            "「大げさかな」って思って来るくらいが\nちょうどいいです。\n\n{symptom}は軽いうちに整えるのが正解。",
 
-            "「{symptom}があるけど\n仕事や家事には支障ない」\n\nそういう方が実は一番多いです。\n\n{nagaoka}\n「支障はないけどしんどい」を\n解消できる体を作りませんか。",
+            "{symptom}を慢性化させないために\n一番大事なのは「早めに来ること」です。",
 
-            "{nagaoka}\n\n整体に来るのは\n「もう限界」になってからじゃなくていい。\n\n「なんか気になる」くらいで来るのが\n一番理想的です。\n\n{symptom}が軽いうちが\n根本改善の絶好のタイミングです。",
+            "「整体はもっとひどくなってから」\n\n逆です。\n軽症のうちに来る人が一番早く楽になります。",
+
+            "夕方だけ{symptom}がある。\n\nそのくらいが実は来るベストタイミングです。",
+
+            "「{symptom}、疲れた日だけある」\n\nそれ、体の最初のSOSです。\n無視しないでください。",
+
+            "週に1〜2回の{symptom}。\n\n今が一番変わりやすい段階です。\n放置するほど時間がかかります。",
+
+            "まだ痛くない。\nだから今来てください。\n\n{symptom}は痛くなってからより\n軽いうちの方が3倍早く改善します。",
         ]
     },
     "keisei_risk": {
         "desc": "軽症放置リスク（慢性化の怖さ＋早期介入のすすめ）[COMMENT]形式",
         "templates": [
-            "{nagaoka}\n\n「月に2〜3回{symptom}がある」\nそのくらいなら放置していませんか？\n[COMMENT]\nそのレベルが1年後には\n「毎日ある」に変わることがほとんどです。\n\n症状は放置するほど積み重なります。\n今が一番回復が早い時期。\n[COMMENT]\n軽症のうちに原因を見つけると\n3〜5回の施術で根本から変わります。\n\n慢性化してからは\n時間も回数もかかります。\n[COMMENT]\nプロフィールからご予約できます。\n「まだ軽いけど気になる」でも全然大丈夫です。",
+            "「月に2〜3回{symptom}がある」\n放置すると慢性化します。\n[COMMENT]\n今なら3〜5回で根本改善できます。\n慢性化してからは倍の時間がかかります。\n\n気になり始めた今が来るタイミングです。",
 
-            "{nagaoka}\n\n「まだ薬を飲むほどじゃない」\nその{symptom}、放置は禁物です。\n[COMMENT]\n軽い症状の段階では\n体は「SOSサイン」を出しています。\n\nここで無視すると\n体はもっと強いサインを出します。\n\nそれが「慢性化」です。\n[COMMENT]\n今なら1〜2ヶ月で根本改善できます。\n慢性化してからだと\n半年以上かかることも。\n\n早い方が、絶対に良いです。\n[COMMENT]\n気になり始めた今が来るタイミング。\nプロフィールからお気軽にどうぞ。",
+            "「まだ薬を飲むほどじゃない{symptom}」\n放置は禁物です。\n[COMMENT]\n軽い今なら1〜2ヶ月で根本改善できます。\n慢性化すると半年以上かかることも。\n\n早い方が絶対いいです。",
 
-            "{nagaoka}\n\n「{symptom}、我慢できる範囲」\nその感覚が危険です。\n[COMMENT]\n我慢できる痛みを放置し続けると\n体はその状態に「慣れて」しまいます。\n\n慣れる＝改善されているわけではありません。\n慢性化のサインです。\n[COMMENT]\n整体師として1万人を見てきて\n「もっと早く来ればよかった」\nという言葉を本当によく聞きます。\n\n軽症のうちが一番ラクに根本改善できます。\n[COMMENT]\n「まだ我慢できる{symptom}」がある方、\n一度ご相談ください。",
+            "「{symptom}、我慢できる範囲」\n\nその感覚が危険です。\n[COMMENT]\n体は痛みに「慣れて」しまいます。\n慣れる＝改善ではありません。\n\n軽症のうちが一番ラクに根本改善できます。",
         ]
     },
     "keisei_kyokan": {
         "desc": "軽症者への共感・来院の背中を押す系",
         "templates": [
-            "「{symptom}くらいで整体に行くのは大げさかな」\n\nそんなことないです。\n{nagaoka}\n\n大げさなくらいで来てくれた方が\n私たちは嬉しいです。",
+            "「{symptom}くらいで整体は大げさ」\n\nそんなことないです。\nそのくらいで来てほしいです。",
 
-            "「忙しくて{symptom}を後回しにしてる」\n\nその気持ち、すごく分かります。\n\n{nagaoka}\nでも体は正直です。\n後回しにした分だけ\nケアに時間がかかります。",
+            "「忙しくて{symptom}を後回しにしてる」\n\n体は正直です。\n後回しにした分だけケアに時間がかかります。",
 
-            "「{symptom}があるけど、病院に行くほどでもない...」\n\nそういう方のために整体があります。\n\n{nagaoka}\n病院と自分でケアの間、\nちょうどそこが私の守備範囲です。",
+            "「{symptom}があるけど病院に行くほどでもない」\n\nそういう方のために整体があります。",
 
-            "{nagaoka}\n\n「整体って、もっとひどくなってから行くところ」\n\nそう思っていませんか？\n\n実は逆です。\n軽症のうちに来る人が\n一番短期間で楽になります。",
+            "軽い{symptom}を後回しにするのは\n一番もったいない選択です。\n\n今が一番変わりやすい時期です。",
+
+            "「整体って、もっとひどくなってから行くところ」\n\n実は逆です。\n軽いうちに来る人が一番早く楽になります。",
         ]
     },
 }
 
-def _ensure_nagaoka(text: str, ratio: float = 0.6) -> str:
-    """truth_body_salon の投稿の約60%に「長岡市」を含める"""
+def _ensure_nagaoka(text: str, ratio: float = 0.6, prepend: bool = False) -> str:
+    """長岡市を投稿に自然に含める。nagaoka用はprepend=Trueで先頭追加"""
     if "長岡市" in text:
         return text
     if random.random() > ratio:
         return text
     phrase = random.choice(NAGAOKA_PHRASES)
-    # CONTINUATION_MARKER があれば本文の末尾（マーカー直前）に追加
+    if prepend:
+        # 先頭に追加（末尾追加より自然）
+        return phrase + "\n\n" + text
+    # 旧ロジック（truth用アペンド）
     marker = "\n\n【続き】\n"
     if marker in text:
         main, rest = text.split(marker, 1)
@@ -432,6 +445,19 @@ def generate_nagaoka_post(pattern_key: str) -> str:
     """nagaoka専用パターンまたは共通パターンで投稿生成"""
     if pattern_key in NAGAOKA_PATTERNS:
         p = NAGAOKA_PATTERNS[pattern_key]
+        return fill(random.choice(p["templates"]))
+    elif pattern_key == "quote_empathy":
+        # nagaoka用: 超短縮版（opener + closer のみ・middleは省略）
+        p = PATTERNS["quote_empathy"]
+        opener = fill(random.choice(p["openers"]))
+        closer = fill(random.choice(p["closers"]))
+        return opener + closer
+    elif pattern_key == "insight":
+        # insight は元々短い（2行）のでそのまま使う
+        return fill(random.choice(PATTERNS["insight"]["templates"]))
+    elif pattern_key == "hook_one_line":
+        # nagaoka用: フックのみ（本文なし・短く）
+        p = PATTERNS["hook_one_line"]
         return fill(random.choice(p["templates"]))
     else:
         return generate_post(pattern_key)
@@ -556,29 +582,30 @@ def generate_30_posts() -> list[str]:
 
 
 def generate_40_nagaoka_posts() -> list[str]:
-    """@truth_nagaoka 専用: 軽症者・まだ我慢できる人ターゲット 40本生成（7:2:1比率）"""
+    """@truth_nagaoka 専用: 軽症者・まだ我慢できる人ターゲット 40本生成
+    方針: 短文（2〜4行）を重視。長岡市は先頭追加（末尾追加しない）。
+    """
     w = _load_weights("nagaoka")
 
-    # 7:2:1 比率 — 情報提供28本・日常/共感8本・宣伝4本 = 40本
+    # 超短文優先の配分（7:2:1比率）
+    # nagaoka専用パターン（全て2〜4行）: 19本
+    # 短い共通パターン（insight=2行・quote_empathy短縮版・hook・ranking）: 17本
+    # [COMMENT]形式の放置リスク系: 4本
     defaults = {
-        # 情報提供系 (28本)
-        "touka_koukan": 3,
-        "prbrep":        2,
-        "keisei_target": 7,    # 軽症者特化（メイン）
-        "education":     3,
-        "insight":       3,
-        "aoi_style":     3,
-        "hori_style":    2,
-        "hook_one_line": 3,
-        "nayami_kyokan": 2,
-        # 日常/共感系 (8本)
-        "quote_empathy": 3,
-        "story":         2,
-        "ranking":       2,
-        "keisei_kyokan": 1,    # 軽症者共感
-        # 宣伝/CTA系 (4本)
-        "hochi_risk":    2,
-        "keisei_risk":   2,    # 軽症放置リスク
+        # ── nagaoka専用・超短文 (19本) ──
+        "keisei_target": 12,   # 軽症者特化（メイン）2〜4行
+        "keisei_kyokan": 4,    # 軽症者共感 2〜3行
+        "keisei_risk":   3,    # 軽症放置リスク [COMMENT]形式
+        # ── 短い共通パターン (17本) ──
+        "insight":       5,    # 2行
+        "hook_one_line": 4,    # 1行フック（nagaoka用: フックのみ）
+        "quote_empathy": 4,    # 共感引用（nagaoka用短縮: opener+closer=3行）
+        "ranking":       4,    # ランキング形式（3〜5行・読みやすい）
+        # ── [COMMENT]形式・長め (4本) ──
+        "hochi_risk":    2,    # 放置リスク
+        "story":         2,    # ストーリー
+        # 長いパターンは除外
+        # "touka_koukan": 0, "prbrep": 0, "aoi_style": 0, "hori_style": 0, "nayami_kyokan": 0
     }
     merged = {k: int(w.get(k, v)) for k, v in defaults.items()}
 
@@ -592,7 +619,8 @@ def generate_40_nagaoka_posts() -> list[str]:
     for pk in plan:
         for _ in range(50):
             post = generate_nagaoka_post(pk)
-            post = _ensure_nagaoka(post, ratio=1.0)  # nagaoka は100%長岡市を含める
+            # 長岡市を先頭に追加（ratio=1.0で必ず、prepend=Trueで先頭追加）
+            post = _ensure_nagaoka(post, ratio=1.0, prepend=True)
             key = post[:100]
             if key not in seen and not _is_ng(post):
                 seen.add(key)
@@ -602,14 +630,14 @@ def generate_40_nagaoka_posts() -> list[str]:
     # feedback の追加テンプレを先頭に差し込む
     for tmpl in _load_extra_templates("nagaoka"):
         try:
-            posts.insert(0, _ensure_nagaoka(fill(tmpl), ratio=1.0))
+            posts.insert(0, _ensure_nagaoka(fill(tmpl), ratio=1.0, prepend=True))
         except Exception:
             pass
 
-    # CTA: 肩こり2本・頭痛1本
+    # CTA: 肩こり2本・頭痛1本（nagaoka全投稿に長岡市必須 → ratio=1.0）
     cta_posts = (
-        [_ensure_nagaoka(generate_cta_post("katakori")) for _ in range(2)] +
-        [_ensure_nagaoka(generate_cta_post("zutsuu"))   for _ in range(1)]
+        [_ensure_nagaoka(generate_cta_post("katakori"), ratio=1.0, prepend=True) for _ in range(2)] +
+        [_ensure_nagaoka(generate_cta_post("zutsuu"),   ratio=1.0, prepend=True) for _ in range(1)]
     )
     for cta in cta_posts:
         pos = random.randint(0, len(posts))

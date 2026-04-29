@@ -1,13 +1,16 @@
 {
   "updated_at": "2026-04-29",
   "pattern_weights": {
-    "quote_empathy": 6,
+    "keisei_target": 7,
+    "keisei_risk": 5,
+    "keisei_kyokan": 4,
+    "quote_empathy": 5,
     "insight": 5,
-    "education": 5,
+    "education": 4,
     "story": 3,
-    "workmom": 2,
     "ranking": 4,
-    "question": 3
+    "question": 3,
+    "hochi_risk": 5
   },
   "feedback_scores": {},
   "api_scores": {}

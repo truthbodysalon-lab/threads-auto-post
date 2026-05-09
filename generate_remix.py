@@ -101,6 +101,27 @@ except Exception:
 
 # ── 投稿パターン定義 ──────────────────────────────
 # 各パターンは (冒頭テンプレ, 中間テンプレ, 締めテンプレ) のリスト
+
+# ── インスタハカセ理論：「自分は何者か」×「気づき1つ」（truth/nagaoka共通）──
+# Threadsの7割はこの構文でOK。権威性＋短い気づきで最高のパフォーマンス
+NANIMONO_KIZUKI_TEMPLATES = [
+    "整体師として1万人を施術してきたけど、\n{symptom}を「年齢のせい」にしている人が\n一番変わるのが遅い。",
+
+    "施術実績1万人の整体師として言えること。\n\n{symptom}は揉んでも治らない。\n原因を変えていないから。",
+
+    "整体師として10年以上やってきて気づいたこと。\n\n改善が早い人は\n施術の間も{cause}を変えている。",
+
+    "改善率93.7%の施術をしてきて分かったこと。\n\n{symptom}の根本は{cause}にある。\nそこを変えない限り、何度でも戻る。",
+
+    "1万人を施術してきたけど、\n週3で頭痛があった人が\n3回の施術でほぼゼロになった。\n\n{cause}を変えたから。",
+
+    "整体師として気づいたこと。\n\n「もう仕方ない」と諦めた瞬間に\n体は本当に変わらなくなる。",
+
+    "施術10年・1万人・改善率93.7%。\nそれでも一番大事なのは\n「日常の{cause}を変えること」だと思っている。",
+
+    "整体師として断言できること。\n\n{symptom}は変えられる。\n年齢のせいにしている間は変わらないだけ。",
+]
+
 PATTERNS = {
     "hook_one_line": {
         "desc": "1行フック系（超短・引き）",
@@ -482,6 +503,9 @@ def generate_nagaoka_post(pattern_key: str) -> str:
     if pattern_key in NAGAOKA_PATTERNS:
         p = NAGAOKA_PATTERNS[pattern_key]
         return fill(random.choice(p["templates"]))
+    elif pattern_key == "nanimono_kizuki":
+        # インスタハカセ理論：「自分は何者か」×「気づき1つ」
+        return fill(random.choice(NANIMONO_KIZUKI_TEMPLATES))
     elif pattern_key == "quote_empathy":
         # nagaoka用: 超短縮版（opener + closer のみ・middleは省略）
         p = PATTERNS["quote_empathy"]
@@ -512,6 +536,10 @@ def generate_cta_post(target: str) -> str:
 
 
 def generate_post(pattern_key: str) -> str:
+    # インスタハカセ理論：「自分は何者か」×「気づき1つ」
+    if pattern_key == "nanimono_kizuki":
+        return fill(random.choice(NANIMONO_KIZUKI_TEMPLATES))
+
     p = PATTERNS[pattern_key]
 
     if pattern_key == "quote_empathy":
@@ -544,19 +572,18 @@ def generate_post(pattern_key: str) -> str:
 
 def generate_30_posts() -> list[str]:
     w = _load_weights("truth")
-    # 小川教材 7:2:1 比率 — 情報提供7・日常/共感2・宣伝1
-    # 45本: 情報系(touka_koukan3+prbrep3+education4+insight4+aoi_style4+hori_style3+hook_one_line3+gyakusetsu3)=27
-    #       宣伝/問題提起(pasona3+hochi_risk4+nayami_kyokan3)=10
-    #       日常/共感(quote_empathy4+story3+workmom2+question2+ranking3)=14 → 合計51→45カット
+    # インスタハカセ理論反映（2026-04-20）
+    # 「自分は何者か」×「気づき1つ」(nanimono_kizuki)を最重要パターンとして追加
     defaults = {
+        "nanimono_kizuki": 5,  # 最重要（インスタハカセ理論・権威性+気づき）
         "touka_koukan": 3,   # 等価交換（情報提供→信頼）
         "prbrep": 3,         # PRBREP（根拠+事例で説得力）
         "pasona": 3,         # PASONA（問題→共感→解決→提案→行動）
-        "hochi_risk": 4,     # 放置リスク（問題提起→末路→改善）
+        "hochi_risk": 3,     # 放置リスク（問題提起→末路→改善）
         "nayami_kyokan": 2,  # 悩み共感→改善実績
         "hook_one_line": 3,
-        "aoi_style": 4,      # 小川式
-        "hori_style": 3,     # 堀式
+        "aoi_style": 3,      # 小川式
+        "hori_style": 2,     # 堀式
         "gyakusetsu": 3,
         "quote_empathy": 4,
         "insight": 4,
@@ -568,6 +595,7 @@ def generate_30_posts() -> list[str]:
     }
     merged = {k: int(w.get(k, v)) for k, v in defaults.items()}
     plan = (
+        ["nanimono_kizuki"] * merged["nanimono_kizuki"] +
         ["touka_koukan"] * merged["touka_koukan"] +
         ["prbrep"] * merged["prbrep"] +
         ["pasona"] * merged["pasona"] +
@@ -631,19 +659,19 @@ def generate_40_nagaoka_posts() -> list[str]:
     # [COMMENT]形式の放置リスク系: 4本
     defaults = {
         # ── nagaoka専用・超短文 (19本) ──
-        "keisei_target": 12,   # 軽症者特化（メイン）2〜4行
-        "keisei_kyokan": 4,    # 軽症者共感 2〜3行
+        "keisei_target": 10,   # 軽症者特化（メイン）2〜4行
+        "keisei_kyokan": 3,    # 軽症者共感 2〜3行
         "keisei_risk":   3,    # 軽症放置リスク [COMMENT]形式
-        # ── 短い共通パターン (17本) ──
-        "insight":       5,    # 2行
-        "hook_one_line": 4,    # 1行フック（nagaoka用: フックのみ）
+        # ── インスタハカセ理論：「自分は何者か」×「気づき」(4本) ──
+        "nanimono_kizuki": 4,  # 権威性+短い気づき（最高エンゲージメント）
+        # ── 短い共通パターン (16本) ──
+        "insight":       4,    # 2行
+        "hook_one_line": 3,    # 1行フック（nagaoka用: フックのみ）
         "quote_empathy": 4,    # 共感引用（nagaoka用短縮: opener+closer=3行）
-        "ranking":       4,    # ランキング形式（3〜5行・読みやすい）
-        # ── [COMMENT]形式・長め (4本) ──
+        "ranking":       3,    # ランキング形式（3〜5行・読みやすい）
+        # ── [COMMENT]形式・長め (3本) ──
         "hochi_risk":    2,    # 放置リスク
-        "story":         2,    # ストーリー
-        # 長いパターンは除外
-        # "touka_koukan": 0, "prbrep": 0, "aoi_style": 0, "hori_style": 0, "nayami_kyokan": 0
+        "story":         1,    # ストーリー
     }
     merged = {k: int(w.get(k, v)) for k, v in defaults.items()}
 
@@ -715,6 +743,25 @@ MASA_TOPICS = _masa_mat.get("topics") or [
 ]
 
 MASA_PATTERNS = {
+    # ── 最重要：「自分は何者か」×「気づき1つ」（インスタハカセ理論・Threadsの7割はこれ）──
+    "nanimono_kizuki": [
+        "マーケター12年やってるけど、\nコンサルにお金かけるのに\n広告にお金かけない人、多すぎる。",
+
+        "集客支援で月商0→100万にした話を\n何度もしてきたけど、\n変えたのは「設計」だけです。",
+
+        "フォロワー200人で月商80万出している人がいる。\nフォロワー数の問題じゃないから。",
+
+        "マーケター歴12年、\n1度も売上を落とさずに増収増益してきたけど、\n理由は「当たる訴求を探し続けたから」だけです。",
+
+        "SNS運用を10年以上やってきて気づいたこと。\n\n当たった投稿はコピペでこすっても当たる。\n新しいネタを毎日考えなくていい。",
+
+        "集客支援をしてきて言えること。\n\n伸びない人の共通点は\n「フォロワー数ばかり気にして導線を作ってない」こと。",
+
+        "マーケターとして完全成果報酬でやってきて気づいたこと。\n\nSNSはバズらせる必要がない。\n「決まった人に届けば」それだけで売上が立つ。",
+
+        "Threads運用でLINE登録を月100件以上取ってるけど、\n秘密はない。\n\n「自分が何者か」×「気づき1つ」を毎日投稿してるだけ。",
+    ],
+
     "hook_one_line": [
         "フォロワーが増えても売上は増えない。",
         "良い動画より大事なことがある。",
@@ -988,14 +1035,15 @@ def generate_masa_post(pattern_key: str) -> str:
 
 def generate_30_masa_posts() -> list[str]:
     w = _load_weights("masa")
-    # コンサル伸びた投稿リスト分析を反映（2026-04-20）
-    # 新規追加: jiko_kaiji（自己開示）, yakan_bucchake（深夜ぶっちゃけ）,
-    #           meigen（金言）, keikoku（警告フック）, kachi_ninshou（価値認識）, sns_honshitsu（SNS本質）
+    # インスタハカセ理論 + コンサル伸びた投稿リスト分析を反映（2026-04-20）
+    # 最重要追加: nanimono_kizuki（「自分は何者か」×「気づき1つ」= Threadsの7割はこれ）
     defaults = {
+        # ── 最重要（インスタハカセ理論）──
+        "nanimono_kizuki": 5,  # 「自分は何者か」×「気づき1つ」最高効率
         # ── 高エンゲージメント（PDFより追加）──
         "jiko_kaiji":    3,   # 自己開示・個人ストーリー（最高反応）
         "meigen":        4,   # 金言・名言型（高シェア・高保存）
-        "keikoku":       3,   # 警告・危険フック（損失回避）
+        "keikoku":       2,   # 警告・危険フック（損失回避）
         "yakan_bucchake":2,   # 深夜・ぶっちゃけ系（特別感）
         "kachi_ninshou": 2,   # 価値認識・承認型
         "sns_honshitsu": 2,   # SNS本質・哲学系
@@ -1004,19 +1052,20 @@ def generate_30_masa_posts() -> list[str]:
         "prbrep":        2,   # PRBREP（根拠+事例）
         "pasona":        2,   # PASONA（問題→共感→解決）
         "hook_one_line": 2,
-        "aoi_style":     3,
+        "aoi_style":     2,
         "hori_style":    2,
         "hanshakai":     2,   # 逆張り・常識破壊
-        "insight":       3,
-        "education":     3,
+        "insight":       2,
+        "education":     2,
         "story":         2,
-        "soft_line":     3,
+        "soft_line":     2,
         "cta":           2,
         "ranking":       3,
         "question":      2,
     }
     merged = {k: int(w.get(k, v)) for k, v in defaults.items()}
     plan = (
+        ["nanimono_kizuki"] * merged["nanimono_kizuki"] +
         ["jiko_kaiji"]    * merged["jiko_kaiji"] +
         ["meigen"]        * merged["meigen"] +
         ["keikoku"]       * merged["keikoku"] +

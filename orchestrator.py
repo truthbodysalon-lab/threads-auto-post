@@ -28,6 +28,17 @@ sys.path.insert(0, str(BASE))
 from agents.generator import generate as gen_posts
 from agents.quality   import check    as quality_check
 from agents.analysis  import run      as run_analysis
+from duplicate_guard  import (
+    normalize_text  as dg_normalize,
+    is_duplicate    as dg_is_duplicate,
+    mark_pending    as dg_mark_pending,
+    mark_posted     as dg_mark_posted,
+)
+
+
+class _DuplicatePost(Exception):
+    """api_post が重複を検知したときに投げる内部例外"""
+    pass
 
 POST_HOUR_START = 6
 POST_HOUR_END   = 23
@@ -136,6 +147,11 @@ def mark_posted(acct: str, index: int, post_id: str, text: str = ""):
 # ── Threads API ───────────────────────────────────────
 
 def api_post(acct: str, text: str) -> str:
+    norm = dg_normalize(text)
+    if dg_is_duplicate(norm, acct):
+        raise _DuplicatePost(f"{text[:50]}")
+    dg_mark_pending(norm, acct)   # API前に記録（タイムアウト対策）
+
     token   = os.environ[ACCOUNTS[acct]["token_key"]]
     user_id = os.environ[ACCOUNTS[acct]["uid_key"]]
 
@@ -150,7 +166,10 @@ def api_post(acct: str, text: str) -> str:
     with urllib.request.urlopen(
         urllib.request.Request(f"{BASE_URL}/{user_id}/threads_publish", data2), timeout=30
     ) as r:
-        return json.loads(r.read())["id"]
+        post_id = json.loads(r.read())["id"]
+
+    dg_mark_posted(norm, acct, post_id)   # 成功後に確定記録
+    return post_id
 
 
 # ── フェーズ別実行 ────────────────────────────────────
@@ -252,6 +271,8 @@ def phase_post(acct: str, posts: list[str]):
                     log(f"[{acct}] コメント{ci}失敗（前投稿は成功）: {ce}")
                     break
 
+        except _DuplicatePost as dp:
+            log(f"[{acct}] [重複スキップ] {str(dp)[:60]}")
         except Exception as e:
             log(f"[{acct}] ✗ 投稿失敗: {e}")
 
@@ -287,6 +308,8 @@ def phase_post(acct: str, posts: list[str]):
                 except Exception as ce:
                     log(f"[{acct}] URLコメント失敗（本投稿は成功）: {ce}")
 
+        except _DuplicatePost as dp:
+            log(f"[{acct}] [重複スキップ] {str(dp)[:60]}")
         except Exception as e:
             log(f"[{acct}] ✗ 投稿失敗: {e}")
 

@@ -24,6 +24,15 @@ import urllib.parse
 import urllib.request
 from datetime import date, datetime
 from pathlib import Path
+from duplicate_guard import (
+    normalize_text as dg_normalize,
+    is_duplicate as dg_is_duplicate,
+    mark_pending as dg_mark_pending,
+    mark_posted as dg_mark_posted,
+)
+
+# get_next_post / get_posted_texts で使う正規化（duplicate_guard と同じロジック）
+_normalize_post_key = dg_normalize
 
 BASE = Path(__file__).parent
 ERROR_LOG = BASE / "error.log"
@@ -40,6 +49,15 @@ ACCOUNTS = {
         "token_key": "THREADS_ACCESS_TOKEN_TRUTH",
         "uid_key": "THREADS_USER_ID_TRUTH",
         "autopost_log": BASE / "autopost_truth.log",
+        "bridge_text": "ご予約・詳細はこちらから 👇",
+    },
+    "nagaoka": {
+        "name": "@truth_nagaoka",
+        "log": BASE / "log_nagaoka.jsonl",
+        "posted": BASE / "log_nagaoka_posted.jsonl",
+        "token_key": "THREADS_ACCESS_TOKEN_NAGAOKA",
+        "uid_key": "THREADS_USER_ID_NAGAOKA",
+        "autopost_log": BASE / "autopost_nagaoka.log",
         "bridge_text": "ご予約・詳細はこちらから 👇",
     },
     "masa": {
@@ -207,13 +225,12 @@ def get_next_post(acct: str, today: str):
     if not today_entries:
         return None, -1
 
-    # 全バッチから候補を収集（テキスト先頭80文字で重複排除）
+    # 全バッチから候補を収集（正規化キーで重複排除）
     seen_keys = set()
     all_posts = []
     for entry in today_entries:
         for post in entry.get("posts", []):
-            clean, _ = extract_url_and_cta(post)
-            key = clean[:80]
+            key = _normalize_post_key(post)[:80]
             if key not in seen_keys:
                 seen_keys.add(key)
                 all_posts.append(post)
@@ -221,17 +238,20 @@ def get_next_post(acct: str, today: str):
     # 投稿済みテキスト（新フォーマット: text フィールドあり）
     posted_texts = get_posted_texts(acct)
 
-    # 旧フォーマット対応: インデックス→テキスト変換（最終バッチ基準）
+    # 旧フォーマット対応: インデックス→テキスト変換（最終バッチ基準・正規化済み）
     last_batch = today_entries[-1].get("posts", [])
     old_posted_keys = set()
     for idx in get_posted_indices(acct, today):
         if idx < len(last_batch):
-            clean, _ = extract_url_and_cta(last_batch[idx])
-            old_posted_keys.add(clean[:80])
+            old_posted_keys.add(_normalize_post_key(last_batch[idx])[:80])
 
     for i, text in enumerate(all_posts):
-        clean, _ = extract_url_and_cta(text)
-        if clean not in posted_texts and clean[:80] not in old_posted_keys:
+        # mark_posted が保存するテキストと同じ正規化で比較する
+        norm = _normalize_post_key(text)
+        if norm not in posted_texts and norm[:80] not in old_posted_keys:
+            # 7日以内の重複は投稿せずスキップ（ループで次の候補へ）
+            if dg_is_duplicate(norm, acct):
+                continue
             return text, i
     return None, -1
 
@@ -327,14 +347,29 @@ def post_reply_to_threads(acct: str, reply_to_id: str, text: str) -> str:
 
 
 def post_to_threads(acct: str, text: str) -> str:
+    """Threads に投稿して post ID を返す。
+    重複チェックをここで行う — run_account の実装に関わらず必ず通る。
+    重複の場合は DuplicatePost 例外を投げる（呼び出し側でログしてスキップ）。
+    """
+    norm = dg_normalize(text)
+    if dg_is_duplicate(norm, acct):
+        raise _DuplicatePost(f"{text[:50]}")
+    dg_mark_pending(norm, acct)   # API呼び出し前に記録（タイムアウト対策）
+
     token = os.environ[ACCOUNTS[acct]["token_key"]]
     user_id = os.environ[ACCOUNTS[acct]["uid_key"]]
-
     data = urllib.parse.urlencode({"media_type": "TEXT", "text": text, "access_token": token}).encode()
     container_id = api_request(f"{BASE_URL}/{user_id}/threads", data)["id"]
     time.sleep(2)
     data2 = urllib.parse.urlencode({"creation_id": container_id, "access_token": token}).encode()
-    return api_request(f"{BASE_URL}/{user_id}/threads_publish", data2)["id"]
+    post_id = api_request(f"{BASE_URL}/{user_id}/threads_publish", data2)["id"]
+    dg_mark_posted(norm, acct, post_id)   # 成功後に確定記録
+    return post_id
+
+
+class _DuplicatePost(Exception):
+    """post_to_threads が重複を検知したときに投げる内部例外"""
+    pass
 
 
 # ── アカウント実行 ────────────────────────────────────
@@ -402,10 +437,14 @@ def run_account(acct: str):
                 log_error(f"{name} URL投稿失敗{suffix}: {ce}")
 
     try:
+        # post_to_threads 内部で重複チェック・pending・posted を一括処理
         post_id = post_to_threads(acct, clean_text)
         mark_posted(acct, today, index, post_id, clean_text)
         log_info(acct, f"{name} ✓ 完了 (ID: {post_id})")
         _post_comments(post_id)
+
+    except _DuplicatePost as dp:
+        log_info(acct, f"{name} [重複スキップ] {str(dp)[:60]}")
 
     except urllib.error.HTTPError as e:
         body = e.read().decode()
@@ -421,6 +460,8 @@ def run_account(acct: str):
                     mark_posted(acct, today, index, post_id, clean_text)
                     log_info(acct, f"{name} ✓ 完了（リフレッシュ後） (ID: {post_id})")
                     _post_comments(post_id, "（リフレッシュ後）")
+                except _DuplicatePost as dp:
+                    log_info(acct, f"{name} [重複スキップ] {str(dp)[:60]}")
                 except Exception as e2:
                     log_error(f"{name} リフレッシュ後も失敗 → 手動で auth.py を実行してください: {e2}")
             else:
@@ -461,10 +502,14 @@ def _run_main():
 
     if target == "truth":
         run_account("truth")
+    elif target == "nagaoka":
+        run_account("nagaoka")
     elif target == "masa":
         run_account("masa")
     else:
         run_account("truth")
+        time.sleep(5)
+        run_account("nagaoka")
         time.sleep(5)
         run_account("masa")
 

@@ -109,7 +109,7 @@ NANIMONO_KIZUKI_TEMPLATES = [
 
     "施術実績1万人の整体師として言えること。\n\n{symptom}は揉んでも治らない。\n原因を変えていないから。",
 
-    "整体師として10年以上やってきて気づいたこと。\n\n改善が早い人は\n施術の間も{cause}を変えている。",
+    "整体師として気づいたこと。\n\n改善が早い人は\n施術の間も{cause}を変えている。",
 
     "改善率93.7%の施術をしてきて分かったこと。\n\n{symptom}の根本は{cause}にある。\nそこを変えない限り、何度でも戻る。",
 
@@ -117,7 +117,7 @@ NANIMONO_KIZUKI_TEMPLATES = [
 
     "整体師として気づいたこと。\n\n「もう仕方ない」と諦めた瞬間に\n体は本当に変わらなくなる。",
 
-    "施術10年・1万人・改善率93.7%。\nそれでも一番大事なのは\n「日常の{cause}を変えること」だと思っている。",
+    "施術実績1万人・改善率93.7%。\nそれでも一番大事なのは\n「日常の{cause}を変えること」だと思っている。",
 
     "整体師として断言できること。\n\n{symptom}は変えられる。\n年齢のせいにしている間は変わらないだけ。",
 ]
@@ -188,19 +188,19 @@ PATTERNS = {
         "desc": "放置リスク（問題提起→放置の末路→改善→CTA）",
         "templates": [
             # 肩こり放置 → 自律神経・うつ・睡眠障害
-            "{nagaoka}\n\n「肩こりくらい」と放置していたら\n眠れなくなった。\n\n実は肩こりと自律神経は直結しています。\n[COMMENT]\n肩まわりの筋肉が緊張し続けると\n交感神経が過剰に働き始めます。\n\n・眠りが浅くなる\n・気分が落ち込みやすくなる\n・疲れが抜けない\n\n「ただの肩こり」じゃないんです。\n[COMMENT]\n肩こりの根本原因は{cause}にあります。\n\nマッサージで一時的に楽になっても\n原因を変えなければ何度でも戻ります。\n\n{cause}から整えると\n自律神経も安定してきます。\n[COMMENT]\nプロフィールから予約できます。\n「肩こり・自律神経が気になる」とお気軽にご相談ください。",
+            "「肩こりくらい」と放置していたら\n眠れなくなった。\n\n実は肩こりと自律神経は直結しています。\n[COMMENT]\n肩まわりの筋肉が緊張し続けると\n交感神経が過剰に働き始めます。\n\n・眠りが浅くなる\n・気分が落ち込みやすくなる\n・疲れが抜けない\n\n「ただの肩こり」じゃないんです。\n[COMMENT]\n肩こりの根本原因は{cause}にあります。\n\nマッサージで一時的に楽になっても\n原因を変えなければ何度でも戻ります。\n\n{cause}から整えると\n自律神経も安定してきます。\n[COMMENT]\nプロフィールから予約できます。\n「肩こり・自律神経が気になる」とお気軽にご相談ください。",
 
             # 頭痛放置 → 慢性化・薬依存・集中力低下
-            "{nagaoka}\n\n「また頭痛薬飲めばいいか」\nそれ、続けると危険です。\n[COMMENT]\n鎮痛剤を週3回以上飲み続けると\n「薬物乱用頭痛」になるリスクがあります。\n\n薬が効かなくなる→量が増える→悪化する\n\nこのスパイラルにはまっている方が\n実はとても多い。\n[COMMENT]\n頭痛の原因の多くは{cause}です。\n\n・水分が足りていない\n・頸椎（首の骨）がずれている\n・{habit1}\n\nここを整えると\n頭痛薬がいらない日が増えてきます。\n[COMMENT]\n頭痛でお悩みの方はプロフィールから。\n根本から整える施術で、薬に頼らない体へ。",
+            "「また頭痛薬飲めばいいか」\nそれ、続けると危険です。\n[COMMENT]\n鎮痛剤を週3回以上飲み続けると\n「薬物乱用頭痛」になるリスクがあります。\n\n薬が効かなくなる→量が増える→悪化する\n\nこのスパイラルにはまっている方が\n実はとても多い。\n[COMMENT]\n頭痛の原因の多くは{cause}です。\n\n・水分が足りていない\n・頸椎（首の骨）がずれている\n・{habit1}\n\nここを整えると\n頭痛薬がいらない日が増えてきます。\n[COMMENT]\n頭痛でお悩みの方はプロフィールから。\n根本から整える施術で、薬に頼らない体へ。",
 
             # 猫背放置 → 内臓圧迫・呼吸が浅い・老け見え
-            "{nagaoka}\n\n猫背の方が増えています。\n「姿勢が悪いだけ」じゃないんです。\n放置すると体の中が変わります。\n[COMMENT]\n猫背が続くと：\n\n・肺が圧迫されて呼吸が浅くなる\n・内臓が下がって消化が悪くなる\n・顔が前に出て老け顔に見える\n\n{symptom}が出やすくなるのもそのせいです。\n[COMMENT]\n猫背の根本原因は{cause}にあります。\n\n姿勢を「直そう」とするより\n{cause}を整えると\n自然に背筋が伸びてきます。\n\n体の使い方を変えることが大切。\n[COMMENT]\n姿勢・猫背が気になる方、\nプロフィールからご相談ください。",
+            "猫背の方が増えています。\n「姿勢が悪いだけ」じゃないんです。\n放置すると体の中が変わります。\n[COMMENT]\n猫背が続くと：\n\n・肺が圧迫されて呼吸が浅くなる\n・内臓が下がって消化が悪くなる\n・顔が前に出て老け顔に見える\n\n{symptom}が出やすくなるのもそのせいです。\n[COMMENT]\n猫背の根本原因は{cause}にあります。\n\n姿勢を「直そう」とするより\n{cause}を整えると\n自然に背筋が伸びてきます。\n\n体の使い方を変えることが大切。\n[COMMENT]\n姿勢・猫背が気になる方、\nプロフィールからご相談ください。",
 
             # 眼精疲労 → めまい・吐き気スパイラル
-            "{nagaoka}\n\n目の疲れを訴える方が急増しています。\n「スマホ疲れかな」で済ませていませんか？\n放置すると全身に影響が出ます。\n[COMMENT]\n眼精疲労が続くと：\n\n・首・肩の筋肉が慢性的に緊張\n・めまい・吐き気が起きやすくなる\n・頭痛が常態化する\n\n目の疲れは体全体のサインです。\n[COMMENT]\n目の奥の疲れには{cause}が関係しています。\n\n①スマホ・PC作業後の首こり\n②{habit1}\n③眼周りの筋肉の緊張\n\nここをほぐすと\nめまいや頭痛も楽になることが多い。\n[COMMENT]\n眼精疲労・めまいが気になる方、\nプロフィールから気軽にご相談ください。",
+            "目の疲れを訴える方が急増しています。\n「スマホ疲れかな」で済ませていませんか？\n放置すると全身に影響が出ます。\n[COMMENT]\n眼精疲労が続くと：\n\n・首・肩の筋肉が慢性的に緊張\n・めまい・吐き気が起きやすくなる\n・頭痛が常態化する\n\n目の疲れは体全体のサインです。\n[COMMENT]\n目の奥の疲れには{cause}が関係しています。\n\n①スマホ・PC作業後の首こり\n②{habit1}\n③眼周りの筋肉の緊張\n\nここをほぐすと\nめまいや頭痛も楽になることが多い。\n[COMMENT]\n眼精疲労・めまいが気になる方、\nプロフィールから気軽にご相談ください。",
 
             # 睡眠不足 → ホルモン崩壊・免疫低下
-            "{nagaoka}\n\nよく聞く「体がダルい」という声。\n睡眠不足を侮ってはいけません。\n放置すると体の根幹が崩れます。\n[COMMENT]\n睡眠不足が続くと：\n\n・成長ホルモンが出ない→回復できない\n・コルチゾール過多→免疫力低下\n・{symptom}が慢性化しやすくなる\n\n「忙しいから仕方ない」は\n体には通じません。\n[COMMENT]\n実は{cause}が睡眠の質を下げています。\n\n眠れない夜は\n・{habit1}\n・首・肩の緊張\nが原因のことが多い。\n\n体を整えると\n睡眠の質が変わる方が多いです。\n[COMMENT]\nぐっすり眠れる体を作りたい方、\nプロフィールからご予約ください。",
+            "よく聞く「体がダルい」という声。\n睡眠不足を侮ってはいけません。\n放置すると体の根幹が崩れます。\n[COMMENT]\n睡眠不足が続くと：\n\n・成長ホルモンが出ない→回復できない\n・コルチゾール過多→免疫力低下\n・{symptom}が慢性化しやすくなる\n\n「忙しいから仕方ない」は\n体には通じません。\n[COMMENT]\n実は{cause}が睡眠の質を下げています。\n\n眠れない夜は\n・{habit1}\n・首・肩の緊張\nが原因のことが多い。\n\n体を整えると\n睡眠の質が変わる方が多いです。\n[COMMENT]\nぐっすり眠れる体を作りたい方、\nプロフィールからご予約ください。",
         ],
     },
     # ── 悩み共感→改善実績系：「○○で△△できない」→来院→Before/After ──
@@ -209,7 +209,7 @@ PATTERNS = {
         "templates": [
             "{symptom}があって\n{life_scene_v}たかったのにできない。\n\n{nagaoka}\nよく聞く言葉です。\n[COMMENT]\n{symptom}の原因の多くは{cause}。\n\n揉んでも治らないのは\n「症状」だけ見ていて\n「原因」を変えていないから。\n[COMMENT]\n当院では{cause}から根本改善します。\n\n・週3あった{symptom} → ほぼゼロ\n・5年続いた症状 → 2ヶ月で改善\n\n諦めないでください。\n変われます。\n[COMMENT]\nプロフィールから予約できます。\n「{symptom}で困っている」とお気軽に。",
 
-            "{nagaoka}\n\n{symptom}のせいで\n{life_scene_v}きれない。\n\nそんなお声が増えています。\n[COMMENT]\n「年齢のせい」「仕方ない」\nそう諦めていませんか？\n\n実は年齢より{cause}の影響の方が\nはるかに大きいです。\n[COMMENT]\n根本から整えた方の変化：\n\n□ {symptom}がほぼゼロになった\n□ {life_scene_n}が変わった\n□ 朝すっきり起きられるようになった\n\n体は変えられます。\n[COMMENT]\nプロフィールリンクから予約できます。\n初回カウンセリング無料です。",
+            "{symptom}のせいで\n{life_scene_v}きれない。\n\nそんなお声が増えています。\n[COMMENT]\n「年齢のせい」「仕方ない」\nそう諦めていませんか？\n\n実は年齢より{cause}の影響の方が\nはるかに大きいです。\n[COMMENT]\n根本から整えた方の変化：\n\n□ {symptom}がほぼゼロになった\n□ {life_scene_n}が変わった\n□ 朝すっきり起きられるようになった\n\n体は変えられます。\n[COMMENT]\nプロフィールリンクから予約できます。\n初回カウンセリング無料です。",
         ],
     },
     # ── 小川式：1行謎かけ → 箇条書き解説 → 1行断言 ──
@@ -375,10 +375,13 @@ CTA_ZUTSUU_TEMPLATES = [
 ]
 
 NAGAOKA_PHRASES = [
+    # ルール（全アカウント投稿ルール集より）:
+    # ・1文目NG・個人名(まぁ等)NG・未確認実績NG・末尾単独追加NG
+    # ・3〜4投稿に1回のみ
     "長岡市で整体院を兄妹で運営しています。",
-    "長岡市で1万人を施術してきました。",
-    "長岡市在住の方へ。",
-    "長岡市で整体師として気づいたこと。",
+    "長岡市での施術でも同じことを感じます。",
+    "長岡市でよく聞く悩みです。",
+    "長岡市の整体院でも同じ相談が多いです。",
 ]
 
 # フック文の先頭に自然に統合するための修飾語。短い1行フックに使う
@@ -406,7 +409,7 @@ NAGAOKA_PATTERNS = {
 
             "まだ軽いうちが\n一番早く根本改善できます。\n\n「{symptom}が気になる」程度で来てください。",
 
-            "「{symptom}、まだ薬を飲むほどじゃない」\n\nそのレベルが一番変わりやすいです。\n長岡市で10年施術してきた実感です。",
+            "「{symptom}、まだ薬を飲むほどじゃない」\n\nそのレベルが一番変わりやすいです。",
 
             "「大げさかな」って思って来るくらいが\nちょうどいいです。\n\n{symptom}は軽いうちに整えるのが正解。",
 
@@ -449,26 +452,57 @@ NAGAOKA_PATTERNS = {
     },
 }
 
-def _ensure_nagaoka(text: str, ratio: float = 0.6, prepend: bool = False) -> str:
-    """長岡市を投稿に自然に含める。nagaoka用はprepend=Trueで先頭追加"""
+def _ensure_nagaoka(text: str, ratio: float = 0.25, prepend: bool = False) -> str:
+    """長岡市を投稿に自然に含める。
+    ルール: 1文目NG・末尾単独追加NG・3〜4投稿に1回（ratio=0.25）
+    """
     if "長岡市" in text:
         return text
     if random.random() > ratio:
         return text
-    # 短い1行フック（改行なし・末尾が典型的な名詞句）なら修飾語として統合
-    first_line = text.split("\n")[0].strip()
-    if "\n" not in first_line and any(first_line.endswith(s) for s in _HOOK_SUFFIXES):
-        prefix = random.choice(NAGAOKA_INTEGRATED_PREFIXES)
-        return prefix + first_line + ("\n" + text[len(first_line):].lstrip("\n") if "\n" in text else "")
     phrase = random.choice(NAGAOKA_PHRASES)
-    if prepend:
-        return phrase + "\n\n" + text
-    # truth用アペンド
+    # アペンドモード（末尾追加）※prepend引数は後方互換のため残すが使わない
+    # 末尾がCTA・URLの場合は追加しない
+    _CTA_KW = ("ご相談ください", "はこちら", "ご予約", "一度", "http", "お問い合わせ")
     marker = "\n\n【続き】\n"
     if marker in text:
         main, rest = text.split(marker, 1)
         return main + "\n\n" + phrase + marker + rest
+    if "\n\n" in text:
+        last_para = text.rsplit("\n\n", 1)[1]
+        if any(kw in last_para for kw in _CTA_KW):
+            return text
     return text + "\n\n" + phrase
+
+
+def _enforce_short_body(text: str, max_lines: int = 3) -> str:
+    """[COMMENT]/【続き】なし投稿が max_lines 行を超える場合、超過分を [COMMENT] に移動する。
+    最初の段落は必ずメイン本文に残す。"""
+    if "[COMMENT]" in text or "【続き】" in text:
+        return text  # 既に分割済み
+
+    paragraphs = text.split("\n\n")
+    if len(paragraphs) <= 1:
+        return text  # 段落が1つだけなら分割不要
+
+    main_paras = [paragraphs[0]]
+    total_lines = len([l for l in paragraphs[0].split("\n") if l.strip()])
+    rest_paras = []
+
+    for para in paragraphs[1:]:
+        para_lines = len([l for l in para.split("\n") if l.strip()])
+        if not rest_paras and total_lines + para_lines <= max_lines:
+            main_paras.append(para)
+            total_lines += para_lines
+        else:
+            rest_paras.append(para)
+
+    if not rest_paras:
+        return text
+
+    main = "\n\n".join(main_paras).rstrip()
+    rest = "\n\n".join(rest_paras).lstrip()
+    return main + "\n[COMMENT]\n" + rest
 
 
 def fill(template: str, symptom: str = None) -> str:
@@ -575,23 +609,23 @@ def generate_30_posts() -> list[str]:
     # インスタハカセ理論反映（2026-04-20）
     # 「自分は何者か」×「気づき1つ」(nanimono_kizuki)を最重要パターンとして追加
     defaults = {
-        "nanimono_kizuki": 5,  # 最重要（インスタハカセ理論・権威性+気づき）
-        "touka_koukan": 3,   # 等価交換（情報提供→信頼）
-        "prbrep": 3,         # PRBREP（根拠+事例で説得力）
-        "pasona": 3,         # PASONA（問題→共感→解決→提案→行動）
-        "hochi_risk": 3,     # 放置リスク（問題提起→末路→改善）
-        "nayami_kyokan": 2,  # 悩み共感→改善実績
-        "hook_one_line": 3,
-        "aoi_style": 3,      # 小川式
-        "hori_style": 2,     # 堀式
-        "gyakusetsu": 3,
-        "quote_empathy": 4,
-        "insight": 4,
-        "education": 4,
-        "story": 3,
-        "workmom": 2,
-        "ranking": 3,
-        "question": 2,
+        "nanimono_kizuki": 7,  # 最重要（インスタハカセ理論・権威性+気づき）
+        "touka_koukan": 5,   # 等価交換（情報提供→信頼）
+        "prbrep": 5,         # PRBREP（根拠+事例で説得力）
+        "pasona": 5,         # PASONA（問題→共感→解決→提案→行動）
+        "hochi_risk": 5,     # 放置リスク（問題提起→末路→改善）
+        "nayami_kyokan": 3,  # 悩み共感→改善実績
+        "hook_one_line": 5,
+        "aoi_style": 5,      # 小川式
+        "hori_style": 3,     # 堀式
+        "gyakusetsu": 5,
+        "quote_empathy": 6,
+        "insight": 6,
+        "education": 6,
+        "story": 5,
+        "workmom": 3,
+        "ranking": 5,
+        "question": 3,
     }
     merged = {k: int(w.get(k, v)) for k, v in defaults.items()}
     plan = (
@@ -620,7 +654,7 @@ def generate_30_posts() -> list[str]:
     seen = set()
     for pk in plan:
         for _ in range(50):
-            post = _ensure_nagaoka(generate_post(pk))
+            post = _enforce_short_body(_ensure_nagaoka(generate_post(pk)))
             key = post[:100]
             first_line = post.split("\n")[0].strip()
             if key not in seen and not _is_ng(post) and first_line not in recent_first_lines:
@@ -631,20 +665,20 @@ def generate_30_posts() -> list[str]:
     # feedback の追加テンプレを先頭に差し込む
     for tmpl in _load_extra_templates("truth"):
         try:
-            posts.insert(0, _ensure_nagaoka(fill(tmpl)))
+            posts.insert(0, _enforce_short_body(_ensure_nagaoka(fill(tmpl))))
         except Exception:
             pass
 
     # 肩こりCTA 2本・頭痛CTA 2本をランダムな位置に差し込む
     cta_posts = (
-        [_ensure_nagaoka(generate_cta_post("katakori")) for _ in range(2)] +
-        [_ensure_nagaoka(generate_cta_post("zutsuu"))   for _ in range(2)]
+        [_enforce_short_body(_ensure_nagaoka(generate_cta_post("katakori"))) for _ in range(2)] +
+        [_enforce_short_body(_ensure_nagaoka(generate_cta_post("zutsuu")))   for _ in range(2)]
     )
     for cta in cta_posts:
         pos = random.randint(0, len(posts))
         posts.insert(pos, cta)
 
-    return posts[:65]
+    return posts[:100]
 
 
 def generate_40_nagaoka_posts() -> list[str]:
@@ -656,22 +690,21 @@ def generate_40_nagaoka_posts() -> list[str]:
     # 超短文優先の配分（7:2:1比率）
     # nagaoka専用パターン（全て2〜4行）: 19本
     # 短い共通パターン（insight=2行・quote_empathy短縮版・hook・ranking）: 17本
-    # [COMMENT]形式の放置リスク系: 4本
     defaults = {
-        # ── nagaoka専用・超短文 (19本) ──
-        "keisei_target": 10,   # 軽症者特化（メイン）2〜4行
-        "keisei_kyokan": 3,    # 軽症者共感 2〜3行
-        "keisei_risk":   3,    # 軽症放置リスク [COMMENT]形式
-        # ── インスタハカセ理論：「自分は何者か」×「気づき」(4本) ──
-        "nanimono_kizuki": 4,  # 権威性+短い気づき（最高エンゲージメント）
-        # ── 短い共通パターン (16本) ──
-        "insight":       4,    # 2行
-        "hook_one_line": 3,    # 1行フック（nagaoka用: フックのみ）
-        "quote_empathy": 4,    # 共感引用（nagaoka用短縮: opener+closer=3行）
-        "ranking":       3,    # ランキング形式（3〜5行・読みやすい）
-        # ── [COMMENT]形式・長め (3本) ──
-        "hochi_risk":    2,    # 放置リスク
-        "story":         1,    # ストーリー
+        # ── nagaoka専用・超短文 ──
+        "keisei_target": 18,   # 軽症者特化（メイン）2〜4行
+        "keisei_kyokan": 6,    # 軽症者共感 2〜3行
+        "keisei_risk":   6,    # 軽症放置リスク [COMMENT]形式
+        # ── インスタハカセ理論：「自分は何者か」×「気づき」──
+        "nanimono_kizuki": 8,  # 権威性+短い気づき（最高エンゲージメント）
+        # ── 短い共通パターン ──
+        "insight":       8,    # 2行
+        "hook_one_line": 6,    # 1行フック（nagaoka用: フックのみ）
+        "quote_empathy": 8,    # 共感引用（nagaoka用短縮: opener+closer=3行）
+        "ranking":       6,    # ランキング形式（3〜5行・読みやすい）
+        # ── [COMMENT]形式・長め ──
+        "hochi_risk":    4,    # 放置リスク
+        "story":         2,    # ストーリー
     }
     merged = {k: int(w.get(k, v)) for k, v in defaults.items()}
 
@@ -682,44 +715,31 @@ def generate_40_nagaoka_posts() -> list[str]:
 
     posts = []
     seen = set()
-    # 長岡市は3〜4本に1本（ratio≈0.25）。連続して入れない。
-    nagaoka_cooldown = 0
+    # 長岡市はテンプレートに自然に含まれているものを使う。
+    # _ensure_nagaoka は呼ばない（1文目NG・末尾単独追加NGのルールを厳守するため）
     for pk in plan:
         for _ in range(50):
             post = generate_nagaoka_post(pk)
-            # 長岡市が既に含まれている場合はcooldownをリセット、追加はスキップ
-            if "長岡市" in post or "長岡" in post:
-                nagaoka_cooldown = 3  # 次の3本は追加しない
-            elif nagaoka_cooldown > 0:
-                nagaoka_cooldown -= 1
-                # cooldown中は追加しない（ratioを0で渡す）
-                post = _ensure_nagaoka(post, ratio=0.0, prepend=True)
-            else:
-                # 3〜4本に1本の割合（ratio=0.25）で先頭追加
-                add = random.random() < 0.25
-                if add:
-                    post = _ensure_nagaoka(post, ratio=1.0, prepend=True)
-                    nagaoka_cooldown = 3
             key = post[:100]
             if key not in seen and not _is_ng(post):
                 seen.add(key)
                 posts.append(post)
                 break
 
-    # feedback の追加テンプレを先頭に差し込む（長岡市は追加しない）
+    # feedback の追加テンプレを先頭に差し込む
     for tmpl in _load_extra_templates("nagaoka"):
         try:
-            posts.insert(0, _ensure_nagaoka(fill(tmpl), ratio=0.0, prepend=True))
+            posts.insert(0, fill(tmpl))
         except Exception:
             pass
 
-    # CTA: 肩こり2本・頭痛1本。長岡市を追加するのは3本中1本のみ（連続を防ぐ）
+    # CTA: 肩こり2本・頭痛1本（_ensure_nagaoka不使用）
     cta_katakori = [generate_cta_post("katakori") for _ in range(2)]
     cta_zutsuu   = [generate_cta_post("zutsuu")   for _ in range(1)]
     cta_posts = cta_katakori + cta_zutsuu
-    nagaoka_cta_idx = random.randint(0, len(cta_posts) - 1)
+    nagaoka_cta_idx = -1  # CTAへの長岡市追加なし
     cta_posts = [
-        _ensure_nagaoka(p, ratio=1.0, prepend=True) if i == nagaoka_cta_idx else p
+        p
         for i, p in enumerate(cta_posts)
     ]
     for cta in cta_posts:
@@ -1039,29 +1059,29 @@ def generate_30_masa_posts() -> list[str]:
     # 最重要追加: nanimono_kizuki（「自分は何者か」×「気づき1つ」= Threadsの7割はこれ）
     defaults = {
         # ── 最重要（インスタハカセ理論）──
-        "nanimono_kizuki": 5,  # 「自分は何者か」×「気づき1つ」最高効率
+        "nanimono_kizuki": 8,  # 「自分は何者か」×「気づき1つ」最高効率
         # ── 高エンゲージメント（PDFより追加）──
-        "jiko_kaiji":    3,   # 自己開示・個人ストーリー（最高反応）
-        "meigen":        4,   # 金言・名言型（高シェア・高保存）
-        "keikoku":       2,   # 警告・危険フック（損失回避）
-        "yakan_bucchake":2,   # 深夜・ぶっちゃけ系（特別感）
-        "kachi_ninshou": 2,   # 価値認識・承認型
-        "sns_honshitsu": 2,   # SNS本質・哲学系
+        "jiko_kaiji":    5,   # 自己開示・個人ストーリー（最高反応）
+        "meigen":        6,   # 金言・名言型（高シェア・高保存）
+        "keikoku":       4,   # 警告・危険フック（損失回避）
+        "yakan_bucchake":3,   # 深夜・ぶっちゃけ系（特別感）
+        "kachi_ninshou": 3,   # 価値認識・承認型
+        "sns_honshitsu": 3,   # SNS本質・哲学系
         # ── 既存パターン ──
-        "touka_koukan":  3,   # 等価交換（情報提供→信頼）
-        "prbrep":        2,   # PRBREP（根拠+事例）
-        "pasona":        2,   # PASONA（問題→共感→解決）
-        "hook_one_line": 2,
-        "aoi_style":     2,
-        "hori_style":    2,
-        "hanshakai":     2,   # 逆張り・常識破壊
-        "insight":       2,
-        "education":     2,
-        "story":         2,
-        "soft_line":     2,
-        "cta":           2,
-        "ranking":       3,
-        "question":      2,
+        "touka_koukan":  5,   # 等価交換（情報提供→信頼）
+        "prbrep":        4,   # PRBREP（根拠+事例）
+        "pasona":        4,   # PASONA（問題→共感→解決）
+        "hook_one_line": 4,
+        "aoi_style":     4,
+        "hori_style":    3,
+        "hanshakai":     4,   # 逆張り・常識破壊
+        "insight":       4,
+        "education":     4,
+        "story":         4,
+        "soft_line":     3,
+        "cta":           3,
+        "ranking":       5,
+        "question":      3,
     }
     merged = {k: int(w.get(k, v)) for k, v in defaults.items()}
     plan = (
@@ -1114,7 +1134,7 @@ def generate_30_masa_posts() -> list[str]:
         except Exception:
             posts.insert(0, tmpl)
 
-    return posts[:45]
+    return posts[:100]
 
 
 # ══════════════════════════════════════════════

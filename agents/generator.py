@@ -114,6 +114,18 @@ def _read_myfile(rel_path: str) -> str:
         return ""
 
 
+def _load_posting_rules() -> str:
+    """全アカウント投稿ルール集.md を読み込む（フィードバックの蓄積）"""
+    rules_file = MYFILES / "SNS・Threads" / "全アカウント投稿ルール集.md"
+    try:
+        text = rules_file.read_text(encoding="utf-8")
+        # 共通ルール部分（最初の300文字 + masahide/truth/nagaoka の該当セクション）
+        # ファイル全体は長いので共通セクションとアカウント別の要点のみ
+        return text[:4000]
+    except Exception:
+        return ""
+
+
 def _load_top_posts(acct: str, n: int = 5) -> str:
     """インサイトからトップ投稿を取得"""
     ifile = BASE / f"insights_{acct}.json"
@@ -187,6 +199,7 @@ def generate(acct: str, count: int = 30) -> list[str]:
     profile_text = _read_myfile(prof["profile_file"])
     top_posts    = _load_top_posts(acct)
     feedback     = _load_feedback()
+    posting_rules = _load_posting_rules()
 
     system = f"""あなたはSNS投稿の専門家です。
 以下のアカウント情報と小川教材フレームワークに基づき、Threads投稿を{count}本生成してください。
@@ -194,6 +207,11 @@ def generate(acct: str, count: int = 30) -> list[str]:
 アカウント: {prof['name']}（{prof['persona']}）
 ターゲット: {prof['target']}
 文体ルール: {prof['tone']}
+
+━━━━━━━━━━━━━━━━━━━━━━━
+【蓄積されたフィードバックルール（必ず守ること）】
+━━━━━━━━━━━━━━━━━━━━━━━
+{posting_rules}
 
 ━━━━━━━━━━━━━━━━━━━━━━━
 【小川教材コアフレームワーク】

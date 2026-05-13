@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd /Users/mt112/threads-auto-post && git add feedback.json add_feedback.py 2>/dev/null; git diff --cached --quiet || git commit -m 'chore: update feedback notes [skip ci]' && git push origin main --quiet || true",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}

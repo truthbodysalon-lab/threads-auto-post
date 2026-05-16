@@ -313,6 +313,30 @@ PATTERNS = {
             "質問です。\n\n{symptom}が続いているのに、\nなぜ放置してしまうんだと思いますか？\n\n「お金」「時間」「めんどくさい」\n……どれですか？",
         ],
     },
+    # ── 3つの問い：何のお店?・行くとどうなる?・他と何が違う? ──
+    # 新規顧客の「知りたい」に直接答えるシリーズ
+    "store_identity": {
+        "desc": "店舗アイデンティティ（何のお店?・どうなる?・他と違う?）",
+        "templates": [
+            # Q1: 何のお店ですか？（逆説フック）
+            "揉んでほしいだけなら、うちじゃなくていいです。\n\n肩こり・頭痛の「なぜ起きるのか」を一緒に探して\n根本から変えるのが私たちの仕事です。\n[COMMENT]\nインナー整体×骨格の歪み×生活習慣。\nこの3つをまとめて整える整体院です。\n\n施術実績1万人・改善率93.7%。\nご予約はプロフィールから👆",
+
+            # Q1: 何のお店ですか？（共感フック）
+            "「マッサージに行っても、また戻る」\nその繰り返し、うちで終わりにしませんか。\n[COMMENT]\n薬でもなく、揉むだけでもない。\n\n姿勢・歪み・日常習慣を丸ごと変えるから\n「もう仕方ない」が「こんなに楽になるんだ」に変わります。\n[COMMENT]\n肩こり・頭痛を根本から変える整体院です。\nプロフィールのリンクからご予約👆",
+
+            # Q2: 行くとどうなる？（数字Before/After）
+            "週3で頭痛薬を飲んでいた人が\n3回の施術でほぼ飲まなくなった。\n\nこれが当院でよく起きることです。\n[COMMENT]\n5年続いた肩こりが2ヶ月で改善。\n朝起きるのが楽しみになった。\n仕事帰りでもまだ余裕がある。\n\nそういう変化を一緒に作ります。\n[COMMENT]\n施術実績1万人・改善率93.7%。\nプロフィールから予約できます👆",
+
+            # Q2: 行くとどうなる？（生活変化）
+            "体が変わると、子どもへの接し方まで変わる。\n\nそれくらい、毎日の頭痛・肩こりは\n生活全体を消耗させています。\n[COMMENT]\n当院に来た方がよく言う言葉があります。\n\n「なんで今まで我慢してたんだろう」\n\n痛みがなくなるだけじゃなく\n「自分のことを後回しにしなくなった」という変化が\n一番大きいと思っています。\n[COMMENT]\nご予約はプロフィールから👆",
+
+            # Q3: 他と何が違う？（NG客設定型）
+            "正直に言います。\nうちに向いていない人がいます。\n\n・1回で完全に治したい人\n・揉んでもらうだけで終わりたい人\n・生活習慣を変える気がない人\n[COMMENT]\n逆に、こういう方に来てほしい。\n\n「なぜ毎回繰り返すのか知りたい」\n「根本から変えたい」\n「子どもが成人するまで元気でいたい」\n[COMMENT]\n本気で変わりたい方のための整体院です。\nプロフィールから👆",
+
+            # Q3: 他と何が違う？（施術哲学）
+            "一般的な整体は「ほぐす」。\nうちは「なぜ硬くなるのか」を変える。\n\nこの違いが、通い続けるか卒業できるかを分けます。\n[COMMENT]\nインナー整体×骨格の歪み×栄養指導。\n\nこの3つをセットで見るから\n「施術後に戻らない体」になっていきます。\n[COMMENT]\n「また来てください」より「もう来なくていいですよ」と\n言える関係性を目指しています。\n\n施術実績1万人・改善率93.7%。\nプロフィールから👆",
+        ],
+    },
 }
 
 # ── 素材（myfilesロード済みならそちらを優先）────────────────────
@@ -450,6 +474,20 @@ NAGAOKA_PATTERNS = {
             "「整体って、もっとひどくなってから行くところ」\n\n実は逆です。\n軽いうちに来る人が一番早く楽になります。",
         ]
     },
+    # ── nagaoka専用：3つの問い（何のお店?・どうなる?・他と違う?）──
+    "nagaoka_store_identity": {
+        "desc": "nagaoka店舗アイデンティティ（軽症者向け3つの問い）",
+        "templates": [
+            # Q1: 何のお店ですか？
+            "「整体って、もっとひどくなってから行くところ」\nそう思っていたら、一度読んでください。\n[COMMENT]\n頭痛・肩こりの根本改善が専門の整体院です。\n\n「まだ我慢できる」レベルで来てほしいんです。\n軽症のうちが一番早く、一番ラクに変われるから。\n[COMMENT]\n長岡市で兄妹が運営する整体院です。\nプロフィールからご予約できます👆",
+
+            # Q2: 行くとどうなる？
+            "「たまにある{symptom}」が\n「なくて当たり前」に変わった。\n\n来院3〜5回でこういう変化がよく起きます。\n[COMMENT]\n軽症のうちに来てくれた人ほど\n変わるのが早い。\n\n慢性化してから来た場合の\n3分の1くらいの期間で改善できることが多いです。\n[COMMENT]\nプロフィールからご予約できます👆",
+
+            # Q3: 他と何が違う？
+            "うちが普通の整体と違うのは\n「まだ軽い人」に来てほしいこと。\n\nほとんどの整体院は「限界の人」を待っています。\n[COMMENT]\nなぜ軽症を大事にするか。\n\n軽いうちが一番変わりやすい。\n慢性化する前なら、根っこから変えられる。\n[COMMENT]\n「もっと早く来ればよかった」\nこの言葉を聞くたびに思います。\n\n長岡市の整体院、軽症の方大歓迎です👆",
+        ]
+    },
 }
 
 def _ensure_nagaoka(text: str, ratio: float = 0.25, prepend: bool = False) -> str:
@@ -537,6 +575,9 @@ def generate_nagaoka_post(pattern_key: str) -> str:
     if pattern_key in NAGAOKA_PATTERNS:
         p = NAGAOKA_PATTERNS[pattern_key]
         return fill(random.choice(p["templates"]))
+    elif pattern_key == "nagaoka_store_identity":
+        p = NAGAOKA_PATTERNS["nagaoka_store_identity"]
+        return fill(random.choice(p["templates"]))
     elif pattern_key == "nanimono_kizuki":
         # インスタハカセ理論：「自分は何者か」×「気づき1つ」
         return fill(random.choice(NANIMONO_KIZUKI_TEMPLATES))
@@ -574,6 +615,10 @@ def generate_post(pattern_key: str) -> str:
     if pattern_key == "nanimono_kizuki":
         return fill(random.choice(NANIMONO_KIZUKI_TEMPLATES))
 
+    # 3つの問いシリーズ（何のお店?・どうなる?・他と違う?）
+    if pattern_key == "store_identity":
+        return fill(random.choice(PATTERNS["store_identity"]["templates"]))
+
     p = PATTERNS[pattern_key]
 
     if pattern_key == "quote_empathy":
@@ -606,30 +651,30 @@ def generate_post(pattern_key: str) -> str:
 
 def generate_30_posts() -> list[str]:
     w = _load_weights("truth")
-    # インスタハカセ理論反映（2026-04-20）
-    # 「自分は何者か」×「気づき1つ」(nanimono_kizuki)を最重要パターンとして追加
     defaults = {
-        "nanimono_kizuki": 7,  # 最重要（インスタハカセ理論・権威性+気づき）
-        "touka_koukan": 5,   # 等価交換（情報提供→信頼）
-        "prbrep": 5,         # PRBREP（根拠+事例で説得力）
-        "pasona": 5,         # PASONA（問題→共感→解決→提案→行動）
-        "hochi_risk": 5,     # 放置リスク（問題提起→末路→改善）
-        "nayami_kyokan": 3,  # 悩み共感→改善実績
-        "hook_one_line": 5,
-        "aoi_style": 5,      # 小川式
-        "hori_style": 3,     # 堀式
-        "gyakusetsu": 5,
-        "quote_empathy": 6,
-        "insight": 6,
-        "education": 6,
-        "story": 5,
+        "nanimono_kizuki": 7,  # 「自分は何者か」×「気づき1つ」
+        "store_identity":  3,  # 3つの問い（何のお店?・どうなる?・他と違う?）
+        "touka_koukan": 4,
+        "prbrep": 4,
+        "pasona": 4,
+        "hochi_risk": 4,
+        "nayami_kyokan": 3,
+        "hook_one_line": 4,
+        "aoi_style": 4,
+        "hori_style": 3,
+        "gyakusetsu": 4,
+        "quote_empathy": 5,
+        "insight": 5,
+        "education": 5,
+        "story": 4,
         "workmom": 3,
-        "ranking": 5,
+        "ranking": 4,
         "question": 3,
     }
     merged = {k: int(w.get(k, v)) for k, v in defaults.items()}
     plan = (
         ["nanimono_kizuki"] * merged["nanimono_kizuki"] +
+        ["store_identity"]  * merged["store_identity"] +
         ["touka_koukan"] * merged["touka_koukan"] +
         ["prbrep"] * merged["prbrep"] +
         ["pasona"] * merged["pasona"] +
@@ -692,19 +737,20 @@ def generate_40_nagaoka_posts() -> list[str]:
     # 短い共通パターン（insight=2行・quote_empathy短縮版・hook・ranking）: 17本
     defaults = {
         # ── nagaoka専用・超短文 ──
-        "keisei_target": 18,   # 軽症者特化（メイン）2〜4行
-        "keisei_kyokan": 6,    # 軽症者共感 2〜3行
-        "keisei_risk":   6,    # 軽症放置リスク [COMMENT]形式
-        # ── インスタハカセ理論：「自分は何者か」×「気づき」──
-        "nanimono_kizuki": 8,  # 権威性+短い気づき（最高エンゲージメント）
+        "keisei_target":          15,  # 軽症者特化（メイン）
+        "keisei_kyokan":           5,  # 軽症者共感
+        "keisei_risk":             5,  # 軽症放置リスク
+        "nagaoka_store_identity":  3,  # 3つの問い（何のお店?・どうなる?・他と違う?）
+        # ── インスタハカせ理論 ──
+        "nanimono_kizuki":         6,  # 「自分は何者か」×「気づき1つ」
         # ── 短い共通パターン ──
-        "insight":       8,    # 2行
-        "hook_one_line": 6,    # 1行フック（nagaoka用: フックのみ）
-        "quote_empathy": 8,    # 共感引用（nagaoka用短縮: opener+closer=3行）
-        "ranking":       6,    # ランキング形式（3〜5行・読みやすい）
-        # ── [COMMENT]形式・長め ──
-        "hochi_risk":    4,    # 放置リスク
-        "story":         2,    # ストーリー
+        "insight":       6,
+        "hook_one_line": 4,
+        "quote_empathy": 6,
+        "ranking":       4,
+        # ── [COMMENT]形式 ──
+        "hochi_risk":    3,
+        "story":         2,
     }
     merged = {k: int(w.get(k, v)) for k, v in defaults.items()}
 
@@ -746,7 +792,7 @@ def generate_40_nagaoka_posts() -> list[str]:
         pos = random.randint(0, len(posts))
         posts.insert(pos, cta)
 
-    return posts[:40]
+    return posts[:100]
 
 
 # ══════════════════════════════════════════════

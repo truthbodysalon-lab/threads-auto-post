@@ -1,0 +1,147 @@
+name: Threads Health Check & Auto-Fix
+
+on:
+  schedule:
+    # 毎時45分に実行（JST 6:45〜22:45）
+    - cron: '45 21,22,23,0,1,2,3,4,5,6,7,8,9,10,11,12,13 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: threads-health-check
+  cancel-in-progress: false
+
+jobs:
+  health_check:
+    runs-on: ubuntu-latest
+    env:
+      TZ: Asia/Tokyo
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          token: ${{ secrets.GH_PAT }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Create .env from secrets
+        run: |
+          cat > .env << EOF
+          THREADS_APP_ID=${{ secrets.THREADS_APP_ID }}
+          THREADS_APP_SECRET=${{ secrets.THREADS_APP_SECRET }}
+          THREADS_ACCESS_TOKEN_TRUTH=${{ secrets.THREADS_ACCESS_TOKEN_TRUTH }}
+          THREADS_USER_ID_TRUTH=${{ secrets.THREADS_USER_ID_TRUTH }}
+          THREADS_ACCESS_TOKEN_NAGAOKA=${{ secrets.THREADS_ACCESS_TOKEN_NAGAOKA }}
+          THREADS_USER_ID_NAGAOKA=${{ secrets.THREADS_USER_ID_NAGAOKA }}
+          THREADS_ACCESS_TOKEN_MASA=${{ secrets.THREADS_ACCESS_TOKEN_MASA }}
+          THREADS_USER_ID_MASA=${{ secrets.THREADS_USER_ID_MASA }}
+          GH_PAT=${{ secrets.GH_PAT }}
+          GH_REPO=${{ github.repository }}
+          ANTHROPIC_API_KEY=${{ secrets.ANTHROPIC_API_KEY }}
+          EOF
+
+      - name: Check posting health & auto-fix
+        id: health
+        run: |
+          python3 - << 'PYEOF'
+          import json, subprocess, sys, os
+          from pathlib import Path
+          from datetime import date, datetime, timedelta
+
+          BASE = Path(".")
+          TODAY = date.today().strftime("%Y-%m-%d")
+          NOW = datetime.now()
+          STALL_HOURS = 3  # 3時間投稿なければ異常と判定
+
+          ACCOUNTS = {
+              "truth":   {"log": "log_truth.jsonl",   "posted": "log_truth_posted.jsonl"},
+              "nagaoka": {"log": "log_nagaoka.jsonl", "posted": "log_nagaoka_posted.jsonl"},
+              "masa":    {"log": "log_masa.jsonl",    "posted": "log_masa_posted.jsonl"},
+          }
+
+          # 投稿時間帯のチェック（JST 6:00〜23:00）
+          if not (6 <= NOW.hour < 23):
+              print(f"⏰ 投稿時間外（{NOW.hour}時）→ スキップ")
+              sys.exit(0)
+
+          problems = []
+
+          for acct, files in ACCOUNTS.items():
+              posted_file = BASE / files["posted"]
+              log_file    = BASE / files["log"]
+
+              # 1. キューが存在するか確認
+              has_queue = False
+              if log_file.exists():
+                  for line in reversed(log_file.read_text().splitlines()):
+                      try:
+                          e = json.loads(line)
+                          if e.get("date") == TODAY and e.get("posts"):
+                              has_queue = True
+                              break
+                      except: pass
+
+              if not has_queue:
+                  print(f"❌ [{acct}] 今日のキューなし → 再生成")
+                  problems.append(acct)
+                  result = subprocess.run(
+                      [sys.executable, "generate_remix.py", acct],
+                      capture_output=True, text=True, timeout=120
+                  )
+                  if result.returncode == 0:
+                      print(f"  ✓ [{acct}] キュー再生成完了")
+                  else:
+                      print(f"  ✗ [{acct}] キュー再生成失敗: {result.stderr[:200]}")
+                  continue
+
+              # 2. 直近の投稿から何時間経過しているか確認
+              last_posted_date = None
+              if posted_file.exists():
+                  for line in reversed(posted_file.read_text().splitlines()):
+                      try:
+                          e = json.loads(line)
+                          if e.get("date") == TODAY:
+                              last_posted_date = e.get("date")
+                              break
+                      except: pass
+
+              if last_posted_date is None:
+                  # 今日の投稿がない場合は時間で判定
+                  # 6時以降で投稿0なら問題
+                  if NOW.hour >= 8:
+                      print(f"⚠️  [{acct}] 今日の投稿0件（{NOW.hour}時）→ 強制実行")
+                      problems.append(acct)
+
+          # 3. 問題があれば強制投稿
+          if problems:
+              print(f"\n🔧 問題アカウント: {problems} → 強制投稿実行")
+              for acct in problems:
+                  result = subprocess.run(
+                      [sys.executable, "orchestrator.py", acct],
+                      capture_output=True, text=True, timeout=120
+                  )
+                  print(f"  [{acct}] 強制投稿: {'✓' if result.returncode == 0 else '✗'}")
+                  if result.stdout: print(f"  stdout: {result.stdout[-200:]}")
+                  if result.stderr: print(f"  stderr: {result.stderr[-200:]}")
+          else:
+              print("✅ 全アカウント正常")
+
+          PYEOF
+
+      - name: Commit any fixes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add log_truth.jsonl log_masa.jsonl log_nagaoka.jsonl \
+                  log_truth_posted.jsonl log_masa_posted.jsonl log_nagaoka_posted.jsonl \
+                  2>/dev/null || true
+          git diff --cached --quiet || git commit -m "fix: health-check auto-fix [skip ci]"
+          for i in 1 2 3; do
+            git push && break
+            echo "Push failed (attempt $i), retrying..."
+            git pull --rebase origin main
+          done

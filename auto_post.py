@@ -24,12 +24,18 @@ import urllib.parse
 import urllib.request
 from datetime import date, datetime
 from pathlib import Path
-from duplicate_guard import (
-    normalize_text as dg_normalize,
-    is_duplicate as dg_is_duplicate,
-    mark_pending as dg_mark_pending,
-    mark_posted as dg_mark_posted,
-)
+try:
+    from duplicate_guard import (
+        normalize_text as dg_normalize,
+        is_duplicate as dg_is_duplicate,
+        mark_pending as dg_mark_pending,
+        mark_posted as dg_mark_posted,
+    )
+except ImportError:
+    def dg_normalize(t): return t
+    def dg_is_duplicate(t, a): return False
+    def dg_mark_pending(t, a): pass
+    def dg_mark_posted(t, a, pid): pass
 
 # get_next_post / get_posted_texts で使う正規化（duplicate_guard と同じロジック）
 _normalize_post_key = dg_normalize

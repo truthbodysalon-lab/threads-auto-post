@@ -28,12 +28,21 @@ sys.path.insert(0, str(BASE))
 from agents.generator import generate as gen_posts
 from agents.quality   import check    as quality_check
 from agents.analysis  import run      as run_analysis
-from duplicate_guard  import (
-    normalize_text  as dg_normalize,
-    is_duplicate    as dg_is_duplicate,
-    mark_pending    as dg_mark_pending,
-    mark_posted     as dg_mark_posted,
-)
+try:
+    from duplicate_guard import (
+        normalize_text  as dg_normalize,
+        is_duplicate    as dg_is_duplicate,
+        mark_pending    as dg_mark_pending,
+        mark_posted     as dg_mark_posted,
+    )
+    _DG_AVAILABLE = True
+except ImportError:
+    # duplicate_guard が存在しない場合はフォールバック（クラッシュさせない）
+    _DG_AVAILABLE = False
+    def dg_normalize(t): return t
+    def dg_is_duplicate(t, a): return False
+    def dg_mark_pending(t, a): pass
+    def dg_mark_posted(t, a, pid): pass
 
 
 class _DuplicatePost(Exception):

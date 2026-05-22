@@ -3,7 +3,10 @@
     "other": 1.0,
     "hook_one_line": 1.0,
     "aoi_style": 1.0,
-    "hori_style": 1.0
+    "hori_style": 1.0,
+    "keisei_target": 1.0,
+    "keisei_kyokan": 1.0,
+    "story": 1.0
   },
   "ng_words": [
     "100店舗以上",
@@ -79,5 +82,5 @@
       "account": "all"
     }
   ],
-  "updated_at": "2026-05-13 00:00"
+  "updated_at": "2026-05-22 18:51"
 }

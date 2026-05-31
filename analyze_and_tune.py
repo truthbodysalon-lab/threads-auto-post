@@ -86,6 +86,7 @@ ACCOUNTS = {
 
 FEEDBACK_FILE = BASE / "feedback.jsonl"
 FOLLOWERS_HISTORY = BASE / "followers_history.json"
+LINE_HISTORY = BASE / "line_history.json"
 
 
 # ── パターン検出 ───────────────────────────────────
@@ -242,30 +243,16 @@ def _posts_by_date(acct: str) -> dict:
     return by_date
 
 
-def load_follower_scores(acct: str) -> dict:
-    """フォロワー増加デルタを、その日に投稿したパターンへ按分して
-    パターン別スコア（-3〜+3程度）を返す。
-
-    「いいね」ではなく「実際にフォロワーが増えた日に多く出ていた型」を
-    優先的に増やすための、KPI直結シグナル。
-    """
-    if not FOLLOWERS_HISTORY.exists():
-        return {}
-    try:
-        history = json.loads(FOLLOWERS_HISTORY.read_text())
-    except Exception:
-        return {}
-
-    series = history.get(acct, [])
+def _attribute_deltas_to_patterns(acct: str, series: list) -> dict:
+    """日次デルタ系列 [{date, delta}, ...] を、その日に投稿したパターンへ
+    按分し、パターン別スコア（-3〜+3程度）を返す共通処理。"""
     if len(series) < 2:
-        # デルタが算出できるだけの履歴がまだ無い
-        return {}
+        return {}  # デルタを算出できる履歴がまだ足りない
 
     by_date = _posts_by_date(acct)
     if not by_date:
         return {}
 
-    # パターン別の累積フォロワー貢献
     credit = defaultdict(float)
     for snap in series:
         d = snap.get("date")
@@ -273,7 +260,6 @@ def load_follower_scores(acct: str) -> dict:
         posts = by_date.get(d, [])
         if not posts or delta == 0:
             continue
-        # その日の各パターンの出現数に応じてデルタを按分
         day_patterns = defaultdict(int)
         for t in posts:
             day_patterns[detect_pattern(t, acct)] += 1
@@ -284,18 +270,43 @@ def load_follower_scores(acct: str) -> dict:
     if not credit:
         return {}
 
-    # 平均との乖離を -3〜+3 にスケール
     vals = list(credit.values())
     avg = sum(vals) / len(vals) if vals else 0
     spread = max(abs(max(vals) - avg), abs(min(vals) - avg), 1.0)
     return {pat: round((c - avg) / spread * 3, 2) for pat, c in credit.items()}
 
 
+def load_follower_scores(acct: str) -> dict:
+    """フォロワー増加デルタを、その日の投稿パターンへ按分したスコア。
+    「いいね」ではなく「実際にフォロワーが増えた型」を増やすKPIシグナル。"""
+    if not FOLLOWERS_HISTORY.exists():
+        return {}
+    try:
+        history = json.loads(FOLLOWERS_HISTORY.read_text())
+    except Exception:
+        return {}
+    return _attribute_deltas_to_patterns(acct, history.get(acct, []))
+
+
+def load_line_scores(acct: str) -> dict:
+    """LINE登録（友だち追加）デルタを、その日の投稿パターンへ按分したスコア。
+    最終KPI=LINE登録に繋がった型。現状はmasaのみ（harness連携）。"""
+    if not LINE_HISTORY.exists():
+        return {}
+    try:
+        history = json.loads(LINE_HISTORY.read_text())
+    except Exception:
+        return {}
+    return _attribute_deltas_to_patterns(acct, history.get(acct, []))
+
+
 # ── 重み計算 ──────────────────────────────────────
 
 def compute_new_weights(acct: str, feedback_scores: dict, api_scores: dict,
-                        follower_scores: dict | None = None) -> dict:
+                        follower_scores: dict | None = None,
+                        line_scores: dict | None = None) -> dict:
     follower_scores = follower_scores or {}
+    line_scores = line_scores or {}
     defaults = ACCOUNTS[acct]["default_weights"].copy()
     patterns = ACCOUNTS[acct]["patterns"]
 
@@ -305,8 +316,9 @@ def compute_new_weights(acct: str, feedback_scores: dict, api_scores: dict,
         fb = feedback_scores.get(pattern, 0)
         api = api_scores.get(pattern, 0)
         fol = follower_scores.get(pattern, 0)
-        # 手動FB（係数2）＋フォロワー増加=KPI直結（係数2）＋APIエンゲージ補助（係数1）
-        adjustment = fb * 2 + fol * 2 + api
+        line = line_scores.get(pattern, 0)
+        # 優先度: LINE登録=最終KPI(係数3) > 手動FB(2)・フォロワー増(2) > APIエンゲージ(1)
+        adjustment = line * 3 + fb * 2 + fol * 2 + api
         new_w = round(base + adjustment)
         # 最小1、最大20にクランプ
         new_weights[pattern] = max(1, min(20, new_w))
@@ -315,13 +327,14 @@ def compute_new_weights(acct: str, feedback_scores: dict, api_scores: dict,
 
 
 def save_weights(acct: str, weights: dict, feedback_scores: dict, api_scores: dict,
-                 follower_scores: dict | None = None):
+                 follower_scores: dict | None = None, line_scores: dict | None = None):
     out = {
         "updated_at": TODAY,
         "pattern_weights": weights,
         "feedback_scores": feedback_scores,
         "api_scores": api_scores,
         "follower_scores": follower_scores or {},
+        "line_scores": line_scores or {},
     }
     ACCOUNTS[acct]["weights"].write_text(
         json.dumps(out, ensure_ascii=False, indent=2)
@@ -332,20 +345,28 @@ def save_weights(acct: str, weights: dict, feedback_scores: dict, api_scores: di
 
 def build_report_lines(acct: str, old_weights: dict, new_weights: dict,
                         feedback_scores: dict, api_scores: dict,
-                        follower_scores: dict | None = None) -> list[str]:
+                        follower_scores: dict | None = None,
+                        line_scores: dict | None = None) -> list[str]:
     follower_scores = follower_scores or {}
+    line_scores = line_scores or {}
     name = ACCOUNTS[acct]["name"]
 
-    # フォロワー増加サマリー
-    fol_summary = ""
+    # KPIサマリー（フォロワー・LINE登録）
+    summary_parts = []
     if FOLLOWERS_HISTORY.exists():
         try:
             hist = json.loads(FOLLOWERS_HISTORY.read_text()).get(acct, [])
             if hist:
-                latest = hist[-1]
-                week = hist[-7:]
-                week_delta = sum(s.get("delta", 0) for s in week)
-                fol_summary = f"フォロワー: {latest['followers']}人 / 直近7日 {week_delta:+}"
+                week_delta = sum(s.get("delta", 0) for s in hist[-7:])
+                summary_parts.append(f"フォロワー: {hist[-1]['followers']}人 / 直近7日 {week_delta:+}")
+        except Exception:
+            pass
+    if LINE_HISTORY.exists():
+        try:
+            lh = json.loads(LINE_HISTORY.read_text()).get(acct, [])
+            if lh:
+                week_delta = sum(s.get("delta", 0) for s in lh[-7:])
+                summary_parts.append(f"LINE登録: {lh[-1]['friends']}人 / 直近7日 {week_delta:+}")
         except Exception:
             pass
 
@@ -353,20 +374,21 @@ def build_report_lines(acct: str, old_weights: dict, new_weights: dict,
         f"## {name}",
         "",
     ]
-    if fol_summary:
-        lines += [f"> {fol_summary}", ""]
+    if summary_parts:
+        lines += [f"> {' ｜ '.join(summary_parts)}", ""]
     lines += [
-        "| パターン | 旧重み | 新重み | FB | フォロワー | API |",
-        "|---------|-------|-------|----|----------|----|",
+        "| パターン | 旧重み | 新重み | FB | フォロワー | LINE | API |",
+        "|---------|-------|-------|----|----------|------|----|",
     ]
     for pattern in ACCOUNTS[acct]["patterns"]:
         old = old_weights.get(pattern, "-")
         new = new_weights.get(pattern, "-")
         fb = feedback_scores.get(pattern, 0)
         fol = round(follower_scores.get(pattern, 0), 2)
+        line = round(line_scores.get(pattern, 0), 2)
         api = round(api_scores.get(pattern, 0), 2)
         arrow = "↑" if isinstance(old, (int, float)) and isinstance(new, (int, float)) and new > old else ("↓" if isinstance(old, (int, float)) and isinstance(new, (int, float)) and new < old else ("→" if isinstance(old, (int, float)) else "?"))
-        lines.append(f"| {pattern} | {old} | **{new}** {arrow} | {fb:+} | {fol:+} | {api:+} |")
+        lines.append(f"| {pattern} | {old} | **{new}** {arrow} | {fb:+} | {fol:+} | {line:+} | {api:+} |")
 
     lines += ["", "---", ""]
     return lines
@@ -382,6 +404,51 @@ def save_obsidian_report(report_lines: list[str]):
     except Exception as e:
         if not QUIET:
             print(f"  [WARN] Obsidian保存失敗: {e}")
+
+
+# ── LINE登録の取得（ローカル専用）──────────────────
+
+def refresh_line_history():
+    """line_tracker を呼んで line_history.json を最新化する。
+    harness DB はローカルにしか無いため、DBが無い環境では静かにスキップ。"""
+    try:
+        import line_tracker
+        line_tracker.main()
+    except Exception as e:
+        if not QUIET:
+            print(f"  [WARN] LINE登録取得スキップ: {e}")
+
+
+# ── 重み・履歴をGitHubへ同期 ───────────────────────
+
+def sync_to_github():
+    """ローカルで更新した重み・KPI履歴をGitHubへpushし、
+    GitHub Actionsのgenerate.ymlが最新の重みで生成できるようにする。"""
+    import subprocess
+    files = [
+        "weights_truth.json", "weights_nagaoka.json", "weights_masa.json",
+        "followers_history.json", "line_history.json",
+    ]
+    files = [f for f in files if (BASE / f).exists()]
+    try:
+        subprocess.run(["git", "add", *files], cwd=str(BASE), check=False)
+        diff = subprocess.run(["git", "diff", "--cached", "--quiet"], cwd=str(BASE))
+        if diff.returncode == 0:
+            return  # 変更なし
+        subprocess.run(
+            ["git", "commit", "-m", f"chore: KPI連動の重み更新 {TODAY} [skip ci]"],
+            cwd=str(BASE), check=False,
+        )
+        for _ in range(3):
+            if subprocess.run(["git", "push"], cwd=str(BASE)).returncode == 0:
+                break
+            subprocess.run(["git", "pull", "--rebase", "-X", "ours", "origin", "main"],
+                           cwd=str(BASE), check=False)
+        if not QUIET:
+            print("  → 重み・KPI履歴をGitHubへ同期")
+    except Exception as e:
+        if not QUIET:
+            print(f"  [WARN] GitHub同期スキップ: {e}")
 
 
 # ── メイン ────────────────────────────────────────
@@ -402,8 +469,9 @@ def run(acct: str) -> list[str]:
     feedback_scores = load_feedback_scores(acct)
     api_scores = load_api_scores(acct)
     follower_scores = load_follower_scores(acct)
-    new_weights = compute_new_weights(acct, feedback_scores, api_scores, follower_scores)
-    save_weights(acct, new_weights, feedback_scores, api_scores, follower_scores)
+    line_scores = load_line_scores(acct)
+    new_weights = compute_new_weights(acct, feedback_scores, api_scores, follower_scores, line_scores)
+    save_weights(acct, new_weights, feedback_scores, api_scores, follower_scores, line_scores)
 
     if not QUIET:
         print(f"  パターン重み更新:")
@@ -411,15 +479,22 @@ def run(acct: str) -> list[str]:
             old = old_weights.get(p, "?")
             arrow = "↑" if isinstance(old, (int, float)) and w > old else ("↓" if isinstance(old, (int, float)) and w < old else ("→" if isinstance(old, (int, float)) else "?"))
             fol = follower_scores.get(p, 0)
-            tag = f"  (フォロワー寄与 {fol:+})" if fol else ""
+            line = line_scores.get(p, 0)
+            tags = []
+            if line: tags.append(f"LINE寄与 {line:+}")
+            if fol: tags.append(f"フォロワー寄与 {fol:+}")
+            tag = f"  ({', '.join(tags)})" if tags else ""
             print(f"    {p:<18} {old} → {w} {arrow}{tag}")
 
-    return build_report_lines(acct, old_weights, new_weights, feedback_scores, api_scores, follower_scores)
+    return build_report_lines(acct, old_weights, new_weights, feedback_scores, api_scores, follower_scores, line_scores)
 
 
 def main():
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
     target = args[0].lower() if args else "all"
+
+    # LINE登録（最終KPI）を最新化してから採点する
+    refresh_line_history()
 
     report_lines = [
         f"# Threads 投稿分析レポート｜{TODAY}",
@@ -441,6 +516,7 @@ def main():
         report_lines += run("masa")
 
     save_obsidian_report(report_lines)
+    sync_to_github()
 
     if not QUIET:
         print("\n  完了。generate_remix.py は次回から新しい重みで生成します。")

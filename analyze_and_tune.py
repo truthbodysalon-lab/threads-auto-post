@@ -13,6 +13,8 @@
   python3 analyze_and_tune.py --quiet # サイレント（launchd用）
 """
 
+from __future__ import annotations
+
 import json
 import sys
 from collections import defaultdict
@@ -83,6 +85,7 @@ ACCOUNTS = {
 }
 
 FEEDBACK_FILE = BASE / "feedback.jsonl"
+FOLLOWERS_HISTORY = BASE / "followers_history.json"
 
 
 # ── パターン検出 ───────────────────────────────────
@@ -219,9 +222,80 @@ def load_api_scores(acct: str) -> dict:
     return result
 
 
+# ── フォロワー増加スコア（KPI直結）────────────────
+
+def _posts_by_date(acct: str) -> dict:
+    """投稿日 -> [text, ...] を返す（log_*_posted.jsonl から）"""
+    posted = ACCOUNTS[acct]["posted"]
+    by_date = defaultdict(list)
+    if not posted.exists():
+        return by_date
+    for l in posted.read_text().splitlines():
+        try:
+            e = json.loads(l)
+            d = e.get("date")
+            t = e.get("text", "")
+            if d and t:
+                by_date[d].append(t)
+        except Exception:
+            pass
+    return by_date
+
+
+def load_follower_scores(acct: str) -> dict:
+    """フォロワー増加デルタを、その日に投稿したパターンへ按分して
+    パターン別スコア（-3〜+3程度）を返す。
+
+    「いいね」ではなく「実際にフォロワーが増えた日に多く出ていた型」を
+    優先的に増やすための、KPI直結シグナル。
+    """
+    if not FOLLOWERS_HISTORY.exists():
+        return {}
+    try:
+        history = json.loads(FOLLOWERS_HISTORY.read_text())
+    except Exception:
+        return {}
+
+    series = history.get(acct, [])
+    if len(series) < 2:
+        # デルタが算出できるだけの履歴がまだ無い
+        return {}
+
+    by_date = _posts_by_date(acct)
+    if not by_date:
+        return {}
+
+    # パターン別の累積フォロワー貢献
+    credit = defaultdict(float)
+    for snap in series:
+        d = snap.get("date")
+        delta = snap.get("delta", 0)
+        posts = by_date.get(d, [])
+        if not posts or delta == 0:
+            continue
+        # その日の各パターンの出現数に応じてデルタを按分
+        day_patterns = defaultdict(int)
+        for t in posts:
+            day_patterns[detect_pattern(t, acct)] += 1
+        total = sum(day_patterns.values())
+        for pat, cnt in day_patterns.items():
+            credit[pat] += delta * (cnt / total)
+
+    if not credit:
+        return {}
+
+    # 平均との乖離を -3〜+3 にスケール
+    vals = list(credit.values())
+    avg = sum(vals) / len(vals) if vals else 0
+    spread = max(abs(max(vals) - avg), abs(min(vals) - avg), 1.0)
+    return {pat: round((c - avg) / spread * 3, 2) for pat, c in credit.items()}
+
+
 # ── 重み計算 ──────────────────────────────────────
 
-def compute_new_weights(acct: str, feedback_scores: dict, api_scores: dict) -> dict:
+def compute_new_weights(acct: str, feedback_scores: dict, api_scores: dict,
+                        follower_scores: dict | None = None) -> dict:
+    follower_scores = follower_scores or {}
     defaults = ACCOUNTS[acct]["default_weights"].copy()
     patterns = ACCOUNTS[acct]["patterns"]
 
@@ -230,8 +304,9 @@ def compute_new_weights(acct: str, feedback_scores: dict, api_scores: dict) -> d
         base = defaults.get(pattern, 5)
         fb = feedback_scores.get(pattern, 0)
         api = api_scores.get(pattern, 0)
-        # フィードバックを優先（係数2）、APIスコアを補助（係数1）
-        adjustment = fb * 2 + api
+        fol = follower_scores.get(pattern, 0)
+        # 手動FB（係数2）＋フォロワー増加=KPI直結（係数2）＋APIエンゲージ補助（係数1）
+        adjustment = fb * 2 + fol * 2 + api
         new_w = round(base + adjustment)
         # 最小1、最大20にクランプ
         new_weights[pattern] = max(1, min(20, new_w))
@@ -239,12 +314,14 @@ def compute_new_weights(acct: str, feedback_scores: dict, api_scores: dict) -> d
     return new_weights
 
 
-def save_weights(acct: str, weights: dict, feedback_scores: dict, api_scores: dict):
+def save_weights(acct: str, weights: dict, feedback_scores: dict, api_scores: dict,
+                 follower_scores: dict | None = None):
     out = {
         "updated_at": TODAY,
         "pattern_weights": weights,
         "feedback_scores": feedback_scores,
         "api_scores": api_scores,
+        "follower_scores": follower_scores or {},
     }
     ACCOUNTS[acct]["weights"].write_text(
         json.dumps(out, ensure_ascii=False, indent=2)
@@ -254,21 +331,42 @@ def save_weights(acct: str, weights: dict, feedback_scores: dict, api_scores: di
 # ── レポート生成 ──────────────────────────────────
 
 def build_report_lines(acct: str, old_weights: dict, new_weights: dict,
-                        feedback_scores: dict, api_scores: dict) -> list[str]:
+                        feedback_scores: dict, api_scores: dict,
+                        follower_scores: dict | None = None) -> list[str]:
+    follower_scores = follower_scores or {}
     name = ACCOUNTS[acct]["name"]
+
+    # フォロワー増加サマリー
+    fol_summary = ""
+    if FOLLOWERS_HISTORY.exists():
+        try:
+            hist = json.loads(FOLLOWERS_HISTORY.read_text()).get(acct, [])
+            if hist:
+                latest = hist[-1]
+                week = hist[-7:]
+                week_delta = sum(s.get("delta", 0) for s in week)
+                fol_summary = f"フォロワー: {latest['followers']}人 / 直近7日 {week_delta:+}"
+        except Exception:
+            pass
+
     lines = [
         f"## {name}",
         "",
-        "| パターン | 旧重み | 新重み | FB調整 | API調整 |",
-        "|---------|-------|-------|--------|---------|",
+    ]
+    if fol_summary:
+        lines += [f"> {fol_summary}", ""]
+    lines += [
+        "| パターン | 旧重み | 新重み | FB | フォロワー | API |",
+        "|---------|-------|-------|----|----------|----|",
     ]
     for pattern in ACCOUNTS[acct]["patterns"]:
         old = old_weights.get(pattern, "-")
         new = new_weights.get(pattern, "-")
         fb = feedback_scores.get(pattern, 0)
+        fol = round(follower_scores.get(pattern, 0), 2)
         api = round(api_scores.get(pattern, 0), 2)
         arrow = "↑" if isinstance(old, (int, float)) and isinstance(new, (int, float)) and new > old else ("↓" if isinstance(old, (int, float)) and isinstance(new, (int, float)) and new < old else ("→" if isinstance(old, (int, float)) else "?"))
-        lines.append(f"| {pattern} | {old} | **{new}** {arrow} | {fb:+} | {api:+} |")
+        lines.append(f"| {pattern} | {old} | **{new}** {arrow} | {fb:+} | {fol:+} | {api:+} |")
 
     lines += ["", "---", ""]
     return lines
@@ -303,17 +401,20 @@ def run(acct: str) -> list[str]:
 
     feedback_scores = load_feedback_scores(acct)
     api_scores = load_api_scores(acct)
-    new_weights = compute_new_weights(acct, feedback_scores, api_scores)
-    save_weights(acct, new_weights, feedback_scores, api_scores)
+    follower_scores = load_follower_scores(acct)
+    new_weights = compute_new_weights(acct, feedback_scores, api_scores, follower_scores)
+    save_weights(acct, new_weights, feedback_scores, api_scores, follower_scores)
 
     if not QUIET:
         print(f"  パターン重み更新:")
         for p, w in new_weights.items():
             old = old_weights.get(p, "?")
             arrow = "↑" if isinstance(old, (int, float)) and w > old else ("↓" if isinstance(old, (int, float)) and w < old else ("→" if isinstance(old, (int, float)) else "?"))
-            print(f"    {p:<18} {old} → {w} {arrow}")
+            fol = follower_scores.get(p, 0)
+            tag = f"  (フォロワー寄与 {fol:+})" if fol else ""
+            print(f"    {p:<18} {old} → {w} {arrow}{tag}")
 
-    return build_report_lines(acct, old_weights, new_weights, feedback_scores, api_scores)
+    return build_report_lines(acct, old_weights, new_weights, feedback_scores, api_scores, follower_scores)
 
 
 def main():

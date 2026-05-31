@@ -37,12 +37,16 @@ jobs:
       - name: Run insights
         run: python3 insights.py
 
+      - name: Track follower growth (KPI)
+        run: python3 follower_tracker.py || true
+
       - name: Commit insights data
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add insights_truth.json insights_nagaoka.json insights_masa.json \
-                  past_posts.json past_posts_nagaoka.json past_posts_masa.json 2>/dev/null || true
+                  past_posts.json past_posts_nagaoka.json past_posts_masa.json \
+                  followers_history.json 2>/dev/null || true
           git diff --cached --quiet || git commit -m "chore: update insights [skip ci]"
           for i in 1 2 3; do
             git push && break

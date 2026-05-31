@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-05-31",
+  "updated_at": "2026-06-01",
   "pattern_weights": {
     "keisei_target": 7,
     "keisei_risk": 5,
@@ -14,5 +14,6 @@
   },
   "feedback_scores": {},
   "api_scores": {},
-  "follower_scores": {}
+  "follower_scores": {},
+  "line_scores": {}
 }

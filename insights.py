@@ -54,11 +54,33 @@ BASE_URL = "https://graph.threads.net/v1.0"
 
 # ── API取得 ────────────────────────────────────────
 
+def fetch_post_insights(mid: str, token: str) -> dict:
+    """1投稿のいいね・閲覧・返信を /insights エッジから取得。
+    ※ /threads の fields= で like_count/views を指定するとnull/500になるため、
+      必ずこの media insights エンドポイントを使う。"""
+    url = f"{BASE_URL}/{mid}/insights?metric=likes,views,replies&access_token={token}"
+    try:
+        with urllib.request.urlopen(url) as r:
+            data = json.loads(r.read())
+    except Exception:
+        return {}
+    out = {}
+    for m in data.get("data", []):
+        name = m.get("name")
+        vals = m.get("values")
+        if vals:
+            out[name] = vals[-1].get("value", 0)
+        elif "total_value" in m:
+            out[name] = m["total_value"].get("value", 0)
+    return out
+
+
 def fetch_posts_with_metrics(acct: str, limit: int = 100) -> list:
     a = ACCOUNTS[acct]
+    # 1) 投稿リスト（id/text/timestampのみ。指標はここでは取れない）
     url = (
         f"{BASE_URL}/{a['user_id']}/threads"
-        f"?fields=id,text,timestamp,like_count,views,replies_count"
+        f"?fields=id,text,timestamp"
         f"&limit={limit}&access_token={a['token']}"
     )
     all_posts = []
@@ -67,6 +89,13 @@ def fetch_posts_with_metrics(acct: str, limit: int = 100) -> list:
             data = json.loads(r.read())
         all_posts.extend(data.get("data", []))
         url = data.get("paging", {}).get("next")
+
+    # 2) 各投稿の指標を insights エッジから取得して付与
+    for p in all_posts:
+        ins = fetch_post_insights(p["id"], a["token"])
+        p["like_count"] = ins.get("likes", 0)
+        p["views"] = ins.get("views", 0)
+        p["replies_count"] = ins.get("replies", 0)
     return all_posts
 
 

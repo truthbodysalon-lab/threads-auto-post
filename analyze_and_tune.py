@@ -419,6 +419,17 @@ def refresh_line_history():
             print(f"  [WARN] LINE登録取得スキップ: {e}")
 
 
+def refresh_follower_history():
+    """follower_tracker を呼んで followers_history.json を最新化する。
+    CIのgit競合で履歴が飛ぶのを避け、ローカルの本ジョブで毎日確実に蓄積する。"""
+    try:
+        import follower_tracker
+        follower_tracker.main()
+    except Exception as e:
+        if not QUIET:
+            print(f"  [WARN] フォロワー取得スキップ: {e}")
+
+
 # ── 重み・履歴をGitHubへ同期 ───────────────────────
 
 def sync_to_github():
@@ -493,7 +504,8 @@ def main():
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
     target = args[0].lower() if args else "all"
 
-    # LINE登録（最終KPI）を最新化してから採点する
+    # KPI（フォロワー数・LINE登録）を最新化してから採点する
+    refresh_follower_history()
     refresh_line_history()
 
     report_lines = [

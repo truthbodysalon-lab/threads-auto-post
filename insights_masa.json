@@ -1,106 +1,106 @@
 {
   "account": "@masahide_takahashi_",
-  "updated_at": "2026-06-06 08:06",
+  "updated_at": "2026-06-06 15:26",
   "total_posts": 200,
-  "total_likes": 0,
-  "total_views": 0,
-  "total_replies": 0,
-  "avg_likes": 0.0,
-  "avg_views": 0.0,
-  "recent_7days_count": 117,
-  "recent_7days_avg_likes": 0.0,
+  "total_likes": 25,
+  "total_views": 21533,
+  "total_replies": 193,
+  "avg_likes": 0.12,
+  "avg_views": 107.67,
+  "recent_7days_count": 125,
+  "recent_7days_avg_likes": 0.13,
   "top10_by_likes": [
     {
-      "text": "コンテンツ設計で結果を出す人がやっている\n3つの習慣をお伝えします。",
-      "likes": 0,
-      "views": 0,
+      "text": "正直に言います。コンテンツカレンダーは手段です。",
+      "likes": 4,
+      "views": 369,
       "replies": 0,
-      "date": "2026-06-05"
+      "date": "2026-05-31"
     },
     {
-      "text": "テキスト投稿の書き方だけやっても集客できない理由。",
-      "likes": 0,
-      "views": 0,
-      "replies": 0,
-      "date": "2026-06-05"
+      "text": "広告費をかけなくても集客できます。\n\nなぜなら信頼を先に積み上げれば\nお客様は自然に来るから。",
+      "likes": 2,
+      "views": 97,
+      "replies": 2,
+      "date": "2026-06-03"
     },
     {
-      "text": "「広告費の使い方をやっているのに集客できない」",
-      "likes": 0,
-      "views": 0,
+      "text": "LINE配信設計で結果が出ない人の共通点。",
+      "likes": 2,
+      "views": 253,
       "replies": 0,
-      "date": "2026-06-05"
+      "date": "2026-05-30"
     },
     {
-      "text": "「新規集客の自動化を頑張っているのに\nなぜ結果が出ないんだろう」\nそう悩んでいませんか？",
-      "likes": 0,
-      "views": 0,
-      "replies": 0,
-      "date": "2026-06-05"
+      "text": "「TikTok集客」を難しく考えすぎていませんか？",
+      "likes": 2,
+      "views": 256,
+      "replies": 1,
+      "date": "2026-05-28"
     },
     {
-      "text": "売れる教育コンテンツの作り方と売れない教育コンテンツの作り方の違い。",
-      "likes": 0,
-      "views": 0,
-      "replies": 0,
-      "date": "2026-06-05"
+      "text": "SNS×LINE導線の本質は、",
+      "likes": 2,
+      "views": 295,
+      "replies": 1,
+      "date": "2026-05-27"
     },
     {
-      "text": "あなたのお客様の声の集め方、何が原因で伸びてないと思いますか？",
-      "likes": 0,
-      "views": 0,
+      "text": "集客がうまくいかない時の5つの処方箋\n\n・そもそも知られていない（認知不足）\n・魅力が伝わっていない（訴求力不足）\n・信頼されていない（信頼性不足）\n・行動する",
+      "likes": 1,
+      "views": 31,
       "replies": 0,
-      "date": "2026-06-05"
+      "date": "2026-06-06"
     },
     {
-      "text": "バズる投稿の法則で成果が出ない人がやっていること3選",
-      "likes": 0,
-      "views": 0,
-      "replies": 0,
-      "date": "2026-06-05"
+      "text": "今日の講義の資料作ってます\n決して遊んでいるわけではありません。",
+      "likes": 1,
+      "views": 56,
+      "replies": 5,
+      "date": "2026-06-06"
     },
     {
-      "text": "テキスト投稿の書き方で悩んでいる方、\nLINEで気軽に相談してください。",
-      "likes": 0,
-      "views": 0,
-      "replies": 0,
-      "date": "2026-06-05"
+      "text": "お客様の声の集め方の壁は、センスじゃないです。",
+      "likes": 1,
+      "views": 65,
+      "replies": 1,
+      "date": "2026-06-03"
     },
     {
-      "text": "売れるショート動画制作と売れないショート動画制作の違い。",
-      "likes": 0,
-      "views": 0,
-      "replies": 0,
-      "date": "2026-06-05"
+      "text": "今日営業電話が来た時に\n\n「代表者様いらっしゃいますか？」\n「代表者って誰のことですか？」\n「代表者様いらっしゃいますか？」\n「代表者って誰のことですか？」\n「",
+      "likes": 1,
+      "views": 232,
+      "replies": 2,
+      "date": "2026-06-02"
     },
     {
-      "text": "SNS×LINE導線で成果が出ない人がやっていること3選",
-      "likes": 0,
-      "views": 0,
-      "replies": 0,
-      "date": "2026-06-05"
+      "text": "店舗集客で大切な3つのこと。",
+      "likes": 1,
+      "views": 430,
+      "replies": 1,
+      "date": "2026-06-01"
     }
   ],
   "performance_by_length": {
     "〜50字": {
-      "count": 149,
-      "avg_likes": 0.0,
-      "avg_views": 0.0
+      "count": 148,
+      "avg_likes": 0.16,
+      "avg_views": 130.76
+    },
+    "100〜150字": {
+      "count": 16,
+      "avg_likes": 0.12,
+      "avg_views": 28.0
     },
     "50〜100字": {
       "count": 32,
       "avg_likes": 0.0,
-      "avg_views": 0.0
-    },
-    "100〜150字": {
-      "count": 15,
-      "avg_likes": 0.0,
-      "avg_views": 0.0
+      "avg_views": 53.41
     },
     "150字以上": {
       "count": 4,
       "avg_likes": 0.0,
-      "avg_views": 0.0
+      "avg_views": 5.75
     }
   }
 }

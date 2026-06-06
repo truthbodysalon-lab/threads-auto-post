@@ -5,7 +5,7 @@
     "education": 3,
     "story": 1,
     "cta": 2,
-    "ranking": 3,
+    "ranking": 1,
     "question": 3
   },
   "feedback_scores": {},
@@ -17,8 +17,9 @@
     "education": -2.79
   },
   "follower_scores": {
-    "story": -2.25,
-    "insight": 2.25
+    "story": -1.2,
+    "insight": 2.4,
+    "ranking": -1.2
   },
   "line_scores": {}
 }

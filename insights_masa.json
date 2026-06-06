@@ -1,14 +1,14 @@
 {
   "account": "@masahide_takahashi_",
-  "updated_at": "2026-06-06 15:26",
+  "updated_at": "2026-06-07 08:07",
   "total_posts": 200,
-  "total_likes": 25,
-  "total_views": 21533,
-  "total_replies": 193,
-  "avg_likes": 0.12,
-  "avg_views": 107.67,
-  "recent_7days_count": 125,
-  "recent_7days_avg_likes": 0.13,
+  "total_likes": 27,
+  "total_views": 21995,
+  "total_replies": 199,
+  "avg_likes": 0.14,
+  "avg_views": 109.97,
+  "recent_7days_count": 129,
+  "recent_7days_avg_likes": 0.12,
   "top10_by_likes": [
     {
       "text": "正直に言います。コンテンツカレンダーは手段です。",
@@ -46,61 +46,61 @@
       "date": "2026-05-27"
     },
     {
+      "text": "ショート動画制作の本質は、",
+      "likes": 1,
+      "views": 156,
+      "replies": 1,
+      "date": "2026-06-06"
+    },
+    {
+      "text": "Threadsを見ているお客様の本音はコレ\n\n・恥ずかしいら、いいねしない\n・恥ずかしいからコメントしない\n・いつか行ってみようかな～\n\nだから、いいねやコメン",
+      "likes": 1,
+      "views": 7,
+      "replies": 0,
+      "date": "2026-06-06"
+    },
+    {
+      "text": "教育コンテンツの作り方を始める前に確認してほしいこと。",
+      "likes": 1,
+      "views": 689,
+      "replies": 1,
+      "date": "2026-06-06"
+    },
+    {
       "text": "集客がうまくいかない時の5つの処方箋\n\n・そもそも知られていない（認知不足）\n・魅力が伝わっていない（訴求力不足）\n・信頼されていない（信頼性不足）\n・行動する",
       "likes": 1,
-      "views": 31,
+      "views": 49,
       "replies": 0,
       "date": "2026-06-06"
     },
     {
       "text": "今日の講義の資料作ってます\n決して遊んでいるわけではありません。",
       "likes": 1,
-      "views": 56,
+      "views": 81,
       "replies": 5,
       "date": "2026-06-06"
-    },
-    {
-      "text": "お客様の声の集め方の壁は、センスじゃないです。",
-      "likes": 1,
-      "views": 65,
-      "replies": 1,
-      "date": "2026-06-03"
-    },
-    {
-      "text": "今日営業電話が来た時に\n\n「代表者様いらっしゃいますか？」\n「代表者って誰のことですか？」\n「代表者様いらっしゃいますか？」\n「代表者って誰のことですか？」\n「",
-      "likes": 1,
-      "views": 232,
-      "replies": 2,
-      "date": "2026-06-02"
-    },
-    {
-      "text": "店舗集客で大切な3つのこと。",
-      "likes": 1,
-      "views": 430,
-      "replies": 1,
-      "date": "2026-06-01"
     }
   ],
   "performance_by_length": {
-    "〜50字": {
-      "count": 148,
-      "avg_likes": 0.16,
-      "avg_views": 130.76
-    },
-    "100〜150字": {
-      "count": 16,
-      "avg_likes": 0.12,
-      "avg_views": 28.0
-    },
     "50〜100字": {
-      "count": 32,
+      "count": 33,
       "avg_likes": 0.0,
-      "avg_views": 53.41
+      "avg_views": 52.33
+    },
+    "〜50字": {
+      "count": 147,
+      "avg_likes": 0.16,
+      "avg_views": 134.65
     },
     "150字以上": {
-      "count": 4,
+      "count": 5,
       "avg_likes": 0.0,
-      "avg_views": 5.75
+      "avg_views": 4.8
+    },
+    "100〜150字": {
+      "count": 15,
+      "avg_likes": 0.2,
+      "avg_views": 30.0
     }
   }
 }

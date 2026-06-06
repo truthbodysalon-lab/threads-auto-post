@@ -1,14 +1,14 @@
 {
   "account": "@truth_body_salon",
-  "updated_at": "2026-06-06 15:21",
+  "updated_at": "2026-06-07 08:03",
   "total_posts": 200,
-  "total_likes": 59,
-  "total_views": 55519,
-  "total_replies": 209,
-  "avg_likes": 0.29,
-  "avg_views": 277.6,
-  "recent_7days_count": 186,
-  "recent_7days_avg_likes": 0.32,
+  "total_likes": 67,
+  "total_views": 60433,
+  "total_replies": 215,
+  "avg_likes": 0.34,
+  "avg_views": 302.17,
+  "recent_7days_count": 172,
+  "recent_7days_avg_likes": 0.3,
   "top10_by_likes": [
     {
       "text": "体が楽になった人がやめたこと",
@@ -16,6 +16,13 @@
       "views": 2857,
       "replies": 1,
       "date": "2026-05-30"
+    },
+    {
+      "text": "体のだるさの原因、知ってますか？\n\nほとんどの人が答えられないんですよ。\n\n実は巻き肩が一番の原因です。",
+      "likes": 2,
+      "views": 407,
+      "replies": 3,
+      "date": "2026-06-06"
     },
     {
       "text": "頭の重さの本当の原因は、\n\n睡眠不足が主な原因です。\n施術だけでなく、日常の習慣を変えることが大切。",
@@ -72,25 +79,18 @@
       "views": 678,
       "replies": 6,
       "date": "2026-05-30"
-    },
-    {
-      "text": "首こりは、薬では治りません。\n\nなぜなら薬は「痛みを消す」だけで\n「原因を取り除く」ものではないから。",
-      "likes": 1,
-      "views": 219,
-      "replies": 3,
-      "date": "2026-06-05"
     }
   ],
   "performance_by_length": {
     "〜50字": {
-      "count": 126,
-      "avg_likes": 0.33,
-      "avg_views": 337.78
+      "count": 124,
+      "avg_likes": 0.38,
+      "avg_views": 376.49
     },
     "50〜100字": {
-      "count": 71,
-      "avg_likes": 0.25,
-      "avg_views": 181.11
+      "count": 73,
+      "avg_likes": 0.27,
+      "avg_views": 186.96
     },
     "100〜150字": {
       "count": 2,

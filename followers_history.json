@@ -9,6 +9,11 @@
       "date": "2026-06-06",
       "followers": 1364,
       "delta": 0
+    },
+    {
+      "date": "2026-06-07",
+      "followers": 1367,
+      "delta": 3
     }
   ],
   "masa": [
@@ -21,6 +26,11 @@
       "date": "2026-06-06",
       "followers": 188,
       "delta": 0
+    },
+    {
+      "date": "2026-06-07",
+      "followers": 191,
+      "delta": 3
     }
   ]
 }

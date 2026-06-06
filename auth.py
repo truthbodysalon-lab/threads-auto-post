@@ -23,7 +23,7 @@ PORT = 8080
 AUTH_URL = "https://threads.net/oauth/authorize"
 TOKEN_URL = "https://graph.threads.net/oauth/access_token"
 LONG_LIVED_TOKEN_URL = "https://graph.threads.net/access_token"
-SCOPE = "threads_basic,threads_content_publish"
+SCOPE = "threads_basic,threads_content_publish,threads_manage_insights,threads_manage_replies"
 
 ENV_FILE = Path(__file__).parent / ".env"
 

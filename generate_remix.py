@@ -398,6 +398,29 @@ CTA_ZUTSUU_TEMPLATES = [
     "頭痛があると、\n{life_scene_n}が半減しますよね。\n\n根本から改善した方が\n長い目でみてずっと楽です。\n\n▶ 頭痛改善の予約はこちら\n{url}",
 ]
 
+# ── 公式LINEリストイン（頭痛改善の専門情報配信）──────────────────
+# truth / nagaoka 共通。頭痛改善の無料情報を提供する公式LINEへ登録を促す。
+# ルール: 1文目はフックから（地域名/実績/自己紹介で始めない）・短文・URLは本文末尾に残す。
+# _ensure_nagaoka / _enforce_short_body は通さず直接挿入する（URLをコメントへ流さない）。
+LINE_LISTIN_URL = "https://lin.ee/qbRbPAm"
+
+LINE_LISTIN_TEMPLATES = [
+    "薬に頼らず頭痛を減らすコツ、\n毎日LINEで配信しています。\n\n「また痛くなりそう」の前に読んでおくと違います。\n登録は無料です👇\n{url}",
+    "頭痛持ちさんへ。\n\n病院では教えてくれない\n「頭痛を繰り返さない体の作り方」を\nLINEで無料配信中です👇\n{url}",
+    "「天気が崩れると頭が痛い」\nそれ、対策できます。\n\n頭痛専門の改善情報をLINEでお届け中。\n登録は無料👇\n{url}",
+    "鎮痛剤を飲む回数が増えてきた人ほど\n読んでほしい。\n\n薬を減らしていくための頭痛ケアを\nLINEで配信しています👇\n{url}",
+    "頭痛のタイプは人それぞれ。\nだから自分のタイプを知るのが第一歩です。\n\nセルフチェック＆改善法をLINEで配信中👇\n{url}",
+    "「この頭痛、いつまで続くんだろう」\nそう思ったらLINEへ。\n\n頭痛を根本から減らすヒントを無料で受け取れます👇\n{url}",
+    "頭痛とサヨナラしたい人だけ見てください。\n\n専門家が頭痛改善の情報を\nLINEで毎日シェアしています👇\n{url}",
+]
+
+
+def generate_line_listin_post() -> str:
+    """公式LINE（頭痛改善情報）へのリストイン投稿を生成"""
+    tmpl = random.choice(LINE_LISTIN_TEMPLATES)
+    return fill(tmpl.replace("{url}", LINE_LISTIN_URL))
+
+
 NAGAOKA_PHRASES = [
     # ルール（全アカウント投稿ルール集より）:
     # ・1文目NG・個人名(まぁ等)NG・未確認実績NG・末尾単独追加NG
@@ -723,6 +746,19 @@ def generate_30_posts() -> list[str]:
         pos = random.randint(0, len(posts))
         posts.insert(pos, cta)
 
+    # 公式LINEリストイン投稿を織り交ぜる（頭痛改善情報の配信LINEへ誘導）
+    # URLを本文に残すため _ensure_nagaoka / _enforce_short_body は通さない
+    listin_posts = []
+    for _ in range(4):
+        for _ in range(20):
+            p = generate_line_listin_post()
+            if p not in listin_posts:
+                listin_posts.append(p)
+                break
+    for lp in listin_posts:
+        pos = random.randint(0, len(posts))
+        posts.insert(pos, lp)
+
     return posts[:100]
 
 
@@ -791,6 +827,18 @@ def generate_40_nagaoka_posts() -> list[str]:
     for cta in cta_posts:
         pos = random.randint(0, len(posts))
         posts.insert(pos, cta)
+
+    # 公式LINEリストイン投稿を織り交ぜる（頭痛改善情報の配信LINEへ誘導）
+    listin_posts = []
+    for _ in range(3):
+        for _ in range(20):
+            p = generate_line_listin_post()
+            if p not in listin_posts:
+                listin_posts.append(p)
+                break
+    for lp in listin_posts:
+        pos = random.randint(0, len(posts))
+        posts.insert(pos, lp)
 
     return posts[:100]
 

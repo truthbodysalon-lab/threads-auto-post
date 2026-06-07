@@ -1,14 +1,14 @@
 {
   "account": "@masahide_takahashi_",
-  "updated_at": "2026-06-07 08:27",
+  "updated_at": "2026-06-08 08:08",
   "total_posts": 200,
-  "total_likes": 27,
-  "total_views": 21845,
-  "total_replies": 200,
-  "avg_likes": 0.14,
-  "avg_views": 109.22,
-  "recent_7days_count": 131,
-  "recent_7days_avg_likes": 0.11,
+  "total_likes": 20,
+  "total_views": 22800,
+  "total_replies": 205,
+  "avg_likes": 0.1,
+  "avg_views": 114.0,
+  "recent_7days_count": 137,
+  "recent_7days_avg_likes": 0.07,
   "top10_by_likes": [
     {
       "text": "正直に言います。コンテンツカレンダーは手段です。",
@@ -32,20 +32,6 @@
       "date": "2026-05-30"
     },
     {
-      "text": "「TikTok集客」を難しく考えすぎていませんか？",
-      "likes": 2,
-      "views": 256,
-      "replies": 1,
-      "date": "2026-05-28"
-    },
-    {
-      "text": "SNS×LINE導線の本質は、",
-      "likes": 2,
-      "views": 295,
-      "replies": 1,
-      "date": "2026-05-27"
-    },
-    {
       "text": "ショート動画制作の本質は、",
       "likes": 1,
       "views": 156,
@@ -55,7 +41,7 @@
     {
       "text": "Threadsを見ているお客様の本音はコレ\n\n・恥ずかしいら、いいねしない\n・恥ずかしいからコメントしない\n・いつか行ってみようかな～\n\nだから、いいねやコメン",
       "likes": 1,
-      "views": 7,
+      "views": 8,
       "replies": 0,
       "date": "2026-06-06"
     },
@@ -76,31 +62,45 @@
     {
       "text": "今日の講義の資料作ってます\n決して遊んでいるわけではありません。",
       "likes": 1,
-      "views": 82,
+      "views": 84,
       "replies": 5,
       "date": "2026-06-06"
+    },
+    {
+      "text": "お客様の声の集め方の壁は、センスじゃないです。",
+      "likes": 1,
+      "views": 65,
+      "replies": 1,
+      "date": "2026-06-03"
+    },
+    {
+      "text": "今日営業電話が来た時に\n\n「代表者様いらっしゃいますか？」\n「代表者って誰のことですか？」\n「代表者様いらっしゃいますか？」\n「代表者って誰のことですか？」\n「",
+      "likes": 1,
+      "views": 232,
+      "replies": 2,
+      "date": "2026-06-02"
     }
   ],
   "performance_by_length": {
     "〜50字": {
-      "count": 148,
-      "avg_likes": 0.16,
-      "avg_views": 132.88
+      "count": 155,
+      "avg_likes": 0.11,
+      "avg_views": 134.03
     },
     "50〜100字": {
-      "count": 32,
+      "count": 28,
       "avg_likes": 0.0,
-      "avg_views": 53.28
+      "avg_views": 55.14
+    },
+    "100〜150字": {
+      "count": 12,
+      "avg_likes": 0.25,
+      "avg_views": 38.08
     },
     "150字以上": {
       "count": 5,
       "avg_likes": 0.0,
       "avg_views": 4.8
-    },
-    "100〜150字": {
-      "count": 15,
-      "avg_likes": 0.2,
-      "avg_views": 30.0
     }
   }
 }

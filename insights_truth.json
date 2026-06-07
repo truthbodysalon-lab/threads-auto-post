@@ -1,26 +1,19 @@
 {
   "account": "@truth_body_salon",
-  "updated_at": "2026-06-07 08:25",
+  "updated_at": "2026-06-08 08:05",
   "total_posts": 200,
-  "total_likes": 67,
-  "total_views": 60522,
-  "total_replies": 216,
-  "avg_likes": 0.34,
-  "avg_views": 302.61,
-  "recent_7days_count": 173,
-  "recent_7days_avg_likes": 0.29,
+  "total_likes": 45,
+  "total_views": 50608,
+  "total_replies": 243,
+  "avg_likes": 0.23,
+  "avg_views": 253.04,
+  "recent_7days_count": 200,
+  "recent_7days_avg_likes": 0.23,
   "top10_by_likes": [
-    {
-      "text": "体が楽になった人がやめたこと",
-      "likes": 4,
-      "views": 2857,
-      "replies": 1,
-      "date": "2026-05-30"
-    },
     {
       "text": "体のだるさの原因、知ってますか？\n\nほとんどの人が答えられないんですよ。\n\n実は巻き肩が一番の原因です。",
       "likes": 2,
-      "views": 408,
+      "views": 410,
       "replies": 3,
       "date": "2026-06-06"
     },
@@ -53,54 +46,56 @@
       "date": "2026-06-01"
     },
     {
-      "text": "改善率93.7%のワケ、話します。\n\n長岡市での施術でも同じことを感じます。",
-      "likes": 2,
-      "views": 259,
-      "replies": 1,
-      "date": "2026-05-31"
-    },
-    {
-      "text": "呼吸の浅さは、呼吸の浅さじゃないところが原因です。\n\nデスクワークが乱れると\n全身に影響が出ます。",
-      "likes": 2,
-      "views": 123,
-      "replies": 1,
-      "date": "2026-05-31"
-    },
-    {
-      "text": "口呼吸だけで朝の疲れはガチガチになる。\n見直してみて。",
-      "likes": 2,
-      "views": 485,
+      "text": "慢性的な肩の重さは年齢のせいじゃない。\n体の使い方の問題。",
+      "likes": 1,
+      "views": 0,
       "replies": 0,
-      "date": "2026-05-30"
+      "date": "2026-06-07"
     },
     {
-      "text": "首こりの原因、知ってますか？\n\nほとんどの人が答えられないんですよ。\n\n実は姿勢の歪みが一番の原因です。",
-      "likes": 2,
-      "views": 678,
-      "replies": 6,
-      "date": "2026-05-30"
+      "text": "一番大事なのは、実は施術じゃない。",
+      "likes": 1,
+      "views": 82,
+      "replies": 1,
+      "date": "2026-06-07"
+    },
+    {
+      "text": "なぜ「マッサージに通っても慢性的な首・肩のこりが治らないのか」\n仕組みをお話しします。",
+      "likes": 1,
+      "views": 234,
+      "replies": 1,
+      "date": "2026-06-07"
+    },
+    {
+      "text": "鎮痛剤を飲む回数が増えてきた人ほど\n読んでほしい。",
+      "likes": 1,
+      "views": 173,
+      "replies": 3,
+      "date": "2026-06-07"
+    },
+    {
+      "text": "今日は朝の疲れを楽にするための\n5つのセルフケアをお伝えします。",
+      "likes": 1,
+      "views": 265,
+      "replies": 1,
+      "date": "2026-06-07"
     }
   ],
   "performance_by_length": {
-    "50〜100字": {
-      "count": 73,
-      "avg_likes": 0.27,
-      "avg_views": 185.37
-    },
     "〜50字": {
-      "count": 124,
-      "avg_likes": 0.38,
-      "avg_views": 378.15
+      "count": 130,
+      "avg_likes": 0.24,
+      "avg_views": 307.82
+    },
+    "50〜100字": {
+      "count": 69,
+      "avg_likes": 0.2,
+      "avg_views": 153.38
     },
     "100〜150字": {
-      "count": 2,
-      "avg_likes": 0.0,
-      "avg_views": 35.5
-    },
-    "150字以上": {
       "count": 1,
       "avg_likes": 0.0,
-      "avg_views": 29.0
+      "avg_views": 9.0
     }
   }
 }

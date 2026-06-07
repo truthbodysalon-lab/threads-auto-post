@@ -1,21 +1,28 @@
 {
   "account": "@truth_nagaoka",
-  "updated_at": "2026-06-07 11:17",
+  "updated_at": "2026-06-08 08:06",
   "total_posts": 200,
-  "total_likes": 52,
-  "total_views": 50386,
-  "total_replies": 2,
-  "avg_likes": 0.26,
-  "avg_views": 251.93,
+  "total_likes": 49,
+  "total_views": 55608,
+  "total_replies": 42,
+  "avg_likes": 0.24,
+  "avg_views": 278.04,
   "recent_7days_count": 200,
-  "recent_7days_avg_likes": 0.26,
+  "recent_7days_avg_likes": 0.24,
   "top10_by_likes": [
     {
       "text": "当院は長岡市で兄妹でやってますが\nたまに夫婦に間違えられます。\n\n兄妹です。",
       "likes": 13,
-      "views": 4069,
+      "views": 4072,
       "replies": 0,
       "date": "2026-06-04"
+    },
+    {
+      "text": "夜中に目が覚めるのは「歳のせい」じゃない。\n体が助けを求めているサインです\n無視しないで",
+      "likes": 3,
+      "views": 322,
+      "replies": 0,
+      "date": "2026-06-07"
     },
     {
       "text": "カフェラテと菓子パンで朝を済ませてませんか？\n湿気の多い日に頭痛が出る理由です。",
@@ -72,35 +79,28 @@
       "views": 208,
       "replies": 0,
       "date": "2026-06-03"
-    },
-    {
-      "text": "お尻が硬いと\n膝は痛みます。",
-      "likes": 2,
-      "views": 43,
-      "replies": 0,
-      "date": "2026-06-03"
     }
   ],
   "performance_by_length": {
     "〜50字": {
-      "count": 125,
-      "avg_likes": 0.33,
-      "avg_views": 237.46
+      "count": 137,
+      "avg_likes": 0.29,
+      "avg_views": 284.36
     },
     "50〜100字": {
-      "count": 72,
+      "count": 61,
       "avg_likes": 0.15,
-      "avg_views": 284.65
+      "avg_views": 269.1
     },
     "100〜150字": {
       "count": 1,
       "avg_likes": 0.0,
-      "avg_views": 162.0
+      "avg_views": 166.0
     },
     "150字以上": {
-      "count": 2,
+      "count": 1,
       "avg_likes": 0.0,
-      "avg_views": 23.0
+      "avg_views": 69.0
     }
   }
 }

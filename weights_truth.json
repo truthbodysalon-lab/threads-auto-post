@@ -21,7 +21,8 @@
   },
   "follower_scores": {
     "insight": 3.0,
-    "quote_empathy": -3.0
+    "quote_empathy": -1.0,
+    "story": -2.0
   },
   "line_scores": {}
 }

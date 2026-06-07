@@ -1,8 +1,8 @@
 {
   "updated_at": "2026-06-07",
   "pattern_weights": {
-    "quote_empathy": 4,
-    "insight": 6,
+    "quote_empathy": 1,
+    "insight": 12,
     "education": 5,
     "story": 1,
     "workmom": 1,
@@ -20,7 +20,8 @@
     "workmom": -1.81
   },
   "follower_scores": {
-    "insight": 0.0
+    "insight": 3.0,
+    "quote_empathy": -3.0
   },
   "line_scores": {}
 }

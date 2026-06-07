@@ -212,6 +212,29 @@ PATTERNS = {
             "{symptom}のせいで\n{life_scene_v}きれない。\n\nそんなお声が増えています。\n[COMMENT]\n「年齢のせい」「仕方ない」\nそう諦めていませんか？\n\n実は年齢より{cause}の影響の方が\nはるかに大きいです。\n[COMMENT]\n根本から整えた方の変化：\n\n□ {symptom}がほぼゼロになった\n□ {life_scene_n}が変わった\n□ 朝すっきり起きられるようになった\n\n体は変えられます。\n[COMMENT]\nプロフィールリンクから予約できます。\n初回カウンセリング無料です。",
         ],
     },
+    # ── 親しみ口語×時短セルフケア（@goodbody0614 うっちゃん 参考）──
+    # カジュアルで温度感のある口語＋「1日◯分」の低ハードル提案＋ベネフィット直球。
+    # 1文目は問いかけ/共感/ベネフィットで始める（地域名・実績・自己紹介NG）。短文。
+    "selfcare_casual": {
+        "desc": "親しみ口語×時短セルフケア（問いかけ→小さな一歩→ベネフィット）",
+        "templates": [
+            "その{symptom}、一生付き合うつもりですか？\n\n1日3分のケアで変わる人、ほんとに多いです。",
+
+            "「忙しくて時間ない」人ほど聞いてほしい。\n\n{symptom}対策は、寝る前のたった3分でいけます。",
+
+            "薬を飲む前に、まず{cause}を見直してみて。\n\n「あれ、ラクかも」ってなる人、けっこういます。",
+
+            "1日たった4分でいいんです。\n\n{cause}を整えるだけで、{symptom}がスッと軽くなる人が多い。",
+
+            "{symptom}がなくなると、体ってこんなに軽いんだ。\n\nそう言う人、本当に多いんです。",
+
+            "毎日{habit1}になってませんか？\n\nそれ、{symptom}の地味な原因。やめるだけでも変わります。",
+
+            "頑張らなくていいんです。\n\n1日1分、{cause}を整えるだけ。{symptom}は積み重ねで変わります。",
+
+            "「{symptom}くらい大丈夫」が一番こわい。\n\n軽いうちに3分のケア、それだけで先が変わります。",
+        ],
+    },
     # ── 小川式：1行謎かけ → 箇条書き解説 → 1行断言 ──
     "aoi_style": {
         "desc": "小川式（謎かけ→箇条書き→断言）",
@@ -694,7 +717,7 @@ def generate_post(pattern_key: str) -> str:
     elif pattern_key in ("story", "workmom", "ranking", "question",
                           "gyakusetsu", "aoi_style", "hori_style",
                           "pasona", "prbrep", "touka_koukan",
-                          "hochi_risk", "nayami_kyokan"):
+                          "hochi_risk", "nayami_kyokan", "selfcare_casual"):
         return fill(random.choice(p["templates"]))
 
     return ""
@@ -710,6 +733,7 @@ def generate_30_posts() -> list[str]:
         "pasona": 4,
         "hochi_risk": 4,
         "nayami_kyokan": 3,
+        "selfcare_casual": 5,  # 親しみ口語×時短セルフケア（うっちゃん参考）
         "hook_one_line": 4,
         "aoi_style": 4,
         "hori_style": 3,
@@ -731,6 +755,7 @@ def generate_30_posts() -> list[str]:
         ["pasona"] * merged["pasona"] +
         ["hochi_risk"] * merged["hochi_risk"] +
         ["nayami_kyokan"] * merged["nayami_kyokan"] +
+        ["selfcare_casual"] * merged["selfcare_casual"] +
         ["hook_one_line"] * merged["hook_one_line"] +
         ["aoi_style"] * merged["aoi_style"] +
         ["hori_style"] * merged["hori_style"] +

@@ -35,7 +35,7 @@ ACCOUNTS = {
         "posted": BASE / "log_truth_posted.jsonl",
         "insights": BASE / "insights_truth.json",
         "weights": BASE / "weights_truth.json",
-        "patterns": ["quote_empathy", "insight", "education", "story", "workmom", "ranking", "question"],
+        "patterns": ["quote_empathy", "insight", "education", "story", "workmom", "ranking", "question", "selfcare_casual"],
         "default_weights": {
             "quote_empathy": 6,
             "insight": 5,
@@ -44,6 +44,7 @@ ACCOUNTS = {
             "workmom": 2,
             "ranking": 4,
             "question": 3,
+            "selfcare_casual": 5,
         },
     },
     "nagaoka": {
@@ -119,6 +120,8 @@ def detect_pattern(text: str, acct: str) -> str:
             return "story"
         return "insight"
     elif acct == "truth":
+        if any(w in text for w in ["1日3分", "1日1分", "1日たった", "寝る前の", "一生付き合う", "頑張らなくていい", "やめるだけ"]):
+            return "selfcare_casual"
         if any(w in text for w in ["TOP3", "3選", "3つ", "1位", "2位", "1）", "2）"]):
             return "ranking"
         if any(w in text for w in ["コメントで教えて", "当てはまりますか", "A：", "B："]):

@@ -1,14 +1,14 @@
 {
   "account": "@truth_body_salon",
-  "updated_at": "2026-06-07 08:03",
+  "updated_at": "2026-06-07 08:25",
   "total_posts": 200,
   "total_likes": 67,
-  "total_views": 60433,
-  "total_replies": 215,
+  "total_views": 60522,
+  "total_replies": 216,
   "avg_likes": 0.34,
-  "avg_views": 302.17,
-  "recent_7days_count": 172,
-  "recent_7days_avg_likes": 0.3,
+  "avg_views": 302.61,
+  "recent_7days_count": 173,
+  "recent_7days_avg_likes": 0.29,
   "top10_by_likes": [
     {
       "text": "体が楽になった人がやめたこと",
@@ -20,7 +20,7 @@
     {
       "text": "体のだるさの原因、知ってますか？\n\nほとんどの人が答えられないんですよ。\n\n実は巻き肩が一番の原因です。",
       "likes": 2,
-      "views": 407,
+      "views": 408,
       "replies": 3,
       "date": "2026-06-06"
     },
@@ -82,15 +82,15 @@
     }
   ],
   "performance_by_length": {
-    "〜50字": {
-      "count": 124,
-      "avg_likes": 0.38,
-      "avg_views": 376.49
-    },
     "50〜100字": {
       "count": 73,
       "avg_likes": 0.27,
-      "avg_views": 186.96
+      "avg_views": 185.37
+    },
+    "〜50字": {
+      "count": 124,
+      "avg_likes": 0.38,
+      "avg_views": 378.15
     },
     "100〜150字": {
       "count": 2,

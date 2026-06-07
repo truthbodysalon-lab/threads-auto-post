@@ -87,12 +87,19 @@ class CallbackHandler(BaseHTTPRequestHandler):
             self.wfile.write(
                 "<h2>認証完了！このタブを閉じてください。</h2>".encode("utf-8")
             )
-        else:
+        elif "error" in params:
             error = params.get("error", ["不明"])[0]
             self.send_response(400)
             self.send_header("Content-Type", "text/html; charset=utf-8")
             self.end_headers()
             self.wfile.write(f"<h2>エラー: {error}</h2>".encode("utf-8"))
+        else:
+            # favicon / ngrok確認ページ / プローブ 等の code無しアクセスは
+            # 無視して待機を継続する（1回で終了させない）
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.end_headers()
+            self.wfile.write("<h2>認証待機中…</h2>".encode("utf-8"))
 
     def log_message(self, format, *args):
         pass  # アクセスログを非表示
@@ -214,7 +221,13 @@ def main():
 
     # ngrokでHTTPS URLを生成
     print("\nHTTPS Callback URLを生成中...")
-    tunnel = ngrok.connect(PORT, "http")
+    ngrok_domain = env.get("NGROK_DOMAIN", "").strip()
+    if ngrok_domain:
+        # 固定ドメイン使用（Metaへの登録は一度きりで済む）
+        tunnel = ngrok.connect(PORT, "http", domain=ngrok_domain)
+        print(f"  固定ドメインを使用: {ngrok_domain}")
+    else:
+        tunnel = ngrok.connect(PORT, "http")
     callback_url = tunnel.public_url + "/callback"
     print(f"\n{'='*50}")
     print(f"Callback URL（Meta Developerに登録してください）:")
@@ -222,7 +235,13 @@ def main():
     print(f"{'='*50}")
     print("↑ このURLを Meta Developer Console の")
     print("  「コールバックURLをリダイレクト」に追加して保存してください。")
-    input("\n保存したら Enter を押してください...")
+    # 固定ドメイン(NGROK_DOMAIN)使用時は登録が一度きりで済むため Enter 待ちをしない
+    # （バックグラウンド実行でも止まらないようにする）。SKIP_ENTER=1 でも省略可。
+    if not ngrok_domain and os.environ.get("SKIP_ENTER") != "1":
+        try:
+            input("\n保存したら Enter を押してください...")
+        except EOFError:
+            pass
 
     # 認証URL生成
     params = urllib.parse.urlencode({
@@ -234,13 +253,19 @@ def main():
     auth_url = f"{AUTH_URL}?{params}"
 
     print(f"\n--- Threads OAuth 認証: {cfg['name']} ---")
-    print(f"ブラウザで認証ページを開きます...")
-    webbrowser.open(auth_url)
+    print(f"▼ 下のURLをブラウザで開き、{cfg['name']} でログインして「許可」してください:")
+    print(f"\n{auth_url}\n")
+    try:
+        webbrowser.open(auth_url)
+    except Exception:
+        pass
 
-    # コールバック待機
-    print(f"コールバックを待機中...")
+    # コールバック待機（code が来るまで何度でも受け付ける。
+    # favicon や ngrok確認ページ等の code無しアクセスでは終了しない）
+    print(f"コールバックを待機中...（このまま開いたままにしてください）")
     server = HTTPServer(("localhost", PORT), CallbackHandler)
-    server.handle_request()
+    while not received_code:
+        server.handle_request()
     ngrok.disconnect(tunnel.public_url)
 
     if not received_code:

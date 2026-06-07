@@ -1,14 +1,14 @@
 {
   "account": "@masahide_takahashi_",
-  "updated_at": "2026-06-07 08:07",
+  "updated_at": "2026-06-07 08:27",
   "total_posts": 200,
   "total_likes": 27,
-  "total_views": 21995,
-  "total_replies": 199,
+  "total_views": 21845,
+  "total_replies": 200,
   "avg_likes": 0.14,
-  "avg_views": 109.97,
-  "recent_7days_count": 129,
-  "recent_7days_avg_likes": 0.12,
+  "avg_views": 109.22,
+  "recent_7days_count": 131,
+  "recent_7days_avg_likes": 0.11,
   "top10_by_likes": [
     {
       "text": "正直に言います。コンテンツカレンダーは手段です。",
@@ -76,21 +76,21 @@
     {
       "text": "今日の講義の資料作ってます\n決して遊んでいるわけではありません。",
       "likes": 1,
-      "views": 81,
+      "views": 82,
       "replies": 5,
       "date": "2026-06-06"
     }
   ],
   "performance_by_length": {
-    "50〜100字": {
-      "count": 33,
-      "avg_likes": 0.0,
-      "avg_views": 52.33
-    },
     "〜50字": {
-      "count": 147,
+      "count": 148,
       "avg_likes": 0.16,
-      "avg_views": 134.65
+      "avg_views": 132.88
+    },
+    "50〜100字": {
+      "count": 32,
+      "avg_likes": 0.0,
+      "avg_views": 53.28
     },
     "150字以上": {
       "count": 5,

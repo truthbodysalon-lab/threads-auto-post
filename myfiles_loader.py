@@ -84,21 +84,77 @@ def _load_extra_life_scenes() -> list[str]:
                 results.append(c)
     return results[:8]
 
+# ── お客様の感想（顧客の声）：ルール準拠で素材抽出 ─────────────
+# 個人名・未確認の年数実績は除外する（投稿ルールを絶対にブラさない）
+_NAME_HINT = re.compile(r'.(様|さん|氏|くん|ちゃん)([\s:：）)、。]|$)')
+_VOICE_NG = ("まぁ", "ゆう", "10年", "20年", "30年", "何年も通", "年通って")
+
+
+def _voice_safe(s: str) -> bool:
+    if not s or any(ng in s for ng in _VOICE_NG):
+        return False
+    if _NAME_HINT.search(s):
+        return False
+    return True
+
+
+def load_customer_voices() -> dict:
+    """お客様の感想・患者リサーチから、投稿ルール準拠の素材を抽出する。
+    感想を丸ごと投稿に使うのではなく、症状の言葉・感情・変化の切り口として
+    既存テンプレートに反映する。個人名・未確認実績は除外。
+    """
+    files = [
+        MYFILES_PATH / "整体" / "患者リサーチ" / "お客様の感想.md",
+        MYFILES_PATH / "整体" / "患者リサーチ" / "Part1_表層.md",
+        MYFILES_PATH / "整体" / "患者リサーチ" / "Part3_契約トリガー.md",
+    ]
+    symptoms, emotions, results = [], [], []
+    for f in files:
+        for raw in _read(f).splitlines():
+            s = raw.strip()
+            # 実データ行のみ採用: 番号付きリスト or "- "箇条書きの本文だけ
+            if not (re.match(r'^\d+[\.\．、]', s) or s.startswith("- ")):
+                continue
+            c = _clean_line(raw)
+            # 見出し・件数・コメント・絵文字・記号残りは除外
+            if (not c or "例" in c or "件" in c or "トリガー" in c
+                    or any(e in c for e in "🔴🟡🔵📋⚠️🟢→←")):
+                continue
+            if not _voice_safe(c):
+                continue
+            if any(k in c for k in ["楽になった", "減った", "眠れる", "改善", "軽くなった", "通える", "変わった", "起きられる"]):
+                if 6 <= len(c) <= 26:
+                    results.append(c)
+            elif any(k in c for k in ["諦め", "不安", "我慢", "後回し", "悩んで", "怖", "仕方ない"]):
+                if 6 <= len(c) <= 24:
+                    emotions.append(c)
+            elif any(k in c for k in ["痛", "こり", "だるさ", "重だる", "疲れ", "眠れない", "つらい", "張り"]):
+                # {symptom} にinline挿入されるので短い名詞句のみ
+                short = re.split(r'[やためがでをにはやと、。]', c)[0]
+                if 4 <= len(short) <= 14:
+                    symptoms.append(short)
+    dd = lambda xs: list(dict.fromkeys(xs))
+    return {"symptoms": dd(symptoms)[:10], "emotions": dd(emotions)[:8], "results": dd(results)[:12]}
+
+
 def load_truth_materials() -> dict:
-    """myfilesを参照しつつ固定素材でフォールバック"""
+    """myfilesを参照しつつ固定素材でフォールバック（毎回最新を読み込む）"""
     extra_symptoms = _load_from_file_symptoms()
     extra_scenes = _load_extra_life_scenes()
+    voices = load_customer_voices()  # お客様の感想を反映
 
-    symptoms = list(dict.fromkeys(_SYMPTOMS_BASE + extra_symptoms))
+    symptoms = list(dict.fromkeys(_SYMPTOMS_BASE + extra_symptoms + voices["symptoms"]))
     life_scenes_noun = list(dict.fromkeys(_LIFE_SCENES_NOUN_BASE + extra_scenes))
+    emotions = list(dict.fromkeys(_EMOTIONS_BASE + voices["emotions"]))
 
     return {
-        "symptoms": symptoms[:18],
+        "symptoms": symptoms[:20],
         "causes": _CAUSES_BASE,
         "habits": _HABITS_BASE,
-        "emotions": _EMOTIONS_BASE,
+        "emotions": emotions[:18],
         "life_scenes_noun": life_scenes_noun[:15],
         "life_scenes_verb": _LIFE_SCENES_VERB_BASE,
+        "customer_results": voices["results"],  # 変化・結果の声（任意利用）
     }
 
 

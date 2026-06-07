@@ -52,11 +52,12 @@ ACCOUNTS = {
         "posted": BASE / "log_nagaoka_posted.jsonl",
         "insights": BASE / "insights_nagaoka.json",
         "weights": BASE / "weights_nagaoka.json",
-        "patterns": ["keisei_target", "keisei_risk", "keisei_kyokan", "quote_empathy", "insight", "education", "story", "ranking", "question", "hochi_risk"],
+        "patterns": ["keisei_target", "keisei_risk", "keisei_kyokan", "keisei_casual", "quote_empathy", "insight", "education", "story", "ranking", "question", "hochi_risk"],
         "default_weights": {
             "keisei_target": 7,   # 軽症者ターゲット（メイン）
             "keisei_risk":   5,   # 軽症放置リスク
             "keisei_kyokan": 4,   # 軽症者共感
+            "keisei_casual": 5,   # 口語共感・呼びかけ（堀式参考）
             "quote_empathy": 5,
             "insight":       5,
             "education":     4,
@@ -93,6 +94,8 @@ LINE_HISTORY = BASE / "line_history.json"
 
 def detect_pattern(text: str, acct: str) -> str:
     if acct == "nagaoka":
+        if any(w in text for w in ["多いよね", "ちょろい", "ちょうどいい", "ほんとに", "逆ですよ", "ですよね", "「私も」"]):
+            return "keisei_casual"
         if any(w in text for w in ["まだ我慢できる", "軽症のうち", "軽いうちに", "まだ大丈夫", "まだ薬を飲む"]):
             return "keisei_target"
         if any(w in text for w in ["慢性化する前", "放置は禁物", "月に2〜3回", "我慢できる範囲"]) and "[COMMENT]" in text:

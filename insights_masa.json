@@ -1,14 +1,14 @@
 {
   "account": "@masahide_takahashi_",
-  "updated_at": "2026-06-08 08:08",
+  "updated_at": "2026-06-09 08:16",
   "total_posts": 200,
-  "total_likes": 20,
-  "total_views": 22800,
-  "total_replies": 205,
-  "avg_likes": 0.1,
-  "avg_views": 114.0,
-  "recent_7days_count": 137,
-  "recent_7days_avg_likes": 0.07,
+  "total_likes": 24,
+  "total_views": 22193,
+  "total_replies": 199,
+  "avg_likes": 0.12,
+  "avg_views": 110.97,
+  "recent_7days_count": 148,
+  "recent_7days_avg_likes": 0.11,
   "top10_by_likes": [
     {
       "text": "正直に言います。コンテンツカレンダーは手段です。",
@@ -32,75 +32,75 @@
       "date": "2026-05-30"
     },
     {
-      "text": "ショート動画制作の本質は、",
+      "text": "予約が増えないのは、投稿のせいじゃない。",
       "likes": 1,
-      "views": 156,
+      "views": 109,
       "replies": 1,
-      "date": "2026-06-06"
+      "date": "2026-06-08"
     },
     {
-      "text": "Threadsを見ているお客様の本音はコレ\n\n・恥ずかしいら、いいねしない\n・恥ずかしいからコメントしない\n・いつか行ってみようかな～\n\nだから、いいねやコメン",
+      "text": "ターゲット設定を始める前に確認してほしいこと。",
       "likes": 1,
-      "views": 8,
+      "views": 299,
+      "replies": 1,
+      "date": "2026-06-08"
+    },
+    {
+      "text": "予約が増えないのは、投稿のせいじゃない。",
+      "likes": 1,
+      "views": 167,
+      "replies": 1,
+      "date": "2026-06-08"
+    },
+    {
+      "text": "フォロワー獲得の本質は、",
+      "likes": 1,
+      "views": 132,
+      "replies": 1,
+      "date": "2026-06-08"
+    },
+    {
+      "text": "集客できない人がやりがちな\n5つの間違いを解説します。\n\n① フォロワーが増えないと設計より発信量を増やす\n② 投稿の目的がバラバラで一貫性がない\n③ 毎回違う",
+      "likes": 1,
+      "views": 15,
       "replies": 0,
-      "date": "2026-06-06"
+      "date": "2026-06-07"
     },
     {
-      "text": "教育コンテンツの作り方を始める前に確認してほしいこと。",
+      "text": "フォロワーを増やすより、導線を1つ整えるほうが早い。",
       "likes": 1,
-      "views": 689,
+      "views": 213,
       "replies": 1,
-      "date": "2026-06-06"
+      "date": "2026-06-07"
     },
     {
-      "text": "集客がうまくいかない時の5つの処方箋\n\n・そもそも知られていない（認知不足）\n・魅力が伝わっていない（訴求力不足）\n・信頼されていない（信頼性不足）\n・行動する",
+      "text": "【コンサル、まだいらない】",
       "likes": 1,
-      "views": 49,
-      "replies": 0,
-      "date": "2026-06-06"
-    },
-    {
-      "text": "今日の講義の資料作ってます\n決して遊んでいるわけではありません。",
-      "likes": 1,
-      "views": 84,
-      "replies": 5,
-      "date": "2026-06-06"
-    },
-    {
-      "text": "お客様の声の集め方の壁は、センスじゃないです。",
-      "likes": 1,
-      "views": 65,
+      "views": 83,
       "replies": 1,
-      "date": "2026-06-03"
-    },
-    {
-      "text": "今日営業電話が来た時に\n\n「代表者様いらっしゃいますか？」\n「代表者って誰のことですか？」\n「代表者様いらっしゃいますか？」\n「代表者って誰のことですか？」\n「",
-      "likes": 1,
-      "views": 232,
-      "replies": 2,
-      "date": "2026-06-02"
+      "date": "2026-06-07"
     }
   ],
   "performance_by_length": {
     "〜50字": {
-      "count": 155,
-      "avg_likes": 0.11,
-      "avg_views": 134.03
+      "count": 156,
+      "avg_likes": 0.13,
+      "avg_views": 130.51
     },
     "50〜100字": {
-      "count": 28,
+      "count": 25,
       "avg_likes": 0.0,
-      "avg_views": 55.14
+      "avg_views": 52.4
     },
     "100〜150字": {
-      "count": 12,
-      "avg_likes": 0.25,
-      "avg_views": 38.08
+      "count": 14,
+      "avg_likes": 0.21,
+      "avg_views": 35.07
     },
     "150字以上": {
       "count": 5,
-      "avg_likes": 0.0,
-      "avg_views": 4.8
+      "avg_likes": 0.2,
+      "avg_views": 6.6
     }
   }
 }

@@ -1,22 +1,15 @@
 {
   "account": "@masahide_takahashi_",
-  "updated_at": "2026-06-09 08:16",
+  "updated_at": "2026-06-10 08:23",
   "total_posts": 200,
-  "total_likes": 24,
-  "total_views": 22193,
-  "total_replies": 199,
-  "avg_likes": 0.12,
-  "avg_views": 110.97,
-  "recent_7days_count": 148,
+  "total_likes": 19,
+  "total_views": 22135,
+  "total_replies": 200,
+  "avg_likes": 0.1,
+  "avg_views": 110.67,
+  "recent_7days_count": 151,
   "recent_7days_avg_likes": 0.11,
   "top10_by_likes": [
-    {
-      "text": "正直に言います。コンテンツカレンダーは手段です。",
-      "likes": 4,
-      "views": 369,
-      "replies": 0,
-      "date": "2026-05-31"
-    },
     {
       "text": "広告費をかけなくても集客できます。\n\nなぜなら信頼を先に積み上げれば\nお客様は自然に来るから。",
       "likes": 2,
@@ -25,37 +18,37 @@
       "date": "2026-06-03"
     },
     {
-      "text": "LINE配信設計で結果が出ない人の共通点。",
-      "likes": 2,
-      "views": 253,
-      "replies": 0,
-      "date": "2026-05-30"
+      "text": "「店舗集客」を難しく考えすぎていませんか？",
+      "likes": 1,
+      "views": 212,
+      "replies": 1,
+      "date": "2026-06-09"
     },
     {
       "text": "予約が増えないのは、投稿のせいじゃない。",
       "likes": 1,
-      "views": 109,
+      "views": 138,
       "replies": 1,
       "date": "2026-06-08"
     },
     {
       "text": "ターゲット設定を始める前に確認してほしいこと。",
       "likes": 1,
-      "views": 299,
+      "views": 309,
       "replies": 1,
       "date": "2026-06-08"
     },
     {
       "text": "予約が増えないのは、投稿のせいじゃない。",
       "likes": 1,
-      "views": 167,
+      "views": 168,
       "replies": 1,
       "date": "2026-06-08"
     },
     {
       "text": "フォロワー獲得の本質は、",
       "likes": 1,
-      "views": 132,
+      "views": 133,
       "replies": 1,
       "date": "2026-06-08"
     },
@@ -79,23 +72,30 @@
       "views": 83,
       "replies": 1,
       "date": "2026-06-07"
+    },
+    {
+      "text": "ショート動画制作の本質は、",
+      "likes": 1,
+      "views": 157,
+      "replies": 1,
+      "date": "2026-06-06"
     }
   ],
   "performance_by_length": {
     "〜50字": {
-      "count": 156,
-      "avg_likes": 0.13,
-      "avg_views": 130.51
+      "count": 157,
+      "avg_likes": 0.1,
+      "avg_views": 130.11
     },
     "50〜100字": {
-      "count": 25,
+      "count": 23,
       "avg_likes": 0.0,
-      "avg_views": 52.4
+      "avg_views": 50.3
     },
     "100〜150字": {
-      "count": 14,
-      "avg_likes": 0.21,
-      "avg_views": 35.07
+      "count": 15,
+      "avg_likes": 0.2,
+      "avg_views": 34.47
     },
     "150字以上": {
       "count": 5,

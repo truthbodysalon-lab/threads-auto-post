@@ -230,6 +230,24 @@ def main():
         "overall": "FAIL" if fails else ("WARN" if warns else "PASS"),
     }
 
+    # Obsidianへレポート保存（--report）
+    if "--report" in sys.argv:
+        try:
+            rd = Path("/Users/mt112/Desktop/my files/myfiles/システム検証")
+            rd.mkdir(parents=True, exist_ok=True)
+            lines = [f"# システム検証 {summary['checked_at']}", "",
+                     f"総合: **{summary['overall']}** | PASS {summary['pass']} / WARN {summary['warn']} / FAIL {summary['fail']}",
+                     "", "## 要対応・注意（FAIL/WARN）", ""]
+            nonpass = [r for r in results if r["status"] != "PASS"]
+            if nonpass:
+                for r in nonpass:
+                    lines.append(f"- **{r['status']}** [{r['category']}] `{r['id']}`: {r['detail']}")
+            else:
+                lines.append("- なし（全項目PASS）")
+            (rd / f"検証_{date.today().strftime('%Y-%m-%d')}.md").write_text("\n".join(lines), encoding="utf-8")
+        except Exception:
+            pass
+
     if "--json" in sys.argv:
         print(json.dumps({"summary": summary, "results": results}, ensure_ascii=False, indent=2))
     else:

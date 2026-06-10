@@ -1,12 +1,12 @@
 {
   "account": "@truth_body_salon",
-  "updated_at": "2026-06-11 05:37",
+  "updated_at": "2026-06-11 06:02",
   "total_posts": 200,
   "total_likes": 42,
-  "total_views": 42896,
+  "total_views": 42901,
   "total_replies": 238,
   "avg_likes": 0.21,
-  "avg_views": 214.48,
+  "avg_views": 214.5,
   "recent_7days_count": 200,
   "recent_7days_avg_likes": 0.21,
   "top10_by_likes": [
@@ -69,7 +69,7 @@
     {
       "text": "痛みのせいは揉んでも治らない。",
       "likes": 1,
-      "views": 592,
+      "views": 593,
       "replies": 1,
       "date": "2026-06-10"
     },
@@ -85,7 +85,7 @@
     "〜50字": {
       "count": 144,
       "avg_likes": 0.25,
-      "avg_views": 256.42
+      "avg_views": 256.46
     },
     "50〜100字": {
       "count": 53,

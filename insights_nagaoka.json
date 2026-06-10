@@ -1,12 +1,12 @@
 {
   "account": "@truth_nagaoka",
-  "updated_at": "2026-06-11 05:40",
+  "updated_at": "2026-06-11 06:04",
   "total_posts": 200,
   "total_likes": 33,
-  "total_views": 50656,
-  "total_replies": 80,
+  "total_views": 50504,
+  "total_replies": 81,
   "avg_likes": 0.17,
-  "avg_views": 253.28,
+  "avg_views": 252.52,
   "recent_7days_count": 200,
   "recent_7days_avg_likes": 0.17,
   "top10_by_likes": [
@@ -62,14 +62,14 @@
     {
       "text": "頭痛、我慢が当たり前になってないですか。",
       "likes": 1,
-      "views": 376,
+      "views": 377,
       "replies": 1,
       "date": "2026-06-10"
     },
     {
       "text": "“たまに”のうちに動けた人は、ほんと早い。",
       "likes": 1,
-      "views": 420,
+      "views": 421,
       "replies": 1,
       "date": "2026-06-10"
     },
@@ -83,19 +83,19 @@
   ],
   "performance_by_length": {
     "〜50字": {
-      "count": 148,
+      "count": 149,
       "avg_likes": 0.18,
-      "avg_views": 280.55
+      "avg_views": 278.69
     },
     "50〜100字": {
       "count": 50,
       "avg_likes": 0.12,
-      "avg_views": 175.56
+      "avg_views": 175.76
     },
     "100〜150字": {
-      "count": 2,
+      "count": 1,
       "avg_likes": 0.0,
-      "avg_views": 178.5
+      "avg_views": 191.0
     }
   }
 }

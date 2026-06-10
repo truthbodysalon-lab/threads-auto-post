@@ -157,8 +157,9 @@ def check_execution_gaps():
     add("exec:followers", "C.実行ギャップ", "PASS" if ok else "WARN",
         f"フォロワー履歴更新 {'直近2日内' if ok else '停滞の疑い'}")
 
-    # C5: 今日のキューが存在するか
+    # C5: 今日のキューが存在するか（朝の生成時間帯=8時より前は未生成でも正常）
     today = date.today().strftime("%Y-%m-%d")
+    before_gen = datetime.now().hour < 8  # 生成は朝6〜7時。8時前は未生成でもOK
     for acct in ACCTS:
         f = BASE / f"log_{acct}.jsonl"
         has = False
@@ -170,8 +171,12 @@ def check_execution_gaps():
                         has = True
                 except Exception:
                     pass
-        add(f"exec:queue:{acct}", "C.実行ギャップ", "PASS" if has else "WARN",
-            f"今日のキュー {'あり' if has else 'なし'}")
+        if has:
+            add(f"exec:queue:{acct}", "C.実行ギャップ", "PASS", "今日のキュー あり")
+        elif before_gen:
+            add(f"exec:queue:{acct}", "C.実行ギャップ", "PASS", "今日のキュー未生成（朝の生成前で正常）")
+        else:
+            add(f"exec:queue:{acct}", "C.実行ギャップ", "WARN", "今日のキュー なし（生成失敗の疑い）")
 
 
 # ── D. ログエラー ─────────────────────────────────

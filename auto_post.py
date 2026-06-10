@@ -130,10 +130,14 @@ ACCOUNT_PERSONAS = {
     "masa": "整体サロンのオーナー・masahide_takahashiの個人アカウント。集客・SNS運用・動画マーケティングについて発信。",
 }
 
+_BRIDGE_DISABLED = False  # 残高不足/認証エラー検知後はAPIを叩かずデフォルトに切替（無駄打ち・ログ連発防止）
+
+
 def generate_bridge_comment(clean_text: str, acct: str) -> str:
     """メイン投稿の内容をもとにClaude APIで補足説明コメントを生成する。失敗時はデフォルトテキストを返す。"""
+    global _BRIDGE_DISABLED
     api_key = os.environ.get("ANTHROPIC_API_KEY", "")
-    if not api_key:
+    if not api_key or _BRIDGE_DISABLED:
         return ACCOUNTS[acct].get("bridge_text", "詳しくはこちら 👇")
 
     persona = ACCOUNT_PERSONAS.get(acct, "")
@@ -170,8 +174,18 @@ def generate_bridge_comment(clean_text: str, acct: str) -> str:
             result = json.loads(r.read())
         return result["content"][0]["text"].strip()
     except Exception as e:
-        # API失敗時はデフォルトにフォールバック
-        print(f"[generate_bridge_comment] fallback: {e}", file=sys.stderr)
+        # 残高不足・認証エラー等の恒久的失敗は以降スキップ（無駄打ち・ログ連発を止める）
+        body = ""
+        if isinstance(e, urllib.error.HTTPError):
+            try:
+                body = e.read().decode()
+            except Exception:
+                body = ""
+        if "credit balance" in body or "authentication" in body or (isinstance(e, urllib.error.HTTPError) and e.code in (400, 401, 403)):
+            if not _BRIDGE_DISABLED:
+                print(f"[generate_bridge_comment] APIが恒久エラー(残高不足等)のため、以降はデフォルト文に固定: {body[:120]}", file=sys.stderr)
+            _BRIDGE_DISABLED = True
+        # それ以外（一時的な失敗）は静かにフォールバック
         return ACCOUNTS[acct].get("bridge_text", "詳しくはこちら 👇")
 
 

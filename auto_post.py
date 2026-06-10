@@ -222,6 +222,36 @@ def get_posted_texts(acct: str) -> set:
                 texts.add(entry["text"])
     return texts
 
+# ── LINEリストイン投稿：定期織り込み（1日1回・重複ガード免除）─────
+# 「織り交ぜる」意図どおり毎日確実に出すため、通常の7日重複ガードを免除し
+# 1日1回に制限する（同URL系を重複扱いしてブロックされ続ける問題への対処）。
+_LINE_LISTIN_URL = "lin.ee/qbRbPAm"
+_LINE_STATE_FILE = BASE / "line_listin_state.json"
+
+
+def _is_line_listin(text: str) -> bool:
+    return _LINE_LISTIN_URL in (text or "")
+
+
+def _line_done_today(acct: str, today: str) -> bool:
+    try:
+        return json.loads(_LINE_STATE_FILE.read_text()).get(acct) == today
+    except Exception:
+        return False
+
+
+def _mark_line_done(acct: str, today: str):
+    try:
+        d = json.loads(_LINE_STATE_FILE.read_text()) if _LINE_STATE_FILE.exists() else {}
+    except Exception:
+        d = {}
+    d[acct] = today
+    try:
+        _LINE_STATE_FILE.write_text(json.dumps(d, ensure_ascii=False))
+    except Exception:
+        pass
+
+
 def get_next_post(acct: str, today: str):
     log_file = ACCOUNTS[acct]["log"]
     if not log_file.exists():
@@ -251,7 +281,21 @@ def get_next_post(acct: str, today: str):
         if idx < len(last_batch):
             old_posted_keys.add(_normalize_post_key(last_batch[idx])[:80])
 
+    line_done = _line_done_today(acct, today)
+
+    # LINEリストインは1日1回、確実に織り込む（重複ガード免除）。
+    # キュー位置に依存せず必ず出すため、未実施なら最初の候補を優先採用する。
+    if not line_done:
+        # 既に数本投稿済みなら自然に混ぜ、序盤は通常投稿を優先（毎日同じ先頭固定を避ける）
+        posted_today = len(get_posted_indices(acct, today))
+        if posted_today >= 2:
+            for i, text in enumerate(all_posts):
+                if _is_line_listin(text):
+                    return text, i
+
     for i, text in enumerate(all_posts):
+        if _is_line_listin(text):
+            continue  # LINEは上で処理（未実施なら採用済み／実施済みならスキップ）
         # mark_posted が保存するテキストと同じ正規化で比較する
         norm = _normalize_post_key(text)
         if norm not in posted_texts and norm[:80] not in old_posted_keys:
@@ -259,6 +303,12 @@ def get_next_post(acct: str, today: str):
             if dg_is_duplicate(norm, acct):
                 continue
             return text, i
+
+    # 通常投稿が尽きていて、LINEが未実施なら最後に出す（取りこぼし防止）
+    if not line_done:
+        for i, text in enumerate(all_posts):
+            if _is_line_listin(text):
+                return text, i
     return None, -1
 
 def ensure_generated(acct: str, today: str):
@@ -352,15 +402,17 @@ def post_reply_to_threads(acct: str, reply_to_id: str, text: str) -> str:
     return api_request(f"{BASE_URL}/{user_id}/threads_publish", data2)["id"]
 
 
-def post_to_threads(acct: str, text: str) -> str:
+def post_to_threads(acct: str, text: str, skip_dup: bool = False) -> str:
     """Threads に投稿して post ID を返す。
     重複チェックをここで行う — run_account の実装に関わらず必ず通る。
     重複の場合は DuplicatePost 例外を投げる（呼び出し側でログしてスキップ）。
+    skip_dup=True（LINEリストイン等の意図的な定期投稿）は重複ガードを免除する。
     """
     norm = dg_normalize(text)
-    if dg_is_duplicate(norm, acct):
-        raise _DuplicatePost(f"{text[:50]}")
-    dg_mark_pending(norm, acct)   # API呼び出し前に記録（タイムアウト対策）
+    if not skip_dup:
+        if dg_is_duplicate(norm, acct):
+            raise _DuplicatePost(f"{text[:50]}")
+        dg_mark_pending(norm, acct)   # API呼び出し前に記録（タイムアウト対策）
 
     token = os.environ[ACCOUNTS[acct]["token_key"]]
     user_id = os.environ[ACCOUNTS[acct]["uid_key"]]
@@ -369,7 +421,8 @@ def post_to_threads(acct: str, text: str) -> str:
     time.sleep(2)
     data2 = urllib.parse.urlencode({"creation_id": container_id, "access_token": token}).encode()
     post_id = api_request(f"{BASE_URL}/{user_id}/threads_publish", data2)["id"]
-    dg_mark_posted(norm, acct, post_id)   # 成功後に確定記録
+    if not skip_dup:
+        dg_mark_posted(norm, acct, post_id)   # 成功後に確定記録
     return post_id
 
 
@@ -387,6 +440,7 @@ def run_account(acct: str):
     ensure_generated(acct, today)
 
     text, index = get_next_post(acct, today)
+    is_line = _is_line_listin(text or "")  # 元テキスト(URL付き)でLINEリストイン判定
     if text is None:
         log_info(acct, f"{name} 今日の投稿完了")
         return
@@ -444,8 +498,10 @@ def run_account(acct: str):
 
     try:
         # post_to_threads 内部で重複チェック・pending・posted を一括処理
-        post_id = post_to_threads(acct, clean_text)
+        post_id = post_to_threads(acct, clean_text, skip_dup=is_line)
         mark_posted(acct, today, index, post_id, clean_text)
+        if is_line:
+            _mark_line_done(acct, today)
         log_info(acct, f"{name} ✓ 完了 (ID: {post_id})")
         _post_comments(post_id)
 
@@ -462,8 +518,10 @@ def run_account(acct: str):
             log_info(acct, f"{name} トークン期限切れ → 自動リフレッシュ...")
             if refresh_token(acct):
                 try:
-                    post_id = post_to_threads(acct, clean_text)
+                    post_id = post_to_threads(acct, clean_text, skip_dup=is_line)
                     mark_posted(acct, today, index, post_id, clean_text)
+                    if is_line:
+                        _mark_line_done(acct, today)
                     log_info(acct, f"{name} ✓ 完了（リフレッシュ後） (ID: {post_id})")
                     _post_comments(post_id, "（リフレッシュ後）")
                 except _DuplicatePost as dp:

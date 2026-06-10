@@ -97,7 +97,7 @@ jobs:
                   log_truth_posted.jsonl log_masa_posted.jsonl log_nagaoka_posted.jsonl \
                   insights_truth.json insights_nagaoka.json insights_masa.json \
                   weights_truth.json weights_nagaoka.json weights_masa.json \
-                  feedback.json 2>/dev/null || true
+                  feedback.json line_listin_state.json shared_posted_guard.jsonl 2>/dev/null || true
           git diff --cached --quiet || git commit -m "chore: update logs [skip ci]"
           for i in 1 2 3; do
             git push && break

@@ -1,14 +1,14 @@
 {
   "account": "@masahide_takahashi_",
-  "updated_at": "2026-06-10 08:23",
+  "updated_at": "2026-06-11 05:43",
   "total_posts": 200,
   "total_likes": 19,
-  "total_views": 22135,
-  "total_replies": 200,
+  "total_views": 21776,
+  "total_replies": 205,
   "avg_likes": 0.1,
-  "avg_views": 110.67,
-  "recent_7days_count": 151,
-  "recent_7days_avg_likes": 0.11,
+  "avg_views": 108.88,
+  "recent_7days_count": 141,
+  "recent_7days_avg_likes": 0.1,
   "top10_by_likes": [
     {
       "text": "広告費をかけなくても集客できます。\n\nなぜなら信頼を先に積み上げれば\nお客様は自然に来るから。",
@@ -18,9 +18,16 @@
       "date": "2026-06-03"
     },
     {
+      "text": "「新規集客の自動化をやっているのに集客できない」",
+      "likes": 1,
+      "views": 177,
+      "replies": 1,
+      "date": "2026-06-10"
+    },
+    {
       "text": "「店舗集客」を難しく考えすぎていませんか？",
       "likes": 1,
-      "views": 212,
+      "views": 218,
       "replies": 1,
       "date": "2026-06-09"
     },
@@ -55,7 +62,7 @@
     {
       "text": "集客できない人がやりがちな\n5つの間違いを解説します。\n\n① フォロワーが増えないと設計より発信量を増やす\n② 投稿の目的がバラバラで一貫性がない\n③ 毎回違う",
       "likes": 1,
-      "views": 15,
+      "views": 16,
       "replies": 0,
       "date": "2026-06-07"
     },
@@ -72,35 +79,28 @@
       "views": 83,
       "replies": 1,
       "date": "2026-06-07"
-    },
-    {
-      "text": "ショート動画制作の本質は、",
-      "likes": 1,
-      "views": 157,
-      "replies": 1,
-      "date": "2026-06-06"
     }
   ],
   "performance_by_length": {
     "〜50字": {
-      "count": 157,
-      "avg_likes": 0.1,
-      "avg_views": 130.11
+      "count": 159,
+      "avg_likes": 0.09,
+      "avg_views": 126.3
     },
     "50〜100字": {
-      "count": 23,
+      "count": 22,
       "avg_likes": 0.0,
-      "avg_views": 50.3
+      "avg_views": 52.09
     },
     "100〜150字": {
       "count": 15,
       "avg_likes": 0.2,
-      "avg_views": 34.47
+      "avg_views": 34.8
     },
     "150字以上": {
-      "count": 5,
-      "avg_likes": 0.2,
-      "avg_views": 6.6
+      "count": 4,
+      "avg_likes": 0.25,
+      "avg_views": 6.5
     }
   }
 }

@@ -1,19 +1,19 @@
 {
   "account": "@truth_body_salon",
-  "updated_at": "2026-06-10 08:18",
+  "updated_at": "2026-06-11 05:37",
   "total_posts": 200,
-  "total_likes": 47,
-  "total_views": 45499,
-  "total_replies": 245,
-  "avg_likes": 0.23,
-  "avg_views": 227.5,
+  "total_likes": 42,
+  "total_views": 42896,
+  "total_replies": 238,
+  "avg_likes": 0.21,
+  "avg_views": 214.48,
   "recent_7days_count": 200,
-  "recent_7days_avg_likes": 0.23,
+  "recent_7days_avg_likes": 0.21,
   "top10_by_likes": [
     {
       "text": "薬を飲む前に、まず水分不足を見直してみて。",
       "likes": 3,
-      "views": 634,
+      "views": 676,
       "replies": 1,
       "date": "2026-06-09"
     },
@@ -34,7 +34,7 @@
     {
       "text": "朝起きても疲れは揉んでも治らない。",
       "likes": 2,
-      "views": 136,
+      "views": 137,
       "replies": 1,
       "date": "2026-06-09"
     },
@@ -53,49 +53,49 @@
       "date": "2026-06-09"
     },
     {
-      "text": "体のだるさの原因、知ってますか？\n\nほとんどの人が答えられないんですよ。\n\n実は巻き肩が一番の原因です。",
-      "likes": 2,
-      "views": 411,
-      "replies": 3,
-      "date": "2026-06-06"
-    },
-    {
-      "text": "その慢性的な首・肩のこり、一生付き合うつもりですか？",
+      "text": "朝の疲れは、薬では治りません。\n\nなぜなら薬は「痛みを消す」だけで\n「原因を取り除く」ものではないから。",
       "likes": 1,
-      "views": 81,
+      "views": 142,
       "replies": 1,
-      "date": "2026-06-09"
+      "date": "2026-06-10"
     },
     {
-      "text": "その慢性的な肩の重さ、一生付き合うつもりですか？",
+      "text": "頭痛の本当の原因、知ってますか？",
       "likes": 1,
-      "views": 141,
+      "views": 309,
       "replies": 1,
-      "date": "2026-06-09"
+      "date": "2026-06-10"
     },
     {
-      "text": "「朝起きても疲れで子どもとの時間が楽しめない」\nそんな声をよく聞きます。\n呼吸の浅さはスマホの見すぎが原因のことが多いです。\n揉んでも治らないのは、そこを変えて",
+      "text": "痛みのせいは揉んでも治らない。",
       "likes": 1,
-      "views": 84,
+      "views": 592,
+      "replies": 1,
+      "date": "2026-06-10"
+    },
+    {
+      "text": "「また首こりが...」\nそう思った瞬間がケアのサインです。\n実は呼吸の浅さを見直すだけで、\nかなり楽になるケースが多いです。\n朝の時間の使い方を思いっきり楽しめ",
+      "likes": 1,
+      "views": 64,
       "replies": 0,
-      "date": "2026-06-09"
+      "date": "2026-06-10"
     }
   ],
   "performance_by_length": {
     "〜50字": {
       "count": 144,
-      "avg_likes": 0.26,
-      "avg_views": 267.15
+      "avg_likes": 0.25,
+      "avg_views": 256.42
     },
     "50〜100字": {
-      "count": 55,
-      "avg_likes": 0.15,
-      "avg_views": 126.27
+      "count": 53,
+      "avg_likes": 0.09,
+      "avg_views": 108.79
     },
     "100〜150字": {
-      "count": 1,
-      "avg_likes": 1.0,
-      "avg_views": 84.0
+      "count": 3,
+      "avg_likes": 0.33,
+      "avg_views": 68.33
     }
   }
 }

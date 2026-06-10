@@ -1,26 +1,26 @@
 {
   "account": "@truth_nagaoka",
-  "updated_at": "2026-06-10 08:21",
+  "updated_at": "2026-06-11 05:40",
   "total_posts": 200,
-  "total_likes": 29,
-  "total_views": 50714,
-  "total_replies": 67,
-  "avg_likes": 0.14,
-  "avg_views": 253.57,
+  "total_likes": 33,
+  "total_views": 50656,
+  "total_replies": 80,
+  "avg_likes": 0.17,
+  "avg_views": 253.28,
   "recent_7days_count": 200,
-  "recent_7days_avg_likes": 0.14,
+  "recent_7days_avg_likes": 0.17,
   "top10_by_likes": [
     {
       "text": "当院は長岡市で兄妹でやってますが\nたまに夫婦に間違えられます。\n\n兄妹です。",
       "likes": 3,
-      "views": 1093,
+      "views": 1094,
       "replies": 0,
       "date": "2026-06-08"
     },
     {
       "text": "実は当院って見附市や津南町、柏崎市\n南魚沼市、三条市からも\n来院されてます。",
       "likes": 3,
-      "views": 1325,
+      "views": 1326,
       "replies": 0,
       "date": "2026-06-07"
     },
@@ -34,7 +34,7 @@
     {
       "text": "頭痛、我慢が当たり前になってないですか。",
       "likes": 2,
-      "views": 799,
+      "views": 800,
       "replies": 3,
       "date": "2026-06-08"
     },
@@ -46,61 +46,56 @@
       "date": "2026-06-08"
     },
     {
-      "text": "毎日の小さな変化が、 \n未来の健康につながる。 \nまずは、できるところから \n始めてみよう。",
-      "likes": 2,
-      "views": 158,
-      "replies": 0,
-      "date": "2026-06-05"
+      "text": "たまの慢性的な肩の重さを「気のせい」で済ませてる人へ。",
+      "likes": 1,
+      "views": 187,
+      "replies": 1,
+      "date": "2026-06-10"
     },
     {
-      "text": "首こりは水分不足の問題です。",
+      "text": "朝の疲れ、我慢が当たり前になってないですか。",
       "likes": 1,
-      "views": 529,
-      "replies": 0,
-      "date": "2026-06-09"
+      "views": 271,
+      "replies": 1,
+      "date": "2026-06-10"
     },
     {
-      "text": "「また眠りの浅さが...」\nそう思った瞬間がケアのサインです。\n体を後回しにしないでください。",
+      "text": "頭痛、我慢が当たり前になってないですか。",
       "likes": 1,
-      "views": 205,
-      "replies": 0,
-      "date": "2026-06-09"
+      "views": 376,
+      "replies": 1,
+      "date": "2026-06-10"
     },
     {
-      "text": "「忙しいし朝の疲れは我慢するしかない」\nそう思っていませんか？\n自分の体への投資、惜しまないでほしい。",
+      "text": "“たまに”のうちに動けた人は、ほんと早い。",
       "likes": 1,
-      "views": 22,
-      "replies": 0,
-      "date": "2026-06-09"
+      "views": 420,
+      "replies": 1,
+      "date": "2026-06-10"
     },
     {
-      "text": "整体に来る方の声\n\n「毎週頭痛薬を飲んでいたのに、\n月1回通うようになったら、薬が要らなくなりました」\n\n根本から整えると、こんな変化が起きます。",
+      "text": "一番大事なのは、実は施術じゃない。",
       "likes": 1,
-      "views": 16,
-      "replies": 0,
-      "date": "2026-06-08"
+      "views": 345,
+      "replies": 1,
+      "date": "2026-06-10"
     }
   ],
   "performance_by_length": {
-    "50〜100字": {
-      "count": 51,
-      "avg_likes": 0.1,
-      "avg_views": 190.92
-    },
     "〜50字": {
-      "count": 146,
-      "avg_likes": 0.16,
-      "avg_views": 276.91
+      "count": 148,
+      "avg_likes": 0.18,
+      "avg_views": 280.55
+    },
+    "50〜100字": {
+      "count": 50,
+      "avg_likes": 0.12,
+      "avg_views": 175.56
     },
     "100〜150字": {
       "count": 2,
       "avg_likes": 0.0,
-      "avg_views": 178.0
-    },
-    "150字以上": {
-      "count": 1,
-      "avg_likes": 0.0,
-      "avg_views": 192.0
+      "avg_views": 178.5
     }
   }
 }

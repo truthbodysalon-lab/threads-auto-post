@@ -1,12 +1,12 @@
 {
   "account": "@truth_nagaoka",
-  "updated_at": "2026-06-11 06:04",
+  "updated_at": "2026-06-11 08:26",
   "total_posts": 200,
-  "total_likes": 33,
-  "total_views": 50504,
-  "total_replies": 81,
+  "total_likes": 35,
+  "total_views": 48668,
+  "total_replies": 86,
   "avg_likes": 0.17,
-  "avg_views": 252.52,
+  "avg_views": 243.34,
   "recent_7days_count": 200,
   "recent_7days_avg_likes": 0.17,
   "top10_by_likes": [
@@ -46,6 +46,20 @@
       "date": "2026-06-08"
     },
     {
+      "text": "週末のお出かけを楽しみたいのに、\n眠りの浅さがあって気力が出ない。",
+      "likes": 1,
+      "views": 312,
+      "replies": 1,
+      "date": "2026-06-10"
+    },
+    {
+      "text": "「頭痛、まだ我慢できる」って人、コメントで「私も」って教えてください。",
+      "likes": 1,
+      "views": 428,
+      "replies": 1,
+      "date": "2026-06-10"
+    },
+    {
       "text": "たまの慢性的な肩の重さを「気のせい」で済ませてる人へ。",
       "likes": 1,
       "views": 187,
@@ -62,35 +76,21 @@
     {
       "text": "頭痛、我慢が当たり前になってないですか。",
       "likes": 1,
-      "views": 377,
-      "replies": 1,
-      "date": "2026-06-10"
-    },
-    {
-      "text": "“たまに”のうちに動けた人は、ほんと早い。",
-      "likes": 1,
-      "views": 421,
-      "replies": 1,
-      "date": "2026-06-10"
-    },
-    {
-      "text": "一番大事なのは、実は施術じゃない。",
-      "likes": 1,
-      "views": 345,
+      "views": 378,
       "replies": 1,
       "date": "2026-06-10"
     }
   ],
   "performance_by_length": {
     "〜50字": {
-      "count": 149,
-      "avg_likes": 0.18,
-      "avg_views": 278.69
+      "count": 148,
+      "avg_likes": 0.2,
+      "avg_views": 266.2
     },
     "50〜100字": {
-      "count": 50,
+      "count": 51,
       "avg_likes": 0.12,
-      "avg_views": 175.76
+      "avg_views": 178.02
     },
     "100〜150字": {
       "count": 1,

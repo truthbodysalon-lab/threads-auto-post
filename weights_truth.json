@@ -12,12 +12,12 @@
   },
   "feedback_scores": {},
   "api_scores": {
+    "story": -1.86,
+    "quote_empathy": -1.16,
     "insight": 0.57,
-    "education": -0.57,
-    "story": -1.94,
-    "quote_empathy": -1.17,
-    "selfcare_casual": 0.36,
-    "ranking": 2.48
+    "education": -0.69,
+    "selfcare_casual": 0.18,
+    "ranking": 2.17
   },
   "follower_scores": {
     "insight": 3.0,

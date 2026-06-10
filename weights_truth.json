@@ -8,7 +8,7 @@
     "workmom": 2,
     "ranking": 7,
     "question": 3,
-    "selfcare_casual": 6
+    "selfcare_casual": 4
   },
   "feedback_scores": {},
   "api_scores": {
@@ -21,8 +21,10 @@
   },
   "follower_scores": {
     "insight": 3.0,
-    "quote_empathy": -1.0,
-    "story": -2.0
+    "quote_empathy": -0.22,
+    "story": -0.82,
+    "ranking": -0.98,
+    "selfcare_casual": -0.98
   },
   "line_scores": {}
 }

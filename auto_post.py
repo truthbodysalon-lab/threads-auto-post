@@ -445,30 +445,35 @@ def run_account(acct: str):
         log_info(acct, f"{name} 今日の投稿完了")
         return
 
-    # URLをメイン本文から除去し、コメントに回す
-    clean_text, cta_block = extract_url_and_cta(text)
-
-    # テキストをコメント部分に分割する
-    # 優先順位: [COMMENT] タグ → 【続き】マーカー → \n\n 段落区切り
     comment_parts: list[str] = []
 
-    if "\n[COMMENT]\n" in clean_text:
-        # [COMMENT] で複数コメントに分割
-        segments = clean_text.split("\n[COMMENT]\n")
-        clean_text = segments[0].strip()
-        comment_parts = [s.strip() for s in segments[1:] if s.strip()]
-    elif "\n\n【続き】\n" in clean_text:
-        parts = clean_text.split("\n\n【続き】\n", 1)
-        clean_text = parts[0].strip()
-        if parts[1].strip():
-            comment_parts = [parts[1].strip()]
-    elif "\n\n" in clean_text:
-        # マーカーなし長文 → 最初の段落のみ本文、残りをコメントへ
-        first_para, rest = clean_text.split("\n\n", 1)
-        rest = rest.strip()
-        if rest:
-            clean_text = first_para.rstrip()
-            comment_parts = [rest]
+    if is_line:
+        # LINEリストインは「URLを本文末尾に残す」ルール厳守 → 分割もURL除去もしない
+        clean_text = (text or "").strip()
+        cta_block = None
+    else:
+        # URLをメイン本文から除去し、コメントに回す
+        clean_text, cta_block = extract_url_and_cta(text)
+
+        # テキストをコメント部分に分割する
+        # 優先順位: [COMMENT] タグ → 【続き】マーカー → \n\n 段落区切り
+        if "\n[COMMENT]\n" in clean_text:
+            # [COMMENT] で複数コメントに分割
+            segments = clean_text.split("\n[COMMENT]\n")
+            clean_text = segments[0].strip()
+            comment_parts = [s.strip() for s in segments[1:] if s.strip()]
+        elif "\n\n【続き】\n" in clean_text:
+            parts = clean_text.split("\n\n【続き】\n", 1)
+            clean_text = parts[0].strip()
+            if parts[1].strip():
+                comment_parts = [parts[1].strip()]
+        elif "\n\n" in clean_text:
+            # マーカーなし長文 → 最初の段落のみ本文、残りをコメントへ
+            first_para, rest = clean_text.split("\n\n", 1)
+            rest = rest.strip()
+            if rest:
+                clean_text = first_para.rstrip()
+                comment_parts = [rest]
 
     log_info(acct, f"{name} [{index+1}本目]: {clean_text[:40].replace(chr(10), ' ')}...")
 

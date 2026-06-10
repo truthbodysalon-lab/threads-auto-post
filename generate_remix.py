@@ -1268,8 +1268,8 @@ def generate_30_masa_posts() -> list[str]:
         "insight":       3,
         "education":     3,
         "story":         3,
-        "soft_line":     3,
-        "cta":           2,
+        "soft_line":     1,  # LINE言及を10%未満に抑える（3→1）
+        "cta":           1,  # LINE URL付きを2本以下に（2→1）
         "ranking":       4,
         "question":      3,
     }

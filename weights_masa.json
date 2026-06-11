@@ -3,18 +3,18 @@
   "pattern_weights": {
     "insight": 13,
     "education": 3,
-    "story": 2,
+    "story": 1,
     "cta": 1,
     "ranking": 3,
     "question": 1
   },
   "feedback_scores": {},
   "api_scores": {
-    "insight": 0.41,
-    "ranking": -0.58,
-    "story": -1.13,
-    "cta": -1.41,
-    "education": -1.74,
+    "insight": 0.39,
+    "ranking": -0.66,
+    "story": -1.43,
+    "cta": -1.25,
+    "education": -1.73,
     "question": -2.9
   },
   "follower_scores": {

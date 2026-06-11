@@ -1,14 +1,14 @@
 {
   "account": "@truth_body_salon",
-  "updated_at": "2026-06-12 06:24",
+  "updated_at": "2026-06-12 08:22",
   "total_posts": 200,
-  "total_likes": 38,
-  "total_views": 40870,
-  "total_replies": 182,
-  "avg_likes": 0.19,
-  "avg_views": 204.35,
+  "total_likes": 42,
+  "total_views": 46996,
+  "total_replies": 218,
+  "avg_likes": 0.21,
+  "avg_views": 234.98,
   "recent_7days_count": 200,
-  "recent_7days_avg_likes": 0.19,
+  "recent_7days_avg_likes": 0.21,
   "top10_by_likes": [
     {
       "text": "薬を飲む前に、まず水分不足を見直してみて。",
@@ -53,9 +53,16 @@
       "date": "2026-06-09"
     },
     {
+      "text": "慢性的な肩の重さを悪化させる習慣があります。\n\n◎睡眠不足が続くと、筋肉が常に緊張状態に\n◎それが呼吸の浅さとして現れる",
+      "likes": 1,
+      "views": 240,
+      "replies": 1,
+      "date": "2026-06-11"
+    },
+    {
       "text": "毎日食いしばりがあるになってませんか？",
       "likes": 1,
-      "views": 383,
+      "views": 386,
       "replies": 1,
       "date": "2026-06-11"
     },
@@ -72,25 +79,18 @@
       "views": 97,
       "replies": 1,
       "date": "2026-06-11"
-    },
-    {
-      "text": "頭痛がなくなると、\n週末のお出かけがこんなに変わるのかと驚く人が多い。",
-      "likes": 1,
-      "views": 242,
-      "replies": 0,
-      "date": "2026-06-10"
     }
   ],
   "performance_by_length": {
     "〜50字": {
-      "count": 144,
-      "avg_likes": 0.22,
-      "avg_views": 252.07
+      "count": 143,
+      "avg_likes": 0.24,
+      "avg_views": 283.86
     },
     "50〜100字": {
-      "count": 53,
-      "avg_likes": 0.09,
-      "avg_views": 82.4
+      "count": 54,
+      "avg_likes": 0.11,
+      "avg_views": 114.8
     },
     "100〜150字": {
       "count": 3,

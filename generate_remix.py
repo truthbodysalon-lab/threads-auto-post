@@ -435,6 +435,9 @@ LINE_LISTIN_TEMPLATES = [
     "頭痛のタイプは人それぞれ。\nだから自分のタイプを知るのが第一歩です。\n\nセルフチェック＆改善法をLINEで配信中👇\n{url}",
     "「この頭痛、いつまで続くんだろう」\nそう思ったらLINEへ。\n\n頭痛を根本から減らすヒントを無料で受け取れます👇\n{url}",
     "頭痛とサヨナラしたい人だけ見てください。\n\n専門家が頭痛改善の情報を\nLINEで毎日シェアしています👇\n{url}",
+    "毎朝の頭痛がなくなった理由、知りたくない？\n\n実は頭痛は呼吸・姿勢・睡眠で変わります。\n無料情報をLINEで配信中👇\n{url}",
+    "頭痛で仕事の効率が落ちていませんか。\n\n改善できる方法があります。\n専門的な情報をLINEで無料でお伝えしています👇\n{url}",
+    "季節の変わり目に頭痛が出やすい人へ。\n\n事前対策があります。\nLINE登録で体の準備の仕方を学べます👇\n{url}",
 ]
 
 
@@ -585,6 +588,17 @@ def _ensure_nagaoka(text: str, ratio: float = 0.25, prepend: bool = False) -> st
         if any(kw in last_para for kw in _CTA_KW):
             return text
     return text + "\n\n" + phrase
+
+
+def _is_valid_first_line(text: str, acct: str = "truth") -> bool:
+    """1文目が投稿ルール違反でないか確認（truth/nagaoka共通）
+    NG: 「長岡市」「整体師」「施術」「実績」「改善率」で始まる
+    """
+    if not text:
+        return True
+    first_line = text.split("\n")[0].strip()
+    ng_starts = ["長岡市", "長岡", "整体師", "施術", "実績", "改善率", "1万人", "1万", "100店舗"]
+    return not any(first_line.startswith(ng) for ng in ng_starts)
 
 
 def _enforce_short_body(text: str, max_lines: int = 3) -> str:
@@ -778,7 +792,10 @@ def generate_30_posts() -> list[str]:
             post = _enforce_short_body(_ensure_nagaoka(generate_post(pk)))
             key = post[:100]
             first_line = post.split("\n")[0].strip()
-            if key not in seen and not _is_ng(post) and first_line not in recent_first_lines:
+            # 1文目NG・NGワード・重複チェック
+            if (key not in seen and not _is_ng(post) and
+                first_line not in recent_first_lines and
+                _is_valid_first_line(post, "truth")):
                 seen.add(key)
                 posts.append(post)
                 break
@@ -851,14 +868,22 @@ def generate_40_nagaoka_posts() -> list[str]:
 
     posts = []
     seen = set()
-    # 長岡市はテンプレートに自然に含まれているものを使う。
-    # _ensure_nagaoka は呼ばない（1文目NG・末尾単独追加NGのルールを厳守するため）
+    # 長岡市を25%程度の投稿に織り込む（3-4投稿に1回）
+    # 1文目NG・末尾単独追加NGルール厳守のため、中盤・本文内に挿入
+    target_nagaoka_count = max(1, len(plan) // 4)  # 全体の25%程度
+    nagaoka_count = 0
+
     for pk in plan:
         for _ in range(50):
             post = generate_nagaoka_post(pk)
             key = post[:100]
-            if key not in seen and not _is_ng(post):
+            # 1文目NG・NGワード・重複チェック
+            if key not in seen and not _is_ng(post) and _is_valid_first_line(post, "nagaoka"):
                 seen.add(key)
+                # 目標に達するまで、長岡市を追加（1文目NGルール守る）
+                if nagaoka_count < target_nagaoka_count and "長岡" not in post:
+                    post = _ensure_nagaoka(post, ratio=1.0, prepend=False)
+                    nagaoka_count += 1
                 posts.append(post)
                 break
 

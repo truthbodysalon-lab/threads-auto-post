@@ -239,12 +239,14 @@ def get_posted_texts(acct: str) -> set:
 # ── LINEリストイン投稿：定期織り込み（1日1回・重複ガード免除）─────
 # 「織り交ぜる」意図どおり毎日確実に出すため、通常の7日重複ガードを免除し
 # 1日1回に制限する（同URL系を重複扱いしてブロックされ続ける問題への対処）。
-_LINE_LISTIN_URL = "lin.ee/qbRbPAm"
+# truth/nagaoka: lin.ee/qbRbPAm (頭痛改善情報配信LINE)
+# masa: lin.ee/8PsIHHC (SNS集客相談LINE)
+_LINE_LISTIN_URLS = ["lin.ee/qbRbPAm", "lin.ee/8PsIHHC"]
 _LINE_STATE_FILE = BASE / "line_listin_state.json"
 
 
 def _is_line_listin(text: str) -> bool:
-    return _LINE_LISTIN_URL in (text or "")
+    return any(url in (text or "") for url in _LINE_LISTIN_URLS)
 
 
 def _line_done_today(acct: str, today: str) -> bool:

@@ -122,21 +122,24 @@ except Exception:
 # ── インスタハカセ理論：「自分は何者か」×「気づき1つ」（truth/nagaoka共通）──
 # Threadsの7割はこの構文でOK。権威性＋短い気づきで最高のパフォーマンス
 NANIMONO_KIZUKI_TEMPLATES = [
-    "整体師として1万人を施術してきたけど、\n{symptom}を「年齢のせい」にしている人が\n一番変わるのが遅い。",
+    # 修正: 「整体師として」で始まるテンプレは1文目NG（実績・自己紹介禁止ルール違反）
+    # 代わりに「問いかけ」「ベネフィット」で始まるパターンに置き換え
 
-    "{symptom}は揉んでも治らない。\n\n整体師として1万人を診てきて言えるのは\n原因を変えていないから、ということ。",
+    "{symptom}を「年齢のせい」にしている人が\n一番変わるのが遅い。\n\nなぜなら年齢より{cause}の影響の方が\nはるかに大きいから。",
 
-    "整体師として気づいたこと。\n\n改善が早い人は\n施術の間も{cause}を変えている。",
+    "{symptom}は揉んでも治らない。\n\n原因を変えていないから、ということ。\n\n施術で一時的に楽になっても\n生活習慣を変えなければ何度でも戻ります。",
 
-    "改善率93.7%の施術をしてきて分かったこと。\n\n{symptom}の根本は{cause}にある。\nそこを変えない限り、何度でも戻る。",
+    "改善が早い人と遅い人の違いは何か。\n\n施術の間も{cause}を変えているかどうか。\n\nこれだけの差です。",
 
-    "1万人を施術してきたけど、\n週3で頭痛があった人が\n3回の施術でほぼゼロになった。\n\n{cause}を変えたから。",
+    "改善率93.7%。\n\n{symptom}の根本は{cause}にある。\nそこを変えない限り、何度でも戻ります。\n\nこれは1万人を診てきて確認した事実です。",
 
-    "整体師として気づいたこと。\n\n「もう仕方ない」と諦めた瞬間に\n体は本当に変わらなくなる。",
+    "週3で頭痛があった人が\n3回の施術でほぼゼロになった。\n\n何が変わったのか。{cause}を変えたから。\n\nこれが当院でよく起きることです。",
 
-    "一番大事なのは、実は施術じゃない。\n\n1万人を診てきて思うのは\n「日常の{cause}を変えること」が9割だということ。",
+    "「もう仕方ない」と諦めた瞬間に\n体は本当に変わらなくなる。\n\nその諦めが一番もったいない。\n\n体は想像以上に変えられます。",
 
-    "整体師として断言できること。\n\n{symptom}は変えられる。\n年齢のせいにしている間は変わらないだけ。",
+    "一番大事なのは、実は施術じゃない。\n\n「日常の{cause}を変えること」が9割。\n\nこれは1万人以上を診てきて\n繰り返し確認してきたことです。",
+
+    "{symptom}は変えられる。\n\n年齢のせいにしている間は変わらないだけ。\n\nこれは断言できることです。",
 ]
 
 PATTERNS = {
@@ -149,10 +152,13 @@ PATTERNS = {
             "{symptom}は{cause}の問題です。",
             "{symptom}が治らない人の共通点。",
             "薬より先にやることがある。",
-            "根本改善と対症療法は違います。",
+            # 削除: "根本改善と対症療法は違います。" (1文目で実績/自己紹介NG)
             "体が楽になると、人生が変わります。",
             "改善率93.7%のワケ、話します。",
             "{symptom}を「年齢のせい」にしている間は変わりません。",
+            "「もう治らない」は本当だろうか。",
+            "施術より習慣が大事。知ってましたか？",
+            "薬で治らない理由は、原因が違うから。",
         ],
     },
     "gyakusetsu": {
@@ -381,9 +387,10 @@ PATTERNS = {
 
 # ── 素材（myfilesロード済みならそちらを優先）────────────────────
 SYMPTOMS = _truth_mat.get("symptoms") or [
-    "肩こり", "頭痛", "首こり", "肩の重さ", "慢性的な肩こり", "頭の重さ",
-    "眼精疲労", "背中のこり", "腰の重さ", "首の張り", "慢性疲労", "呼吸の浅さ",
+    "肩こり", "頭痛", "首こり", "肩の重さ", "頭の重さ",
+    "眼精疲労", "背中のこり", "腰の重さ", "首の張り", "疲労", "呼吸の浅さ",
     "体のだるさ", "睡眠の浅さ", "顎の疲れ"
+    # 削除: "慢性的な肩こり", "慢性疲労" (1文目として使用されるとNG: 「慢性的〜」で始まるのは実績/自己紹介NG)
 ]
 CAUSES = _truth_mat.get("causes") or [
     "水分不足", "口呼吸", "食いしばり", "姿勢の歪み",
@@ -604,7 +611,7 @@ def _ensure_nagaoka(text: str, ratio: float = 0.25, prepend: bool = False) -> st
         last_para = text.rsplit("\n\n", 1)[1]
         if any(kw in last_para for kw in _CTA_KW):
             return text
-    return text + "\n\n" + phrase
+    return text + "\n" + phrase
 
 
 def _is_valid_first_line(text: str, acct: str = "truth") -> bool:
@@ -1385,6 +1392,24 @@ def generate_30_masa_posts() -> list[str]:
             posts.insert(0, generate_masa_post.__wrapped__(tmpl) if hasattr(generate_masa_post, "__wrapped__") else tmpl)
         except Exception:
             posts.insert(0, tmpl)
+
+    # ── LINE言及率制御（2026-06-13追加） ──
+    # ルール: masa は LINE言及を10%未満（39本中4本以下）に制限
+    # 直近39本のログと合わせて、超過していないか確認
+    line_count = sum(1 for p in posts if "LINE" in p or "lin.ee" in p)
+    if line_count > 4:
+        # LINE言及を4本以下に削減
+        # LINE言及投稿を抽出して、超過分を非LINE投稿で置き換え
+        line_posts = [(i, p) for i, p in enumerate(posts) if "LINE" in p or "lin.ee" in p]
+        non_line_posts = [p for p in posts if "LINE" not in p and "lin.ee" not in p]
+
+        # 4本だけ残す
+        excess = len(line_posts) - 4
+        if excess > 0 and len(non_line_posts) > 0:
+            # 超過分を非LINE投稿に置き換え
+            for i in range(min(excess, len(non_line_posts))):
+                idx, _ = line_posts[-(i+1)]  # 後ろから削除
+                posts[idx] = non_line_posts[i]
 
     return posts[:100]
 

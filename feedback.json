@@ -6,7 +6,8 @@
     "hori_style": 1.0,
     "keisei_target": 1.0,
     "keisei_kyokan": 1.0,
-    "story": 1.0
+    "story": 1.0,
+    "line_listin_masa": 0.2
   },
   "ng_words": [
     "100店舗以上",

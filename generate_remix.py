@@ -88,6 +88,19 @@ def _is_ng(text: str) -> bool:
     ng = _load_ng_words()
     return any(w in text for w in ng)
 
+# masa専用: 予告型NGパターンチェック（feedback.json 2026-05-13ルール）
+_MASA_YOKOKOKU_NG = [
+    "をお伝えします",
+    "について解説します",
+    "についてお話しします",
+    "をご紹介します",
+]
+
+def _is_masa_yokokoku_ng(text: str) -> bool:
+    """masa投稿の予告型NG（1文目に「〇〇をお伝えします」等）を除外"""
+    first_line = text.split("\n")[0].strip()
+    return any(ng in first_line for ng in _MASA_YOKOKOKU_NG)
+
 # ── myfilesから素材を読み込む（失敗時はデフォルト使用）──────────
 try:
     from myfiles_loader import load_truth_materials, load_masa_materials
@@ -1334,14 +1347,27 @@ def generate_30_masa_posts() -> list[str]:
             post = generate_masa_post(pk)
             key = post[:60]
             first_line = post.split("\n")[0].strip()
-            if key not in seen and not _is_ng(post) and first_line not in recent_first_lines:
+            if (key not in seen and not _is_ng(post)
+                    and not _is_masa_yokokoku_ng(post)
+                    and first_line not in recent_first_lines):
                 seen.add(key)
                 posts.append(post)
                 added = True
                 break
         if not added:
-            # 重複でもスロットを埋める
-            posts.append(generate_masa_post(pk))
+            # 重複でもスロットを埋める（予告型NGは最終手段でもスキップ）
+            fallback = generate_masa_post(pk)
+            if _is_masa_yokokoku_ng(fallback):
+                # 予告型テンプレートしかないパターンは別パターンで代替
+                for alt_pk in ["nanimono_kizuki", "meigen", "keikoku"]:
+                    alt = generate_masa_post(alt_pk)
+                    if not _is_masa_yokokoku_ng(alt):
+                        posts.append(alt)
+                        break
+                else:
+                    posts.append(fallback)
+            else:
+                posts.append(fallback)
 
     # feedback の追加テンプレを先頭に差し込む
     for tmpl in _load_extra_templates("masa"):

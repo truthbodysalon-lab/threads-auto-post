@@ -16,6 +16,7 @@ from __future__ import annotations
 import fcntl
 import json
 import os
+import random
 import re
 import subprocess
 import sys
@@ -300,11 +301,13 @@ def get_next_post(acct: str, today: str):
     line_done = _line_done_today(acct, today)
 
     # LINEリストインは1日1回、確実に織り込む（重複ガード免除）。
-    # キュー位置に依存せず必ず出すため、未実施なら最初の候補を優先採用する。
+    # フィードバック: truth/nagaoka は5〜7%の頻度で投稿されるべき。
+    # 序盤でも投稿される確率を高めて目標達成を目指す。
     if not line_done:
-        # 既に数本投稿済みなら自然に混ぜ、序盤は通常投稿を優先（毎日同じ先頭固定を避ける）
         posted_today = len(get_posted_indices(acct, today))
-        if posted_today >= 2:
+        # 0〜3本投稿時の確率的採用（序盤で出やすく） / 4本以上は確実に出す
+        should_post_line = (posted_today >= 4) or (posted_today >= 1 and random.random() < 0.6)
+        if should_post_line:
             for i, text in enumerate(all_posts):
                 if _is_line_listin(text):
                     return text, i

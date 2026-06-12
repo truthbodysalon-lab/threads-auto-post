@@ -287,9 +287,14 @@ def phase_post(acct: str, posts: list[str]):
 
     else:
         # 旧フォーマット: URLをコメントに分離する従来ロジック
+        # ただしLINEリストイン投稿はURLを本文に残す（feedback.jsonルール）
         text = full_text
         url_match = re.search(r"https?://\S+", text)
-        if url_match:
+        if url_match and _is_line_listin(text):
+            # LINEリストイン: URLを本文に残したまま投稿
+            clean_text = text
+            url = None
+        elif url_match:
             url = url_match.group()
             clean_text = re.sub(r"\n*https?://\S+", "", text).strip()
             lines = clean_text.splitlines()

@@ -97,9 +97,13 @@ _MASA_YOKOKOKU_NG = [
 ]
 
 def _is_masa_yokokoku_ng(text: str) -> bool:
-    """masa投稿の予告型NG（1文目に「〇〇をお伝えします」等）を除外"""
-    first_line = text.split("\n")[0].strip()
-    return any(ng in first_line for ng in _MASA_YOKOKOKU_NG)
+    """masa投稿の予告型NG（「〇〇をお伝えします」等）を除外。
+    1文目だけでなく2文目もチェック（2行セットで予告型になるテンプレ対策）。"""
+    lines = text.split("\n")
+    # 1文目・2文目（空行を除いた最初の2行）をチェック
+    non_empty = [l.strip() for l in lines if l.strip()]
+    check_lines = non_empty[:2]  # 最初の2行を対象
+    return any(ng in line for ng in _MASA_YOKOKOKU_NG for line in check_lines)
 
 # ── myfilesから素材を読み込む（失敗時はデフォルト使用）──────────
 try:
@@ -831,6 +835,8 @@ def generate_30_posts() -> list[str]:
 
     # 公式LINEリストイン投稿を織り交ぜる（頭痛改善情報の配信LINEへ誘導）
     # URLを本文に残すため _ensure_nagaoka / _enforce_short_body は通さない
+    # 目標頻度: 全体の5〜7%（feedback.json 2026-06-06ルール）
+    # 実行ギャップ対策: 1日の投稿は最大20本程度なので、必ず前半（index 3〜12）に配置
     listin_posts = []
     for _ in range(4):
         for _ in range(20):
@@ -838,8 +844,10 @@ def generate_30_posts() -> list[str]:
             if p not in listin_posts:
                 listin_posts.append(p)
                 break
-    for lp in listin_posts:
-        pos = random.randint(0, len(posts))
+    for i, lp in enumerate(listin_posts):
+        # 前半に均等配置: 4本を index 3, 7, 12, 18 付近に差し込む
+        anchor_positions = [3, 7, 12, 18]
+        pos = min(anchor_positions[i] if i < len(anchor_positions) else (i * 5 + 3), len(posts))
         posts.insert(pos, lp)
 
     return posts[:100]
@@ -921,6 +929,7 @@ def generate_40_nagaoka_posts() -> list[str]:
         posts.insert(pos, cta)
 
     # 公式LINEリストイン投稿を織り交ぜる（頭痛改善情報の配信LINEへ誘導）
+    # 実行ギャップ対策: 前半（index 4, 10, 18）に固定配置
     listin_posts = []
     for _ in range(3):
         for _ in range(20):
@@ -928,8 +937,9 @@ def generate_40_nagaoka_posts() -> list[str]:
             if p not in listin_posts:
                 listin_posts.append(p)
                 break
-    for lp in listin_posts:
-        pos = random.randint(0, len(posts))
+    for i, lp in enumerate(listin_posts):
+        anchor_positions = [4, 10, 18]
+        pos = min(anchor_positions[i] if i < len(anchor_positions) else (i * 7 + 4), len(posts))
         posts.insert(pos, lp)
 
     return posts[:100]

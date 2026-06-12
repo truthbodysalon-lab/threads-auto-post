@@ -1294,7 +1294,7 @@ def generate_30_masa_posts() -> list[str]:
         "education":     3,
         "story":         3,
         "soft_line":     2,  # LINE言及を10%未満に抑える（非LINE系のみ）
-        "cta":           4,  # LINE URL付きを4本（目標10%未満 ≈ 3-4本/39本）
+        "cta":           2,  # LINE URL付きは2本まで（フィードバックルール: URLありは月間2本以下）
         "ranking":       4,
         "question":      3,
     }

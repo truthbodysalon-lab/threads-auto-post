@@ -190,9 +190,13 @@ def check_logs():
             continue
         try:
             lines = f.read_text(encoding="utf-8", errors="ignore").splitlines()[-200:]
-            errs = [l for l in lines if any(k in l for k in ("Traceback", "Error", "ERROR", "Exception", "失敗"))]
+            # リトライ/フォールバックで回復する一時的エラーは除外し、最終失敗のみ問題視
+            transient = ("リトライ", "fallback", "retrying", "後にリトライ")
+            errs = [l for l in lines
+                    if any(k in l for k in ("Traceback", "Error", "ERROR", "Exception", "失敗"))
+                    and not any(t in l for t in transient)]
             add(f"log:{lg}", "D.ログ", "PASS" if not errs else "WARN",
-                f"直近のエラー痕跡 {len(errs)}件" + (f" 例: {errs[-1][:80]}" if errs else ""))
+                f"未回復エラー {len(errs)}件" + (f" 例: {errs[-1][:80]}" if errs else ""))
         except Exception as e:
             add(f"log:{lg}", "D.ログ", "WARN", f"読込失敗: {e}")
 

@@ -1,12 +1,12 @@
 {
   "account": "@truth_nagaoka",
-  "updated_at": "2026-06-13 06:04",
+  "updated_at": "2026-06-13 08:18",
   "total_posts": 200,
-  "total_likes": 28,
-  "total_views": 44078,
-  "total_replies": 57,
+  "total_likes": 27,
+  "total_views": 44820,
+  "total_replies": 58,
   "avg_likes": 0.14,
-  "avg_views": 220.39,
+  "avg_views": 224.1,
   "recent_7days_count": 200,
   "recent_7days_avg_likes": 0.14,
   "top10_by_likes": [
@@ -41,21 +41,21 @@
     {
       "text": "頭痛があるのに検査をしても\n脳は悪くない頭痛の原因の多くは\n\n首と肩の筋肉の緊張です",
       "likes": 1,
-      "views": 1738,
+      "views": 1752,
       "replies": 0,
       "date": "2026-06-12"
     },
     {
       "text": "たまの体のだるさを「気のせい」で済ませてる人へ。",
       "likes": 1,
-      "views": 422,
+      "views": 425,
       "replies": 1,
       "date": "2026-06-12"
     },
     {
       "text": "実は当院って見附市や津南町、柏崎市\n南魚沼市、三条市からも\n来院されてます。",
       "likes": 1,
-      "views": 51,
+      "views": 55,
       "replies": 0,
       "date": "2026-06-12"
     },
@@ -85,12 +85,12 @@
     "50〜100字": {
       "count": 62,
       "avg_likes": 0.1,
-      "avg_views": 163.66
+      "avg_views": 170.34
     },
     "〜50字": {
       "count": 137,
-      "avg_likes": 0.16,
-      "avg_views": 246.28
+      "avg_likes": 0.15,
+      "avg_views": 248.67
     },
     "100〜150字": {
       "count": 1,

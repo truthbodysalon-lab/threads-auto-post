@@ -1,14 +1,14 @@
 {
   "account": "@masahide_takahashi_",
-  "updated_at": "2026-06-13 06:06",
+  "updated_at": "2026-06-13 08:20",
   "total_posts": 200,
-  "total_likes": 20,
-  "total_views": 21273,
+  "total_likes": 19,
+  "total_views": 21155,
   "total_replies": 198,
   "avg_likes": 0.1,
-  "avg_views": 106.36,
-  "recent_7days_count": 141,
-  "recent_7days_avg_likes": 0.11,
+  "avg_views": 105.78,
+  "recent_7days_count": 143,
+  "recent_7days_avg_likes": 0.1,
   "top10_by_likes": [
     {
       "text": "広告費をかけなくても集客できます。\n\nなぜなら信頼を先に積み上げれば\nお客様は自然に来るから。",
@@ -82,20 +82,20 @@
     }
   ],
   "performance_by_length": {
-    "100〜150字": {
-      "count": 18,
-      "avg_likes": 0.17,
-      "avg_views": 31.61
-    },
     "〜50字": {
       "count": 153,
-      "avg_likes": 0.1,
-      "avg_views": 128.76
+      "avg_likes": 0.09,
+      "avg_views": 128.01
+    },
+    "100〜150字": {
+      "count": 19,
+      "avg_likes": 0.16,
+      "avg_views": 30.05
     },
     "150字以上": {
-      "count": 6,
-      "avg_likes": 0.17,
-      "avg_views": 7.17
+      "count": 5,
+      "avg_likes": 0.2,
+      "avg_views": 7.8
     },
     "50〜100字": {
       "count": 23,

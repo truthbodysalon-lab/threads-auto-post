@@ -1,12 +1,12 @@
 {
   "account": "@truth_body_salon",
-  "updated_at": "2026-06-13 06:02",
+  "updated_at": "2026-06-13 08:17",
   "total_posts": 200,
   "total_likes": 44,
-  "total_views": 48441,
+  "total_views": 48745,
   "total_replies": 218,
   "avg_likes": 0.22,
-  "avg_views": 242.21,
+  "avg_views": 243.72,
   "recent_7days_count": 200,
   "recent_7days_avg_likes": 0.22,
   "top10_by_likes": [
@@ -55,7 +55,7 @@
     {
       "text": "毎日猫背で座っているになってませんか？",
       "likes": 1,
-      "views": 904,
+      "views": 933,
       "replies": 1,
       "date": "2026-06-12"
     },
@@ -82,15 +82,15 @@
     }
   ],
   "performance_by_length": {
-    "〜50字": {
-      "count": 147,
-      "avg_likes": 0.25,
-      "avg_views": 289.51
-    },
     "50〜100字": {
       "count": 50,
       "avg_likes": 0.12,
-      "avg_views": 113.56
+      "avg_views": 118.92
+    },
+    "〜50字": {
+      "count": 147,
+      "avg_likes": 0.25,
+      "avg_views": 289.76
     },
     "100〜150字": {
       "count": 3,

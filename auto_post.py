@@ -22,7 +22,7 @@ import sys
 import time
 import urllib.parse
 import urllib.request
-from datetime import date, datetime
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 try:
     from duplicate_guard import (
@@ -418,6 +418,36 @@ def post_reply_to_threads(acct: str, reply_to_id: str, text: str) -> str:
     return api_request(f"{BASE_URL}/{user_id}/threads_publish", data2)["id"]
 
 
+def _recently_posted_on_threads(acct: str, text: str, hours: int = 12) -> bool:
+    """Threads APIの実投稿を正とする最終重複チェック（投稿系統をまたぐ二重投稿を防ぐ）。
+    直近 hours 時間内に同じ1文目の投稿があれば True。API失敗時は False（通常フローに委ねる）。"""
+    try:
+        target_fl = dg_normalize(text).split("\n")[0].strip()[:40]
+        if not target_fl:
+            return False
+        token = os.environ[ACCOUNTS[acct]["token_key"]]
+        uid = os.environ[ACCOUNTS[acct]["uid_key"]]
+        url = f"{BASE_URL}/{uid}/threads?fields=id,text,timestamp&limit=25&access_token={token}"
+        with urllib.request.urlopen(url, timeout=15) as r:
+            data = json.loads(r.read())
+        cutoff = datetime.now(timezone.utc) - timedelta(hours=hours)
+        for p in data.get("data", []):
+            ptext = p.get("text", "")
+            if not ptext:
+                continue
+            try:
+                pts = datetime.fromisoformat(p.get("timestamp", "").replace("Z", "+00:00"))
+            except Exception:
+                pts = datetime.now(timezone.utc)
+            if pts < cutoff:
+                continue
+            if dg_normalize(ptext).split("\n")[0].strip()[:40] == target_fl:
+                return True
+        return False
+    except Exception:
+        return False
+
+
 def post_to_threads(acct: str, text: str, skip_dup: bool = False) -> str:
     """Threads に投稿して post ID を返す。
     重複チェックをここで行う — run_account の実装に関わらず必ず通る。
@@ -428,6 +458,10 @@ def post_to_threads(acct: str, text: str, skip_dup: bool = False) -> str:
     if not skip_dup:
         if dg_is_duplicate(norm, acct):
             raise _DuplicatePost(f"{text[:50]}")
+    # API実投稿を正とする最終重複チェック（系統をまたぐ二重投稿を防ぐ。LINEも対象）
+    if _recently_posted_on_threads(acct, text):
+        raise _DuplicatePost(f"[API直近重複] {text[:50]}")
+    if not skip_dup:
         dg_mark_pending(norm, acct)   # API呼び出し前に記録（タイムアウト対策）
 
     token = os.environ[ACCOUNTS[acct]["token_key"]]

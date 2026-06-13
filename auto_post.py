@@ -250,6 +250,22 @@ def _is_line_listin(text: str) -> bool:
     return any(url in (text or "") for url in _LINE_LISTIN_URLS)
 
 
+def _posted_count_today(acct: str) -> int:
+    """log_{acct}_posted.jsonl の本日の投稿件数（バッチ投稿の打ち切り判定用）"""
+    pfile = ACCOUNTS[acct]["posted"]
+    if not pfile.exists():
+        return 0
+    today = date.today().strftime("%Y-%m-%d")
+    n = 0
+    for line in pfile.read_text(encoding="utf-8").splitlines():
+        try:
+            if json.loads(line).get("date") == today:
+                n += 1
+        except Exception:
+            pass
+    return n
+
+
 def _line_done_today(acct: str, today: str) -> bool:
     try:
         return json.loads(_LINE_STATE_FILE.read_text()).get(acct) == today
@@ -619,21 +635,33 @@ def main():
         lock_fd.close()
 
 
+# 1回の実行で各アカウント最大何本投稿するか（単一系統で頻度を上げる）
+POSTS_PER_RUN = int(os.environ.get("POSTS_PER_RUN", "3"))
+
+
+def _run_account_batch(acct: str):
+    """1アカウントを最大 POSTS_PER_RUN 本投稿する。投稿できなくなったら止める。"""
+    for i in range(POSTS_PER_RUN):
+        before = _posted_count_today(acct)
+        run_account(acct)
+        after = _posted_count_today(acct)
+        if after <= before:   # 投稿されなかった（キュー枯渇/重複）→ 打ち切り
+            break
+        if i < POSTS_PER_RUN - 1:
+            time.sleep(4)
+
+
 def _run_main():
     target = sys.argv[1].lower() if len(sys.argv) > 1 else "all"
 
-    if target == "truth":
-        run_account("truth")
-    elif target == "nagaoka":
-        run_account("nagaoka")
-    elif target == "masa":
-        run_account("masa")
+    if target in ("truth", "nagaoka", "masa"):
+        _run_account_batch(target)
     else:
-        run_account("truth")
+        _run_account_batch("truth")
         time.sleep(5)
-        run_account("nagaoka")
+        _run_account_batch("nagaoka")
         time.sleep(5)
-        run_account("masa")
+        _run_account_batch("masa")
 
     # 投稿後にObsidianレポートを自動更新
     try:

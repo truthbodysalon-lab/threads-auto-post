@@ -35,7 +35,7 @@ ACCOUNTS = {
         "posted": BASE / "log_truth_posted.jsonl",
         "insights": BASE / "insights_truth.json",
         "weights": BASE / "weights_truth.json",
-        "patterns": ["quote_empathy", "insight", "education", "story", "workmom", "ranking", "question", "selfcare_casual"],
+        "patterns": ["quote_empathy", "insight", "education", "story", "workmom", "ranking", "question", "selfcare_casual", "variety"],
         "default_weights": {
             "quote_empathy": 6,
             "insight": 5,
@@ -45,6 +45,7 @@ ACCOUNTS = {
             "ranking": 4,
             "question": 3,
             "selfcare_casual": 5,
+            "variety": 25,
         },
     },
     "nagaoka": {
@@ -53,7 +54,7 @@ ACCOUNTS = {
         "posted": BASE / "log_nagaoka_posted.jsonl",
         "insights": BASE / "insights_nagaoka.json",
         "weights": BASE / "weights_nagaoka.json",
-        "patterns": ["keisei_target", "keisei_risk", "keisei_kyokan", "keisei_casual", "quote_empathy", "insight", "education", "story", "ranking", "question", "hochi_risk"],
+        "patterns": ["keisei_target", "keisei_risk", "keisei_kyokan", "keisei_casual", "quote_empathy", "insight", "education", "story", "ranking", "question", "hochi_risk", "variety"],
         "default_weights": {
             "keisei_target": 7,   # 軽症者ターゲット（メイン）
             "keisei_risk":   5,   # 軽症放置リスク
@@ -66,6 +67,7 @@ ACCOUNTS = {
             "ranking":       4,
             "question":      3,
             "hochi_risk":    5,
+            "variety":       32,
         },
     },
     "masa": {
@@ -74,7 +76,7 @@ ACCOUNTS = {
         "posted": BASE / "log_masa_posted.jsonl",
         "insights": BASE / "insights_masa.json",
         "weights": BASE / "weights_masa.json",
-        "patterns": ["insight", "education", "story", "cta", "ranking", "question"],
+        "patterns": ["insight", "education", "story", "cta", "ranking", "question", "variety"],
         "default_weights": {
             "insight": 7,
             "education": 6,
@@ -82,6 +84,7 @@ ACCOUNTS = {
             "cta": 3,
             "ranking": 4,
             "question": 3,
+            "variety": 45,
         },
     },
 }

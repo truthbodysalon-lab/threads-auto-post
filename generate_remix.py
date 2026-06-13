@@ -116,6 +116,12 @@ except Exception:
     _truth_mat = {}
     _masa_mat = {}
 
+# ── 多様性拡張テンプレ（1文目の被りを減らし重複ガード通過数を増やす）──
+try:
+    from variety_templates import MASA_VARIETY, TRUTH_VARIETY, NAGAOKA_VARIETY
+except Exception:
+    MASA_VARIETY, TRUTH_VARIETY, NAGAOKA_VARIETY = [], [], []
+
 # ── 投稿パターン定義 ──────────────────────────────
 # 各パターンは (冒頭テンプレ, 中間テンプレ, 締めテンプレ) のリスト
 
@@ -684,6 +690,8 @@ HOOK_BODIES = [
 
 def generate_nagaoka_post(pattern_key: str) -> str:
     """nagaoka専用パターンまたは共通パターンで投稿生成"""
+    if pattern_key == "variety" and NAGAOKA_VARIETY:
+        return fill(random.choice(NAGAOKA_VARIETY))
     if pattern_key in NAGAOKA_PATTERNS:
         p = NAGAOKA_PATTERNS[pattern_key]
         return fill(random.choice(p["templates"]))
@@ -723,6 +731,10 @@ def generate_cta_post(target: str) -> str:
 
 
 def generate_post(pattern_key: str) -> str:
+    # 多様性拡張プール（truth）
+    if pattern_key == "variety" and TRUTH_VARIETY:
+        return fill(random.choice(TRUTH_VARIETY))
+
     # インスタハカセ理論：「自分は何者か」×「気づき1つ」
     if pattern_key == "nanimono_kizuki":
         return fill(random.choice(NANIMONO_KIZUKI_TEMPLATES))
@@ -764,6 +776,7 @@ def generate_post(pattern_key: str) -> str:
 def generate_30_posts() -> list[str]:
     w = _load_weights("truth")
     defaults = {
+        "variety":        25,  # 多様性拡張（1文目の被りを減らし重複ガード通過数を増やす）
         "nanimono_kizuki": 7,  # 「自分は何者か」×「気づき1つ」
         "store_identity":  3,  # 3つの問い（何のお店?・どうなる?・他と違う?）
         "touka_koukan": 4,
@@ -786,6 +799,7 @@ def generate_30_posts() -> list[str]:
     }
     merged = {k: int(w.get(k, v)) for k, v in defaults.items()}
     plan = (
+        ["variety"] * merged["variety"] +
         ["nanimono_kizuki"] * merged["nanimono_kizuki"] +
         ["store_identity"]  * merged["store_identity"] +
         ["touka_koukan"] * merged["touka_koukan"] +
@@ -870,6 +884,8 @@ def generate_40_nagaoka_posts() -> list[str]:
     # nagaoka専用パターン（全て2〜4行）: 19本
     # 短い共通パターン（insight=2行・quote_empathy短縮版・hook・ranking）: 17本
     defaults = {
+        # ── 多様性拡張（1文目の被りを減らし重複ガード通過数を増やす）──
+        "variety":                32,
         # ── nagaoka専用・超短文 ──
         "keisei_target":          15,  # 軽症者特化（メイン）
         "keisei_kyokan":           5,  # 軽症者共感
@@ -1279,9 +1295,12 @@ MASA_BAD_HABITS = [
 
 
 def generate_masa_post(pattern_key: str) -> str:
-    entry = MASA_PATTERNS[pattern_key]
-    # 新パターン(pasona/prbrep/touka_koukan)はリスト直接、旧パターンはdictのtemplatesキー
-    templates = entry if isinstance(entry, list) else entry["templates"] if isinstance(entry, dict) and "templates" in entry else entry
+    if pattern_key == "variety" and MASA_VARIETY:
+        templates = MASA_VARIETY
+    else:
+        entry = MASA_PATTERNS[pattern_key]
+        # 新パターン(pasona/prbrep/touka_koukan)はリスト直接、旧パターンはdictのtemplatesキー
+        templates = entry if isinstance(entry, list) else entry["templates"] if isinstance(entry, dict) and "templates" in entry else entry
     tmpl = random.choice(templates)
     tips = random.sample(MASA_TIPS, min(3, len(MASA_TIPS)))
     bads = random.sample(MASA_BAD_HABITS, min(3, len(MASA_BAD_HABITS)))
@@ -1301,6 +1320,8 @@ def generate_30_masa_posts() -> list[str]:
     # インスタハカセ理論 + コンサル伸びた投稿リスト分析を反映（2026-04-20）
     # 最重要追加: nanimono_kizuki（「自分は何者か」×「気づき1つ」= Threadsの7割はこれ）
     defaults = {
+        # ── 多様性拡張（1文目の被りを減らし、重複ガード通過数を増やす本丸）──
+        "variety":        45,  # {topic}×多数テンプレで1文目が爆発的に増える
         # ── 最重要（インスタハカセ理論）──
         "nanimono_kizuki": 7,  # 「自分は何者か」×「気づき1つ」
         # ── 猿でもわかるアナリティクス ──
@@ -1330,6 +1351,7 @@ def generate_30_masa_posts() -> list[str]:
     }
     merged = {k: int(w.get(k, v)) for k, v in defaults.items()}
     plan = (
+        ["variety"]         * merged["variety"] +
         ["nanimono_kizuki"] * merged["nanimono_kizuki"] +
         ["saru_analytics"]  * merged["saru_analytics"] +
         ["jiko_kaiji"]    * merged["jiko_kaiji"] +

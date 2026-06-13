@@ -11,7 +11,8 @@
     "story": 5,
     "ranking": 1,
     "question": 3,
-    "hochi_risk": 5
+    "hochi_risk": 5,
+    "variety": 20
   },
   "feedback_scores": {},
   "api_scores": {

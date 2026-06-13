@@ -6,7 +6,8 @@
     "story": 1,
     "cta": 1,
     "ranking": 3,
-    "question": 1
+    "question": 1,
+    "variety": 20
   },
   "feedback_scores": {},
   "api_scores": {

@@ -1,19 +1,19 @@
 {
   "account": "@truth_body_salon",
-  "updated_at": "2026-06-14 06:02",
+  "updated_at": "2026-06-14 08:04",
   "total_posts": 200,
-  "total_likes": 49,
-  "total_views": 51098,
-  "total_replies": 214,
-  "avg_likes": 0.24,
-  "avg_views": 255.49,
+  "total_likes": 47,
+  "total_views": 50222,
+  "total_replies": 215,
+  "avg_likes": 0.23,
+  "avg_views": 251.11,
   "recent_7days_count": 200,
-  "recent_7days_avg_likes": 0.24,
+  "recent_7days_avg_likes": 0.23,
   "top10_by_likes": [
     {
       "text": "最近外が気持ちいいので\n動画撮影は裏の公園でやってます",
       "likes": 6,
-      "views": 177,
+      "views": 182,
       "replies": 0,
       "date": "2026-06-13"
     },
@@ -83,14 +83,14 @@
   ],
   "performance_by_length": {
     "〜50字": {
-      "count": 145,
-      "avg_likes": 0.29,
-      "avg_views": 306.85
+      "count": 141,
+      "avg_likes": 0.28,
+      "avg_views": 303.01
     },
     "50〜100字": {
-      "count": 52,
-      "avg_likes": 0.12,
-      "avg_views": 123.08
+      "count": 56,
+      "avg_likes": 0.11,
+      "avg_views": 130.23
     },
     "100〜150字": {
       "count": 3,

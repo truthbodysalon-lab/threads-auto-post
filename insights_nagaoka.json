@@ -1,26 +1,26 @@
 {
   "account": "@truth_nagaoka",
-  "updated_at": "2026-06-14 06:03",
+  "updated_at": "2026-06-14 08:06",
   "total_posts": 200,
   "total_likes": 27,
-  "total_views": 48705,
-  "total_replies": 50,
+  "total_views": 50061,
+  "total_replies": 49,
   "avg_likes": 0.14,
-  "avg_views": 243.53,
+  "avg_views": 250.31,
   "recent_7days_count": 200,
   "recent_7days_avg_likes": 0.14,
   "top10_by_likes": [
     {
       "text": "当院は長岡市で兄妹でやってますが\nたまに夫婦に間違えられます。\n\n兄妹です。",
       "likes": 4,
-      "views": 1375,
+      "views": 1396,
       "replies": 0,
       "date": "2026-06-13"
     },
     {
       "text": "肩こりは変えられる。",
       "likes": 2,
-      "views": 576,
+      "views": 577,
       "replies": 1,
       "date": "2026-06-13"
     },
@@ -34,14 +34,14 @@
     {
       "text": "頭痛に悩んでいるなら、\n一度試してほしいこと\n\n・姿勢を正す\n・水をこまめに飲む\n・首をゆっくりまわす\n・当院に予約をする\n・塩を舐める\n\n小さな習慣が積み重な",
       "likes": 1,
-      "views": 777,
+      "views": 779,
       "replies": 0,
       "date": "2026-06-13"
     },
     {
       "text": "雨の日に頭痛がひどくなる理由。\n気圧の変化で血管が拡張し、神経を圧迫するからです。\nでも実は、毎日のコーヒーと缶コーヒーだけで、\n水を飲まない習慣が気圧頭痛を悪",
       "likes": 1,
-      "views": 1036,
+      "views": 1040,
       "replies": 0,
       "date": "2026-06-13"
     },
@@ -82,20 +82,20 @@
     }
   ],
   "performance_by_length": {
-    "50〜100字": {
-      "count": 66,
-      "avg_likes": 0.06,
-      "avg_views": 149.61
-    },
     "〜50字": {
-      "count": 132,
+      "count": 129,
       "avg_likes": 0.17,
-      "avg_views": 284.88
+      "avg_views": 297.68
+    },
+    "50〜100字": {
+      "count": 67,
+      "avg_likes": 0.06,
+      "avg_views": 154.48
     },
     "100〜150字": {
-      "count": 2,
-      "avg_likes": 0.5,
-      "avg_views": 613.5
+      "count": 4,
+      "avg_likes": 0.25,
+      "avg_views": 327.5
     }
   }
 }

@@ -63,6 +63,28 @@ def _get_recent_first_lines(acct: str, days: int = 4) -> set:
             pass
     return result
 
+def _monthly_line_url_count(acct: str, month: str = None) -> int:
+    """当月、既に投稿済みのLINE URL付き投稿（lin.ee を含む本文）の本数を数える。
+    feedbackルール『masa: LINE URLありは月間2本以下』をバッチ跨ぎで守るための実績カウント。"""
+    if month is None:
+        month = TODAY[:7]  # 'YYYY-MM'
+    pfile = BASE / f"log_{acct}_posted.jsonl"
+    if not pfile.exists():
+        return 0
+    count = 0
+    for l in pfile.read_text().splitlines():
+        if not l.strip():
+            continue
+        try:
+            entry = json.loads(l)
+            d = (entry.get("date") or "")[:7]
+            t = entry.get("text", "")
+            if d == month and "lin.ee" in t:
+                count += 1
+        except Exception:
+            pass
+    return count
+
 def _load_ng_words() -> list[str]:
     """feedback.json からNGワードを読み込む"""
     fb_file = BASE / "feedback.json"
@@ -1415,12 +1437,27 @@ def generate_30_masa_posts() -> list[str]:
         except Exception:
             posts.insert(0, tmpl)
 
-    # ── LINE言及率制御（2026-06-13追加） ──
+    # ── LINE URL 月間上限制御（2026-06-14追加） ──
+    # ルール: masa の LINE URL（lin.ee）付き投稿は「月間2本以下」。
+    # バッチ単位ではなく、当月の投稿実績（log_masa_posted.jsonl）と合算して上限を守る。
+    already_url = _monthly_line_url_count("masa")
+    url_budget = max(0, 2 - already_url)  # 今バッチで許容できるURL付き本数
+    url_posts = [(i, p) for i, p in enumerate(posts) if "lin.ee" in p]
+    non_line_posts = [p for p in posts if "LINE" not in p and "lin.ee" not in p]
+    if len(url_posts) > url_budget:
+        excess = len(url_posts) - url_budget
+        repl = 0
+        for i in range(excess):
+            if repl >= len(non_line_posts):
+                break
+            idx, _ = url_posts[-(i + 1)]  # 後ろのURL投稿から差し替え
+            posts[idx] = non_line_posts[repl]
+            repl += 1
+
+    # ── LINE言及率制御（2026-06-13） ──
     # ルール: masa は LINE言及を10%未満（39本中4本以下）に制限
-    # 直近39本のログと合わせて、超過していないか確認
     line_count = sum(1 for p in posts if "LINE" in p or "lin.ee" in p)
     if line_count > 4:
-        # LINE言及を4本以下に削減
         # LINE言及投稿を抽出して、超過分を非LINE投稿で置き換え
         line_posts = [(i, p) for i, p in enumerate(posts) if "LINE" in p or "lin.ee" in p]
         non_line_posts = [p for p in posts if "LINE" not in p and "lin.ee" not in p]

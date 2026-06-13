@@ -76,20 +76,25 @@ def main():
     _log(f"未push {n}件 → 同期開始")
 
     # 3) rebase -X ours で取り込みつつ push（リトライ）
+    # ※ 未コミット/未追跡ファイルを失わないよう、stash は必ず pop で復元する
     for attempt in range(1, 5):
         push = _git("push", "origin", "main")
         if push.returncode == 0:
             _log(f"✓ push成功（{n}件反映）")
             return
         # 失敗 → リモートを取り込んで再挑戦
-        _git("stash", "-u")
+        stash = _git("stash", "-u")
+        stashed = "No local changes" not in (stash.stdout + stash.stderr)
         rb = _git("pull", "--rebase", "-X", "ours", "origin", "main")
         # rebase中断の保険
         if "rebase" in (rb.stderr + rb.stdout).lower() and rb.returncode != 0:
             _git("rebase", "--abort")
             _git("merge", "-X", "ours", "origin/main", "-m", "merge: reconcile data [skip ci]")
-        _git("checkout", "HEAD", "--", ".")
-        _git("stash", "drop")
+        if stashed:
+            pop = _git("stash", "pop")   # drop ではなく pop（退避した変更を必ず戻す）
+            if pop.returncode != 0:
+                # pop衝突時もデータを失わないようstashは保持（手動回収可能）
+                _log("  [WARN] stash pop 衝突。stashに退避を保持しています（git stash list で確認可）")
         _log(f"  リトライ {attempt}: リモート取り込み後に再push")
 
     _log("⚠ push最終失敗（次回フラッシュで再試行）")

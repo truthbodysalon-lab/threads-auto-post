@@ -21,8 +21,12 @@
 from __future__ import annotations
 
 import json
+import re
 import sys
 from pathlib import Path
+
+# 未確認の年数実績（「10年以上診て」「20年の経験」等）を弾く正規表現
+_YEAR_CLAIM = re.compile(r"\d+\s*年(以上|間)?\s*[^\n]{0,6}(診|施術|経験|やっ|続け|運営)")
 
 BASE = Path(__file__).parent
 VFILE = BASE / "variety_templates.py"
@@ -52,6 +56,8 @@ def validate(acct: str, tmpl: str, existing: set) -> bool:
     if tmpl in existing:
         return False
     if len(tmpl) > 480:
+        return False
+    if _YEAR_CLAIM.search(tmpl):   # 未確認の年数実績はNG
         return False
     # 複数回埋めて検証（フィルのランダム性をカバー）
     for _ in range(4):

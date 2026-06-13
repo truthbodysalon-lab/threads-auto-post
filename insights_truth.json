@@ -1,15 +1,22 @@
 {
   "account": "@truth_body_salon",
-  "updated_at": "2026-06-13 08:17",
+  "updated_at": "2026-06-14 06:02",
   "total_posts": 200,
-  "total_likes": 44,
-  "total_views": 48745,
-  "total_replies": 218,
-  "avg_likes": 0.22,
-  "avg_views": 243.72,
+  "total_likes": 49,
+  "total_views": 51098,
+  "total_replies": 214,
+  "avg_likes": 0.24,
+  "avg_views": 255.49,
   "recent_7days_count": 200,
-  "recent_7days_avg_likes": 0.22,
+  "recent_7days_avg_likes": 0.24,
   "top10_by_likes": [
+    {
+      "text": "最近外が気持ちいいので\n動画撮影は裏の公園でやってます",
+      "likes": 6,
+      "views": 177,
+      "replies": 0,
+      "date": "2026-06-13"
+    },
     {
       "text": "薬を飲む前に、まず水分不足を見直してみて。",
       "likes": 3,
@@ -30,6 +37,13 @@
       "views": 273,
       "replies": 1,
       "date": "2026-06-08"
+    },
+    {
+      "text": "毎日頭痛があると\n仕事も育児も本当に辛いですよね。",
+      "likes": 2,
+      "views": 1137,
+      "replies": 1,
+      "date": "2026-06-13"
     },
     {
       "text": "朝起きても疲れは揉んでも治らない。",
@@ -55,42 +69,28 @@
     {
       "text": "毎日猫背で座っているになってませんか？",
       "likes": 1,
-      "views": 933,
+      "views": 944,
       "replies": 1,
       "date": "2026-06-12"
     },
     {
       "text": "めっちゃ勉強になります！！",
       "likes": 1,
-      "views": 72,
+      "views": 82,
       "replies": 1,
       "date": "2026-06-12"
-    },
-    {
-      "text": "慢性的な肩の重さを悪化させる習慣があります。\n\n◎睡眠不足が続くと、筋肉が常に緊張状態に\n◎それが呼吸の浅さとして現れる",
-      "likes": 1,
-      "views": 291,
-      "replies": 1,
-      "date": "2026-06-11"
-    },
-    {
-      "text": "毎日食いしばりがあるになってませんか？",
-      "likes": 1,
-      "views": 387,
-      "replies": 1,
-      "date": "2026-06-11"
     }
   ],
   "performance_by_length": {
-    "50〜100字": {
-      "count": 50,
-      "avg_likes": 0.12,
-      "avg_views": 118.92
-    },
     "〜50字": {
-      "count": 147,
-      "avg_likes": 0.25,
-      "avg_views": 289.76
+      "count": 145,
+      "avg_likes": 0.29,
+      "avg_views": 306.85
+    },
+    "50〜100字": {
+      "count": 52,
+      "avg_likes": 0.12,
+      "avg_views": 123.08
     },
     "100〜150字": {
       "count": 3,

@@ -1,101 +1,101 @@
 {
   "account": "@truth_nagaoka",
-  "updated_at": "2026-06-13 08:18",
+  "updated_at": "2026-06-14 06:03",
   "total_posts": 200,
   "total_likes": 27,
-  "total_views": 44820,
-  "total_replies": 58,
+  "total_views": 48705,
+  "total_replies": 50,
   "avg_likes": 0.14,
-  "avg_views": 224.1,
+  "avg_views": 243.53,
   "recent_7days_count": 200,
   "recent_7days_avg_likes": 0.14,
   "top10_by_likes": [
     {
       "text": "当院は長岡市で兄妹でやってますが\nたまに夫婦に間違えられます。\n\n兄妹です。",
-      "likes": 3,
-      "views": 1094,
+      "likes": 4,
+      "views": 1375,
       "replies": 0,
-      "date": "2026-06-08"
+      "date": "2026-06-13"
+    },
+    {
+      "text": "肩こりは変えられる。",
+      "likes": 2,
+      "views": 576,
+      "replies": 1,
+      "date": "2026-06-13"
     },
     {
       "text": "正直に言うと、朝の疲れは軽いうちが一番ちょろい。",
       "likes": 2,
-      "views": 812,
+      "views": 813,
       "replies": 1,
       "date": "2026-06-11"
     },
     {
-      "text": "頭痛、我慢が当たり前になってないですか。",
-      "likes": 2,
-      "views": 800,
-      "replies": 3,
-      "date": "2026-06-08"
+      "text": "頭痛に悩んでいるなら、\n一度試してほしいこと\n\n・姿勢を正す\n・水をこまめに飲む\n・首をゆっくりまわす\n・当院に予約をする\n・塩を舐める\n\n小さな習慣が積み重な",
+      "likes": 1,
+      "views": 777,
+      "replies": 0,
+      "date": "2026-06-13"
     },
     {
-      "text": "週に何度も頭痛薬を飲んでいませんか？\n\n薬は一時しのぎ。\n睡眠不足を根本から変えると、\n頭痛の頻度が下がります。",
-      "likes": 2,
-      "views": 2447,
+      "text": "雨の日に頭痛がひどくなる理由。\n気圧の変化で血管が拡張し、神経を圧迫するからです。\nでも実は、毎日のコーヒーと缶コーヒーだけで、\n水を飲まない習慣が気圧頭痛を悪",
+      "likes": 1,
+      "views": 1036,
       "replies": 0,
-      "date": "2026-06-08"
+      "date": "2026-06-13"
+    },
+    {
+      "text": "睡眠の質を悪化させる習慣 TOP3",
+      "likes": 1,
+      "views": 1032,
+      "replies": 1,
+      "date": "2026-06-13"
     },
     {
       "text": "頭痛があるのに検査をしても\n脳は悪くない頭痛の原因の多くは\n\n首と肩の筋肉の緊張です",
       "likes": 1,
-      "views": 1752,
+      "views": 1773,
       "replies": 0,
       "date": "2026-06-12"
     },
     {
       "text": "たまの体のだるさを「気のせい」で済ませてる人へ。",
       "likes": 1,
-      "views": 425,
+      "views": 443,
       "replies": 1,
       "date": "2026-06-12"
     },
     {
       "text": "実は当院って見附市や津南町、柏崎市\n南魚沼市、三条市からも\n来院されてます。",
       "likes": 1,
-      "views": 55,
+      "views": 59,
       "replies": 0,
       "date": "2026-06-12"
     },
     {
       "text": "最近、肩こりや頭痛で辛い日が増えてませんか？\nお母さんが元気でいることが\n実はお子さんいとって１番の安心になります。",
       "likes": 1,
-      "views": 226,
+      "views": 227,
       "replies": 0,
       "date": "2026-06-11"
-    },
-    {
-      "text": "週末のお出かけを楽しみたいのに、\n眠りの浅さがあって気力が出ない。",
-      "likes": 1,
-      "views": 327,
-      "replies": 1,
-      "date": "2026-06-10"
-    },
-    {
-      "text": "「頭痛、まだ我慢できる」って人、コメントで「私も」って教えてください。",
-      "likes": 1,
-      "views": 651,
-      "replies": 1,
-      "date": "2026-06-10"
     }
   ],
   "performance_by_length": {
     "50〜100字": {
-      "count": 62,
-      "avg_likes": 0.1,
-      "avg_views": 170.34
+      "count": 66,
+      "avg_likes": 0.06,
+      "avg_views": 149.61
     },
     "〜50字": {
-      "count": 137,
-      "avg_likes": 0.15,
-      "avg_views": 248.67
+      "count": 132,
+      "avg_likes": 0.17,
+      "avg_views": 284.88
     },
     "100〜150字": {
-      "count": 1,
-      "avg_likes": 0.0,
-      "avg_views": 191.0
+      "count": 2,
+      "avg_likes": 0.5,
+      "avg_views": 613.5
     }
   }
 }

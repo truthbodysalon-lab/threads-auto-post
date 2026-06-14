@@ -316,6 +316,9 @@ def get_next_post(acct: str, today: str):
 
     line_done = _line_done_today(acct, today)
 
+    # API実投稿の直近1文目（CIが先に投稿した分をローカルが再選択しないよう除外）
+    api_recent = _recent_api_firstlines(acct)
+
     # LINEリストインは1日1回、確実に織り込む（重複ガード免除）。
     # フィードバック: truth/nagaoka は5〜7%の頻度で投稿されるべき。
     # 序盤でも投稿される確率を高めて目標達成を目指す。
@@ -336,6 +339,9 @@ def get_next_post(acct: str, today: str):
         if norm not in posted_texts and norm[:80] not in old_posted_keys:
             # 7日以内の重複は投稿せずスキップ（ループで次の候補へ）
             if dg_is_duplicate(norm, acct):
+                continue
+            # API実投稿の直近に同じ1文目があれば飛ばす（系統間ラグ対策）
+            if dg_normalize(text).split("\n")[0].strip()[:40] in api_recent:
                 continue
             return text, i
 
@@ -465,6 +471,40 @@ def _recently_posted_on_threads(acct: str, text: str, hours: int = 12) -> bool:
         return False
     except Exception:
         return False
+
+
+def _parse_ts(ts: str):
+    try:
+        return datetime.strptime(ts.replace("Z", "+0000"), "%Y-%m-%dT%H:%M:%S%z")
+    except Exception:
+        return None
+
+
+def _recent_api_firstlines(acct: str, hours: int = 12) -> set:
+    """直近 hours 時間に Threads へ実投稿された1文目の集合（選択段階での除外用）。
+    get_next_post がこれを使い、CIが先に投稿した記事をローカルが再選択して
+    投稿が止まる事故を防ぐ。API失敗時は空集合（通常フローに委ねる）。"""
+    try:
+        token = os.environ[ACCOUNTS[acct]["token_key"]]
+        uid = os.environ[ACCOUNTS[acct]["uid_key"]]
+        url = f"{BASE_URL}/{uid}/threads?fields=id,text,timestamp&limit=25&access_token={token}"
+        with urllib.request.urlopen(url, timeout=15) as r:
+            data = json.loads(r.read())
+        cutoff = datetime.now(timezone.utc) - timedelta(hours=hours)
+        out = set()
+        for p in data.get("data", []):
+            ptext = p.get("text", "")
+            if not ptext:
+                continue
+            pts = _parse_ts(p.get("timestamp", ""))
+            if pts and pts < cutoff:
+                continue
+            fl = dg_normalize(ptext).split("\n")[0].strip()[:40]
+            if fl:
+                out.add(fl)
+        return out
+    except Exception:
+        return set()
 
 
 def post_to_threads(acct: str, text: str, skip_dup: bool = False) -> str:

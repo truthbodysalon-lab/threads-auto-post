@@ -1,5 +1,6 @@
 {
   "start_date": "2026-06-14",
-  "target": 1000000,
-  "days": 30
+  "target_per_account": 1000000,
+  "days": 30,
+  "note": "各アカウント100万閲覧/月（合計300万）"
 }

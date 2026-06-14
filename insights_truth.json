@@ -1,12 +1,12 @@
 {
   "account": "@truth_body_salon",
-  "updated_at": "2026-06-15 05:36",
+  "updated_at": "2026-06-15 06:02",
   "total_posts": 200,
   "total_likes": 29,
-  "total_views": 60192,
+  "total_views": 60315,
   "total_replies": 157,
   "avg_likes": 0.14,
-  "avg_views": 300.96,
+  "avg_views": 301.57,
   "recent_7days_count": 200,
   "recent_7days_avg_likes": 0.14,
   "top10_by_likes": [
@@ -27,14 +27,14 @@
     {
       "text": "突然の引用失礼します。\n今僕がこのことについて色々\n課題があり考えている最中でした！\n\n凄く参考になりました！",
       "likes": 1,
-      "views": 244,
+      "views": 246,
       "replies": 1,
       "date": "2026-06-14"
     },
     {
       "text": "仕草は騙せませんなぁ〜笑",
       "likes": 1,
-      "views": 312,
+      "views": 318,
       "replies": 3,
       "date": "2026-06-14"
     },
@@ -85,12 +85,12 @@
     "〜50字": {
       "count": 109,
       "avg_likes": 0.21,
-      "avg_views": 394.81
+      "avg_views": 395.92
     },
     "50〜100字": {
       "count": 77,
       "avg_likes": 0.06,
-      "avg_views": 195.78
+      "avg_views": 195.81
     },
     "100〜150字": {
       "count": 14,

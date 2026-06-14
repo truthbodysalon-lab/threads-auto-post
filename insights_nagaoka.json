@@ -1,12 +1,12 @@
 {
   "account": "@truth_nagaoka",
-  "updated_at": "2026-06-15 05:38",
+  "updated_at": "2026-06-15 06:04",
   "total_posts": 200,
   "total_likes": 19,
-  "total_views": 61974,
+  "total_views": 62023,
   "total_replies": 39,
   "avg_likes": 0.1,
-  "avg_views": 309.87,
+  "avg_views": 310.12,
   "recent_7days_count": 200,
   "recent_7days_avg_likes": 0.1,
   "top10_by_likes": [
@@ -27,7 +27,7 @@
     {
       "text": "体のだるさ、我慢が当たり前になってないですか。",
       "likes": 1,
-      "views": 864,
+      "views": 882,
       "replies": 1,
       "date": "2026-06-14"
     },
@@ -41,7 +41,7 @@
     {
       "text": "週に何度も頭痛薬を飲んでいませんか？\n\n薬は一時しのぎ。\n睡眠不足を根本から変えると、\n頭痛の頻度が下がります。",
       "likes": 1,
-      "views": 1704,
+      "views": 1706,
       "replies": 0,
       "date": "2026-06-14"
     },
@@ -85,12 +85,12 @@
     "〜50字": {
       "count": 91,
       "avg_likes": 0.14,
-      "avg_views": 411.52
+      "avg_views": 412.01
     },
     "50〜100字": {
       "count": 98,
       "avg_likes": 0.05,
-      "avg_views": 225.38
+      "avg_views": 225.42
     },
     "100〜150字": {
       "count": 11,

@@ -1,101 +1,101 @@
 {
   "account": "@truth_body_salon",
-  "updated_at": "2026-06-14 08:04",
+  "updated_at": "2026-06-15 05:36",
   "total_posts": 200,
-  "total_likes": 47,
-  "total_views": 50222,
-  "total_replies": 215,
-  "avg_likes": 0.23,
-  "avg_views": 251.11,
+  "total_likes": 29,
+  "total_views": 60192,
+  "total_replies": 157,
+  "avg_likes": 0.14,
+  "avg_views": 300.96,
   "recent_7days_count": 200,
-  "recent_7days_avg_likes": 0.23,
+  "recent_7days_avg_likes": 0.14,
   "top10_by_likes": [
     {
       "text": "最近外が気持ちいいので\n動画撮影は裏の公園でやってます",
       "likes": 6,
-      "views": 182,
+      "views": 187,
       "replies": 0,
       "date": "2026-06-13"
     },
     {
-      "text": "薬を飲む前に、まず水分不足を見直してみて。",
-      "likes": 3,
-      "views": 676,
-      "replies": 1,
-      "date": "2026-06-09"
-    },
-    {
-      "text": "朝の疲れは揉んでも治らない。",
-      "likes": 3,
-      "views": 414,
-      "replies": 1,
-      "date": "2026-06-09"
-    },
-    {
-      "text": "マッサージは気持ちいい。\nでも体の痛みは変わらない。",
-      "likes": 3,
-      "views": 273,
-      "replies": 1,
-      "date": "2026-06-08"
-    },
-    {
       "text": "毎日頭痛があると\n仕事も育児も本当に辛いですよね。",
       "likes": 2,
-      "views": 1137,
+      "views": 1138,
       "replies": 1,
       "date": "2026-06-13"
     },
     {
-      "text": "朝起きても疲れは揉んでも治らない。",
-      "likes": 2,
-      "views": 137,
+      "text": "突然の引用失礼します。\n今僕がこのことについて色々\n課題があり考えている最中でした！\n\n凄く参考になりました！",
+      "likes": 1,
+      "views": 244,
       "replies": 1,
-      "date": "2026-06-09"
+      "date": "2026-06-14"
     },
     {
-      "text": "その体のだるさ、一生付き合うつもりですか？",
-      "likes": 2,
-      "views": 87,
-      "replies": 1,
-      "date": "2026-06-09"
-    },
-    {
-      "text": "痛みのせいがあって\n家族と笑って過ごしたかったのにできない。\n\n長岡市で整体院を兄妹で運営しています。\nよく聞く言葉です。",
-      "likes": 2,
-      "views": 100,
+      "text": "仕草は騙せませんなぁ〜笑",
+      "likes": 1,
+      "views": 312,
       "replies": 3,
-      "date": "2026-06-09"
+      "date": "2026-06-14"
     },
     {
-      "text": "毎日猫背で座っているになってませんか？",
+      "text": "痛みのせいを「年齢のせい」にしている人が\n一番変わるのが遅い。",
       "likes": 1,
-      "views": 944,
+      "views": 498,
       "replies": 1,
-      "date": "2026-06-12"
+      "date": "2026-06-14"
     },
     {
-      "text": "めっちゃ勉強になります！！",
+      "text": "「体の痛み、もう仕方ない」\nって諦めてませんか？\n頭痛はスマホの見すぎが原因のことが多いです。\n揉んでも治らないのは、そこを変えていないから。\n体を後回しにしな",
       "likes": 1,
-      "views": 82,
+      "views": 31,
+      "replies": 0,
+      "date": "2026-06-14"
+    },
+    {
+      "text": "慢性的な首・肩のこりは、もう諦めなくていい。\n\n長岡の整体院でこんな変化が起きています。",
+      "likes": 1,
+      "views": 168,
       "replies": 1,
-      "date": "2026-06-12"
+      "date": "2026-06-14"
+    },
+    {
+      "text": "慢性的な首・肩のこりは、もう諦めなくていい。\n\n長岡の整体院でこんな変化が起きています。",
+      "likes": 1,
+      "views": 189,
+      "replies": 1,
+      "date": "2026-06-14"
+    },
+    {
+      "text": "薬を飲む前に、まず呼吸の浅さを見直してみて。",
+      "likes": 1,
+      "views": 969,
+      "replies": 1,
+      "date": "2026-06-14"
+    },
+    {
+      "text": "頭の重さを「歳のせい」にするのは\n早すぎます。",
+      "likes": 1,
+      "views": 389,
+      "replies": 1,
+      "date": "2026-06-14"
     }
   ],
   "performance_by_length": {
     "〜50字": {
-      "count": 141,
-      "avg_likes": 0.28,
-      "avg_views": 303.01
+      "count": 109,
+      "avg_likes": 0.21,
+      "avg_views": 394.81
     },
     "50〜100字": {
-      "count": 56,
-      "avg_likes": 0.11,
-      "avg_views": 130.23
+      "count": 77,
+      "avg_likes": 0.06,
+      "avg_views": 195.78
     },
     "100〜150字": {
-      "count": 3,
-      "avg_likes": 0.33,
-      "avg_views": 68.33
+      "count": 14,
+      "avg_likes": 0.07,
+      "avg_views": 148.79
     }
   }
 }

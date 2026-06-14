@@ -1,12 +1,12 @@
 {
   "account": "@truth_body_salon",
-  "updated_at": "2026-06-15 06:02",
+  "updated_at": "2026-06-15 08:10",
   "total_posts": 200,
-  "total_likes": 29,
-  "total_views": 60315,
-  "total_replies": 157,
+  "total_likes": 28,
+  "total_views": 56881,
+  "total_replies": 130,
   "avg_likes": 0.14,
-  "avg_views": 301.57,
+  "avg_views": 284.4,
   "recent_7days_count": 200,
   "recent_7days_avg_likes": 0.14,
   "top10_by_likes": [
@@ -18,6 +18,13 @@
       "date": "2026-06-13"
     },
     {
+      "text": "肩と首の張りは、肩と首の張りじゃないところが原因です。\n\n水分不足が乱れると\n全身に影響が出ます。",
+      "likes": 2,
+      "views": 160,
+      "replies": 1,
+      "date": "2026-06-14"
+    },
+    {
       "text": "毎日頭痛があると\n仕事も育児も本当に辛いですよね。",
       "likes": 2,
       "views": 1138,
@@ -25,23 +32,30 @@
       "date": "2026-06-13"
     },
     {
+      "text": "本田圭佑の解説面白すぎだし\nめっちゃ的確！",
+      "likes": 1,
+      "views": 1321,
+      "replies": 0,
+      "date": "2026-06-14"
+    },
+    {
       "text": "突然の引用失礼します。\n今僕がこのことについて色々\n課題があり考えている最中でした！\n\n凄く参考になりました！",
       "likes": 1,
-      "views": 246,
+      "views": 275,
       "replies": 1,
       "date": "2026-06-14"
     },
     {
       "text": "仕草は騙せませんなぁ〜笑",
       "likes": 1,
-      "views": 318,
+      "views": 335,
       "replies": 3,
       "date": "2026-06-14"
     },
     {
       "text": "痛みのせいを「年齢のせい」にしている人が\n一番変わるのが遅い。",
       "likes": 1,
-      "views": 498,
+      "views": 499,
       "replies": 1,
       "date": "2026-06-14"
     },
@@ -55,47 +69,33 @@
     {
       "text": "慢性的な首・肩のこりは、もう諦めなくていい。\n\n長岡の整体院でこんな変化が起きています。",
       "likes": 1,
-      "views": 168,
+      "views": 170,
       "replies": 1,
       "date": "2026-06-14"
     },
     {
       "text": "慢性的な首・肩のこりは、もう諦めなくていい。\n\n長岡の整体院でこんな変化が起きています。",
       "likes": 1,
-      "views": 189,
-      "replies": 1,
-      "date": "2026-06-14"
-    },
-    {
-      "text": "薬を飲む前に、まず呼吸の浅さを見直してみて。",
-      "likes": 1,
-      "views": 969,
-      "replies": 1,
-      "date": "2026-06-14"
-    },
-    {
-      "text": "頭の重さを「歳のせい」にするのは\n早すぎます。",
-      "likes": 1,
-      "views": 389,
+      "views": 190,
       "replies": 1,
       "date": "2026-06-14"
     }
   ],
   "performance_by_length": {
-    "〜50字": {
-      "count": 109,
-      "avg_likes": 0.21,
-      "avg_views": 395.92
-    },
     "50〜100字": {
-      "count": 77,
-      "avg_likes": 0.06,
-      "avg_views": 195.81
+      "count": 84,
+      "avg_likes": 0.05,
+      "avg_views": 193.42
     },
     "100〜150字": {
-      "count": 14,
-      "avg_likes": 0.07,
-      "avg_views": 148.79
+      "count": 21,
+      "avg_likes": 0.05,
+      "avg_views": 106.81
+    },
+    "〜50字": {
+      "count": 95,
+      "avg_likes": 0.24,
+      "avg_views": 404.12
     }
   }
 }

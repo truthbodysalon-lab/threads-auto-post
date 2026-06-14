@@ -1,20 +1,27 @@
 {
   "account": "@masahide_takahashi_",
-  "updated_at": "2026-06-15 06:06",
+  "updated_at": "2026-06-15 08:17",
   "total_posts": 200,
-  "total_likes": 19,
-  "total_views": 41889,
-  "total_replies": 186,
-  "avg_likes": 0.1,
-  "avg_views": 209.44,
+  "total_likes": 16,
+  "total_views": 40624,
+  "total_replies": 177,
+  "avg_likes": 0.08,
+  "avg_views": 203.12,
   "recent_7days_count": 200,
-  "recent_7days_avg_likes": 0.1,
+  "recent_7days_avg_likes": 0.08,
   "top10_by_likes": [
     {
       "text": "リピートが取れないサロンほど、インスタのハッシュタグ戦略を軽視してます。",
       "likes": 2,
       "views": 639,
       "replies": 1,
+      "date": "2026-06-14"
+    },
+    {
+      "text": "客はLINE配信設計を見てない。\n見てるのはターゲットを絞ることが最優先だけ。\nここを直す。\nプロフィールを最適化する\nお客様の声を定期的に投稿する\n数値で結果",
+      "likes": 1,
+      "views": 39,
+      "replies": 0,
       "date": "2026-06-14"
     },
     {
@@ -41,14 +48,14 @@
     {
       "text": "ショート動画制作がしんどいのは、たぶんやり方の問題です。",
       "likes": 1,
-      "views": 202,
+      "views": 203,
       "replies": 1,
       "date": "2026-06-14"
     },
     {
       "text": "問い合わせを増やす仕組み、フォロワー1000人でも予約は埋まります。",
       "likes": 1,
-      "views": 731,
+      "views": 732,
       "replies": 1,
       "date": "2026-06-14"
     },
@@ -62,7 +69,7 @@
     {
       "text": "ショート動画制作がうまくいかない時、まず疑うべきは設計です。",
       "likes": 1,
-      "views": 267,
+      "views": 268,
       "replies": 1,
       "date": "2026-06-14"
     },
@@ -72,30 +79,23 @@
       "views": 205,
       "replies": 1,
       "date": "2026-06-14"
-    },
-    {
-      "text": "ショート動画制作、なんとなくで続けてると一生伸びません。",
-      "likes": 1,
-      "views": 280,
-      "replies": 1,
-      "date": "2026-06-14"
     }
   ],
   "performance_by_length": {
-    "50〜100字": {
-      "count": 22,
+    "100〜150字": {
+      "count": 9,
       "avg_likes": 0.0,
-      "avg_views": 73.5
+      "avg_views": 19.11
     },
     "〜50字": {
-      "count": 167,
-      "avg_likes": 0.11,
-      "avg_views": 239.96
+      "count": 164,
+      "avg_likes": 0.09,
+      "avg_views": 236.8
     },
-    "100〜150字": {
-      "count": 8,
-      "avg_likes": 0.0,
-      "avg_views": 19.62
+    "50〜100字": {
+      "count": 24,
+      "avg_likes": 0.04,
+      "avg_views": 65.62
     },
     "150字以上": {
       "count": 3,

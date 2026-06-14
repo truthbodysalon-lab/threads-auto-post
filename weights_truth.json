@@ -6,21 +6,20 @@
     "education": 5,
     "story": 1,
     "workmom": 1,
-    "ranking": 5,
+    "ranking": 4,
     "question": 1,
     "selfcare_casual": 3,
     "variety": 20
   },
   "feedback_scores": {},
   "api_scores": {
-    "insight": 0.88,
-    "quote_empathy": -1.14,
-    "story": -1.55,
-    "education": 0.52,
-    "selfcare_casual": -0.89,
-    "workmom": -1.51,
-    "question": -0.8,
-    "ranking": 0.55
+    "insight": 0.95,
+    "story": -1.58,
+    "quote_empathy": -1.19,
+    "selfcare_casual": -1.32,
+    "education": 0.42,
+    "workmom": -1.45,
+    "question": -0.71
   },
   "follower_scores": {
     "insight": 3.0,

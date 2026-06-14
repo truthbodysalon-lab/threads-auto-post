@@ -1,19 +1,19 @@
 {
   "account": "@truth_nagaoka",
-  "updated_at": "2026-06-15 06:04",
+  "updated_at": "2026-06-15 08:13",
   "total_posts": 200,
-  "total_likes": 19,
-  "total_views": 62023,
-  "total_replies": 39,
-  "avg_likes": 0.1,
-  "avg_views": 310.12,
+  "total_likes": 17,
+  "total_views": 60401,
+  "total_replies": 36,
+  "avg_likes": 0.09,
+  "avg_views": 302.0,
   "recent_7days_count": 200,
-  "recent_7days_avg_likes": 0.1,
+  "recent_7days_avg_likes": 0.09,
   "top10_by_likes": [
     {
       "text": "当院は長岡市で兄妹でやってますが\nたまに夫婦に間違えられます。\n\n兄妹です。",
       "likes": 5,
-      "views": 1700,
+      "views": 1702,
       "replies": 0,
       "date": "2026-06-13"
     },
@@ -27,21 +27,21 @@
     {
       "text": "体のだるさ、我慢が当たり前になってないですか。",
       "likes": 1,
-      "views": 882,
+      "views": 897,
       "replies": 1,
       "date": "2026-06-14"
     },
     {
       "text": "「また頭痛が...」\nそう思った瞬間がケアのサインです。\n根本から変えると、毎日が変わります。\n長岡市で整体院を兄妹で運営しています。",
       "likes": 1,
-      "views": 175,
+      "views": 176,
       "replies": 0,
       "date": "2026-06-14"
     },
     {
       "text": "週に何度も頭痛薬を飲んでいませんか？\n\n薬は一時しのぎ。\n睡眠不足を根本から変えると、\n頭痛の頻度が下がります。",
       "likes": 1,
-      "views": 1706,
+      "views": 1710,
       "replies": 0,
       "date": "2026-06-14"
     },
@@ -55,7 +55,7 @@
     {
       "text": "「病院に行くほどじゃない朝の疲れ」を放っておく人が、一番もったいない。",
       "likes": 1,
-      "views": 311,
+      "views": 316,
       "replies": 1,
       "date": "2026-06-14"
     },
@@ -82,20 +82,20 @@
     }
   ],
   "performance_by_length": {
-    "〜50字": {
-      "count": 91,
-      "avg_likes": 0.14,
-      "avg_views": 412.01
-    },
     "50〜100字": {
-      "count": 98,
-      "avg_likes": 0.05,
-      "avg_views": 225.42
+      "count": 109,
+      "avg_likes": 0.04,
+      "avg_views": 194.72
+    },
+    "〜50字": {
+      "count": 75,
+      "avg_likes": 0.16,
+      "avg_views": 465.72
     },
     "100〜150字": {
-      "count": 11,
-      "avg_likes": 0.09,
-      "avg_views": 221.73
+      "count": 16,
+      "avg_likes": 0.06,
+      "avg_views": 265.44
     }
   }
 }

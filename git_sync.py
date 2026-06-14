@@ -29,7 +29,8 @@ DATA_FILES = [
     "past_posts.json", "past_posts_nagaoka.json", "past_posts_masa.json",
     "followers_history.json", "line_history.json",
     "shared_posted_guard.jsonl", "feedback.json",
-    "line_listin_state.json",  # LINEリストイン 1日1回 の状態（cross-system共有）
+    "line_listin_state.json",
+    "views_goal.json", "views_history.json",  # LINEリストイン 1日1回 の状態（cross-system共有）
 ]
 
 

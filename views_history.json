@@ -1,0 +1,13 @@
+[
+  {
+    "date": "2026-06-14",
+    "cumulative": 28522,
+    "daily_avg": 28522,
+    "pace": 85,
+    "per_acct": {
+      "truth": 8271,
+      "nagaoka": 14776,
+      "masa": 5475
+    }
+  }
+]

@@ -946,8 +946,13 @@ def generate_40_nagaoka_posts() -> list[str]:
             # 1文目NG・NGワード・重複チェック
             if key not in seen and not _is_ng(post) and _is_valid_first_line(post, "nagaoka"):
                 seen.add(key)
-                # 目標に達するまで、長岡市を追加（1文目NGルール守る）
-                if nagaoka_count < target_nagaoka_count and "長岡" not in post:
+                # テンプレ自体に「長岡」が含まれる場合は目標カウントに算入する
+                # （ベースで含むぶんを数えないと、_ensure_nagaoka が25%を上乗せして
+                #  実投稿の長岡市率が40%超に膨らむ＝基準25%から乖離する）
+                if "長岡" in post:
+                    nagaoka_count += 1
+                # 目標に達していなければ長岡市を追加（1文目NGルール守る）
+                elif nagaoka_count < target_nagaoka_count:
                     post = _ensure_nagaoka(post, ratio=1.0, prepend=False)
                     nagaoka_count += 1
                 posts.append(post)

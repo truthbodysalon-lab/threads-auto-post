@@ -1,21 +1,35 @@
 {
   "account": "@masahide_takahashi_",
-  "updated_at": "2026-06-15 08:17",
+  "updated_at": "2026-06-16 05:39",
   "total_posts": 200,
-  "total_likes": 16,
-  "total_views": 40624,
-  "total_replies": 177,
-  "avg_likes": 0.08,
-  "avg_views": 203.12,
+  "total_likes": 9,
+  "total_views": 30586,
+  "total_replies": 171,
+  "avg_likes": 0.04,
+  "avg_views": 152.93,
   "recent_7days_count": 200,
-  "recent_7days_avg_likes": 0.08,
+  "recent_7days_avg_likes": 0.04,
   "top10_by_likes": [
     {
-      "text": "リピートが取れないサロンほど、インスタのハッシュタグ戦略を軽視してます。",
-      "likes": 2,
-      "views": 639,
+      "text": "口コミ・紹介の作り方を伸ばすコツ、結局は3つに集約されます。",
+      "likes": 1,
+      "views": 227,
       "replies": 1,
-      "date": "2026-06-14"
+      "date": "2026-06-15"
+    },
+    {
+      "text": "口コミ・紹介の作り方で大事なのは、新規よりバズより「刺さる」を狙うかもしれません。",
+      "likes": 1,
+      "views": 108,
+      "replies": 1,
+      "date": "2026-06-15"
+    },
+    {
+      "text": "頑張る方向が合ってれば、導線設計は勝手に回り出します。",
+      "likes": 1,
+      "views": 172,
+      "replies": 1,
+      "date": "2026-06-15"
     },
     {
       "text": "客はLINE配信設計を見てない。\n見てるのはターゲットを絞ることが最優先だけ。\nここを直す。\nプロフィールを最適化する\nお客様の声を定期的に投稿する\n数値で結果",
@@ -27,14 +41,14 @@
     {
       "text": "コンテンツ設計、頑張ってるのに伸びないのは才能やセンスじゃない。",
       "likes": 1,
-      "views": 234,
+      "views": 237,
       "replies": 1,
       "date": "2026-06-14"
     },
     {
       "text": "コンテンツ設計、頑張ってるのに伸びないのは才能やセンスじゃない。",
       "likes": 1,
-      "views": 333,
+      "views": 335,
       "replies": 1,
       "date": "2026-06-14"
     },
@@ -55,52 +69,33 @@
     {
       "text": "問い合わせを増やす仕組み、フォロワー1000人でも予約は埋まります。",
       "likes": 1,
-      "views": 732,
+      "views": 735,
       "replies": 1,
       "date": "2026-06-14"
     },
     {
-      "text": "広告費の使い方を見直したら、集客が安定しました。",
-      "likes": 1,
-      "views": 568,
+      "text": "コメント活用の正解、たぶん逆だと思ってる人が多い。",
+      "likes": 0,
+      "views": 81,
       "replies": 1,
-      "date": "2026-06-14"
-    },
-    {
-      "text": "ショート動画制作がうまくいかない時、まず疑うべきは設計です。",
-      "likes": 1,
-      "views": 268,
-      "replies": 1,
-      "date": "2026-06-14"
-    },
-    {
-      "text": "ストーリーズ活用、頑張りすぎてる人ほど一回手を止めてほしい。",
-      "likes": 1,
-      "views": 205,
-      "replies": 1,
-      "date": "2026-06-14"
+      "date": "2026-06-15"
     }
   ],
   "performance_by_length": {
-    "100〜150字": {
-      "count": 9,
-      "avg_likes": 0.0,
-      "avg_views": 19.11
-    },
     "〜50字": {
-      "count": 164,
-      "avg_likes": 0.09,
-      "avg_views": 236.8
+      "count": 169,
+      "avg_likes": 0.05,
+      "avg_views": 174.96
     },
     "50〜100字": {
-      "count": 24,
-      "avg_likes": 0.04,
-      "avg_views": 65.62
+      "count": 21,
+      "avg_likes": 0.05,
+      "avg_views": 32.52
     },
-    "150字以上": {
-      "count": 3,
+    "100〜150字": {
+      "count": 10,
       "avg_likes": 0.0,
-      "avg_views": 14.0
+      "avg_views": 33.5
     }
   }
 }

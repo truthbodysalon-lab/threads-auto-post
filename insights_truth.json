@@ -1,12 +1,12 @@
 {
   "account": "@truth_body_salon",
-  "updated_at": "2026-06-16 05:35",
+  "updated_at": "2026-06-16 06:02",
   "total_posts": 200,
   "total_likes": 33,
-  "total_views": 52363,
+  "total_views": 52442,
   "total_replies": 97,
   "avg_likes": 0.17,
-  "avg_views": 261.81,
+  "avg_views": 262.21,
   "recent_7days_count": 200,
   "recent_7days_avg_likes": 0.17,
   "top10_by_likes": [
@@ -69,14 +69,14 @@
     {
       "text": "肩こりは睡眠不足の問題です。",
       "likes": 1,
-      "views": 1054,
+      "views": 1068,
       "replies": 1,
       "date": "2026-06-15"
     },
     {
       "text": "水分不足は全身に影響する。特に頭痛に。",
       "likes": 1,
-      "views": 2171,
+      "views": 2174,
       "replies": 0,
       "date": "2026-06-15"
     }
@@ -90,12 +90,12 @@
     "50〜100字": {
       "count": 75,
       "avg_likes": 0.12,
-      "avg_views": 194.13
+      "avg_views": 194.21
     },
     "〜50字": {
       "count": 82,
       "avg_likes": 0.23,
-      "avg_views": 416.73
+      "avg_views": 417.62
     }
   }
 }

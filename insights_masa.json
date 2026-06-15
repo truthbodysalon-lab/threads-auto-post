@@ -1,12 +1,12 @@
 {
   "account": "@masahide_takahashi_",
-  "updated_at": "2026-06-16 05:39",
+  "updated_at": "2026-06-16 06:06",
   "total_posts": 200,
   "total_likes": 9,
-  "total_views": 30586,
+  "total_views": 30606,
   "total_replies": 171,
   "avg_likes": 0.04,
-  "avg_views": 152.93,
+  "avg_views": 153.03,
   "recent_7days_count": 200,
   "recent_7days_avg_likes": 0.04,
   "top10_by_likes": [
@@ -85,17 +85,17 @@
     "〜50字": {
       "count": 169,
       "avg_likes": 0.05,
-      "avg_views": 174.96
+      "avg_views": 175.06
     },
     "50〜100字": {
       "count": 21,
       "avg_likes": 0.05,
-      "avg_views": 32.52
+      "avg_views": 32.57
     },
     "100〜150字": {
       "count": 10,
       "avg_likes": 0.0,
-      "avg_views": 33.5
+      "avg_views": 33.7
     }
   }
 }

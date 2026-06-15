@@ -1,19 +1,19 @@
 {
   "account": "@truth_nagaoka",
-  "updated_at": "2026-06-16 05:37",
+  "updated_at": "2026-06-16 06:04",
   "total_posts": 200,
   "total_likes": 21,
-  "total_views": 48258,
+  "total_views": 48264,
   "total_replies": 41,
   "avg_likes": 0.1,
-  "avg_views": 241.29,
+  "avg_views": 241.32,
   "recent_7days_count": 200,
   "recent_7days_avg_likes": 0.1,
   "top10_by_likes": [
     {
       "text": "長岡市で１番健康情報を発信している整体院ですが\n実際に来院されるとこんな感じです。",
       "likes": 2,
-      "views": 129,
+      "views": 131,
       "replies": 0,
       "date": "2026-06-15"
     },
@@ -85,7 +85,7 @@
     "〜50字": {
       "count": 62,
       "avg_likes": 0.18,
-      "avg_views": 419.27
+      "avg_views": 419.37
     },
     "50〜100字": {
       "count": 125,

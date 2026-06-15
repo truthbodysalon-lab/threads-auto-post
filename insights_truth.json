@@ -1,19 +1,19 @@
 {
   "account": "@truth_body_salon",
-  "updated_at": "2026-06-16 06:02",
+  "updated_at": "2026-06-16 08:46",
   "total_posts": 200,
-  "total_likes": 33,
-  "total_views": 52442,
+  "total_likes": 26,
+  "total_views": 48022,
   "total_replies": 97,
-  "avg_likes": 0.17,
-  "avg_views": 262.21,
+  "avg_likes": 0.13,
+  "avg_views": 240.11,
   "recent_7days_count": 200,
-  "recent_7days_avg_likes": 0.17,
+  "recent_7days_avg_likes": 0.13,
   "top10_by_likes": [
     {
       "text": "体の痛みを「年齢のせい」にしている人が\n一番変わるのが遅い。",
       "likes": 2,
-      "views": 1279,
+      "views": 1281,
       "replies": 1,
       "date": "2026-06-15"
     },
@@ -25,18 +25,11 @@
       "date": "2026-06-15"
     },
     {
-      "text": "肩と首の張りは、肩と首の張りじゃないところが原因です。\n\n水分不足が乱れると\n全身に影響が出ます。",
-      "likes": 2,
-      "views": 175,
+      "text": "睡眠不足が眠りの浅さの主な原因です。\n\nなぜなら睡眠不足が続くと\n筋肉が常に緊張状態になるから。",
+      "likes": 1,
+      "views": 0,
       "replies": 1,
-      "date": "2026-06-14"
-    },
-    {
-      "text": "本田圭佑の解説面白すぎだし\nめっちゃ的確！",
-      "likes": 2,
-      "views": 1337,
-      "replies": 0,
-      "date": "2026-06-14"
+      "date": "2026-06-15"
     },
     {
       "text": "なぜデスクワークで体のだるさになるのか？\n\n◎スマホの見すぎが続くと、筋肉が常に緊張状態に\n◎それが首こりとして現れる",
@@ -48,14 +41,14 @@
     {
       "text": "姿勢の悪さ（猫背・巻き肩）が出るたびに薬を飲む生活、いつまで続けますか？\n呼吸の浅さを整えれば、薬の前に体が楽になります。\n来院3〜5回で「最近飲んでない」と言",
       "likes": 1,
-      "views": 67,
+      "views": 68,
       "replies": 0,
       "date": "2026-06-15"
     },
     {
       "text": "痛い場所に原因がない。これが治らない理由です。",
       "likes": 1,
-      "views": 541,
+      "views": 547,
       "replies": 0,
       "date": "2026-06-15"
     },
@@ -69,33 +62,40 @@
     {
       "text": "肩こりは睡眠不足の問題です。",
       "likes": 1,
-      "views": 1068,
+      "views": 1092,
       "replies": 1,
       "date": "2026-06-15"
     },
     {
       "text": "水分不足は全身に影響する。特に頭痛に。",
       "likes": 1,
-      "views": 2174,
+      "views": 2175,
       "replies": 0,
+      "date": "2026-06-15"
+    },
+    {
+      "text": "肩と首の張りに効果があった習慣 3選",
+      "likes": 1,
+      "views": 1188,
+      "replies": 1,
       "date": "2026-06-15"
     }
   ],
   "performance_by_length": {
     "100〜150字": {
-      "count": 43,
-      "avg_likes": 0.12,
-      "avg_views": 84.44
+      "count": 46,
+      "avg_likes": 0.11,
+      "avg_views": 80.67
     },
     "50〜100字": {
-      "count": 75,
-      "avg_likes": 0.12,
-      "avg_views": 194.21
+      "count": 78,
+      "avg_likes": 0.09,
+      "avg_views": 162.18
     },
     "〜50字": {
-      "count": 82,
-      "avg_likes": 0.23,
-      "avg_views": 417.62
+      "count": 76,
+      "avg_likes": 0.18,
+      "avg_views": 416.59
     }
   }
 }

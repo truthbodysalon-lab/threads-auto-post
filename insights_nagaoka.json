@@ -1,19 +1,19 @@
 {
   "account": "@truth_nagaoka",
-  "updated_at": "2026-06-16 06:04",
+  "updated_at": "2026-06-16 08:49",
   "total_posts": 200,
-  "total_likes": 21,
-  "total_views": 48264,
-  "total_replies": 41,
-  "avg_likes": 0.1,
-  "avg_views": 241.32,
+  "total_likes": 22,
+  "total_views": 44702,
+  "total_replies": 39,
+  "avg_likes": 0.11,
+  "avg_views": 223.51,
   "recent_7days_count": 200,
-  "recent_7days_avg_likes": 0.1,
+  "recent_7days_avg_likes": 0.11,
   "top10_by_likes": [
     {
       "text": "長岡市で１番健康情報を発信している整体院ですが\n実際に来院されるとこんな感じです。",
-      "likes": 2,
-      "views": 131,
+      "likes": 3,
+      "views": 139,
       "replies": 0,
       "date": "2026-06-15"
     },
@@ -25,16 +25,23 @@
       "date": "2026-06-15"
     },
     {
+      "text": "頭痛を「気合いで乗り切ってる」人、それ慣れてはいけないやつです。\n我慢が当たり前になるほど、回復に時間がかかる。\n水分不足を軽いうちに整えれば、3〜5回で十分変",
+      "likes": 1,
+      "views": 440,
+      "replies": 0,
+      "date": "2026-06-15"
+    },
+    {
       "text": "デスクワークをするなら、 \n1時間ごとに立ち上がることを \n習慣にしてみよう。 \n少しの工夫で、動きやすい体に \n変わるかもしれないよ。",
       "likes": 1,
-      "views": 71,
+      "views": 72,
       "replies": 0,
       "date": "2026-06-15"
     },
     {
       "text": "朝の疲れは変えられる。",
       "likes": 1,
-      "views": 696,
+      "views": 697,
       "replies": 1,
       "date": "2026-06-15"
     },
@@ -72,30 +79,23 @@
       "views": 299,
       "replies": 0,
       "date": "2026-06-15"
-    },
-    {
-      "text": "姿勢の悪さ（猫背・巻き肩）で「我慢強いね」と言われるあなたへ。\nその我慢強さが巻き肩の悪化を見逃させてます。\n長岡市の兄妹整体、軽いうちに来る人ほど早く、ラクに",
-      "likes": 1,
-      "views": 126,
-      "replies": 0,
-      "date": "2026-06-15"
     }
   ],
   "performance_by_length": {
     "〜50字": {
-      "count": 62,
-      "avg_likes": 0.18,
-      "avg_views": 419.37
+      "count": 58,
+      "avg_likes": 0.19,
+      "avg_views": 396.55
     },
     "50〜100字": {
       "count": 125,
-      "avg_likes": 0.08,
-      "avg_views": 160.08
+      "avg_likes": 0.09,
+      "avg_views": 151.3
     },
     "100〜150字": {
-      "count": 13,
+      "count": 17,
       "avg_likes": 0.0,
-      "avg_views": 173.31
+      "avg_views": 164.12
     }
   }
 }

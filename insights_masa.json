@@ -1,101 +1,101 @@
 {
   "account": "@masahide_takahashi_",
-  "updated_at": "2026-06-16 08:51",
+  "updated_at": "2026-06-17 06:05",
   "total_posts": 200,
-  "total_likes": 6,
-  "total_views": 26600,
-  "total_replies": 167,
-  "avg_likes": 0.03,
-  "avg_views": 133.0,
+  "total_likes": 21,
+  "total_views": 43659,
+  "total_replies": 172,
+  "avg_likes": 0.1,
+  "avg_views": 218.29,
   "recent_7days_count": 200,
-  "recent_7days_avg_likes": 0.03,
+  "recent_7days_avg_likes": 0.1,
   "top10_by_likes": [
     {
-      "text": "コメント活用で成果が出ない人がやっていること3選",
-      "likes": 1,
-      "views": 698,
-      "replies": 1,
-      "date": "2026-06-15"
-    },
-    {
-      "text": "新規集客の自動化でフォロワーを増やすより、信頼が先、販売は後。この順番を絶対に崩さないほうが早いです。",
-      "likes": 1,
-      "views": 69,
-      "replies": 1,
-      "date": "2026-06-15"
-    },
-    {
-      "text": "口コミ・紹介の作り方を伸ばすコツ、結局は3つに集約されます。",
-      "likes": 1,
-      "views": 227,
-      "replies": 1,
-      "date": "2026-06-15"
-    },
-    {
-      "text": "口コミ・紹介の作り方で大事なのは、新規よりバズより「刺さる」を狙うかもしれません。",
-      "likes": 1,
-      "views": 108,
-      "replies": 1,
-      "date": "2026-06-15"
-    },
-    {
-      "text": "頑張る方向が合ってれば、導線設計は勝手に回り出します。",
-      "likes": 1,
-      "views": 172,
-      "replies": 1,
-      "date": "2026-06-15"
-    },
-    {
-      "text": "客はLINE配信設計を見てない。\n見てるのはターゲットを絞ることが最優先だけ。\nここを直す。\nプロフィールを最適化する\nお客様の声を定期的に投稿する\n数値で結果",
-      "likes": 1,
-      "views": 39,
+      "text": "新規集客より既客育成が正解。ここで差が出ます。",
+      "likes": 2,
+      "views": 1080,
       "replies": 0,
-      "date": "2026-06-14"
+      "date": "2026-06-16"
     },
     {
-      "text": "コメント活用で成果が出ない人がやっていること3選",
-      "likes": 0,
-      "views": 185,
+      "text": "ターゲット設定で結果を出す人は、実はターゲットの悩みを言語化できると投稿が刺さる。",
+      "likes": 2,
+      "views": 99,
       "replies": 1,
-      "date": "2026-06-15"
-    },
-    {
-      "text": "フォロワー獲得に時間をかけるほど予約が減る人がいます。",
-      "likes": 0,
-      "views": 0,
-      "replies": 1,
-      "date": "2026-06-15"
+      "date": "2026-06-16"
     },
     {
       "text": "Instagram集客って、実は難しくない。",
-      "likes": 0,
-      "views": 80,
+      "likes": 2,
+      "views": 731,
       "replies": 1,
       "date": "2026-06-15"
     },
     {
-      "text": "エンゲージメントを見る人が、集客に成功してます。",
-      "likes": 0,
-      "views": 176,
+      "text": "教育コンテンツの作り方で消耗してる人の共通点を一つだけ挙げます。",
+      "likes": 1,
+      "views": 239,
+      "replies": 1,
+      "date": "2026-06-16"
+    },
+    {
+      "text": "インスタのハッシュタグ戦略を制する鍵は、派手さじゃなく最初の3秒で興味を引けるかがすべてです。",
+      "likes": 1,
+      "views": 270,
+      "replies": 1,
+      "date": "2026-06-16"
+    },
+    {
+      "text": "店舗集客の沼にハマる原因はだいたい同じです。",
+      "likes": 1,
+      "views": 318,
+      "replies": 1,
+      "date": "2026-06-16"
+    },
+    {
+      "text": "ファン化戦略、フォロワー1000人でも予約は埋まります。",
+      "likes": 1,
+      "views": 105,
+      "replies": 1,
+      "date": "2026-06-16"
+    },
+    {
+      "text": "新規客を求める人ほど、既客を失ってます。",
+      "likes": 1,
+      "views": 205,
+      "replies": 1,
+      "date": "2026-06-16"
+    },
+    {
+      "text": "売上につながる投稿、なんとなくで続けてると一生伸びません。",
+      "likes": 1,
+      "views": 156,
+      "replies": 1,
+      "date": "2026-06-16"
+    },
+    {
+      "text": "リピートが取れないサロンは、LINE戦略を見直してません。",
+      "likes": 1,
+      "views": 84,
       "replies": 0,
-      "date": "2026-06-15"
+      "date": "2026-06-16"
     }
   ],
   "performance_by_length": {
     "〜50字": {
-      "count": 169,
-      "avg_likes": 0.02,
-      "avg_views": 150.99
+      "count": 182,
+      "avg_likes": 0.11,
+      "avg_views": 229.44
     },
     "50〜100字": {
-      "count": 22,
-      "avg_likes": 0.09,
-      "avg_views": 35.5
+      "count": 13,
+      "avg_likes": 0.08,
+      "avg_views": 105.0
     },
     "100〜150字": {
-      "count": 9,
+      "count": 5,
       "avg_likes": 0.0,
-      "avg_views": 33.56
+      "avg_views": 107.2
     }
   }
 }

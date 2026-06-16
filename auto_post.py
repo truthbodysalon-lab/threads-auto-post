@@ -250,6 +250,28 @@ def _is_line_listin(text: str) -> bool:
     return any(url in (text or "") for url in _LINE_LISTIN_URLS)
 
 
+def _recent_listin_firstlines(acct: str, days: int = 7) -> set:
+    """直近 days 日に投稿済みのLINEリストイン投稿の1文目集合。
+    リストインは重複ガード(skip_dup=True)を免除しているため、同一テンプレが
+    7日以内に再投稿されるのを防ぐ目的で個別ログから直接1文目を収集する。"""
+    pfile = ACCOUNTS[acct]["posted"]
+    if not pfile.exists():
+        return set()
+    cutoff = (date.today() - timedelta(days=days)).strftime("%Y-%m-%d")
+    fls = set()
+    for line in pfile.read_text(encoding="utf-8").splitlines():
+        try:
+            e = json.loads(line)
+        except Exception:
+            continue
+        if (e.get("date") or "")[:10] < cutoff:
+            continue
+        t = e.get("text", "")
+        if _is_line_listin(t):
+            fls.add(t.split("\n")[0].strip())
+    return fls
+
+
 def _posted_count_today(acct: str) -> int:
     """log_{acct}_posted.jsonl の本日の投稿件数（バッチ投稿の打ち切り判定用）"""
     pfile = ACCOUNTS[acct]["posted"]
@@ -327,9 +349,15 @@ def get_next_post(acct: str, today: str):
         # 0〜3本投稿時の確率的採用（序盤で出やすく） / 4本以上は確実に出す
         should_post_line = (posted_today >= 4) or (posted_today >= 1 and random.random() < 0.6)
         if should_post_line:
-            for i, text in enumerate(all_posts):
-                if _is_line_listin(text):
+            # リストインは重複ガード免除のため、ここで7日以内の同一1文目を避ける
+            recent_listin = _recent_listin_firstlines(acct)
+            line_candidates = [(i, t) for i, t in enumerate(all_posts) if _is_line_listin(t)]
+            for i, text in line_candidates:
+                if text.split("\n")[0].strip() not in recent_listin:
                     return text, i
+            # 全候補が7日以内に使用済みなら、取りこぼし防止で先頭を採用
+            if line_candidates:
+                return line_candidates[0][1], line_candidates[0][0]
 
     for i, text in enumerate(all_posts):
         if _is_line_listin(text):
@@ -347,9 +375,13 @@ def get_next_post(acct: str, today: str):
 
     # 通常投稿が尽きていて、LINEが未実施なら最後に出す（取りこぼし防止）
     if not line_done:
-        for i, text in enumerate(all_posts):
-            if _is_line_listin(text):
+        recent_listin = _recent_listin_firstlines(acct)
+        line_candidates = [(i, t) for i, t in enumerate(all_posts) if _is_line_listin(t)]
+        for i, text in line_candidates:
+            if text.split("\n")[0].strip() not in recent_listin:
                 return text, i
+        if line_candidates:
+            return line_candidates[0][1], line_candidates[0][0]
     return None, -1
 
 def ensure_generated(acct: str, today: str):

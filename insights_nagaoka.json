@@ -1,12 +1,12 @@
 {
   "account": "@truth_nagaoka",
-  "updated_at": "2026-06-17 06:03",
+  "updated_at": "2026-06-17 08:29",
   "total_posts": 200,
-  "total_likes": 41,
-  "total_views": 50362,
-  "total_replies": 39,
+  "total_likes": 39,
+  "total_views": 50297,
+  "total_replies": 45,
   "avg_likes": 0.2,
-  "avg_views": 251.81,
+  "avg_views": 251.49,
   "recent_7days_count": 200,
   "recent_7days_avg_likes": 0.2,
   "top10_by_likes": [
@@ -20,28 +20,35 @@
     {
       "text": "頭痛を「気合いで乗り切ってる」自分を、少し休ませてあげませんか。",
       "likes": 2,
-      "views": 747,
+      "views": 750,
       "replies": 1,
       "date": "2026-06-16"
     },
     {
-      "text": "呼吸の浅さは揉んでも治らない。",
-      "likes": 2,
-      "views": 891,
+      "text": "「呼吸の浅さがあるけど病院に行くほどでもない」",
+      "likes": 1,
+      "views": 260,
       "replies": 1,
-      "date": "2026-06-15"
+      "date": "2026-06-16"
+    },
+    {
+      "text": "睡眠不足だけで呼吸の浅さはガチガチになる。\n見直してみて。\n長岡市の整体院でも同じ相談が多いです。",
+      "likes": 1,
+      "views": 1252,
+      "replies": 0,
+      "date": "2026-06-16"
     },
     {
       "text": "睡眠の質を「寝れば治る」で済ませてる人、それ慣れちゃダメなやつです。",
       "likes": 1,
-      "views": 1234,
+      "views": 1238,
       "replies": 1,
       "date": "2026-06-16"
     },
     {
       "text": "体のだるさが週末になると決まって出る、そのリズムが整え時のサインです。\n平日の水分不足が週末にあらわれているだけのことも多い。\n軽いうちに整えると、来院3〜5回",
       "likes": 1,
-      "views": 128,
+      "views": 129,
       "replies": 0,
       "date": "2026-06-16"
     },
@@ -55,47 +62,40 @@
     {
       "text": "正直に言うと、睡眠の質は軽いうちが一番ちょろい。",
       "likes": 1,
-      "views": 221,
+      "views": 225,
       "replies": 1,
       "date": "2026-06-16"
     },
     {
       "text": "睡眠不足が下地にあると、季節の変わり目に頭痛が出やすくなります。\n気圧のせいだけにしてると、毎年繰り返すことに。\n軽いうちに長岡市の当院で整えておくとラクだよ。",
       "likes": 1,
-      "views": 1139,
+      "views": 1140,
       "replies": 0,
       "date": "2026-06-16"
     },
     {
       "text": "週に3回以上頭痛薬を飲んでるなら要注意。",
       "likes": 1,
-      "views": 802,
-      "replies": 0,
-      "date": "2026-06-16"
-    },
-    {
-      "text": "たまの睡眠の質を市販薬でしのいでる人、めちゃくちゃ多い。\nでもそれ、根本の口呼吸は手つかずのままなんだよね。\n軽いうちに整えると、薬に頼る回数が減っていく人が多",
-      "likes": 1,
-      "views": 162,
+      "views": 908,
       "replies": 0,
       "date": "2026-06-16"
     }
   ],
   "performance_by_length": {
     "〜50字": {
-      "count": 73,
-      "avg_likes": 0.26,
-      "avg_views": 408.38
+      "count": 81,
+      "avg_likes": 0.23,
+      "avg_views": 384.98
     },
     "50〜100字": {
-      "count": 118,
+      "count": 107,
       "avg_likes": 0.18,
-      "avg_views": 165.04
+      "avg_views": 157.68
     },
     "100〜150字": {
-      "count": 9,
-      "avg_likes": 0.11,
-      "avg_views": 119.44
+      "count": 12,
+      "avg_likes": 0.08,
+      "avg_views": 186.83
     }
   }
 }

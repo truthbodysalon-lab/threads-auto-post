@@ -34,13 +34,13 @@
   },
   {
     "date": "2026-06-17",
-    "cumulative": 371350,
-    "daily_avg": 92837,
-    "pace": 79,
+    "cumulative": 282196,
+    "daily_avg": 70548,
+    "pace": 0,
     "per_acct": {
-      "truth": 130188,
-      "nagaoka": 135246,
-      "masa": 105916
+      "truth": 136538,
+      "nagaoka": 145658,
+      "masa": 0
     }
   }
 ]

@@ -1,12 +1,12 @@
 {
   "account": "@masahide_takahashi_",
-  "updated_at": "2026-06-18 06:42",
+  "updated_at": "2026-06-18 08:26",
   "total_posts": 200,
   "total_likes": 28,
-  "total_views": 58306,
-  "total_replies": 174,
+  "total_views": 58114,
+  "total_replies": 172,
   "avg_likes": 0.14,
-  "avg_views": 291.53,
+  "avg_views": 290.57,
   "recent_7days_count": 200,
   "recent_7days_avg_likes": 0.14,
   "top10_by_likes": [
@@ -35,7 +35,7 @@
       "text": "新規集客より既客育成が正解。ここで差が出ます。",
       "likes": 2,
       "views": 1321,
-      "replies": 1,
+      "replies": 2,
       "date": "2026-06-16"
     },
     {
@@ -82,15 +82,15 @@
     }
   ],
   "performance_by_length": {
-    "50〜100字": {
-      "count": 12,
-      "avg_likes": 0.0,
-      "avg_views": 135.5
-    },
     "〜50字": {
       "count": 184,
       "avg_likes": 0.15,
-      "avg_views": 305.72
+      "avg_views": 303.8
+    },
+    "50〜100字": {
+      "count": 12,
+      "avg_likes": 0.0,
+      "avg_views": 149.0
     },
     "100〜150字": {
       "count": 4,

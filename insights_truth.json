@@ -1,12 +1,12 @@
 {
   "account": "@truth_body_salon",
-  "updated_at": "2026-06-17 10:20",
+  "updated_at": "2026-06-17 10:23",
   "total_posts": 200,
   "total_likes": 23,
-  "total_views": 30944,
+  "total_views": 30972,
   "total_replies": 108,
   "avg_likes": 0.12,
-  "avg_views": 154.72,
+  "avg_views": 154.86,
   "recent_7days_count": 200,
   "recent_7days_avg_likes": 0.12,
   "top10_by_likes": [
@@ -34,7 +34,7 @@
     {
       "text": "「水をあまり飲まない」という方、頭痛が出やすい傾向があります。\n姿勢の歪みは頭痛や体のだるさの隠れた原因です。\n長岡市で多くの方を診てきて、ここを見落としている",
       "likes": 1,
-      "views": 321,
+      "views": 322,
       "replies": 0,
       "date": "2026-06-16"
     },
@@ -85,7 +85,7 @@
     "〜50字": {
       "count": 67,
       "avg_likes": 0.06,
-      "avg_views": 230.3
+      "avg_views": 230.66
     },
     "100〜150字": {
       "count": 50,
@@ -95,7 +95,7 @@
     "50〜100字": {
       "count": 83,
       "avg_likes": 0.17,
-      "avg_views": 142.19
+      "avg_views": 142.24
     }
   }
 }

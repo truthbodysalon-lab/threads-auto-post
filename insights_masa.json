@@ -1,40 +1,61 @@
 {
   "account": "@masahide_takahashi_",
-  "updated_at": "2026-06-17 08:32",
+  "updated_at": "2026-06-17 10:28",
   "total_posts": 200,
-  "total_likes": 22,
-  "total_views": 44828,
-  "total_replies": 172,
-  "avg_likes": 0.11,
-  "avg_views": 224.14,
+  "total_likes": 25,
+  "total_views": 48702,
+  "total_replies": 173,
+  "avg_likes": 0.12,
+  "avg_views": 243.51,
   "recent_7days_count": 200,
-  "recent_7days_avg_likes": 0.11,
+  "recent_7days_avg_likes": 0.12,
   "top10_by_likes": [
     {
       "text": "Instagram集客って、実は難しくない。",
       "likes": 3,
-      "views": 785,
+      "views": 808,
       "replies": 1,
       "date": "2026-06-15"
     },
     {
       "text": "新規集客より既客育成が正解。ここで差が出ます。",
       "likes": 2,
-      "views": 1119,
+      "views": 1140,
       "replies": 0,
       "date": "2026-06-16"
     },
     {
       "text": "ターゲット設定で結果を出す人は、実はターゲットの悩みを言語化できると投稿が刺さる。",
       "likes": 2,
-      "views": 99,
+      "views": 100,
       "replies": 1,
       "date": "2026-06-16"
     },
     {
+      "text": "新規集客より既客育成が正解。ここで差が出ます。",
+      "likes": 2,
+      "views": 643,
+      "replies": 0,
+      "date": "2026-06-16"
+    },
+    {
+      "text": "導線設計、続かないのは意志が弱いからじゃありません。",
+      "likes": 1,
+      "views": 0,
+      "replies": 1,
+      "date": "2026-06-17"
+    },
+    {
       "text": "Instagram集客を伸ばすコツ、結局は3つに集約されます。",
       "likes": 1,
-      "views": 166,
+      "views": 170,
+      "replies": 1,
+      "date": "2026-06-16"
+    },
+    {
+      "text": "インスタのハッシュタグ戦略は才能ゲームだと思われがちですが、違います。",
+      "likes": 1,
+      "views": 1387,
       "replies": 1,
       "date": "2026-06-16"
     },
@@ -48,7 +69,7 @@
     {
       "text": "インスタのハッシュタグ戦略を制する鍵は、派手さじゃなく最初の3秒で興味を引けるかがすべてです。",
       "likes": 1,
-      "views": 276,
+      "views": 295,
       "replies": 1,
       "date": "2026-06-16"
     },
@@ -58,44 +79,23 @@
       "views": 318,
       "replies": 1,
       "date": "2026-06-16"
-    },
-    {
-      "text": "ファン化戦略、フォロワー1000人でも予約は埋まります。",
-      "likes": 1,
-      "views": 107,
-      "replies": 1,
-      "date": "2026-06-16"
-    },
-    {
-      "text": "新規客を求める人ほど、既客を失ってます。",
-      "likes": 1,
-      "views": 205,
-      "replies": 1,
-      "date": "2026-06-16"
-    },
-    {
-      "text": "売上につながる投稿、なんとなくで続けてると一生伸びません。",
-      "likes": 1,
-      "views": 156,
-      "replies": 1,
-      "date": "2026-06-16"
     }
   ],
   "performance_by_length": {
     "〜50字": {
       "count": 182,
-      "avg_likes": 0.12,
-      "avg_views": 235.37
+      "avg_likes": 0.13,
+      "avg_views": 256.61
     },
     "100〜150字": {
       "count": 6,
       "avg_likes": 0.0,
-      "avg_views": 90.17
+      "avg_views": 90.67
     },
     "50〜100字": {
       "count": 12,
       "avg_likes": 0.08,
-      "avg_views": 120.75
+      "avg_views": 121.25
     }
   }
 }

@@ -1,14 +1,14 @@
 {
   "account": "@truth_nagaoka",
-  "updated_at": "2026-06-17 08:29",
+  "updated_at": "2026-06-17 10:25",
   "total_posts": 200,
-  "total_likes": 39,
-  "total_views": 50297,
-  "total_replies": 45,
-  "avg_likes": 0.2,
-  "avg_views": 251.49,
+  "total_likes": 37,
+  "total_views": 50100,
+  "total_replies": 48,
+  "avg_likes": 0.18,
+  "avg_views": 250.5,
   "recent_7days_count": 200,
-  "recent_7days_avg_likes": 0.2,
+  "recent_7days_avg_likes": 0.18,
   "top10_by_likes": [
     {
       "text": "長岡市で１番健康情報を発信している整体院ですが\n実際に来院されるとこんな感じです。",
@@ -20,28 +20,28 @@
     {
       "text": "頭痛を「気合いで乗り切ってる」自分を、少し休ませてあげませんか。",
       "likes": 2,
-      "views": 750,
+      "views": 752,
       "replies": 1,
       "date": "2026-06-16"
     },
     {
       "text": "「呼吸の浅さがあるけど病院に行くほどでもない」",
       "likes": 1,
-      "views": 260,
+      "views": 307,
       "replies": 1,
       "date": "2026-06-16"
     },
     {
       "text": "睡眠不足だけで呼吸の浅さはガチガチになる。\n見直してみて。\n長岡市の整体院でも同じ相談が多いです。",
       "likes": 1,
-      "views": 1252,
+      "views": 1258,
       "replies": 0,
       "date": "2026-06-16"
     },
     {
       "text": "睡眠の質を「寝れば治る」で済ませてる人、それ慣れちゃダメなやつです。",
       "likes": 1,
-      "views": 1238,
+      "views": 1242,
       "replies": 1,
       "date": "2026-06-16"
     },
@@ -62,7 +62,7 @@
     {
       "text": "正直に言うと、睡眠の質は軽いうちが一番ちょろい。",
       "likes": 1,
-      "views": 225,
+      "views": 228,
       "replies": 1,
       "date": "2026-06-16"
     },
@@ -76,26 +76,26 @@
     {
       "text": "週に3回以上頭痛薬を飲んでるなら要注意。",
       "likes": 1,
-      "views": 908,
+      "views": 914,
       "replies": 0,
       "date": "2026-06-16"
     }
   ],
   "performance_by_length": {
     "〜50字": {
-      "count": 81,
-      "avg_likes": 0.23,
-      "avg_views": 384.98
+      "count": 89,
+      "avg_likes": 0.2,
+      "avg_views": 365.62
     },
     "50〜100字": {
-      "count": 107,
+      "count": 101,
       "avg_likes": 0.18,
-      "avg_views": 157.68
+      "avg_views": 152.18
     },
     "100〜150字": {
-      "count": 12,
-      "avg_likes": 0.08,
-      "avg_views": 186.83
+      "count": 10,
+      "avg_likes": 0.1,
+      "avg_views": 219.0
     }
   }
 }

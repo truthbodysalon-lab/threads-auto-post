@@ -42,5 +42,16 @@
       "nagaoka": 145658,
       "masa": 0
     }
+  },
+  {
+    "date": "2026-06-18",
+    "cumulative": 401872,
+    "daily_avg": 80373,
+    "pace": 71,
+    "per_acct": {
+      "truth": 137077,
+      "nagaoka": 146318,
+      "masa": 118477
+    }
   }
 ]

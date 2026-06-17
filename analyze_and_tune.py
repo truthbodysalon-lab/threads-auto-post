@@ -459,13 +459,14 @@ def sync_to_github():
             ["git", "commit", "-m", f"chore: KPI連動の重み更新 {TODAY} [skip ci]"],
             cwd=str(BASE), check=False,
         )
-        for _ in range(3):
-            if subprocess.run(["git", "push"], cwd=str(BASE)).returncode == 0:
-                break
-            subprocess.run(["git", "pull", "--rebase", "-X", "ours", "origin", "main"],
-                           cwd=str(BASE), check=False)
+        # push（とリモート競合の解決）は git_sync.py に委譲。
+        # ここで直接 pull --rebase すると、他ジョブの未ステージ変更があるとき
+        # 『cannot pull with rebase: You have unstaged changes』で失敗するため、
+        # stash安全・冪等な git_sync.py に一本化してerror.log汚染を防ぐ。
+        import sys as _sys
+        subprocess.run([_sys.executable, "git_sync.py"], cwd=str(BASE), check=False)
         if not QUIET:
-            print("  → 重み・KPI履歴をGitHubへ同期")
+            print("  → 重み・KPI履歴をGitHubへ同期（git_sync経由）")
     except Exception as e:
         if not QUIET:
             print(f"  [WARN] GitHub同期スキップ: {e}")

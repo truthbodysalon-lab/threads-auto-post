@@ -44,7 +44,10 @@ def generate_today():
             print(f"[{account}] 本日分は生成済み")
 
 def git_push():
-    """変更をGitHubにプッシュ"""
+    """変更をコミットし、push は git_sync.py（stash安全・rebase競合対策済み）に委譲する。
+    ここで直接 pull --rebase すると未追跡/未ステージのデータ変更があるとき
+    『cannot pull with rebase: You have unstaged changes』で失敗しerror.logを汚すため、
+    push の競合解決は冪等な git_sync.py に一本化する。"""
     run(["git", "add", "log_truth.jsonl", "log_masa.jsonl"])
     result = run(["git", "diff", "--cached", "--quiet"])
     if result.returncode == 0:
@@ -52,8 +55,9 @@ def git_push():
         return
 
     run(["git", "commit", "-m", f"auto: generate posts {TODAY}"])
-    run(["git", "push", "origin", "main"])
-    print("✓ GitHubへプッシュ完了")
+    # push（とリモート競合の解決）は git_sync.py に委譲（stash安全・冪等）
+    run([sys.executable, "git_sync.py"])
+    print("✓ GitHubへ同期（git_sync経由）")
 
 if __name__ == "__main__":
     print(f"=== daily_sync 開始 {TODAY} ===")

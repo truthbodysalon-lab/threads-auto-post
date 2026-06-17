@@ -1,19 +1,19 @@
 {
   "account": "@truth_nagaoka",
-  "updated_at": "2026-06-18 06:04",
+  "updated_at": "2026-06-18 06:40",
   "total_posts": 200,
-  "total_likes": 37,
-  "total_views": 57661,
+  "total_likes": 36,
+  "total_views": 57857,
   "total_replies": 59,
   "avg_likes": 0.18,
-  "avg_views": 288.31,
+  "avg_views": 289.29,
   "recent_7days_count": 200,
   "recent_7days_avg_likes": 0.18,
   "top10_by_likes": [
     {
       "text": "当院は長岡市で兄妹でやってますが\nたまに夫婦に間違えられます。\n\n兄妹です。",
       "likes": 2,
-      "views": 1203,
+      "views": 1432,
       "replies": 0,
       "date": "2026-06-17"
     },
@@ -55,7 +55,7 @@
     {
       "text": "「呼吸の浅さがあるけど病院に行くほどでもない」",
       "likes": 1,
-      "views": 938,
+      "views": 964,
       "replies": 1,
       "date": "2026-06-16"
     },
@@ -83,14 +83,14 @@
   ],
   "performance_by_length": {
     "50〜100字": {
-      "count": 94,
-      "avg_likes": 0.19,
-      "avg_views": 136.48
+      "count": 92,
+      "avg_likes": 0.18,
+      "avg_views": 136.38
     },
     "〜50字": {
-      "count": 99,
+      "count": 101,
       "avg_likes": 0.18,
-      "avg_views": 435.19
+      "avg_views": 431.31
     },
     "100〜150字": {
       "count": 7,

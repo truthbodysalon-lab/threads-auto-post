@@ -1,7 +1,7 @@
 {
   "updated_at": "2026-06-17",
   "pattern_weights": {
-    "quote_empathy": 4,
+    "quote_empathy": 5,
     "insight": 12,
     "education": 6,
     "story": 1,

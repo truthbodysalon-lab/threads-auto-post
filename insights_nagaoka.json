@@ -1,14 +1,14 @@
 {
   "account": "@truth_nagaoka",
-  "updated_at": "2026-06-19 06:03",
+  "updated_at": "2026-06-19 08:47",
   "total_posts": 200,
-  "total_likes": 27,
-  "total_views": 63054,
+  "total_likes": 24,
+  "total_views": 64826,
   "total_replies": 57,
-  "avg_likes": 0.14,
-  "avg_views": 315.27,
+  "avg_likes": 0.12,
+  "avg_views": 324.13,
   "recent_7days_count": 200,
-  "recent_7days_avg_likes": 0.14,
+  "recent_7days_avg_likes": 0.12,
   "top10_by_likes": [
     {
       "text": "当院は長岡市で兄妹でやってますが\nたまに夫婦に間違えられます。\n\n兄妹です。",
@@ -82,15 +82,15 @@
     }
   ],
   "performance_by_length": {
-    "〜50字": {
-      "count": 112,
-      "avg_likes": 0.15,
-      "avg_views": 440.03
-    },
     "50〜100字": {
-      "count": 80,
-      "avg_likes": 0.12,
-      "avg_views": 149.22
+      "count": 78,
+      "avg_likes": 0.09,
+      "avg_views": 150.94
+    },
+    "〜50字": {
+      "count": 114,
+      "avg_likes": 0.15,
+      "avg_views": 449.3
     },
     "100〜150字": {
       "count": 8,

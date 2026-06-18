@@ -1,26 +1,26 @@
 {
   "account": "@truth_nagaoka",
-  "updated_at": "2026-06-18 08:24",
+  "updated_at": "2026-06-19 05:37",
   "total_posts": 200,
-  "total_likes": 36,
-  "total_views": 59797,
-  "total_replies": 58,
-  "avg_likes": 0.18,
-  "avg_views": 298.99,
+  "total_likes": 28,
+  "total_views": 63092,
+  "total_replies": 57,
+  "avg_likes": 0.14,
+  "avg_views": 315.46,
   "recent_7days_count": 200,
-  "recent_7days_avg_likes": 0.18,
+  "recent_7days_avg_likes": 0.14,
   "top10_by_likes": [
     {
       "text": "当院は長岡市で兄妹でやってますが\nたまに夫婦に間違えられます。\n\n兄妹です。",
-      "likes": 2,
-      "views": 1579,
+      "likes": 3,
+      "views": 2898,
       "replies": 0,
       "date": "2026-06-17"
     },
     {
       "text": "カフェラテと菓子パンで朝を済ませてませんか？\n湿気の多い日に頭痛が出る理由です。",
       "likes": 2,
-      "views": 112,
+      "views": 114,
       "replies": 0,
       "date": "2026-06-17"
     },
@@ -34,7 +34,7 @@
     {
       "text": "肩こり・頭痛に悩む人の共通点。\nそれは「圧倒的な水分不足」です",
       "likes": 1,
-      "views": 478,
+      "views": 482,
       "replies": 0,
       "date": "2026-06-17"
     },
@@ -83,19 +83,19 @@
   ],
   "performance_by_length": {
     "50〜100字": {
-      "count": 93,
-      "avg_likes": 0.18,
-      "avg_views": 134.12
+      "count": 81,
+      "avg_likes": 0.14,
+      "avg_views": 147.95
     },
     "〜50字": {
-      "count": 100,
-      "avg_likes": 0.18,
-      "avg_views": 455.75
+      "count": 111,
+      "avg_likes": 0.15,
+      "avg_views": 443.92
     },
     "100〜150字": {
-      "count": 7,
-      "avg_likes": 0.14,
-      "avg_views": 249.86
+      "count": 8,
+      "avg_likes": 0.0,
+      "avg_views": 229.12
     }
   }
 }

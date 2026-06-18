@@ -1,14 +1,14 @@
 {
   "account": "@masahide_takahashi_",
-  "updated_at": "2026-06-18 08:26",
+  "updated_at": "2026-06-19 05:39",
   "total_posts": 200,
-  "total_likes": 28,
-  "total_views": 58114,
-  "total_replies": 172,
-  "avg_likes": 0.14,
-  "avg_views": 290.57,
+  "total_likes": 24,
+  "total_views": 51965,
+  "total_replies": 164,
+  "avg_likes": 0.12,
+  "avg_views": 259.82,
   "recent_7days_count": 200,
-  "recent_7days_avg_likes": 0.14,
+  "recent_7days_avg_likes": 0.12,
   "top10_by_likes": [
     {
       "text": "ターゲット設定がしんどいのは、たぶんやり方の問題です。",
@@ -16,13 +16,6 @@
       "views": 164,
       "replies": 1,
       "date": "2026-06-17"
-    },
-    {
-      "text": "Instagram集客って、実は難しくない。",
-      "likes": 3,
-      "views": 809,
-      "replies": 1,
-      "date": "2026-06-15"
     },
     {
       "text": "Threadsの伸ばし方で予約が増えないのは、投稿のせいじゃありません。",
@@ -62,7 +55,7 @@
     {
       "text": "導線設計、続かないのは意志が弱いからじゃありません。",
       "likes": 1,
-      "views": 606,
+      "views": 608,
       "replies": 1,
       "date": "2026-06-17"
     },
@@ -79,23 +72,30 @@
       "views": 1472,
       "replies": 1,
       "date": "2026-06-16"
+    },
+    {
+      "text": "教育コンテンツの作り方で消耗してる人の共通点を一つだけ挙げます。",
+      "likes": 1,
+      "views": 239,
+      "replies": 1,
+      "date": "2026-06-16"
     }
   ],
   "performance_by_length": {
-    "〜50字": {
-      "count": 184,
-      "avg_likes": 0.15,
-      "avg_views": 303.8
-    },
     "50〜100字": {
-      "count": 12,
+      "count": 15,
       "avg_likes": 0.0,
-      "avg_views": 149.0
+      "avg_views": 133.93
     },
     "100〜150字": {
-      "count": 4,
+      "count": 7,
       "avg_likes": 0.0,
-      "avg_views": 106.75
+      "avg_views": 85.43
+    },
+    "〜50字": {
+      "count": 178,
+      "avg_likes": 0.13,
+      "avg_views": 277.29
     }
   }
 }

@@ -1,19 +1,19 @@
 {
   "account": "@truth_body_salon",
-  "updated_at": "2026-06-18 08:23",
+  "updated_at": "2026-06-19 05:36",
   "total_posts": 200,
-  "total_likes": 21,
-  "total_views": 36141,
-  "total_replies": 105,
+  "total_likes": 20,
+  "total_views": 40916,
+  "total_replies": 109,
   "avg_likes": 0.1,
-  "avg_views": 180.71,
+  "avg_views": 204.58,
   "recent_7days_count": 200,
   "recent_7days_avg_likes": 0.1,
   "top10_by_likes": [
     {
       "text": "昨日は久しぶりに\nバッティングセンター行ってきました。\nぜひご指導お願いしたいです。\n\n@eq.baseball_waki \n\nあ、あとストラックアウトは2回目",
       "likes": 5,
-      "views": 444,
+      "views": 527,
       "replies": 9,
       "date": "2026-06-16"
     },
@@ -82,20 +82,20 @@
     }
   ],
   "performance_by_length": {
-    "50〜100字": {
-      "count": 82,
-      "avg_likes": 0.16,
-      "avg_views": 171.87
-    },
     "〜50字": {
-      "count": 77,
-      "avg_likes": 0.05,
-      "avg_views": 248.17
+      "count": 80,
+      "avg_likes": 0.04,
+      "avg_views": 279.73
     },
     "100〜150字": {
-      "count": 41,
+      "count": 39,
       "avg_likes": 0.1,
-      "avg_views": 71.68
+      "avg_views": 80.59
+    },
+    "50〜100字": {
+      "count": 81,
+      "avg_likes": 0.16,
+      "avg_views": 190.06
     }
   }
 }

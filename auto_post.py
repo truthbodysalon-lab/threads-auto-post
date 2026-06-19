@@ -685,11 +685,34 @@ def run_account(acct: str):
 
 # ── メイン ────────────────────────────────────────────
 
+def _ensure_caffeinate():
+    """投稿時間帯にAC電源なら、スリープ防止(caffeinate)が動いているか確認し、無ければ起動する。
+    Mac再起動・日中の復帰でも自動でスリープ防止を効かせる（sudo不要・AC時のみ）。"""
+    try:
+        now = datetime.now()
+        if not (POST_HOUR_START <= now.hour < POST_HOUR_END):
+            return
+        batt = subprocess.run(["pmset", "-g", "batt"], capture_output=True, text=True, timeout=5).stdout
+        if "AC Power" not in batt:        # バッテリー時は何もしない（浪費防止）
+            return
+        running = subprocess.run(["pgrep", "-f", "caffeinate -s"], capture_output=True, text=True).stdout.strip()
+        if running:                        # 既に効いている
+            return
+        end = now.replace(hour=POST_HOUR_END, minute=0, second=0, microsecond=0)
+        sec = max(60, int((end - now).total_seconds()))
+        subprocess.Popen(["caffeinate", "-s", "-t", str(sec)])
+        log_info("system", f"AC電源を検知 → スリープ防止を自動起動（{sec}秒）")
+    except Exception:
+        pass
+
+
 def main():
     now = datetime.now()
     if not (POST_HOUR_START <= now.hour < POST_HOUR_END):
         print(f"[{now.strftime('%H:%M')}] 投稿時間外 → スキップ")
         return
+
+    _ensure_caffeinate()   # AC電源を検知してスリープ防止を自動起動
 
     # 並行実行防止（launchd が重なった場合にスキップ）
     lock_fd = open(LOCK_FILE, "w")
@@ -711,7 +734,8 @@ def main():
 # 1日の投稿目標と上限（過剰投稿=スパムを防ぎつつ、50本を均等ペースで担保）
 DAILY_TARGET = int(os.environ.get("DAILY_TARGET", "50"))   # 各アカウント1日の目標本数
 DAILY_CAP = int(os.environ.get("DAILY_CAP", "55"))         # 上限（これ以上は出さない）
-MAX_PER_RUN = int(os.environ.get("MAX_PER_RUN", "8"))      # 1サイクルで出す上限（遅れ回復を速く）
+MAX_PER_RUN = int(os.environ.get("MAX_PER_RUN", "8"))      # 通常の1サイクル上限
+MAX_BURST = int(os.environ.get("MAX_BURST", "15"))         # 大きく遅れた時の一気回復上限（スリープ復帰時）
 POSTS_PER_RUN = int(os.environ.get("POSTS_PER_RUN", "3"))  # 後方互換
 
 
@@ -737,9 +761,14 @@ def _run_account_batch(acct: str):
     hour = datetime.now().hour
     want = _target_cumulative_by_now(hour)             # 今あるべき累計
     need = max(0, want - posted)
-    n = min(need, MAX_PER_RUN)
+    # 遅れ幅を自動検知してバースト量を調整（スリープ復帰時に一気に回復）
+    # 通常は MAX_PER_RUN まで。大きく遅れている時は最大15本まで一気に出す。
+    burst_cap = MAX_BURST if need > MAX_PER_RUN else MAX_PER_RUN
+    n = min(need, burst_cap)
     if n == 0 and posted < DAILY_TARGET:
         n = 1                                          # 最低1本（取りこぼし防止）
+    if n > MAX_PER_RUN:
+        log_info(acct, f"{ACCOUNTS[acct]['name']} 遅れ検知（不足{need}本）→ {n}本まとめて回復")
     for i in range(n):
         if _posted_count_today(acct) >= DAILY_CAP:
             break

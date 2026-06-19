@@ -711,7 +711,7 @@ def main():
 # 1日の投稿目標と上限（過剰投稿=スパムを防ぎつつ、50本を均等ペースで担保）
 DAILY_TARGET = int(os.environ.get("DAILY_TARGET", "50"))   # 各アカウント1日の目標本数
 DAILY_CAP = int(os.environ.get("DAILY_CAP", "55"))         # 上限（これ以上は出さない）
-MAX_PER_RUN = int(os.environ.get("MAX_PER_RUN", "6"))      # 1サイクルで出す上限（遅れ回復用）
+MAX_PER_RUN = int(os.environ.get("MAX_PER_RUN", "8"))      # 1サイクルで出す上限（遅れ回復を速く）
 POSTS_PER_RUN = int(os.environ.get("POSTS_PER_RUN", "3"))  # 後方互換
 
 

@@ -493,9 +493,20 @@ LINE_LISTIN_TEMPLATES = [
 ]
 
 
-def generate_line_listin_post() -> str:
-    """公式LINE（頭痛改善情報）へのリストイン投稿を生成"""
-    tmpl = random.choice(LINE_LISTIN_TEMPLATES)
+# truth/nagaoka でテンプレを分割し、同日に両アカウントが同一文を投稿する
+# クロスアカウント重複を構造的に防ぐ（is_duplicate は acct 別判定のため検出できない）。
+# 奇数 index = truth 用、偶数 index = nagaoka 用。
+_LISTIN_POOLS = {
+    "truth":   [t for i, t in enumerate(LINE_LISTIN_TEMPLATES) if i % 2 == 0],
+    "nagaoka": [t for i, t in enumerate(LINE_LISTIN_TEMPLATES) if i % 2 == 1],
+}
+
+
+def generate_line_listin_post(acct: str = "truth") -> str:
+    """公式LINE（頭痛改善情報）へのリストイン投稿を生成。
+    acct ごとに別テンプレ群から選び、truth/nagaoka間の同一文重複を防ぐ。"""
+    pool = _LISTIN_POOLS.get(acct) or LINE_LISTIN_TEMPLATES
+    tmpl = random.choice(pool)
     return fill(tmpl.replace("{url}", LINE_LISTIN_URL))
 
 
@@ -636,9 +647,16 @@ def _ensure_nagaoka(text: str, ratio: float = 0.25, prepend: bool = False) -> st
         main, rest = text.split(marker, 1)
         return main + "\n\n" + phrase + marker + rest
     if "\n\n" in text:
-        last_para = text.rsplit("\n\n", 1)[1]
+        # ルール厳守: 末尾に長岡市を単独追加しない。
+        # 最終段落の「手前」に挿入し、地域ワードが投稿末尾の単独行にならないようにする。
+        head, last_para = text.rsplit("\n\n", 1)
         if any(kw in last_para for kw in _CTA_KW):
             return text
+        return head + "\n\n" + phrase + "\n\n" + last_para
+    # 段落が1つだけの短文: 1文目を残し、フックの直後（本文中盤）に織り込む
+    lines = text.split("\n")
+    if len(lines) >= 2:
+        return lines[0] + "\n" + phrase + "\n" + "\n".join(lines[1:])
     return text + "\n" + phrase
 
 
@@ -883,7 +901,7 @@ def generate_30_posts() -> list[str]:
     listin_posts = []
     for _ in range(4):
         for _ in range(20):
-            p = generate_line_listin_post()
+            p = generate_line_listin_post("truth")
             if p not in listin_posts:
                 listin_posts.append(p)
                 break
@@ -983,7 +1001,7 @@ def generate_40_nagaoka_posts() -> list[str]:
     listin_posts = []
     for _ in range(3):
         for _ in range(20):
-            p = generate_line_listin_post()
+            p = generate_line_listin_post("nagaoka")
             if p not in listin_posts:
                 listin_posts.append(p)
                 break

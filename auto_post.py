@@ -708,18 +708,47 @@ def main():
 
 
 # 1回の実行で各アカウント最大何本投稿するか（単一系統で頻度を上げる）
-POSTS_PER_RUN = int(os.environ.get("POSTS_PER_RUN", "3"))
+# 1日の投稿目標と上限（過剰投稿=スパムを防ぎつつ、50本を均等ペースで担保）
+DAILY_TARGET = int(os.environ.get("DAILY_TARGET", "50"))   # 各アカウント1日の目標本数
+DAILY_CAP = int(os.environ.get("DAILY_CAP", "55"))         # 上限（これ以上は出さない）
+MAX_PER_RUN = int(os.environ.get("MAX_PER_RUN", "6"))      # 1サイクルで出す上限（遅れ回復用）
+POSTS_PER_RUN = int(os.environ.get("POSTS_PER_RUN", "3"))  # 後方互換
+
+
+def _target_cumulative_by_now(hour: int) -> int:
+    """投稿時間帯(6-23時)で DAILY_TARGET を均等配分した、現時点であるべき累計本数。"""
+    start, end = POST_HOUR_START, POST_HOUR_END
+    if hour < start:
+        return 0
+    frac = min(1.0, (hour - start + 1) / max(1, end - start))
+    return int(DAILY_TARGET * frac)
 
 
 def _run_account_batch(acct: str):
-    """1アカウントを最大 POSTS_PER_RUN 本投稿する。投稿できなくなったら止める。"""
-    for i in range(POSTS_PER_RUN):
+    """ペースに追従して投稿する。
+    - 目標(50)に対し『今あるべき累計』との不足分を、最大 MAX_PER_RUN 本まで埋める
+    - DAILY_CAP に達したら出さない（過剰投稿=スパム防止）
+    - 遅れていればまとめて回復、進んでいれば控える（Mac休止後のキャッチアップ対応）
+    """
+    posted = _posted_count_today(acct)
+    if posted >= DAILY_CAP:
+        log_info(acct, f"{ACCOUNTS[acct]['name']} 本日上限({DAILY_CAP})到達 → スキップ")
+        return
+    hour = datetime.now().hour
+    want = _target_cumulative_by_now(hour)             # 今あるべき累計
+    need = max(0, want - posted)
+    n = min(need, MAX_PER_RUN)
+    if n == 0 and posted < DAILY_TARGET:
+        n = 1                                          # 最低1本（取りこぼし防止）
+    for i in range(n):
+        if _posted_count_today(acct) >= DAILY_CAP:
+            break
         before = _posted_count_today(acct)
         run_account(acct)
         after = _posted_count_today(acct)
-        if after <= before:   # 投稿されなかった（キュー枯渇/重複）→ 打ち切り
+        if after <= before:                            # 投稿できなかった→打ち切り
             break
-        if i < POSTS_PER_RUN - 1:
+        if i < n - 1:
             time.sleep(4)
 
 

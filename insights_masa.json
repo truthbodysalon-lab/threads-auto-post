@@ -1,14 +1,14 @@
 {
   "account": "@masahide_takahashi_",
-  "updated_at": "2026-06-19 08:50",
+  "updated_at": "2026-06-20 05:40",
   "total_posts": 200,
-  "total_likes": 24,
-  "total_views": 50193,
-  "total_replies": 163,
-  "avg_likes": 0.12,
-  "avg_views": 250.97,
+  "total_likes": 13,
+  "total_views": 42302,
+  "total_replies": 147,
+  "avg_likes": 0.07,
+  "avg_views": 211.51,
   "recent_7days_count": 200,
-  "recent_7days_avg_likes": 0.12,
+  "recent_7days_avg_likes": 0.07,
   "top10_by_likes": [
     {
       "text": "ターゲット設定がしんどいのは、たぶんやり方の問題です。",
@@ -25,25 +25,11 @@
       "date": "2026-06-17"
     },
     {
-      "text": "新規集客より既客育成が正解。ここで差が出ます。",
-      "likes": 2,
-      "views": 1321,
-      "replies": 2,
-      "date": "2026-06-16"
-    },
-    {
-      "text": "ターゲット設定で結果を出す人は、実はターゲットの悩みを言語化できると投稿が刺さる。",
-      "likes": 2,
-      "views": 100,
+      "text": "集客コンテンツにフォロワーが増えないと設計より発信量を増やすが入っている限り、どんな院でも成果は出ません。",
+      "likes": 1,
+      "views": 68,
       "replies": 1,
-      "date": "2026-06-16"
-    },
-    {
-      "text": "新規集客より既客育成が正解。ここで差が出ます。",
-      "likes": 2,
-      "views": 884,
-      "replies": 0,
-      "date": "2026-06-16"
+      "date": "2026-06-19"
     },
     {
       "text": "Instagram集客は才能ゲームだと思われがちですが、違います。",
@@ -79,23 +65,37 @@
       "views": 239,
       "replies": 1,
       "date": "2026-06-16"
+    },
+    {
+      "text": "インスタのハッシュタグ戦略を制する鍵は、派手さじゃなく最初の3秒で興味を引けるかがすべてです。",
+      "likes": 1,
+      "views": 308,
+      "replies": 1,
+      "date": "2026-06-16"
+    },
+    {
+      "text": "店舗集客の沼にハマる原因はだいたい同じです。",
+      "likes": 1,
+      "views": 319,
+      "replies": 1,
+      "date": "2026-06-16"
     }
   ],
   "performance_by_length": {
     "〜50字": {
-      "count": 177,
-      "avg_likes": 0.14,
-      "avg_views": 268.14
+      "count": 170,
+      "avg_likes": 0.07,
+      "avg_views": 233.59
     },
     "50〜100字": {
-      "count": 16,
-      "avg_likes": 0.0,
-      "avg_views": 133.44
+      "count": 20,
+      "avg_likes": 0.05,
+      "avg_views": 97.2
     },
     "100〜150字": {
-      "count": 7,
+      "count": 10,
       "avg_likes": 0.0,
-      "avg_views": 85.43
+      "avg_views": 64.8
     }
   }
 }

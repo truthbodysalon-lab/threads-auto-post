@@ -1,12 +1,12 @@
 {
   "account": "@truth_nagaoka",
-  "updated_at": "2026-06-20 05:36",
+  "updated_at": "2026-06-20 05:38",
   "total_posts": 200,
   "total_likes": 7,
-  "total_views": 59855,
+  "total_views": 59862,
   "total_replies": 38,
   "avg_likes": 0.04,
-  "avg_views": 299.27,
+  "avg_views": 299.31,
   "recent_7days_count": 200,
   "recent_7days_avg_likes": 0.04,
   "top10_by_likes": [
@@ -90,7 +90,7 @@
     "〜50字": {
       "count": 92,
       "avg_likes": 0.07,
-      "avg_views": 465.22
+      "avg_views": 465.29
     },
     "100〜150字": {
       "count": 5,

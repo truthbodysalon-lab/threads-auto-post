@@ -1,22 +1,15 @@
 {
   "account": "@truth_body_salon",
-  "updated_at": "2026-06-19 08:45",
+  "updated_at": "2026-06-20 05:36",
   "total_posts": 200,
-  "total_likes": 20,
-  "total_views": 41824,
-  "total_replies": 108,
-  "avg_likes": 0.1,
-  "avg_views": 209.12,
+  "total_likes": 10,
+  "total_views": 38391,
+  "total_replies": 88,
+  "avg_likes": 0.05,
+  "avg_views": 191.96,
   "recent_7days_count": 200,
-  "recent_7days_avg_likes": 0.1,
+  "recent_7days_avg_likes": 0.05,
   "top10_by_likes": [
-    {
-      "text": "昨日は久しぶりに\nバッティングセンター行ってきました。\nぜひご指導お願いしたいです。\n\n@eq.baseball_waki \n\nあ、あとストラックアウトは2回目",
-      "likes": 5,
-      "views": 542,
-      "replies": 9,
-      "date": "2026-06-16"
-    },
     {
       "text": "慢性的な首・肩のこりがひどい人に共通していること",
       "likes": 1,
@@ -69,7 +62,7 @@
     {
       "text": "呼吸の浅さのせいでデスクワーク＋中学生・高校生の子育てを心から楽しめない、そんな声をよく聞きます。\n原因の多くは巻き肩にあります。\nそこを整えた方は、来院3〜5",
       "likes": 1,
-      "views": 211,
+      "views": 212,
       "replies": 0,
       "date": "2026-06-16"
     },
@@ -79,23 +72,30 @@
       "views": 760,
       "replies": 1,
       "date": "2026-06-16"
+    },
+    {
+      "text": "「水をあまり飲まない」という方、肩と首の張りが出やすい傾向があります。\nデスクワークは頭痛や体のだるさの隠れた原因です。\n長岡市で多くの方を診てきて、ここを見落",
+      "likes": 1,
+      "views": 127,
+      "replies": 0,
+      "date": "2026-06-16"
     }
   ],
   "performance_by_length": {
-    "50〜100字": {
-      "count": 83,
-      "avg_likes": 0.16,
-      "avg_views": 199.31
-    },
     "〜50字": {
-      "count": 79,
-      "avg_likes": 0.04,
-      "avg_views": 281.14
+      "count": 82,
+      "avg_likes": 0.02,
+      "avg_views": 244.48
+    },
+    "50〜100字": {
+      "count": 84,
+      "avg_likes": 0.07,
+      "avg_views": 186.15
     },
     "100〜150字": {
-      "count": 38,
-      "avg_likes": 0.11,
-      "avg_views": 80.82
+      "count": 34,
+      "avg_likes": 0.06,
+      "avg_views": 79.62
     }
   }
 }

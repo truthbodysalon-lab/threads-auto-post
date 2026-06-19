@@ -1,14 +1,14 @@
 {
   "account": "@masahide_takahashi_",
-  "updated_at": "2026-06-20 05:40",
+  "updated_at": "2026-06-20 06:05",
   "total_posts": 200,
-  "total_likes": 13,
-  "total_views": 42302,
-  "total_replies": 147,
-  "avg_likes": 0.07,
-  "avg_views": 211.51,
+  "total_likes": 12,
+  "total_views": 41906,
+  "total_replies": 145,
+  "avg_likes": 0.06,
+  "avg_views": 209.53,
   "recent_7days_count": 200,
-  "recent_7days_avg_likes": 0.07,
+  "recent_7days_avg_likes": 0.06,
   "top10_by_likes": [
     {
       "text": "ターゲット設定がしんどいのは、たぶんやり方の問題です。",
@@ -74,23 +74,23 @@
       "date": "2026-06-16"
     },
     {
-      "text": "店舗集客の沼にハマる原因はだいたい同じです。",
-      "likes": 1,
-      "views": 319,
-      "replies": 1,
-      "date": "2026-06-16"
+      "text": "バズる投稿の法則で消耗する人は、たいていエンゲージメントが上がると自然に露出が増えるを飛ばしてます。",
+      "likes": 0,
+      "views": 0,
+      "replies": 0,
+      "date": "2026-06-19"
     }
   ],
   "performance_by_length": {
-    "〜50字": {
-      "count": 170,
-      "avg_likes": 0.07,
-      "avg_views": 233.59
-    },
     "50〜100字": {
-      "count": 20,
+      "count": 22,
       "avg_likes": 0.05,
-      "avg_views": 97.2
+      "avg_views": 88.36
+    },
+    "〜50字": {
+      "count": 168,
+      "avg_likes": 0.07,
+      "avg_views": 234.01
     },
     "100〜150字": {
       "count": 10,

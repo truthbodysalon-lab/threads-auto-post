@@ -1,12 +1,12 @@
 {
   "account": "@truth_nagaoka",
-  "updated_at": "2026-06-20 05:38",
+  "updated_at": "2026-06-20 06:03",
   "total_posts": 200,
   "total_likes": 7,
-  "total_views": 59862,
+  "total_views": 60056,
   "total_replies": 38,
   "avg_likes": 0.04,
-  "avg_views": 299.31,
+  "avg_views": 300.28,
   "recent_7days_count": 200,
   "recent_7days_avg_likes": 0.04,
   "top10_by_likes": [
@@ -41,35 +41,35 @@
     {
       "text": "食いしばりや歯ぎしりが\n側頭部の筋肉を緊張させ頭痛を引き起こします。\n「顎が疲れる」方は一度ご相談ください\n\nこんな感じで施術しますよーー",
       "likes": 0,
-      "views": 0,
+      "views": 127,
       "replies": 0,
       "date": "2026-06-19"
     },
     {
       "text": "頭痛薬を飲む前に、まず水を一杯。\n水分不足が、\n意外な頭痛の原因になっていることも。",
       "likes": 0,
-      "views": 1415,
+      "views": 1434,
       "replies": 0,
       "date": "2026-06-19"
     },
     {
       "text": "朝起きたとき肩が痛い人\n寝ている間も筋肉が緊張してるサインです\n体は正直。",
       "likes": 0,
-      "views": 3740,
+      "views": 3745,
       "replies": 0,
       "date": "2026-06-19"
     },
     {
       "text": "知らないうちに、歯を食いしばっていませんか？\nストレスが原因で、顎から首にかけての\n筋肉がガチガチに\n\nそれが、こめかみのズキズキに\n繋がっているかも",
       "likes": 0,
-      "views": 1336,
+      "views": 1340,
       "replies": 0,
       "date": "2026-06-19"
     },
     {
       "text": "当院は長岡市で兄妹でやってますが\nたまに夫婦に間違えられます。\n\n兄妹です。",
       "likes": 0,
-      "views": 590,
+      "views": 603,
       "replies": 0,
       "date": "2026-06-19"
     },
@@ -85,17 +85,17 @@
     "50〜100字": {
       "count": 103,
       "avg_likes": 0.01,
-      "avg_views": 158.27
+      "avg_views": 159.6
     },
     "〜50字": {
       "count": 92,
       "avg_likes": 0.07,
-      "avg_views": 465.29
+      "avg_views": 465.9
     },
     "100〜150字": {
       "count": 5,
       "avg_likes": 0.0,
-      "avg_views": 150.6
+      "avg_views": 150.8
     }
   }
 }

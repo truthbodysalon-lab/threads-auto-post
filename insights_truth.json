@@ -1,12 +1,12 @@
 {
   "account": "@truth_body_salon",
-  "updated_at": "2026-06-20 05:36",
+  "updated_at": "2026-06-20 06:01",
   "total_posts": 200,
   "total_likes": 10,
-  "total_views": 38391,
+  "total_views": 38393,
   "total_replies": 88,
   "avg_likes": 0.05,
-  "avg_views": 191.96,
+  "avg_views": 191.97,
   "recent_7days_count": 200,
   "recent_7days_avg_likes": 0.05,
   "top10_by_likes": [
@@ -90,7 +90,7 @@
     "50〜100字": {
       "count": 84,
       "avg_likes": 0.07,
-      "avg_views": 186.15
+      "avg_views": 186.18
     },
     "100〜150字": {
       "count": 34,

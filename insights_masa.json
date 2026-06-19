@@ -1,14 +1,14 @@
 {
   "account": "@masahide_takahashi_",
-  "updated_at": "2026-06-20 06:05",
+  "updated_at": "2026-06-20 08:01",
   "total_posts": 200,
-  "total_likes": 12,
-  "total_views": 41906,
-  "total_replies": 145,
-  "avg_likes": 0.06,
-  "avg_views": 209.53,
+  "total_likes": 9,
+  "total_views": 38938,
+  "total_replies": 143,
+  "avg_likes": 0.04,
+  "avg_views": 194.69,
   "recent_7days_count": 200,
-  "recent_7days_avg_likes": 0.06,
+  "recent_7days_avg_likes": 0.04,
   "top10_by_likes": [
     {
       "text": "ターゲット設定がしんどいのは、たぶんやり方の問題です。",
@@ -53,49 +53,49 @@
       "date": "2026-06-16"
     },
     {
-      "text": "インスタのハッシュタグ戦略は才能ゲームだと思われがちですが、違います。",
-      "likes": 1,
-      "views": 1472,
-      "replies": 1,
-      "date": "2026-06-16"
-    },
-    {
-      "text": "教育コンテンツの作り方で消耗してる人の共通点を一つだけ挙げます。",
-      "likes": 1,
-      "views": 239,
-      "replies": 1,
-      "date": "2026-06-16"
-    },
-    {
-      "text": "インスタのハッシュタグ戦略を制する鍵は、派手さじゃなく最初の3秒で興味を引けるかがすべてです。",
-      "likes": 1,
-      "views": 308,
-      "replies": 1,
-      "date": "2026-06-16"
-    },
-    {
-      "text": "バズる投稿の法則で消耗する人は、たいていエンゲージメントが上がると自然に露出が増えるを飛ばしてます。",
+      "text": "問い合わせが来ない院と来る院、導線設計の量はほぼ同じです。",
       "likes": 0,
       "views": 0,
-      "replies": 0,
+      "replies": 1,
+      "date": "2026-06-19"
+    },
+    {
+      "text": "ブランディングで問い合わせが来ない院の共通点、たった1つです。",
+      "likes": 0,
+      "views": 0,
+      "replies": 1,
+      "date": "2026-06-19"
+    },
+    {
+      "text": "「投稿しても反応ゼロ」が続く時、問題はコンテンツじゃなくて最初の3秒で興味を引けるかがすべてです。",
+      "likes": 0,
+      "views": 0,
+      "replies": 1,
+      "date": "2026-06-19"
+    },
+    {
+      "text": "プロフィール設計で月10件問い合わせが来る院は、ターゲットを絞ることが最優先を徹底しているだけです。",
+      "likes": 0,
+      "views": 0,
+      "replies": 1,
       "date": "2026-06-19"
     }
   ],
   "performance_by_length": {
+    "〜50字": {
+      "count": 167,
+      "avg_likes": 0.05,
+      "avg_views": 217.61
+    },
     "50〜100字": {
       "count": 22,
       "avg_likes": 0.05,
-      "avg_views": 88.36
-    },
-    "〜50字": {
-      "count": 168,
-      "avg_likes": 0.07,
-      "avg_views": 234.01
+      "avg_views": 88.23
     },
     "100〜150字": {
-      "count": 10,
+      "count": 11,
       "avg_likes": 0.0,
-      "avg_views": 64.8
+      "avg_views": 59.64
     }
   }
 }

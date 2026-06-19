@@ -11,10 +11,10 @@
   },
   "feedback_scores": {},
   "api_scores": {
-    "insight": 0.21,
-    "ranking": -1.29,
-    "education": -2.21,
-    "story": -1.22
+    "education": -2.04,
+    "ranking": -1.1,
+    "insight": 0.26,
+    "story": -1.43
   },
   "follower_scores": {
     "story": -0.38,

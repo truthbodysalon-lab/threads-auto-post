@@ -13,12 +13,12 @@
   },
   "feedback_scores": {},
   "api_scores": {
-    "insight": 0.87,
-    "quote_empathy": -0.91,
-    "story": -1.81,
-    "education": -2.2,
-    "selfcare_casual": -0.29,
-    "workmom": -2.6
+    "insight": 0.97,
+    "workmom": -2.56,
+    "education": -2.41,
+    "story": -1.72,
+    "quote_empathy": -0.87,
+    "selfcare_casual": -0.18
   },
   "follower_scores": {
     "insight": 3.0,

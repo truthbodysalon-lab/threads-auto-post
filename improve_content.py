@@ -50,14 +50,31 @@ def _fill(acct: str, tmpl: str) -> str:
     return g.fill(tmpl)
 
 
+# 店舗性シグナル（truth/nagaoka は具体的な店舗性が必須。薄いポエム/一般論を弾く）
+_STORE_SIGNALS = ("来院", "うち", "当院", "原因", "整え", "改善率", "施術実績", "兄妹",
+                  "3〜5回", "3〜５回", "月10回", "→", "軽症", "歓迎", "薬", "兄妹で")
+# 明らかな壊れ/ジャンク
+_JUNK = {"candidates", "candidate", "json", "テンプレ", "出力", ""}
+# 過剰約束（1回で治る等）も弾く
+_OVERCLAIM = ("1回で変わ", "一回で変わ", "1回で治", "必ず治", "100%")
+
+
 def validate(acct: str, tmpl: str, existing: set) -> bool:
     if not isinstance(tmpl, str) or not tmpl.strip():
         return False
-    if tmpl in existing:
+    t = tmpl.strip()
+    if t in existing or tmpl in existing:
+        return False
+    if t in _JUNK or len(t) < 30:        # ジャンク・極端に短い（中身が薄い）
         return False
     if len(tmpl) > 480:
         return False
-    if _YEAR_CLAIM.search(tmpl):   # 未確認の年数実績はNG
+    if _YEAR_CLAIM.search(tmpl):         # 未確認の年数実績はNG
+        return False
+    if any(o in tmpl for o in _OVERCLAIM):   # 過剰約束NG
+        return False
+    # truth/nagaoka は「具体的な店舗性」を必須に（薄い一般論・ポエムを弾く）
+    if acct in ("truth", "nagaoka") and not any(s in tmpl for s in _STORE_SIGNALS):
         return False
     # 複数回埋めて検証（フィルのランダム性をカバー）
     for _ in range(4):

@@ -3,7 +3,7 @@ name: Threads Auto Post
 on:
   schedule:
     # 20分おきに実行（UTC）。スクリプト側でJST 6:00-23:00を判定
-    - cron: '0,20,40 * * * *'
+    - cron: '2,12,22,32,42,52 * * * *'
   workflow_dispatch:
 
 concurrency:

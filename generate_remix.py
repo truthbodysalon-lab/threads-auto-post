@@ -653,11 +653,18 @@ def _ensure_nagaoka(text: str, ratio: float = 0.25, prepend: bool = False) -> st
         if any(kw in last_para for kw in _CTA_KW):
             return text
         return head + "\n\n" + phrase + "\n\n" + last_para
-    # 段落が1つだけの短文: 1文目を残し、フックの直後（本文中盤）に織り込む
+    # 段落が1つだけの短文: 末尾単独追加NG厳守のため、
+    # 2行以上あれば「末尾より1行前」に挿入（最終行が末尾単独にならないよう）
+    # 1行のみ（単文）の場合は長岡市を追加しない（末尾単独になるため）
     lines = text.split("\n")
-    if len(lines) >= 2:
-        return lines[0] + "\n" + phrase + "\n" + "\n".join(lines[1:])
-    return text + "\n" + phrase
+    if len(lines) >= 3:
+        # 末尾行の手前に挿入
+        return "\n".join(lines[:-1]) + "\n" + phrase + "\n" + lines[-1]
+    elif len(lines) == 2:
+        # 2行の場合: 1文目→長岡市→2文目 の順（中盤挿入）
+        return lines[0] + "\n" + phrase + "\n" + lines[1]
+    # 1行のみ: 末尾単独になるため追加しない
+    return text
 
 
 def _is_valid_first_line(text: str, acct: str = "truth") -> bool:

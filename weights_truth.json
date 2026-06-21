@@ -3,7 +3,7 @@
   "pattern_weights": {
     "quote_empathy": 4,
     "insight": 12,
-    "education": 1,
+    "education": 2,
     "story": 2,
     "workmom": 1,
     "ranking": 4,
@@ -24,8 +24,8 @@
     "insight": 3.0,
     "quote_empathy": -0.1,
     "selfcare_casual": -0.54,
-    "education": -0.4,
-    "story": 0.0,
+    "education": -0.38,
+    "story": -0.0,
     "question": -1.0,
     "workmom": -0.96
   },

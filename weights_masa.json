@@ -19,9 +19,9 @@
   "follower_scores": {
     "story": -0.51,
     "insight": 3.0,
-    "ranking": -0.49,
+    "ranking": -0.5,
     "education": -0.84,
-    "cta": -1.16
+    "cta": -1.15
   },
   "line_scores": {}
 }

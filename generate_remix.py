@@ -1554,6 +1554,20 @@ def generate_30_masa_posts() -> list[str]:
                 idx, _ = line_posts[-(i+1)]  # 後ろから削除
                 posts[idx] = non_line_posts[i]
 
+    # ── LINE追加リンク(8PsIHHC)を確実に織り込む（コンサル成約の入口）──
+    # 上記の言及率制御の「後」に挿入し、必ずURL付きの追加投稿がキューに残るようにする。
+    # auto_post側がLINEリストインとして1日1回に制御するので過剰投稿にはならない。
+    line_add = []
+    for _ in range(2):
+        for _ in range(20):
+            p = generate_masa_post("cta")        # cta = LINE追加URL付き
+            if "8PsIHHC" in p and p not in line_add:
+                line_add.append(p)
+                break
+    for i, lp in enumerate(line_add):
+        pos = min([5, 14][i] if i < 2 else (i * 8 + 5), len(posts))
+        posts.insert(pos, lp)
+
     return posts[:100]
 
 

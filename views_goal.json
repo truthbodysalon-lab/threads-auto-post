@@ -1,6 +1,7 @@
 {
-  "start_date": "2026-06-14",
   "target_per_account": 1000000,
-  "days": 60,
-  "note": "各アカウント2ヶ月(60日)以内に100万閲覧"
+  "mode": "monthly_rolling",
+  "window_days": 30,
+  "max_posts_per_day": 50,
+  "note": "各アカウント常時『直近30日で100万閲覧』を担保する。pace=直近30日実閲覧/100万。累計方式は使わない（月次レートを正直に測る）。"
 }

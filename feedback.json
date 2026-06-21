@@ -7,7 +7,8 @@
     "keisei_target": 1.0,
     "keisei_kyokan": 1.0,
     "story": 1.0,
-    "line_listin_masa": 0.2
+    "line_listin_masa": 0.2,
+    "education": 1.0
   },
   "ng_words": [
     "100店舗以上",
@@ -196,5 +197,5 @@
       "account": "all"
     }
   ],
-  "updated_at": "2026-06-21 11:34"
+  "updated_at": "2026-06-21 14:16"
 }

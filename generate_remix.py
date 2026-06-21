@@ -510,6 +510,38 @@ def generate_line_listin_post(acct: str = "truth") -> str:
     return fill(tmpl.replace("{url}", LINE_LISTIN_URL))
 
 
+# ── 場所・アクセス・駐車場・地域ワード（truth/nagaoka 共通）──────────
+# 確認済みの事実のみ使用: 長岡駅徒歩5分・専用駐車場あり(無料)・お車OK・
+# 夜22時まで受付・土日祝営業・完全予約制・1日3名限定。台数等の不確定情報は書かない。
+# 1文目はフックから（地域名/実績/自己紹介で始めない）。地域ワードは本文に必ず入れる。
+STORE_ACCESS_TEMPLATES = [
+    "「仕事帰りに寄れる整体院、長岡にないかな」という方へ。\n長岡駅から徒歩5分、夜22時まで受付しています。\n専用駐車場もあるので、お車でも通いやすいです。",
+    "頭痛で通うなら、続けやすい場所選びも大事ですよね。\n当院は長岡駅から徒歩5分、お車なら無料の専用駐車場あり。\n土日祝も営業しているので、忙しい方も通えます。",
+    "「駐車場がないと通えない」という声、よくいただきます。\n当院は院の前に専用駐車場をご用意しています。\n長岡駅からも徒歩5分。お車でも電車でも通えます。",
+    "夜遅くまで頭痛をみてくれる整体、長岡にあります。\n夜22時まで受付、長岡駅から徒歩5分。\nお仕事帰りにも寄りやすい立地です。",
+    "本気で体を変えたいなら、通いやすさも続ける力になります。\n長岡駅徒歩5分・専用駐車場あり・夜22時まで受付。\n通いやすさにこだわった長岡市の整体院です。",
+    "「長岡で頭痛・肩こりの整体、どこがいい？」と迷っている方へ。\n長岡駅から徒歩5分、お車なら無料駐車場あり。\n完全予約制なので待ち時間もありません。",
+    "車で通いたい方も、電車の方も大丈夫です。\n長岡駅から徒歩5分、院の前に専用駐車場あり。\n夜22時まで受付なので、生活リズムに合わせて通えます。",
+    "小さいお子さん連れでも通いやすいよう、専用駐車場をご用意しています。\n長岡駅からは徒歩5分。\n完全予約制・1日3名限定で、ゆっくり受けられます。",
+    "「平日は忙しくて行けない」という方へ。\n当院は土日祝も営業、夜22時まで受付しています。\n長岡駅徒歩5分・専用駐車場あり、長岡市内外から通われています。",
+    "通うほど良くなる整体だからこそ、通いやすさで選んでほしい。\n長岡駅徒歩5分／無料の専用駐車場あり／夜22時まで。\n長岡市で頭痛・肩こりを根本から整えています。",
+]
+
+_STORE_ACCESS_POOLS = {
+    "truth":   [t for i, t in enumerate(STORE_ACCESS_TEMPLATES) if i % 2 == 0],
+    "nagaoka": [t for i, t in enumerate(STORE_ACCESS_TEMPLATES) if i % 2 == 1] + [
+        "「軽いうちに、近くで通える整体ないかな」という長岡の方へ。\n兄妹で営む当院は長岡駅から徒歩5分、専用駐車場もあります。\n夜22時まで受付、まだ我慢できる段階でも気軽にどうぞ。",
+        "通いやすさにもこだわっている、兄妹の整体院です。\n長岡駅から徒歩5分・無料の専用駐車場あり・夜22時まで受付。\n軽症のうちに、お車でも電車でも気軽に来てください。",
+    ],
+}
+
+
+def generate_store_access_post(acct: str = "truth") -> str:
+    """場所・アクセス・駐車場・地域ワードの投稿を生成（truth/nagaoka）。"""
+    pool = _STORE_ACCESS_POOLS.get(acct) or STORE_ACCESS_TEMPLATES
+    return fill(random.choice(pool))
+
+
 NAGAOKA_PHRASES = [
     # ルール（全アカウント投稿ルール集より）:
     # ・1文目NG・個人名(まぁ等)NG・未確認実績NG・末尾単独追加NG
@@ -918,6 +950,17 @@ def generate_30_posts() -> list[str]:
         pos = min(anchor_positions[i] if i < len(anchor_positions) else (i * 5 + 3), len(posts))
         posts.insert(pos, lp)
 
+    # 場所・アクセス・駐車場・地域ワード投稿を織り交ぜる（来店ハードルを下げる）
+    access_posts = []
+    for _ in range(3):
+        for _ in range(20):
+            p = generate_store_access_post("truth")
+            if p not in access_posts:
+                access_posts.append(p)
+                break
+    for ap_ in access_posts:
+        posts.insert(random.randint(0, len(posts)), ap_)
+
     return posts[:100]
 
 
@@ -1016,6 +1059,17 @@ def generate_40_nagaoka_posts() -> list[str]:
         anchor_positions = [4, 10, 18]
         pos = min(anchor_positions[i] if i < len(anchor_positions) else (i * 7 + 4), len(posts))
         posts.insert(pos, lp)
+
+    # 場所・アクセス・駐車場・地域ワード投稿を織り交ぜる（来店ハードルを下げる）
+    access_posts = []
+    for _ in range(3):
+        for _ in range(20):
+            p = generate_store_access_post("nagaoka")
+            if p not in access_posts:
+                access_posts.append(p)
+                break
+    for ap_ in access_posts:
+        posts.insert(random.randint(0, len(posts)), ap_)
 
     return posts[:100]
 

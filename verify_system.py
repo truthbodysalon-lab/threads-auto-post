@@ -178,6 +178,47 @@ def check_execution_gaps():
         else:
             add(f"exec:queue:{acct}", "C.実行ギャップ", "WARN", "今日のキュー なし（生成失敗の疑い）")
 
+    # C6: 誘導投稿（ホットペッパー予約・店舗アクセス）がキュー前半(<50)に固定されているか
+    #     ランダム高位置だと1日約50本の消費に届かず未投稿になるバグの再発検知。
+    for acct in ("truth", "nagaoka"):
+        f = BASE / f"log_{acct}.jsonl"
+        try:
+            lines = [l for l in f.read_text(encoding="utf-8").splitlines() if l.strip()]
+            posts = json.loads(lines[-1]).get("posts", []) if lines else []
+            hpb = [i for i, p in enumerate(posts) if "beauty.hotpepper.jp" in p]
+            acc = [i for i, p in enumerate(posts) if "専用駐車場" in p or "長岡駅から車で5分" in p]
+            bad = [x for x in hpb + acc if x >= 50]
+            present = len(hpb) >= 1 and len(acc) >= 1
+            if not present:
+                add(f"exec:funnel:{acct}", "C.実行ギャップ", "WARN",
+                    f"誘導投稿がキューに不足（HPB{len(hpb)}/アクセス{len(acc)}）")
+            elif bad:
+                add(f"exec:funnel:{acct}", "C.実行ギャップ", "FAIL",
+                    f"誘導投稿が位置50超に配置（未投稿リスク）: {bad}")
+            else:
+                add(f"exec:funnel:{acct}", "C.実行ギャップ", "PASS",
+                    f"誘導投稿は前半固定 HPB{hpb} アクセス{acc}")
+        except Exception as e:
+            add(f"exec:funnel:{acct}", "C.実行ギャップ", "WARN", f"キュー確認不可: {e}")
+
+    # C7: 月100万ペース（常時アラーム）。views_action.json を読み、未達アカウントを明示。
+    #     達成は野心的目標のため未達は WARN（恒常監視・改善誘導が目的。FAILにはしない）。
+    try:
+        va = json.loads((BASE / "views_action.json").read_text())
+        per = va.get("per_acct", {})
+        behind = va.get("behind", [])
+        for acct in ACCTS:
+            s = per.get(acct, {})
+            pace = s.get("pace", 0)
+            status = "PASS" if pace >= 100 else "WARN"
+            add(f"exec:views_pace:{acct}", "C.実行ギャップ", status,
+                f"月次pace {pace}%（30日{s.get('v30',0):,} / 1投稿{s.get('avg_post',0)}→必要{s.get('need_avg',0)}）")
+        if behind:
+            add("exec:views_weakest", "C.実行ギャップ", "WARN",
+                f"月100万未達 {len(behind)}件・最弱={va.get('weakest')}（優先テコ入れ要）")
+    except Exception as e:
+        add("exec:views_pace", "C.実行ギャップ", "WARN", f"views_action.json未生成: {e}（views_report.py要実行）")
+
 
 # ── D. ログエラー ─────────────────────────────────
 def check_logs():

@@ -924,13 +924,16 @@ def generate_30_posts() -> list[str]:
         except Exception:
             pass
 
-    # 肩こりCTA 2本・頭痛CTA 2本をランダムな位置に差し込む
+    # 肩こりCTA 2本・頭痛CTA 2本（ホットペッパー予約導線）を前半に固定配置する。
+    # 実行ギャップ対策: 1日の消費は約50本なので、ランダム高位置だと到達せず未投稿になる。
+    # LINEリストインと同様に前半（index 5, 14, 23, 32）へアンカーして毎日確実に届ける。
     cta_posts = (
         [_enforce_short_body(_ensure_nagaoka(generate_cta_post("katakori"))) for _ in range(2)] +
         [_enforce_short_body(_ensure_nagaoka(generate_cta_post("zutsuu")))   for _ in range(2)]
     )
-    for cta in cta_posts:
-        pos = random.randint(0, len(posts))
+    cta_anchors = [5, 14, 23, 32]
+    for i, cta in enumerate(cta_posts):
+        pos = min(cta_anchors[i] if i < len(cta_anchors) else (i * 9 + 5), len(posts))
         posts.insert(pos, cta)
 
     # 公式LINEリストイン投稿を織り交ぜる（頭痛改善情報の配信LINEへ誘導）
@@ -951,6 +954,8 @@ def generate_30_posts() -> list[str]:
         posts.insert(pos, lp)
 
     # 場所・アクセス・駐車場・地域ワード投稿を織り交ぜる（来店ハードルを下げる）
+    # 実行ギャップ対策: ランダム高位置(例 86)だと1日約50本の消費に届かず未投稿になっていた。
+    # 前半（index 9, 19, 28）へアンカーして毎日確実に届ける。
     access_posts = []
     for _ in range(3):
         for _ in range(20):
@@ -958,8 +963,10 @@ def generate_30_posts() -> list[str]:
             if p not in access_posts:
                 access_posts.append(p)
                 break
-    for ap_ in access_posts:
-        posts.insert(random.randint(0, len(posts)), ap_)
+    access_anchors = [9, 19, 28]
+    for i, ap_ in enumerate(access_posts):
+        pos = min(access_anchors[i] if i < len(access_anchors) else (i * 9 + 9), len(posts))
+        posts.insert(pos, ap_)
 
     return posts[:100]
 
@@ -1042,8 +1049,10 @@ def generate_40_nagaoka_posts() -> list[str]:
         p
         for i, p in enumerate(cta_posts)
     ]
-    for cta in cta_posts:
-        pos = random.randint(0, len(posts))
+    # 実行ギャップ対策: ホットペッパー予約導線を前半（index 6, 16, 26）へ固定配置して毎日確実に届ける
+    cta_anchors = [6, 16, 26]
+    for i, cta in enumerate(cta_posts):
+        pos = min(cta_anchors[i] if i < len(cta_anchors) else (i * 10 + 6), len(posts))
         posts.insert(pos, cta)
 
     # 公式LINEリストイン投稿を織り交ぜる（頭痛改善情報の配信LINEへ誘導）
@@ -1061,6 +1070,7 @@ def generate_40_nagaoka_posts() -> list[str]:
         posts.insert(pos, lp)
 
     # 場所・アクセス・駐車場・地域ワード投稿を織り交ぜる（来店ハードルを下げる）
+    # 実行ギャップ対策: 前半（index 12, 21, 30）へアンカーして毎日確実に届ける
     access_posts = []
     for _ in range(3):
         for _ in range(20):
@@ -1068,8 +1078,10 @@ def generate_40_nagaoka_posts() -> list[str]:
             if p not in access_posts:
                 access_posts.append(p)
                 break
-    for ap_ in access_posts:
-        posts.insert(random.randint(0, len(posts)), ap_)
+    access_anchors = [12, 21, 30]
+    for i, ap_ in enumerate(access_posts):
+        pos = min(access_anchors[i] if i < len(access_anchors) else (i * 9 + 12), len(posts))
+        posts.insert(pos, ap_)
 
     return posts[:100]
 
@@ -1084,7 +1096,12 @@ MASA_TOPICS = _masa_mat.get("topics") or [
     "動画集客", "Instagram運用", "Threads運用", "広告費の考え方",
     "プロフィール設計", "コンテンツ設計", "リール動画", "MEO対策",
     "フォロワーより導線", "売上につながる投稿", "エンゲージメント改善",
-    "バズる投稿の法則", "コメント活用", "ストーリーズ活用", "教育コンテンツの作り方"
+    "バズる投稿の法則", "コメント活用", "ストーリーズ活用", "教育コンテンツの作り方",
+    # ── コンサル教材テーマ（店舗/整体院オーナー向け・ローンチ前の権威性醸成）──
+    "店舗集客の全体設計", "圧倒的なウリの作り方", "3秒で選ばれる伝え方",
+    "高額コースの成約", "カウンセリング設計", "リピートとLTV", "紹介が生まれる仕組み",
+    "Googleマップ攻略", "ホットペッパー攻略", "患者の本音リサーチ",
+    "地方院の集客", "新規10名の安定獲得", "売上50万から100万の壁"
 ]
 
 MASA_PATTERNS = {

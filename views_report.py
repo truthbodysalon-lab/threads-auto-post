@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """
-全アカウントの閲覧データをObsidianに記録し、問題点・改善点・
-「1ヶ月で100万閲覧」目標の進捗を出す日次レポート。
+各アカウントが「常に1ヶ月あたり100万閲覧以上」を担保できているかを毎日チェックする。
 
-- Threads API のアカウント別 views（日次）を取得
-- 目標開始日からの累計・現状ペース・達成見込みを算出
-- 問題点（弱いアカウント・投稿停滞・伸び悩み）と改善案を出す
-- Obsidian（SNS・Threads/閲覧レポート/）にMarkdownでWrite
+設計（2026-06-22 作り直し）:
+- 旧版は「開始日からの累計 / 60日」方式で pace が過大表示され、真の月次レートを隠していた。
+- 新版は **直近30日の実閲覧（=本当の月次レート）vs 100万** で正直に測る。
+- views = 投稿数 × 1投稿あたり閲覧。どちらのレバーが不足かを出し、改善先を明示する。
+- 投稿数は1日最大50（月1500）が上限なので、現実的な主レバーは「1投稿あたり閲覧」。
+- 未達アカウントは views_action.json に記録し、毎朝のサブエージェントEが最優先テコ入れに使う。
 
 使い方:
   python3 views_report.py
@@ -22,6 +23,7 @@ from pathlib import Path
 BASE = Path(__file__).parent
 GOAL_FILE = BASE / "views_goal.json"
 HIST_FILE = BASE / "views_history.json"
+ACTION_FILE = BASE / "views_action.json"     # 毎朝のテコ入れ用フラグ
 REPORT_DIR = Path("/Users/mt112/Desktop/my files/myfiles/SNS・Threads/閲覧レポート")
 ACCTS = {"truth": "TRUTH", "nagaoka": "NAGAOKA", "masa": "MASA"}
 NAMES = {"truth": "@truth_body_salon", "nagaoka": "@truth_nagaoka", "masa": "@masahide_takahashi_"}
@@ -34,43 +36,49 @@ for line in (BASE / ".env").read_text().splitlines():
 
 
 def load_goal() -> dict:
+    g = {"target_per_account": 1_000_000, "mode": "monthly_rolling",
+         "window_days": 30, "max_posts_per_day": 50}
     if GOAL_FILE.exists():
         try:
-            g = json.loads(GOAL_FILE.read_text())
-            # 後方互換: 旧 target → target_per_account
-            if "target_per_account" not in g:
-                g["target_per_account"] = g.get("target", 1_000_000)
-            return g
+            g.update(json.loads(GOAL_FILE.read_text()))
         except Exception:
             pass
-    g = {"start_date": date.today().isoformat(), "target_per_account": 1_000_000, "days": 30}
-    GOAL_FILE.write_text(json.dumps(g, ensure_ascii=False, indent=2))
     return g
 
 
-def _parse_ts(ts: str):
-    try:
-        return datetime.strptime(ts.replace("Z", "+0000"), "%Y-%m-%dT%H:%M:%S%z")
-    except Exception:
-        return None
-
-
-def fetch_daily_views(acct: str, since_ts: int, until_ts: int):
-    """[(date_str, views), ...] を返す。失敗時は空。"""
+def fetch_window_views(acct: str, days: int) -> tuple[int, int, int]:
+    """直近 days 日の (合計views, 取得日数, 当日views) を返す。失敗時 (0,0,0)。"""
     uid = os.environ.get(f"THREADS_USER_ID_{ACCTS[acct]}")
     tok = os.environ.get(f"THREADS_ACCESS_TOKEN_{ACCTS[acct]}")
+    until = int(datetime.now(timezone.utc).timestamp())
+    since = int((datetime.now(timezone.utc) - timedelta(days=days)).timestamp())
     url = (f"https://graph.threads.net/v1.0/{uid}/threads_insights"
-           f"?metric=views&since={since_ts}&until={until_ts}&access_token={tok}")
-    out = []
+           f"?metric=views&since={since}&until={until}&access_token={tok}")
     try:
         with urllib.request.urlopen(url, timeout=20) as r:
             data = json.loads(r.read())
-        for v in data["data"][0].get("values", []):
-            et = v.get("end_time", "")
-            out.append((et[:10], int(v.get("value", 0))))
+        vals = data["data"][0].get("values", [])
+        total = sum(int(v.get("value", 0)) for v in vals)
+        today = int(vals[-1].get("value", 0)) if vals else 0
+        return total, len(vals), today
     except Exception:
-        pass
-    return out
+        return 0, 0, 0
+
+
+def posts_in_window(acct: str, days: int) -> int:
+    """直近 days 日の投稿本数（log_<acct>_posted.jsonl ベース）。"""
+    pf = BASE / f"log_{acct}_posted.jsonl"
+    if not pf.exists():
+        return 0
+    cutoff = (date.today() - timedelta(days=days)).isoformat()
+    n = 0
+    for line in pf.read_text(encoding="utf-8").splitlines():
+        try:
+            if json.loads(line).get("date", "") >= cutoff:
+                n += 1
+        except Exception:
+            pass
+    return n
 
 
 def posted_today(acct: str) -> int:
@@ -78,101 +86,97 @@ def posted_today(acct: str) -> int:
     if not pf.exists():
         return 0
     t = date.today().isoformat()
-    n = 0
-    for line in pf.read_text(encoding="utf-8").splitlines():
-        try:
-            if json.loads(line).get("date") == t:
-                n += 1
-        except Exception:
-            pass
-    return n
+    return sum(1 for line in pf.read_text(encoding="utf-8").splitlines()
+               if line.strip() and json.loads(line).get("date") == t)
 
 
 def main():
     goal = load_goal()
-    start = date.fromisoformat(goal["start_date"])
-    target = goal["target_per_account"]      # 各アカウント100万
-    days = goal["days"]
-    deadline = start + timedelta(days=days)
+    target = goal["target_per_account"]          # 各アカウント月100万
+    win = goal.get("window_days", 30)
+    cap = goal.get("max_posts_per_day", 50)
+    req_daily = target // win                     # 1日に必要な閲覧 = 33,334
     today = date.today()
-    elapsed = max(1, (today - start).days + 1)
-    remaining = max(0, (deadline - today).days)
-    required_daily = target // days          # 各アカウント1日に必要なviews
 
-    since = int(datetime(start.year, start.month, start.day, tzinfo=timezone.utc).timestamp())
-    until = int(datetime.now(timezone.utc).timestamp())
-
-    # アカウントごとに「自身の100万」への進捗を出す
     stat = {}
     for acct in ACCTS:
-        vals = fetch_daily_views(acct, since, until)
-        cum = sum(v for _, v in vals)
-        d_today = vals[-1][1] if vals else 0
-        d_avg = cum // elapsed
-        proj = d_avg * days
-        pace = (d_avg * 100 // required_daily) if required_daily else 0
-        need_from_now = (max(0, target - cum) // remaining) if remaining else max(0, target - cum)
-        stat[acct] = {"cum": cum, "today": d_today, "avg": d_avg, "proj": proj,
-                      "pace": pace, "need": need_from_now, "posts": posted_today(acct)}
+        v30, vdays, vtoday = fetch_window_views(acct, win)
+        p30 = posts_in_window(acct, win)
+        avg_post = (v30 // p30) if p30 else 0      # 1投稿あたり閲覧（実績）
+        pace = (v30 * 100 // target) if target else 0
+        d_avg = v30 // max(1, vdays)
+        gap_daily = max(0, req_daily - d_avg)      # 1日あたり不足views
+        # レバー分析: 月100万に必要な「1投稿あたり閲覧」（投稿数=直近実績ベース）
+        need_avg_at_current_posts = (target // p30) if p30 else 0
+        # 月100万に必要な「投稿数」（1投稿あたり閲覧=現状維持の場合）
+        need_posts_at_current_avg = (target // avg_post) if avg_post else 0
+        need_posts_per_day = need_posts_at_current_avg / win if need_posts_at_current_avg else 0
+        stat[acct] = dict(v30=v30, vdays=vdays, vtoday=vtoday, p30=p30, avg_post=avg_post,
+                          pace=pace, d_avg=d_avg, gap_daily=gap_daily,
+                          need_avg=need_avg_at_current_posts,
+                          need_posts_day=need_posts_per_day, posts_today=posted_today(acct))
 
-    # ── 問題点・改善点（アカウント別・データ駆動）──
+    # ── 問題点・改善アクション（レバーを名指しで）──
     problems, actions = [], []
+    behind = []
     for acct in ACCTS:
         s = stat[acct]
         if s["pace"] < 100:
-            gap = required_daily - s["avg"]
-            problems.append(f"{NAMES[acct]}: 目標ペース {s['pace']}%（日平均 {s['avg']:,} / 必要 {required_daily:,} ＝ 1日あと {gap:,} 不足）")
-        # 投稿停滞は「10時以降に少ない」場合のみ警告（深夜/早朝の誤検知を防ぐ）
-        if datetime.now().hour >= 10 and s["posts"] < 5:
-            problems.append(f"{NAMES[acct]}: 本日投稿 {s['posts']}本と少ない（投稿停滞の疑い）")
-    # 最弱を最優先アクションに
-    weakest = min(ACCTS, key=lambda a: stat[a]["avg"])
-    actions.append(f"【最優先】{NAMES[weakest]}（日平均 {stat[weakest]['avg']:,}・達成率 {stat[weakest]['pace']}%）を重点改善：勝ちパターン比率UP・投稿本数増・フック強化")
-    behind = [a for a in ACCTS if stat[a]["pace"] < 100]
-    if behind:
-        actions.append("各アカウントとも100万には届いていない。投稿頻度（1日の投稿本数）と1投稿あたりの閲覧（フックの強さ）の両方を上げる必要がある")
-        actions.append("特に閲覧を伸ばすには『保存・シェアされる切り口』『コメントを誘う問いかけ』『冒頭3秒で刺すフック』を増やす")
-    else:
-        actions.append("全アカウント目標ペース達成中。維持しつつ最弱を底上げ")
+            behind.append(acct)
+            problems.append(
+                f"{NAMES[acct]}: 月次レート {s['v30']:,}/{target:,}（{s['pace']}%）"
+                f" ｜ 1日あと {s['gap_daily']:,} 不足")
+        if today.isoformat() and s["posts_today"] < 5 and datetime.now().hour >= 12:
+            problems.append(f"{NAMES[acct]}: 本日投稿 {s['posts_today']}本（投稿停滞の疑い）")
 
-    # ── Obsidianレポート ──
+    weakest = min(ACCTS, key=lambda a: stat[a]["pace"]) if ACCTS else None
+    for acct in behind:
+        s = stat[acct]
+        # 主レバー判定: 投稿数は cap(月 cap*win) が上限。avg_post を上げる方が現実的かを示す
+        max_posts_month = cap * win
+        if s["avg_post"] and s["need_posts_day"] > cap:
+            lever = (f"投稿数据え置きでは月{max_posts_month:,}本でも届かない。"
+                     f"1投稿あたり閲覧を {s['avg_post']:,}→{s['need_avg']:,} へ引き上げる"
+                     f"（フック強化・勝ちパターン比率UP）のが必須")
+        else:
+            lever = (f"1投稿あたり閲覧 {s['avg_post']:,} を維持しても、"
+                     f"月{int(s['need_posts_day'])}本/日でも到達可。投稿数の安定確保が効く")
+        actions.append(f"{NAMES[acct]}（{s['pace']}%）: {lever}")
+    if weakest:
+        actions.insert(0, f"【最優先テコ入れ】{NAMES[weakest]}（pace {stat[weakest]['pace']}%・"
+                          f"1投稿 {stat[weakest]['avg_post']:,}views）を今日の重点に")
+    if not behind:
+        actions.append("全アカウント月100万ペース達成 ✅ 維持しつつ最弱を底上げ")
+
+    # ── Obsidian レポート ──
     bar = lambda p: "█" * (min(p, 100) // 5) + "░" * (20 - min(p, 100) // 5)
-    total_cum = sum(stat[a]["cum"] for a in ACCTS)
     lines = [
-        f"# 閲覧レポート {today.isoformat()}",
+        f"# 閲覧レポート {today.isoformat()}（常時・月100万チェック）",
         "",
-        f"## 🎯 目標: 各アカウント {target:,} views/月（{start.isoformat()}〜{deadline.isoformat()}）",
-        f"> 経過 {elapsed}日 / 残り {remaining}日 ｜ 各アカウント1日 {required_daily:,} views必要 ｜ 3アカウント累計 {total_cum:,}",
+        f"## 🎯 目標: 各アカウント **常に直近{win}日で {target:,} views 以上**",
+        f"> 1日あたり必要 {req_daily:,} views ｜ 投稿上限 {cap}本/日（月{cap*win:,}本）",
+        f"> 月100万に必要な1投稿あたり閲覧 = {target//(cap*win):,}（上限投稿時）",
         "",
     ]
     for acct in ACCTS:
         s = stat[acct]
-        pct = s["cum"] * 100 // target
         lines += [
-            f"### {NAMES[acct]}",
-            f"- 累計 **{s['cum']:,}** / {target:,}（{pct}%）  `{bar(pct)}`",
-            f"- 日平均 **{s['avg']:,}** / 必要 {required_daily:,} ＝ ペース **{s['pace']}%** ｜ 達成見込み {s['proj']:,}",
-            f"- 本日 {s['today']:,} views / 投稿 {s['posts']}本 ｜ 残りは1日 {s['need']:,} 必要",
+            f"### {NAMES[acct]} — pace **{s['pace']}%**  `{bar(s['pace'])}`",
+            f"- 直近{win}日: **{s['v30']:,}** views / {target:,}（日平均 {s['d_avg']:,} / 必要 {req_daily:,}）",
+            f"- 投稿 {s['p30']:,}本 → **1投稿あたり {s['avg_post']:,} views** ｜ 本日 {s['vtoday']:,}views・{s['posts_today']}投稿",
+            f"- 月100万に必要: 現投稿数なら1投稿 **{s['need_avg']:,}** views / 現品質なら **{s['need_posts_day']:.0f}** 本/日",
             "",
         ]
-    lines += ["## ⚠️ 問題点", ""]
-    lines += [f"- {p}" for p in problems] or ["- 特になし（順調）"]
-    lines += ["", "## ✅ 改善アクション", ""]
-    lines += [f"- {a}" for a in actions]
+    lines += ["## ⚠️ 問題点", ""] + ([f"- {p}" for p in problems] or ["- 特になし（順調）"])
+    lines += ["", "## ✅ 改善アクション（レバー指定）", ""] + [f"- {a}" for a in actions]
     lines += ["", f"> 更新: {datetime.now().strftime('%Y-%m-%d %H:%M')}"]
-    # 後段（保存・履歴）で使う集計値
-    cumulative = total_cum
-    total_daily_avg = sum(stat[a]["avg"] for a in ACCTS)
-    pace = min(stat[a]["pace"] for a in ACCTS)
-    per_acct_cum = {a: stat[a]["cum"] for a in ACCTS}
 
     try:
         REPORT_DIR.mkdir(parents=True, exist_ok=True)
         (REPORT_DIR / f"閲覧レポート_{today.isoformat()}.md").write_text("\n".join(lines), encoding="utf-8")
-        # インデックス追記（各アカウントの達成率を併記）
         idx = REPORT_DIR / "00_INDEX.md"
-        per_pct = " / ".join(f"{a}{per_acct_cum[a]*100//target}%" for a in ACCTS)
-        entry = f"- [{today.isoformat()}](閲覧レポート_{today.isoformat()}.md) 各100万目標 [{per_pct}] 最低ペース{pace}%\n"
+        per = " / ".join(f"{a}{stat[a]['pace']}%" for a in ACCTS)
+        entry = f"- [{today.isoformat()}](閲覧レポート_{today.isoformat()}.md) 月100万 [{per}]\n"
         if idx.exists():
             if today.isoformat() not in idx.read_text(encoding="utf-8"):
                 idx.write_text(idx.read_text(encoding="utf-8") + entry, encoding="utf-8")
@@ -181,19 +185,36 @@ def main():
     except Exception as e:
         print(f"[WARN] Obsidian保存失敗: {e}")
 
-    # 履歴も残す
+    # ── 履歴（真の月次レートで記録）──
     try:
         hist = json.loads(HIST_FILE.read_text()) if HIST_FILE.exists() else []
         hist = [h for h in hist if h.get("date") != today.isoformat()]
-        hist.append({"date": today.isoformat(), "cumulative": cumulative, "daily_avg": total_daily_avg,
-                     "pace": pace, "per_acct": per_acct_cum})
+        hist.append({"date": today.isoformat(),
+                     "per_acct_30d": {a: stat[a]["v30"] for a in ACCTS},
+                     "per_acct_pace": {a: stat[a]["pace"] for a in ACCTS},
+                     "per_acct_avg_post": {a: stat[a]["avg_post"] for a in ACCTS}})
         HIST_FILE.write_text(json.dumps(hist, ensure_ascii=False, indent=2))
     except Exception:
         pass
 
-    per_pct = " / ".join(f"{a} {per_acct_cum[a]*100//target}%" for a in ACCTS)
-    print(f"閲覧レポート {today.isoformat()}: 各100万目標への達成率 [{per_pct}] "
-          f"3アカウント累計{cumulative:,} 最低ペース{pace}% → Obsidian保存")
+    # ── テコ入れフラグ（毎朝サブエージェントEが読む）──
+    try:
+        ACTION_FILE.write_text(json.dumps({
+            "date": today.isoformat(),
+            "target_per_account": target,
+            "weakest": weakest,
+            "behind": behind,
+            "per_acct": {a: {"pace": stat[a]["pace"], "v30": stat[a]["v30"],
+                             "avg_post": stat[a]["avg_post"], "need_avg": stat[a]["need_avg"],
+                             "gap_daily": stat[a]["gap_daily"]} for a in ACCTS},
+            "priority_order": sorted(ACCTS, key=lambda a: stat[a]["pace"]),
+        }, ensure_ascii=False, indent=2), encoding="utf-8")
+    except Exception:
+        pass
+
+    per = " / ".join(f"{a} {stat[a]['pace']}%(1投稿{stat[a]['avg_post']:,})" for a in ACCTS)
+    print(f"月100万チェック {today.isoformat()}: [{per}] "
+          f"最弱={NAMES.get(weakest,'-')} 未達={len(behind)}件 → Obsidian保存・views_action.json更新")
 
 
 if __name__ == "__main__":

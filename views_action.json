@@ -1,0 +1,38 @@
+{
+  "date": "2026-06-22",
+  "target_per_account": 1000000,
+  "weakest": "masa",
+  "behind": [
+    "truth",
+    "nagaoka",
+    "masa"
+  ],
+  "per_acct": {
+    "truth": {
+      "pace": 37,
+      "v30": 376439,
+      "avg_post": 434,
+      "need_avg": 1153,
+      "gap_daily": 21190
+    },
+    "nagaoka": {
+      "pace": 47,
+      "v30": 474311,
+      "avg_post": 635,
+      "need_avg": 1340,
+      "gap_daily": 18033
+    },
+    "masa": {
+      "pace": 19,
+      "v30": 196822,
+      "avg_post": 238,
+      "need_avg": 1210,
+      "gap_daily": 26984
+    }
+  },
+  "priority_order": [
+    "masa",
+    "truth",
+    "nagaoka"
+  ]
+}

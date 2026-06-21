@@ -1,12 +1,12 @@
 {
   "account": "@masahide_takahashi_",
-  "updated_at": "2026-06-21 23:47",
+  "updated_at": "2026-06-22 06:05",
   "total_posts": 200,
   "total_likes": 1,
-  "total_views": 26474,
+  "total_views": 26548,
   "total_replies": 144,
   "avg_likes": 0.01,
-  "avg_views": 132.37,
+  "avg_views": 132.74,
   "recent_7days_count": 200,
   "recent_7days_avg_likes": 0.01,
   "top10_by_likes": [
@@ -20,7 +20,7 @@
     {
       "text": "ターゲット設定で結果が出る人と出ない人の差は、才能じゃなく順番です。",
       "likes": 0,
-      "views": 12,
+      "views": 15,
       "replies": 1,
       "date": "2026-06-21"
     },
@@ -34,28 +34,28 @@
     {
       "text": "導線設計に時間をかけてるのに成果が出ないなら、原因は量じゃありません。\nSNSは「場所取り」より「信頼貯金」\nここが土台になっていないだけです。",
       "likes": 0,
-      "views": 138,
+      "views": 143,
       "replies": 0,
       "date": "2026-06-21"
     },
     {
       "text": "「発信が苦手」という人は、実は新規集客の自動化への誤解を持っているだけです。",
       "likes": 0,
-      "views": 253,
+      "views": 280,
       "replies": 1,
       "date": "2026-06-21"
     },
     {
       "text": "Instagram集客が伸びない原因の9割は、努力不足じゃなく設計ミスです。",
       "likes": 0,
-      "views": 198,
+      "views": 209,
       "replies": 1,
       "date": "2026-06-21"
     },
     {
       "text": "コメント活用で消耗してる院ほど、足し算ばかりしています。",
       "likes": 0,
-      "views": 164,
+      "views": 170,
       "replies": 1,
       "date": "2026-06-21"
     },
@@ -85,17 +85,17 @@
     "〜50字": {
       "count": 156,
       "avg_likes": 0.0,
-      "avg_views": 149.01
+      "avg_views": 149.39
     },
     "50〜100字": {
       "count": 35,
       "avg_likes": 0.03,
-      "avg_views": 76.54
+      "avg_views": 76.71
     },
     "100〜150字": {
       "count": 9,
       "avg_likes": 0.0,
-      "avg_views": 61.0
+      "avg_views": 62.0
     }
   }
 }

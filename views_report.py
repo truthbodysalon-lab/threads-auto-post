@@ -122,7 +122,8 @@ def main():
         if s["pace"] < 100:
             gap = required_daily - s["avg"]
             problems.append(f"{NAMES[acct]}: 目標ペース {s['pace']}%（日平均 {s['avg']:,} / 必要 {required_daily:,} ＝ 1日あと {gap:,} 不足）")
-        if s["posts"] < 5:
+        # 投稿停滞は「10時以降に少ない」場合のみ警告（深夜/早朝の誤検知を防ぐ）
+        if datetime.now().hour >= 10 and s["posts"] < 5:
             problems.append(f"{NAMES[acct]}: 本日投稿 {s['posts']}本と少ない（投稿停滞の疑い）")
     # 最弱を最優先アクションに
     weakest = min(ACCTS, key=lambda a: stat[a]["avg"])

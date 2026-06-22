@@ -1,12 +1,12 @@
 {
   "account": "@truth_nagaoka",
-  "updated_at": "2026-06-23 06:43",
+  "updated_at": "2026-06-23 06:47",
   "total_posts": 200,
   "total_likes": 0,
-  "total_views": 46253,
+  "total_views": 46263,
   "total_replies": 26,
   "avg_likes": 0.0,
-  "avg_views": 231.26,
+  "avg_views": 231.31,
   "recent_7days_count": 200,
   "recent_7days_avg_likes": 0.0,
   "top10_by_likes": [
@@ -27,7 +27,7 @@
     {
       "text": "毎朝のルーティンが\n「頭痛薬⇨コーヒー」？\nそれ、合法的カフェイン中毒です\n\nそろそろ首と人生をほぐしてあげて",
       "likes": 0,
-      "views": 372,
+      "views": 376,
       "replies": 0,
       "date": "2026-06-22"
     },
@@ -85,12 +85,12 @@
     "50〜100字": {
       "count": 124,
       "avg_likes": 0.0,
-      "avg_views": 157.49
+      "avg_views": 157.52
     },
     "〜50字": {
       "count": 65,
       "avg_likes": 0.0,
-      "avg_views": 392.69
+      "avg_views": 392.78
     },
     "150字以上": {
       "count": 2,

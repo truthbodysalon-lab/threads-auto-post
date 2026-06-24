@@ -1,12 +1,12 @@
 {
   "account": "@truth_nagaoka",
-  "updated_at": "2026-06-25 06:03",
+  "updated_at": "2026-06-25 06:54",
   "total_posts": 200,
   "total_likes": 2,
-  "total_views": 38920,
+  "total_views": 39492,
   "total_replies": 21,
   "avg_likes": 0.01,
-  "avg_views": 194.6,
+  "avg_views": 197.46,
   "recent_7days_count": 200,
   "recent_7days_avg_likes": 0.01,
   "top10_by_likes": [
@@ -25,9 +25,16 @@
       "date": "2026-06-22"
     },
     {
-      "text": "週3回の頭痛。\nそれ、普通じゃないから\n体からのSOS無視しないで",
+      "text": "頭痛があるのに検査をしても\n脳は悪くない頭痛の原因の多くは\n\n首と肩の筋肉の緊張です",
       "likes": 0,
       "views": 0,
+      "replies": 0,
+      "date": "2026-06-24"
+    },
+    {
+      "text": "週3回の頭痛。\nそれ、普通じゃないから\n体からのSOS無視しないで",
+      "likes": 0,
+      "views": 555,
       "replies": 0,
       "date": "2026-06-24"
     },
@@ -41,14 +48,14 @@
     {
       "text": "頭が痛いのに、頭を冷やしていませんか？\nこの頭痛はお腹を温めるのが正解です。",
       "likes": 0,
-      "views": 6,
+      "views": 7,
       "replies": 0,
       "date": "2026-06-24"
     },
     {
       "text": "デスクワークをするなら、 \n1時間ごとに立ち上がることを \n習慣にしてみよう。 \n少しの工夫で、動きやすい体に \n変わるかもしれないよ。",
       "likes": 0,
-      "views": 390,
+      "views": 391,
       "replies": 0,
       "date": "2026-06-24"
     },
@@ -62,7 +69,7 @@
     {
       "text": "「菓子パンをやめたら頭痛が激減！」\n 血糖値の乱高下が頭痛を引き起こす",
       "likes": 0,
-      "views": 553,
+      "views": 554,
       "replies": 0,
       "date": "2026-06-24"
     },
@@ -72,25 +79,18 @@
       "views": 478,
       "replies": 0,
       "date": "2026-06-24"
-    },
-    {
-      "text": "自分の体の声に耳を傾けて、 \n無理をせず、健康を優先することが \n大切だと感じる。 \nもし何か気になることがあれば、 \n気軽に相談してみてほしい。",
-      "likes": 0,
-      "views": 92,
-      "replies": 0,
-      "date": "2026-06-24"
     }
   ],
   "performance_by_length": {
     "〜50字": {
       "count": 57,
       "avg_likes": 0.0,
-      "avg_views": 334.02
+      "avg_views": 343.86
     },
     "50〜100字": {
       "count": 126,
       "avg_likes": 0.01,
-      "avg_views": 152.87
+      "avg_views": 152.95
     },
     "150字以上": {
       "count": 11,

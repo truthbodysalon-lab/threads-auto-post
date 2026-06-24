@@ -3,11 +3,11 @@
   "pattern_weights": {
     "keisei_target": 7,
     "keisei_risk": 5,
-    "keisei_kyokan": 4,
-    "keisei_casual": 2,
-    "quote_empathy": 8,
+    "keisei_kyokan": 3,
+    "keisei_casual": 3,
+    "quote_empathy": 7,
     "insight": 12,
-    "education": 1,
+    "education": 2,
     "story": 1,
     "ranking": 1,
     "question": 3,
@@ -16,23 +16,23 @@
   },
   "feedback_scores": {},
   "api_scores": {
-    "insight": 0.96,
-    "story": -1.99,
-    "quote_empathy": 1.79,
-    "ranking": -1.54,
-    "keisei_target": -1.52,
-    "keisei_casual": -0.68,
-    "keisei_kyokan": 2.22
+    "quote_empathy": 1.73,
+    "keisei_target": -1.51,
+    "story": -2.03,
+    "keisei_kyokan": 0.12,
+    "insight": 1.08,
+    "ranking": -1.49,
+    "keisei_casual": -0.52
   },
   "follower_scores": {
     "insight": 3.0,
-    "keisei_kyokan": -0.89,
-    "education": -1.28,
-    "quote_empathy": 0.41,
-    "ranking": -1.25,
-    "keisei_casual": -0.98,
-    "keisei_target": 0.98,
-    "story": 0.0
+    "keisei_kyokan": -0.62,
+    "education": -1.19,
+    "quote_empathy": 0.31,
+    "ranking": -1.16,
+    "keisei_casual": -0.91,
+    "keisei_target": 0.77,
+    "story": -0.21
   },
   "line_scores": {}
 }

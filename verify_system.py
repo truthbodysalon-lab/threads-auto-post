@@ -232,7 +232,14 @@ def check_logs():
         try:
             lines = f.read_text(encoding="utf-8", errors="ignore").splitlines()[-200:]
             # リトライ/フォールバックで回復する一時的エラーは除外し、最終失敗のみ問題視
-            transient = ("リトライ", "fallback", "retrying", "後にリトライ")
+            # ネットワーク一時エラー（接続リセット・DNS解決失敗・タイムアウト・SSL切断・投稿失敗code=0）も除外
+            transient = (
+                "リトライ", "fallback", "retrying", "後にリトライ",
+                "Connection reset", "Connection Reset",
+                "nodename nor servname", "Errno 8", "Errno 54", "Errno 60",
+                "Operation timed out", "EOF occurred in violation",
+                "投稿失敗 (code=0)",
+            )
             errs = [l for l in lines
                     if any(k in l for k in ("Traceback", "Error", "ERROR", "Exception", "失敗"))
                     and not any(t in l for t in transient)]

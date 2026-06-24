@@ -1,12 +1,12 @@
 {
   "account": "@truth_body_salon",
-  "updated_at": "2026-06-25 06:53",
+  "updated_at": "2026-06-25 06:54",
   "total_posts": 200,
   "total_likes": 1,
-  "total_views": 16906,
+  "total_views": 17171,
   "total_replies": 111,
   "avg_likes": 0.01,
-  "avg_views": 84.53,
+  "avg_views": 85.86,
   "recent_7days_count": 200,
   "recent_7days_avg_likes": 0.01,
   "top10_by_likes": [
@@ -41,7 +41,7 @@
     {
       "text": "頭痛を気合いで乗り切る生活、いつまで続けますか。\n根っこにあるのは呼吸の浅さです。\n原因を整えると、頑張らなくても動ける体に戻ります。",
       "likes": 0,
-      "views": 0,
+      "views": 16,
       "replies": 0,
       "date": "2026-06-24"
     },
@@ -55,14 +55,14 @@
     {
       "text": "首こりを「動けるうちは大丈夫」で乗り切る人が一番こじらせます。\n動けるのは体がムリをしているだけで、原因の食いしばりは残ったままです。\n長岡市の当院は、そうなる",
       "likes": 0,
-      "views": 0,
+      "views": 219,
       "replies": 0,
       "date": "2026-06-24"
     },
     {
       "text": "「忙しいし肩と首の張りは我慢するしかない」\nそう思っていませんか？\n肩こりは口呼吸が原因のことが多いです。\n揉んでも治らないのは、そこを変えていないから。\n日常",
       "likes": 0,
-      "views": 0,
+      "views": 27,
       "replies": 0,
       "date": "2026-06-24"
     },
@@ -85,7 +85,7 @@
     "50〜100字": {
       "count": 104,
       "avg_likes": 0.01,
-      "avg_views": 81.67
+      "avg_views": 84.22
     },
     "〜50字": {
       "count": 66,

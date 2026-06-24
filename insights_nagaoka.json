@@ -1,12 +1,12 @@
 {
   "account": "@truth_nagaoka",
-  "updated_at": "2026-06-25 06:54",
+  "updated_at": "2026-06-25 06:55",
   "total_posts": 200,
   "total_likes": 2,
-  "total_views": 39492,
+  "total_views": 39421,
   "total_replies": 21,
   "avg_likes": 0.01,
-  "avg_views": 197.46,
+  "avg_views": 197.1,
   "recent_7days_count": 200,
   "recent_7days_avg_likes": 0.01,
   "top10_by_likes": [
@@ -23,6 +23,20 @@
       "views": 106,
       "replies": 0,
       "date": "2026-06-22"
+    },
+    {
+      "text": "毎朝の頭痛がなくなった理由、知りたくない？\n\n実は頭痛は呼吸・姿勢・睡眠で変わります。\n無料情報をLINEで配信中👇\nhttps://lin.ee/qbRbPA",
+      "likes": 0,
+      "views": 0,
+      "replies": 0,
+      "date": "2026-06-24"
+    },
+    {
+      "text": "「呼吸の浅さくらい」\nって後回しにしてませんか？\n長岡市でよく聞く悩みです。\n体を後回しにしないでください。",
+      "likes": 0,
+      "views": 0,
+      "replies": 0,
+      "date": "2026-06-24"
     },
     {
       "text": "頭痛があるのに検査をしても\n脳は悪くない頭痛の原因の多くは\n\n首と肩の筋肉の緊張です",
@@ -65,32 +79,18 @@
       "views": 4,
       "replies": 0,
       "date": "2026-06-24"
-    },
-    {
-      "text": "「菓子パンをやめたら頭痛が激減！」\n 血糖値の乱高下が頭痛を引き起こす",
-      "likes": 0,
-      "views": 554,
-      "replies": 0,
-      "date": "2026-06-24"
-    },
-    {
-      "text": "週に何度も頭痛薬を飲んでいませんか？\n\n薬は一時しのぎ。\n睡眠不足を根本から変えると、\n頭痛の頻度が下がります。",
-      "likes": 0,
-      "views": 478,
-      "replies": 0,
-      "date": "2026-06-24"
     }
   ],
   "performance_by_length": {
+    "50〜100字": {
+      "count": 126,
+      "avg_likes": 0.01,
+      "avg_views": 152.39
+    },
     "〜50字": {
       "count": 57,
       "avg_likes": 0.0,
       "avg_views": 343.86
-    },
-    "50〜100字": {
-      "count": 126,
-      "avg_likes": 0.01,
-      "avg_views": 152.95
     },
     "150字以上": {
       "count": 11,

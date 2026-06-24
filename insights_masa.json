@@ -1,12 +1,12 @@
 {
   "account": "@masahide_takahashi_",
-  "updated_at": "2026-06-25 06:04",
+  "updated_at": "2026-06-25 06:56",
   "total_posts": 200,
   "total_likes": 2,
-  "total_views": 18452,
+  "total_views": 18062,
   "total_replies": 114,
   "avg_likes": 0.01,
-  "avg_views": 92.26,
+  "avg_views": 90.31,
   "recent_7days_count": 200,
   "recent_7days_avg_likes": 0.01,
   "top10_by_likes": [
@@ -23,6 +23,20 @@
       "views": 30,
       "replies": 0,
       "date": "2026-06-22"
+    },
+    {
+      "text": "コンテンツカレンダー、最初の1行で勝負は終わってます。",
+      "likes": 0,
+      "views": 0,
+      "replies": 1,
+      "date": "2026-06-24"
+    },
+    {
+      "text": "コメントに必ず返信する・問いかけで読者の参加を促す・感情に訴えるストーリーを使う、これだけで問い合わせの質が変わります。",
+      "likes": 0,
+      "views": 0,
+      "replies": 1,
+      "date": "2026-06-24"
     },
     {
       "text": "今教材作っているんですが\nこんなの作ってます",
@@ -65,32 +79,18 @@
       "views": 40,
       "replies": 0,
       "date": "2026-06-24"
-    },
-    {
-      "text": "バズる投稿の法則が伸びないのは、センスの問題じゃありません。\nフォロワー数より問い合わせ導線が100倍大事\nそこがズレてるだけです。",
-      "likes": 0,
-      "views": 33,
-      "replies": 0,
-      "date": "2026-06-24"
-    },
-    {
-      "text": "「ウチの強みは丁寧な施術です」\nこれ書いた瞬間、患者の指は次の院へスクロールしてる。\n人は3秒で選ぶか捨てるか決める。\nその3秒で刺さるのは「丁寧」みたいな曖昧",
-      "likes": 0,
-      "views": 20,
-      "replies": 0,
-      "date": "2026-06-23"
     }
   ],
   "performance_by_length": {
     "〜50字": {
-      "count": 108,
+      "count": 107,
       "avg_likes": 0.01,
-      "avg_views": 117.35
+      "avg_views": 114.8
     },
     "50〜100字": {
-      "count": 78,
+      "count": 79,
       "avg_likes": 0.0,
-      "avg_views": 69.67
+      "avg_views": 68.78
     },
     "150字以上": {
       "count": 10,

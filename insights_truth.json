@@ -1,21 +1,28 @@
 {
   "account": "@truth_body_salon",
-  "updated_at": "2026-06-25 06:54",
+  "updated_at": "2026-06-25 06:56",
   "total_posts": 200,
   "total_likes": 1,
-  "total_views": 17171,
+  "total_views": 17116,
   "total_replies": 111,
   "avg_likes": 0.01,
-  "avg_views": 85.86,
+  "avg_views": 85.58,
   "recent_7days_count": 200,
   "recent_7days_avg_likes": 0.01,
   "top10_by_likes": [
     {
       "text": "頭痛で子どもとの時間を諦めかけていませんか。\n原因の多くは運動不足にあります。\nそこを整えた方は、また楽しめるようになったと話してくれます。",
       "likes": 1,
-      "views": 161,
+      "views": 162,
       "replies": 0,
       "date": "2026-06-23"
+    },
+    {
+      "text": "「また慢性的な肩の重さが...」\nそう思った瞬間がケアのサインです。\n猫背が続くと、体はどんどん硬くなります。\n気づいたときが、変えるタイミングです。\n長岡市の",
+      "likes": 0,
+      "views": 0,
+      "replies": 0,
+      "date": "2026-06-24"
     },
     {
       "text": "体のだるさがあって\n休日を元気に過ごしたかったのにできない。\n\n長岡市で整体院を兄妹で運営しています。\nよく聞く言葉です。",
@@ -72,30 +79,23 @@
       "views": 3,
       "replies": 1,
       "date": "2026-06-24"
-    },
-    {
-      "text": "薬に頼らず頭痛を減らすコツ、\n毎日LINEで配信しています。\n\n「また痛くなりそう」の前に読んでおくと違います。\n登録は無料です👇\nhttps://lin.ee",
-      "likes": 0,
-      "views": 0,
-      "replies": 0,
-      "date": "2026-06-24"
     }
   ],
   "performance_by_length": {
+    "100〜150字": {
+      "count": 25,
+      "avg_likes": 0.0,
+      "avg_views": 36.4
+    },
     "50〜100字": {
       "count": 104,
       "avg_likes": 0.01,
-      "avg_views": 84.22
+      "avg_views": 84.23
     },
     "〜50字": {
       "count": 66,
       "avg_likes": 0.0,
       "avg_views": 109.58
-    },
-    "100〜150字": {
-      "count": 25,
-      "avg_likes": 0.0,
-      "avg_views": 38.64
     },
     "150字以上": {
       "count": 5,

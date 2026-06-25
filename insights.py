@@ -132,6 +132,24 @@ def analyze(posts: list, acct: str) -> dict:
         for p in sorted_by_likes[:10]
     ]
 
+    # TOP10（閲覧順）= 閲覧がKPI。毎朝のサブエージェントEはこちらを学習源にする。
+    # 「実際に伸びた投稿の1文目の型・切り口・長さ」を再現させるため、本文を長めに保持。
+    sorted_by_views = sorted(valid, key=lambda p: p.get("views", 0), reverse=True)
+    top10_by_views = [
+        {
+            "text": p["text"][:120],
+            "views": p.get("views", 0),
+            "likes": p.get("like_count", 0),
+            "date": p.get("timestamp", "")[:10],
+        }
+        for p in sorted_by_views[:10]
+    ]
+    # 最低層（閲覧ワースト10）= 避けるべき型を学ぶ
+    worst10_by_views = [
+        {"text": p["text"][:80], "views": p.get("views", 0), "date": p.get("timestamp", "")[:10]}
+        for p in sorted_by_views[-10:] if p.get("views", 0) >= 0
+    ]
+
     # 文字数帯別パフォーマンス
     def char_bucket(text):
         n = len(text)
@@ -173,6 +191,8 @@ def analyze(posts: list, acct: str) -> dict:
         "recent_7days_count": len(recent),
         "recent_7days_avg_likes": round(recent_avg_likes, 2),
         "top10_by_likes": top10,
+        "top10_by_views": top10_by_views,
+        "worst10_by_views": worst10_by_views,
         "performance_by_length": bucket_avg,
     }
 

@@ -210,8 +210,8 @@ def load_api_scores(acct: str) -> dict:
         views = p.get("views", 0)
         if not text or (likes == 0 and views == 0):
             continue
-        # いいね率ベースのスコア
-        score = likes + (views * 0.01)
+        # 閲覧(views)がKPI。閲覧を主信号にし、いいねは補助係数に（旧: likes+views*0.01 はいいね偏重で閲覧をほぼ無視していた）
+        score = views + likes * 5
         pattern = detect_pattern(text, acct)
         pattern_scores[pattern].append(score)
 

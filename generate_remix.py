@@ -852,6 +852,33 @@ def generate_post(pattern_key: str) -> str:
     return ""
 
 
+def _enforce_diversity(posts: list[str], prefix_len: int = 9) -> list[str]:
+    """実投稿される前半に同じ冒頭・同じ骨格・同じ長さ帯が固まらないよう貪欲に並べ替える。
+    1日約50本が消費されるため、前半の構造的多様性を最大化して「量産テンプレ臭」を減らす
+    （Threadsアルゴリズムは繰り返しの自動投稿を抑制する＝1投稿あたり閲覧の低下要因）。
+    特別投稿（誘導・アンカー固定）の挿入より前に、ベース投稿のみへ適用する。"""
+    from collections import Counter
+    seen_open = set()
+    fmt_count, len_count = Counter(), Counter()
+    primary, rest = [], []
+    for p in posts:
+        fl = p.split("\n")[0]
+        op = fl[:prefix_len]
+        # フォーマット署名: 問いかけ / カギ括弧始まり / 数字あり / 末尾文字種 を散らす
+        fmt = (("？" in fl or "?" in fl), fl.startswith(("「", "『")),
+               bool(re.search(r"\d", fl)), fl[-1:])
+        lb = len(p) // 50                                       # 長さ帯（50字刻み）
+        # 同じ冒頭は1本のみ。同じフォーマットは前半で最大8本、同じ長さ帯は最大15本に制限
+        if op in seen_open or fmt_count[fmt] >= 8 or len_count[lb] >= 15:
+            rest.append(p)
+        else:
+            seen_open.add(op)
+            fmt_count[fmt] += 1
+            len_count[lb] += 1
+            primary.append(p)
+    return primary + rest
+
+
 def generate_30_posts() -> list[str]:
     w = _load_weights("truth")
     defaults = {
@@ -916,6 +943,9 @@ def generate_30_posts() -> list[str]:
                 seen.add(key)
                 posts.append(post)
                 break
+
+    # 構造的多様性を強制（実投稿される前半を被らせない）→ 特別投稿の挿入はこの後
+    posts = _enforce_diversity(posts)
 
     # feedback の追加テンプレを先頭に差し込む
     for tmpl in _load_extra_templates("truth"):
@@ -1032,6 +1062,9 @@ def generate_40_nagaoka_posts() -> list[str]:
                     nagaoka_count += 1
                 posts.append(post)
                 break
+
+    # 構造的多様性を強制（実投稿される前半を被らせない）→ 特別投稿の挿入はこの後
+    posts = _enforce_diversity(posts)
 
     # feedback の追加テンプレを先頭に差し込む
     for tmpl in _load_extra_templates("nagaoka"):
@@ -1530,6 +1563,9 @@ def generate_30_masa_posts() -> list[str]:
                     posts.append(fallback)
             else:
                 posts.append(fallback)
+
+    # 構造的多様性を強制（実投稿される前半を被らせない）→ 特別投稿の挿入はこの後
+    posts = _enforce_diversity(posts)
 
     # feedback の追加テンプレを先頭に差し込む
     for tmpl in _load_extra_templates("masa"):

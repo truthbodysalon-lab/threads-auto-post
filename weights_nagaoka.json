@@ -16,23 +16,23 @@
   },
   "feedback_scores": {},
   "api_scores": {
-    "quote_empathy": 1.73,
-    "keisei_target": -1.51,
+    "quote_empathy": 1.75,
+    "keisei_target": -1.54,
     "story": -2.03,
     "keisei_kyokan": 0.12,
-    "insight": 1.08,
-    "ranking": -1.49,
+    "insight": 1.09,
+    "ranking": -1.48,
     "keisei_casual": -0.52
   },
   "follower_scores": {
     "insight": 3.0,
-    "keisei_kyokan": -0.62,
-    "education": -1.19,
-    "quote_empathy": 0.31,
-    "ranking": -1.16,
-    "keisei_casual": -0.91,
-    "keisei_target": 0.77,
-    "story": -0.21
+    "keisei_kyokan": -0.6,
+    "education": -1.24,
+    "quote_empathy": 0.34,
+    "ranking": -1.21,
+    "keisei_casual": -0.98,
+    "keisei_target": 0.81,
+    "story": -0.13
   },
   "line_scores": {}
 }

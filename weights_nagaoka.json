@@ -4,7 +4,7 @@
     "keisei_target": 7,
     "keisei_risk": 5,
     "keisei_kyokan": 2,
-    "keisei_casual": 4,
+    "keisei_casual": 5,
     "quote_empathy": 6,
     "insight": 12,
     "education": 2,
@@ -16,13 +16,13 @@
   },
   "feedback_scores": {},
   "api_scores": {
-    "insight": 0.76,
-    "keisei_casual": 1.22,
-    "quote_empathy": 0.36,
-    "story": -1.41,
-    "keisei_target": -1.25,
-    "ranking": -2.84,
-    "keisei_kyokan": -1.03
+    "insight": 0.74,
+    "story": -1.31,
+    "quote_empathy": 0.22,
+    "keisei_casual": 1.37,
+    "keisei_target": -1.21,
+    "ranking": -2.83,
+    "keisei_kyokan": -0.98
   },
   "follower_scores": {
     "insight": 3.0,

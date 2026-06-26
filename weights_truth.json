@@ -4,7 +4,7 @@
     "quote_empathy": 5,
     "insight": 12,
     "education": 2,
-    "story": 3,
+    "story": 2,
     "workmom": 1,
     "ranking": 2,
     "question": 1,
@@ -13,20 +13,20 @@
   },
   "feedback_scores": {},
   "api_scores": {
-    "story": -0.62,
-    "insight": 0.57,
+    "insight": 0.54,
+    "story": -0.57,
     "quote_empathy": -0.87,
     "selfcare_casual": -1.64,
     "education": -2.86
   },
   "follower_scores": {
     "insight": 3.0,
-    "quote_empathy": 0.03,
-    "selfcare_casual": -0.4,
-    "education": -0.24,
-    "story": 0.09,
+    "quote_empathy": 0.05,
+    "selfcare_casual": -0.39,
+    "education": -0.22,
+    "story": 0.01,
     "question": -0.83,
-    "workmom": -0.8,
+    "workmom": -0.79,
     "ranking": -0.84
   },
   "line_scores": {}

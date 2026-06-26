@@ -1,12 +1,12 @@
 {
   "account": "@masahide_takahashi_",
-  "updated_at": "2026-06-27 06:05",
+  "updated_at": "2026-06-27 08:05",
   "total_posts": 200,
   "total_likes": 1,
-  "total_views": 15622,
-  "total_replies": 118,
+  "total_views": 15776,
+  "total_replies": 119,
   "avg_likes": 0.01,
-  "avg_views": 78.11,
+  "avg_views": 78.88,
   "recent_7days_count": 200,
   "recent_7days_avg_likes": 0.01,
   "top10_by_likes": [
@@ -16,6 +16,20 @@
       "views": 59,
       "replies": 1,
       "date": "2026-06-25"
+    },
+    {
+      "text": "集客が安定しない人の9割は、ブランディングより先に直すべきことを見落としています。",
+      "likes": 0,
+      "views": 202,
+      "replies": 1,
+      "date": "2026-06-26"
+    },
+    {
+      "text": "お客様の声の集め方で大切な3つのこと。",
+      "likes": 0,
+      "views": 8,
+      "replies": 1,
+      "date": "2026-06-26"
     },
     {
       "text": "投稿を毎日続けているのに問い合わせが来ないなら、完璧を目指さずまず公開することが大事がズレています。",
@@ -64,20 +78,6 @@
       "likes": 0,
       "views": 134,
       "replies": 0,
-      "date": "2026-06-26"
-    },
-    {
-      "text": "問い合わせが来ない投稿と来る投稿、違いはコンテンツは一度作ったら何度でも使い回せるだけです。",
-      "likes": 0,
-      "views": 9,
-      "replies": 1,
-      "date": "2026-06-26"
-    },
-    {
-      "text": "Instagram集客で院の売上を動かすには、コメントに必ず返信する・保存される投稿を意識する・問いかけで読者の参加を促すの順番が大事です。",
-      "likes": 0,
-      "views": 5,
-      "replies": 1,
       "date": "2026-06-26"
     }
   ],
@@ -196,6 +196,11 @@
     }
   ],
   "performance_by_length": {
+    "〜50字": {
+      "count": 100,
+      "avg_likes": 0.01,
+      "avg_views": 106.94
+    },
     "50〜100字": {
       "count": 74,
       "avg_likes": 0.0,
@@ -206,15 +211,10 @@
       "avg_likes": 0.0,
       "avg_views": 30.64
     },
-    "〜50字": {
-      "count": 99,
-      "avg_likes": 0.01,
-      "avg_views": 106.42
-    },
     "150字以上": {
-      "count": 13,
+      "count": 12,
       "avg_likes": 0.0,
-      "avg_views": 17.54
+      "avg_views": 18.67
     }
   }
 }

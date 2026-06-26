@@ -1,12 +1,12 @@
 {
   "account": "@truth_nagaoka",
-  "updated_at": "2026-06-27 05:37",
+  "updated_at": "2026-06-27 06:03",
   "total_posts": 200,
   "total_likes": 0,
-  "total_views": 30978,
+  "total_views": 31031,
   "total_replies": 26,
   "avg_likes": 0.0,
-  "avg_views": 154.89,
+  "avg_views": 155.16,
   "recent_7days_count": 200,
   "recent_7days_avg_likes": 0.0,
   "top10_by_likes": [
@@ -20,14 +20,14 @@
     {
       "text": "ストレス溜め込んで歯を食いしばってる人、\nこめかみ頭痛に直行してます。\n無意識にやってたら要注意。",
       "likes": 0,
-      "views": 815,
+      "views": 858,
       "replies": 0,
       "date": "2026-06-26"
     },
     {
       "text": "お尻が硬いと\n膝は痛みます。",
       "likes": 0,
-      "views": 69,
+      "views": 73,
       "replies": 0,
       "date": "2026-06-26"
     },
@@ -114,7 +114,7 @@
     },
     {
       "text": "ストレス溜め込んで歯を食いしばってる人、\nこめかみ頭痛に直行してます。\n無意識にやってたら要注意。",
-      "views": 815,
+      "views": 858,
       "likes": 0,
       "date": "2026-06-26"
     },
@@ -204,7 +204,7 @@
     "〜50字": {
       "count": 70,
       "avg_likes": 0.0,
-      "avg_views": 240.0
+      "avg_views": 240.76
     },
     "150字以上": {
       "count": 13,

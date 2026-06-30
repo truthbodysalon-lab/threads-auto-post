@@ -22,13 +22,13 @@
   },
   "follower_scores": {
     "insight": 3.0,
-    "quote_empathy": 0.05,
-    "selfcare_casual": -0.42,
-    "education": -0.27,
+    "quote_empathy": 0.02,
+    "selfcare_casual": -0.41,
+    "education": -0.26,
     "story": 0.16,
-    "question": -0.86,
-    "workmom": -0.81,
-    "ranking": -0.86
+    "question": -0.84,
+    "workmom": -0.8,
+    "ranking": -0.85
   },
   "line_scores": {}
 }

@@ -232,9 +232,12 @@ def get_posted_texts(acct: str) -> set:
     texts = set()
     for l in pfile.read_text().splitlines():
         if l.strip():
-            entry = json.loads(l)
-            if entry.get("text"):
-                texts.add(entry["text"])
+            try:
+                entry = json.loads(l)
+                if entry.get("text"):
+                    texts.add(entry["text"])
+            except json.JSONDecodeError:
+                pass  # 書き込み競合で生じた不完全行はスキップ
     return texts
 
 # ── LINEリストイン投稿：定期織り込み（1日1回・重複ガード免除）─────
@@ -244,6 +247,9 @@ def get_posted_texts(acct: str) -> set:
 # masa: lin.ee/8PsIHHC (SNS集客相談LINE)
 _LINE_LISTIN_URLS = ["lin.ee/qbRbPAm", "lin.ee/8PsIHHC"]
 _LINE_STATE_FILE = BASE / "line_listin_state.json"
+# 1日あたりのLINEリストイン投稿回数の上限（LINE登録を伸ばすため truth/nagaoka を2回に）。
+# masaは月間URL上限2本の別ルールがあるため1のまま（実質は月2本程度）。
+_LINE_DAILY = {"truth": 2, "nagaoka": 2, "masa": 1}
 
 
 def _is_line_listin(text: str) -> bool:
@@ -288,11 +294,20 @@ def _posted_count_today(acct: str) -> int:
     return n
 
 
-def _line_done_today(acct: str, today: str) -> bool:
+def _line_count_today(acct: str, today: str) -> int:
+    """本日すでに投稿したLINEリストインの回数。旧形式（値が日付文字列）も後方互換で解釈。"""
     try:
-        return json.loads(_LINE_STATE_FILE.read_text()).get(acct) == today
+        v = json.loads(_LINE_STATE_FILE.read_text()).get(acct)
     except Exception:
-        return False
+        return 0
+    if isinstance(v, dict):
+        return v.get("count", 0) if v.get("date") == today else 0
+    # 旧形式: {acct: "YYYY-MM-DD"} は「その日1回済み」を意味する
+    return 1 if v == today else 0
+
+
+def _line_done_today(acct: str, today: str) -> bool:
+    return _line_count_today(acct, today) >= _LINE_DAILY.get(acct, 1)
 
 
 def _mark_line_done(acct: str, today: str):
@@ -300,7 +315,8 @@ def _mark_line_done(acct: str, today: str):
         d = json.loads(_LINE_STATE_FILE.read_text()) if _LINE_STATE_FILE.exists() else {}
     except Exception:
         d = {}
-    d[acct] = today
+    cur = _line_count_today(acct, today)
+    d[acct] = {"date": today, "count": cur + 1}
     try:
         _LINE_STATE_FILE.write_text(json.dumps(d, ensure_ascii=False))
     except Exception:

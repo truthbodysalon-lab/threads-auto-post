@@ -16,11 +16,37 @@ from __future__ import annotations
 
 import json
 import os
+import sqlite3
 import urllib.request
 from datetime import datetime, timezone, timedelta, date
 from pathlib import Path
 
 BASE = Path(__file__).parent
+# LINE登録数を測るharness DB（ローカルのみ）。truth/nagaokaは共有LINE(qbRbPAm)。
+_LINE_DBS = {
+    "truth_nagaoka": "/Users/mt112/Desktop/line-harness-zutsu/data.db",  # qbRbPAm 共有
+    "masa": "/Users/mt112/Desktop/line-harness/data.db",                 # 8PsIHHC（現状不在の可能性）
+}
+
+
+def line_registrations() -> dict:
+    """各LINEの累計/直近7日/直近30日の登録数。DB不在時は None を値に。"""
+    out = {}
+    for key, path in _LINE_DBS.items():
+        p = Path(path)
+        if not p.exists():
+            out[key] = None
+            continue
+        try:
+            con = sqlite3.connect(f"file:{path}?mode=ro", uri=True)
+            total = con.execute("SELECT count(*) FROM friends").fetchone()[0]
+            d7 = con.execute("SELECT count(*) FROM friends WHERE added_at >= date('now','-7 days')").fetchone()[0]
+            d30 = con.execute("SELECT count(*) FROM friends WHERE added_at >= date('now','-30 days')").fetchone()[0]
+            con.close()
+            out[key] = {"total": total, "d7": d7, "d30": d30}
+        except Exception:
+            out[key] = None
+    return out
 GOAL_FILE = BASE / "views_goal.json"
 HIST_FILE = BASE / "views_history.json"
 ACTION_FILE = BASE / "views_action.json"     # 毎朝のテコ入れ用フラグ
@@ -167,6 +193,23 @@ def main():
             f"- 月100万に必要: 現投稿数なら1投稿 **{s['need_avg']:,}** views / 現品質なら **{s['need_posts_day']:.0f}** 本/日",
             "",
         ]
+    # ── LINE登録（本当のゴール＝成果KPI）──
+    line_reg = line_registrations()
+    lines += ["## 🎯 LINE登録（成果KPI｜閲覧はこれに繋げる手段）", ""]
+    lr = line_reg.get("truth_nagaoka")
+    if lr:
+        lines.append(f"- truth/nagaoka 共有LINE(頭痛講座): 累計 **{lr['total']}** / 直近7日 **+{lr['d7']}** / 直近30日 +{lr['d30']}")
+    else:
+        lines.append("- truth/nagaoka 共有LINE: DB読取不可")
+    mr = line_reg.get("masa")
+    if mr:
+        lines.append(f"- masa LINE(集客): 累計 **{mr['total']}** / 直近7日 **+{mr['d7']}** / 直近30日 +{mr['d30']}")
+    else:
+        lines.append("- ⚠️ masa LINE: harness DB不在で**計測不能**（/Users/mt112/Desktop/line-harness/data.db が無い）")
+    if lr is not None and lr["d7"] < 3:
+        lines.append("- ⚠️ 閲覧に対しLINE登録がほぼ伸びていない。プロフィールのLINE導線・リードマグネット・LINE誘導投稿の質/量を要改善")
+    lines.append("")
+
     lines += ["## ⚠️ 問題点", ""] + ([f"- {p}" for p in problems] or ["- 特になし（順調）"])
     lines += ["", "## ✅ 改善アクション（レバー指定）", ""] + [f"- {a}" for a in actions]
     lines += ["", f"> 更新: {datetime.now().strftime('%Y-%m-%d %H:%M')}"]
@@ -208,13 +251,18 @@ def main():
                              "avg_post": stat[a]["avg_post"], "need_avg": stat[a]["need_avg"],
                              "gap_daily": stat[a]["gap_daily"]} for a in ACCTS},
             "priority_order": sorted(ACCTS, key=lambda a: stat[a]["pace"]),
+            "line_registrations": line_reg,
         }, ensure_ascii=False, indent=2), encoding="utf-8")
     except Exception:
         pass
 
     per = " / ".join(f"{a} {stat[a]['pace']}%(1投稿{stat[a]['avg_post']:,})" for a in ACCTS)
+    lr = line_reg.get("truth_nagaoka") or {}
     print(f"月100万チェック {today.isoformat()}: [{per}] "
-          f"最弱={NAMES.get(weakest,'-')} 未達={len(behind)}件 → Obsidian保存・views_action.json更新")
+          f"最弱={NAMES.get(weakest,'-')} 未達={len(behind)}件 ｜ "
+          f"LINE登録 truth系累計{lr.get('total','?')}(+{lr.get('d7','?')}/7日) "
+          f"masa={'計測不能' if line_reg.get('masa') is None else line_reg['masa']['total']} "
+          f"→ Obsidian保存・views_action.json更新")
 
 
 if __name__ == "__main__":

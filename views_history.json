@@ -252,9 +252,9 @@
   {
     "date": "2026-07-01",
     "per_acct_30d": {
-      "truth": 353597,
-      "nagaoka": 552096,
-      "masa": 223720
+      "truth": 353847,
+      "nagaoka": 552664,
+      "masa": 224006
     },
     "per_acct_pace": {
       "truth": 35,

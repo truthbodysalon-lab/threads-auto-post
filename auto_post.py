@@ -131,7 +131,7 @@ ACCOUNT_PERSONAS = {
     "masa": "整体サロンのオーナー・masahide_takahashiの個人アカウント。集客・SNS運用・動画マーケティングについて発信。",
 }
 
-_BRIDGE_DISABLED = False  # 残高不足/認証エラー検知後はAPIを叩かずデフォルトに切替（無駄打ち・ログ連発防止）
+_BRIDGE_DISABLED = True  # 2026-07-02: API残高不足のため、自動コメント生成を完全に無効化
 
 
 def generate_bridge_comment(clean_text: str, acct: str) -> str:
@@ -362,8 +362,9 @@ def get_next_post(acct: str, today: str):
     # 序盤でも投稿される確率を高めて目標達成を目指す。
     if not line_done:
         posted_today = len(get_posted_indices(acct, today))
-        # 0〜3本投稿時の確率的採用（序盤で出やすく） / 4本以上は確実に出す
-        should_post_line = (posted_today >= 4) or (posted_today >= 1 and random.random() < 0.6)
+        # 確率的採用から確定採用へ変更（feedback.json: truth 5-7%, nagaoka <10%）
+        # 序盤(0-2本)では確実に出す、3本以上で判定再開するが優先採用維持
+        should_post_line = (posted_today <= 1) or (posted_today >= 1 and random.random() < 0.9)
         if should_post_line:
             # リストインは重複ガード免除のため、ここで7日以内の同一1文目を避ける
             recent_listin = _recent_listin_firstlines(acct)

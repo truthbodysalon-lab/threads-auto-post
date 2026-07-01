@@ -1166,7 +1166,26 @@ def generate_40_nagaoka_posts() -> list[str]:
         pos = min(access_anchors[i] if i < len(access_anchors) else (i * 9 + 12), len(posts))
         posts.insert(pos, ap_)
 
-    return posts[:100]
+    # ── 長岡市言及率の最終調整（アンカー挿入後） ──
+    # アンカー挿入で投稿数が増えたため、長岡市率が目標(25%)を超える可能性がある。
+    # 超過分を削除してルール遵守を確保。
+    final_posts = posts[:100]
+    nagaoka_mentions = sum(1 for p in final_posts if "長岡" in p)
+    target_rate = 0.25
+    target_count = max(1, int(len(final_posts) * target_rate))
+
+    if nagaoka_mentions > target_count + 2:  # 2件の余裕を許容
+        # 超過分を削除（後ろから削除して前半の重要な投稿は保護）
+        excess = nagaoka_mentions - target_count
+        deleted = 0
+        for i in range(len(final_posts) - 1, 25, -1):  # index 25以降から削除（前半保護）
+            if deleted >= excess:
+                break
+            if "長岡" in final_posts[i]:
+                final_posts.pop(i)
+                deleted += 1
+
+    return final_posts
 
 
 # ══════════════════════════════════════════════

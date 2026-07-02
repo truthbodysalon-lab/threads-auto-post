@@ -7,7 +7,7 @@
     "keisei_casual": 9,
     "quote_empathy": 6,
     "insight": 11,
-    "education": 1,
+    "education": 2,
     "story": 3,
     "ranking": 1,
     "question": 3,
@@ -26,13 +26,13 @@
   },
   "follower_scores": {
     "insight": 3.0,
-    "keisei_kyokan": -0.67,
-    "education": -1.27,
-    "quote_empathy": 0.28,
-    "ranking": -1.24,
-    "keisei_casual": -0.95,
-    "keisei_target": 0.71,
-    "story": 0.15
+    "keisei_kyokan": -0.66,
+    "education": -1.24,
+    "quote_empathy": 0.23,
+    "ranking": -1.21,
+    "keisei_casual": -0.93,
+    "keisei_target": 0.7,
+    "story": 0.11
   },
   "line_scores": {}
 }

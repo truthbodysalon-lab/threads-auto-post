@@ -138,14 +138,18 @@ def _load_gemini_key() -> str:
     key = os.environ.get("GEMINI_API_KEY", "")
     if key:
         return key
-    try:
-        with open(os.path.expanduser("~/.env")) as f:
-            for line in f:
-                line = line.strip()
-                if line.startswith("GEMINI_API_KEY"):
-                    return line.split("=", 1)[1].strip().strip('"').strip("'")
-    except OSError:
-        pass
+    # ~/.claude/secrets/gemini.env が正本（2026-07-03ローテーション後）。~/.env は旧キーの可能性あり
+    for path in ("~/.claude/secrets/gemini.env", "~/.zshenv", "~/.env"):
+        try:
+            with open(os.path.expanduser(path)) as f:
+                for line in f:
+                    line = line.strip()
+                    if line.startswith("export "):
+                        line = line[len("export "):]
+                    if line.startswith("GEMINI_API_KEY"):
+                        return line.split("=", 1)[1].strip().strip('"').strip("'")
+        except OSError:
+            continue
     return ""
 
 

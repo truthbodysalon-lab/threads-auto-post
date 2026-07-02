@@ -288,9 +288,9 @@
   {
     "date": "2026-07-03",
     "per_acct_30d": {
-      "truth": 347235,
-      "nagaoka": 556094,
-      "masa": 225716
+      "truth": 347254,
+      "nagaoka": 556586,
+      "masa": 225720
     },
     "per_acct_pace": {
       "truth": 34,
@@ -299,7 +299,7 @@
     },
     "per_acct_avg_post": {
       "truth": 270,
-      "nagaoka": 484,
+      "nagaoka": 485,
       "masa": 189
     }
   }

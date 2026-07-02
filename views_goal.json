@@ -3,5 +3,10 @@
   "mode": "monthly_rolling",
   "window_days": 30,
   "max_posts_per_day": 50,
-  "note": "各アカウント常時『直近30日で100万閲覧』を担保する。pace=直近30日実閲覧/100万。累計方式は使わない（月次レートを正直に測る）。"
+  "deadline": "2026-09-03",
+  "ramp_start": "2026-07-03",
+  "ramp_weeks": 8,
+  "baseline_avg_post_7d": {"truth": 138, "nagaoka": 374, "masa": 108},
+  "target_avg_post": 666,
+  "note": "2ヶ月以内(=2026-09-03まで)に全アカウントを月100万閲覧レートへ。週次ランプ: 各acctの1投稿あたり閲覧(7日速報)を baseline→666 へ指数的に引き上げる。week k 目標 = base*(666/base)^(k/8)。毎日 views_report が軌道対比→views_action.json に修正指示を出し、朝のサブエージェントEが実行する。"
 }

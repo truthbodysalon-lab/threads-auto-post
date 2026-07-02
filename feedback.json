@@ -9,7 +9,8 @@
     "story": 1.0,
     "line_listin_masa": 0.2,
     "education": 1.0,
-    "workmom": 1.0
+    "workmom": 1.0,
+    "cta": 1.0
   },
   "ng_words": [
     "100店舗以上",
@@ -223,5 +224,5 @@
       "account": "all"
     }
   ],
-  "updated_at": "2026-07-03 06:41"
+  "updated_at": "2026-07-03 07:17"
 }

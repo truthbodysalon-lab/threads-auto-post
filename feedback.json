@@ -8,7 +8,8 @@
     "keisei_kyokan": 1.0,
     "story": 1.0,
     "line_listin_masa": 0.2,
-    "education": 1.0
+    "education": 1.0,
+    "workmom": 1.0
   },
   "ng_words": [
     "100店舗以上",
@@ -212,5 +213,5 @@
       "account": "truth"
     }
   ],
-  "updated_at": "2026-06-25 09:04"
+  "updated_at": "2026-07-02 21:20"
 }

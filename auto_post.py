@@ -592,6 +592,10 @@ def post_to_threads(acct: str, text: str, skip_dup: bool = False) -> str:
             raise _DuplicatePost(f"{text[:50]}")
     # API実投稿を正とする最終重複チェック（系統をまたぐ二重投稿を防ぐ。LINEも対象）
     if _recently_posted_on_threads(acct, text):
+        # 消費済みとして記録してから弾く。これをしないと get_next_post が同じ投稿を
+        # 選び続けて最大12時間パイプラインが詰まり、1日50本を割る原因になる。
+        if not skip_dup:
+            dg_mark_pending(norm, acct)
         raise _DuplicatePost(f"[API直近重複] {text[:50]}")
     if not skip_dup:
         dg_mark_pending(norm, acct)   # API呼び出し前に記録（タイムアウト対策）
@@ -622,6 +626,13 @@ def run_account(acct: str):
     ensure_generated(acct, today)
 
     text, index = get_next_post(acct, today)
+    if text is None and _posted_count_today(acct) < DAILY_TARGET:
+        # 適格な投稿が尽きたが目標50本に未達 → 追加バッチを生成して補充する
+        # （キューはあっても重複除外で選べる投稿が枯渇するケースがある）
+        log_info(acct, f"{name} 適格投稿が枯渇（{_posted_count_today(acct)}本/{DAILY_TARGET}）→ 追加生成")
+        subprocess.run([sys.executable, str(BASE / "generate_remix.py"), acct],
+                       capture_output=True, text=True, timeout=300)
+        text, index = get_next_post(acct, today)
     is_line = _is_line_listin(text or "")  # 元テキスト(URL付き)でLINEリストイン判定
     if text is None:
         log_info(acct, f"{name} 今日の投稿完了")
@@ -810,14 +821,21 @@ def _run_account_batch(acct: str):
         n = 1                                          # 最低1本（取りこぼし防止）
     if n > MAX_PER_RUN:
         log_info(acct, f"{ACCOUNTS[acct]['name']} 遅れ検知（不足{need}本）→ {n}本まとめて回復")
+    fails = 0
     for i in range(n):
         if _posted_count_today(acct) >= DAILY_CAP:
             break
         before = _posted_count_today(acct)
         run_account(acct)
         after = _posted_count_today(acct)
-        if after <= before:                            # 投稿できなかった→打ち切り
-            break
+        if after <= before:
+            # 1本の失敗（重複スキップ等）で全体を打ち切らない。連続3回失敗で今回は諦める
+            # （次サイクル5分後に再試行される）。即断打ち切りは1日50本割れの主因だった。
+            fails += 1
+            if fails >= 3:
+                break
+        else:
+            fails = 0
         if i < n - 1:
             time.sleep(4)
 

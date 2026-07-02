@@ -201,6 +201,22 @@ def check_execution_gaps():
         except Exception as e:
             add(f"exec:funnel:{acct}", "C.実行ギャップ", "WARN", f"キュー確認不可: {e}")
 
+    # C8: 1日50投稿の遵守（昨日の実績）。ユーザー必須ルール。
+    yesterday = (date.today() - timedelta(days=1)).strftime("%Y-%m-%d")
+    for acct in ACCTS:
+        pfile = BASE / f"log_{acct}_posted.jsonl"
+        n = 0
+        if pfile.exists():
+            for line in pfile.read_text(encoding="utf-8").splitlines():
+                try:
+                    if json.loads(line).get("date") == yesterday:
+                        n += 1
+                except Exception:
+                    pass
+        add(f"exec:daily50:{acct}", "C.実行ギャップ",
+            "PASS" if n >= 50 else "FAIL",
+            f"昨日({yesterday})の投稿 {n}本 / 必須50本")
+
     # C7: 月100万ペース（常時アラーム）。views_action.json を読み、未達アカウントを明示。
     #     達成は野心的目標のため未達は WARN（恒常監視・改善誘導が目的。FAILにはしない）。
     try:

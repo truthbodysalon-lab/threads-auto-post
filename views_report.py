@@ -116,6 +116,16 @@ def posted_today(acct: str) -> int:
                if line.strip() and json.loads(line).get("date") == t)
 
 
+def ramp_target(goal: dict, acct: str, today: date) -> tuple[int, int]:
+    """(今週のランプ目標avg_post, 経過週) を返す。目標 = base*(666/base)^(week/8) の指数ランプ。"""
+    base = goal.get("baseline_avg_post_7d", {}).get(acct, 100) or 100
+    tgt = goal.get("target_avg_post", 666)
+    weeks = goal.get("ramp_weeks", 8)
+    start = date.fromisoformat(goal.get("ramp_start", today.isoformat()))
+    week = min(weeks, max(0, (today - start).days) // 7 + 1)   # 1週目から始動
+    return int(base * (tgt / base) ** (week / weeks)), week
+
+
 def main():
     goal = load_goal()
     target = goal["target_per_account"]          # 各アカウント月100万
@@ -123,11 +133,17 @@ def main():
     cap = goal.get("max_posts_per_day", 50)
     req_daily = target // win                     # 1日に必要な閲覧 = 33,334
     today = date.today()
+    deadline = goal.get("deadline", "")
 
     stat = {}
     for acct in ACCTS:
         v30, vdays, vtoday = fetch_window_views(acct, win)
         p30 = posts_in_window(acct, win)
+        # 7日速報（軌道管理のメイン指標。30日窓はラグが大きく週次PDCAに使えない）
+        v7, v7days, _ = fetch_window_views(acct, 7)
+        p7 = posts_in_window(acct, 7)
+        avg_post_7d = (v7 // p7) if p7 else 0
+        rt, week = ramp_target(goal, acct, today)
         avg_post = (v30 // p30) if p30 else 0      # 1投稿あたり閲覧（実績）
         pace = (v30 * 100 // target) if target else 0
         d_avg = v30 // max(1, vdays)
@@ -140,7 +156,10 @@ def main():
         stat[acct] = dict(v30=v30, vdays=vdays, vtoday=vtoday, p30=p30, avg_post=avg_post,
                           pace=pace, d_avg=d_avg, gap_daily=gap_daily,
                           need_avg=need_avg_at_current_posts,
-                          need_posts_day=need_posts_per_day, posts_today=posted_today(acct))
+                          need_posts_day=need_posts_per_day, posts_today=posted_today(acct),
+                          v7=v7, p7=p7, avg_post_7d=avg_post_7d,
+                          ramp_target=rt, ramp_week=week,
+                          on_track=avg_post_7d >= rt)
 
     # ── 問題点・改善アクション（レバーを名指しで）──
     problems, actions = [], []
@@ -152,6 +171,10 @@ def main():
             problems.append(
                 f"{NAMES[acct]}: 月次レート {s['v30']:,}/{target:,}（{s['pace']}%）"
                 f" ｜ 1日あと {s['gap_daily']:,} 不足")
+        if not s["on_track"]:
+            problems.append(
+                f"{NAMES[acct]}: 【軌道遅れ】1投稿あたり(7日) {s['avg_post_7d']:,} < 週{s['ramp_week']}目標 {s['ramp_target']:,}"
+                f"（{deadline}までに666必要）")
         if today.isoformat() and s["posts_today"] < 5 and datetime.now().hour >= 12:
             problems.append(f"{NAMES[acct]}: 本日投稿 {s['posts_today']}本（投稿停滞の疑い）")
 
@@ -186,8 +209,10 @@ def main():
     ]
     for acct in ACCTS:
         s = stat[acct]
+        trk = "🟢軌道内" if s["on_track"] else "🔴軌道遅れ"
         lines += [
             f"### {NAMES[acct]} — pace **{s['pace']}%**  `{bar(s['pace'])}`",
+            f"- **{deadline}期限ランプ {trk}**: 1投稿あたり(7日速報) **{s['avg_post_7d']:,}** / 週{s['ramp_week']}目標 **{s['ramp_target']:,}**（最終目標666）",
             f"- 直近{win}日: **{s['v30']:,}** views / {target:,}（日平均 {s['d_avg']:,} / 必要 {req_daily:,}）",
             f"- 投稿 {s['p30']:,}本 → **1投稿あたり {s['avg_post']:,} views** ｜ 本日 {s['vtoday']:,}views・{s['posts_today']}投稿",
             f"- 月100万に必要: 現投稿数なら1投稿 **{s['need_avg']:,}** views / 現品質なら **{s['need_posts_day']:.0f}** 本/日",
@@ -252,6 +277,19 @@ def main():
                              "gap_daily": stat[a]["gap_daily"]} for a in ACCTS},
             "priority_order": sorted(ACCTS, key=lambda a: stat[a]["pace"]),
             "line_registrations": line_reg,
+            # ── 期限付きランプ（2ヶ月で月100万）と本日の修正指示 ──
+            "deadline": deadline,
+            "ramp": {a: {"week": stat[a]["ramp_week"], "target_avg_post_7d": stat[a]["ramp_target"],
+                         "actual_avg_post_7d": stat[a]["avg_post_7d"], "on_track": stat[a]["on_track"]}
+                     for a in ACCTS},
+            "directives": [
+                (f"{a}: 軌道遅れ（{stat[a]['avg_post_7d']}<{stat[a]['ramp_target']}）→ "
+                 f"①prune_templates.pyで負けテンプレ削除 ②新テンプレ24本(通常の2倍)を"
+                 f"top10_by_viewsの勝ち構造で生成 ③フック全面刷新")
+                if not stat[a]["on_track"] else
+                f"{a}: 軌道内 → 維持（新テンプレ12本・勝ちパターン比率キープ）"
+                for a in sorted(ACCTS, key=lambda x: stat[x]["avg_post_7d"] - stat[x]["ramp_target"])
+            ],
         }, ensure_ascii=False, indent=2), encoding="utf-8")
     except Exception:
         pass

@@ -216,6 +216,16 @@ def check_execution_gaps():
         if behind:
             add("exec:views_weakest", "C.実行ギャップ", "WARN",
                 f"月100万未達 {len(behind)}件・最弱={va.get('weakest')}（優先テコ入れ要）")
+        # C7b: 期限ランプ（2026-09-03に月100万）の軌道チェック
+        ramp = va.get("ramp", {})
+        off = [a for a, r in ramp.items() if not r.get("on_track")]
+        if ramp:
+            add("exec:views_ramp", "C.実行ギャップ",
+                "PASS" if not off else "WARN",
+                ("全アカウント軌道内" if not off else
+                 "軌道遅れ: " + ", ".join(
+                     f"{a}({ramp[a]['actual_avg_post_7d']}<{ramp[a]['target_avg_post_7d']})" for a in off)
+                 + f" → 週{next(iter(ramp.values()))['week']}/8・期限{va.get('deadline')}"))
     except Exception as e:
         add("exec:views_pace", "C.実行ギャップ", "WARN", f"views_action.json未生成: {e}（views_report.py要実行）")
 

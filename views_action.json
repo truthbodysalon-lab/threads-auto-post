@@ -10,21 +10,21 @@
   "per_acct": {
     "truth": {
       "pace": 34,
-      "v30": 347235,
+      "v30": 347254,
       "avg_post": 270,
       "need_avg": 778,
       "gap_daily": 22132
     },
     "nagaoka": {
       "pace": 55,
-      "v30": 556094,
-      "avg_post": 484,
+      "v30": 556586,
+      "avg_post": 485,
       "need_avg": 871,
-      "gap_daily": 15395
+      "gap_daily": 15379
     },
     "masa": {
       "pace": 22,
-      "v30": 225716,
+      "v30": 225720,
       "avg_post": 189,
       "need_avg": 837,
       "gap_daily": 26052
@@ -46,5 +46,31 @@
       "d7": 0,
       "d30": 0
     }
-  }
+  },
+  "deadline": "2026-09-03",
+  "ramp": {
+    "truth": {
+      "week": 1,
+      "target_avg_post_7d": 168,
+      "actual_avg_post_7d": 138,
+      "on_track": false
+    },
+    "nagaoka": {
+      "week": 1,
+      "target_avg_post_7d": 401,
+      "actual_avg_post_7d": 374,
+      "on_track": false
+    },
+    "masa": {
+      "week": 1,
+      "target_avg_post_7d": 135,
+      "actual_avg_post_7d": 108,
+      "on_track": false
+    }
+  },
+  "directives": [
+    "truth: 軌道遅れ（138<168）→ ①prune_templates.pyで負けテンプレ削除 ②新テンプレ24本(通常の2倍)をtop10_by_viewsの勝ち構造で生成 ③フック全面刷新",
+    "nagaoka: 軌道遅れ（374<401）→ ①prune_templates.pyで負けテンプレ削除 ②新テンプレ24本(通常の2倍)をtop10_by_viewsの勝ち構造で生成 ③フック全面刷新",
+    "masa: 軌道遅れ（108<135）→ ①prune_templates.pyで負けテンプレ削除 ②新テンプレ24本(通常の2倍)をtop10_by_viewsの勝ち構造で生成 ③フック全面刷新"
+  ]
 }

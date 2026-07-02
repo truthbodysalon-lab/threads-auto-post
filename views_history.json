@@ -284,5 +284,23 @@
       "nagaoka": 491,
       "masa": 191
     }
+  },
+  {
+    "date": "2026-07-03",
+    "per_acct_30d": {
+      "truth": 347235,
+      "nagaoka": 556094,
+      "masa": 225716
+    },
+    "per_acct_pace": {
+      "truth": 34,
+      "nagaoka": 55,
+      "masa": 22
+    },
+    "per_acct_avg_post": {
+      "truth": 270,
+      "nagaoka": 484,
+      "masa": 189
+    }
   }
 ]

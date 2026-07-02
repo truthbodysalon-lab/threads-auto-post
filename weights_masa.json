@@ -1,11 +1,11 @@
 {
-  "updated_at": "2026-07-02",
+  "updated_at": "2026-07-03",
   "pattern_weights": {
-    "insight": 7,
+    "insight": 6,
     "education": 4,
-    "story": 5,
+    "story": 3,
     "cta": 1,
-    "ranking": 3,
+    "ranking": 5,
     "question": 3,
     "variety": 20
   },
@@ -25,7 +25,8 @@
     "cta": -1.05
   },
   "line_scores": {
-    "insight": -1.09,
-    "story": 1.09
+    "insight": -1.36,
+    "story": 0.43,
+    "ranking": 0.94
   }
 }

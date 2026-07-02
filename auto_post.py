@@ -131,13 +131,28 @@ ACCOUNT_PERSONAS = {
     "masa": "整体サロンのオーナー・masahide_takahashiの個人アカウント。集客・SNS運用・動画マーケティングについて発信。",
 }
 
-_BRIDGE_DISABLED = True  # 2026-07-02: API残高不足のため、自動コメント生成を完全に無効化
+_BRIDGE_DISABLED = False  # 2026-07-03: Anthropic API(従量課金)→Gemini API(既存キー・無料枠)に切替
+
+
+def _load_gemini_key() -> str:
+    key = os.environ.get("GEMINI_API_KEY", "")
+    if key:
+        return key
+    try:
+        with open(os.path.expanduser("~/.env")) as f:
+            for line in f:
+                line = line.strip()
+                if line.startswith("GEMINI_API_KEY"):
+                    return line.split("=", 1)[1].strip().strip('"').strip("'")
+    except OSError:
+        pass
+    return ""
 
 
 def generate_bridge_comment(clean_text: str, acct: str) -> str:
-    """メイン投稿の内容をもとにClaude APIで補足説明コメントを生成する。失敗時はデフォルトテキストを返す。"""
+    """メイン投稿の内容をもとにGemini APIで補足説明コメントを生成する。失敗時はデフォルトテキストを返す。"""
     global _BRIDGE_DISABLED
-    api_key = os.environ.get("ANTHROPIC_API_KEY", "")
+    api_key = _load_gemini_key()
     if not api_key or _BRIDGE_DISABLED:
         return ACCOUNTS[acct].get("bridge_text", "詳しくはこちら 👇")
 
@@ -155,39 +170,44 @@ def generate_bridge_comment(clean_text: str, acct: str) -> str:
     )
 
     payload = json.dumps({
-        "model": "claude-haiku-4-5-20251001",
-        "max_tokens": 300,
-        "messages": [{"role": "user", "content": prompt}]
+        "contents": [{"parts": [{"text": prompt}]}],
+        # thinkingBudget:0 で思考トークンを止めないと、maxOutputTokens を思考が食い潰して本文が途切れる
+        "generationConfig": {"maxOutputTokens": 512, "thinkingConfig": {"thinkingBudget": 0}},
     }, ensure_ascii=False).encode()
 
-    req = urllib.request.Request(
-        "https://api.anthropic.com/v1/messages",
-        data=payload,
-        headers={
-            "x-api-key": api_key,
-            "anthropic-version": "2023-06-01",
-            "content-type": "application/json",
-        },
-        method="POST",
-    )
-    try:
-        with urllib.request.urlopen(req, timeout=20) as r:
-            result = json.loads(r.read())
-        return result["content"][0]["text"].strip()
-    except Exception as e:
-        # 残高不足・認証エラー等の恒久的失敗は以降スキップ（無駄打ち・ログ連発を止める）
-        body = ""
-        if isinstance(e, urllib.error.HTTPError):
-            try:
-                body = e.read().decode()
-            except Exception:
-                body = ""
-        if "credit balance" in body or "authentication" in body or (isinstance(e, urllib.error.HTTPError) and e.code in (400, 401, 403)):
-            if not _BRIDGE_DISABLED:
-                print(f"[generate_bridge_comment] APIが恒久エラー(残高不足等)のため、以降はデフォルト文に固定: {body[:120]}", file=sys.stderr)
-            _BRIDGE_DISABLED = True
-        # それ以外（一時的な失敗）は静かにフォールバック
-        return ACCOUNTS[acct].get("bridge_text", "詳しくはこちら 👇")
+    # 503(高負荷)・429(レート制限)は一時的なので、モデルを変えつつ最大3回試す
+    attempts = ["gemini-flash-latest", "gemini-flash-lite-latest", "gemini-flash-latest"]
+    for i, model in enumerate(attempts):
+        req = urllib.request.Request(
+            f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={api_key}",
+            data=payload,
+            headers={"content-type": "application/json"},
+            method="POST",
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=30) as r:
+                result = json.loads(r.read())
+            parts = result["candidates"][0]["content"].get("parts", [])
+            text = "".join(p.get("text", "") for p in parts).strip()
+            # 途切れ・極端な長短は不採用（デフォルト文の方がマシ）
+            if text and 40 <= len(text) <= 250 and result["candidates"][0].get("finishReason") == "STOP":
+                return text
+        except Exception as e:
+            body = ""
+            if isinstance(e, urllib.error.HTTPError):
+                try:
+                    body = e.read().decode()
+                except Exception:
+                    body = ""
+            # 認証エラー等の恒久的失敗は以降スキップ（無駄打ち・ログ連発を止める）
+            if isinstance(e, urllib.error.HTTPError) and e.code in (400, 401, 403):
+                if not _BRIDGE_DISABLED:
+                    print(f"[generate_bridge_comment] Gemini APIが恒久エラーのため、以降はデフォルト文に固定: {body[:120]}", file=sys.stderr)
+                _BRIDGE_DISABLED = True
+                break
+            if i < len(attempts) - 1:
+                time.sleep(3)
+    return ACCOUNTS[acct].get("bridge_text", "詳しくはこちら 👇")
 
 
 # ── トークン自動リフレッシュ ──────────────────────────────

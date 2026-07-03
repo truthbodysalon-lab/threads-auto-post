@@ -1,5 +1,5 @@
 {
-  "date": "2026-07-03",
+  "date": "2026-07-04",
   "target_per_account": 1000000,
   "weakest": "masa",
   "behind": [
@@ -10,24 +10,24 @@
   "per_acct": {
     "truth": {
       "pace": 34,
-      "v30": 347254,
-      "avg_post": 270,
-      "need_avg": 778,
-      "gap_daily": 22132
+      "v30": 345816,
+      "avg_post": 257,
+      "need_avg": 745,
+      "gap_daily": 22178
     },
     "nagaoka": {
-      "pace": 55,
-      "v30": 556586,
-      "avg_post": 485,
-      "need_avg": 871,
-      "gap_daily": 15379
+      "pace": 56,
+      "v30": 562115,
+      "avg_post": 467,
+      "need_avg": 831,
+      "gap_daily": 15201
     },
     "masa": {
       "pace": 22,
-      "v30": 225720,
-      "avg_post": 189,
-      "need_avg": 837,
-      "gap_daily": 26052
+      "v30": 226593,
+      "avg_post": 181,
+      "need_avg": 800,
+      "gap_daily": 26024
     }
   },
   "priority_order": [
@@ -52,25 +52,25 @@
     "truth": {
       "week": 1,
       "target_avg_post_7d": 168,
-      "actual_avg_post_7d": 138,
+      "actual_avg_post_7d": 141,
       "on_track": false
     },
     "nagaoka": {
       "week": 1,
       "target_avg_post_7d": 401,
-      "actual_avg_post_7d": 374,
+      "actual_avg_post_7d": 379,
       "on_track": false
     },
     "masa": {
       "week": 1,
       "target_avg_post_7d": 135,
-      "actual_avg_post_7d": 108,
+      "actual_avg_post_7d": 99,
       "on_track": false
     }
   },
   "directives": [
-    "truth: 軌道遅れ（138<168）→ ①prune_templates.pyで負けテンプレ削除 ②新テンプレ24本(通常の2倍)をtop10_by_viewsの勝ち構造で生成 ③フック全面刷新",
-    "nagaoka: 軌道遅れ（374<401）→ ①prune_templates.pyで負けテンプレ削除 ②新テンプレ24本(通常の2倍)をtop10_by_viewsの勝ち構造で生成 ③フック全面刷新",
-    "masa: 軌道遅れ（108<135）→ ①prune_templates.pyで負けテンプレ削除 ②新テンプレ24本(通常の2倍)をtop10_by_viewsの勝ち構造で生成 ③フック全面刷新"
+    "masa: 軌道遅れ（99<135）→ ①prune_templates.pyで負けテンプレ削除 ②新テンプレ24本(通常の2倍)をtop10_by_viewsの勝ち構造で生成 ③フック全面刷新",
+    "truth: 軌道遅れ（141<168）→ ①prune_templates.pyで負けテンプレ削除 ②新テンプレ24本(通常の2倍)をtop10_by_viewsの勝ち構造で生成 ③フック全面刷新",
+    "nagaoka: 軌道遅れ（379<401）→ ①prune_templates.pyで負けテンプレ削除 ②新テンプレ24本(通常の2倍)をtop10_by_viewsの勝ち構造で生成 ③フック全面刷新"
   ]
 }

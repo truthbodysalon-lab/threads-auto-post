@@ -1136,12 +1136,14 @@ def generate_40_nagaoka_posts() -> list[str]:
     # 構造的多様性を強制（実投稿される前半を被らせない）→ 特別投稿の挿入はこの後
     posts = _enforce_diversity(posts)
 
-    # feedback の追加テンプレを先頭に差し込む（1文目NGをフィルター）
+    # feedback の追加テンプレを先頭に差し込む（1文目startswith NGのみフィルター）
     for tmpl in _load_extra_templates("nagaoka"):
         try:
             filled = fill(tmpl)
-            # 1文目NG検証: 長岡市/実績/自己紹介で始まるテンプレは除外
-            if _is_valid_first_line(filled, "nagaoka"):
+            # 1文目NG検証: 長岡市/実績/自己紹介で始まるテンプレは除外（startswith のみ）
+            first_line = filled.split("\n")[0].strip()
+            ng_starts = ["長岡市", "長岡", "整体師", "施術", "実績", "改善率", "1万人", "1万"]
+            if not any(first_line.startswith(ng) for ng in ng_starts):
                 posts.insert(0, filled)
         except Exception:
             pass
@@ -1163,6 +1165,7 @@ def generate_40_nagaoka_posts() -> list[str]:
 
     # 公式LINEリストイン投稿を織り交ぜる（頭痛改善情報の配信LINEへ誘導）
     # 実行ギャップ対策: 前半（index 4, 10, 18）に固定配置
+    # 修正: sequential insert ではなく batch build で anchor_positions を正確に保証
     listin_posts = []
     for _ in range(3):
         for _ in range(20):
@@ -1170,10 +1173,16 @@ def generate_40_nagaoka_posts() -> list[str]:
             if p not in listin_posts:
                 listin_posts.append(p)
                 break
-    for i, lp in enumerate(listin_posts):
-        anchor_positions = [4, 10, 18]
-        pos = min(anchor_positions[i] if i < len(anchor_positions) else (i * 7 + 4), len(posts))
-        posts.insert(pos, lp)
+
+    # Batch insert: anchor_positions に先読みして、最後に差し込む（insert順でインデックスシフトを回避）
+    anchor_positions = {4: listin_posts[0] if len(listin_posts) > 0 else None,
+                        10: listin_posts[1] if len(listin_posts) > 1 else None,
+                        18: listin_posts[2] if len(listin_posts) > 2 else None}
+
+    # 逆順で挿入（後ろから）で前半のインデックスを保護
+    for pos in sorted(anchor_positions.keys(), reverse=True):
+        if anchor_positions[pos] is not None and pos < len(posts):
+            posts.insert(pos, anchor_positions[pos])
 
     # 場所・アクセス・駐車場・地域ワード投稿を織り交ぜる（来店ハードルを下げる）
     # 実行ギャップ対策: 前半（index 12, 21, 30）へアンカーして毎日確実に届ける
@@ -1199,9 +1208,11 @@ def generate_40_nagaoka_posts() -> list[str]:
 
     if nagaoka_mentions > target_count + 2:  # 2件の余裕を許容
         # 超過分を削除（後ろから削除して前半の重要な投稿は保護）
+        # 保護範囲: CTA[6,16,26] + LINE_LISTIN[4,10,18] + STORE_ACCESS[12,21,30] の anchor 付近は除外
+        # 安全マージン: index 35以降のみ削除
         excess = nagaoka_mentions - target_count
         deleted = 0
-        for i in range(len(final_posts) - 1, 25, -1):  # index 25以降から削除（前半保護）
+        for i in range(len(final_posts) - 1, 35, -1):  # index 35以降から削除（全 anchor 保護）
             if deleted >= excess:
                 break
             if "長岡" in final_posts[i]:

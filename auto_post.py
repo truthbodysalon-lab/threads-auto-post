@@ -302,6 +302,39 @@ def _recent_listin_firstlines(acct: str, days: int = 7) -> set:
     return fls
 
 
+def _is_store_access(text: str) -> bool:
+    """店舗アクセスアンカー投稿の判定（全テンプレ共通の確定フレーズで判定）"""
+    t = text or ""
+    return "長岡駅" in t and "車で5分" in t
+
+
+def _access_anchor_ok(acct: str, today: str, text: str) -> bool:
+    """店舗アクセス投稿の7日重複ガード緩和判定（2026-07-03追加）。
+    テンプレ約9種が7日ガードで全滅し nagaoka は06-26以降0本になっていたため、
+    『1日1本まで・3日以内の同一1文目は回避』に緩和して毎日のアンカー投稿を確保する。"""
+    if not _is_store_access(text):
+        return False
+    pfile = ACCOUNTS[acct]["posted"]
+    if not pfile.exists():
+        return True
+    cutoff = (date.today() - timedelta(days=3)).strftime("%Y-%m-%d")
+    first = (text or "").split("\n")[0].strip()
+    for line in pfile.read_text(encoding="utf-8").splitlines():
+        try:
+            e = json.loads(line)
+        except Exception:
+            continue
+        d = (e.get("date") or "")[:10]
+        t = e.get("text", "")
+        if not _is_store_access(t):
+            continue
+        if d == today:
+            return False  # 本日すでにアクセス投稿済み（1日1本まで）
+        if d >= cutoff and t.split("\n")[0].strip() == first:
+            return False  # 3日以内に同一テンプレを使用済み
+    return True
+
+
 def _posted_count_today(acct: str) -> int:
     """log_{acct}_posted.jsonl の本日の投稿件数（バッチ投稿の打ち切り判定用）"""
     pfile = ACCOUNTS[acct]["posted"]
@@ -330,7 +363,30 @@ def _line_count_today(acct: str, today: str) -> int:
     return 1 if v == today else 0
 
 
+def _monthly_line_url_count(acct: str) -> int:
+    """当月に実投稿済みのLINE URL(lin.ee)付き投稿数。
+    feedbackルール『masa: LINE URLありは月間2本以下』の実投稿側ガード用。"""
+    pfile = ACCOUNTS[acct]["posted"]
+    if not pfile.exists():
+        return 0
+    month = date.today().strftime("%Y-%m")
+    n = 0
+    for line in pfile.read_text(encoding="utf-8").splitlines():
+        try:
+            e = json.loads(line)
+        except Exception:
+            continue
+        if (e.get("date") or "")[:7] == month and "lin.ee" in (e.get("text") or ""):
+            n += 1
+    return n
+
+
 def _line_done_today(acct: str, today: str) -> bool:
+    # masaはfeedbackルール「LINE URL付きは月間2本以下」が最優先。
+    # 「1日1回確実に織り込む」ロジックがmasaにも毎日適用され月30本ペースに
+    # なっていた設計矛盾を修正（2026-07-03）。上限到達後はLINE投稿を完了扱いにする。
+    if acct == "masa" and _monthly_line_url_count("masa") >= 2:
+        return True
     return _line_count_today(acct, today) >= _LINE_DAILY.get(acct, 1)
 
 
@@ -407,7 +463,8 @@ def get_next_post(acct: str, today: str):
         norm = _normalize_post_key(text)
         if norm not in posted_texts and norm[:80] not in old_posted_keys:
             # 7日以内の重複は投稿せずスキップ（ループで次の候補へ）
-            if dg_is_duplicate(norm, acct):
+            # ただし店舗アクセスアンカーは緩和ルールで採用可（2026-07-03）
+            if dg_is_duplicate(norm, acct) and not _access_anchor_ok(acct, today, text):
                 continue
             # API実投稿の直近に同じ1文目があれば飛ばす（系統間ラグ対策）
             if dg_normalize(text).split("\n")[0].strip()[:40] in api_recent:

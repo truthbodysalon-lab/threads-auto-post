@@ -552,6 +552,12 @@ STORE_ACCESS_TEMPLATES = [
     "小さいお子さん連れでも通いやすいよう、専用駐車場をご用意しています。\n長岡駅からは車で5分。\n完全予約制・1日3名限定で、ゆっくり受けられます。",
     "「平日は忙しくて行けない」という方へ。\n当院は土日祝も営業、夜22時まで受付しています。\n長岡駅から車で5分・専用駐車場あり、長岡市内外から通われています。",
     "通うほど良くなる整体だからこそ、通いやすさで選んでほしい。\n長岡駅から車で5分／無料の専用駐車場あり／夜22時まで。\n長岡市で頭痛・肩こりを根本から整えています。",
+    # 2026-07-03追加: テンプレ枯渇で7日重複ガードに全滅しアクセス投稿が停止していたため
+    # バリエーション増強（確認済み事実のみ: 車で5分・無料駐車場・22時・土日祝・完全予約制・1日3名）
+    "「予約したのに待たされる」が苦手な方へ。\n当院は完全予約制・1日3名限定です。\n長岡駅から車で5分、専用駐車場もあります。",
+    "整体は「続けられる場所」で選ぶのが正解です。\n土日祝も営業、夜22時まで受付。\n長岡駅から車で5分、お車でどうぞ。",
+    "雪の日も通いやすいように、院の前に専用駐車場をご用意しています。\n長岡駅から車で5分、完全予約制で待ち時間なし。\n土日祝も営業しています。",
+    "仕事終わりの21時でも間に合う整体院です。\n夜22時まで受付、土日祝も営業。\n長岡駅から車で5分・専用駐車場あり。",
 ]
 
 _STORE_ACCESS_POOLS = {
@@ -1027,6 +1033,7 @@ def generate_30_posts() -> list[str]:
     # URLを本文に残すため _ensure_nagaoka / _enforce_short_body は通さない
     # 目標頻度: 全体の5〜7%（feedback.json 2026-06-06ルール）
     # 実行ギャップ対策: 1日の投稿は最大20本程度なので、必ず前半（index 3〜12）に配置
+    # 修正: sequential insert ではなく batch build で anchor_positions を正確に保証
     listin_posts = []
     for _ in range(4):
         for _ in range(20):
@@ -1034,11 +1041,17 @@ def generate_30_posts() -> list[str]:
             if p not in listin_posts:
                 listin_posts.append(p)
                 break
-    for i, lp in enumerate(listin_posts):
-        # 前半に均等配置: 4本を index 3, 7, 12, 18 付近に差し込む
-        anchor_positions = [3, 7, 12, 18]
-        pos = min(anchor_positions[i] if i < len(anchor_positions) else (i * 5 + 3), len(posts))
-        posts.insert(pos, lp)
+
+    # Batch insert: anchor_positions に先読みして、最後に差し込む（insert順でインデックスシフトを回避）
+    anchor_positions = {3: listin_posts[0] if len(listin_posts) > 0 else None,
+                        7: listin_posts[1] if len(listin_posts) > 1 else None,
+                        12: listin_posts[2] if len(listin_posts) > 2 else None,
+                        18: listin_posts[3] if len(listin_posts) > 3 else None}
+
+    # 逆順で挿入（後ろから）で前半のインデックスを保護
+    for pos in sorted(anchor_positions.keys(), reverse=True):
+        if anchor_positions[pos] is not None and pos < len(posts):
+            posts.insert(pos, anchor_positions[pos])
 
     # 場所・アクセス・駐車場・地域ワード投稿を織り交ぜる（来店ハードルを下げる）
     # 実行ギャップ対策: ランダム高位置(例 86)だと1日約50本の消費に届かず未投稿になっていた。
@@ -1123,10 +1136,13 @@ def generate_40_nagaoka_posts() -> list[str]:
     # 構造的多様性を強制（実投稿される前半を被らせない）→ 特別投稿の挿入はこの後
     posts = _enforce_diversity(posts)
 
-    # feedback の追加テンプレを先頭に差し込む
+    # feedback の追加テンプレを先頭に差し込む（1文目NGをフィルター）
     for tmpl in _load_extra_templates("nagaoka"):
         try:
-            posts.insert(0, fill(tmpl))
+            filled = fill(tmpl)
+            # 1文目NG検証: 長岡市/実績/自己紹介で始まるテンプレは除外
+            if _is_valid_first_line(filled, "nagaoka"):
+                posts.insert(0, filled)
         except Exception:
             pass
 
@@ -1702,10 +1718,13 @@ def generate_30_masa_posts() -> list[str]:
                 posts[idx] = non_line_posts[i]
 
     # ── LINE追加リンク(8PsIHHC)を確実に織り込む（コンサル成約の入口）──
-    # 上記の言及率制御の「後」に挿入し、必ずURL付きの追加投稿がキューに残るようにする。
-    # auto_post側がLINEリストインとして1日1回に制御するので過剰投稿にはならない。
+    # 月間URL上限(2本)を再チェックしてから挿入する。
+    # 上の言及率制御ブロックの後に無条件で挿入していたため毎日超過していたバグを修正(2026-07-03)。
+    already_url_after = sum(1 for p in posts if "lin.ee" in p)  # バッチ内のURL投稿数
+    already_url_posted = _monthly_line_url_count("masa")        # 当月投稿済み数
+    url_budget_remaining = max(0, 2 - already_url_posted - already_url_after)
     line_add = []
-    for _ in range(2):
+    for _ in range(min(url_budget_remaining, 2)):
         for _ in range(20):
             p = generate_masa_post("cta")        # cta = LINE追加URL付き
             if "8PsIHHC" in p and p not in line_add:

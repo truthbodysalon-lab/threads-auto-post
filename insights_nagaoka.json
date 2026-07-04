@@ -1,33 +1,33 @@
 {
   "account": "@truth_nagaoka",
-  "updated_at": "2026-07-05 06:03",
+  "updated_at": "2026-07-05 06:42",
   "total_posts": 200,
-  "total_likes": 85,
-  "total_views": 41939,
+  "total_likes": 87,
+  "total_views": 42553,
   "total_replies": 25,
-  "avg_likes": 0.42,
-  "avg_views": 209.69,
+  "avg_likes": 0.43,
+  "avg_views": 212.76,
   "recent_7days_count": 200,
-  "recent_7days_avg_likes": 0.42,
+  "recent_7days_avg_likes": 0.43,
   "top10_by_likes": [
     {
       "text": "当院は長岡市で兄妹でやってますが\nたまに夫婦に間違えられます。\n\n兄妹です。",
       "likes": 5,
-      "views": 502,
+      "views": 518,
       "replies": 0,
       "date": "2026-07-04"
     },
     {
       "text": "本日も長岡市だけでなく\n南魚沼市や中魚沼市、見附市からもお客様から\n来院されます。\nいつもありがとうございます！",
       "likes": 2,
-      "views": 117,
+      "views": 130,
       "replies": 0,
       "date": "2026-07-04"
     },
     {
       "text": "実は当院って見附市や津南町、柏崎市\n南魚沼市、三条市からも\n来院されてます。",
       "likes": 2,
-      "views": 298,
+      "views": 301,
       "replies": 0,
       "date": "2026-07-04"
     },
@@ -145,6 +145,11 @@
   ],
   "worst10_by_views": [
     {
+      "text": "肩こりの本当の原因、知ってますか？",
+      "views": 4,
+      "date": "2026-07-02"
+    },
+    {
       "text": "肩こりがなくなると、\n仕事への集中力がこんなに変わるのかと驚く人が多い。",
       "views": 3,
       "date": "2026-07-03"
@@ -158,6 +163,11 @@
       "text": "自律神経が乱れると、\n筋肉が常に緊張した状態になります。\n\n深呼吸を1日3回するだけで、\n身体の緊張がほぐれていきます。",
       "views": 3,
       "date": "2026-07-03"
+    },
+    {
+      "text": "頭痛は体質ではなく、原因があります。\nその原因からケアする『1週間で頭痛がラクになる講座』をLINEで無料配布中👇\nhttps://lin.ee/qbRbPAm",
+      "views": 2,
+      "date": "2026-07-04"
     },
     {
       "text": "頭痛の日をカレンダーに丸するだけで、原因が見え始めます。\n天気・寝不足・PC時間…パターンは人それぞれ。\n自分のタイプ別ケアが分かる無料LINE講座はこちら👇\n",
@@ -182,29 +192,19 @@
     {
       "text": "頭痛は体質ではなく、原因があります。\nその原因からケアする『1週間で頭痛がラクになる講座』をLINEで無料配布中👇\nhttps://lin.ee/qbRbPAm",
       "views": 0,
-      "date": "2026-07-04"
-    },
-    {
-      "text": "毎日の小さな変化が、 \n未来の健康につながる。 \nまずは、できるところから \n始めてみよう。",
-      "views": 0,
-      "date": "2026-07-04"
-    },
-    {
-      "text": "頭痛は体質ではなく、原因があります。\nその原因からケアする『1週間で頭痛がラクになる講座』をLINEで無料配布中👇\nhttps://lin.ee/qbRbPAm",
-      "views": 0,
       "date": "2026-07-02"
     }
   ],
   "performance_by_length": {
     "50〜100字": {
       "count": 135,
-      "avg_likes": 0.33,
-      "avg_views": 196.69
+      "avg_likes": 0.34,
+      "avg_views": 196.87
     },
     "〜50字": {
       "count": 55,
       "avg_likes": 0.67,
-      "avg_views": 255.56
+      "avg_views": 266.27
     },
     "100〜150字": {
       "count": 7,

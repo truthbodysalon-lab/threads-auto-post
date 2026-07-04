@@ -26,11 +26,11 @@
     "insight": 3.0,
     "keisei_kyokan": -0.65,
     "education": -1.24,
-    "quote_empathy": 0.21,
+    "quote_empathy": 0.2,
     "ranking": -1.21,
     "keisei_casual": -0.94,
-    "keisei_target": 0.65,
-    "story": 0.17
+    "keisei_target": 0.67,
+    "story": 0.16
   },
   "line_scores": {}
 }

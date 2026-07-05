@@ -13,19 +13,19 @@
   },
   "feedback_scores": {},
   "api_scores": {
-    "story": -0.87,
-    "insight": 1.07,
-    "quote_empathy": -1.25,
-    "selfcare_casual": -1.57,
-    "education": -0.7,
-    "ranking": 0.19
+    "insight": 1.03,
+    "story": -0.86,
+    "selfcare_casual": -1.59,
+    "quote_empathy": -1.24,
+    "education": -0.69,
+    "ranking": 0.2
   },
   "follower_scores": {
     "insight": 3.0,
     "quote_empathy": 0.01,
     "selfcare_casual": -0.44,
     "education": -0.3,
-    "story": 0.27,
+    "story": 0.25,
     "question": -0.85,
     "workmom": -0.82,
     "ranking": -0.86

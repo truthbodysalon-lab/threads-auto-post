@@ -231,7 +231,12 @@
       "date": "2026-07-04",
       "text": "【masa・ローンチ教育投稿】2026-07-11〜07-30の20日間はローンチシーケンスを投稿する。通常バッチと並存し、ローンチ投稿（theme=ローンチシーケンス）がindex=0に固定されているため最優先で選ばれる。既存のcta_profile（index 9, 27）・cta URL（index 5, 14）とは衝突しない。使用できる実数字: 72件のカウンセリング録音分析・成約率50%vs20%の差・次回予約その場確定の成約率97%vs47%・13,300名の施術実績。テーマ: 月50万で停滞する院の共通点/SNS頑張っても予約が入らない4つの壁/新規より先にリピートを固める理由。CTAは必ずLINE登録（プロフィールのLINE）のみ・URL直貼りはオファーフェーズのみ。通常バッチ生成（generate_remix.py）は引き続き毎日行い、1日50本体制を維持する。",
       "account": "masa"
+    },
+    {
+      "date": "2026-07-05",
+      "text": "【truth/nagaoka・頭痛タイプ診断誘導】Web頭痛タイプ診断(https://truthbodysalon-lab.github.io/zutsu-shindan/)への誘導投稿を毎日確実に投稿する。各アカウント2本/日、generate_remix.pyのSHINDAN_TEMPLATESからキュー前半(truth: index6,16 / nagaoka: index8,17)にアンカー。診断は結果画面ボタン→公式LINE登録に繋がる導線。lin.ee URL本数制限とは別枠。1文目はフックから(地域名/実績/自己紹介NG)。検証時は log_*_posted.jsonl に zutsu-shindan URL入り投稿が両アカウントで毎日出ているかを確認する。",
+      "account": "all"
     }
   ],
-  "updated_at": "2026-07-04 00:00"
+  "updated_at": "2026-07-05 11:37"
 }

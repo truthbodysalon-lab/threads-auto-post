@@ -16,12 +16,12 @@
   },
   "feedback_scores": {},
   "api_scores": {
-    "quote_empathy": -0.03,
-    "insight": 0.19,
-    "keisei_target": -0.55,
-    "story": -0.16,
+    "insight": 0.15,
+    "quote_empathy": -0.01,
+    "keisei_target": -0.54,
+    "story": -0.09,
     "ranking": -2.7,
-    "keisei_kyokan": 0.99
+    "keisei_kyokan": 1.02
   },
   "follower_scores": {
     "insight": 3.0,

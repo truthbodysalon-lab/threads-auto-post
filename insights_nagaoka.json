@@ -1,12 +1,12 @@
 {
   "account": "@truth_nagaoka",
-  "updated_at": "2026-07-09 06:51",
+  "updated_at": "2026-07-09 06:54",
   "total_posts": 200,
   "total_likes": 20,
-  "total_views": 17614,
+  "total_views": 17613,
   "total_replies": 14,
   "avg_likes": 0.1,
-  "avg_views": 88.07,
+  "avg_views": 88.06,
   "recent_7days_count": 200,
   "recent_7days_avg_likes": 0.1,
   "top10_by_likes": [
@@ -145,6 +145,11 @@
   ],
   "worst10_by_views": [
     {
+      "text": "肩と首の張りがなくなると、\n長岡市で整体院を兄妹で運営しています。\n家族との時間がこんなに変わるのかと驚く人が多い。",
+      "views": 0,
+      "date": "2026-07-08"
+    },
+    {
       "text": "頭痛を放っておくと「薬が手放せない生活」になります。\n長岡市でよく聞く話です。今の段階なら来院3〜5回で変わります。",
       "views": 0,
       "date": "2026-07-08"
@@ -156,11 +161,6 @@
     },
     {
       "text": "整体は「続けられる場所」で選ぶのが正解です。\n土日祝も営業、夜22時まで受付。\n長岡駅から車で5分、お車でどうぞ。",
-      "views": 0,
-      "date": "2026-07-08"
-    },
-    {
-      "text": "首がちょっと回しにくい、その段階が頭の重さを防ぐゴールデンタイムです。\n長岡市での施術でも同じことを感じます。\n呼吸の浅さが浅いうちに整えると来院3〜5回で十分",
       "views": 0,
       "date": "2026-07-08"
     },
@@ -197,19 +197,19 @@
   ],
   "performance_by_length": {
     "〜50字": {
-      "count": 63,
+      "count": 64,
       "avg_likes": 0.16,
-      "avg_views": 112.52
+      "avg_views": 110.77
     },
     "50〜100字": {
       "count": 133,
       "avg_likes": 0.07,
-      "avg_views": 76.28
+      "avg_views": 76.32
     },
     "100〜150字": {
-      "count": 4,
-      "avg_likes": 0.25,
-      "avg_views": 95.0
+      "count": 3,
+      "avg_likes": 0.33,
+      "avg_views": 124.33
     }
   }
 }

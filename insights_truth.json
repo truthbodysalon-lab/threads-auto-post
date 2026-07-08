@@ -196,6 +196,11 @@
     }
   ],
   "performance_by_length": {
+    "〜50字": {
+      "count": 52,
+      "avg_likes": 0.06,
+      "avg_views": 197.5
+    },
     "50〜100字": {
       "count": 126,
       "avg_likes": 0.15,

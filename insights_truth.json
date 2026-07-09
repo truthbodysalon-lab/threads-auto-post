@@ -1,12 +1,12 @@
 {
   "account": "@truth_body_salon",
-  "updated_at": "2026-07-10 06:01",
+  "updated_at": "2026-07-10 06:40",
   "total_posts": 200,
   "total_likes": 29,
-  "total_views": 11042,
+  "total_views": 11034,
   "total_replies": 80,
   "avg_likes": 0.14,
-  "avg_views": 55.21,
+  "avg_views": 55.17,
   "recent_7days_count": 200,
   "recent_7days_avg_likes": 0.14,
   "top10_by_likes": [
@@ -145,11 +145,6 @@
   ],
   "worst10_by_views": [
     {
-      "text": "肩こりのせいで\n料理や家事をこなしきれない。\n\nそんなお声が増えています。",
-      "views": 6,
-      "date": "2026-07-07"
-    },
-    {
       "text": "お風呂で頭痛を防ぐコツは「湯船で肩まで浸かって深呼吸5回」。\n肩の緊張がゆるむと頭への血流が整います。\n毎日1分のケアを7日間届ける無料講座があります👇\nhtt",
       "views": 5,
       "date": "2026-07-08"
@@ -185,6 +180,11 @@
       "date": "2026-07-07"
     },
     {
+      "text": "頭痛薬に手が伸びる回数、減らしたくないですか。\n登録した人に『1週間で頭痛がラクになるセルフケア講座』を無料でお届けしています。\n1日3分、薬に頼らない体へ👇\n",
+      "views": 2,
+      "date": "2026-07-09"
+    },
+    {
       "text": "薬に頼らず頭痛を減らしたい方へ。\n登録すると1週間のセルフケア講座（無料）が毎日1通ずつ届きます👇\nhttps://lin.ee/qbRbPAm",
       "views": 2,
       "date": "2026-07-08"
@@ -196,20 +196,20 @@
     }
   ],
   "performance_by_length": {
+    "100〜150字": {
+      "count": 27,
+      "avg_likes": 0.0,
+      "avg_views": 22.74
+    },
     "50〜100字": {
       "count": 124,
       "avg_likes": 0.17,
-      "avg_views": 56.61
+      "avg_views": 56.62
     },
     "〜50字": {
-      "count": 50,
+      "count": 49,
       "avg_likes": 0.16,
-      "avg_views": 68.2
-    },
-    "100〜150字": {
-      "count": 26,
-      "avg_likes": 0.0,
-      "avg_views": 23.54
+      "avg_views": 69.37
     }
   }
 }

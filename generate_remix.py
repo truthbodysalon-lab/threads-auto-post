@@ -105,10 +105,23 @@ def _load_extra_templates(acct: str) -> list[str]:
             pass
     return []
 
+# 変数の不自然な組み合わせ（mad-lib事故）検出。
+# 例:「眠りの浅さで湿布を週3枚」— 痛み系でない症状に鎮痛手段が付くと機械生成感が出て
+# 読者にもアルゴリズムにもスパム扱いされる（2026-07-09 実測TOP投稿にも混入していた）。
+_NON_PAIN_SYMPTOMS = ("眠りの浅さ", "呼吸の浅さ", "体のだるさ", "疲れやすさ", "姿勢の悪さ", "猫背", "巻き肩")
+_PAIN_REMEDIES = ("湿布", "鎮痛剤", "頭痛薬", "痛み止め", "薬を飲")
+
+
+def _is_incoherent(text: str) -> bool:
+    """症状と対処の組み合わせが不自然な文（変数事故）を検出する。"""
+    head = text[:120]   # 主に1〜2文目で起きる
+    return any(s in head for s in _NON_PAIN_SYMPTOMS) and any(r in head for r in _PAIN_REMEDIES)
+
+
 def _is_ng(text: str) -> bool:
-    """NGワードを含む投稿を除外"""
+    """NGワード・不自然な変数組み合わせを含む投稿を除外"""
     ng = _load_ng_words()
-    return any(w in text for w in ng)
+    return any(w in text for w in ng) or _is_incoherent(text)
 
 # masa専用: 予告型NGパターンチェック（feedback.json 2026-05-13ルール）
 _MASA_YOKOKOKU_NG = [
@@ -537,6 +550,37 @@ def generate_line_listin_post(acct: str = "truth") -> str:
     return fill(tmpl.replace("{url}", LINE_LISTIN_URL))
 
 
+# ── 頭痛タイプ診断への誘導（truth/nagaoka 共通・2026-07-05ルール化）──────────
+# Web診断アプリ(GitHub Pages)へ誘導する。診断結果ボタン→公式LINEへ繋がる導線。
+# ルール: 1文目はフックから（地域名/実績/自己紹介で始めない）・短文・URLは本文末尾。
+# lin.ee URLではないため LINE URL 本数制限とは別枠。各アカウント毎日2本をキュー前半にアンカー。
+SHINDAN_URL = "https://truthbodysalon-lab.github.io/zutsu-shindan/"
+
+SHINDAN_TEMPLATES = [
+    "自分の頭痛のタイプ、答えられますか。\n緊張型か、片頭痛か、薬の使いすぎか。\n10問・60秒でわかる無料診断を作りました👇\n{url}",
+    "頭痛対策が効かないのは、タイプが違うからかもしれません。\n温めるべき頭痛と、冷やすべき頭痛は真逆です。\n60秒でタイプがわかる無料診断はこちら👇\n{url}",
+    "「とりあえず薬」の前に、60秒だけください。\n10問であなたの頭痛タイプと今日からできる対策がわかります。\n無料で診断できます👇\n{url}",
+    "頭痛には大きく3タイプあります。\n締めつけ型・ズキズキ型・薬の使いすぎ型。\nあなたはどれか、60秒で診断できます👇\n{url}",
+    "月10回以上頭痛薬を飲む人は、一度確かめてみてください。\n薬が頭痛を招く悪循環に入っているかもしれません。\n無料・60秒・10問の頭痛タイプ診断です👇\n{url}",
+    "天気が崩れる前に頭が痛くなる人と、夕方に痛くなる人。\n実は対策がまったく違います。\nあなたのタイプを60秒で診断👇\n{url}",
+    "頭痛改善の第一歩は、自分のタイプを知ることです。\n10の質問に答えるだけで、今日からできる対策までわかります👇\n{url}",
+    "その頭痛、揉んで治るタイプですか。冷やすタイプですか。\n間違った対処は逆効果になることもあります。\n60秒の無料診断で確かめられます👇\n{url}",
+]
+
+# 奇数/偶数 index で truth / nagaoka に分割（同日の同一文クロス投稿を構造的に防ぐ）
+_SHINDAN_POOLS = {
+    "truth":   [t for i, t in enumerate(SHINDAN_TEMPLATES) if i % 2 == 0],
+    "nagaoka": [t for i, t in enumerate(SHINDAN_TEMPLATES) if i % 2 == 1],
+}
+
+
+def generate_shindan_post(acct: str = "truth") -> str:
+    """頭痛タイプ診断（Web）への誘導投稿を生成（truth/nagaoka）。"""
+    pool = _SHINDAN_POOLS.get(acct) or SHINDAN_TEMPLATES
+    tmpl = random.choice(pool)
+    return fill(tmpl.replace("{url}", SHINDAN_URL))
+
+
 # ── 場所・アクセス・駐車場・地域ワード（truth/nagaoka 共通）──────────
 # 確認済みの事実のみ使用: 長岡駅徒歩5分・専用駐車場あり(無料)・お車OK・
 # 夜22時まで受付・土日祝営業・完全予約制・1日3名限定。台数等の不確定情報は書かない。
@@ -915,6 +959,34 @@ def generate_post(pattern_key: str) -> str:
     return ""
 
 
+def _load_hero_posts(acct: str) -> list[str]:
+    """ヒーロー投稿（毎朝サブエージェントが書く変数無しの完成原稿）を読む。
+    hero_<acct>.json = {"date": "YYYY-MM-DD", "posts": [...]}。当日分のみ有効。
+    テンプレ量産と別枠の「跳ねを狙う原稿」で、キュー前半に散らして配置する。"""
+    import datetime as _dt
+    f = BASE / f"hero_{acct}.json"
+    if not f.exists():
+        return []
+    try:
+        d = json.loads(f.read_text(encoding="utf-8"))
+        if d.get("date") != _dt.date.today().isoformat():
+            return []   # 古いヒーローは使わない（鮮度が命）
+        return [p for p in d.get("posts", []) if isinstance(p, str) and len(p) >= 30 and not _is_ng(p)]
+    except Exception:
+        return []
+
+
+def _insert_hero_posts(posts: list[str], acct: str) -> list[str]:
+    """ヒーロー投稿を実投稿される前半50本に等間隔で差し込む（最大10本）。"""
+    heroes = _load_hero_posts(acct)[:10]
+    if not heroes:
+        return posts
+    step = max(4, 46 // max(1, len(heroes)))
+    for i, h in enumerate(heroes):
+        posts.insert(min(2 + i * step, len(posts)), h)
+    return posts
+
+
 def _enforce_diversity(posts: list[str], prefix_len: int = 9) -> list[str]:
     """実投稿される前半に同じ冒頭・同じ骨格・同じ長さ帯が固まらないよう貪欲に並べ替える。
     1日約50本が消費されるため、前半の構造的多様性を最大化して「量産テンプレ臭」を減らす
@@ -1009,6 +1081,7 @@ def generate_30_posts() -> list[str]:
 
     # 構造的多様性を強制（実投稿される前半を被らせない）→ 特別投稿の挿入はこの後
     posts = _enforce_diversity(posts)
+    posts = _insert_hero_posts(posts, "truth")
 
     # feedback の追加テンプレを先頭に差し込む
     for tmpl in _load_extra_templates("truth"):
@@ -1067,6 +1140,20 @@ def generate_30_posts() -> list[str]:
     for i, ap_ in enumerate(access_posts):
         pos = min(access_anchors[i] if i < len(access_anchors) else (i * 9 + 9), len(posts))
         posts.insert(pos, ap_)
+
+    # 頭痛タイプ診断(Web)への誘導を毎日確実に投稿する（2026-07-05ルール化）
+    # 前半（index 6, 16）へアンカーして1日約50本の消費内で必ず届ける
+    shindan_posts = []
+    for _ in range(2):
+        for _ in range(20):
+            p = generate_shindan_post("truth")
+            if p not in shindan_posts:
+                shindan_posts.append(p)
+                break
+    shindan_anchors = [6, 16]
+    for i, sp_ in enumerate(shindan_posts):
+        pos = min(shindan_anchors[i] if i < len(shindan_anchors) else (i * 10 + 6), len(posts))
+        posts.insert(pos, sp_)
 
     return posts[:100]
 
@@ -1135,6 +1222,7 @@ def generate_40_nagaoka_posts() -> list[str]:
 
     # 構造的多様性を強制（実投稿される前半を被らせない）→ 特別投稿の挿入はこの後
     posts = _enforce_diversity(posts)
+    posts = _insert_hero_posts(posts, "nagaoka")
 
     # feedback の追加テンプレを先頭に差し込む（1文目startswith NGのみフィルター）
     for tmpl in _load_extra_templates("nagaoka"):
@@ -1197,6 +1285,20 @@ def generate_40_nagaoka_posts() -> list[str]:
     for i, ap_ in enumerate(access_posts):
         pos = min(access_anchors[i] if i < len(access_anchors) else (i * 9 + 12), len(posts))
         posts.insert(pos, ap_)
+
+    # 頭痛タイプ診断(Web)への誘導を毎日確実に投稿する（2026-07-05ルール化）
+    # 前半（index 8, 17）へアンカーして1日の消費内で必ず届ける
+    shindan_posts = []
+    for _ in range(2):
+        for _ in range(20):
+            p = generate_shindan_post("nagaoka")
+            if p not in shindan_posts:
+                shindan_posts.append(p)
+                break
+    shindan_anchors = [8, 17]
+    for i, sp_ in enumerate(shindan_posts):
+        pos = min(shindan_anchors[i] if i < len(shindan_anchors) else (i * 10 + 8), len(posts))
+        posts.insert(pos, sp_)
 
     # ── 長岡市言及率の最終調整（アンカー挿入後） ──
     # アンカー挿入で投稿数が増えたため、長岡市率が目標(25%)を超える可能性がある。
@@ -1687,6 +1789,7 @@ def generate_30_masa_posts() -> list[str]:
 
     # 構造的多様性を強制（実投稿される前半を被らせない）→ 特別投稿の挿入はこの後
     posts = _enforce_diversity(posts)
+    posts = _insert_hero_posts(posts, "masa")
 
     # feedback の追加テンプレを先頭に差し込む
     for tmpl in _load_extra_templates("masa"):

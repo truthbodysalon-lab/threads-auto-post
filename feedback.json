@@ -20,7 +20,9 @@
     "必ず月100万",
     "誰でも",
     "簡単に",
-    "100%"
+    "100%",
+    "主な原因です。なぜなら",
+    "が原因のことが多いです。揉んでも治らないのは"
   ],
   "extra_templates": {
     "truth": [
@@ -236,7 +238,12 @@
       "date": "2026-07-05",
       "text": "【truth/nagaoka・頭痛タイプ診断誘導】Web頭痛タイプ診断(https://truthbodysalon-lab.github.io/zutsu-shindan/)への誘導投稿を毎日確実に投稿する。各アカウント2本/日、generate_remix.pyのSHINDAN_TEMPLATESからキュー前半(truth: index6,16 / nagaoka: index8,17)にアンカー。診断は結果画面ボタン→公式LINE登録に繋がる導線。lin.ee URL本数制限とは別枠。1文目はフックから(地域名/実績/自己紹介NG)。検証時は log_*_posted.jsonl に zutsu-shindan URL入り投稿が両アカウントで毎日出ているかを確認する。",
       "account": "all"
+    },
+    {
+      "date": "2026-07-09",
+      "text": "truth閲覧の実測分析(2026-07-09)による鉄則: ①跳ねる=短い断定1〜3行・問いだけで止める(答えを書かない)・数えられる数字の自己診断・独白型共感 ②死ぬ=『主な原因です。なぜなら』型三段論法・問いの即自己回収・4文超のてんこ盛り・空虚な穴埋め共感 ③ヒーロー投稿(hero_<acct>.json)を毎朝書き直す。分析はanalyze_breakout.py→breakout_<acct>.json",
+      "account": "truth"
     }
   ],
-  "updated_at": "2026-07-05 11:37"
+  "updated_at": "2026-07-09 19:44"
 }

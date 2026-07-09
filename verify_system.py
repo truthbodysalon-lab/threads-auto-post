@@ -217,6 +217,28 @@ def check_execution_gaps():
             "PASS" if n >= 50 else "FAIL",
             f"昨日({yesterday})の投稿 {n}本 / 必須50本")
 
+    # C9: プレイブック（修正基準の正本）が毎朝検証・更新されているか。
+    #     基準そのものを向上させるメタPDCAが止まると改善が旧基準で空回りする。
+    for acct in ACCTS:
+        f = BASE / f"playbook_{acct}.json"
+        try:
+            pb = json.loads(f.read_text(encoding="utf-8"))
+            upd = pb.get("updated", "2000-01-01")
+            days_old = (date.today() - date.fromisoformat(upd)).days
+            active = sum(1 for r in pb.get("rules", []) if r.get("status") == "active")
+            testing = sum(1 for r in pb.get("rules", []) if r.get("status") == "testing")
+            if days_old > 2:
+                add(f"exec:playbook:{acct}", "C.実行ギャップ", "WARN",
+                    f"プレイブック未検証{days_old}日（毎朝検証・updated更新が必須）")
+            elif active == 0:
+                add(f"exec:playbook:{acct}", "C.実行ギャップ", "WARN",
+                    f"activeルール0件（testing{testing}件。昇格判定が機能していない疑い）")
+            else:
+                add(f"exec:playbook:{acct}", "C.実行ギャップ", "PASS",
+                    f"v{pb.get('version','?')} 更新{upd} active{active}/testing{testing}")
+        except Exception as e:
+            add(f"exec:playbook:{acct}", "C.実行ギャップ", "WARN", f"playbook読込不可: {e}")
+
     # C7: 月100万ペース（常時アラーム）。views_action.json を読み、未達アカウントを明示。
     #     達成は野心的目標のため未達は WARN（恒常監視・改善誘導が目的。FAILにはしない）。
     try:

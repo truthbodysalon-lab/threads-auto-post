@@ -1,0 +1,114 @@
+{
+ "acct": "nagaoka",
+ "version": 1,
+ "updated": "2026-07-09",
+ "description": "修正ポイント（勝ち構造・死ぬ構造）の正本。毎朝サブエージェントEが実測データで各ルールを検証し、効かなくなったルールはretired、新発見はtestingで追加、実証されたらactiveに昇格する。ヒーロー投稿と新テンプレはこのプレイブックのactiveルールに従って書く。",
+ "rules": [
+  {
+   "id": "W1",
+   "type": "win",
+   "status": "testing",
+   "added": "2026-07-09",
+   "last_validated": "2026-07-09",
+   "rule": "短い断定1〜3行で言い切って去る（15〜30字単位・話者の解説姿勢を消す）",
+   "evidence": "truthの実測から移植した仮説。nagaoka自身の実測(breakout_nagaoka.json)で検証して昇格/棄却する"
+  },
+  {
+   "id": "W2",
+   "type": "win",
+   "status": "testing",
+   "added": "2026-07-09",
+   "last_validated": "2026-07-09",
+   "rule": "問いだけで止める。答えを同じ投稿内で書かない（プロフィールへの好奇心を残す）",
+   "evidence": "truthの実測から移植した仮説。nagaoka自身の実測(breakout_nagaoka.json)で検証して昇格/棄却する"
+  },
+  {
+   "id": "W3",
+   "type": "win",
+   "status": "testing",
+   "added": "2026-07-09",
+   "last_validated": "2026-07-09",
+   "rule": "数えられる数字の自己診断（月に何錠・週に何枚・何回）で自分ごと化",
+   "evidence": "truthの実測から移植した仮説。nagaoka自身の実測(breakout_nagaoka.json)で検証して昇格/棄却する"
+  },
+  {
+   "id": "W4",
+   "type": "win",
+   "status": "testing",
+   "added": "2026-07-09",
+   "last_validated": "2026-07-09",
+   "rule": "独白型の共感（〜辛いですよね/〜んだ）で終わり、営業要素を続けない",
+   "evidence": "truthの実測から移植した仮説。nagaoka自身の実測(breakout_nagaoka.json)で検証して昇格/棄却する"
+  },
+  {
+   "id": "W5",
+   "type": "win",
+   "status": "testing",
+   "added": "2026-07-09",
+   "last_validated": "2026-07-09",
+   "rule": "ママの実在する生活場面から入るエピソード型（保育園のお迎え・夜泣き・抱っこ）",
+   "evidence": "truthの実測から移植した仮説。nagaoka自身の実測(breakout_nagaoka.json)で検証して昇格/棄却する"
+  },
+  {
+   "id": "L1",
+   "type": "lose",
+   "status": "testing",
+   "added": "2026-07-09",
+   "last_validated": "2026-07-09",
+   "rule": "「〜が主な原因です。なぜなら〜」型三段論法テンプレは禁止（NGワード化済み）",
+   "evidence": "truthの実測から移植した仮説。nagaoka自身の実測(breakout_nagaoka.json)で検証して昇格/棄却する"
+  },
+  {
+   "id": "L2",
+   "type": "lose",
+   "status": "testing",
+   "added": "2026-07-09",
+   "last_validated": "2026-07-09",
+   "rule": "問いを立てて同じ投稿内で自己回収しない（W2の裏面）",
+   "evidence": "truthの実測から移植した仮説。nagaoka自身の実測(breakout_nagaoka.json)で検証して昇格/棄却する"
+  },
+  {
+   "id": "L3",
+   "type": "lose",
+   "status": "testing",
+   "added": "2026-07-09",
+   "last_validated": "2026-07-09",
+   "rule": "4文超のてんこ盛り（悩み→原因→実績→地域→CTA）にしない。詰めるほど沈む",
+   "evidence": "truthの実測から移植した仮説。nagaoka自身の実測(breakout_nagaoka.json)で検証して昇格/棄却する"
+  },
+  {
+   "id": "L4",
+   "type": "lose",
+   "status": "testing",
+   "added": "2026-07-09",
+   "last_validated": "2026-07-09",
+   "rule": "空虚な穴埋め共感（「〜が楽しめない」等のフォーマット共感）を使わない",
+   "evidence": "truthの実測から移植した仮説。nagaoka自身の実測(breakout_nagaoka.json)で検証して昇格/棄却する"
+  },
+  {
+   "id": "L5",
+   "type": "lose",
+   "status": "testing",
+   "added": "2026-07-09",
+   "last_validated": "2026-07-09",
+   "rule": "LINEリンク付き投稿は閲覧2〜7viewsに抑制される（登録獲得のため1日2本は維持＝閲覧との意図的トレードオフ。増やさない）",
+   "evidence": "truthの実測から移植した仮説。nagaoka自身の実測(breakout_nagaoka.json)で検証して昇格/棄却する"
+  },
+  {
+   "id": "L6",
+   "type": "lose",
+   "status": "testing",
+   "added": "2026-07-09",
+   "last_validated": "2026-07-09",
+   "rule": "症状と対処の不自然な組み合わせ（眠りの浅さ×湿布等）は機械生成感=スパム判定の元（_is_incoherentで自動排除済み）",
+   "evidence": "truthの実測から移植した仮説。nagaoka自身の実測(breakout_nagaoka.json)で検証して昇格/棄却する"
+  }
+ ],
+ "changelog": [
+  {
+   "version": 1,
+   "date": "2026-07-09",
+   "change": "初版。truthプレイブックv1から仮説として移植（全ルールtesting）"
+  }
+ ]
+}

@@ -1,60 +1,60 @@
 {
  "acct": "nagaoka",
- "version": 1,
- "updated": "2026-07-09",
+ "version": 2,
+ "updated": "2026-07-10",
  "description": "修正ポイント（勝ち構造・死ぬ構造）の正本。毎朝サブエージェントEが実測データで各ルールを検証し、効かなくなったルールはretired、新発見はtestingで追加、実証されたらactiveに昇格する。ヒーロー投稿と新テンプレはこのプレイブックのactiveルールに従って書く。",
  "rules": [
   {
    "id": "W1",
    "type": "win",
-   "status": "testing",
+   "status": "active",
    "added": "2026-07-09",
-   "last_validated": "2026-07-09",
+   "last_validated": "2026-07-10",
    "rule": "短い断定1〜3行で言い切って去る（15〜30字単位・話者の解説姿勢を消す）",
-   "evidence": "truthの実測から移植した仮説。nagaoka自身の実測(breakout_nagaoka.json)で検証して昇格/棄却する"
+   "evidence": "723v「病院に行くほどじゃない体のだるさを放っておく人が、一番もったいない」488v/375v/368v/220v/204v等、断定1〜3行がTOP30の大半"
   },
   {
    "id": "W2",
    "type": "win",
    "status": "testing",
    "added": "2026-07-09",
-   "last_validated": "2026-07-09",
+   "last_validated": "2026-07-10",
    "rule": "問いだけで止める。答えを同じ投稿内で書かない（プロフィールへの好奇心を残す）",
    "evidence": "truthの実測から移植した仮説。nagaoka自身の実測(breakout_nagaoka.json)で検証して昇格/棄却する"
   },
   {
    "id": "W3",
    "type": "win",
-   "status": "testing",
+   "status": "active",
    "added": "2026-07-09",
-   "last_validated": "2026-07-09",
+   "last_validated": "2026-07-10",
    "rule": "数えられる数字の自己診断（月に何錠・週に何枚・何回）で自分ごと化",
-   "evidence": "truthの実測から移植した仮説。nagaoka自身の実測(breakout_nagaoka.json)で検証して昇格/棄却する"
+   "evidence": "347v「月に2〜3回の頭の重さを『持病』と呼ぶのはまだ早い…来院3〜5回」321v「週3回の頭痛」等、数字系がTOP30上位に多数"
   },
   {
    "id": "W4",
    "type": "win",
    "status": "testing",
    "added": "2026-07-09",
-   "last_validated": "2026-07-09",
+   "last_validated": "2026-07-10",
    "rule": "独白型の共感（〜辛いですよね/〜んだ）で終わり、営業要素を続けない",
    "evidence": "truthの実測から移植した仮説。nagaoka自身の実測(breakout_nagaoka.json)で検証して昇格/棄却する"
   },
   {
    "id": "W5",
    "type": "win",
-   "status": "testing",
+   "status": "retired",
    "added": "2026-07-09",
-   "last_validated": "2026-07-09",
+   "last_validated": "2026-07-10",
    "rule": "ママの実在する生活場面から入るエピソード型（保育園のお迎え・夜泣き・抱っこ）",
-   "evidence": "truthの実測から移植した仮説。nagaoka自身の実測(breakout_nagaoka.json)で検証して昇格/棄却する"
+   "evidence": "TOP30に保育園・夜泣き・抱っこ等の実在エピソード型は0件。truth移植仮説がnagaokaで未再現"
   },
   {
    "id": "L1",
    "type": "lose",
    "status": "testing",
    "added": "2026-07-09",
-   "last_validated": "2026-07-09",
+   "last_validated": "2026-07-10",
    "rule": "「〜が主な原因です。なぜなら〜」型三段論法テンプレは禁止（NGワード化済み）",
    "evidence": "truthの実測から移植した仮説。nagaoka自身の実測(breakout_nagaoka.json)で検証して昇格/棄却する"
   },
@@ -63,45 +63,54 @@
    "type": "lose",
    "status": "testing",
    "added": "2026-07-09",
-   "last_validated": "2026-07-09",
+   "last_validated": "2026-07-10",
    "rule": "問いを立てて同じ投稿内で自己回収しない（W2の裏面）",
    "evidence": "truthの実測から移植した仮説。nagaoka自身の実測(breakout_nagaoka.json)で検証して昇格/棄却する"
   },
   {
    "id": "L3",
    "type": "lose",
-   "status": "testing",
+   "status": "active",
    "added": "2026-07-09",
-   "last_validated": "2026-07-09",
+   "last_validated": "2026-07-10",
    "rule": "4文超のてんこ盛り（悩み→原因→実績→地域→CTA）にしない。詰めるほど沈む",
-   "evidence": "truthの実測から移植した仮説。nagaoka自身の実測(breakout_nagaoka.json)で検証して昇格/棄却する"
+   "evidence": "2v「運動不足と朝の疲れ…兄妹で運営…来院3〜5回」の5要素てんこ盛りで実証。3文構成までが生存境界"
   },
   {
    "id": "L4",
    "type": "lose",
-   "status": "testing",
+   "status": "retired",
    "added": "2026-07-09",
-   "last_validated": "2026-07-09",
+   "last_validated": "2026-07-10",
    "rule": "空虚な穴埋め共感（「〜が楽しめない」等のフォーマット共感）を使わない",
-   "evidence": "truthの実測から移植した仮説。nagaoka自身の実測(breakout_nagaoka.json)で検証して昇格/棄却する"
+   "evidence": "281v/370v/240vと同型の穴埋め共感がTOP30に複数生存。禁止は過剰一般化。死因は量産感・具体性不足（L7へ置換）"
   },
   {
    "id": "L5",
    "type": "lose",
-   "status": "testing",
+   "status": "active",
    "added": "2026-07-09",
-   "last_validated": "2026-07-09",
+   "last_validated": "2026-07-10",
    "rule": "LINEリンク付き投稿は閲覧2〜7viewsに抑制される（登録獲得のため1日2本は維持＝閲覧との意図的トレードオフ。増やさない）",
-   "evidence": "truthの実測から移植した仮説。nagaoka自身の実測(breakout_nagaoka.json)で検証して昇格/棄却する"
+   "evidence": "LINEリンク付き5本すべて0〜1views（想定2〜7よりさらに低い実測）"
   },
   {
    "id": "L6",
    "type": "lose",
    "status": "testing",
    "added": "2026-07-09",
-   "last_validated": "2026-07-09",
+   "last_validated": "2026-07-10",
    "rule": "症状と対処の不自然な組み合わせ（眠りの浅さ×湿布等）は機械生成感=スパム判定の元（_is_incoherentで自動排除済み）",
    "evidence": "truthの実測から移植した仮説。nagaoka自身の実測(breakout_nagaoka.json)で検証して昇格/棄却する"
+  },
+  {
+   "id": "L7",
+   "type": "lose",
+   "status": "testing",
+   "added": "2026-07-10",
+   "last_validated": "2026-07-10",
+   "rule": "症状名だけ差し替えた量産的複製（差し替え箇所以外の文言・構文が完全一致するバリエーション連投）をしない。型を使う場合も語順・視点・具体性を変える",
+   "evidence": "WORST20の量産感の強い版が0〜3views。同型でも具体性のある版はTOP30(281v/370v/240v)に生存"
   }
  ],
  "changelog": [
@@ -109,6 +118,11 @@
    "version": 1,
    "date": "2026-07-09",
    "change": "初版。truthプレイブックv1から仮説として移植（全ルールtesting）"
+  },
+  {
+   "version": 2,
+   "date": "2026-07-10",
+   "change": "nagaoka自身の実測(breakout 200投稿)で全ルール判定: W1→active, W3→active, W5→retired, L3→active, L4→retired, L5→active, L7を追加(testing)"
   }
  ]
 }

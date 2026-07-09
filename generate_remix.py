@@ -971,7 +971,8 @@ def _load_hero_posts(acct: str) -> list[str]:
         d = json.loads(f.read_text(encoding="utf-8"))
         if d.get("date") != _dt.date.today().isoformat():
             return []   # 古いヒーローは使わない（鮮度が命）
-        return [p for p in d.get("posts", []) if isinstance(p, str) and len(p) >= 30 and not _is_ng(p)]
+        # 実測で「短い断定1〜3行(15〜25字)」が最強と判明(playbook W1)。30字下限は勝ち筋を弾くため15字に
+        return [p for p in d.get("posts", []) if isinstance(p, str) and len(p) >= 15 and not _is_ng(p)]
     except Exception:
         return []
 
@@ -1081,7 +1082,6 @@ def generate_30_posts() -> list[str]:
 
     # 構造的多様性を強制（実投稿される前半を被らせない）→ 特別投稿の挿入はこの後
     posts = _enforce_diversity(posts)
-    posts = _insert_hero_posts(posts, "truth")
 
     # feedback の追加テンプレを先頭に差し込む
     for tmpl in _load_extra_templates("truth"):
@@ -1155,6 +1155,7 @@ def generate_30_posts() -> list[str]:
         pos = min(shindan_anchors[i] if i < len(shindan_anchors) else (i * 10 + 6), len(posts))
         posts.insert(pos, sp_)
 
+    posts = _insert_hero_posts(posts, "truth")   # 全挿入の最後（位置50超への押し出し防止）
     return posts[:100]
 
 
@@ -1222,7 +1223,6 @@ def generate_40_nagaoka_posts() -> list[str]:
 
     # 構造的多様性を強制（実投稿される前半を被らせない）→ 特別投稿の挿入はこの後
     posts = _enforce_diversity(posts)
-    posts = _insert_hero_posts(posts, "nagaoka")
 
     # feedback の追加テンプレを先頭に差し込む（1文目startswith NGのみフィルター）
     for tmpl in _load_extra_templates("nagaoka"):
@@ -1321,6 +1321,7 @@ def generate_40_nagaoka_posts() -> list[str]:
                 final_posts.pop(i)
                 deleted += 1
 
+    final_posts = _insert_hero_posts(final_posts, "nagaoka")   # 全挿入の最後
     return final_posts
 
 
@@ -1789,7 +1790,6 @@ def generate_30_masa_posts() -> list[str]:
 
     # 構造的多様性を強制（実投稿される前半を被らせない）→ 特別投稿の挿入はこの後
     posts = _enforce_diversity(posts)
-    posts = _insert_hero_posts(posts, "masa")
 
     # feedback の追加テンプレを先頭に差し込む
     for tmpl in _load_extra_templates("masa"):
@@ -1862,6 +1862,7 @@ def generate_30_masa_posts() -> list[str]:
         pos = min([9, 27][i] if i < 2 else (i * 9 + 9), len(posts))
         posts.insert(pos, pp)
 
+    posts = _insert_hero_posts(posts, "masa")   # 全挿入の最後
     return posts[:100]
 
 

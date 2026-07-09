@@ -3,7 +3,7 @@
   "pattern_weights": {
     "keisei_target": 9,
     "keisei_risk": 5,
-    "keisei_kyokan": 11,
+    "keisei_kyokan": 12,
     "keisei_casual": 3,
     "quote_empathy": 5,
     "insight": 11,
@@ -24,13 +24,13 @@
   },
   "follower_scores": {
     "insight": 3.0,
-    "keisei_kyokan": -0.72,
-    "education": -1.08,
-    "quote_empathy": 0.4,
-    "ranking": -1.06,
-    "keisei_casual": -0.85,
-    "keisei_target": 0.39,
-    "story": -0.08
+    "keisei_kyokan": -0.66,
+    "education": -1.05,
+    "quote_empathy": 0.3,
+    "ranking": -1.03,
+    "keisei_casual": -0.83,
+    "keisei_target": 0.38,
+    "story": -0.09
   },
   "line_scores": {}
 }

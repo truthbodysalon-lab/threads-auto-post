@@ -1,7 +1,7 @@
 {
-  "date": "2026-07-04",
+  "date": "2026-07-09",
   "target_per_account": 1000000,
-  "weakest": "masa",
+  "weakest": "truth",
   "behind": [
     "truth",
     "nagaoka",
@@ -9,37 +9,37 @@
   ],
   "per_acct": {
     "truth": {
-      "pace": 34,
-      "v30": 345816,
-      "avg_post": 257,
-      "need_avg": 745,
-      "gap_daily": 22178
+      "pace": 0,
+      "v30": 0,
+      "avg_post": 0,
+      "need_avg": 633,
+      "gap_daily": 33333
     },
     "nagaoka": {
-      "pace": 56,
-      "v30": 562115,
-      "avg_post": 467,
-      "need_avg": 831,
-      "gap_daily": 15201
+      "pace": 0,
+      "v30": 0,
+      "avg_post": 0,
+      "need_avg": 751,
+      "gap_daily": 33333
     },
     "masa": {
-      "pace": 22,
-      "v30": 226593,
-      "avg_post": 181,
-      "need_avg": 800,
-      "gap_daily": 26024
+      "pace": 0,
+      "v30": 0,
+      "avg_post": 0,
+      "need_avg": 676,
+      "gap_daily": 33333
     }
   },
   "priority_order": [
-    "masa",
     "truth",
-    "nagaoka"
+    "nagaoka",
+    "masa"
   ],
   "line_registrations": {
     "truth_nagaoka": {
-      "total": 9,
-      "d7": 0,
-      "d30": 6
+      "total": 13,
+      "d7": 4,
+      "d30": 10
     },
     "masa": {
       "total": 0,
@@ -52,25 +52,25 @@
     "truth": {
       "week": 1,
       "target_avg_post_7d": 168,
-      "actual_avg_post_7d": 141,
+      "actual_avg_post_7d": 0,
       "on_track": false
     },
     "nagaoka": {
       "week": 1,
       "target_avg_post_7d": 401,
-      "actual_avg_post_7d": 379,
+      "actual_avg_post_7d": 0,
       "on_track": false
     },
     "masa": {
       "week": 1,
       "target_avg_post_7d": 135,
-      "actual_avg_post_7d": 99,
+      "actual_avg_post_7d": 0,
       "on_track": false
     }
   },
   "directives": [
-    "masa: 軌道遅れ（99<135）→ ①prune_templates.pyで負けテンプレ削除 ②新テンプレ24本(通常の2倍)をtop10_by_viewsの勝ち構造で生成 ③フック全面刷新",
-    "truth: 軌道遅れ（141<168）→ ①prune_templates.pyで負けテンプレ削除 ②新テンプレ24本(通常の2倍)をtop10_by_viewsの勝ち構造で生成 ③フック全面刷新",
-    "nagaoka: 軌道遅れ（379<401）→ ①prune_templates.pyで負けテンプレ削除 ②新テンプレ24本(通常の2倍)をtop10_by_viewsの勝ち構造で生成 ③フック全面刷新"
+    "nagaoka: 軌道遅れ（0<401）→ ①prune_templates.pyで負けテンプレ削除 ②新テンプレ24本(通常の2倍)をtop10_by_viewsの勝ち構造で生成 ③フック全面刷新",
+    "truth: 軌道遅れ（0<168）→ ①prune_templates.pyで負けテンプレ削除 ②新テンプレ24本(通常の2倍)をtop10_by_viewsの勝ち構造で生成 ③フック全面刷新",
+    "masa: 軌道遅れ（0<135）→ ①prune_templates.pyで負けテンプレ削除 ②新テンプレ24本(通常の2倍)をtop10_by_viewsの勝ち構造で生成 ③フック全面刷新"
   ]
 }

@@ -239,6 +239,39 @@ def check_execution_gaps():
         except Exception as e:
             add(f"exec:playbook:{acct}", "C.実行ギャップ", "WARN", f"playbook読込不可: {e}")
 
+    # C10: 投稿の時間配分（固め打ち検知）。昨日の投稿ログから
+    #      「午前(6-12時)に70%以上」or「最終投稿が18時前」なら配分バグの再発疑い。
+    yesterday2 = (date.today() - timedelta(days=1)).strftime("%Y-%m-%d")
+    for acct in ACCTS:
+        lf = BASE / f"autopost_{acct}.log"
+        try:
+            hours = []
+            for line in lf.read_text(encoding="utf-8").splitlines():
+                if "✓ 完了" in line and line.startswith(f"[{yesterday2}"):
+                    try:
+                        hours.append(int(line[12:14]))
+                    except Exception:
+                        pass
+            if not hours:
+                add(f"exec:pacing:{acct}", "C.実行ギャップ", "WARN", f"昨日の完了ログなし")
+                continue
+            am = sum(1 for h in hours if h < 13)
+            ratio = am * 100 // len(hours)
+            last = max(hours)
+            if ratio >= 70 or last < 18:
+                add(f"exec:pacing:{acct}", "C.実行ギャップ", "FAIL",
+                    f"固め打ち疑い: 午前比率{ratio}%・最終投稿{last}時（終日均等配分ルール違反）")
+            else:
+                add(f"exec:pacing:{acct}", "C.実行ギャップ", "PASS",
+                    f"配分OK 午前{ratio}%・最終{last}時・計{len(hours)}本")
+        except Exception as e:
+            add(f"exec:pacing:{acct}", "C.実行ギャップ", "WARN", f"配分検査不可: {e}")
+
+    # C11: watchdogが直近24hに動いているか（見張り番自体の死活監視）
+    ok = _recent(BASE / "watchdog.log", 1)
+    add("exec:watchdog", "C.実行ギャップ", "PASS" if ok else "WARN",
+        "watchdog稼働中" if ok else "watchdog.logが24h以上更新なし（launchd要確認）")
+
     # C7: 月100万ペース（常時アラーム）。views_action.json を読み、未達アカウントを明示。
     #     達成は野心的目標のため未達は WARN（恒常監視・改善誘導が目的。FAILにはしない）。
     try:

@@ -762,6 +762,11 @@ def run_account(acct: str):
 
     except _DuplicatePost as dp:
         log_info(acct, f"{name} [重複スキップ] {str(dp)[:60]}")
+        if is_line:
+            # LINEリストインがAPI重複で弾かれた場合、本日消化済みにしないと
+            # get_next_post が同じLINE投稿を選び続けて全投稿が止まる
+            # （2026-07-10 truthが16本で夜まで停止した実障害）。
+            _mark_line_done(acct, today)
 
     except urllib.error.HTTPError as e:
         body = e.read().decode()
@@ -874,8 +879,10 @@ def _run_account_batch(acct: str):
     # 通常は MAX_PER_RUN まで。大きく遅れている時は最大15本まで一気に出す。
     burst_cap = MAX_BURST if need > MAX_PER_RUN else MAX_PER_RUN
     n = min(need, burst_cap)
-    if n == 0 and posted < DAILY_TARGET:
-        n = 1                                          # 最低1本（取りこぼし防止）
+    if n == 0 and posted < DAILY_TARGET and hour >= 21:
+        n = 1   # 終盤のみの取りこぼし防止。終日この床を効かせると毎5分の実行が
+                # 常に1本投稿し、50本を昼までに使い切って午後が無音になる
+                # （2026-07-10 masaが12:56に50本完了→半日沈黙した実障害）。
     if n > MAX_PER_RUN:
         log_info(acct, f"{ACCOUNTS[acct]['name']} 遅れ検知（不足{need}本）→ {n}本まとめて回復")
     fails = 0

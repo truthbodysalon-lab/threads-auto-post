@@ -68,22 +68,13 @@ jobs:
               subprocess.run([sys.executable, 'generate_remix.py', 'masa'], check=False)
           "
 
-      - name: Run orchestrator
-        id: orchestrator
-        run: python3 orchestrator.py
-        continue-on-error: true
-
-      - name: Fallback to auto_post if orchestrator skipped
-        run: |
-          # orchestrator が失敗・スキップした場合のみ auto_post でフォールバック
-          BEFORE=$(wc -l < log_truth_posted.jsonl 2>/dev/null || echo 0)
-          python3 auto_post.py all || true
-          AFTER=$(wc -l < log_truth_posted.jsonl 2>/dev/null || echo 0)
-          if [ "$BEFORE" = "$AFTER" ]; then
-            echo "投稿なし（両方スキップ）"
-          else
-            echo "auto_post でフォールバック投稿完了"
-          fi
+      # 2026-07-10 一本化: orchestrator(旧系統・ペース制御なし・重複ループ対策なし)を廃止し、
+      # ローカルと同一の auto_post.py（ペース回廊・バースト回復・50本/日担保・全修正入り）だけを使う。
+      # GitHub Actionsのschedule遅延で実行が3〜12回/日でも、各回のバースト回復(最大15本)で
+      # Mac停止時も50本/日に到達できる。
+      - name: Run auto_post (pace-aware batch)
+        run: python3 auto_post.py all || true
+        timeout-minutes: 15
 
       - name: Sync refreshed tokens to GitHub Secrets
         run: python3 token_manager.py --sync-secrets

@@ -302,6 +302,38 @@ def _recent_listin_firstlines(acct: str, days: int = 7) -> set:
     return fls
 
 
+_SHINDAN_URL = "https://truthbodysalon-lab.github.io/zutsu-shindan/"
+
+
+def _is_shindan(text: str) -> bool:
+    """頭痛タイプ診断アンカー投稿の判定（2026-07-05導入）"""
+    return _SHINDAN_URL in (text or "")
+
+
+def _shindan_anchor_ok(acct: str, today: str, text: str) -> bool:
+    """頭痛タイプ診断アンカー投稿の7日重複ガード緩和判定（2026-07-11追加）。
+    各アカウントのテンプレは4種のみで毎日2本必要なため、7日ガードだと
+    2日目以降は全滅して一度も投稿されない実障害があった
+    （_access_anchor_ok と同じ問題パターン）。当日未使用の1文目なら通す。"""
+    if not _is_shindan(text):
+        return False
+    pfile = ACCOUNTS[acct]["posted"]
+    if not pfile.exists():
+        return True
+    first = (text or "").split("\n")[0].strip()
+    for line in pfile.read_text(encoding="utf-8").splitlines():
+        try:
+            e = json.loads(line)
+        except Exception:
+            continue
+        if (e.get("date") or "")[:10] != today:
+            continue
+        t = e.get("text", "")
+        if _is_shindan(t) and t.split("\n")[0].strip() == first:
+            return False  # 本日すでに同一テンプレ使用済み
+    return True
+
+
 def _is_store_access(text: str) -> bool:
     """店舗アクセスアンカー投稿の判定（全テンプレ共通の確定フレーズで判定）"""
     t = text or ""
@@ -463,8 +495,9 @@ def get_next_post(acct: str, today: str):
         norm = _normalize_post_key(text)
         if norm not in posted_texts and norm[:80] not in old_posted_keys:
             # 7日以内の重複は投稿せずスキップ（ループで次の候補へ）
-            # ただし店舗アクセスアンカーは緩和ルールで採用可（2026-07-03）
-            if dg_is_duplicate(norm, acct) and not _access_anchor_ok(acct, today, text):
+            # ただし店舗アクセスアンカー（2026-07-03）・頭痛タイプ診断アンカー（2026-07-11）は緩和ルールで採用可
+            if dg_is_duplicate(norm, acct) and not _access_anchor_ok(acct, today, text) \
+                    and not _shindan_anchor_ok(acct, today, text):
                 continue
             # API実投稿の直近に同じ1文目があれば飛ばす（系統間ラグ対策）
             if dg_normalize(text).split("\n")[0].strip()[:40] in api_recent:
@@ -691,14 +724,17 @@ def run_account(acct: str):
                        capture_output=True, text=True, timeout=300)
         text, index = get_next_post(acct, today)
     is_line = _is_line_listin(text or "")  # 元テキスト(URL付き)でLINEリストイン判定
+    is_shindan = _is_shindan(text or "")   # 頭痛タイプ診断アンカー判定（2026-07-11）
     if text is None:
         log_info(acct, f"{name} 今日の投稿完了")
         return
 
     comment_parts: list[str] = []
 
-    if is_line:
-        # LINEリストインは「URLを本文末尾に残す」ルール厳守 → 分割もURL除去もしない
+    if is_line or is_shindan:
+        # LINEリストイン・頭痛タイプ診断アンカーは「URLを本文末尾に残す」ルール厳守
+        # （診断は「👇」の直後にURLが来る設計のため、コメントに追い出すと意味を成さない）
+        # → 分割もURL除去もしない
         clean_text = (text or "").strip()
         cta_block = None
     else:
@@ -753,7 +789,7 @@ def run_account(acct: str):
 
     try:
         # post_to_threads 内部で重複チェック・pending・posted を一括処理
-        post_id = post_to_threads(acct, clean_text, skip_dup=is_line)
+        post_id = post_to_threads(acct, clean_text, skip_dup=(is_line or is_shindan))
         mark_posted(acct, today, index, post_id, clean_text)
         if is_line:
             _mark_line_done(acct, today)
@@ -778,7 +814,7 @@ def run_account(acct: str):
             log_info(acct, f"{name} トークン期限切れ → 自動リフレッシュ...")
             if refresh_token(acct):
                 try:
-                    post_id = post_to_threads(acct, clean_text, skip_dup=is_line)
+                    post_id = post_to_threads(acct, clean_text, skip_dup=(is_line or is_shindan))
                     mark_posted(acct, today, index, post_id, clean_text)
                     if is_line:
                         _mark_line_done(acct, today)

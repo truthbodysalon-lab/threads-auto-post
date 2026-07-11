@@ -1,19 +1,19 @@
 {
   "account": "@masahide_takahashi_",
-  "updated_at": "2026-07-12 06:41",
+  "updated_at": "2026-07-12 07:46",
   "total_posts": 200,
-  "total_likes": 21,
-  "total_views": 8941,
+  "total_likes": 22,
+  "total_views": 9012,
   "total_replies": 35,
-  "avg_likes": 0.1,
-  "avg_views": 44.7,
+  "avg_likes": 0.11,
+  "avg_views": 45.06,
   "recent_7days_count": 200,
-  "recent_7days_avg_likes": 0.1,
+  "recent_7days_avg_likes": 0.11,
   "top10_by_likes": [
     {
       "text": "なんか僕のAIカンパニー\n社員56名もいるんですけど、、、、\nめっちゃ多くないですか？？\n\nこんなもんなんですかね？\n@aoi_ogawa_sns \n@yusu",
       "likes": 4,
-      "views": 328,
+      "views": 329,
       "replies": 16,
       "date": "2026-07-10"
     },
@@ -29,6 +29,13 @@
       "likes": 2,
       "views": 27,
       "replies": 0,
+      "date": "2026-07-11"
+    },
+    {
+      "text": "72件のカウンセリング録音を聞き返した。",
+      "likes": 1,
+      "views": 83,
+      "replies": 1,
       "date": "2026-07-11"
     },
     {
@@ -72,13 +79,6 @@
       "views": 64,
       "replies": 2,
       "date": "2026-07-10"
-    },
-    {
-      "text": "フォロワー獲得で消耗してる院は全員、広告費をコストだと思って一切使わないから始めています。\n「保存される投稿」を意識するだけで結果が変わるが先です。発信量は後で",
-      "likes": 1,
-      "views": 45,
-      "replies": 0,
-      "date": "2026-07-10"
     }
   ],
   "top10_by_views": [
@@ -90,7 +90,7 @@
     },
     {
       "text": "なんか僕のAIカンパニー\n社員56名もいるんですけど、、、、\nめっちゃ多くないですか？？\n\nこんなもんなんですかね？\n@aoi_ogawa_sns \n@yusuke_hori_ \n@hiromichi_shimizu_",
-      "views": 328,
+      "views": 329,
       "likes": 4,
       "date": "2026-07-10"
     },
@@ -175,12 +175,12 @@
       "date": "2026-07-08"
     },
     {
-      "text": "自分の院のボトルネック、数字で言えますか？\n言えないなら、まず3問の診断から。\n整体院の集客力チェックシート、プロフィールのリンクから受け取れます。",
+      "text": "店舗集客より先に捨てるものがあります。\nLINEやDMへの導線を作っていないです。\nそれだけで投稿の届き方が変わります。",
       "views": 0,
       "date": "2026-07-11"
     },
     {
-      "text": "72件のカウンセリング録音を聞き返した。",
+      "text": "問い合わせが来る投稿と来ない投稿の差は最初の3秒で興味を引けるかがすべてだけです。\n一貫したメッセージを発信するを意識するだけで同じ内容でも反応が変わります。",
       "views": 0,
       "date": "2026-07-11"
     },
@@ -197,19 +197,19 @@
   ],
   "performance_by_length": {
     "50〜100字": {
-      "count": 121,
+      "count": 123,
       "avg_likes": 0.07,
-      "avg_views": 39.21
+      "avg_views": 38.63
     },
     "〜50字": {
       "count": 25,
-      "avg_likes": 0.12,
-      "avg_views": 116.4
+      "avg_likes": 0.16,
+      "avg_views": 119.72
     },
     "100〜150字": {
-      "count": 54,
+      "count": 52,
       "avg_likes": 0.17,
-      "avg_views": 23.81
+      "avg_views": 24.37
     }
   }
 }

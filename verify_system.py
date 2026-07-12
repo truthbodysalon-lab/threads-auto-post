@@ -202,9 +202,49 @@ def check_execution_gaps():
         except Exception as e:
             add(f"exec:funnel:{acct}", "C.実行ギャップ", "WARN", f"キュー確認不可: {e}")
 
+    # 共通ヘルパー: 昨日(JST)の実投稿数を外形API（Threads API）で数える。C8/C10で共有。
+    _api_count_cache: dict = {}
+    def _yesterday_posts_api_c8(acct: str) -> int:
+        """昨日の本体投稿数。スコープ不足トークンはリプライ込み概算。取得不可なら-1。"""
+        if acct in _api_count_cache:
+            return _api_count_cache[acct]
+        import urllib.request as _ur
+        jst = timezone(timedelta(hours=9))
+        y0 = datetime.now(jst).replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(days=1)
+        envf = BASE / ".env"
+        if envf.exists():
+            for _l in envf.read_text().splitlines():
+                if "=" in _l and not _l.startswith("#"):
+                    _k, _v = _l.split("=", 1)
+                    os.environ.setdefault(_k.strip(), _v.strip())
+        uid = os.environ.get(f"THREADS_USER_ID_{acct.upper()}")
+        tok = os.environ.get(f"THREADS_ACCESS_TOKEN_{acct.upper()}")
+        if not uid or not tok:
+            _api_count_cache[acct] = -1
+            return -1
+        url = (f"https://graph.threads.net/v1.0/{uid}/threads?fields=id,is_reply"
+               f"&since={int(y0.timestamp())}&until={int((y0 + timedelta(days=1)).timestamp())}"
+               f"&limit=100&access_token={tok}")
+        n = -1
+        try:
+            with _ur.urlopen(url, timeout=20) as r:
+                data = json.loads(r.read())
+            n = sum(1 for x in data.get("data", []) if not x.get("is_reply"))
+        except Exception:
+            try:
+                with _ur.urlopen(url.replace("id,is_reply", "id"), timeout=20) as r:
+                    data = json.loads(r.read())
+                n = len(data.get("data", []))  # リプライ込み概算（過大側）
+            except Exception:
+                n = -1
+        _api_count_cache[acct] = n
+        return n
+
     # C8: 1日50投稿の遵守（昨日の実績）。ユーザー必須ルール。
+    # 2026-07-13改修: ローカルログはCIコミット経由の不完全ミラーで過少カウント（偽FAIL）を
+    # 出すため、外形API実測（C10と同じ_yesterday_posts_api）を正とし、API不可時のみログで代替。
     yesterday = (date.today() - timedelta(days=1)).strftime("%Y-%m-%d")
-    for acct in ACCTS:
+    def _count_from_log(acct: str) -> int:
         pfile = BASE / f"log_{acct}_posted.jsonl"
         n = 0
         if pfile.exists():
@@ -214,9 +254,16 @@ def check_execution_gaps():
                         n += 1
                 except Exception:
                     pass
+        return n
+    for acct in ACCTS:
+        n = _yesterday_posts_api_c8(acct)
+        src = "外形API実測"
+        if n < 0:
+            n = _count_from_log(acct)
+            src = "ローカルログ（API不可・過少の可能性）"
         add(f"exec:daily50:{acct}", "C.実行ギャップ",
             "PASS" if n >= 50 else "FAIL",
-            f"昨日({yesterday})の投稿 {n}本 / 必須50本")
+            f"昨日({yesterday})の投稿 {n}本 / 必須50本（{src}）")
 
     # C9: プレイブック（修正基準の正本）が毎朝検証・更新されているか。
     #     基準そのものを向上させるメタPDCAが止まると改善が旧基準で空回りする。
@@ -244,44 +291,9 @@ def check_execution_gaps():
     #      旧実装はautopost_*.log（CIコミット経由の不完全ミラー）を数えており、
     #      ログ遅延で「18本しか投稿していない」等の偽FAILを出していた。
     #      時間帯の偏りはCIバースト設計（memory: project_mac_independence）どおりのため検査しない。
-    def _yesterday_posts_api(acct: str) -> int:
-        """昨日(JST)の実投稿数をThreads APIで数える。取得不可なら-1。"""
-        import urllib.request as _ur
-        jst = timezone(timedelta(hours=9))
-        y0 = datetime.now(jst).replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(days=1)
-        uid = os.environ.get(f"THREADS_USER_ID_{acct.upper()}")
-        tok = os.environ.get(f"THREADS_ACCESS_TOKEN_{acct.upper()}")
-        if not uid or not tok:
-            envf = BASE / ".env"
-            if envf.exists():
-                for _l in envf.read_text().splitlines():
-                    if "=" in _l and not _l.startswith("#"):
-                        _k, _v = _l.split("=", 1)
-                        os.environ.setdefault(_k.strip(), _v.strip())
-                uid = os.environ.get(f"THREADS_USER_ID_{acct.upper()}")
-                tok = os.environ.get(f"THREADS_ACCESS_TOKEN_{acct.upper()}")
-            if not uid or not tok:
-                return -1
-        url = (f"https://graph.threads.net/v1.0/{uid}/threads?fields=id,is_reply"
-               f"&since={int(y0.timestamp())}&until={int((y0 + timedelta(days=1)).timestamp())}"
-               f"&limit=100&access_token={tok}")
-        try:
-            with _ur.urlopen(url, timeout=20) as r:
-                data = json.loads(r.read())
-            return sum(1 for x in data.get("data", []) if not x.get("is_reply"))
-        except Exception:
-            # スコープ耐性: threads_read_replies無しトークンはis_reply指定で失敗する
-            # （nagaokaで実発生・2026-07-12）。リプライ込み概算にフォールバック
-            try:
-                with _ur.urlopen(url.replace("id,is_reply", "id"), timeout=20) as r:
-                    data = json.loads(r.read())
-                return len(data.get("data", []))  # リプライ込み概算（過大側）
-            except Exception:
-                return -1
-
     for acct in ACCTS:
         try:
-            n = _yesterday_posts_api(acct)
+            n = _yesterday_posts_api_c8(acct)
             if n < 0:
                 add(f"exec:pacing:{acct}", "C.実行ギャップ", "WARN",
                     "外形API取得不可（トークンのスコープ不足等）。実投稿数はCI watchdogの外形監視が正")

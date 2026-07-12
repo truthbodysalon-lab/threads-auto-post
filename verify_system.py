@@ -270,7 +270,14 @@ def check_execution_gaps():
                 data = json.loads(r.read())
             return sum(1 for x in data.get("data", []) if not x.get("is_reply"))
         except Exception:
-            return -1
+            # スコープ耐性: threads_read_replies無しトークンはis_reply指定で失敗する
+            # （nagaokaで実発生・2026-07-12）。リプライ込み概算にフォールバック
+            try:
+                with _ur.urlopen(url.replace("id,is_reply", "id"), timeout=20) as r:
+                    data = json.loads(r.read())
+                return len(data.get("data", []))  # リプライ込み概算（過大側）
+            except Exception:
+                return -1
 
     for acct in ACCTS:
         try:

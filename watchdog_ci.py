@@ -41,7 +41,18 @@ def api_count_today(acct: str) -> int:
     tok = os.environ.get(f"THREADS_ACCESS_TOKEN_{ACCTS[acct]}")
     today = datetime.now(JST).date().isoformat()
     n, url = 0, f"https://graph.threads.net/v1.0/{uid}/threads?fields=id,timestamp,is_reply&limit=100&access_token={tok}"
+    # スコープ耐性: threads_read_replies が無いトークン（nagaokaで実発生・2026-07-12）は
+    # is_reply指定が code10 で失敗する。その場合はis_reply抜きで数え、リプライ込み概算として扱う
+    # （監視が沈黙するより過大側の概算で継続する方が安全）。
+    def _fetch(u):
+        with urllib.request.urlopen(u, timeout=20) as r:
+            return json.loads(r.read())
     try:
+        try:
+            _fetch(url.replace("&limit=100", "&limit=1"))
+        except Exception:
+            url = url.replace("id,timestamp,is_reply", "id,timestamp")
+            print(f"{acct}: is_reply不可トークン→リプライ込み概算で継続")
         for _ in range(3):  # コメント除外後の本体50本を確実に拾う
             with urllib.request.urlopen(url, timeout=20) as r:
                 d = json.loads(r.read())

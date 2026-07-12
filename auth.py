@@ -23,7 +23,7 @@ PORT = 8080
 AUTH_URL = "https://threads.net/oauth/authorize"
 TOKEN_URL = "https://graph.threads.net/oauth/access_token"
 LONG_LIVED_TOKEN_URL = "https://graph.threads.net/access_token"
-SCOPE = "threads_basic,threads_content_publish,threads_manage_insights,threads_manage_replies"
+SCOPE = "threads_basic,threads_content_publish,threads_manage_insights,threads_manage_replies,threads_read_replies"
 
 ENV_FILE = Path(__file__).parent / ".env"
 
@@ -289,6 +289,13 @@ def main():
     # ユーザーID取得
     user_id, username = get_user_id(long_token)
     print(f"  ユーザー: @{username} (ID: {user_id})")
+
+    # 誤アカウント防止ガード（2026-07-12追加）: 認証したユーザーが想定と違えば保存しない
+    expected = cfg["name"].lstrip("@")
+    if username and username != expected:
+        print(f"⚠ 認証アカウント @{username} が想定 {cfg['name']} と不一致。トークンは保存せず中断します。")
+        print("  正しいアカウントでブラウザにログインし直してから再実行してください。")
+        sys.exit(1)
 
     # .env に保存
     env["THREADS_APP_ID"] = app_id

@@ -258,12 +258,20 @@ def check_execution_gaps():
             am = sum(1 for h in hours if h < 13)
             ratio = am * 100 // len(hours)
             last = max(hours)
-            if ratio >= 70 or last < 18:
+            count = len(hours)
+            # 2026-07-10 Mac非依存化以降、投稿はGitHub Actionsのペース回廊バースト
+            # （schedule遅延で実質3〜12回/日・各回最大15本）が正のため、
+            # 時間帯の偏りはFAILにしない（外形監視=実投稿数を正とする）。
+            # FAILは「1日の総投稿数不足」のみ。偏りは情報WARN。
+            if count < 40:
                 add(f"exec:pacing:{acct}", "C.実行ギャップ", "FAIL",
-                    f"固め打ち疑い: 午前比率{ratio}%・最終投稿{last}時（終日均等配分ルール違反）")
+                    f"投稿数不足: 昨日{count}本 < 40本（目標50本/日の8割）")
+            elif ratio >= 90 or last < 15:
+                add(f"exec:pacing:{acct}", "C.実行ギャップ", "WARN",
+                    f"時間帯の偏り大（CI遅延バーストの可能性・実害は本数で判定済み）: 午前比率{ratio}%・最終{last}時・計{count}本")
             else:
                 add(f"exec:pacing:{acct}", "C.実行ギャップ", "PASS",
-                    f"配分OK 午前{ratio}%・最終{last}時・計{len(hours)}本")
+                    f"配分OK 午前{ratio}%・最終{last}時・計{count}本")
         except Exception as e:
             add(f"exec:pacing:{acct}", "C.実行ギャップ", "WARN", f"配分検査不可: {e}")
 

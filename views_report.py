@@ -16,6 +16,9 @@ from __future__ import annotations
 
 import json
 import os
+import subprocess
+import sys
+import time
 import sqlite3
 import urllib.request
 from datetime import datetime, timezone, timedelta, date
@@ -73,22 +76,30 @@ def load_goal() -> dict:
 
 
 def fetch_window_views(acct: str, days: int) -> tuple[int, int, int]:
-    """直近 days 日の (合計views, 取得日数, 当日views) を返す。失敗時 (0,0,0)。"""
+    """直近 days 日の (合計views, 取得日数, 当日views) を返す。
+    3回リトライしても失敗した場合は (-1, 0, 0) を返す（呼び出し側で異常終了させる）。
+    旧実装は失敗時に (0,0,0) を黙って返し「30日閲覧0」の偽データが
+    views_action.json→verify_system→日次検証レポートまで汚染していた（2026-07-12監査で修正。鉄則5: サイレント失敗禁止）。"""
     uid = os.environ.get(f"THREADS_USER_ID_{ACCTS[acct]}")
     tok = os.environ.get(f"THREADS_ACCESS_TOKEN_{ACCTS[acct]}")
     until = int(datetime.now(timezone.utc).timestamp())
     since = int((datetime.now(timezone.utc) - timedelta(days=days)).timestamp())
     url = (f"https://graph.threads.net/v1.0/{uid}/threads_insights"
            f"?metric=views&since={since}&until={until}&access_token={tok}")
-    try:
-        with urllib.request.urlopen(url, timeout=20) as r:
-            data = json.loads(r.read())
-        vals = data["data"][0].get("values", [])
-        total = sum(int(v.get("value", 0)) for v in vals)
-        today = int(vals[-1].get("value", 0)) if vals else 0
-        return total, len(vals), today
-    except Exception:
-        return 0, 0, 0
+    last_err: Exception | None = None
+    for attempt in range(3):
+        try:
+            with urllib.request.urlopen(url, timeout=20) as r:
+                data = json.loads(r.read())
+            vals = data["data"][0].get("values", [])
+            total = sum(int(v.get("value", 0)) for v in vals)
+            today = int(vals[-1].get("value", 0)) if vals else 0
+            return total, len(vals), today
+        except Exception as e:
+            last_err = e
+            time.sleep(15 * (attempt + 1))
+    print(f"[ERROR] views API取得失敗 acct={acct} days={days}: {last_err}", file=sys.stderr)
+    return -1, 0, 0
 
 
 def posts_in_window(acct: str, days: int) -> int:
@@ -136,6 +147,7 @@ def main():
     deadline = goal.get("deadline", "")
 
     stat = {}
+    fetch_failed: list[str] = []
     for acct in ACCTS:
         v30, vdays, vtoday = fetch_window_views(acct, win)
         p30 = posts_in_window(acct, win)
@@ -143,6 +155,9 @@ def main():
         v7, v7days, _ = fetch_window_views(acct, 7)
         p7 = posts_in_window(acct, 7)
         avg_post_7d = (v7 // p7) if p7 else 0
+        if v30 < 0 or v7 < 0:
+            fetch_failed.append(acct)
+            v30 = max(v30, 0); v7 = max(v7, 0)
         rt, week = ramp_target(goal, acct, today)
         avg_post = (v30 // p30) if p30 else 0      # 1投稿あたり閲覧（実績）
         pace = (v30 * 100 // target) if target else 0
@@ -160,6 +175,18 @@ def main():
                           v7=v7, p7=p7, avg_post_7d=avg_post_7d,
                           ramp_target=rt, ramp_week=week,
                           on_track=avg_post_7d >= rt)
+
+    # ── API取得失敗時: 偽0を書き込まず通知して異常終了（前回の正常な action/history を温存）──
+    if fetch_failed:
+        msg = (f"【views_report】Threads views API取得失敗: {', '.join(fetch_failed)}\n"
+               f"views_action.json は更新せず前回値を温存。ネットワーク/トークンを確認してください。")
+        print(msg, file=sys.stderr)
+        try:
+            subprocess.run(["/Users/mt112/.claude/scripts/line-push-masahide.sh"],
+                           input=msg.encode(), timeout=60, check=False)
+        except Exception as e:
+            print(f"[WARN] LINE通知も失敗: {e}", file=sys.stderr)
+        sys.exit(2)
 
     # ── 問題点・改善アクション（レバーを名指しで）──
     problems, actions = [], []

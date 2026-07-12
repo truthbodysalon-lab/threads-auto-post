@@ -20,10 +20,11 @@ from __future__ import annotations
 
 import importlib
 import json
+import os
 import subprocess
 import sys
 import traceback
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 BASE = Path(__file__).parent
@@ -239,39 +240,50 @@ def check_execution_gaps():
         except Exception as e:
             add(f"exec:playbook:{acct}", "C.実行ギャップ", "WARN", f"playbook読込不可: {e}")
 
-    # C10: 投稿の時間配分（固め打ち検知）。昨日の投稿ログから
-    #      「午前(6-12時)に70%以上」or「最終投稿が18時前」なら配分バグの再発疑い。
-    yesterday2 = (date.today() - timedelta(days=1)).strftime("%Y-%m-%d")
-    for acct in ACCTS:
-        lf = BASE / f"autopost_{acct}.log"
+    # C10: 昨日の実投稿数チェック（外形監視=Threads APIを正とする。2026-07-12改修）
+    #      旧実装はautopost_*.log（CIコミット経由の不完全ミラー）を数えており、
+    #      ログ遅延で「18本しか投稿していない」等の偽FAILを出していた。
+    #      時間帯の偏りはCIバースト設計（memory: project_mac_independence）どおりのため検査しない。
+    def _yesterday_posts_api(acct: str) -> int:
+        """昨日(JST)の実投稿数をThreads APIで数える。取得不可なら-1。"""
+        import urllib.request as _ur
+        jst = timezone(timedelta(hours=9))
+        y0 = datetime.now(jst).replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(days=1)
+        uid = os.environ.get(f"THREADS_USER_ID_{acct.upper()}")
+        tok = os.environ.get(f"THREADS_ACCESS_TOKEN_{acct.upper()}")
+        if not uid or not tok:
+            envf = BASE / ".env"
+            if envf.exists():
+                for _l in envf.read_text().splitlines():
+                    if "=" in _l and not _l.startswith("#"):
+                        _k, _v = _l.split("=", 1)
+                        os.environ.setdefault(_k.strip(), _v.strip())
+                uid = os.environ.get(f"THREADS_USER_ID_{acct.upper()}")
+                tok = os.environ.get(f"THREADS_ACCESS_TOKEN_{acct.upper()}")
+            if not uid or not tok:
+                return -1
+        url = (f"https://graph.threads.net/v1.0/{uid}/threads?fields=id,is_reply"
+               f"&since={int(y0.timestamp())}&until={int((y0 + timedelta(days=1)).timestamp())}"
+               f"&limit=100&access_token={tok}")
         try:
-            hours = []
-            for line in lf.read_text(encoding="utf-8").splitlines():
-                if "✓ 完了" in line and line.startswith(f"[{yesterday2}"):
-                    try:
-                        hours.append(int(line[12:14]))
-                    except Exception:
-                        pass
-            if not hours:
-                add(f"exec:pacing:{acct}", "C.実行ギャップ", "WARN", f"昨日の完了ログなし")
-                continue
-            am = sum(1 for h in hours if h < 13)
-            ratio = am * 100 // len(hours)
-            last = max(hours)
-            count = len(hours)
-            # 2026-07-10 Mac非依存化以降、投稿はGitHub Actionsのペース回廊バースト
-            # （schedule遅延で実質3〜12回/日・各回最大15本）が正のため、
-            # 時間帯の偏りはFAILにしない（外形監視=実投稿数を正とする）。
-            # FAILは「1日の総投稿数不足」のみ。偏りは情報WARN。
-            if count < 40:
-                add(f"exec:pacing:{acct}", "C.実行ギャップ", "FAIL",
-                    f"投稿数不足: 昨日{count}本 < 40本（目標50本/日の8割）")
-            elif ratio >= 90 or last < 15:
+            with _ur.urlopen(url, timeout=20) as r:
+                data = json.loads(r.read())
+            return sum(1 for x in data.get("data", []) if not x.get("is_reply"))
+        except Exception:
+            return -1
+
+    for acct in ACCTS:
+        try:
+            n = _yesterday_posts_api(acct)
+            if n < 0:
                 add(f"exec:pacing:{acct}", "C.実行ギャップ", "WARN",
-                    f"時間帯の偏り大（CI遅延バーストの可能性・実害は本数で判定済み）: 午前比率{ratio}%・最終{last}時・計{count}本")
+                    "外形API取得不可（トークンのスコープ不足等）。実投稿数はCI watchdogの外形監視が正")
+            elif n < 40:
+                add(f"exec:pacing:{acct}", "C.実行ギャップ", "FAIL",
+                    f"投稿数不足: 昨日の実投稿{n}本 < 40本（目標50本/日の8割・外形API実測）")
             else:
                 add(f"exec:pacing:{acct}", "C.実行ギャップ", "PASS",
-                    f"配分OK 午前{ratio}%・最終{last}時・計{count}本")
+                    f"昨日の実投稿{n}本（外形API実測・目標50本/日）")
         except Exception as e:
             add(f"exec:pacing:{acct}", "C.実行ギャップ", "WARN", f"配分検査不可: {e}")
 

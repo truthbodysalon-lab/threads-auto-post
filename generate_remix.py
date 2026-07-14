@@ -905,15 +905,23 @@ def generate_nagaoka_post(pattern_key: str) -> str:
 
 
 def generate_cta_post(target: str) -> str:
-    """target: 'katakori' or 'zutsuu'"""
-    if target == "katakori":
-        tmpl = random.choice(CTA_KATAKORI_TEMPLATES)
-        symptom = random.choice(SYMPTOMS_KATAKORI)
-        return fill(tmpl.replace("{url}", URL_KATAKORI), symptom=symptom)
-    else:
-        tmpl = random.choice(CTA_ZUTSUU_TEMPLATES)
-        symptom = random.choice(SYMPTOMS_ZUTSUU)
-        return fill(tmpl.replace("{url}", URL_ZUTSUU), symptom=symptom)
+    """target: 'katakori' or 'zutsuu'
+    2026-07-15: CTAは{cause}にCAUSESの語（例:「呼吸の浅さ」）が入ると、
+    頭痛薬CTA等の「痛み系対処＋非痛み症状」の不自然な組み合わせ（mad-lib事故）
+    になりうる。_is_ng（_is_incoherent含む）を通らない組み合わせが出た場合は
+    最大10回まで再抽選してから返す（NGワード検査バイパス対策）。"""
+    for _ in range(10):
+        if target == "katakori":
+            tmpl = random.choice(CTA_KATAKORI_TEMPLATES)
+            symptom = random.choice(SYMPTOMS_KATAKORI)
+            post = fill(tmpl.replace("{url}", URL_KATAKORI), symptom=symptom)
+        else:
+            tmpl = random.choice(CTA_ZUTSUU_TEMPLATES)
+            symptom = random.choice(SYMPTOMS_ZUTSUU)
+            post = fill(tmpl.replace("{url}", URL_ZUTSUU), symptom=symptom)
+        if not _is_ng(post):
+            return post
+    return post  # 10回試しても解消しない場合はそのまま返す（無限ループ回避）
 
 
 def generate_post(pattern_key: str) -> str:

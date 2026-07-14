@@ -367,6 +367,37 @@ def _access_anchor_ok(acct: str, today: str, text: str) -> bool:
     return True
 
 
+def _is_hpb_cta(text: str) -> bool:
+    """ホットペッパー予約導線CTA投稿の判定（肩こり/頭痛CTA共通）"""
+    return "beauty.hotpepper.jp" in (text or "")
+
+
+def _hpb_anchor_ok(acct: str, today: str, text: str) -> bool:
+    """ホットペッパー予約導線CTAの7日重複ガード緩和判定（2026-07-15追加）。
+    CTA_KATAKORI_TEMPLATES/CTA_ZUTSUU_TEMPLATESは各12種のみで固定フレーズの
+    1文目が実質12パターンしかなく、7日ガード＋truth/nagaoka共有の
+    shared_posted_guardにより全滅し、実測で1度も実投稿されていなかった
+    （_access_anchor_ok/_shindan_anchor_ok と同じ障害パターン）。
+    実投稿ログ(clean_text=URL抽出後の本文)は1文目が候補と一致するため、
+    本日まだ同一1文目を使っていなければ通す。"""
+    if not _is_hpb_cta(text):
+        return False
+    pfile = ACCOUNTS[acct]["posted"]
+    if not pfile.exists():
+        return True
+    first = (text or "").split("\n")[0].strip()
+    for line in pfile.read_text(encoding="utf-8").splitlines():
+        try:
+            e = json.loads(line)
+        except Exception:
+            continue
+        if (e.get("date") or "")[:10] != today:
+            continue
+        if (e.get("text") or "").split("\n")[0].strip() == first:
+            return False  # 本日すでに同一テンプレ使用済み
+    return True
+
+
 def _posted_count_today(acct: str) -> int:
     """log_{acct}_posted.jsonl の本日の投稿件数（バッチ投稿の打ち切り判定用）"""
     pfile = ACCOUNTS[acct]["posted"]
@@ -495,9 +526,11 @@ def get_next_post(acct: str, today: str):
         norm = _normalize_post_key(text)
         if norm not in posted_texts and norm[:80] not in old_posted_keys:
             # 7日以内の重複は投稿せずスキップ（ループで次の候補へ）
-            # ただし店舗アクセスアンカー（2026-07-03）・頭痛タイプ診断アンカー（2026-07-11）は緩和ルールで採用可
+            # ただし店舗アクセスアンカー（2026-07-03）・頭痛タイプ診断アンカー（2026-07-11）・
+            # ホットペッパー予約導線CTA（2026-07-15）は緩和ルールで採用可
             if dg_is_duplicate(norm, acct) and not _access_anchor_ok(acct, today, text) \
-                    and not _shindan_anchor_ok(acct, today, text):
+                    and not _shindan_anchor_ok(acct, today, text) \
+                    and not _hpb_anchor_ok(acct, today, text):
                 continue
             # API実投稿の直近に同じ1文目があれば飛ばす（系統間ラグ対策）
             if dg_normalize(text).split("\n")[0].strip()[:40] in api_recent:

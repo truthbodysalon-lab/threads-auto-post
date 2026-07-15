@@ -177,3 +177,22 @@ def mark_posted(norm: str, acct: str, post_id: str):
         "norm":       norm,
         "first_line": _first_line(norm),
     })
+
+
+def marked_today(norm: str, acct: str) -> bool:
+    """本日すでに shared_posted_guard に記録済み（投稿成功 or PENDING失敗含む）かどうか。
+
+    店舗アクセス/頭痛診断/HPB CTAアンカーの『7日ガードを緩和し当日未使用なら通す』
+    ロジックは、本来『過去に投稿した古い重複』だけをバイパスする意図だが、
+    本日すでにAPI側で重複拒否されPENDING記録されたテキストまで再選択してしまうと、
+    post_to_threads側の通常dup判定（緩和なし）で必ず再度弾かれ、同じ投稿を
+    延々と選び続けて丸1日投稿が止まる実障害になる（2026-07-15 truth/nagaoka障害）。
+    そのため『当日は一度でも記録済みなら二度と候補にしない』ガードとして使う。"""
+    today = date.today().strftime("%Y-%m-%d")
+    fl = _first_line(norm)
+    for e in _read_shared():
+        if e.get("acct") != acct or e.get("date") != today:
+            continue
+        if e.get("norm") == norm or e.get("first_line") == fl:
+            return True
+    return False

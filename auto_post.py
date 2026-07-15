@@ -31,12 +31,14 @@ try:
         is_duplicate as dg_is_duplicate,
         mark_pending as dg_mark_pending,
         mark_posted as dg_mark_posted,
+        marked_today as dg_marked_today,
     )
 except ImportError:
     def dg_normalize(t): return t
     def dg_is_duplicate(t, a): return False
     def dg_mark_pending(t, a): pass
     def dg_mark_posted(t, a, pid): pass
+    def dg_marked_today(t, a): return False
 
 # get_next_post / get_posted_texts で使う正規化（duplicate_guard と同じロジック）
 _normalize_post_key = dg_normalize
@@ -528,10 +530,19 @@ def get_next_post(acct: str, today: str):
             # 7日以内の重複は投稿せずスキップ（ループで次の候補へ）
             # ただし店舗アクセスアンカー（2026-07-03）・頭痛タイプ診断アンカー（2026-07-11）・
             # ホットペッパー予約導線CTA（2026-07-15）は緩和ルールで採用可
-            if dg_is_duplicate(norm, acct) and not _access_anchor_ok(acct, today, text) \
-                    and not _shindan_anchor_ok(acct, today, text) \
-                    and not _hpb_anchor_ok(acct, today, text):
-                continue
+            if dg_is_duplicate(norm, acct):
+                anchor_ok = _access_anchor_ok(acct, today, text) \
+                    or _shindan_anchor_ok(acct, today, text) \
+                    or _hpb_anchor_ok(acct, today, text)
+                if not anchor_ok:
+                    continue
+                # アンカー緩和が効いても、本日すでにshared guardに記録済み
+                # （投稿成功済み or 直前の試行がAPI側で重複拒否されPENDING記録済み）なら
+                # post_to_threads側の通常dup判定で必ず再度弾かれるため、再選択しない。
+                # これを入れないと同一アンカー候補を延々選び続けて丸1日投稿が止まる
+                # （2026-07-15 truth/nagaoka障害・2026-07-16修正）。
+                if dg_marked_today(norm, acct):
+                    continue
             # API実投稿の直近に同じ1文目があれば飛ばす（系統間ラグ対策）
             if dg_normalize(text).split("\n")[0].strip()[:40] in api_recent:
                 continue

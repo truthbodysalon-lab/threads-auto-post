@@ -1,21 +1,21 @@
 {
-  "updated_at": "2026-07-15",
+  "updated_at": "2026-07-16",
   "pattern_weights": {
     "insight": 6,
-    "education": 3,
+    "education": 4,
     "story": 3,
     "cta": 1,
-    "ranking": 1,
+    "ranking": 2,
     "question": 3,
     "variety": 20
   },
   "feedback_scores": {},
   "api_scores": {
-    "insight": 0.3,
-    "story": -0.61,
-    "cta": -2.27,
-    "education": -2.09,
-    "ranking": -1.55
+    "insight": 0.35,
+    "cta": -2.15,
+    "story": -0.91,
+    "ranking": -1.37,
+    "education": -1.59
   },
   "follower_scores": {
     "story": 0.71,

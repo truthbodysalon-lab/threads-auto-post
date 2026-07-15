@@ -279,10 +279,16 @@ def _attribute_deltas_to_patterns(acct: str, series: list) -> dict:
     if not credit:
         return {}
 
+    # 信号量に応じた信頼度減衰: 日次デルタの絶対量が少ないうちはspread正規化で
+    # ±3級に増幅しない（LINE解除1件(-1)が×係数3でviews実測のapi_scoresを圧殺し、
+    # 最高評価のinsightを最低重みに逆転させた2026-07-15の事故対策）
+    total_abs = sum(abs(s.get("delta", 0)) for s in series if by_date.get(s.get("date")))
+    confidence = min(1.0, total_abs / 10)
+
     vals = list(credit.values())
     avg = sum(vals) / len(vals) if vals else 0
     spread = max(abs(max(vals) - avg), abs(min(vals) - avg), 1.0)
-    return {pat: round((c - avg) / spread * 3, 2) for pat, c in credit.items()}
+    return {pat: round((c - avg) / spread * 3 * confidence, 2) for pat, c in credit.items()}
 
 
 def load_follower_scores(acct: str) -> dict:
@@ -326,8 +332,10 @@ def compute_new_weights(acct: str, feedback_scores: dict, api_scores: dict,
         api = api_scores.get(pattern, 0)
         fol = follower_scores.get(pattern, 0)
         line = line_scores.get(pattern, 0)
-        # 優先度: LINE登録=最終KPI(係数3) > 手動FB(2)・フォロワー増(2) > APIエンゲージ(1)
-        adjustment = line * 3 + fb * 2 + fol * 2 + api
+        # 優先度: LINE登録=最終KPI(係数3) > 手動FB(2)・フォロワー増(2)・閲覧実測(2)
+        # api(=views+likes*5の乖離)は月間閲覧KPIに直結するため係数1→2に引き上げ
+        # （2026-07-15: 係数1では高閲覧パターンが日次デルタのノイズに埋没していた）
+        adjustment = line * 3 + fb * 2 + fol * 2 + api * 2
         new_w = round(base + adjustment)
         # 最小1、最大20にクランプ
         new_weights[pattern] = max(1, min(20, new_w))

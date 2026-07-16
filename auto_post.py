@@ -847,6 +847,14 @@ def run_account(acct: str):
             # get_next_post が同じLINE投稿を選び続けて全投稿が止まる
             # （2026-07-10 truthが16本で夜まで停止した実障害）。
             _mark_line_done(acct, today)
+        else:
+            # 設計原則: 弾いた投稿は必ず消費済みにする。本文分割後(clean_text)が重複でも
+            # 元のキュー全文は未マークのため、ここで全文normを消費済みにしないと
+            # 同じ投稿を無限再選択して停止する（2026-07-16 truthが5本で停止した実障害）。
+            try:
+                dg_mark_pending(dg_normalize(text), acct)
+            except Exception:
+                pass
 
     except urllib.error.HTTPError as e:
         body = e.read().decode()
@@ -949,6 +957,16 @@ def _run_account_batch(acct: str):
     - 遅れていればまとめて回復、進んでいれば控える（Mac休止後のキャッチアップ対応）
     """
     posted = _posted_count_today(acct)
+    # ログ同期ラグ（pull_syncのreset等）でローカルログが実投稿数を過小カウントし
+    # 上限超過する事故（2026-07-16 nagaoka71本）を防ぐため、外形(API実測)と比べて大きい方を使う
+    try:
+        from watchdog_ci import api_count_today
+        api_n = api_count_today(acct)
+        if api_n > posted:
+            log_info(acct, f"{ACCOUNTS[acct]['name']} ログ{posted}本<API実測{api_n}本 → 実測を採用")
+            posted = api_n
+    except Exception:
+        pass
     if posted >= DAILY_CAP:
         log_info(acct, f"{ACCOUNTS[acct]['name']} 本日上限({DAILY_CAP})到達 → スキップ")
         return

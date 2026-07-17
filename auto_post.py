@@ -769,6 +769,13 @@ def run_account(acct: str):
         text, index = get_next_post(acct, today)
     is_line = _is_line_listin(text or "")  # 元テキスト(URL付き)でLINEリストイン判定
     is_shindan = _is_shindan(text or "")   # 頭痛タイプ診断アンカー判定（2026-07-11）
+    # ホットペッパー予約CTA・店舗アクセスアンカーも get_next_post 側で7日重複ガードを
+    # 緩和して選ばれている（_hpb_anchor_ok/_access_anchor_ok）。post_to_threads側の
+    # 通常dup判定（緩和なし）に skip_dup=False のまま渡すと、選ばれた直後に必ず
+    # [重複スキップ]で弾かれ実質0投稿になる実障害があったため、同様にskip_dup対象に含める
+    # （2026-07-18検証で発覚: 07-10以降HPB CTA本文が一度も実投稿されていなかった）。
+    is_hpb = _is_hpb_cta(text or "")
+    is_access = _is_store_access(text or "")
     if text is None:
         log_info(acct, f"{name} 今日の投稿完了")
         return
@@ -833,7 +840,7 @@ def run_account(acct: str):
 
     try:
         # post_to_threads 内部で重複チェック・pending・posted を一括処理
-        post_id = post_to_threads(acct, clean_text, skip_dup=(is_line or is_shindan))
+        post_id = post_to_threads(acct, clean_text, skip_dup=(is_line or is_shindan or is_hpb or is_access))
         mark_posted(acct, today, index, post_id, clean_text)
         if is_line:
             _mark_line_done(acct, today)
@@ -866,7 +873,7 @@ def run_account(acct: str):
             log_info(acct, f"{name} トークン期限切れ → 自動リフレッシュ...")
             if refresh_token(acct):
                 try:
-                    post_id = post_to_threads(acct, clean_text, skip_dup=(is_line or is_shindan))
+                    post_id = post_to_threads(acct, clean_text, skip_dup=(is_line or is_shindan or is_hpb or is_access))
                     mark_posted(acct, today, index, post_id, clean_text)
                     if is_line:
                         _mark_line_done(acct, today)

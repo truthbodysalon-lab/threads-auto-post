@@ -1,7 +1,7 @@
 {
  "acct": "masa",
- "version": 2,
- "updated": "2026-07-10",
+ "version": 3,
+ "updated": "2026-07-19",
  "description": "修正ポイント（勝ち構造・死ぬ構造）の正本。毎朝サブエージェントEが実測データで各ルールを検証し、効かなくなったルールはretired、新発見はtestingで追加、実証されたらactiveに昇格する。ヒーロー投稿と新テンプレはこのプレイブックのactiveルールに従って書く。",
  "rules": [
   {
@@ -9,7 +9,7 @@
    "type": "win",
    "status": "active",
    "added": "2026-07-09",
-   "last_validated": "2026-07-10",
+   "last_validated": "2026-07-19",
    "rule": "短い断定1〜3行で言い切って去る（15〜30字単位・話者の解説姿勢を消す）",
    "evidence": "608v「悩んだら筋トレ〜脳筋すぎます？」276v「『導線設計』を難しく考えすぎていませんか？」(21字)198v「ファン化戦略で結果が出ない人の共通点。」(体言止め19字)"
   },
@@ -18,7 +18,7 @@
    "type": "win",
    "status": "active",
    "added": "2026-07-09",
-   "last_validated": "2026-07-10",
+   "last_validated": "2026-07-19",
    "rule": "問いだけで止める。答えを同じ投稿内で書かない（プロフィールへの好奇心を残す）",
    "evidence": "276vは問いのみで自己回収せず。WORST側は問い＋答え書き切りで1view"
   },
@@ -54,7 +54,7 @@
    "type": "lose",
    "status": "active",
    "added": "2026-07-09",
-   "last_validated": "2026-07-10",
+   "last_validated": "2026-07-19",
    "rule": "「〜が主な原因です。なぜなら〜」型三段論法テンプレは禁止（NGワード化済み）",
    "evidence": "0v「広告費の使い方の成果は量で決まらない〜」が3回重複投稿され全て0〜3views。「共通するのは〜です」型テンプレ全滅"
   },
@@ -79,36 +79,36 @@
   {
    "id": "L4",
    "type": "lose",
-   "status": "testing",
+   "status": "retired",
    "added": "2026-07-09",
-   "last_validated": "2026-07-10",
+   "last_validated": "2026-07-19",
    "rule": "空虚な穴埋め共感（「〜が楽しめない」等のフォーマット共感）を使わない",
-   "evidence": "truthの実測から移植した仮説。masa自身の実測(breakout_masa.json)で検証して昇格/棄却する"
+   "evidence": "B2B宣言口調の文脈に該当実例が200件中皆無・検証不能"
   },
   {
    "id": "L5",
    "type": "lose",
    "status": "active",
    "added": "2026-07-09",
-   "last_validated": "2026-07-10",
+   "last_validated": "2026-07-19",
    "rule": "LINEリンク付き投稿は閲覧2〜7viewsに抑制される（登録獲得のため1日2本は維持＝閲覧との意図的トレードオフ。増やさない）",
    "evidence": "「無料診断→プロフィールのリンクから」3本すべて0〜2views（想定2〜7よりさらに低い）"
   },
   {
    "id": "L6",
    "type": "lose",
-   "status": "testing",
+   "status": "retired",
    "added": "2026-07-09",
-   "last_validated": "2026-07-10",
+   "last_validated": "2026-07-19",
    "rule": "症状と対処の不自然な組み合わせ（眠りの浅さ×湿布等）は機械生成感=スパム判定の元（_is_incoherentで自動排除済み）",
-   "evidence": "truthの実測から移植した仮説。masa自身の実測(breakout_masa.json)で検証して昇格/棄却する"
+   "evidence": "症状×対処の概念がB2B文脈に存在せず200件中0件"
   },
   {
    "id": "W6",
    "type": "win",
    "status": "active",
    "added": "2026-07-09",
-   "last_validated": "2026-07-10",
+   "last_validated": "2026-07-19",
    "rule": "店舗オーナーの痛点を数字で断定（売上50万の壁・新規10名・広告費）＋教材の勝ち筋を1テーマずつ",
    "evidence": "220v「売上の60%は定期顧客由来。当院で実測」513v「成約97%と47%」120v「月50万で止まる原因を数字で言える院長はほとんどいない」"
   },
@@ -117,7 +117,7 @@
    "type": "lose",
    "status": "active",
    "added": "2026-07-10",
-   "last_validated": "2026-07-10",
+   "last_validated": "2026-07-19",
    "rule": "同一文面を複数回投稿しない（重複はアルゴリズムと読者の両方に即バレする）",
    "evidence": "WORST20内で2文面が計5回重複投稿され全て0〜3viewsに張り付いた"
   },
@@ -126,9 +126,27 @@
    "type": "win",
    "status": "testing",
    "added": "2026-07-10",
-   "last_validated": "2026-07-10",
+   "last_validated": "2026-07-19",
    "rule": "一人称の実況・当事者性ワード（当院/僕/今/これ）を1文に含める",
    "evidence": "TOP30の一人称含有投稿(608/220/129/100/79v)が上位に多く、抽象論のみのWORST20には一人称がほぼ皆無"
+  },
+  {
+   "id": "W8",
+   "type": "win",
+   "status": "active",
+   "added": "2026-07-19",
+   "last_validated": "2026-07-19",
+   "rule": "数字を対比で提示し、理由を明かさずに文を終える（好奇心ギャップ×数字断定の複合）",
+   "evidence": "513v「成約97%と47%。この差は、トークのうまさじゃなかった。」＝全200件中トップ3"
+  },
+  {
+   "id": "L8",
+   "type": "lose",
+   "status": "active",
+   "added": "2026-07-19",
+   "last_validated": "2026-07-19",
+   "rule": "【型疲労】同じ穴埋め骨格×同じ語彙プールからの量産禁止。型は初出時75-220vでも9日以内の再利用で0-3vまで急落する。毎日「新しい語彙・新しい切り口」で書く",
+   "evidence": "top30は全て7/6-7/9投稿で7/10以降ゼロ。同一文面が80v→1v。型テンプレ平均108v→1.7vに崩落"
   }
  ],
  "changelog": [
@@ -141,6 +159,11 @@
    "version": 2,
    "date": "2026-07-10",
    "change": "masa自身の実測(breakout 200投稿)で全ルール判定: W1→active, W2→active, W3→retired, W4→retired, W5→retired, L1→active, L5→active, W6→active, L7を追加(testing), W7を追加(testing)"
+  },
+  {
+   "version": 3,
+   "date": "2026-07-19",
+   "change": "7/19実測で再検証（10日ぶり・成果物消失障害からの復旧）: L4→retired, L6→retired, W8追加, L8追加"
   }
  ]
 }

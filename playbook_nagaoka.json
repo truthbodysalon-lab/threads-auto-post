@@ -52,11 +52,11 @@
   {
    "id": "L1",
    "type": "lose",
-   "status": "testing",
+   "status": "active",
    "added": "2026-07-09",
-   "last_validated": "2026-07-10",
+   "last_validated": "2026-07-19",
    "rule": "「〜が主な原因です。なぜなら〜」型三段論法テンプレは禁止（NGワード化済み）",
-   "evidence": "truthの実測から移植した仮説。nagaoka自身の実測(breakout_nagaoka.json)で検証して昇格/棄却する"
+   "evidence": "truthの実測から移植した仮説。nagaoka自身の実測(breakout_nagaoka.json)で検証して昇格/棄却する ／監査④: NGワード・_is_incoherentとしてコードで全アカウント強制済みのためactive化（コード実装済みルールはtesting対象外）"
   },
   {
    "id": "L2",
@@ -97,11 +97,11 @@
   {
    "id": "L6",
    "type": "lose",
-   "status": "testing",
+   "status": "active",
    "added": "2026-07-09",
-   "last_validated": "2026-07-10",
+   "last_validated": "2026-07-19",
    "rule": "症状と対処の不自然な組み合わせ（眠りの浅さ×湿布等）は機械生成感=スパム判定の元（_is_incoherentで自動排除済み）",
-   "evidence": "truthの実測から移植した仮説。nagaoka自身の実測(breakout_nagaoka.json)で検証して昇格/棄却する"
+   "evidence": "truthの実測から移植した仮説。nagaoka自身の実測(breakout_nagaoka.json)で検証して昇格/棄却する ／監査④: NGワード・_is_incoherentとしてコードで全アカウント強制済みのためactive化（コード実装済みルールはtesting対象外）"
   },
   {
    "id": "L7",
@@ -123,6 +123,11 @@
    "version": 2,
    "date": "2026-07-10",
    "change": "nagaoka自身の実測(breakout 200投稿)で全ルール判定: W1→active, W3→active, W5→retired, L3→active, L4→retired, L5→active, L7を追加(testing)"
+  },
+  {
+   "version": 2,
+   "date": "2026-07-19",
+   "change": "監査④: L1/L6はコード強制済みのためactiveへ（表示と実効の乖離解消）"
   }
  ]
 }

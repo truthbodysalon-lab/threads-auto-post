@@ -91,7 +91,7 @@
    "status": "active",
    "added": "2026-07-09",
    "last_validated": "2026-07-19",
-   "rule": "LINEリンク付き投稿は閲覧2〜7viewsに抑制される（登録獲得のため1日2本は維持＝閲覧との意図的トレードオフ。増やさない）",
+   "rule": "LINEリンク付き投稿は0〜2viewsに抑制される。masaはURL付き月2本上限＋日次1本以下（auto_post/_monthly_line_url_countのコードcapが正）。増やさない。URL無しのプロフィール誘導(cta_profile 2/日)が主導線",
    "evidence": "「無料診断→プロフィールのリンクから」3本すべて0〜2views（想定2〜7よりさらに低い）"
   },
   {
@@ -164,6 +164,11 @@
    "version": 3,
    "date": "2026-07-19",
    "change": "7/19実測で再検証（10日ぶり・成果物消失障害からの復旧）: L4→retired, L6→retired, W8追加, L8追加"
+  },
+  {
+   "version": 3,
+   "date": "2026-07-19",
+   "change": "監査①: L5をコード実態（月2本+日次1本）に整合"
   }
  ]
 }

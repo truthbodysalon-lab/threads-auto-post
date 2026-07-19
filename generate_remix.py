@@ -113,7 +113,8 @@ _PAIN_REMEDIES = ("湿布", "鎮痛剤", "頭痛薬", "痛み止め", "薬を飲
 
 
 def _is_incoherent(text: str) -> bool:
-    """症状と対処の組み合わせが不自然な文（変数事故）を検出する。"""
+    """症状と対処の組み合わせが不自然な文（変数事故）を検出する。
+    全アカウント共通適用（masaのB2B文脈では該当語が出ないため実質無害＝playbook masa L6退役と両立）。"""
     head = text[:120]   # 主に1〜2文目で起きる
     return any(s in head for s in _NON_PAIN_SYMPTOMS) and any(r in head for r in _PAIN_REMEDIES)
 
@@ -129,6 +130,17 @@ def _is_ng(text: str) -> bool:
     if any(re.sub(r"\s+", "", w) in normalized for w in ng if w.strip()):
         return True
     return _is_incoherent(text)
+
+# masa専用: 面談・金額・決済の言及禁止（クロージング戦略の根幹。goals.json/2026-07-07指示）。
+# 面談案内はLINE Day6-7のみ。教育的な金額（月商50万等）は許可し、自社オファーの価格・申込を遮断する。
+_MASA_SALES_NG = re.compile(
+    r"面談|決済|お?申し?込み|お支払い|購入はこちら|税込|割引|モニター価格|キャンペーン価格|Square|"
+    r"(料金|価格)(は|表)|円で(提供|販売|案内)|コース(料金|価格)")
+
+
+def _is_masa_sales_ng(text: str) -> bool:
+    return bool(_MASA_SALES_NG.search(text or ""))
+
 
 # masa専用: 予告型NGパターンチェック（feedback.json 2026-05-13ルール）
 _MASA_YOKOKOKU_NG = [
@@ -1008,7 +1020,11 @@ def _load_hero_posts(acct: str) -> list[str]:
         if d.get("date") != _dt.date.today().isoformat():
             return []   # 古いヒーローは使わない（鮮度が命）
         # 実測で「短い断定1〜3行(15〜25字)」が最強と判明(playbook W1)。30字下限は勝ち筋を弾くため15字に
-        return [p for p in d.get("posts", []) if isinstance(p, str) and len(p) >= 15 and not _is_ng(p)]
+        out = [p for p in d.get("posts", []) if isinstance(p, str) and len(p) >= 15 and not _is_ng(p)]
+        if acct == "masa":
+            # 面談/金額/決済の機械ガード＋250字上限（masa10原則）
+            out = [p for p in out if not _is_masa_sales_ng(p) and len(p) <= 250]
+        return out
     except Exception:
         return []
 
@@ -1150,7 +1166,7 @@ def generate_30_posts() -> list[str]:
     # 実行ギャップ対策: 1日の投稿は最大20本程度なので、必ず前半（index 3〜12）に配置
     # 修正: sequential insert ではなく batch build で anchor_positions を正確に保証
     listin_posts = []
-    for _ in range(4):
+    for _ in range(2):   # 実投稿5〜7%ルール(2026-06-06)と_LINE_DAILY=2に整合（監査⑥で4→2に是正）
         for _ in range(20):
             p = generate_line_listin_post("truth")
             if p not in listin_posts:
@@ -1816,6 +1832,8 @@ def generate_30_masa_posts() -> list[str]:
             first_line = post.split("\n")[0].strip()
             if (key not in seen and not _is_ng(post)
                     and not _is_masa_yokokoku_ng(post)
+                    and not _is_masa_sales_ng(post)
+                    and len(post) <= 250
                     and first_line not in recent_first_lines):
                 seen.add(key)
                 posts.append(post)
@@ -1824,7 +1842,7 @@ def generate_30_masa_posts() -> list[str]:
         if not added:
             # 重複でもスロットを埋める（予告型NGは最終手段でもスキップ）
             fallback = generate_masa_post(pk)
-            if _is_masa_yokokoku_ng(fallback):
+            if _is_masa_yokokoku_ng(fallback) or _is_masa_sales_ng(fallback):
                 # 予告型テンプレートしかないパターンは別パターンで代替
                 for alt_pk in ["nanimono_kizuki", "meigen", "keikoku"]:
                     alt = generate_masa_post(alt_pk)

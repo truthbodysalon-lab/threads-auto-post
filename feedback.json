@@ -281,8 +281,13 @@
       "date": "2026-07-19",
       "text": "アカウントのゴール階層はgoals.jsonが正本(2026-07-19): truth=①HPB予約(プロフィールURL+CTA4/日)②頭痛LINE(qbRbPAm)③整体LINE(GwQ0FSx無料相談1/日)④フォロワー増⑤閲覧100万。masa=①個別面談②LINE登録(8PsIHHC)③フォロワー④閲覧100万。閲覧はゴールでなく上流指標。導線投稿は閲覧が低くても削らない。",
       "account": "all"
+    },
+    {
+      "date": "2026-07-19",
+      "text": "ルール監査2026-07-19完了: 15件検出→P1全て+P2以降を修正済み。優先順位=goals.json>playbook active>最新note>旧note(feedback.json precedenceが正本)。masa面談/金額/決済は_is_masa_sales_ngでコード強制。導線投稿はprune対象外。",
+      "account": "all"
     }
   ],
-  "updated_at": "2026-07-19 10:09",
+  "updated_at": "2026-07-19 10:33",
   "precedence": "ルールの優先順位（2026-07-19監査で制定）: ①goals.json(ゴール・導線保護) ②playbookのactiveルール(構造の勝敗・実測で進化) ③notesの最新日付 ④旧note。同一テーマのnoteは最新日付が旧を上書きする（旧noteとの矛盾はFAILにしない）。導線投稿(HPB/LINE/診断/整体LINE/cta_profile)は閲覧基準の負けテンプレ判定・pruneの対象外"
 }

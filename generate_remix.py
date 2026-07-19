@@ -592,6 +592,27 @@ def generate_shindan_post(acct: str = "truth") -> str:
 # 確認済みの事実のみ使用: 長岡駅徒歩5分・専用駐車場あり(無料)・お車OK・
 # 夜22時まで受付・土日祝営業・完全予約制・1日3名限定。台数等の不確定情報は書かない。
 # 1文目はフックから（地域名/実績/自己紹介で始めない）。地域ワードは本文に必ず入れる。
+# ── 整体公式LINE（無料相談・来院前相談）誘導 truth専用 1日1本（goals.json ゴール3）──
+# 頭痛LINE(qbRbPAm=情報配信)とは別の、本体LINE(GwQ0FSx=無料相談→来院)。
+# 予約(HPB)はハードルが高い人向けの中間導線。「相談だけでもOK」を明確に。
+SEITAI_LINE_URL = "https://lin.ee/GwQ0FSx"
+SEITAI_LINE_TEMPLATES = [
+    "「予約するほどか分からない」その段階で相談してほしいんです。\nいまの症状を送ってもらえれば、来院が必要かどうかも正直にお答えします。\n無料相談はこちら👇\n{url}",
+    "自分の肩こりが整体で変わるのか、確かめてから決めたい方へ。\n公式LINEで症状を聞かせてください。無料で相談に乗ります👇\n{url}",
+    "「この痛み、どこに行けばいいの？」と迷ったら。\n病院か整体か、判断に迷う症状ほど一度聞いてください。\n無料相談LINEはこちら👇\n{url}",
+    "予約の前に、聞きたいことがある方へ。\n施術の内容も、通う回数の目安も、LINEで気軽に質問できます👇\n{url}",
+    "症状を文章で送るだけで、まず何をすべきかお答えしています。\n売り込みはしません。無料相談のLINEはこちら👇\n{url}",
+    "「行って合わなかったら気まずい」その心配、相談で解消できます。\nあなたの症状に合うかどうか、先にLINEでお答えします👇\n{url}",
+    "夜中に痛みで検索しているあなたへ。\nその症状、明日LINEで聞かせてください。無料で相談に乗ります👇\n{url}",
+    "整体が初めての方の「分からないこと」、全部LINEで答えています。\n服装・時間・痛みの程度、何でもどうぞ👇\n{url}",
+]
+
+
+def generate_seitai_line_post() -> str:
+    """整体公式LINE(無料相談)誘導投稿を生成（truth専用・1日1本）。"""
+    return random.choice(SEITAI_LINE_TEMPLATES).replace("{url}", SEITAI_LINE_URL)
+
+
 STORE_ACCESS_TEMPLATES = [
     "「仕事帰りに寄れる整体院、長岡にないかな」という方へ。\n長岡駅から車で5分、夜22時まで受付しています。\n専用駐車場もあるので、お車でそのままお越しいただけます。",
     "頭痛で通うなら、続けやすい場所選びも大事ですよね。\n当院は長岡駅から車で5分、無料の専用駐車場あり。\n土日祝も営業しているので、忙しい方も通えます。",
@@ -1161,6 +1182,9 @@ def generate_30_posts() -> list[str]:
     for i, ap_ in enumerate(access_posts):
         pos = min(access_anchors[i] if i < len(access_anchors) else (i * 9 + 9), len(posts))
         posts.insert(pos, ap_)
+
+    # 整体公式LINE(無料相談)を1日1本、前半にアンカー（goals.json ゴール3）
+    posts.insert(min(21, len(posts)), generate_seitai_line_post())
 
     # 頭痛タイプ診断(Web)への誘導を毎日確実に投稿する（2026-07-05ルール化）
     # 前半（index 6, 16）へアンカーして1日約50本の消費内で必ず届ける

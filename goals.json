@@ -1,0 +1,26 @@
+{
+  "updated": "2026-07-19",
+  "note": "各アカウントのゴール階層（ユーザー指示2026-07-19・正本）。毎朝のサブエージェントEと投稿ミックスはこの優先順位に従う。",
+  "truth": {
+    "goals": [
+      {"p": 1, "goal": "新規集客（プロフィールURLのHPBから予約）", "kpi": "HPB CTA投稿4/日の確実投稿（C6監視）＋プロフィール誘導型の閲覧", "url": "beauty.hotpepper.jp storeId=H000596246"},
+      {"p": 2, "goal": "頭痛公式LINEの追加", "kpi": "line-harness-zutsu friends増", "url": "lin.ee/qbRbPAm"},
+      {"p": 3, "goal": "整体公式LINEの追加（無料相談）", "kpi": "登録数は手動確認（harness外）", "url": "lin.ee/GwQ0FSx"},
+      {"p": 4, "goal": "アカウントパワー強化（フォロワー増）", "kpi": "followers_history.json のdelta"},
+      {"p": 5, "goal": "閲覧 月100万以上", "kpi": "views_action.json ramp/avg_post_7d"}
+    ]
+  },
+  "masa": {
+    "goals": [
+      {"p": 1, "goal": "個別面談の獲得", "kpi": "masa harness incoming「面談」件数（mendan_alert検知）", "flow": "投稿→LINE→診断/7日ステップ→Day6-7面談案内"},
+      {"p": 2, "goal": "公式LINE登録", "kpi": "line-harness friends増", "url": "lin.ee/8PsIHHC"},
+      {"p": 3, "goal": "フォロワーアップ", "kpi": "followers_history.json のdelta"},
+      {"p": 4, "goal": "閲覧 月100万", "kpi": "views_action.json ramp/avg_post_7d"}
+    ]
+  },
+  "rules": [
+    "閲覧はゴールでなく上流指標。ゴール1-3の導線投稿（HPB/LINE/診断/プロフィール誘導）は閲覧が低くても削らない（意図的トレードオフ）",
+    "投稿ではmasaの面談・金額・決済に触れない（LINE Day6-7のみ）",
+    "フォロワー増の主レバー=ヒーロー投稿の質＋プロフィール遷移を生む問い止め型（W2）"
+  ]
+}

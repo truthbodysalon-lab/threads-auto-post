@@ -32,6 +32,36 @@ _LINE_DBS = {
 }
 
 
+def follower_deltas() -> dict:
+    """followers_history.json から各acctの現在値と7日デルタ。無ければ空。"""
+    try:
+        h = json.loads((BASE / "followers_history.json").read_text())
+    except Exception:
+        return {}
+    out = {}
+    for acct in ("truth", "nagaoka", "masa"):
+        pts = [(e.get("date"), e.get(acct)) for e in h if isinstance(e, dict) and e.get(acct) is not None]
+        if not pts:
+            continue
+        cur = pts[-1][1]
+        week_ago = next((v for d, v in reversed(pts) if d and d <= (date.today() - timedelta(days=7)).isoformat()), None)
+        out[acct] = {"now": cur, "d7": (cur - week_ago) if isinstance(week_ago, (int, float)) else None}
+    return out
+
+
+def mendan_count() -> dict:
+    """masa harness DBの「面談」受信件数（累計/直近7日）。ローカルのみ。"""
+    db = "/Users/mt112/Desktop/line-harness/data.db"
+    try:
+        con = sqlite3.connect(f"file:{db}?mode=ro", uri=True)
+        total = con.execute("SELECT count(*) FROM messages WHERE direction='incoming' AND content LIKE '%面談%'").fetchone()[0]
+        d7 = con.execute("SELECT count(*) FROM messages WHERE direction='incoming' AND content LIKE '%面談%' AND created_at >= date('now','-7 days')").fetchone()[0]
+        con.close()
+        return {"total": total, "d7": d7}
+    except Exception:
+        return {}
+
+
 def line_registrations() -> dict:
     """各LINEの累計/直近7日/直近30日の登録数。DB不在時は None を値に。"""
     out = {}
@@ -245,6 +275,19 @@ def main():
             f"- 月100万に必要: 現投稿数なら1投稿 **{s['need_avg']:,}** views / 現品質なら **{s['need_posts_day']:.0f}** 本/日",
             "",
         ]
+    # ── ゴール階層KPI（goals.json準拠。閲覧は上流指標）──
+    fol = follower_deltas()
+    mdn = mendan_count()
+    lines += ["## 🏁 ゴールKPI（goals.json の優先順位）", ""]
+    if mdn:
+        lines.append(f"- masa【最優先】個別面談: 「面談」受信 累計 **{mdn.get('total',0)}** / 直近7日 **+{mdn.get('d7',0)}**")
+    for acct in ("truth", "masa"):
+        f = fol.get(acct)
+        if f:
+            d7f = f.get("d7")
+            lines.append(f"- {NAMES[acct]} フォロワー: **{f['now']:,}**（7日 {'+' if (d7f or 0)>=0 else ''}{d7f if d7f is not None else '?'}）")
+    lines.append("")
+
     # ── LINE登録（本当のゴール＝成果KPI）──
     line_reg = line_registrations()
     lines += ["## 🎯 LINE登録（成果KPI｜閲覧はこれに繋げる手段）", ""]
@@ -304,6 +347,8 @@ def main():
                              "gap_daily": stat[a]["gap_daily"]} for a in ACCTS},
             "priority_order": sorted(ACCTS, key=lambda a: stat[a]["pace"]),
             "line_registrations": line_reg,
+            "followers": fol,
+            "mendan": mdn,
             # ── 期限付きランプ（2ヶ月で月100万）と本日の修正指示 ──
             "deadline": deadline,
             "ramp": {a: {"week": stat[a]["ramp_week"], "target_avg_post_7d": stat[a]["ramp_target"],

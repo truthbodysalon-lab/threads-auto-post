@@ -1000,6 +1000,12 @@ def _insert_hero_posts(posts: list[str], acct: str) -> list[str]:
     step = max(4, 46 // max(1, len(heroes)))
     for i, h in enumerate(heroes):
         posts.insert(min(2 + i * step, len(posts)), h)
+    # 最終ガード: ヒーロー挿入で誘導投稿(ホットペッパー/駐車場/LINE)が位置50超へ
+    # 押し出されたら前半へ戻す（1日約50本消費のため位置50超=未投稿）
+    markers = ("beauty.hotpepper.jp", "専用駐車場", "長岡駅から車で5分", "lin.ee/")
+    for idx in range(len(posts) - 1, 49, -1):
+        if any(m in posts[idx] for m in markers):
+            posts.insert(44, posts.pop(idx))
     return posts
 
 

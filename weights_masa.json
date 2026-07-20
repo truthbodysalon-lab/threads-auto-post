@@ -1,7 +1,7 @@
 {
   "updated_at": "2026-07-20",
   "pattern_weights": {
-    "insight": 13,
+    "insight": 20,
     "education": 1,
     "story": 1,
     "cta": 1,
@@ -25,8 +25,9 @@
     "cta": -1.74
   },
   "line_scores": {
-    "insight": -0.14,
-    "story": 0.04,
-    "ranking": 0.09
+    "insight": 2.58,
+    "story": -3.0,
+    "ranking": 0.2,
+    "cta": 0.22
   }
 }

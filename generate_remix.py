@@ -1223,15 +1223,16 @@ def generate_30_posts() -> list[str]:
     posts.insert(min(21, len(posts)), generate_seitai_line_post())
 
     # 頭痛タイプ診断(Web)への誘導を毎日確実に投稿する（2026-07-05ルール化）
-    # 前半（index 6, 16）へアンカーして1日約50本の消費内で必ず届ける
+    # 2026-07-21変更: リンク付き投稿の同日連発抑制（Brain記事実測）のため2本→1本/日。
+    # 前半（index 6）へアンカーして1日約50本の消費内で必ず届ける
     shindan_posts = []
-    for _ in range(2):
+    for _ in range(1):
         for _ in range(20):
             p = generate_shindan_post("truth")
             if p not in shindan_posts:
                 shindan_posts.append(p)
                 break
-    shindan_anchors = [6, 16]
+    shindan_anchors = [6]
     for i, sp_ in enumerate(shindan_posts):
         pos = min(shindan_anchors[i] if i < len(shindan_anchors) else (i * 10 + 6), len(posts))
         posts.insert(pos, sp_)
@@ -1369,15 +1370,16 @@ def generate_40_nagaoka_posts() -> list[str]:
         posts.insert(pos, ap_)
 
     # 頭痛タイプ診断(Web)への誘導を毎日確実に投稿する（2026-07-05ルール化）
-    # 前半（index 8, 17）へアンカーして1日の消費内で必ず届ける
+    # 2026-07-21変更: リンク付き投稿の同日連発抑制（Brain記事実測）のため2本→1本/日。
+    # 前半（index 8）へアンカーして1日の消費内で必ず届ける
     shindan_posts = []
-    for _ in range(2):
+    for _ in range(1):
         for _ in range(20):
             p = generate_shindan_post("nagaoka")
             if p not in shindan_posts:
                 shindan_posts.append(p)
                 break
-    shindan_anchors = [8, 17]
+    shindan_anchors = [8]
     for i, sp_ in enumerate(shindan_posts):
         pos = min(shindan_anchors[i] if i < len(shindan_anchors) else (i * 10 + 8), len(posts))
         posts.insert(pos, sp_)

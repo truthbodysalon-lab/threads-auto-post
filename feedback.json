@@ -253,7 +253,7 @@
     },
     {
       "date": "2026-07-05",
-      "text": "【truth/nagaoka・頭痛タイプ診断誘導】Web頭痛タイプ診断(https://truthbodysalon-lab.github.io/zutsu-shindan/)への誘導投稿を毎日確実に投稿する。各アカウント2本/日、generate_remix.pyのSHINDAN_TEMPLATESからキュー前半(truth: index6,16 / nagaoka: index8,17)にアンカー。診断は結果画面ボタン→公式LINE登録に繋がる導線。lin.ee URL本数制限とは別枠。1文目はフックから(地域名/実績/自己紹介NG)。検証時は log_*_posted.jsonl に zutsu-shindan URL入り投稿が両アカウントで毎日出ているかを確認する。",
+      "text": "【truth/nagaoka・頭痛タイプ診断誘導】Web頭痛タイプ診断(https://truthbodysalon-lab.github.io/zutsu-shindan/)への誘導投稿を毎日確実に投稿する。各アカウント1本/日（2026-07-21変更: リンク付き投稿の同日連発抑制のため2本→1本）、generate_remix.pyのSHINDAN_TEMPLATESからキュー前半(truth: index6 / nagaoka: index8)にアンカー。診断は結果画面ボタン→公式LINE登録に繋がる導線。lin.ee URL本数制限とは別枠。1文目はフックから(地域名/実績/自己紹介NG)。検証時は log_*_posted.jsonl に zutsu-shindan URL入り投稿が両アカウントで毎日出ているかを確認する。",
       "account": "all"
     },
     {

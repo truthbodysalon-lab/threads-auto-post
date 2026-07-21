@@ -57,6 +57,10 @@ _STORE_SIGNALS = ("来院", "うち", "当院", "原因", "整え", "改善率",
 _JUNK = {"candidates", "candidate", "json", "テンプレ", "出力", ""}
 # 過剰約束（1回で治る等）も弾く
 _OVERCLAIM = ("1回で変わ", "一回で変わ", "1回で治", "必ず治", "100%")
+# 抽象的・わかりにくい表現（原因や症状の擬人化・ポエム）を弾く。
+# 「内容が難しい」というユーザーフィードバック対応（2026-07-21）。
+# 何が起きるのか具体的に言わない曖昧表現は不採用にし、平易・具体を担保する。
+_VAGUE = ("進行中", "原因は育", "原因が育", "定着に向か", "反転させ", "サインが育")
 
 
 def validate(acct: str, tmpl: str, existing: set) -> bool:
@@ -72,6 +76,8 @@ def validate(acct: str, tmpl: str, existing: set) -> bool:
     if _YEAR_CLAIM.search(tmpl):         # 未確認の年数実績はNG
         return False
     if any(o in tmpl for o in _OVERCLAIM):   # 過剰約束NG
+        return False
+    if any(v in tmpl for v in _VAGUE):       # 抽象的・わかりにくい擬人化表現NG
         return False
     # truth/nagaoka は「具体的な店舗性」を必須に（薄い一般論・ポエムを弾く）
     if acct in ("truth", "nagaoka") and not any(s in tmpl for s in _STORE_SIGNALS):

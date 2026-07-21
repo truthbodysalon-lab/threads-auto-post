@@ -140,11 +140,23 @@ _PREDICATE_WO_BREAK = re.compile(r"(?:思っている|している|できる|や
 _PARTICLE_DUP = re.compile(r"をを|がが|はは|にに")
 _PUNCT_BREAK = re.compile(r"。。|ですです|ますです")
 
+# 追加破綻型（2026-07-21第3弾・実投稿ログで検出された取りこぼし）:
+#   「〜と思っているです。」= 述語終止形＋です（「〜ているんです」は正しい日本語で、
+#   ん が挟まるためこのregexにはマッチしない＝誤検知しないことをテストで確認済み）
+#   「〜がないではなく」= 節＋ではなく（「〜のではなく」は正しいためマッチさせない）
+# 全postedログ8,545件を走査して誤検知0件・真陽性のみを確認済み（2026-07-21）。
+_PREDICATE_DESU_BREAK = re.compile(r"(?:ている|ていた)です")
+_NAI_DEWANAKU_BREAK = re.compile(r"ないではなく")
+
 
 def _check_grammar(text: str) -> list[str]:
     reasons = []
     if _PREDICATE_WO_BREAK.search(text or ""):
         reasons.append("述語＋「を」の助詞破綻（テンプレ穴埋み事故）")
+    if _PREDICATE_DESU_BREAK.search(text or ""):
+        reasons.append("述語＋「です」の破綻（「〜ているです」テンプレ穴埋み事故）")
+    if _NAI_DEWANAKU_BREAK.search(text or ""):
+        reasons.append("「〜ないではなく」の破綻（テンプレ穴埋み事故）")
     if _PARTICLE_DUP.search(text or ""):
         reasons.append("助詞の重複（をを/がが/はは/にに）")
     if _PUNCT_BREAK.search(text or ""):

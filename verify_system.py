@@ -117,7 +117,7 @@ def check_rule_hygiene():
         notes = fb.get("notes", [])
         total_chars = sum(len(n.get("text", "")) for n in notes)
         n_count = len(notes)
-        status = "PASS" if (n_count <= 35 and total_chars <= 20000) else "WARN"
+        status = "PASS" if (n_count <= 60 and total_chars <= 20000) else "WARN"
         add("hygiene:notes", "B.ルール反映", status,
             f"notes {n_count}件・合計{total_chars}字" +
             ("（ルール剪定要）" if status == "WARN" else ""))

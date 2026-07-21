@@ -894,11 +894,13 @@ def run_account(acct: str):
 
         # テキストをコメント部分に分割する
         # 優先順位: [COMMENT] タグ → 【続き】マーカー → \n\n 段落区切り
-        if "\n[COMMENT]\n" in clean_text:
+        if "[COMMENT]" in clean_text:
             # [COMMENT] で複数コメントに分割
-            segments = clean_text.split("\n[COMMENT]\n")
-            clean_text = segments[0].strip()
-            comment_parts = [s.strip() for s in segments[1:] if s.strip()]
+            # 前後の改行・空白の有無に関わらず確実に分割する（末尾に改行のない
+            # [COMMENT] が本文に混入して literal 表示される実障害を防ぐ・2026-07-21）
+            segments = [s.strip() for s in re.split(r"\[COMMENT\]", clean_text) if s.strip()]
+            clean_text = segments[0] if segments else ""
+            comment_parts = segments[1:]
         elif "\n\n【続き】\n" in clean_text:
             parts = clean_text.split("\n\n【続き】\n", 1)
             clean_text = parts[0].strip()
@@ -911,6 +913,13 @@ def run_account(acct: str):
             if rest:
                 clean_text = first_para.rstrip()
                 comment_parts = [rest]
+
+    # 最終防衛: どの分岐を通っても [COMMENT]/【続き】マーカーが本文・コメントに
+    # 残らないよう除去する（literal 表示の再発防止・2026-07-21）
+    def _strip_markers(s: str) -> str:
+        return re.sub(r"\s*(?:\[COMMENT\]|【続き】)\s*", "\n", s or "").strip()
+    clean_text   = _strip_markers(clean_text)
+    comment_parts = [p for p in (_strip_markers(p) for p in comment_parts) if p]
 
     log_info(acct, f"{name} [{index+1}本目]: {clean_text[:40].replace(chr(10), ' ')}...")
 

@@ -50,7 +50,7 @@ def _recent(path: Path, days: int) -> bool:
 def check_imports():
     mods = ["generate_remix", "myfiles_loader", "analyze_and_tune",
             "auto_post", "insights", "follower_tracker", "line_tracker",
-            "duplicate_guard", "token_manager", "git_sync"]
+            "duplicate_guard", "token_manager", "git_sync", "inspector"]
     for m in mods:
         try:
             importlib.import_module(m)
@@ -105,6 +105,46 @@ def check_rules():
             f"NGワード登録 {len(ng_words)}件")
     except Exception as e:
         add("rule:all", "B.ルール反映", "FAIL", f"検査失敗: {e}")
+
+
+# ── B'. ルール衛生（検品ゲート導入・2026-07-21）───────────────
+def check_rule_hygiene():
+    """feedback.json notesの肥大化・inspection_log.jsonlのNG急増を検知する。
+    Brain記事(aoi_ai 2026-07-20)実測: ルール1万字肥大→矛盾→品質低下、
+    3,536字へ剪定で回復。noteは足すより削る運用を維持できているかの健全性チェック。"""
+    try:
+        fb = json.loads((BASE / "feedback.json").read_text(encoding="utf-8"))
+        notes = fb.get("notes", [])
+        total_chars = sum(len(n.get("text", "")) for n in notes)
+        n_count = len(notes)
+        status = "PASS" if (n_count <= 35 and total_chars <= 20000) else "WARN"
+        add("hygiene:notes", "B.ルール反映", status,
+            f"notes {n_count}件・合計{total_chars}字" +
+            ("（ルール剪定要）" if status == "WARN" else ""))
+    except Exception as e:
+        add("hygiene:notes", "B.ルール反映", "WARN", f"確認失敗: {e}")
+
+    try:
+        log_file = BASE / "inspection_log.jsonl"
+        if not log_file.exists():
+            add("hygiene:inspection_ng", "B.ルール反映", "PASS", "inspection_log.jsonl なし（NGなし）")
+        else:
+            today = date.today().strftime("%Y-%m-%d")
+            n_today = 0
+            for line in log_file.read_text(encoding="utf-8").splitlines():
+                if not line.strip():
+                    continue
+                try:
+                    if json.loads(line).get("date") == today:
+                        n_today += 1
+                except Exception:
+                    pass
+            status = "PASS" if n_today <= 20 else "WARN"
+            add("hygiene:inspection_ng", "B.ルール反映", status,
+                f"本日の検品NG {n_today}件" +
+                ("（誤検知 or 生成品質劣化の疑い）" if status == "WARN" else ""))
+    except Exception as e:
+        add("hygiene:inspection_ng", "B.ルール反映", "WARN", f"確認失敗: {e}")
 
 
 # ── C. 実行ギャップ（実装≠実行 を検出）──────────────
@@ -387,6 +427,7 @@ def run_all():
     check_imports()
     check_generation()
     check_rules()
+    check_rule_hygiene()
     check_execution_gaps()
     check_logs()
     check_sync()

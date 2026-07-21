@@ -3,6 +3,7 @@
 過去投稿をベースに新しい投稿を生成する（API不要）
 past_posts.json から構造・文体を学習してリミックス生成。
 """
+from __future__ import annotations
 
 import json
 import random
@@ -175,6 +176,24 @@ try:
     from variety_templates import MASA_VARIETY, TRUTH_VARIETY, NAGAOKA_VARIETY
 except Exception:
     MASA_VARIETY, TRUTH_VARIETY, NAGAOKA_VARIETY = [], [], []
+
+# ── 検品ゲート（2026-07-21・Brain記事「AIでThreadsを事故ゼロ運用する方法」）──
+# 生成ループ内では log=False（再抽選中のノイズをinspection_log.jsonlに残さない）。
+# 失敗時はフェイルオープン（_is_ng等の既存フィルタと同じ思想＝全停止しない）。
+try:
+    import inspector as _inspector
+except Exception:
+    _inspector = None
+
+
+def _inspect_ok(text: str, account: str, pattern_name: str | None = None, log: bool = False) -> bool:
+    if _inspector is None:
+        return True
+    try:
+        ok, _ = _inspector.inspect_post(text, account, pattern_name=pattern_name, log=log)
+        return ok
+    except Exception:
+        return True  # 検品自体が壊れても生成は止めない（全停止しない原則）
 
 # ── 投稿パターン定義 ──────────────────────────────
 # 各パターンは (冒頭テンプレ, 中間テンプレ, 締めテンプレ) のリスト
@@ -959,7 +978,7 @@ def generate_cta_post(target: str) -> str:
             tmpl = random.choice(CTA_ZUTSUU_TEMPLATES)
             symptom = random.choice(SYMPTOMS_ZUTSUU)
             post = fill(tmpl.replace("{url}", URL_ZUTSUU), symptom=symptom)
-        if not _is_ng(post):
+        if not _is_ng(post) and _inspect_ok(post, "truth", log=False):
             return post
     return post  # 10回試しても解消しない場合はそのまま返す（無限ループ回避）
 
@@ -1133,7 +1152,8 @@ def generate_30_posts() -> list[str]:
             # 1文目NG・NGワード・重複チェック
             if (key not in seen and not _is_ng(post) and
                 first_line not in recent_first_lines and
-                _is_valid_first_line(post, "truth")):
+                _is_valid_first_line(post, "truth") and
+                _inspect_ok(post, "truth", pattern_name=pk, log=False)):
                 seen.add(key)
                 posts.append(post)
                 break
@@ -1268,7 +1288,8 @@ def generate_40_nagaoka_posts() -> list[str]:
             post = generate_nagaoka_post(pk)
             key = post[:100]
             # 1文目NG・NGワード・重複チェック
-            if key not in seen and not _is_ng(post) and _is_valid_first_line(post, "nagaoka"):
+            if (key not in seen and not _is_ng(post) and _is_valid_first_line(post, "nagaoka")
+                    and _inspect_ok(post, "nagaoka", pattern_name=pk, log=False)):
                 seen.add(key)
                 # テンプレ自体に「長岡」が含まれる場合は目標カウントに算入する
                 # （ベースで含むぶんを数えないと、_ensure_nagaoka が25%を上乗せして
@@ -1834,7 +1855,8 @@ def generate_30_masa_posts() -> list[str]:
                     and not _is_masa_yokokoku_ng(post)
                     and not _is_masa_sales_ng(post)
                     and len(post) <= 250
-                    and first_line not in recent_first_lines):
+                    and first_line not in recent_first_lines
+                    and _inspect_ok(post, "masa", pattern_name=pk, log=False)):
                 seen.add(key)
                 posts.append(post)
                 added = True
@@ -1936,23 +1958,47 @@ def generate_30_masa_posts() -> list[str]:
 # メイン
 # ══════════════════════════════════════════════
 
+def _is_anchor_post(p: str) -> bool:
+    """goals.json保護の導線投稿判定（削らない対象。auto_post.pyのアンカー判定と同じ基準）。"""
+    return (
+        "lin.ee" in p
+        or SHINDAN_URL in p
+        or SEITAI_LINE_URL in p
+        or "beauty.hotpepper.jp" in p
+        or ("長岡駅" in p and "車で5分" in p)
+    )
+
+
+def _final_inspection_pass(posts: list[str], account: str) -> list[str]:
+    """書き出し直前の最終検品パス（安全網・2026-07-21）。
+    生成ループ内の検品（log=False）は既に大半のNGを弾いているため、ここで拾うのは
+    CTA/リストイン等の定型テンプレや取りこぼし分のみ。導線投稿(goals.json保護)は
+    検品NGでも削らずログのみ残す（無くすと当日のゴール導線が0件になりうるため）。"""
+    out = []
+    for p in posts:
+        ok = _inspect_ok(p, account, log=True)
+        if ok or _is_anchor_post(p):
+            out.append(p)
+    return out
+
+
 def main():
     account = sys.argv[1] if len(sys.argv) > 1 else "truth"
 
     if "masa" in account.lower():
-        posts = generate_30_masa_posts()
+        posts = _final_inspection_pass(generate_30_masa_posts(), "masa")
         entry = {"account": "@masahide_takahashi_", "theme": "リミックス生成", "date": TODAY, "posts": posts}
         with open(LOG_FILE_MASA, "a") as f:
             f.write(json.dumps(entry, ensure_ascii=False) + "\n")
         print(f"✓ {len(posts)}本生成 → log_masa.jsonl に保存")
     elif "nagaoka" in account.lower():
-        posts = generate_40_nagaoka_posts()   # 軽症者ターゲット40本専用生成
+        posts = _final_inspection_pass(generate_40_nagaoka_posts(), "nagaoka")   # 軽症者ターゲット40本専用生成
         entry = {"account": "@truth_nagaoka", "theme": "軽症者ターゲット40本生成", "date": TODAY, "posts": posts}
         with open(LOG_FILE_NAGAOKA, "a") as f:
             f.write(json.dumps(entry, ensure_ascii=False) + "\n")
         print(f"✓ {len(posts)}本生成 → log_nagaoka.jsonl に保存")
     else:
-        posts = generate_30_posts()
+        posts = _final_inspection_pass(generate_30_posts(), "truth")
         entry = {"account": "@truth_body_salon", "theme": "リミックス生成", "date": TODAY, "posts": posts}
         with open(LOG_FILE, "a") as f:
             f.write(json.dumps(entry, ensure_ascii=False) + "\n")

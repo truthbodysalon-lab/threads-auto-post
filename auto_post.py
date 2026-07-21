@@ -40,6 +40,22 @@ except ImportError:
     def dg_mark_posted(t, a, pid): pass
     def dg_marked_today(t, a): return False
 
+try:
+    import inspector as _inspector
+except Exception:
+    _inspector = None
+
+
+def inspect_before_post(text: str, acct: str):
+    """投稿直前の検品ゲート（2026-07-21）。inspector未読込・例外時はフェイルオープン
+    （検品で全停止しない。既存の自動エラー回復方針と同じ思想）。"""
+    if _inspector is None or not text:
+        return True, []
+    try:
+        return _inspector.inspect_post(text, acct)
+    except Exception:
+        return True, []
+
 # get_next_post / get_posted_texts で使う正規化（duplicate_guard と同じロジック）
 _normalize_post_key = dg_normalize
 
@@ -400,6 +416,56 @@ def _hpb_anchor_ok(acct: str, today: str, text: str) -> bool:
     return True
 
 
+# ── URL連続回避（2026-07-21・Brain記事「AIでThreadsを事故ゼロ運用する方法」実測）─
+# URL入り投稿の同日連発はリーチを下げる。導線投稿(goals.json保護)は削らないが、
+# 直前投稿の本文にURLが残っていた（=is_line/is_shindan、他は本文からURLをコメントへ
+# 逃がすため対象外）なら、次はURL無し投稿を優先選択する。無ければそのまま投稿する
+# （導線アンカーを削除しない・新規URL枠も追加しない）。
+
+def _text_has_visible_url(text: str) -> bool:
+    """メイン投稿本文にURLがそのまま残る投稿かどうか。
+    HPB CTA・店舗アクセス等は extract_url_and_cta でURLがコメントへ移動するため対象外。
+    LINEリストイン・頭痛タイプ診断のみ、ルール上URLを本文末尾に残す設計（run_account参照）。"""
+    return _is_line_listin(text or "") or _is_shindan(text or "")
+
+
+def _last_post_had_visible_url(acct: str, today: str) -> bool:
+    """本日この投稿者の直近投稿がメイン本文にURLを含んでいたか。無ければFalse。
+    単体テスト可能な純粋関数（auto_post.py自体は実行しなくても検証できる）。"""
+    pfile = ACCOUNTS[acct]["posted"]
+    if not pfile.exists():
+        return False
+    last_text = None
+    for line in pfile.read_text(encoding="utf-8").splitlines():
+        if not line.strip():
+            continue
+        try:
+            e = json.loads(line)
+        except Exception:
+            continue
+        if (e.get("date") or "")[:10] != today:
+            continue
+        last_text = e.get("text", "")
+    if last_text is None:
+        return False
+    return _text_has_visible_url(last_text)
+
+
+def pick_avoiding_consecutive_url(candidates, last_had_url: bool):
+    """候補リスト（選択優先順）から、直前投稿がURL入りだった場合はURL無しの
+    候補を優先して返す純粋関数。見つからなければ先頭候補をそのまま返す
+    （導線投稿を削らない・取りこぼさない）。candidates: list[(text, index)]。
+    候補が空なら None を返す。"""
+    if not candidates:
+        return None
+    if not last_had_url:
+        return candidates[0]
+    for text, idx in candidates:
+        if not _text_has_visible_url(text):
+            return (text, idx)
+    return candidates[0]
+
+
 def _posted_count_today(acct: str) -> int:
     """log_{acct}_posted.jsonl の本日の投稿件数（バッチ投稿の打ち切り判定用）"""
     pfile = ACCOUNTS[acct]["posted"]
@@ -468,7 +534,7 @@ def _mark_line_done(acct: str, today: str):
         pass
 
 
-def get_next_post(acct: str, today: str):
+def get_next_post(acct: str, today: str, avoid_url: bool = False):
     log_file = ACCOUNTS[acct]["log"]
     if not log_file.exists():
         return None, -1
@@ -521,6 +587,9 @@ def get_next_post(acct: str, today: str):
             if line_candidates:
                 return line_candidates[0][1], line_candidates[0][0]
 
+    # avoid_url=True の場合、直前投稿URL連発回避のため候補を集めてから選ぶ
+    # （既定のavoid_url=Falseでは従来どおり最初の適格候補を即返す＝挙動を変えない）
+    eligible: list[tuple[str, int]] = []
     for i, text in enumerate(all_posts):
         if _is_line_listin(text):
             continue  # LINEは上で処理（未実施なら採用済み／実施済みならスキップ）
@@ -546,7 +615,16 @@ def get_next_post(acct: str, today: str):
             # API実投稿の直近に同じ1文目があれば飛ばす（系統間ラグ対策）
             if dg_normalize(text).split("\n")[0].strip()[:40] in api_recent:
                 continue
-            return text, i
+            if not avoid_url:
+                return text, i  # 従来どおり即返す（挙動不変）
+            eligible.append((text, i))
+            if len(eligible) >= 20:
+                break  # 取りすぎない（性能・挙動は従来と同等の範囲で十分）
+
+    if avoid_url:
+        picked = pick_avoiding_consecutive_url(eligible, last_had_url=True)
+        if picked is not None:
+            return picked
 
     # 通常投稿が尽きていて、LINEが未実施なら最後に出す（取りこぼし防止）
     if not line_done:
@@ -759,14 +837,36 @@ def run_account(acct: str):
 
     ensure_generated(acct, today)
 
-    text, index = get_next_post(acct, today)
+    avoid_url = _last_post_had_visible_url(acct, today)
+    text, index = get_next_post(acct, today, avoid_url=avoid_url)
     if text is None and _posted_count_today(acct) < DAILY_TARGET:
         # 適格な投稿が尽きたが目標50本に未達 → 追加バッチを生成して補充する
         # （キューはあっても重複除外で選べる投稿が枯渇するケースがある）
         log_info(acct, f"{name} 適格投稿が枯渇（{_posted_count_today(acct)}本/{DAILY_TARGET}）→ 追加生成")
         subprocess.run([sys.executable, str(BASE / "generate_remix.py"), acct],
                        capture_output=True, text=True, timeout=300)
-        text, index = get_next_post(acct, today)
+        text, index = get_next_post(acct, today, avoid_url=avoid_url)
+
+    # ── 検品ゲート（2026-07-21）: 投稿直前に最終チェック。NGは既存のpending消費済み
+    # マーク機構で弾いて次候補へ（無限ループ禁止のため最大5回まで・全停止しない）。
+    _MAX_INSPECT_ATTEMPTS = 5
+    _inspect_attempts = 0
+    while text is not None:
+        _ok, _reasons = inspect_before_post(text, acct)
+        if _ok:
+            break
+        log_info(acct, f"{name} [検品NG] {'; '.join(_reasons)[:100]} → {text[:30].replace(chr(10), ' ')}...")
+        try:
+            dg_mark_pending(dg_normalize(text), acct)  # 消費済みにして次回同一候補を再選択しない
+        except Exception:
+            pass
+        _inspect_attempts += 1
+        if _inspect_attempts >= _MAX_INSPECT_ATTEMPTS:
+            log_info(acct, f"{name} 検品NGが{_inspect_attempts}回連続 → 本サイクルは見送り")
+            text = None
+            break
+        text, index = get_next_post(acct, today, avoid_url=avoid_url)
+
     is_line = _is_line_listin(text or "")  # 元テキスト(URL付き)でLINEリストイン判定
     is_shindan = _is_shindan(text or "")   # 頭痛タイプ診断アンカー判定（2026-07-11）
     # ホットペッパー予約CTA・店舗アクセスアンカーも get_next_post 側で7日重複ガードを

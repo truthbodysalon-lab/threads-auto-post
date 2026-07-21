@@ -81,6 +81,48 @@ def main():
     print(f"[{'OK' if not ok2 else 'FAIL(免除なしなのに通過)'}] 免除なしなら同文がNGになること: {r2}")
     results.append(not ok2)
 
+    print("\n=== ⑩ 規制表現の型（2026-07-21・第9回）が検出されること ===")
+    results.append(_assert_ng("この方法なら必ず稼げます。", "masa", "必ず稼げ（断定保証型）"))
+    results.append(_assert_ng("絶対に治りますと言い切れる施術です。", "truth", "絶対に治り（断定保証型）"))
+    results.append(_assert_ng("誰でも痩せられるメソッドです。", "truth", "誰でも痩せ（断定保証型）"))
+    results.append(_assert_ng("当院は業界No.1の実績です。", "masa", "業界No.1（比較優位型）"))
+    results.append(_assert_ng("地域ナンバーワンを自負しています。", "truth", "ナンバーワン（比較優位型）"))
+
+    print("\n=== ⑪ 個人名（truth/nagaokaのみ・さん付き完全一致）が検出されること ===")
+    results.append(_assert_ng("まぁさんが担当します。", "truth", "まぁさん（truth）"))
+    results.append(_assert_ng("ゆうさんに相談してください。", "nagaoka", "ゆうさん（nagaoka）"))
+    results.append(_assert_ok("まぁさんの話をしよう。", "masa", "masaは個人名チェック対象外"))
+    results.append(_assert_ok("まぁ、そういうこともあります。", "truth", "「まぁ、」は完全一致でないため誤検知しない"))
+
+    print("\n=== ⑫ dead_openings_auto（自動追記分）が読めること ===")
+    # 実feedback.jsonを汚さないよう、モジュール変数を一時差し替えてテスト
+    import tempfile
+    orig_fb_file = inspector.FEEDBACK_FILE
+    with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False, encoding="utf-8") as tf:
+        json.dump({
+            "ng_words": [],
+            "dead_openings": {"all": [], "truth": [], "exempt_patterns": []},
+            "dead_openings_auto": {"truth": [
+                {"regex": "^テスト負けモチーフ", "motif": "テスト負けモチーフ", "auto": True, "added": "2026-07-21"},
+                "^素の文字列regex",
+            ]},
+        }, tf, ensure_ascii=False)
+        tmp_path = tf.name
+    try:
+        inspector.FEEDBACK_FILE = Path(tmp_path)
+        ok_a, r_a = inspector.inspect_post("テスト負けモチーフで始まる投稿", "truth", log=False)
+        results.append(not ok_a)
+        print(f"[{'OK' if not ok_a else 'FAIL'}] dict形式の自動regexで検出: {r_a}")
+        ok_b, r_b = inspector.inspect_post("素の文字列regexで始まる投稿", "truth", log=False)
+        results.append(not ok_b)
+        print(f"[{'OK' if not ok_b else 'FAIL'}] 文字列形式の自動regexで検出: {r_b}")
+        ok_c, _ = inspector.inspect_post("普通の書き出しの投稿です。", "truth", log=False)
+        results.append(ok_c)
+        print(f"[{'OK' if ok_c else 'FAIL'}] 自動regex非該当は通過")
+    finally:
+        inspector.FEEDBACK_FILE = orig_fb_file
+        Path(tmp_path).unlink(missing_ok=True)
+
     print("\n=== ⑨ 正常投稿（誤検知しないこと）の代表例 ===")
     normal_examples = [
         ("その肩こり、一生付き合うつもりですか？\n\n1日3分のケアで変わる人、ほんとに多いです。", "truth"),

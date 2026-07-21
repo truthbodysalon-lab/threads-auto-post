@@ -16,9 +16,10 @@
 from __future__ import annotations
 
 import json
+import re
 import sys
-from collections import defaultdict
-from datetime import date, datetime, timedelta
+from collections import Counter, defaultdict
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 BASE = Path(__file__).parent
@@ -358,6 +359,151 @@ def save_weights(acct: str, weights: dict, feedback_scores: dict, api_scores: di
     )
 
 
+# ── 負け投稿→dead_openings 自動追記PDCA（2026-07-21・Brain記事有料本文第12回）──
+# 「負けた投稿を1行、禁止リストに足すたびに工場は賢くなる」。
+# past_posts_{acct}.json（Threads API実測views・timestamp付き）から、
+# 十分に露出時間を経た(3日以上)低views投稿の1行目モチーフを抽出し、
+# 同一モチーフが3件以上負けている場合のみ feedback.json の dead_openings_auto へ
+# 前方一致regexとして追記する。inspector.py が dead_openings と合わせて参照する。
+
+FEEDBACK_JSON = BASE / "feedback.json"
+DEAD_AUTO_MAX_PER_RUN = 2    # 暴走防止: 1実行あたり最大2件
+DEAD_AUTO_MAX_TOTAL = 30     # 暴走防止: 自動追記の累計上限（全アカウント合算）
+DEAD_MOTIF_LEN = 8           # 1行目の先頭8文字をモチーフとする
+DEAD_MIN_LOSSES = 3          # 同一モチーフが3件以上負けていたら追記
+
+
+def _is_funnel_post(text: str) -> bool:
+    """導線投稿（goals.json保護・prune対象外）の判定。除外は広めに取る=保守的。
+    LINE/lin.ee/診断/HPB/店舗アクセス/プロフィール誘導(cta_profile)を全て除外する。"""
+    t = text or ""
+    if any(m in t for m in ("lin.ee", "LINE", "zutsu-shindan", "beauty.hotpepper.jp",
+                            "プロフィール")):
+        return True
+    if "長岡駅" in t and "車で5分" in t:  # 店舗アクセスアンカー
+        return True
+    return False
+
+
+def _load_past_posts_with_views(acct: str) -> list[dict]:
+    """past_posts_{acct}.json から {text, views, timestamp} を返す（3日以上経過のみ）。"""
+    past_file = BASE / ("past_posts.json" if acct == "truth" else f"past_posts_{acct}.json")
+    if not past_file.exists():
+        return []
+    try:
+        posts = json.loads(past_file.read_text(encoding="utf-8"))
+    except Exception:
+        return []
+    cutoff = datetime.now(timezone.utc) - timedelta(days=3)
+    out = []
+    for p in posts:
+        text = p.get("text", "")
+        ts_raw = p.get("timestamp", "")
+        if not text or not ts_raw:
+            continue
+        try:
+            ts = datetime.strptime(ts_raw, "%Y-%m-%dT%H:%M:%S%z")
+        except Exception:
+            continue
+        if ts > cutoff:
+            continue  # 投稿から3日未満はまだ露出が続くため対象外
+        try:
+            views = int(p.get("views", 0) or 0)
+        except Exception:
+            views = 0
+        out.append({"text": text, "views": views})
+    return out
+
+
+def _existing_dead_patterns(fb: dict, acct: str) -> list[str]:
+    """既存のdead_openings（手動）+ dead_openings_auto（自動）の当該アカウント分regex一覧。"""
+    d = fb.get("dead_openings", {}) or {}
+    pats = list(d.get("all", []) or []) + list(d.get(acct, []) or [])
+    for e in (fb.get("dead_openings_auto", {}) or {}).get(acct, []) or []:
+        pats.append(e.get("regex", "") if isinstance(e, dict) else str(e))
+    return [p for p in pats if p]
+
+
+def _count_auto_total(fb: dict) -> int:
+    auto = fb.get("dead_openings_auto", {}) or {}
+    return sum(len(v or []) for v in auto.values())
+
+
+def update_dead_openings_from_losers(acct: str, feedback_path: Path = None) -> list[dict]:
+    """負け投稿の1行目モチーフを dead_openings_auto[acct] へ追記する。
+    仕様: 下位10% かつ views < 中央値の25% の投稿（導線投稿除く）から
+    1行目先頭8文字をモチーフとして抽出し、同一モチーフ3件以上でregex化。
+    1実行2件まで・累計30件まで。追記した項目のリストを返す（テスト検証用）。"""
+    fpath = feedback_path or FEEDBACK_JSON
+    posts = _load_past_posts_with_views(acct)
+    if len(posts) < 20:
+        return []  # 統計が成立しない少数データでは何もしない（保守的）
+
+    views_sorted = sorted(p["views"] for p in posts)
+    n = len(views_sorted)
+    median = views_sorted[n // 2]
+    if median <= 0:
+        return []  # viewsが取得できていないデータでは判定しない
+    bottom_cut = views_sorted[max(0, n // 10 - 1)]  # 下位10%の境界値
+    loser_threshold = median * 0.25
+
+    losers = [p for p in posts
+              if p["views"] <= bottom_cut and p["views"] < loser_threshold
+              and not _is_funnel_post(p["text"])]
+    if not losers:
+        return []
+
+    motifs = Counter()
+    for p in losers:
+        first = p["text"].split("\n")[0].strip()
+        if len(first) >= DEAD_MOTIF_LEN:
+            motifs[first[:DEAD_MOTIF_LEN]] += 1
+
+    try:
+        fb = json.loads(fpath.read_text(encoding="utf-8"))
+    except Exception:
+        return []
+
+    existing = _existing_dead_patterns(fb, acct)
+    added = []
+    for motif, cnt in motifs.most_common():
+        if cnt < DEAD_MIN_LOSSES:
+            break  # most_common順なのでこれ以降は全て未満
+        if len(added) >= DEAD_AUTO_MAX_PER_RUN:
+            break
+        if _count_auto_total(fb) + len(added) >= DEAD_AUTO_MAX_TOTAL:
+            if not QUIET:
+                print(f"  [dead_openings] 自動追記の累計上限({DEAD_AUTO_MAX_TOTAL})到達 → 追記停止")
+            break
+        # 既存パターンとの重複防止: 同一regexがある/既存パターンがモチーフにマッチする場合はスキップ
+        regex = "^" + re.escape(motif)
+        dup = False
+        for pat in existing:
+            try:
+                if pat == regex or re.search(pat, motif):
+                    dup = True
+                    break
+            except re.error:
+                continue
+        if dup:
+            continue
+        added.append({"regex": regex, "motif": motif, "losses": cnt,
+                      "auto": True, "added": TODAY})
+
+    if not added:
+        return []
+
+    auto = fb.setdefault("dead_openings_auto", {})
+    auto.setdefault(acct, []).extend(added)
+    fb["updated_at"] = datetime.now().strftime("%Y-%m-%d %H:%M")
+    fpath.write_text(json.dumps(fb, ensure_ascii=False, indent=2), encoding="utf-8")
+
+    for a in added:
+        # 記事の教訓「負けた投稿を1行、禁止リストに足すたびに工場は賢くなる」— 監査用に必ず1行出す
+        print(f"  [dead_openings] {acct}: 負けモチーフ追記 「{a['motif']}」({a['losses']}敗) → {a['regex']}")
+    return added
+
+
 # ── レポート生成 ──────────────────────────────────
 
 def build_report_lines(acct: str, old_weights: dict, new_weights: dict,
@@ -456,6 +602,9 @@ def sync_to_github():
     files = [
         "weights_truth.json", "weights_nagaoka.json", "weights_masa.json",
         "followers_history.json", "line_history.json",
+        # dead_openings_auto の追記を正本(origin/main)へ反映する（2026-07-21）。
+        # ローカルは30分毎に reset --hard されるため、pushしないと自動追記が消える。
+        "feedback.json",
     ]
     files = [f for f in files if (BASE / f).exists()]
     try:
@@ -501,6 +650,13 @@ def run(acct: str) -> list[str]:
     line_scores = load_line_scores(acct)
     new_weights = compute_new_weights(acct, feedback_scores, api_scores, follower_scores, line_scores)
     save_weights(acct, new_weights, feedback_scores, api_scores, follower_scores, line_scores)
+
+    # 負け投稿→dead_openings自動追記PDCA（2026-07-21・失敗しても重み更新は完了済みなので続行）
+    try:
+        update_dead_openings_from_losers(acct)
+    except Exception as e:
+        if not QUIET:
+            print(f"  [WARN] dead_openings自動追記スキップ: {e}")
 
     if not QUIET:
         print(f"  パターン重み更新:")

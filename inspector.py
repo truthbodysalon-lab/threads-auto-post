@@ -53,9 +53,39 @@ def _load_dead_openings() -> dict:
     return d
 
 
+def _load_dead_openings_auto(account: str) -> list[str]:
+    """analyze_and_tune.py が負け投稿から自動追記した書き出しNGパターン
+    （feedback.json dead_openings_auto[account]）。要素は
+    {"regex": ..., "motif": ..., "added": ...} 形式のdictまたは素のregex文字列の
+    両方を受け付ける（将来の形式変更に耐えるため）。"""
+    fb = _load_feedback()
+    entries = (fb.get("dead_openings_auto", {}) or {}).get(account, []) or []
+    out = []
+    for e in entries:
+        if isinstance(e, dict):
+            r = e.get("regex", "")
+        else:
+            r = str(e)
+        if r:
+            out.append(r)
+    return out
+
+
 # ── 誇大・規制表現（既存ng_wordsに無い追加分。account="masa"は追加語も見る）──
 _HYPE_WORDS_ALL = ["必ず治る", "絶対治る", "誰でも必ず"]
 _HYPE_WORDS_MASA = ["稼げる", "儲かる"]
+
+# 規制表現の「型」検出（2026-07-21・Brain記事有料本文第9回）:
+# 断定保証型（必ず/絶対に/誰でも + 成果語）・比較優位型（業界No.1等）。
+# 語の完全一致でなく型で検出することで言い換え（「絶対に治ります」等）も捕捉する。
+_HYPE_TYPE_PATTERNS = [
+    re.compile(r"(必ず|絶対に?|誰でも)(稼げ|儲か|治る|治り|痩せ|伸び|成功)"),
+    re.compile(r"業界No\.?1|ナンバー ?ワン"),
+]
+
+# 個人情報（検品7項目④・2026-07-21）: 個人名はtruth/nagaokaで投稿禁止
+# （feedback.json 2026-05-13ルール）。誤検知回避のため「さん」付き完全一致のみ。
+_PERSONAL_NAMES_TRUTH_NAGAOKA = ["まぁさん", "ゆうさん"]
 
 
 # ── 本文分割ヘルパー ──────────────────────────────────────────
@@ -83,7 +113,8 @@ def _check_dead_openings(text: str, account: str, pattern_name: str | None) -> l
         return []
 
     reasons = []
-    pools = (d.get("all", []) or []) + (d.get(account, []) or [])
+    pools = (d.get("all", []) or []) + (d.get(account, []) or []) \
+        + _load_dead_openings_auto(account)
     for pat in pools:
         try:
             if re.search(pat, first):
@@ -200,10 +231,20 @@ def _check_hype_and_ng(text: str, account: str) -> list[str]:
         if w in t:
             reasons.append(f"誇大・規制表現: {w}")
 
+    for pat in _HYPE_TYPE_PATTERNS:
+        m = pat.search(t)
+        if m:
+            reasons.append(f"規制表現の型（断定保証/比較優位）: {m.group()}")
+
     if account == "masa":
         for w in _HYPE_WORDS_MASA:
             if w in t:
                 reasons.append(f"誇大・規制表現(masa): {w}")
+
+    if account in ("truth", "nagaoka"):
+        for nm in _PERSONAL_NAMES_TRUTH_NAGAOKA:
+            if nm in t:
+                reasons.append(f"個人名の混入: {nm}")
 
     return reasons
 

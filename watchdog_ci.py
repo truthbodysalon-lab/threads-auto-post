@@ -27,6 +27,7 @@ STATE = BASE / "watchdog_ci_state.json"
 JST = timezone(timedelta(hours=9))
 ACCTS = {"truth": "TRUTH", "nagaoka": "NAGAOKA", "masa": "MASA"}
 POST_HOUR_START, POST_HOUR_END, DAILY_TARGET = 6, 23, 50
+PACE_FULL_HOUR = int(os.environ.get("PACE_FULL_HOUR", "21"))  # auto_post.pyと同じ前倒し按分
 
 for line in (BASE / ".env").read_text().splitlines():
     line = line.strip()
@@ -85,7 +86,7 @@ def want_now() -> int:
     h = datetime.now(JST).hour
     if h < POST_HOUR_START:
         return 0
-    frac = min(1.0, (h - POST_HOUR_START + 1) / (POST_HOUR_END - POST_HOUR_START))
+    frac = min(1.0, (h - POST_HOUR_START + 1) / max(1, PACE_FULL_HOUR - POST_HOUR_START + 1))
     return int(DAILY_TARGET * frac)
 
 
@@ -132,11 +133,13 @@ def main():
         if n < 0:
             continue
         print(f"{acct}: 実投稿{n} / あるべき{want}")
+        gap = want - n
         if n > want + 10 and not _notified_today(st, f"front_{acct}"):
             line_push(f"⚠️Threads {acct}: 投稿が先行しすぎ({n}本/目標{want})。固め打ちバグの疑い(CI watchdog)")
             st[f"front_{acct}"] = today
-        elif want - n > 8:
-            print(f"{acct}: 遅れ{want-n}本 → LINE消化フラグ＋修復バッチ")
+        # 通常は8本超の遅れで修復。21時以降は残り時間が無いため1本の不足でも埋めに行く
+        elif gap > 8 or (h >= 21 and gap > 0):
+            print(f"{acct}: 遅れ{gap}本 → LINE消化フラグ＋修復バッチ")
             # LINE無限ループの可能性を先に潰す（消化済み扱い）
             try:
                 f = BASE / "line_listin_state.json"
@@ -149,7 +152,7 @@ def main():
                            capture_output=True, timeout=780)
             after = api_count_today(acct)
             print(f"{acct}: 修復後 {n}→{after}本")
-            if after - n < 3 and not _notified_today(st, f"stall_{acct}"):
+            if gap > 8 and after - n < 3 and not _notified_today(st, f"stall_{acct}"):
                 line_push(f"🚨Threads {acct}: 投稿停止の疑い({after}本/目標{want}・CI修復でも回復小)。Mac/トークン/キューを確認してください")
                 st[f"stall_{acct}"] = today
             repaired.append(acct)

@@ -15,6 +15,7 @@ import json
 import os
 import subprocess
 import sys
+import urllib.error
 import urllib.request
 from pathlib import Path
 
@@ -36,6 +37,14 @@ def line_push(msg: str):
             method="POST")
         urllib.request.urlopen(req, timeout=20)
         print(f"LINE通知送信: {msg[:60]}")
+    except urllib.error.HTTPError as e:
+        # LINE APIのエラー本文（message/details）まで出して原因特定できるようにする
+        # （本文にトークン等の秘匿値は含まれないため出力は安全）
+        try:
+            body = e.read().decode(errors="replace")
+        except Exception:
+            body = "(本文読取不可)"
+        print(f"LINE通知失敗: HTTP {e.code} {body}")
     except Exception as e:
         print(f"LINE通知失敗: {e}")
 

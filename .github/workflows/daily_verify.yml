@@ -1,0 +1,52 @@
+name: Threads Daily Verify (Mac非依存の日次検品)
+
+on:
+  schedule:
+    # JST 9:33固定（UTC 0:33）。ローカルlaunchdの同時刻ジョブと並走する冗長化。
+    - cron: '33 0 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: threads-daily-verify
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      TZ: Asia/Tokyo
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          token: ${{ secrets.GH_PAT }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Create .env from secrets
+        run: |
+          cat > .env << EOF
+          THREADS_APP_ID=${{ secrets.THREADS_APP_ID }}
+          THREADS_APP_SECRET=${{ secrets.THREADS_APP_SECRET }}
+          THREADS_ACCESS_TOKEN_TRUTH=${{ secrets.THREADS_ACCESS_TOKEN_TRUTH }}
+          THREADS_USER_ID_TRUTH=${{ secrets.THREADS_USER_ID_TRUTH }}
+          THREADS_ACCESS_TOKEN_NAGAOKA=${{ secrets.THREADS_ACCESS_TOKEN_NAGAOKA }}
+          THREADS_USER_ID_NAGAOKA=${{ secrets.THREADS_USER_ID_NAGAOKA }}
+          THREADS_ACCESS_TOKEN_MASA=${{ secrets.THREADS_ACCESS_TOKEN_MASA }}
+          THREADS_USER_ID_MASA=${{ secrets.THREADS_USER_ID_MASA }}
+          GH_PAT=${{ secrets.GH_PAT }}
+          GH_REPO=${{ github.repository }}
+          ANTHROPIC_API_KEY=${{ secrets.ANTHROPIC_API_KEY }}
+          EOF
+
+      - name: Run verify_system (CI検品 → LINE通知)
+        env:
+          LINE_NOTIFY_TOKEN: ${{ secrets.LINE_NOTIFY_TOKEN }}
+          LINE_NOTIFY_USER_ID: ${{ secrets.LINE_NOTIFY_USER_ID }}
+        run: python3 verify_ci.py

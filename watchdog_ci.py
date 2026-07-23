@@ -8,8 +8,9 @@ CI版watchdog（GitHub Actionsから30分毎に実行。Macが停止していて
 チェック（アカウント毎）:
   A. ペース回廊: API実投稿数 vs 今あるべき累計（6〜23時に50本を均等配分）
      - 遅れ8本超 → 詰まりと判定: LINEリストイン消化フラグを立て、修復バッチ実行
-     - 先行10本超 → 固め打ちバグ再発: LINE通知のみ
-  B. 修復しても遅れが解消しなければ LINE Push 通知（1日1回/acctまで。state=repo内ファイル）
+     - 先行10本超 → 固め打ちバグ再発: 通知記録のみ
+  B. 修復しても遅れが解消しなければ 通知記録（旧LINE Push。2026-07-21方針でLINE送信は廃止）
+     （1日1回/acctまで。state=repo内ファイル）
 """
 from __future__ import annotations
 
@@ -25,6 +26,7 @@ from pathlib import Path
 
 BASE = Path(__file__).parent
 STATE = BASE / "watchdog_ci_state.json"
+NOTIFICATIONS = BASE / "notifications.jsonl"
 JST = timezone(timedelta(hours=9))
 ACCTS = {"truth": "TRUTH", "nagaoka": "NAGAOKA", "masa": "MASA"}
 POST_HOUR_START, POST_HOUR_END, DAILY_TARGET = 6, 23, 50
@@ -92,29 +94,17 @@ def want_now() -> int:
 
 
 def line_push(msg: str):
-    tok = os.environ.get("LINE_NOTIFY_TOKEN", "")
-    uid = os.environ.get("LINE_NOTIFY_USER_ID", "")
-    if not tok or not uid:
-        print("LINE通知: secrets未設定でスキップ")
-        return
+    """通知記録（旧: LINE Push）。
+    2026-07-21ユーザー方針によりLINEへは一切送信しない（メッセージ件数消費のため）。
+    代わりにリポジトリ内 notifications.jsonl へ追記し、CIがcommit→ローカルpull_sync.shが
+    Obsidian(_通知)+~/.claude/notifications.log へ転送する。"""
     try:
-        req = urllib.request.Request(
-            "https://api.line.me/v2/bot/message/push",
-            data=json.dumps({"to": uid, "messages": [{"type": "text", "text": msg[:4900]}]}).encode(),
-            headers={"Authorization": f"Bearer {tok}", "Content-Type": "application/json"},
-            method="POST")
-        urllib.request.urlopen(req, timeout=20)
-        print(f"LINE通知送信: {msg[:60]}")
-    except urllib.error.HTTPError as e:
-        # LINE APIのエラー本文（message/details）まで出して原因特定できるようにする
-        # （本文にトークン等の秘匿値は含まれないため出力は安全）
-        try:
-            body = e.read().decode(errors="replace")
-        except Exception:
-            body = "(本文読取不可)"
-        print(f"LINE通知失敗: HTTP {e.code} {body}")
+        entry = {"ts": datetime.now(JST).isoformat(timespec="seconds"), "msg": msg}
+        with NOTIFICATIONS.open("a", encoding="utf-8") as f:
+            f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+        print(f"通知記録: {msg[:60]}")
     except Exception as e:
-        print(f"LINE通知失敗: {e}")
+        print(f"通知記録失敗: {e}")
 
 
 def _state() -> dict:

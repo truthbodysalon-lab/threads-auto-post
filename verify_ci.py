@@ -4,7 +4,8 @@ CI版verify_systemラッパー（GitHub Actionsから毎日実行。Macが停止
 
 verify_system.py --json をサブプロセス実行し、結果を人間可読でActionsログに出す。
 FAILが1件以上ある場合、またはverify_system.py自体がクラッシュ/JSON出力不正だった場合に
-LINE Push通知を送る。WARNのみ・全PASSは通知しない（通知疲れ防止・watchdog_ci.pyと同方針）。
+notifications.jsonlへ通知記録する（2026-07-21方針でLINEへは送信しない）。
+WARNのみ・全PASSは通知しない（通知疲れ防止・watchdog_ci.pyと同方針）。
 
 使い方:
   python3 verify_ci.py
@@ -15,38 +16,26 @@ import json
 import os
 import subprocess
 import sys
-import urllib.error
-import urllib.request
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
 BASE = Path(__file__).parent
+JST = timezone(timedelta(hours=9))
+NOTIFICATIONS = BASE / "notifications.jsonl"
 
 
 def line_push(msg: str):
-    """LINE Push通知（watchdog_ci.pyのline_push()と同一実装をここに再掲）。"""
-    tok = os.environ.get("LINE_NOTIFY_TOKEN", "")
-    uid = os.environ.get("LINE_NOTIFY_USER_ID", "")
-    if not tok or not uid:
-        print("LINE通知: secrets未設定でスキップ")
-        return
+    """通知記録（旧: LINE Push。watchdog_ci.pyのline_push()と同一実装をここに再掲）。
+    2026-07-21ユーザー方針によりLINEへは一切送信しない（メッセージ件数消費のため）。
+    代わりにリポジトリ内 notifications.jsonl へ追記し、CIがcommit→ローカルpull_sync.shが
+    Obsidian(_通知)+~/.claude/notifications.log へ転送する。"""
     try:
-        req = urllib.request.Request(
-            "https://api.line.me/v2/bot/message/push",
-            data=json.dumps({"to": uid, "messages": [{"type": "text", "text": msg[:4900]}]}).encode(),
-            headers={"Authorization": f"Bearer {tok}", "Content-Type": "application/json"},
-            method="POST")
-        urllib.request.urlopen(req, timeout=20)
-        print(f"LINE通知送信: {msg[:60]}")
-    except urllib.error.HTTPError as e:
-        # LINE APIのエラー本文（message/details）まで出して原因特定できるようにする
-        # （本文にトークン等の秘匿値は含まれないため出力は安全）
-        try:
-            body = e.read().decode(errors="replace")
-        except Exception:
-            body = "(本文読取不可)"
-        print(f"LINE通知失敗: HTTP {e.code} {body}")
+        entry = {"ts": datetime.now(JST).isoformat(timespec="seconds"), "msg": msg}
+        with NOTIFICATIONS.open("a", encoding="utf-8") as f:
+            f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+        print(f"通知記録: {msg[:60]}")
     except Exception as e:
-        print(f"LINE通知失敗: {e}")
+        print(f"通知記録失敗: {e}")
 
 
 def _run_url() -> str:

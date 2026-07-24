@@ -8,3 +8,6 @@ insights.log
 # ローカル専用の状態ファイル（pull_syncのreset --hardと衝突するため追跡しない・2026-07-12監査）
 views_action.json
 views_history.json
+
+# 編集中の pull_sync 一時停止ロック（追跡しない・2026-07-24）
+.pullsync-pause

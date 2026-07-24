@@ -533,6 +533,12 @@ VARIETY_FOLLOWUP_CTAS = [
 # 本文は2行のみ（要点止め）。実績・CTA・詳細セルフケアは本文に入れず、
 # _add_variety_followup() でコメント1(セルフケア)・コメント2(実績+CTA)へ回す。
 # 呼吸・口呼吸テーマは使わない（feedback_truth_kokyu_overuse.md準拠）。
+#
+# 1文目がこの型に一致するかを判定する正規表現（_final_inspection_passでpattern_name
+# を補うため・verify_system.pyの_NAGAOKA_SOUDAN_OPEN_REと同じ形状）。
+_NAGAOKA_SOUDAN_OPEN_RE = re.compile(
+    r"^長岡市で.{2,20}(という相談|のご相談|に悩む方|という方)"
+)
 NAGAOKA_SOUDAN_OPENINGS = [
     "長岡市で{symptom}という相談が増えてます。\n{cause}が体に負担をかけているサインです。",
     "長岡市で{symptom}という相談が続いてます。\n{cause}が原因になっていることがほとんどです。",
@@ -2149,10 +2155,17 @@ def _final_inspection_pass(posts: list[str], account: str) -> list[str]:
     """書き出し直前の最終検品パス（安全網・2026-07-21）。
     生成ループ内の検品（log=False）は既に大半のNGを弾いているため、ここで拾うのは
     CTA/リストイン等の定型テンプレや取りこぼし分のみ。導線投稿(goals.json保護)は
-    検品NGでも削らずログのみ残す（無くすと当日のゴール導線が0件になりうるため）。"""
+    検品NGでも削らずログのみ残す（無くすと当日のゴール導線が0件になりうるため）。
+    2026-07-24修正: pattern_nameを渡していなかったため、nagaoka_soudan_open
+    （「長岡市で〜相談が増えてます」型オープニング）がdead_openingsのexempt_patterns
+    を適用されず、生成ループ通過後にこの安全網パスで全滅する不具合があった。
+    1文目の形状で判定してpattern_nameを補って渡す。"""
     out = []
     for p in posts:
-        ok = _inspect_ok(p, account, log=True)
+        pattern_name = "nagaoka_soudan_open" if (
+            account == "nagaoka" and _NAGAOKA_SOUDAN_OPEN_RE.match(p.split("\n")[0].strip())
+        ) else None
+        ok = _inspect_ok(p, account, pattern_name=pattern_name, log=True)
         if ok or _is_anchor_post(p):
             out.append(p)
     return out

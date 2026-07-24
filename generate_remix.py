@@ -798,21 +798,39 @@ NAGAOKA_PATTERNS = {
     },
 }
 
+# 文が完結している行末（ここで区切ってよい）を示す終端記号。
+# 読点「、」や連用中止で終わる行は次行へ続くため挿入位置にしてはいけない
+# （2026-07-24修正: 「頭の重さがなくなると、\n…驚く人が多い。」の間に長岡市文が
+#  割り込み文章構成が壊れる実障害があった）。
+_SENT_END = ("。", "！", "？", "!", "?", "」", "』", "）", ")", "…",
+             "👆", "👇", "✨", "🙆", "🙏", "😌", "🌱")
+
+
+def _is_sentence_end(line: str) -> bool:
+    """行が1つの文として完結しているか（＝直後に別の文を挿入しても壊れないか）"""
+    s = (line or "").rstrip()
+    return bool(s) and s.endswith(_SENT_END)
+
+
 def _ensure_nagaoka(text: str, ratio: float = 0.25, prepend: bool = False) -> str:
     """長岡市を投稿に自然に含める。
     ルール: 1文目NG・末尾単独追加NG・3〜4投稿に1回（ratio=0.25）
+    重要: 文の途中（読点・連用中止で終わる行の直後）には挿入しない。
+    完結した文の境目が無ければ挿入を見送る（無理に入れて文を壊さない）。
     """
     if "長岡市" in text:
         return text
     if random.random() > ratio:
         return text
     phrase = random.choice(NAGAOKA_PHRASES)
-    # アペンドモード（末尾追加）※prepend引数は後方互換のため残すが使わない
     # 末尾がCTA・URLの場合は追加しない
     _CTA_KW = ("ご相談ください", "はこちら", "ご予約", "一度", "http", "お問い合わせ")
     marker = "\n\n【続き】\n"
     if marker in text:
         main, rest = text.split(marker, 1)
+        # main の最終行が文として完結している時のみ挿入（途中挿入で文を壊さない）
+        if not _is_sentence_end(main.split("\n")[-1]):
+            return text
         return main + "\n\n" + phrase + marker + rest
     if "\n\n" in text:
         # ルール厳守: 末尾に長岡市を単独追加しない。
@@ -820,19 +838,20 @@ def _ensure_nagaoka(text: str, ratio: float = 0.25, prepend: bool = False) -> st
         head, last_para = text.rsplit("\n\n", 1)
         if any(kw in last_para for kw in _CTA_KW):
             return text
+        # head の最終行が文として完結している時のみ挿入
+        if not _is_sentence_end(head.split("\n")[-1]):
+            return text
         return head + "\n\n" + phrase + "\n\n" + last_para
-    # 段落が1つだけの短文: 末尾単独追加NG厳守のため、
-    # 2行以上あれば「末尾より1行前」に挿入（最終行が末尾単独にならないよう）
-    # 1行のみ（単文）の場合は長岡市を追加しない（末尾単独になるため）
+    # 段落が1つだけの短文: 末尾単独追加NG厳守のため末尾より前の
+    # 「文が完結している行の直後」に挿入する。安全な境目が無ければ見送る。
     lines = text.split("\n")
-    if len(lines) >= 3:
-        # 末尾行の手前に挿入
-        return "\n".join(lines[:-1]) + "\n" + phrase + "\n" + lines[-1]
-    elif len(lines) == 2:
-        # 2行の場合: 1文目→長岡市→2文目 の順（中盤挿入）
-        return lines[0] + "\n" + phrase + "\n" + lines[1]
-    # 1行のみ: 末尾単独になるため追加しない
-    return text
+    # 挿入可能位置 = 末尾行より前で、その行が文末で終わっている index
+    candidates = [i for i in range(len(lines) - 1) if _is_sentence_end(lines[i])]
+    if not candidates:
+        # 文の途中でしか区切れない（例: 「〜なると、」で終わる連用中止）→ 挿入しない
+        return text
+    i = candidates[-1]  # 末尾に最も近い安全な境目に入れる
+    return "\n".join(lines[:i + 1] + [phrase] + lines[i + 1:])
 
 
 def _is_valid_first_line(text: str, acct: str = "truth") -> bool:

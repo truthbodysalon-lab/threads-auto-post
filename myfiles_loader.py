@@ -146,7 +146,11 @@ def load_truth_materials() -> dict:
     extra_scenes = _load_extra_life_scenes()
     voices = load_customer_voices()  # お客様の感想を反映
 
-    symptoms = list(dict.fromkeys(_SYMPTOMS_BASE + extra_symptoms + voices["symptoms"]))
+    # 肩こり・頭痛が専門のため「呼吸」系の症状は{symptom}プールから除外
+    # （呼吸テーマ多用禁止・2026-07-24フィードバック「肩こり頭痛だから呼吸の内容は変更して」）
+    _OFFTOPIC = ("呼吸",)
+    symptoms = [s for s in dict.fromkeys(_SYMPTOMS_BASE + extra_symptoms + voices["symptoms"])
+                if not any(w in s for w in _OFFTOPIC)]
     life_scenes_noun = list(dict.fromkeys(_LIFE_SCENES_NOUN_BASE + extra_scenes))
     emotions = list(dict.fromkeys(_EMOTIONS_BASE + voices["emotions"]))
 

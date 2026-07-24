@@ -440,7 +440,7 @@ PATTERNS = {
             "{symptom}を悪化させる習慣 TOP3\n\n1位：{habit1}\n2位：{habit2}\n3位：{habit3}\n\n心当たりある人、多いはず。",
             "整体師が見てきた\n{symptom}が治らない人の共通点3つ\n\n① {habit1}\n② {habit2}\n③ {habit3}\n\nこのどれかに当てはまっていませんか？",
             "体が楽になった人がやめたこと\n\n▶ {habit1}\n▶ {habit2}\n▶ {habit3}\n\nたったこれだけで変わる人が多いです。",
-            "{symptom}に効果があった習慣 3選\n\n1）{cause}を意識する\n2）{cause}を見直す\n3）{cause}から改善する\n\n全部無料でできます。",
+            "肩こり・頭痛がラクになった人の習慣 3選\n\n1）1時間に1回、肩を大きく回す\n2）水を1日1.5Lこまめに飲む\n3）寝る前1時間はスマホを置く\n\n全部無料でできます。まずはひとつから。\nそれでも戻るなら、うちで原因から整えましょう。",
         ],
     },
     "question": {
@@ -1369,6 +1369,11 @@ def generate_40_nagaoka_posts() -> list[str]:
         "keisei_casual":           6,  # 口語共感・呼びかけ（堀式トーン参考）
         "keisei_risk":             5,  # 軽症放置リスク
         "nagaoka_store_identity":  3,  # 3つの問い（何のお店?・どうなる?・他と違う?）
+        # 「長岡市で〜相談が増えてます」型オープニング（2026-07-24追加・本文2行＋3層構造）。
+        # 既存の長岡市25%枠(target_nagaoka_count)へ統合＝このパターン自体が長岡市を含むため
+        # 下のループでカウントされ、他パターンへの_ensure_nagaoka強制挿入がその分減る
+        # （総量として長岡市が3〜4投稿に1回を超えない設計）。
+        "nagaoka_soudan_open":    36,
         # ── インスタハカせ理論 ──
         "nanimono_kizuki":         6,  # 「自分は何者か」×「気づき1つ」
         # ── 短い共通パターン ──
@@ -1389,7 +1394,9 @@ def generate_40_nagaoka_posts() -> list[str]:
 
     posts = []
     seen = set()
-    # 長岡市を25%程度の投稿に織り込む（3-4投稿に1回）
+    # 長岡市を25%程度の投稿に織り込む（3-4投稿に1回）。
+    # nagaoka_soudan_open自体が長岡市を含むため、この枠は同パターンでほぼ満たされ、
+    # 他パターンへの_ensure_nagaoka強制挿入は自然と縮小する（総量が二重に増えない）。
     # 1文目NG・末尾単独追加NGルール厳守のため、中盤・本文内に挿入
     target_nagaoka_count = max(1, len(plan) // 4)  # 全体の25%程度
     nagaoka_count = 0
@@ -1398,8 +1405,8 @@ def generate_40_nagaoka_posts() -> list[str]:
         for _ in range(50):
             post = generate_nagaoka_post(pk)
             key = post[:100]
-            # 1文目NG・NGワード・重複チェック
-            if (key not in seen and not _is_ng(post) and _is_valid_first_line(post, "nagaoka")
+            # 1文目NG・NGワード・重複チェック（nagaoka_soudan_openのみ「長岡市」始まりを許可）
+            if (key not in seen and not _is_ng(post) and _is_valid_first_line(post, "nagaoka", pattern_name=pk)
                     and _inspect_ok(post, "nagaoka", pattern_name=pk, log=False)):
                 seen.add(key)
                 # テンプレ自体に「長岡」が含まれる場合は目標カウントに算入する

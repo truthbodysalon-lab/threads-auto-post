@@ -112,12 +112,26 @@ def _load_extra_templates(acct: str) -> list[str]:
 _NON_PAIN_SYMPTOMS = ("眠りの浅さ", "呼吸の浅さ", "体のだるさ", "疲れやすさ", "姿勢の悪さ", "猫背", "巻き肩")
 _PAIN_REMEDIES = ("湿布", "鎮痛剤", "頭痛薬", "痛み止め", "薬を飲")
 
+# 「原因」語は"浅い/深い"で修飾できない（浅いのは症状の程度）。
+# 「巻き肩が浅いうちに」「水分不足が浅いうち」等の変数事故を検出する（2026-07-24）。
+_CAUSE_LIKE = ("水分不足", "食いしばり", "姿勢の歪み", "デスクワーク", "スマホの見すぎ",
+               "運動不足", "睡眠不足", "巻き肩", "猫背", "首の前傾", "寝姿勢の悪さ",
+               "ストレス過多", "血流の悪さ", "顎の緊張", "深夜のスマホ", "睡眠の浅さ")
+
 
 def _is_incoherent(text: str) -> bool:
     """症状と対処の組み合わせが不自然な文（変数事故）を検出する。
     全アカウント共通適用（masaのB2B文脈では該当語が出ないため実質無害＝playbook masa L6退役と両立）。"""
     head = text[:120]   # 主に1〜2文目で起きる
-    return any(s in head for s in _NON_PAIN_SYMPTOMS) and any(r in head for r in _PAIN_REMEDIES)
+    if any(s in head for s in _NON_PAIN_SYMPTOMS) and any(r in head for r in _PAIN_REMEDIES):
+        return True
+    # 状態名詞（〜浅さ/〜悪さ）に発作動詞「が出る」＝不自然（「眠りの浅さが出る」等）
+    if "浅さが出" in head or "悪さが出" in head:
+        return True
+    # 原因語＋「浅い」＝変数事故（「巻き肩が浅いうちに」「水分不足が浅いほど」等）
+    if any(f"{c}が浅い" in text for c in _CAUSE_LIKE):
+        return True
+    return False
 
 
 def _is_ng(text: str) -> bool:
@@ -477,6 +491,38 @@ CAUSES = _truth_mat.get("causes") or [
     "顎の緊張", "ストレス過多", "血流の悪さ",
     "寝姿勢の悪さ", "首の前傾", "深夜のスマホ操作"
 ]
+
+# ── 原因→具体的セルフケア（2026-07-24: variety系の本文のみ投稿にコメント0件で
+# 「問題提起だけで終わる」事故が発生。本文の{cause}に対応した「今日できる手順」を
+# [COMMENT]で自動付与するための対応表）。平易・具体的・今日できる内容に限定。
+# CAUSES の全要素をカバーし、未定義の原因語は _CAUSE_SOLUTION_FALLBACK を使う。
+CAUSE_SOLUTIONS = {
+    "水分不足": "まず朝コップ1杯の水から。1日1.5Lを目安にこまめに飲むと、筋肉のこわばりが和らぎます。",
+    "食いしばり": "日中ふと気づいたら、上下の歯を1mm離す意識を。それだけで顎まわりの緊張が抜けます。",
+    "姿勢の歪み": "1時間に1回、肩を後ろへ大きく10回まわす。デスクワークの合間のリセットが効きます。",
+    "スマホの見すぎ": "スマホは目の高さに構える。1時間ごとに画面から目を離し、遠くを見る習慣をつけましょう。",
+    "デスクワーク": "1時間に1回は立ち上がって、肩甲骨を寄せるように背伸びを。それだけで血流が変わります。",
+    "運動不足": "エレベーターを階段に変えるくらいでOK。1日10分歩くだけでも血流が変わります。",
+    "睡眠不足": "寝る前にスマホを置き、首を左右にゆっくり倒す（各30秒）。眠りが深くなります。",
+    "顎の緊張": "唇は閉じて上下の歯を離す「安静空隙」を意識するだけで、顎まわりの力みが抜けます。",
+    "ストレス過多": "1日3回、鼻から4秒吸って口から8秒吐く深呼吸を。それだけで体の力みが緩みます。",
+    "血流の悪さ": "湯船に肩まで浸かって3分。血流が戻ると朝のだるさが変わります。",
+    "寝姿勢の悪さ": "仰向けで寝るとき、膝の下に丸めたタオルを1本入れる。腰と首の負担が減ります。",
+    "首の前傾": "画面の上端を目線の高さに合わせる。それだけで首が前に出る角度が変わります。",
+    "深夜のスマホ操作": "寝る30分前にスマホを別の部屋へ置く。目と首の負担が減り、眠りの質が上がります。",
+}
+_CAUSE_SOLUTION_FALLBACK = "1時間に1回、肩を後ろへ大きく10回まわす。今日からできる小さな一歩です。"
+
+# variety系の付与コメント2（CTA）: URL無し・プロフィール誘導のみ（LINE系CTAの乱発防止のため
+# {url}を使うCTA_KATAKORI/ZUTSUU_TEMPLATESは流用しない）。長岡市ワード・LINE言及は含めない
+# （頻度ルールを乱さないため）。
+VARIETY_FOLLOWUP_CTAS = [
+    "施術実績1万人・改善率93.7%。\nご予約はプロフィールからどうぞ👆",
+    "気になる方は、プロフィールのリンクからご予約ください👆",
+    "まずは軽いうちにご相談を。プロフィールから予約できます👆",
+    "同じような変化、あなたにも。\nプロフィールから予約できます👆",
+    "続きが気になる方は、プロフィールのリンクからどうぞ👆",
+]
 # 動詞句（〜したい、〜できないに続く形）
 LIFE_SCENES_VERB = _truth_mat.get("life_scenes_verb") or [
     "子どもと思いっきり遊び", "休日を元気に過ごし", "仕事に集中し",
@@ -822,6 +868,16 @@ def _ensure_nagaoka(text: str, ratio: float = 0.25, prepend: bool = False) -> st
         return text
     if random.random() > ratio:
         return text
+    if "[COMMENT]" in text:
+        # [COMMENT]分割済みの投稿（本文＋コメント）は本文セグメントのみに挿入し、
+        # コメント（セルフケア手順・CTA等）へ長岡市ワードが混入するのを防ぐ
+        # （2026-07-24: variety系フォローアップコメントへの誤混入を修正。
+        #  本文側で安全な挿入位置が無ければ全体を変更せずそのまま返す）。
+        main_seg, _, rest = text.partition("[COMMENT]")
+        new_main = _ensure_nagaoka(main_seg, ratio=1.0, prepend=prepend)
+        if new_main == main_seg:
+            return text
+        return new_main + "[COMMENT]" + rest
     phrase = random.choice(NAGAOKA_PHRASES)
     # 末尾がCTA・URLの場合は追加しない
     _CTA_KW = ("ご相談ください", "はこちら", "ご予約", "一度", "http", "お問い合わせ")
@@ -925,19 +981,54 @@ def _enforce_short_body(text: str, max_lines: int = 3) -> str:
     return main + "\n[COMMENT]\n" + rest
 
 
-def fill(template: str, symptom: str = None) -> str:
+def fill_with_meta(template: str, symptom: str = None) -> tuple[str, str, str]:
+    """fill()と同じ変数展開を行い、加えて実際に使われたsymptom/causeも返す。
+    variety系のコメント自動付与（本文の{cause}と整合したセルフケア選択）に使う。"""
     s = symptom or random.choice(SYMPTOMS)
     habits = random.sample(HABITS, min(3, len(HABITS)))
     causes = random.sample(CAUSES, min(3, len(CAUSES)))
-    return (template
+    used_cause = causes[0]
+    text = (template
             .replace("{symptom}", s)
-            .replace("{cause}", causes[0])
+            .replace("{cause}", used_cause)
             .replace("{life_scene_v}", random.choice(LIFE_SCENES_VERB))
             .replace("{life_scene_n}", random.choice(LIFE_SCENES_NOUN))
             .replace("{habit1}", habits[0])
             .replace("{habit2}", habits[1])
             .replace("{habit3}", habits[2])
             .replace("{nagaoka}", random.choice(NAGAOKA_PHRASES)))
+    return text, s, used_cause
+
+
+def fill(template: str, symptom: str = None) -> str:
+    text, _, _ = fill_with_meta(template, symptom)
+    return text
+
+
+def _pick_cause_solution(template: str, filled_text: str, used_cause: str) -> str:
+    """テンプレが{cause}を使っていればその実際の原因に対応する解決策を、
+    使っていなければ本文中に含まれる既知の原因語（例:「運動不足」の直書き）を探し、
+    それも無ければ汎用フォールバックを返す。"""
+    if "{cause}" in template:
+        return CAUSE_SOLUTIONS.get(used_cause, _CAUSE_SOLUTION_FALLBACK)
+    for c in CAUSES:
+        if c in filled_text:
+            return CAUSE_SOLUTIONS.get(c, _CAUSE_SOLUTION_FALLBACK)
+    return _CAUSE_SOLUTION_FALLBACK
+
+
+def _add_variety_followup(template: str) -> str:
+    """truth/nagaokaのvarietyテンプレ（[COMMENT]なし＝本文のみで終わる投稿）に対し、
+    本文で使われた{cause}に対応する具体的セルフケア（コメント1）とCTA（コメント2）を
+    自動付与する（2026-07-24: 「問題提起＋証言で終わりコメント0件」の事故防止）。
+    既に[COMMENT]/【続き】を持つテンプレ（放置リスク系等）は二重付与せずそのまま返す。
+    masaアカウントのvarietyはこの関数を通さない（B2Bで別構成のため対象外）。"""
+    filled, _symptom, used_cause = fill_with_meta(template)
+    if "[COMMENT]" in filled or "【続き】" in filled:
+        return filled
+    solution = _pick_cause_solution(template, filled, used_cause)
+    cta = random.choice(VARIETY_FOLLOWUP_CTAS)
+    return filled + "\n[COMMENT]\n" + solution + "\n[COMMENT]\n" + cta
 
 HOOK_CONTINUATION_MARKER = "\n\n【続き】\n"
 
@@ -955,7 +1046,7 @@ HOOK_BODIES = [
 def generate_nagaoka_post(pattern_key: str) -> str:
     """nagaoka専用パターンまたは共通パターンで投稿生成"""
     if pattern_key == "variety" and NAGAOKA_VARIETY:
-        return fill(random.choice(NAGAOKA_VARIETY))
+        return _add_variety_followup(random.choice(NAGAOKA_VARIETY))
     if pattern_key in NAGAOKA_PATTERNS:
         p = NAGAOKA_PATTERNS[pattern_key]
         return fill(random.choice(p["templates"]))
@@ -1005,7 +1096,7 @@ def generate_cta_post(target: str) -> str:
 def generate_post(pattern_key: str) -> str:
     # 多様性拡張プール（truth）
     if pattern_key == "variety" and TRUTH_VARIETY:
-        return fill(random.choice(TRUTH_VARIETY))
+        return _add_variety_followup(random.choice(TRUTH_VARIETY))
 
     # インスタハカセ理論：「自分は何者か」×「気づき1つ」
     if pattern_key == "nanimono_kizuki":

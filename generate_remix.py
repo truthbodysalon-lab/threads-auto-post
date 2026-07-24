@@ -1403,11 +1403,6 @@ def generate_40_nagaoka_posts() -> list[str]:
         "keisei_casual":           6,  # 口語共感・呼びかけ（堀式トーン参考）
         "keisei_risk":             5,  # 軽症放置リスク
         "nagaoka_store_identity":  3,  # 3つの問い（何のお店?・どうなる?・他と違う?）
-        # 「長岡市で〜相談が増えてます」型オープニング（2026-07-24追加・本文2行＋3層構造）。
-        # 既存の長岡市25%枠(target_nagaoka_count)へ統合＝このパターン自体が長岡市を含むため
-        # 下のループでカウントされ、他パターンへの_ensure_nagaoka強制挿入がその分減る
-        # （総量として長岡市が3〜4投稿に1回を超えない設計）。
-        "nagaoka_soudan_open":    36,
         # ── インスタハカせ理論 ──
         "nanimono_kizuki":         6,  # 「自分は何者か」×「気づき1つ」
         # ── 短い共通パターン ──
@@ -1429,8 +1424,9 @@ def generate_40_nagaoka_posts() -> list[str]:
     posts = []
     seen = set()
     # 長岡市を25%程度の投稿に織り込む（3-4投稿に1回）。
-    # nagaoka_soudan_open自体が長岡市を含むため、この枠は同パターンでほぼ満たされ、
-    # 他パターンへの_ensure_nagaoka強制挿入は自然と縮小する（総量が二重に増えない）。
+    # 「長岡市で〜相談が増えてます」型オープニング(nagaoka_soudan_open)は、この後
+    # _enforce_diversity()の直後に別枠でアンカー配置するため、ここではweighted plan
+    # には含めない（フォーマット重複キャップに巻き込まれ出現率が安定しない対策）。
     # 1文目NG・末尾単独追加NGルール厳守のため、中盤・本文内に挿入
     target_nagaoka_count = max(1, len(plan) // 4)  # 全体の25%程度
     nagaoka_count = 0
@@ -1439,7 +1435,7 @@ def generate_40_nagaoka_posts() -> list[str]:
         for _ in range(50):
             post = generate_nagaoka_post(pk)
             key = post[:100]
-            # 1文目NG・NGワード・重複チェック（nagaoka_soudan_openのみ「長岡市」始まりを許可）
+            # 1文目NG・NGワード・重複チェック
             if (key not in seen and not _is_ng(post) and _is_valid_first_line(post, "nagaoka", pattern_name=pk)
                     and _inspect_ok(post, "nagaoka", pattern_name=pk, log=False)):
                 seen.add(key)
@@ -1534,6 +1530,33 @@ def generate_40_nagaoka_posts() -> list[str]:
     for i, sp_ in enumerate(shindan_posts):
         pos = min(shindan_anchors[i] if i < len(shindan_anchors) else (i * 10 + 8), len(posts))
         posts.insert(pos, sp_)
+
+    # 「長岡市で〜相談が増えてます」型オープニング（2026-07-24追加）をアンカー方式で配置。
+    # weighted plan(重み付き抽選)に混ぜると、全バリエーションが1文目フォーマット的に
+    # 同一シグネチャ（数字/？なし・末尾"。"）になり、_enforce_diversity()の「同一フォーマット
+    # 最大8本」キャップに巻き込まれ出現率が数%まで落ち込む実測不具合があったため、
+    # CTA/LINEリストイン等と同様に確実な位置へ直接差し込む方式にした。
+    # 他のアンカー挿入(CTA/listin/access/shindan)がすべて完了した"後"にこのブロックを置く
+    # ことで、後続insert()によるインデックスずれで安全圏(index<=35)から押し出されるのを防ぐ
+    # （先に挿入すると後続アンカーの累積シフトで一部が長岡市率調整の削除対象に入り込む
+    #  不具合があった）。1日の実消費(約50本)内に4投稿に1回（=3〜4投稿に1回の下限）の
+    # ペースで確実に登場させる。
+    _SOUDAN_ANCHOR_POSITIONS = list(range(3, 36, 4))  # 3,7,11,...,35（末尾削除対象外のindex<=35に収める）
+    soudan_posts, _seen_soudan = [], set()
+    for _ in range(len(_SOUDAN_ANCHOR_POSITIONS)):
+        for _ in range(20):
+            sp = generate_nagaoka_post("nagaoka_soudan_open")
+            key = sp[:100]
+            if (key not in _seen_soudan and not _is_ng(sp)
+                    and _is_valid_first_line(sp, "nagaoka", pattern_name="nagaoka_soudan_open")
+                    and _inspect_ok(sp, "nagaoka", pattern_name="nagaoka_soudan_open", log=False)):
+                _seen_soudan.add(key)
+                soudan_posts.append(sp)
+                break
+    # 昇順で挿入する（降順だと後続の低位置insertが既に挿入した高位置の項目を右へ
+    # 押し出し、index<=35の保護境界から外れて末尾削除の対象に巻き込まれる不具合があった）。
+    for pos, sp in zip(_SOUDAN_ANCHOR_POSITIONS, soudan_posts):
+        posts.insert(min(pos, len(posts)), sp)
 
     # ── 長岡市言及率の最終調整（アンカー挿入後） ──
     # アンカー挿入で投稿数が増えたため、長岡市率が目標(25%)を超える可能性がある。

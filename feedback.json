@@ -53,7 +53,8 @@
     ],
     "exempt_patterns": [
       "jiko_kaiji",
-      "yakan_bucchake"
+      "yakan_bucchake",
+      "nagaoka_soudan_open"
     ]
   },
   "extra_templates": {

@@ -21,6 +21,7 @@ from __future__ import annotations
 import importlib
 import json
 import os
+import re
 import subprocess
 import sys
 import traceback
@@ -77,6 +78,13 @@ def check_generation():
         add("gen:all", "A.コード", "FAIL", f"generate_remix読込失敗: {e}")
 
 
+# nagaoka専用「長岡市で〜相談が増えてます」型オープニングの1文目パターン（2026-07-24追加）。
+# generate_remix.NAGAOKA_SOUDAN_OPENINGSの実際の書き出しバリエーションに合わせて限定的に許可。
+_NAGAOKA_SOUDAN_OPEN_RE = re.compile(
+    r"^長岡市で.{2,20}(という相談|のご相談|に悩む方|という方)"
+)
+
+
 # ── B. ルール反映（フィードバックが効いているか）──────────
 def check_rules():
     try:
@@ -92,7 +100,13 @@ def check_rules():
                     if g._is_ng(p):
                         ng_hit += 1
                     first = p.split("\n")[0].strip()
-                    if acct in ("truth", "nagaoka") and first.startswith(("長岡市", "施術実績", "実績")):
+                    # nagaoka専用の意図的な例外（2026-07-24追加）:
+                    # 「長岡市で〜相談が増えてます」型オープニング（NAGAOKA_SOUDAN_OPENINGS由来）
+                    # のみ「長岡市」始まりを許可する。それ以外の「長岡市/施術実績/実績」始まりは
+                    # 引き続きNG（ザルにしない）。
+                    is_soudan_open = (acct == "nagaoka" and _NAGAOKA_SOUDAN_OPEN_RE.match(first))
+                    if (acct in ("truth", "nagaoka") and first.startswith(("長岡市", "施術実績", "実績"))
+                            and not is_soudan_open):
                         first_bad += 1
             add(f"rule:ng:{acct}", "B.ルール反映",
                 "PASS" if ng_hit == 0 else "FAIL",

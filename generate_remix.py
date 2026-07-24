@@ -481,9 +481,12 @@ PATTERNS = {
 # ── 素材（myfilesロード済みならそちらを優先）────────────────────
 SYMPTOMS = _truth_mat.get("symptoms") or [
     "肩こり", "頭痛", "首こり", "肩の重さ", "頭の重さ",
-    "眼精疲労", "背中のこり", "腰の重さ", "首の張り", "疲労",
-    "体のだるさ", "睡眠の浅さ", "顎の疲れ"
+    "眼精疲労", "背中のこり", "首の張り", "顎の疲れ",
+    "こめかみの痛み", "緊張型頭痛", "肩と首の張り",
+    "肩甲骨まわりのこり", "後頭部の重さ"
     # 削除: "慢性的な肩こり", "慢性疲労" (1文目として使用されるとNG: 「慢性的〜」で始まるのは実績/自己紹介NG)
+    # 削除: "腰の重さ", "疲労", "体のだるさ", "睡眠の浅さ" (2026-07-24: 肩こり・頭痛専門外の
+    #  症状が見出し(1文目の主症状)に出た実投稿指摘対応。専門症状で補充)
 ]
 CAUSES = _truth_mat.get("causes") or [
     "水分不足", "食いしばり", "姿勢の歪み",
@@ -523,6 +526,26 @@ VARIETY_FOLLOWUP_CTAS = [
     "同じような変化、あなたにも。\nプロフィールから予約できます👆",
     "続きが気になる方は、プロフィールのリンクからどうぞ👆",
 ]
+
+# ── nagaoka専用: 「長岡市で〜相談が増えてます」オープニング（2026-07-24追加）──
+# 1文目の型は固定（「長岡市で{symptom}という相談が増えてます。」系）でよい仕様。
+# このパターン自体がnagaoka全体の3〜4投稿に1回の頻度で選ばれるため連投にならない。
+# 本文は2行のみ（要点止め）。実績・CTA・詳細セルフケアは本文に入れず、
+# _add_variety_followup() でコメント1(セルフケア)・コメント2(実績+CTA)へ回す。
+# 呼吸・口呼吸テーマは使わない（feedback_truth_kokyu_overuse.md準拠）。
+NAGAOKA_SOUDAN_OPENINGS = [
+    "長岡市で{symptom}という相談が増えてます。\n{cause}が体に負担をかけているサインです。",
+    "長岡市で{symptom}という相談が続いてます。\n{cause}が原因になっていることがほとんどです。",
+    "長岡市で{symptom}のご相談をよくいただきます。\n{cause}が影響しているケースが多いです。",
+    "長岡市で{symptom}という相談が増えてます。\n{cause}が積み重なっているサインです。",
+    "長岡市で{symptom}が続いているという相談が増えてます。\n{cause}が下地にあることがほとんどです。",
+    "長岡市で{symptom}に悩む方が増えてます。\n{cause}が体からのサインとして出ています。",
+    "長岡市で{symptom}という相談、この時期特に増えてます。\n{cause}が関係していることが多いです。",
+    "長岡市で{symptom}という方が最近多いです。\n{cause}が体に負担をかけているサインです。",
+    "長岡市で{symptom}のご相談が増えてます。\n{cause}が続いているサインです。",
+    "長岡市で{symptom}という相談が増えてます。\n{cause}が日常の中で積み重なっているサインです。",
+]
+
 # 動詞句（〜したい、〜できないに続く形）
 LIFE_SCENES_VERB = _truth_mat.get("life_scenes_verb") or [
     "子どもと思いっきり遊び", "休日を元気に過ごし", "仕事に集中し",
@@ -910,7 +933,13 @@ def _ensure_nagaoka(text: str, ratio: float = 0.25, prepend: bool = False) -> st
     return "\n".join(lines[:i + 1] + [phrase] + lines[i + 1:])
 
 
-def _is_valid_first_line(text: str, acct: str = "truth") -> bool:
+# 1文目が「長岡市で」始まりでも許可する例外パターン（2026-07-24追加）。
+# 「長岡市で〜相談が増えてます」型オープニングは意図的な固定書き出しのため、
+# 「長岡市/長岡」のstartswith NGのみ免除する（他のstartswith NG・含有NGは維持＝ザルにしない）。
+_FIRST_LINE_NAGAOKA_EXEMPT_PATTERNS = {"nagaoka_soudan_open"}
+
+
+def _is_valid_first_line(text: str, acct: str = "truth", pattern_name: str | None = None) -> bool:
     """1文目が投稿ルール違反でないか確認（truth/nagaoka共通）
     NG: 1文目に実績語・自己紹介・年数が含まれてはいけない
     startswith のみでなく、含有NG語もチェック
@@ -921,6 +950,8 @@ def _is_valid_first_line(text: str, acct: str = "truth") -> bool:
 
     # startswith NG（先頭禁止）
     ng_starts = ["長岡市", "長岡", "整体師", "施術", "実績", "改善率", "1万人", "1万", "100店舗"]
+    if pattern_name in _FIRST_LINE_NAGAOKA_EXEMPT_PATTERNS:
+        ng_starts = [w for w in ng_starts if w not in ("長岡市", "長岡")]
     if any(first_line.startswith(ng) for ng in ng_starts):
         return False
 
@@ -1047,6 +1078,9 @@ def generate_nagaoka_post(pattern_key: str) -> str:
     """nagaoka専用パターンまたは共通パターンで投稿生成"""
     if pattern_key == "variety" and NAGAOKA_VARIETY:
         return _add_variety_followup(random.choice(NAGAOKA_VARIETY))
+    if pattern_key == "nagaoka_soudan_open":
+        # 「長岡市で〜相談が増えてます」型オープニング（本文2行＋コメント1セルフケア＋コメント2実績CTA）
+        return _add_variety_followup(random.choice(NAGAOKA_SOUDAN_OPENINGS))
     if pattern_key in NAGAOKA_PATTERNS:
         p = NAGAOKA_PATTERNS[pattern_key]
         return fill(random.choice(p["templates"]))

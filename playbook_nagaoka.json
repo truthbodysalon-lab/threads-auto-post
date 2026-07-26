@@ -1,7 +1,7 @@
 {
  "acct": "nagaoka",
- "version": 2,
- "updated": "2026-07-10",
+ "version": 3,
+ "updated": "2026-07-27",
  "description": "修正ポイント（勝ち構造・死ぬ構造）の正本。毎朝サブエージェントEが実測データで各ルールを検証し、効かなくなったルールはretired、新発見はtestingで追加、実証されたらactiveに昇格する。ヒーロー投稿と新テンプレはこのプレイブックのactiveルールに従って書く。",
  "rules": [
   {
@@ -9,36 +9,36 @@
    "type": "win",
    "status": "active",
    "added": "2026-07-09",
-   "last_validated": "2026-07-10",
+   "last_validated": "2026-07-27",
    "rule": "短い断定1〜3行で言い切って去る（15〜30字単位・話者の解説姿勢を消す）",
    "evidence": "723v「病院に行くほどじゃない体のだるさを放っておく人が、一番もったいない」488v/375v/368v/220v/204v等、断定1〜3行がTOP30の大半"
   },
   {
    "id": "W2",
    "type": "win",
-   "status": "testing",
+   "status": "active",
    "added": "2026-07-09",
-   "last_validated": "2026-07-10",
+   "last_validated": "2026-07-27",
    "rule": "問いだけで止める。答えを同じ投稿内で書かない（プロフィールへの好奇心を残す）",
-   "evidence": "truthの実測から移植した仮説。nagaoka自身の実測(breakout_nagaoka.json)で検証して昇格/棄却する"
+   "evidence": "実測で再確認: 705v「夕方になると肩甲骨まわりのこり、ありませんか。」594v「こめかみの痛みは「仕方ない」じゃない。変えられる。」等、問い止め/断定止めがTOP30上位を占める"
   },
   {
    "id": "W3",
    "type": "win",
    "status": "active",
    "added": "2026-07-09",
-   "last_validated": "2026-07-10",
+   "last_validated": "2026-07-27",
    "rule": "数えられる数字の自己診断（月に何錠・週に何枚・何回）で自分ごと化",
    "evidence": "347v「月に2〜3回の頭の重さを『持病』と呼ぶのはまだ早い…来院3〜5回」321v「週3回の頭痛」等、数字系がTOP30上位に多数"
   },
   {
    "id": "W4",
    "type": "win",
-   "status": "testing",
+   "status": "retired",
    "added": "2026-07-09",
-   "last_validated": "2026-07-10",
+   "last_validated": "2026-07-27",
    "rule": "独白型の共感（〜辛いですよね/〜んだ）で終わり、営業要素を続けない",
-   "evidence": "truthの実測から移植した仮説。nagaoka自身の実測(breakout_nagaoka.json)で検証して昇格/棄却する"
+   "evidence": "7/27実測200件で独白共感型（〜辛いですよね/〜んだ）の該当例なし。W1(断定止め)に収斂しており独立ルールとして再現できず"
   },
   {
    "id": "W5",
@@ -54,25 +54,25 @@
    "type": "lose",
    "status": "active",
    "added": "2026-07-09",
-   "last_validated": "2026-07-19",
+   "last_validated": "2026-07-27",
    "rule": "「〜が主な原因です。なぜなら〜」型三段論法テンプレは禁止（NGワード化済み）",
    "evidence": "truthの実測から移植した仮説。nagaoka自身の実測(breakout_nagaoka.json)で検証して昇格/棄却する ／監査④: NGワード・_is_incoherentとしてコードで全アカウント強制済みのためactive化（コード実装済みルールはtesting対象外）"
   },
   {
    "id": "L2",
    "type": "lose",
-   "status": "testing",
+   "status": "active",
    "added": "2026-07-09",
-   "last_validated": "2026-07-10",
+   "last_validated": "2026-07-27",
    "rule": "問いを立てて同じ投稿内で自己回収しない（W2の裏面）",
-   "evidence": "truthの実測から移植した仮説。nagaoka自身の実測(breakout_nagaoka.json)で検証して昇格/棄却する"
+   "evidence": "W2裏面として実測確認。自己回収型はWORST側に多い"
   },
   {
    "id": "L3",
    "type": "lose",
    "status": "active",
    "added": "2026-07-09",
-   "last_validated": "2026-07-10",
+   "last_validated": "2026-07-27",
    "rule": "4文超のてんこ盛り（悩み→原因→実績→地域→CTA）にしない。詰めるほど沈む",
    "evidence": "2v「運動不足と朝の疲れ…兄妹で運営…来院3〜5回」の5要素てんこ盛りで実証。3文構成までが生存境界"
   },
@@ -90,7 +90,7 @@
    "type": "lose",
    "status": "active",
    "added": "2026-07-09",
-   "last_validated": "2026-07-10",
+   "last_validated": "2026-07-27",
    "rule": "LINEリンク付き投稿は閲覧2〜7viewsに抑制される（登録獲得のため1日2本は維持＝閲覧との意図的トレードオフ。増やさない）",
    "evidence": "LINEリンク付き5本すべて0〜1views（想定2〜7よりさらに低い実測）"
   },
@@ -99,18 +99,27 @@
    "type": "lose",
    "status": "active",
    "added": "2026-07-09",
-   "last_validated": "2026-07-19",
+   "last_validated": "2026-07-27",
    "rule": "症状と対処の不自然な組み合わせ（眠りの浅さ×湿布等）は機械生成感=スパム判定の元（_is_incoherentで自動排除済み）",
    "evidence": "truthの実測から移植した仮説。nagaoka自身の実測(breakout_nagaoka.json)で検証して昇格/棄却する ／監査④: NGワード・_is_incoherentとしてコードで全アカウント強制済みのためactive化（コード実装済みルールはtesting対象外）"
   },
   {
    "id": "L7",
    "type": "lose",
-   "status": "testing",
+   "status": "active",
    "added": "2026-07-10",
-   "last_validated": "2026-07-10",
+   "last_validated": "2026-07-27",
    "rule": "症状名だけ差し替えた量産的複製（差し替え箇所以外の文言・構文が完全一致するバリエーション連投）をしない。型を使う場合も語順・視点・具体性を変える",
-   "evidence": "WORST20の量産感の強い版が0〜3views。同型でも具体性のある版はTOP30(281v/370v/240v)に生存"
+   "evidence": "WORST20に量産的複製が複数（枕/水分不足テンプレの使い回し versionが2〜3v）。TOP30の同型は具体性で生存"
+  },
+  {
+   "id": "L8",
+   "type": "lose",
+   "status": "testing",
+   "added": "2026-07-27",
+   "last_validated": "2026-07-27",
+   "rule": "断定1〜2文の間に第三者言及の中間文（長岡市での施術でも同じことを感じます等）を挟むと閲覧が崩れる（W1の裏面）",
+   "evidence": "「肩と首の張りは「仕方ない」じゃない。長岡市での施術でも同じことを感じます。変えられる。」3v ←同型で中間文なしの「こめかみの痛みは「仕方ない」じゃない。変えられる。」594vと対照的"
   }
  ],
  "changelog": [
@@ -128,6 +137,11 @@
    "version": 2,
    "date": "2026-07-19",
    "change": "監査④: L1/L6はコード強制済みのためactiveへ（表示と実効の乖離解消）"
+  },
+  {
+   "version": 3,
+   "date": "2026-07-27",
+   "change": "7/27実測(breakout 200件・中央値104)で再検証: W2→active昇格, L2→active昇格, W4→retired(該当例なし), L7→active昇格, L8追加(testing・中間文挿入の悪影響)"
   }
  ]
 }

@@ -1,7 +1,7 @@
 {
  "acct": "truth",
- "version": 4,
- "updated": "2026-07-19",
+ "version": 5,
+ "updated": "2026-07-27",
  "description": "修正ポイント（勝ち構造・死ぬ構造）の正本。毎朝サブエージェントEが実測データで各ルールを検証し、効かなくなったルールはretired、新発見はtestingで追加、実証されたらactiveに昇格する。ヒーロー投稿と新テンプレはこのプレイブックのactiveルールに従って書く。",
  "rules": [
   {
@@ -9,7 +9,7 @@
    "type": "win",
    "status": "active",
    "added": "2026-07-09",
-   "last_validated": "2026-07-19",
+   "last_validated": "2026-07-27",
    "rule": "短い断定1〜3行で言い切って去る（15〜30字単位・話者の解説姿勢を消す）",
    "evidence": "「薬を飲む前に、まず姿勢の歪みを見直してみて。」1,830views／「首こりは年齢のせいじゃない。」1,513views"
   },
@@ -18,7 +18,7 @@
    "type": "win",
    "status": "active",
    "added": "2026-07-09",
-   "last_validated": "2026-07-19",
+   "last_validated": "2026-07-27",
    "rule": "問いだけで止める。答えを同じ投稿内で書かない（プロフィールへの好奇心を残す）",
    "evidence": "「首こりの本当の原因、知ってますか？」1,412views。同じ問いでも即自己回収すると6〜7views"
   },
@@ -27,7 +27,7 @@
    "type": "win",
    "status": "active",
    "added": "2026-07-09",
-   "last_validated": "2026-07-19",
+   "last_validated": "2026-07-27",
    "rule": "数えられる数字の自己診断（月に何錠・週に何枚・何回）で自分ごと化",
    "evidence": "「頭痛薬、月に何錠飲んでますか。」317views（中央値28の11倍）"
   },
@@ -54,7 +54,7 @@
    "type": "lose",
    "status": "active",
    "added": "2026-07-09",
-   "last_validated": "2026-07-19",
+   "last_validated": "2026-07-27",
    "rule": "「〜が主な原因です。なぜなら〜」型三段論法テンプレは禁止（NGワード化済み）",
    "evidence": "worst20の最頻出。5〜8views連発。機械生成感が最強"
   },
@@ -63,7 +63,7 @@
    "type": "lose",
    "status": "active",
    "added": "2026-07-09",
-   "last_validated": "2026-07-19",
+   "last_validated": "2026-07-27",
    "rule": "問いを立てて同じ投稿内で自己回収しない（W2の裏面）",
    "evidence": "「その理由わかりますか。原因を変えないから」7views"
   },
@@ -72,7 +72,7 @@
    "type": "lose",
    "status": "active",
    "added": "2026-07-09",
-   "last_validated": "2026-07-19",
+   "last_validated": "2026-07-27",
    "rule": "4文超のてんこ盛り（悩み→原因→実績→地域→CTA）にしない。詰めるほど沈む",
    "evidence": "worst20の最長文は全てこの構造。6〜7views・文末破綻も複数"
   },
@@ -90,7 +90,7 @@
    "type": "lose",
    "status": "active",
    "added": "2026-07-09",
-   "last_validated": "2026-07-19",
+   "last_validated": "2026-07-27",
    "rule": "LINEリンク付き投稿は閲覧2〜7viewsに抑制される（登録獲得のため1日2本は維持＝閲覧との意図的トレードオフ。増やさない）",
    "evidence": "worst20に複数回登場。コピーの巧拙以前に構造として抑制"
   },
@@ -99,7 +99,7 @@
    "type": "lose",
    "status": "active",
    "added": "2026-07-09",
-   "last_validated": "2026-07-19",
+   "last_validated": "2026-07-27",
    "rule": "症状と対処の不自然な組み合わせ（眠りの浅さ×湿布等）は機械生成感=スパム判定の元（_is_incoherentで自動排除済み）",
    "evidence": "実測TOP投稿にも混入していた変数事故"
   },
@@ -126,7 +126,7 @@
    "type": "lose",
    "status": "active",
    "added": "2026-07-19",
-   "last_validated": "2026-07-19",
+   "last_validated": "2026-07-27",
    "rule": "第三者伝聞・曖昧語尾（そんな声をよく聞きます/〜と驚く人が多い/お声が増えています）を使わない",
    "evidence": "7v/7v/6vで全滅。同語尾はtop側でも113v頭打ち"
   },
@@ -135,7 +135,7 @@
    "type": "lose",
    "status": "active",
    "added": "2026-07-19",
-   "last_validated": "2026-07-19",
+   "last_validated": "2026-07-27",
    "rule": "勝ちパターンの短期使い回し禁止。同一・類似文面の再投稿は初回から劣化する（型は消耗品。毎日新しい切り口を作る）",
    "evidence": "同文再投稿157v→129v(-18%)。W2問い止め型も1412v→308v(-78%)と天井崩落"
   },
@@ -178,6 +178,11 @@
    "version": 4,
    "date": "2026-07-19",
    "change": "インスタハカセ講義5本の学びから追加(testing): W9"
+  },
+  {
+   "version": 5,
+   "date": "2026-07-27",
+   "change": "7/27実測(breakout 200件・中央値95)で再検証: W1-W3/L1-L3/L5-L8を再確認しactive維持(last_validated更新)。W6-W9は今回サンプルで明確な追加証拠なし、testing継続"
   }
  ]
 }

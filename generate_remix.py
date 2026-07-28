@@ -1383,7 +1383,7 @@ def generate_30_posts() -> list[str]:
         "workmom": 3,
         "ranking": 4,
         "question": 3,
-        "zutsuu_types": 7,  # 頭痛の種類別・具体的セルフケア（専門性を出す）
+        "zutsuu_types": 3,  # 頭痛の種類別・具体的セルフケア（専門性を出す。新カテゴリのため過大投入回避で7→3に縮小）
     }
     # zutsuu_types はテンプレが存在する時のみ計画に含める
     if not ZUTSUU_TRUTH:

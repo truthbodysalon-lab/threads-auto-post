@@ -191,6 +191,15 @@ try:
 except Exception:
     MASA_VARIETY, TRUTH_VARIETY, NAGAOKA_VARIETY = [], [], []
 
+# ── 頭痛の種類別・具体的セルフケア（2026-07-28 追加）──
+# 緊張型/片頭痛/薬物乱用/気圧/眼精疲労の見分け方と家でできる対処。
+# nagaoka分は variety ローテーションに合流させる（truthは専用カテゴリzutsuu_types）。
+try:
+    from zutsuu_templates import ZUTSUU_TRUTH, ZUTSUU_NAGAOKA
+    NAGAOKA_VARIETY = list(NAGAOKA_VARIETY) + list(ZUTSUU_NAGAOKA)
+except Exception:
+    ZUTSUU_TRUTH, ZUTSUU_NAGAOKA = [], []
+
 # ── 検品ゲート（2026-07-21・Brain記事「AIでThreadsを事故ゼロ運用する方法」）──
 # 生成ループ内では log=False（再抽選中のノイズをinspection_log.jsonlに残さない）。
 # 失敗時はフェイルオープン（_is_ng等の既存フィルタと同じ思想＝全停止しない）。
@@ -502,6 +511,14 @@ PATTERNS = {
         ],
     },
 }
+
+# 頭痛の種類別・具体的セルフケア（2026-07-28追加・専用カテゴリ）。
+# 変数を使わない完成テンプレ（緊張型/片頭痛/薬物乱用/気圧/眼精疲労の見分け方＋対処）。
+if ZUTSUU_TRUTH:
+    PATTERNS["zutsuu_types"] = {
+        "desc": "頭痛の種類別・具体的セルフケア（緊張型/片頭痛/薬物乱用/気圧/眼精疲労）",
+        "templates": ZUTSUU_TRUTH,
+    }
 
 # ── 素材（myfilesロード済みならそちらを優先）────────────────────
 _SYMPTOMS_RAW = _truth_mat.get("symptoms") or [
@@ -1233,7 +1250,8 @@ def generate_post(pattern_key: str) -> str:
     elif pattern_key in ("story", "workmom", "ranking", "question",
                           "gyakusetsu", "aoi_style", "hori_style",
                           "pasona", "prbrep", "touka_koukan",
-                          "hochi_risk", "nayami_kyokan", "selfcare_casual"):
+                          "hochi_risk", "nayami_kyokan", "selfcare_casual",
+                          "zutsuu_types"):
         return fill(random.choice(p["templates"]))
 
     return ""
@@ -1328,7 +1346,11 @@ def generate_30_posts() -> list[str]:
         "workmom": 3,
         "ranking": 4,
         "question": 3,
+        "zutsuu_types": 7,  # 頭痛の種類別・具体的セルフケア（専門性を出す）
     }
+    # zutsuu_types はテンプレが存在する時のみ計画に含める
+    if not ZUTSUU_TRUTH:
+        defaults.pop("zutsuu_types", None)
     merged = {k: int(w.get(k, v)) for k, v in defaults.items()}
     plan = (
         ["variety"] * merged["variety"] +
@@ -1350,7 +1372,8 @@ def generate_30_posts() -> list[str]:
         ["story"] * merged["story"] +
         ["workmom"] * merged["workmom"] +
         ["ranking"] * merged["ranking"] +
-        ["question"] * merged["question"]
+        ["question"] * merged["question"] +
+        ["zutsuu_types"] * merged.get("zutsuu_types", 0)
     )
     random.shuffle(plan)
 
@@ -1359,7 +1382,9 @@ def generate_30_posts() -> list[str]:
     seen = set()
     for pk in plan:
         for _ in range(50):
-            post = _enforce_short_body(_ensure_nagaoka(generate_post(pk)))
+            raw = generate_post(pk)
+            # zutsuu_types は長岡市配置を作り込み済みのため _ensure_nagaoka を通さない
+            post = _enforce_short_body(raw if pk == "zutsuu_types" else _ensure_nagaoka(raw))
             key = post[:100]
             first_line = post.split("\n")[0].strip()
             # 1文目NG・NGワード・重複チェック

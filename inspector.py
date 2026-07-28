@@ -83,6 +83,17 @@ _HYPE_TYPE_PATTERNS = [
     re.compile(r"業界No\.?1|ナンバー ?ワン"),
 ]
 
+# masa面談ファネル鉄則（feedback.json 2026-07-11note）: 投稿では面談・金額・決済に
+# 一切触れない（面談案内はLINEステップDay6-7のみ）。generate_remix.py
+# _is_masa_sales_ng と同じ規則だが、そちらは生成時の候補フィルタのみで
+# inject_launch_sequence.py 等の手動投入コンテンツを通さない穴があった
+# （2026-07-27 masa実投稿で「面談でやることは3つだけ」等が漏れて公開された実障害・
+# 2026-07-29検証で発見）。最終ゲートのここでも二重に検品する。
+_MASA_SALES_NG_RE = re.compile(
+    r"面談|決済|お?申し?込み|お支払い|購入はこちら|税込|割引|モニター価格|キャンペーン価格|Square|"
+    r"(料金|価格)(は|表)|円で(提供|販売|案内)|コース(料金|価格)"
+)
+
 # 個人情報（検品7項目④・2026-07-21）: 個人名はtruth/nagaokaで投稿禁止
 # （feedback.json 2026-05-13ルール）。誤検知回避のため「さん」付き完全一致のみ。
 _PERSONAL_NAMES_TRUTH_NAGAOKA = ["まぁさん", "ゆうさん"]
@@ -252,6 +263,9 @@ def _check_hype_and_ng(text: str, account: str) -> list[str]:
         for w in _HYPE_WORDS_MASA:
             if w in t:
                 reasons.append(f"誇大・規制表現(masa): {w}")
+        m = _MASA_SALES_NG_RE.search(t)
+        if m:
+            reasons.append(f"masa面談/金額/決済NG: {m.group()}")
 
     if account in ("truth", "nagaoka"):
         for nm in _PERSONAL_NAMES_TRUTH_NAGAOKA:

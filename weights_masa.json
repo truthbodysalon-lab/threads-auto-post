@@ -1,9 +1,9 @@
 {
   "updated_at": "2026-08-02",
   "pattern_weights": {
-    "insight": 18,
+    "insight": 19,
     "education": 1,
-    "story": 11,
+    "story": 10,
     "cta": 1,
     "ranking": 1,
     "question": 3,
@@ -18,8 +18,8 @@
     "cta": -2.77
   },
   "follower_scores": {
-    "story": 1.62,
-    "insight": 1.99,
+    "story": 1.28,
+    "insight": 2.32,
     "ranking": -1.16,
     "education": -0.72,
     "cta": -1.73

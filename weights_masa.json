@@ -17,11 +17,11 @@
     "ranking": 0.65
   },
   "follower_scores": {
-    "story": 0.0,
+    "story": -0.08,
     "insight": 3.0,
-    "ranking": -0.99,
-    "education": -0.81,
-    "cta": -1.21
+    "ranking": -0.96,
+    "education": -0.79,
+    "cta": -1.18
   },
   "line_scores": {
     "insight": 3.0,

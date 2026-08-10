@@ -300,6 +300,30 @@ def _check_first_line_length(text: str) -> list[str]:
     return []
 
 
+# ── ⑦ 専門用語の1行目裸置き（masa専用・feedback.json 2026-07-15note①）──
+# 「専門用語は1行目に置かない。使うなら来た瞬間に一言変換する」ルール。
+# 2026-08-11検証で {topic} 直挿入テンプレが「MEO対策で成果が出ている院に
+# 共通していること。」等を無変換のまま実投稿していたのを発見（誤検知回避の
+# ため対象語は保守的に絞り、直後に＝/（による説明があれば許容する）。
+_JARGON_TERMS_MASA = ["MEO対策", "LTV", "LINEステップ配信", "PASONA法則", "CVR", "CPA"]
+
+
+def _check_jargon_first_line(text: str, account: str) -> list[str]:
+    if account != "masa":
+        return []
+    first = _first_line(text)
+    if not first:
+        return []
+    for term in _JARGON_TERMS_MASA:
+        idx = first.find(term)
+        if idx < 0:
+            continue
+        after = first[idx:idx + len(term) + 20]
+        if "＝" not in after and "（" not in after and "(" not in after:
+            return [f"1行目に専門用語を裸置き（{term}・要一言変換）"]
+    return []
+
+
 # ── ログ記録 ──────────────────────────────────────────────
 
 def _log_ng(account: str, reasons: list[str], text: str):
@@ -344,6 +368,7 @@ def inspect_post(text: str, account: str = "truth", pattern_name: str | None = N
     reasons += _check_hype_and_ng(text, account)
     reasons += _check_url_count(text)
     reasons += _check_first_line_length(text)
+    reasons += _check_jargon_first_line(text, account)
 
     ok = len(reasons) == 0
     if not ok and log:

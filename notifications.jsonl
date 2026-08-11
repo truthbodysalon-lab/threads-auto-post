@@ -1,2 +1,3 @@
 {"ts": "2026-08-05T12:43:16+09:00", "msg": "🚨Threads Daily Verify: FAIL 1件検出\n・[exec:daily50:masa] 昨日(2026-08-04)の投稿 49本 / 必須50本（外形API実測）\nhttps://github.com/truthbodysalon-lab/threads-auto-post/actions/runs/30973049916"}
 {"ts": "2026-08-07T12:27:30+09:00", "msg": "🚨Threads Daily Verify: FAIL 1件検出\n・[exec:funnel:nagaoka] 誘導投稿が位置50超に配置（未投稿リスク）: [51]\nhttps://github.com/truthbodysalon-lab/threads-auto-post/actions/runs/31144396739"}
+{"ts": "2026-08-11T11:34:28+09:00", "msg": "🚨Threads Daily Verify: FAIL 1件検出\n・[exec:funnel:nagaoka] 誘導投稿が位置50超に配置（未投稿リスク）: [51]\nhttps://github.com/truthbodysalon-lab/threads-auto-post/actions/runs/31452769751"}

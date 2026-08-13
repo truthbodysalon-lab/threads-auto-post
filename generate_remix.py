@@ -1308,6 +1308,11 @@ def _load_hero_posts(acct: str) -> list[str]:
             return []   # 古いヒーローは使わない（鮮度が命）
         # 実測で「短い断定1〜3行(15〜25字)」が最強と判明(playbook W1)。30字下限は勝ち筋を弾くため15字に
         out = [p for p in d.get("posts", []) if isinstance(p, str) and len(p) >= 15 and not _is_ng(p)]
+        if acct in ("truth", "nagaoka"):
+            # ヒーロー原稿は自由記述のため生成ループの1文目チェックを経由しない。
+            # 「長岡市の当院は兄妹で運営しています。」のような1文目NG（実績・自己紹介・
+            # 地域名始まり）がノーチェックで混入する実障害があった（2026-08-14検証で発覚）。
+            out = [p for p in out if _is_valid_first_line(p, acct)]
         if acct == "masa":
             # 面談/金額/決済の機械ガード＋250字上限（masa10原則）
             out = [p for p in out if not _is_masa_sales_ng(p) and len(p) <= 250]

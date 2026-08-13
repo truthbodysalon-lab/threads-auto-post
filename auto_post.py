@@ -595,31 +595,43 @@ def get_next_post(acct: str, today: str, avoid_url: bool = False):
             continue  # LINEは上で処理（未実施なら採用済み／実施済みならスキップ）
         # mark_posted が保存するテキストと同じ正規化で比較する
         norm = _normalize_post_key(text)
-        if norm not in posted_texts and norm[:80] not in old_posted_keys:
-            # 7日以内の重複は投稿せずスキップ（ループで次の候補へ）
-            # ただし店舗アクセスアンカー（2026-07-03）・頭痛タイプ診断アンカー（2026-07-11）・
+        already_posted_ever = norm in posted_texts or norm[:80] in old_posted_keys
+        # アンカー投稿（店舗アクセス・頭痛タイプ診断・ホットペッパー予約導線）は固定
+        # テンプレのプールが小さく、variable無しの完全一致文が多い。全期間dedup
+        # （posted_texts）でしか判定しないと全テンプレ使用済み後は永久に選ばれなくなる
+        # 実障害があった（2026-06-21導入以降、truthは07-06・nagaokaは07-11を最後に
+        # 0本化＝約1ヶ月間、駐車場/アクセス誘導が実質未投稿だった。2026-08-14検証で発覚・修正）。
+        # 以下の anchor_ok 緩和ルート（既存・HPB/shindanで実績あり）に必ず到達させる。
+        is_anchor_pool_type = (
+            _is_store_access(text) or _is_shindan(text) or _is_hpb_cta(text)
+        )
+        if already_posted_ever and not is_anchor_pool_type:
+            continue
+        if already_posted_ever or dg_is_duplicate(norm, acct):
+            # 7日以内の重複（または全期間で使用済みの固定アンカーテンプレ）は
+            # 投稿せずスキップ（ループで次の候補へ）。ただし店舗アクセスアンカー
+            # （2026-07-03）・頭痛タイプ診断アンカー（2026-07-11）・
             # ホットペッパー予約導線CTA（2026-07-15）は緩和ルールで採用可
-            if dg_is_duplicate(norm, acct):
-                anchor_ok = _access_anchor_ok(acct, today, text) \
-                    or _shindan_anchor_ok(acct, today, text) \
-                    or _hpb_anchor_ok(acct, today, text)
-                if not anchor_ok:
-                    continue
-                # アンカー緩和が効いても、本日すでにshared guardに記録済み
-                # （投稿成功済み or 直前の試行がAPI側で重複拒否されPENDING記録済み）なら
-                # post_to_threads側の通常dup判定で必ず再度弾かれるため、再選択しない。
-                # これを入れないと同一アンカー候補を延々選び続けて丸1日投稿が止まる
-                # （2026-07-15 truth/nagaoka障害・2026-07-16修正）。
-                if dg_marked_today(norm, acct):
-                    continue
-            # API実投稿の直近に同じ1文目があれば飛ばす（系統間ラグ対策）
-            if dg_normalize(text).split("\n")[0].strip()[:40] in api_recent:
+            anchor_ok = _access_anchor_ok(acct, today, text) \
+                or _shindan_anchor_ok(acct, today, text) \
+                or _hpb_anchor_ok(acct, today, text)
+            if not anchor_ok:
                 continue
-            if not avoid_url:
-                return text, i  # 従来どおり即返す（挙動不変）
-            eligible.append((text, i))
-            if len(eligible) >= 20:
-                break  # 取りすぎない（性能・挙動は従来と同等の範囲で十分）
+            # アンカー緩和が効いても、本日すでにshared guardに記録済み
+            # （投稿成功済み or 直前の試行がAPI側で重複拒否されPENDING記録済み）なら
+            # post_to_threads側の通常dup判定で必ず再度弾かれるため、再選択しない。
+            # これを入れないと同一アンカー候補を延々選び続けて丸1日投稿が止まる
+            # （2026-07-15 truth/nagaoka障害・2026-07-16修正）。
+            if dg_marked_today(norm, acct):
+                continue
+        # API実投稿の直近に同じ1文目があれば飛ばす（系統間ラグ対策）
+        if dg_normalize(text).split("\n")[0].strip()[:40] in api_recent:
+            continue
+        if not avoid_url:
+            return text, i  # 従来どおり即返す（挙動不変）
+        eligible.append((text, i))
+        if len(eligible) >= 20:
+            break  # 取りすぎない（性能・挙動は従来と同等の範囲で十分）
 
     if avoid_url:
         picked = pick_avoiding_consecutive_url(eligible, last_had_url=True)

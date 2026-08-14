@@ -12,3 +12,4 @@ masa_pdca_state.json
 
 # 編集中の pull_sync 一時停止ロック（追跡しない・2026-07-24）
 .pullsync-pause
+uplink_top.json

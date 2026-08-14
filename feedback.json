@@ -330,8 +330,13 @@
       "date": "2026-07-29",
       "text": "【検証で発見・修正】検証AIサブエージェントDが、generate_remix.py touka_koukanテンプレの1行目「{symptom}が悪化しやすい習慣を知っていますか？」がdead_openings（知識確認型疑問=死にパターン）に該当するのに、feedback.jsonのdead_openingsが「知っていましたか」（過去形）のみ登録で「知っていますか」（現在形）を拾えず素通りしていたのを発見（truth 2026-07-28/07-29に実投稿2件）。対処: ①テンプレ1行目を断言型「{symptom}を悪化させる習慣、実は日常に潜んでいます。」に書き換え ②dead_openings.allを正規表現「知って(い)?(ます|ました)か」に一般化し過去形/現在形/丁寧形の揺れを一括カバー。",
       "account": "all"
+    },
+    {
+      "date": "2026-08-14",
+      "text": "【必須】整体系(truth/nagaoka)の予約誘導は必ずホットペッパー(beauty.hotpepper.jp)に案内する。LINEは相談・情報配信専用で『予約』語を使わない。プロフィール経由の予約案内はOK(bioリンク=HPB)。ガード=_is_seitai_reserve_violation/検証=C13。",
+      "account": "truth"
     }
   ],
-  "updated_at": "2026-07-29",
+  "updated_at": "2026-08-14 22:09",
   "precedence": "ルールの優先順位（2026-07-19監査で制定）: ①goals.json(ゴール・導線保護) ②playbookのactiveルール(構造の勝敗・実測で進化) ③notesの最新日付 ④旧note。同一テーマのnoteは最新日付が旧を上書きする（旧noteとの矛盾はFAILにしない）。導線投稿(HPB/LINE/診断/整体LINE/cta_profile)は閲覧基準の負けテンプレ判定・pruneの対象外"
 }

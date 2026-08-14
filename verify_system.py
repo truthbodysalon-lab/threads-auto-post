@@ -365,6 +365,26 @@ def check_execution_gaps():
     add("exec:watchdog", "C.実行ギャップ", "PASS" if ok else "WARN",
         "watchdog稼働中" if ok else "watchdog.logが24h以上更新なし（launchd要確認）")
 
+    # C13: 整体系の予約誘導はHPB一本化（2026-08-14ユーザールール）。
+    #      キューと直近実績で「予約語×非HPB URL」を検出したらFAIL。
+    try:
+        from generate_remix import _is_seitai_reserve_violation
+        for acct in ("truth", "nagaoka"):
+            bad_q = bad_p = 0
+            f = BASE / f"log_{acct}.jsonl"
+            if f.exists():
+                lines = [l for l in f.read_text(encoding="utf-8").splitlines() if l.strip()]
+                posts = json.loads(lines[-1]).get("posts", []) if lines else []
+                bad_q = sum(1 for p in posts if _is_seitai_reserve_violation(p))
+            for t in _posted_recent_texts(acct, 3):
+                if _is_seitai_reserve_violation(t):
+                    bad_p += 1
+            add(f"exec:hpb_only:{acct}", "C.実行ギャップ",
+                "PASS" if bad_q == 0 and bad_p == 0 else "FAIL",
+                f"予約誘導のHPB一本化 キュー違反{bad_q}/直近3日実績違反{bad_p}")
+    except Exception as e:
+        add("exec:hpb_only", "C.実行ギャップ", "WARN", f"検査不可: {e}")
+
     # C7: 月100万ペース（常時アラーム）。views_action.json を読み、未達アカウントを明示。
     #     達成は野心的目標のため未達は WARN（恒常監視・改善誘導が目的。FAILにはしない）。
     try:

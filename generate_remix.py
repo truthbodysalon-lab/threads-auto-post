@@ -119,6 +119,19 @@ _CAUSE_LIKE = ("水分不足", "食いしばり", "姿勢の歪み", "デスク�
                "ストレス過多", "血流の悪さ", "顎の緊張", "深夜のスマホ", "睡眠の浅さ")
 
 
+# 整体系(truth/nagaoka)の予約誘導は必ずホットペッパー(HPB)へ（2026-08-14ユーザールール）。
+# 予約系の語と「HPB以外のURL」が同居する投稿を遮断する。相談(LINE)・診断は予約語を使わない。
+_RESERVE_WORDS = ("予約はこちら", "ご予約", "予約でき", "予約を", "予約受付", "今すぐ予約")
+
+
+def _is_seitai_reserve_violation(text: str) -> bool:
+    t = text or ""
+    if not any(w in t for w in _RESERVE_WORDS):
+        return False
+    has_url = ("http" in t) or ("lin.ee" in t)
+    return has_url and "beauty.hotpepper.jp" not in t
+
+
 def _is_incoherent(text: str) -> bool:
     """症状と対処の組み合わせが不自然な文（変数事故）を検出する。
     全アカウント共通適用（masaのB2B文脈では該当語が出ないため実質無害＝playbook masa L6退役と両立）。"""
@@ -774,10 +787,10 @@ def generate_shindan_post(acct: str = "truth") -> str:
 # 予約(HPB)はハードルが高い人向けの中間導線。「相談だけでもOK」を明確に。
 SEITAI_LINE_URL = "https://lin.ee/GwQ0FSx"
 SEITAI_LINE_TEMPLATES = [
-    "「予約するほどか分からない」その段階で相談してほしいんです。\nいまの症状を送ってもらえれば、来院が必要かどうかも正直にお答えします。\n無料相談はこちら👇\n{url}",
+    "「来院するほどか分からない」その段階で相談してほしいんです。\nいまの症状を送ってもらえれば、来院が必要かどうかも正直にお答えします。\n無料相談はこちら👇\n{url}",
     "自分の肩こりが整体で変わるのか、確かめてから決めたい方へ。\n公式LINEで症状を聞かせてください。無料で相談に乗ります👇\n{url}",
     "「この痛み、どこに行けばいいの？」と迷ったら。\n病院か整体か、判断に迷う症状ほど一度聞いてください。\n無料相談LINEはこちら👇\n{url}",
-    "予約の前に、聞きたいことがある方へ。\n施術の内容も、通う回数の目安も、LINEで気軽に質問できます👇\n{url}",
+    "来院の前に、聞きたいことがある方へ。\n施術の内容も、通う回数の目安も、LINEで気軽に質問できます👇\n{url}",
     "症状を文章で送るだけで、まず何をすべきかお答えしています。\n売り込みはしません。無料相談のLINEはこちら👇\n{url}",
     "「行って合わなかったら気まずい」その心配、相談で解消できます。\nあなたの症状に合うかどうか、先にLINEでお答えします👇\n{url}",
     "夜中に痛みで検索しているあなたへ。\nその症状、明日LINEで聞かせてください。無料で相談に乗ります👇\n{url}",
@@ -1313,6 +1326,8 @@ def _load_hero_posts(acct: str) -> list[str]:
             # 「長岡市の当院は兄妹で運営しています。」のような1文目NG（実績・自己紹介・
             # 地域名始まり）がノーチェックで混入する実障害があった（2026-08-14検証で発覚）。
             out = [p for p in out if _is_valid_first_line(p, acct)]
+        if acct in ("truth", "nagaoka"):
+            out = [p for p in out if not _is_seitai_reserve_violation(p)]
         if acct == "masa":
             # 面談/金額/決済の機械ガード＋250字上限（masa10原則）
             out = [p for p in out if not _is_masa_sales_ng(p) and len(p) <= 250]

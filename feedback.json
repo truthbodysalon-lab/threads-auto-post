@@ -335,8 +335,13 @@
       "date": "2026-08-14",
       "text": "【必須】整体系(truth/nagaoka)の予約誘導は必ずホットペッパー(beauty.hotpepper.jp)に案内する。LINEは相談・情報配信専用で『予約』語を使わない。プロフィール経由の予約案内はOK(bioリンク=HPB)。ガード=_is_seitai_reserve_violation/検証=C13。",
       "account": "truth"
+    },
+    {
+      "date": "2026-08-14",
+      "text": "masaは毎朝uplink(月73万閲覧・同ターゲット)の実測トップ投稿を参照する: uplink_reference.py→uplink_top.json→上位を毎日2〜3本『翻案』してヒーローに含める。同一文面の再投稿は絶対禁止（別アカウント間でも重複ペナルティ・関連付けリスク）。語彙・数字・並び・締めを変え一人称『僕』のmasa文体へ。構造(リスト型/やめること型/数字対比)は継承。",
+      "account": "masa"
     }
   ],
-  "updated_at": "2026-08-14 22:09",
+  "updated_at": "2026-08-14 23:35",
   "precedence": "ルールの優先順位（2026-07-19監査で制定）: ①goals.json(ゴール・導線保護) ②playbookのactiveルール(構造の勝敗・実測で進化) ③notesの最新日付 ④旧note。同一テーマのnoteは最新日付が旧を上書きする（旧noteとの矛盾はFAILにしない）。導線投稿(HPB/LINE/診断/整体LINE/cta_profile)は閲覧基準の負けテンプレ判定・pruneの対象外"
 }

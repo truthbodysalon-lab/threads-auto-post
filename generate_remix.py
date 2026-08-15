@@ -1481,7 +1481,8 @@ def generate_30_posts() -> list[str]:
     # 実行ギャップ対策: 1日の投稿は最大20本程度なので、必ず前半（index 3〜12）に配置
     # 修正: sequential insert ではなく batch build で anchor_positions を正確に保証
     listin_posts = []
-    for _ in range(2):   # 実投稿5〜7%ルール(2026-06-06)と_LINE_DAILY=2に整合（監査⑥で4→2に是正）
+    for _ in range(3):   # 実投稿5〜7%ルール(2026-06-06)。2026-08-16検証: 実測が1日50投稿消化で
+        # 2本=4%/日と目標下限5%を割り込んでいたため3本(=6%/日、anchor 3,7,12を使用)に是正
         for _ in range(20):
             p = generate_line_listin_post("truth")
             if p not in listin_posts:

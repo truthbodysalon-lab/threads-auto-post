@@ -27,14 +27,14 @@
   },
   "follower_scores": {
     "insight": 3.0,
-    "keisei_kyokan": -0.55,
-    "education": -0.94,
-    "quote_empathy": 0.66,
-    "ranking": -0.93,
-    "keisei_casual": -0.81,
-    "keisei_target": 0.33,
-    "story": 0.24,
-    "question": -1.0
+    "keisei_kyokan": -0.54,
+    "education": -0.91,
+    "quote_empathy": 0.6,
+    "ranking": -0.9,
+    "keisei_casual": -0.78,
+    "keisei_target": 0.29,
+    "story": 0.2,
+    "question": -0.96
   },
   "line_scores": {}
 }

@@ -416,6 +416,38 @@ def _hpb_anchor_ok(acct: str, today: str, text: str) -> bool:
     return True
 
 
+def _is_cta_profile(text: str) -> bool:
+    """masa: プロフィール経由の無料診断アンカー投稿の判定（cta_profileテンプレ、2026-07-16導入）。
+    「プロフィールのリンク」はtruth/nagaokaのHPB予約CTAにも使われる文言のため、
+    診断関連の言い回し（診断/3問）と組み合わせて誤検知を避ける。"""
+    t = text or ""
+    return "プロフィールのリンク" in t and ("診断" in t or "3問" in t)
+
+
+def _cta_profile_anchor_ok(acct: str, today: str, text: str) -> bool:
+    """プロフィール経由診断アンカーの7日重複ガード緩和判定（2026-08-17追加）。
+    テンプレは12種のみで毎日2本必要なため、7日ガード（さらに全期間dedupで
+    already_posted_ever該当）だと全テンプレが枯渇し、2026-08-03以降0本化していた
+    実障害を修正（_hpb_anchor_ok/_shindan_anchor_ok と同じ障害パターン）。
+    当日まだ同一1文目を使っていなければ通す。"""
+    if not _is_cta_profile(text):
+        return False
+    pfile = ACCOUNTS[acct]["posted"]
+    if not pfile.exists():
+        return True
+    first = (text or "").split("\n")[0].strip()
+    for line in pfile.read_text(encoding="utf-8").splitlines():
+        try:
+            e = json.loads(line)
+        except Exception:
+            continue
+        if (e.get("date") or "")[:10] != today:
+            continue
+        if (e.get("text") or "").split("\n")[0].strip() == first:
+            return False  # 本日すでに同一テンプレ使用済み
+    return True
+
+
 # ── URL連続回避（2026-07-21・Brain記事「AIでThreadsを事故ゼロ運用する方法」実測）─
 # URL入り投稿の同日連発はリーチを下げる。導線投稿(goals.json保護)は削らないが、
 # 直前投稿の本文にURLが残っていた（=is_line/is_shindan、他は本文からURLをコメントへ
@@ -596,14 +628,17 @@ def get_next_post(acct: str, today: str, avoid_url: bool = False):
         # mark_posted が保存するテキストと同じ正規化で比較する
         norm = _normalize_post_key(text)
         already_posted_ever = norm in posted_texts or norm[:80] in old_posted_keys
-        # アンカー投稿（店舗アクセス・頭痛タイプ診断・ホットペッパー予約導線）は固定
-        # テンプレのプールが小さく、variable無しの完全一致文が多い。全期間dedup
-        # （posted_texts）でしか判定しないと全テンプレ使用済み後は永久に選ばれなくなる
-        # 実障害があった（2026-06-21導入以降、truthは07-06・nagaokaは07-11を最後に
-        # 0本化＝約1ヶ月間、駐車場/アクセス誘導が実質未投稿だった。2026-08-14検証で発覚・修正）。
+        # アンカー投稿（店舗アクセス・頭痛タイプ診断・ホットペッパー予約導線・
+        # masaプロフィール診断導線）は固定テンプレのプールが小さく、variable無しの
+        # 完全一致文が多い。全期間dedup（posted_texts）でしか判定しないと
+        # 全テンプレ使用済み後は永久に選ばれなくなる実障害があった
+        # （2026-06-21導入以降、truthは07-06・nagaokaは07-11を最後に
+        # 0本化＝約1ヶ月間、駐車場/アクセス誘導が実質未投稿だった。2026-08-14検証で発覚・修正。
+        # masaのcta_profileも同型障害で2026-08-03以降0本化していたのを2026-08-17検証で修正）。
         # 以下の anchor_ok 緩和ルート（既存・HPB/shindanで実績あり）に必ず到達させる。
         is_anchor_pool_type = (
             _is_store_access(text) or _is_shindan(text) or _is_hpb_cta(text)
+            or _is_cta_profile(text)
         )
         if already_posted_ever and not is_anchor_pool_type:
             continue
@@ -611,10 +646,12 @@ def get_next_post(acct: str, today: str, avoid_url: bool = False):
             # 7日以内の重複（または全期間で使用済みの固定アンカーテンプレ）は
             # 投稿せずスキップ（ループで次の候補へ）。ただし店舗アクセスアンカー
             # （2026-07-03）・頭痛タイプ診断アンカー（2026-07-11）・
-            # ホットペッパー予約導線CTA（2026-07-15）は緩和ルールで採用可
+            # ホットペッパー予約導線CTA（2026-07-15）・masaプロフィール診断導線
+            # （2026-08-17）は緩和ルールで採用可
             anchor_ok = _access_anchor_ok(acct, today, text) \
                 or _shindan_anchor_ok(acct, today, text) \
-                or _hpb_anchor_ok(acct, today, text)
+                or _hpb_anchor_ok(acct, today, text) \
+                or _cta_profile_anchor_ok(acct, today, text)
             if not anchor_ok:
                 continue
             # アンカー緩和が効いても、本日すでにshared guardに記録済み
@@ -885,9 +922,12 @@ def run_account(acct: str):
     # 緩和して選ばれている（_hpb_anchor_ok/_access_anchor_ok）。post_to_threads側の
     # 通常dup判定（緩和なし）に skip_dup=False のまま渡すと、選ばれた直後に必ず
     # [重複スキップ]で弾かれ実質0投稿になる実障害があったため、同様にskip_dup対象に含める
-    # （2026-07-18検証で発覚: 07-10以降HPB CTA本文が一度も実投稿されていなかった）。
+    # （2026-07-18検証で発覚: 07-10以降HPB CTA本文が一度も実投稿されていなかった。
+    # 2026-08-17検証で発覚: masaのcta_profile（プロフィール診断導線）も同型障害で
+    # 08-03以降0本化していたため同様にskip_dup対象へ追加）。
     is_hpb = _is_hpb_cta(text or "")
     is_access = _is_store_access(text or "")
+    is_ctaprofile = _is_cta_profile(text or "")
     if text is None:
         log_info(acct, f"{name} 今日の投稿完了")
         return
@@ -961,7 +1001,7 @@ def run_account(acct: str):
 
     try:
         # post_to_threads 内部で重複チェック・pending・posted を一括処理
-        post_id = post_to_threads(acct, clean_text, skip_dup=(is_line or is_shindan or is_hpb or is_access))
+        post_id = post_to_threads(acct, clean_text, skip_dup=(is_line or is_shindan or is_hpb or is_access or is_ctaprofile))
         mark_posted(acct, today, index, post_id, clean_text)
         if is_line:
             _mark_line_done(acct, today)
@@ -994,7 +1034,7 @@ def run_account(acct: str):
             log_info(acct, f"{name} トークン期限切れ → 自動リフレッシュ...")
             if refresh_token(acct):
                 try:
-                    post_id = post_to_threads(acct, clean_text, skip_dup=(is_line or is_shindan or is_hpb or is_access))
+                    post_id = post_to_threads(acct, clean_text, skip_dup=(is_line or is_shindan or is_hpb or is_access or is_ctaprofile))
                     mark_posted(acct, today, index, post_id, clean_text)
                     if is_line:
                         _mark_line_done(acct, today)

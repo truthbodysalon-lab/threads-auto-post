@@ -934,37 +934,36 @@ def run_account(acct: str):
 
     comment_parts: list[str] = []
 
-    if is_line or is_shindan:
-        # LINEリストイン・頭痛タイプ診断アンカーは「URLを本文末尾に残す」ルール厳守
-        # （診断は「👇」の直後にURLが来る設計のため、コメントに追い出すと意味を成さない）
-        # → 分割もURL除去もしない
-        clean_text = (text or "").strip()
-        cta_block = None
-    else:
-        # URLをメイン本文から除去し、コメントに回す
-        clean_text, cta_block = extract_url_and_cta(text)
+    # 【2026-08-18 社長指示で方針変更】「URLは最初の投稿に載せるな。URLはコメント欄に掲載しろ」
+    # （2026-08-06・08-18の2回にわたり同じ指摘。旧仕様=LINEリストイン/頭痛診断のみ本文末尾に
+    #  URLを残す設計だったが、本文にURLがあると到達が落ち（実測8〜13閲覧）、結果として
+    #  登録数も伸びないため全面的にコメント欄方式へ統一する。**この分岐を元に戻さないこと**）
+    # 「👇」等でURLを指し示す文言は extract_url_and_cta 側で本文から除去されるため、
+    # 本文が「👇」で終わって宙に浮かないよう、末尾の指示記号を落としてから使う。
+    clean_text, cta_block = extract_url_and_cta(text)
+    clean_text = re.sub(r"[\s👇⬇️↓]+$", "", clean_text).strip()
 
-        # テキストをコメント部分に分割する
-        # 優先順位: [COMMENT] タグ → 【続き】マーカー → \n\n 段落区切り
-        if "[COMMENT]" in clean_text:
-            # [COMMENT] で複数コメントに分割
-            # 前後の改行・空白の有無に関わらず確実に分割する（末尾に改行のない
-            # [COMMENT] が本文に混入して literal 表示される実障害を防ぐ・2026-07-21）
-            segments = [s.strip() for s in re.split(r"\[COMMENT\]", clean_text) if s.strip()]
-            clean_text = segments[0] if segments else ""
-            comment_parts = segments[1:]
-        elif "\n\n【続き】\n" in clean_text:
-            parts = clean_text.split("\n\n【続き】\n", 1)
-            clean_text = parts[0].strip()
-            if parts[1].strip():
-                comment_parts = [parts[1].strip()]
-        elif "\n\n" in clean_text:
-            # マーカーなし長文 → 最初の段落のみ本文、残りをコメントへ
-            first_para, rest = clean_text.split("\n\n", 1)
-            rest = rest.strip()
-            if rest:
-                clean_text = first_para.rstrip()
-                comment_parts = [rest]
+    # テキストをコメント部分に分割する
+    # 優先順位: [COMMENT] タグ → 【続き】マーカー → \n\n 段落区切り
+    if "[COMMENT]" in clean_text:
+        # [COMMENT] で複数コメントに分割
+        # 前後の改行・空白の有無に関わらず確実に分割する（末尾に改行のない
+        # [COMMENT] が本文に混入して literal 表示される実障害を防ぐ・2026-07-21）
+        segments = [s.strip() for s in re.split(r"\[COMMENT\]", clean_text) if s.strip()]
+        clean_text = segments[0] if segments else ""
+        comment_parts = segments[1:]
+    elif "\n\n【続き】\n" in clean_text:
+        parts = clean_text.split("\n\n【続き】\n", 1)
+        clean_text = parts[0].strip()
+        if parts[1].strip():
+            comment_parts = [parts[1].strip()]
+    elif "\n\n" in clean_text:
+        # マーカーなし長文 → 最初の段落のみ本文、残りをコメントへ
+        first_para, rest = clean_text.split("\n\n", 1)
+        rest = rest.strip()
+        if rest:
+            clean_text = first_para.rstrip()
+            comment_parts = [rest]
 
     # 最終防衛: どの分岐を通っても [COMMENT]/【続き】マーカーが本文・コメントに
     # 残らないよう除去する（literal 表示の再発防止・2026-07-21）

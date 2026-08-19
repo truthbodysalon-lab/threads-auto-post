@@ -385,6 +385,25 @@ def check_execution_gaps():
     except Exception as e:
         add("exec:hpb_only", "C.実行ギャップ", "WARN", f"検査不可: {e}")
 
+    # C14: 画像投稿パイプラインの健全性（2026-08-19新設）。
+    #      デスクトップ画像フォルダに2日以上滞留があればWARN（パイプライン停止の疑い）。
+    try:
+        img_src = Path("/Users/mt112/Desktop/Threads投稿画像")
+        if img_src.exists():
+            import time as _t
+            stuck = 0
+            for acct in ("truth", "nagaoka"):
+                d = img_src / acct
+                if d.exists():
+                    for p in d.iterdir():
+                        if p.suffix.lower() in (".jpg", ".jpeg", ".png", ".heic") and                            _t.time() - p.stat().st_mtime > 2 * 86400:
+                            stuck += 1
+            add("exec:imagepost", "C.実行ギャップ",
+                "PASS" if stuck == 0 else "WARN",
+                f"画像投稿 滞留{stuck}件" + ("（2日超・launchd com.threads.imagepost要確認）" if stuck else ""))
+    except Exception as e:
+        add("exec:imagepost", "C.実行ギャップ", "WARN", f"確認不可: {e}")
+
     # C7: 月100万ペース（常時アラーム）。views_action.json を読み、未達アカウントを明示。
     #     達成は野心的目標のため未達は WARN（恒常監視・改善誘導が目的。FAILにはしない）。
     try:

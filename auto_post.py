@@ -609,15 +609,22 @@ def get_next_post(acct: str, today: str, avoid_url: bool = False):
         # 序盤(0-2本)では確実に出す、3本以上で判定再開するが優先採用維持
         should_post_line = (posted_today <= 1) or (posted_today >= 1 and random.random() < 0.9)
         if should_post_line:
-            # リストインは重複ガード免除のため、ここで7日以内の同一1文目を避ける
+            # リストインは重複ガード免除のため、ここで7日以内の同一1文目を避ける。
+            # さらにAPI直近実投稿(12h)とも突き合わせ、重複で弾かれる候補を最初から選ばない
+            # （2026-08-21障害: プール枯渇→先頭固定→API重複→未投稿のまま枠消化、の再発防止）。
             recent_listin = _recent_listin_firstlines(acct)
             line_candidates = [(i, t) for i, t in enumerate(all_posts) if _is_line_listin(t)]
-            for i, text in line_candidates:
+            eligible = [(i, t) for i, t in line_candidates
+                        if dg_normalize(t).split("\n")[0].strip()[:40] not in api_recent]
+            for i, text in eligible:
                 if text.split("\n")[0].strip() not in recent_listin:
                     return text, i
-            # 全候補が7日以内に使用済みなら、取りこぼし防止で先頭を採用
-            if line_candidates:
-                return line_candidates[0][1], line_candidates[0][0]
+            # 全候補が7日以内使用済み → 最も昔に使った候補(LRU)を採用（先頭固定にしない）
+            if eligible:
+                order = _listin_last_used_order(acct)
+                eligible.sort(key=lambda it: order.get(it[1].split("\n")[0].strip(), ""))
+                return eligible[0][1], eligible[0][0]
+            # 適格候補ゼロ（全てAPI直近重複）→ 今回はLINEを見送り通常投稿へ（枠は温存）
 
     # avoid_url=True の場合、直前投稿URL連発回避のため候補を集めてから選ぶ
     # （既定のavoid_url=Falseでは従来どおり最初の適格候補を即返す＝挙動を変えない）
@@ -1010,10 +1017,10 @@ def run_account(acct: str):
     except _DuplicatePost as dp:
         log_info(acct, f"{name} [重複スキップ] {str(dp)[:60]}")
         if is_line:
-            # LINEリストインがAPI重複で弾かれた場合、本日消化済みにしないと
-            # get_next_post が同じLINE投稿を選び続けて全投稿が止まる
-            # （2026-07-10 truthが16本で夜まで停止した実障害）。
-            _mark_line_done(acct, today)
+            # 2026-08-21改訂: 枠(_mark_line_done)は燃やさない。選択側がAPI直近重複を
+            # 事前回避するため同一候補の無限再選択は起きない（全滅時はLINE見送りで前進）。
+            # 旧実装は「消化済みマークだけ付いて未投稿」でnagaokaのLINEが3日停止した。
+            pass
         else:
             # 設計原則: 弾いた投稿は必ず消費済みにする。本文分割後(clean_text)が重複でも
             # 元のキュー全文は未マークのため、ここで全文normを消費済みにしないと

@@ -180,14 +180,21 @@ def _posted_recent_texts(acct: str, days: int):
 
 
 def check_execution_gaps():
-    # C1: LINEリストインが直近で実際に投稿されているか（今回のバグの再発検知）
+    # C1: LINEリストインが直近で実際に投稿されているか（再発検知）。
+    #     2026-08-21改訂: 8/18からURLは本文でなくコメント欄のため、本文キーワードでなく
+    #     リストインテンプレの「1文目」と動的照合する（プール変更にも自動追従）。
+    try:
+        import generate_remix as _g
+        _listin_fls = {t.split("\n")[0].strip() for t in _g.LINE_LISTIN_TEMPLATES}
+    except Exception:
+        _listin_fls = set()
     for acct in ("truth", "nagaoka"):
         texts = _posted_recent_texts(acct, 3)
-        line_cnt = sum(1 for t in texts if any(
-            m in t for m in ("LINEで配信", "LINEで無料", "LINEへ", "lin.ee", "LINEで毎日", "LINEでお届け")))
+        line_cnt = sum(1 for t in texts if (
+            t.split("\n")[0].strip() in _listin_fls or "lin.ee" in t))
         status = "PASS" if line_cnt >= 1 else "FAIL"
         add(f"exec:line_listin:{acct}", "C.実行ギャップ", status,
-            f"直近3日のLINEリストイン投稿 {line_cnt}件（{len(texts)}投稿中）")
+            f"直近3日のLINEリストイン投稿 {line_cnt}件（{len(texts)}投稿中・1文目照合）")
 
     # C2: 重みが直近で更新されているか（チューニング稼働）
     for acct in ACCTS:
@@ -385,23 +392,34 @@ def check_execution_gaps():
     except Exception as e:
         add("exec:hpb_only", "C.実行ギャップ", "WARN", f"検査不可: {e}")
 
-    # C14: 画像投稿パイプラインの健全性（2026-08-19新設）。
-    #      デスクトップ画像フォルダに2日以上滞留があればWARN（パイプライン停止の疑い）。
+    # C14: 画像投稿パイプラインの健全性（2026-08-21改訂）。
+    #      在庫画像の経過日数は正常（ストックは2枚/日で消化）。「在庫があるのに
+    #      2日以上投稿されていない」=パイプライン停止のみをWARNにする。
     try:
-        # Desktop直下はTCCでlaunchdから読めないためホーム直下が実体・Desktopはsymlink（2026-08-21）
         img_src = Path("/Users/mt112/Threads投稿画像")
-        if img_src.exists():
-            import time as _t
-            stuck = 0
+        has_stock = any((img_src / a).exists() and any(
+            p.suffix.lower() in (".jpg", ".jpeg", ".png", ".heic")
+            for p in (img_src / a).iterdir()) for a in ("truth", "nagaoka"))
+        if has_stock:
+            recent_img = False
             for acct in ("truth", "nagaoka"):
-                d = img_src / acct
-                if d.exists():
-                    for p in d.iterdir():
-                        if p.suffix.lower() in (".jpg", ".jpeg", ".png", ".heic") and                            _t.time() - p.stat().st_mtime > 2 * 86400:
-                            stuck += 1
+                pfile = BASE / f"log_{acct}_posted.jsonl"
+                if not pfile.exists():
+                    continue
+                cutoff2 = (date.today() - timedelta(days=2)).isoformat()
+                for line in pfile.read_text(encoding="utf-8").splitlines()[-200:]:
+                    try:
+                        e = json.loads(line)
+                        if e.get("kind") == "image" and e.get("date", "") >= cutoff2:
+                            recent_img = True
+                    except Exception:
+                        pass
             add("exec:imagepost", "C.実行ギャップ",
-                "PASS" if stuck == 0 else "WARN",
-                f"画像投稿 滞留{stuck}件" + ("（2日超・launchd com.threads.imagepost要確認）" if stuck else ""))
+                "PASS" if recent_img else "WARN",
+                "画像投稿 稼働中（在庫あり・直近2日に投稿あり）" if recent_img
+                else "在庫があるのに直近2日画像投稿なし（launchd com.threads.imagepost要確認）")
+        else:
+            add("exec:imagepost", "C.実行ギャップ", "PASS", "画像在庫なし（投稿待ちなし）")
     except Exception as e:
         add("exec:imagepost", "C.実行ギャップ", "WARN", f"確認不可: {e}")
 

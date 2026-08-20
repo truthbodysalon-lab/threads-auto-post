@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """デスクトップの画像フォルダからThreadsへ画像投稿する（truth/nagaoka・2026-08-19）。
 
-流れ: /Users/mt112/Desktop/Threads投稿画像/<acct>/ の画像を検出
+流れ: /Users/mt112/Threads投稿画像/<acct>/ の画像を検出（Desktop直下はTCCでlaunchdから読めないためホーム直下が実体・Desktopはsymlink）
   → リサイズ/変換(sips) → リポジトリ images/<acct>/ へコミット＆push（公開raw URL化）
   → ファイル名キーワードに応じた本文を生成 → IMAGEコンテナ作成→公開
   → 元画像を 使用済み/ へ移動・投稿台帳に記録（同一コミットでpush）
@@ -30,7 +30,8 @@ from datetime import date, datetime
 from pathlib import Path
 
 BASE = Path(__file__).parent
-SRC = Path("/Users/mt112/Desktop/Threads投稿画像")
+# Desktop直下はTCCでlaunchdから読めないためホーム直下が実体・Desktopはsymlink（2026-08-21）
+SRC = Path("/Users/mt112/Threads投稿画像")
 REPO_IMG = BASE / "images"
 STATE = BASE / "image_post_state.json"     # 日次カウント（.gitignore）
 RAW = "https://raw.githubusercontent.com/truthbodysalon-lab/threads-auto-post/main/images"

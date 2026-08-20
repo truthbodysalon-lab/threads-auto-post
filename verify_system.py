@@ -388,7 +388,8 @@ def check_execution_gaps():
     # C14: 画像投稿パイプラインの健全性（2026-08-19新設）。
     #      デスクトップ画像フォルダに2日以上滞留があればWARN（パイプライン停止の疑い）。
     try:
-        img_src = Path("/Users/mt112/Desktop/Threads投稿画像")
+        # Desktop直下はTCCでlaunchdから読めないためホーム直下が実体・Desktopはsymlink（2026-08-21）
+        img_src = Path("/Users/mt112/Threads投稿画像")
         if img_src.exists():
             import time as _t
             stuck = 0

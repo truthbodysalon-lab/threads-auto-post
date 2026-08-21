@@ -315,28 +315,45 @@ def main():
     #   「Obsidian保存失敗: Operation not permitted」を出していた。
     #   索引は追記モード(open 'a')にして読まずに済ませ、レポート本体の保存とtryを分離する
     #   （索引が落ちてもレポートは残す）。既存ファイルの上書きが拒否される場合は unlink してから書く。
+    # 2026-08-21: launchd起動時はmacOSのTCCにより ~/Desktop 配下の権限が次のように分かれる（実測）。
+    #   mkdir: OK / stat: OK / **存在しないファイルの新規作成: OK**
+    #   既存ファイルの 読み取り・上書き・追記・削除: すべて DENIED
+    #   このジョブは毎日22:33にlaunchdから動くが、同じ日のレポートは朝の別経路が既に作っている。
+    #   そのため「既存ファイルへの書き込み」になり、8/14〜8/20の7日連続で
+    #   「Obsidian保存失敗: Operation not permitted」を出していた。
+    #   → health-check と同じミラー方式にする。機械が確実に読み書きできる ~/.claude/logs/ を
+    #     正本として必ず保存し、Obsidian側（人が読む用）はベストエフォートで試すだけにする。
     per = " / ".join(f"{a}{stat[a]['pace']}%" for a in ACCTS)
     entry = f"- [{today.isoformat()}](閲覧レポート_{today.isoformat()}.md) 月100万 [{per}]\n"
+    body = "\n".join(lines)
+    fname = f"閲覧レポート_{today.isoformat()}.md"
+
+    # ① ミラー（TCCの影響を受けない。ここは必ず成功させる）
+    mirror = Path.home() / ".claude" / "logs" / "threads-views-reports"
+    try:
+        mirror.mkdir(parents=True, exist_ok=True)
+        (mirror / fname).write_text(body, encoding="utf-8")
+    except Exception as e:
+        print(f"[ERROR] 閲覧レポートのミラー保存に失敗: {e}", file=sys.stderr)
+
+    # ② Obsidian側（人が読む用）。既に同日分がある場合はTCCで触れないので、
+    #    それは異常ではなく想定内。WARNではなくINFOで静かに記録する。
     try:
         REPORT_DIR.mkdir(parents=True, exist_ok=True)
-        rp = REPORT_DIR / f"閲覧レポート_{today.isoformat()}.md"
-        body = "\n".join(lines)
-        try:
-            rp.write_text(body, encoding="utf-8")
-        except PermissionError:
-            rp.unlink(missing_ok=True)          # 既存ファイルへの上書きが拒否されるケースの回避
+        rp = REPORT_DIR / fname
+        if rp.exists():
+            print(f"[INFO] Obsidian側は同日分が既にあるため据え置き（正本はミラー: {mirror / fname}）")
+        else:
             rp.write_text(body, encoding="utf-8")
     except Exception as e:
-        print(f"[WARN] 閲覧レポート保存失敗: {e}")
+        print(f"[INFO] Obsidian保存は見送り（正本はミラーに保存済み）: {e}")
     try:
         idx = REPORT_DIR / "00_INDEX.md"
-        if idx.exists():
-            with open(idx, "a", encoding="utf-8") as f:   # 読まずに追記（read_textはTCCで落ちる）
-                f.write(entry)
-        else:
+        if not idx.exists():
             idx.write_text("# 閲覧レポート索引\n\n" + entry, encoding="utf-8")
+        # 既存の索引はlaunchdからは追記できない（TCC）。朝の経路が更新するので触らない。
     except Exception as e:
-        print(f"[WARN] 索引更新失敗（レポート本体は保存済み）: {e}")
+        print(f"[INFO] 索引は据え置き: {e}")
 
     # ── 履歴（真の月次レートで記録）──
     try:

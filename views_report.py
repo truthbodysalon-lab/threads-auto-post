@@ -309,19 +309,34 @@ def main():
     lines += ["", "## ✅ 改善アクション（レバー指定）", ""] + [f"- {a}" for a in actions]
     lines += ["", f"> 更新: {datetime.now().strftime('%Y-%m-%d %H:%M')}"]
 
+    # 2026-08-21: launchd起動時はmacOSのTCCにより ~/Desktop 配下の挙動が次のように分かれる（実測）。
+    #   新規ファイル作成: OK / mkdir: OK / stat: OK / 既存ファイルの読み取り: DENIED
+    #   旧実装は索引を read_text() していたため毎回ここで例外になり、8/14〜8/20の7日連続で
+    #   「Obsidian保存失敗: Operation not permitted」を出していた。
+    #   索引は追記モード(open 'a')にして読まずに済ませ、レポート本体の保存とtryを分離する
+    #   （索引が落ちてもレポートは残す）。既存ファイルの上書きが拒否される場合は unlink してから書く。
+    per = " / ".join(f"{a}{stat[a]['pace']}%" for a in ACCTS)
+    entry = f"- [{today.isoformat()}](閲覧レポート_{today.isoformat()}.md) 月100万 [{per}]\n"
     try:
         REPORT_DIR.mkdir(parents=True, exist_ok=True)
-        (REPORT_DIR / f"閲覧レポート_{today.isoformat()}.md").write_text("\n".join(lines), encoding="utf-8")
+        rp = REPORT_DIR / f"閲覧レポート_{today.isoformat()}.md"
+        body = "\n".join(lines)
+        try:
+            rp.write_text(body, encoding="utf-8")
+        except PermissionError:
+            rp.unlink(missing_ok=True)          # 既存ファイルへの上書きが拒否されるケースの回避
+            rp.write_text(body, encoding="utf-8")
+    except Exception as e:
+        print(f"[WARN] 閲覧レポート保存失敗: {e}")
+    try:
         idx = REPORT_DIR / "00_INDEX.md"
-        per = " / ".join(f"{a}{stat[a]['pace']}%" for a in ACCTS)
-        entry = f"- [{today.isoformat()}](閲覧レポート_{today.isoformat()}.md) 月100万 [{per}]\n"
         if idx.exists():
-            if today.isoformat() not in idx.read_text(encoding="utf-8"):
-                idx.write_text(idx.read_text(encoding="utf-8") + entry, encoding="utf-8")
+            with open(idx, "a", encoding="utf-8") as f:   # 読まずに追記（read_textはTCCで落ちる）
+                f.write(entry)
         else:
             idx.write_text("# 閲覧レポート索引\n\n" + entry, encoding="utf-8")
     except Exception as e:
-        print(f"[WARN] Obsidian保存失敗: {e}")
+        print(f"[WARN] 索引更新失敗（レポート本体は保存済み）: {e}")
 
     # ── 履歴（真の月次レートで記録）──
     try:

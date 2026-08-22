@@ -1,0 +1,16 @@
+# 2026-08-23 検証で追加。
+# generate.yml（毎朝7:00）とauto_post.yml（10〜20分毎）が同じappend-only
+# jsonlログを並行更新し、git pull --rebase時にConflictで失敗する事故が
+# 月1〜2回発生していた（直近: 2026-08-15/16/19）。
+# 対象ファイルはいずれも常に1行=1レコードの追記のみ（in-place編集なし、
+# generate_remix.py/auto_post.py/duplicate_guard.pyでopen(..., "a")のみ使用
+# を確認済み）のため、git組み込みのunionマージドライバで安全に自動解決する。
+# 対象外（weights_*.json/insights_*.json/feedback.json等）は1オブジェクト
+# 全体を毎回上書きするため union は不可 = 対象に含めない。
+log_truth.jsonl merge=union
+log_nagaoka.jsonl merge=union
+log_masa.jsonl merge=union
+log_truth_posted.jsonl merge=union
+log_nagaoka_posted.jsonl merge=union
+log_masa_posted.jsonl merge=union
+shared_posted_guard.jsonl merge=union

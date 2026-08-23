@@ -1,10 +1,10 @@
 {
-  "updated_at": "2026-08-23",
+  "updated_at": "2026-08-24",
   "pattern_weights": {
     "quote_empathy": 4,
     "insight": 12,
     "education": 4,
-    "story": 1,
+    "story": 2,
     "workmom": 1,
     "ranking": 1,
     "question": 1,
@@ -13,11 +13,11 @@
   },
   "feedback_scores": {},
   "api_scores": {
-    "insight": 0.56,
-    "story": -1.14,
-    "quote_empathy": -1.25,
-    "ranking": -0.71,
-    "education": -0.21
+    "insight": 0.49,
+    "story": -1.11,
+    "quote_empathy": -1.21,
+    "ranking": -0.6,
+    "education": -0.09
   },
   "follower_scores": {
     "insight": 3.0,

@@ -2156,6 +2156,20 @@ AI_KISO_TEMPLATES = [
 ]
 
 
+# ── masa: AI→店舗の時短→公式LINE誘導（URL無し・プロフィール経由／2026-08-23）──
+# 約束＝実物: LINEで「AI」と送ると時短の始め方3ステップが自動で届く（auto_reply登録済み）。
+AI_TIME_CTA_TEMPLATES = [
+    "お店の作業時間、AIで半分にできます。\nでも何から任せればいいか分からない人がほとんど。\nLINEで『AI』と送ると、始め方の3ステップをお送りしています。プロフィールのリンクから。",
+    "閉店後にSNSを書く時間、僕はゼロになりました。\n同じことをやりたい方へ。\nLINEで『AI』と送ってもらえれば、最初の一歩をお伝えします。入口はプロフィールのリンクです。",
+    "AIで時短したい。でも難しそう。\nそんな方のために、最初の3ステップだけをLINEで配っています。\n『AI』と送るだけです。プロフィールのリンクからどうぞ。",
+    "1日30分、SNSや連絡の作業をAIに任せるだけで、月に15時間空きます。\nその15時間で何をするかは、あなた次第。\n始め方はLINEで『AI』と送ってください。プロフィールのリンクから。",
+    "「うちの店だと、何からAIに任せればいい？」\nこの質問、LINEで直接答えています。\n『AI』と送ると始め方が届き、そのまま質問もできます。プロフィールのリンクへ。",
+    "AIに任せて空いた時間で、お客さんと話す。\nこれが僕のお店の時短の正体です。\n同じ形にしたい方は、LINEで『AI』と送ってください。3ステップをお送りします。",
+    "時短の一歩目は、道具を買うことじゃありません。\n『毎日同じことをしている作業』を3つ書き出すこと。\nその先の手順はLINEで『AI』と送ると届きます。プロフィールのリンクから。",
+    "AIを入れたいけど、失敗したくない。\nなら、投稿1本の下書きから始めてください。\n順番を間違えなければ失敗しません。順番はLINEで『AI』と送ればお送りします。",
+]
+
+
 def generate_ai_jitsurei_post() -> str:
     return random.choice(AI_JITSUREI_TEMPLATES)
 
@@ -2363,6 +2377,13 @@ def generate_30_masa_posts() -> list[str]:
     for i, ap_ in enumerate(ai_posts):
         pos = min([4, 20, 36][i] if i < 3 else (i * 12 + 4), len(posts))
         posts.insert(pos, ap_)
+
+    # AI→時短→LINE誘導を1日1本（URL無し・プロフィール経由。LINE言及枠内）
+    for _ in range(20):
+        tc = random.choice(AI_TIME_CTA_TEMPLATES)
+        if not _is_masa_sales_ng(tc) and not _is_ng(tc):
+            posts.insert(min(12, len(posts)), tc)
+            break
 
     posts = _insert_hero_posts(posts, "masa")   # 全挿入の最後
     return posts[:100]

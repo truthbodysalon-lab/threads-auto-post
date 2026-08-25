@@ -2388,11 +2388,40 @@ def generate_30_masa_posts() -> list[str]:
         posts.insert(pos, ap_)
 
     # AI→時短→LINE誘導を1日1本（URL無し・プロフィール経由。LINE言及枠内）
+    ai_time_cta_text = None
     for _ in range(20):
         tc = random.choice(AI_TIME_CTA_TEMPLATES)
         if not _is_masa_sales_ng(tc) and not _is_ng(tc):
             posts.insert(min(12, len(posts)), tc)
+            ai_time_cta_text = tc
             break
+
+    # ── LINE言及率 最終チェック（2026-08-26修正） ──
+    # 従来のcap(4本)は本ブロックより前段（cta_profile/AI_TIME_CTA挿入前）で
+    # 適用されており、その後の固定挿入(cta_profile 2本 + AI_TIME_CTA 1本)が
+    # capを素通りして実績が14%(7/50)まで超過していた
+    # （note 2026-08-23: LINE言及は前半50本で5本以内）。
+    # 導線として保護すべきcta_profile/AI_TIME_CTAは残し、それ以外の超過分のみ
+    # 非LINE投稿に差し替える。
+    protected_line_texts = set(prof_cta)
+    if ai_time_cta_text is not None:
+        protected_line_texts.add(ai_time_cta_text)
+    line_target = 5
+    front_half_len = min(50, len(posts))
+    line_idx_all = [
+        i for i in range(front_half_len)
+        if ("LINE" in posts[i] or "ライン" in posts[i] or "lin.ee" in posts[i])
+    ]
+    if len(line_idx_all) > line_target:
+        removable_idx = [i for i in line_idx_all if posts[i] not in protected_line_texts]
+        excess = len(line_idx_all) - line_target
+        for idx in removable_idx[:excess]:
+            for _ in range(20):
+                repl = generate_masa_post(random.choice(["meigen", "keikoku", "nanimono_kizuki"]))
+                if (repl and "LINE" not in repl and "ライン" not in repl and "lin.ee" not in repl
+                        and not _is_ng(repl) and not _is_masa_sales_ng(repl) and repl not in posts):
+                    posts[idx] = repl
+                    break
 
     posts = _insert_hero_posts(posts, "masa")   # 全挿入の最後
     return posts[:100]

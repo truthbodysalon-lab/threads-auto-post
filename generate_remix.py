@@ -1363,9 +1363,18 @@ def _insert_hero_posts(posts: list[str], acct: str) -> list[str]:
     # 最終ガード: ヒーロー挿入で誘導投稿(ホットペッパー/駐車場/LINE)が位置50超へ
     # 押し出されたら前半へ戻す（1日約50本消費のため位置50超=未投稿）
     markers = ("beauty.hotpepper.jp", "専用駐車場", "長岡駅から車で5分", "lin.ee/")
-    for idx in range(len(posts) - 1, 49, -1):
-        if any(m in posts[idx] for m in markers):
-            posts.insert(44, posts.pop(idx))
+    # 降順1パスだと取り残しが出る: pop(idx)→insert(44) で 44〜idx の要素が右へ1つ
+    # ずれるため、index 49 にあった誘導投稿が 50 へ押し戻される。降順走査は既に
+    # その位置を通過済みで再確認しないため、そのまま位置50超に残る
+    # （2026-08-25 nagaoka: アクセス投稿が index 50 に残留し verify C6 が FAIL）。
+    # 残留ゼロになるまで繰り返す。1回で必ず1本が前半へ確定するので誘導投稿の
+    # 本数ぶんで収束する（上限を付けて無限ループを防ぐ）。
+    for _ in range(len(posts)):
+        stuck = [i for i in range(50, len(posts))
+                 if any(m in posts[i] for m in markers)]
+        if not stuck:
+            break
+        posts.insert(44, posts.pop(stuck[-1]))
     return posts
 
 

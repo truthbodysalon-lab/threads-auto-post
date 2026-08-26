@@ -26,13 +26,13 @@
   },
   "follower_scores": {
     "insight": 3.0,
-    "keisei_kyokan": -0.54,
+    "keisei_kyokan": -0.53,
     "education": -0.85,
-    "quote_empathy": 0.5,
+    "quote_empathy": 0.46,
     "ranking": -0.79,
     "keisei_casual": -0.73,
-    "keisei_target": 0.07,
-    "story": 0.21,
+    "keisei_target": 0.09,
+    "story": 0.23,
     "question": -0.88
   },
   "line_scores": {}

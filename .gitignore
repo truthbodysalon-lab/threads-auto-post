@@ -16,3 +16,7 @@ uplink_top.json
 image_post_state.json
 image_post.log
 image_post_err.log
+
+# 一時バックアップ・ローカル検品ログ（誤コミット防止・2026-08-27検証で発見）
+*.jsonl.bak-*
+inspection_log.jsonl

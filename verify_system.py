@@ -240,6 +240,40 @@ def check_execution_gaps():
         else:
             add(f"exec:queue:{acct}", "C.実行ギャップ", "WARN", "今日のキュー なし（生成失敗の疑い）")
 
+    # C5b: masaのLINE言及率（feedback.json note 2026-08-23: 前半50本で5本以内=10%未満）
+    # 2026-08-26に固定挿入(cta_profile2本+AI_TIME_CTA1本)がcapを素通りし
+    # 22%(11/50)まで超過した実績があるため、実際の投稿実績を直近日次で監視する。
+    try:
+        by_date = {}
+        pfile = BASE / "log_masa_posted.jsonl"
+        if pfile.exists():
+            for line in pfile.read_text(encoding="utf-8").splitlines():
+                try:
+                    e = json.loads(line)
+                    d = e.get("date")
+                    if d:
+                        by_date.setdefault(d, []).append(e.get("text", ""))
+                except Exception:
+                    pass
+        recent_dates = sorted(by_date.keys())[-3:]
+        worst_rate, worst_date, worst_cnt = 0.0, None, 0
+        for d in recent_dates:
+            texts = by_date[d][:50]  # 前半50本
+            if not texts:
+                continue
+            cnt = sum(1 for t in texts if ("LINE" in t or "ライン" in t or "lin.ee" in t))
+            rate = cnt / len(texts)
+            if rate > worst_rate:
+                worst_rate, worst_date, worst_cnt = rate, d, cnt
+        if worst_date is None:
+            add("rule:line_rate:masa", "B.ルール反映", "WARN", "masa投稿実績が見つからず判定不可")
+        else:
+            status = "PASS" if worst_cnt <= 5 else "FAIL"
+            add("rule:line_rate:masa", "B.ルール反映", status,
+                f"直近3日で最大 {worst_date} {worst_cnt}本/50本（{worst_rate*100:.0f}%）LINE言及・上限5本(10%)")
+    except Exception as e:
+        add("rule:line_rate:masa", "B.ルール反映", "WARN", f"検査失敗: {e}")
+
     # C6: 誘導投稿（ホットペッパー予約・店舗アクセス）がキュー前半(<50)に固定されているか
     #     ランダム高位置だと1日約50本の消費に届かず未投稿になるバグの再発検知。
     for acct in ("truth", "nagaoka"):

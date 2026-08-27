@@ -20,6 +20,7 @@ from __future__ import annotations
 import hashlib
 import json
 import random
+import shlex
 import shutil
 import subprocess
 import sys
@@ -33,10 +34,13 @@ BASE = Path(__file__).parent
 # Desktop直下はTCCでlaunchdから読めないためホーム直下が実体・Desktopはsymlink（2026-08-21）
 SRC = Path("/Users/mt112/Threads投稿画像")
 REPO_IMG = BASE / "images"
-STATE = BASE / "image_post_state.json"     # 日次カウント（.gitignore）
+STATE = BASE / "image_post_state.json"     # 日次カウント・使用ログ・通知フラグ（.gitignore）
 RAW = "https://raw.githubusercontent.com/truthbodysalon-lab/threads-auto-post/main/images"
 DAILY_IMG_CAP = 2
 TIMEOUT = 30
+RECYCLE_DAYS = 30           # 使用済み画像の再利用しきい値（日）
+NOTIFY_SCRIPT = Path("/Users/mt112/.claude/scripts/notify.sh")
+IMG_EXTS = (".jpg", ".jpeg", ".png", ".heic")
 
 sys.path.insert(0, str(BASE))
 from auto_post import ACCOUNTS, load_env, POST_HOUR_START, POST_HOUR_END  # noqa: E402
@@ -103,6 +107,76 @@ def _mark(st, acct):
     st[acct] = {"date": date.today().isoformat(),
                 "count": _count_today(st, acct) + 1}
     STATE.write_text(json.dumps(st, ensure_ascii=False))
+
+
+def _save_state(st):
+    STATE.write_text(json.dumps(st, ensure_ascii=False))
+
+
+def _record_used(st, acct: str, filename: str, category: str):
+    """使用済み移動・再利用のたびに使用日時とカテゴリを記録（30日リサイクル判定用）。"""
+    st.setdefault("used_log", {}).setdefault(acct, {})[filename] = {
+        "used_at": datetime.now().isoformat(), "category": category}
+    _save_state(st)
+
+
+def _last_used(st, acct: str, filename: str) -> dict | None:
+    return st.get("used_log", {}).get(acct, {}).get(filename)
+
+
+def recycle_candidates(st, acct: str) -> list[tuple[datetime, Path, str | None]]:
+    """使用済み/ 内で最終使用から RECYCLE_DAYS 日以上経過した画像を、古い順に返す。
+    使用日時は状態ファイルの記録を優先し、記録が無ければファイルのmtimeで代用する。"""
+    used_dir = SRC / "使用済み" / acct
+    if not used_dir.exists():
+        return []
+    now = datetime.now()
+    out = []
+    for p in sorted(used_dir.iterdir()):
+        if p.name.startswith(".") or p.name.startswith("SKIP_"):
+            continue
+        if p.suffix.lower() not in IMG_EXTS:
+            continue
+        entry = _last_used(st, acct, p.name)
+        if entry and entry.get("used_at"):
+            try:
+                used_at = datetime.fromisoformat(entry["used_at"])
+            except Exception:
+                used_at = datetime.fromtimestamp(p.stat().st_mtime)
+        else:
+            used_at = datetime.fromtimestamp(p.stat().st_mtime)
+        if (now - used_at).total_seconds() / 86400 >= RECYCLE_DAYS:
+            out.append((used_at, p, entry.get("category") if entry else None))
+    out.sort(key=lambda t: t[0])   # 最も古い使用から
+    return out
+
+
+def pick_recycle_category(default_cat: str, last_cat: str | None) -> str:
+    """再利用時は前回と別カテゴリのキャプションを選ぶ。"""
+    if last_cat and default_cat == last_cat:
+        others = [c for c in CAPTIONS if c != last_cat]
+        return random.choice(others)
+    return default_cat
+
+
+def notify_stock_empty(st) -> bool:
+    """在庫0かつリサイクル適格も0の日に1日1回だけDiscord通知。送信したらTrue。"""
+    today = date.today().isoformat()
+    if st.get("notify_empty_date") == today:
+        return False
+    msg = ("Threads画像在庫が空です。"
+           "~/Threads投稿画像/truth・nagaokaに写真を追加してください。")
+    try:
+        subprocess.run(
+            ["bash", "-c", f"echo {shlex.quote(msg)} | {shlex.quote(str(NOTIFY_SCRIPT))}"],
+            capture_output=True, timeout=30)
+        st["notify_empty_date"] = today
+        _save_state(st)
+        log("枯渇通知を送信")
+        return True
+    except Exception as e:
+        log(f"枯渇通知失敗: {e}")
+        return False
 
 
 def category_of(name: str) -> str:
@@ -208,6 +282,7 @@ def main():
         print("投稿時間外")
         return
     st = _state()
+    exhausted = []
     for acct in ("truth", "nagaoka"):
         folder = SRC / acct
         if not folder.exists():
@@ -215,20 +290,37 @@ def main():
         if _count_today(st, acct) >= DAILY_IMG_CAP:
             continue
         imgs = sorted([p for p in folder.iterdir()
-                       if p.suffix.lower() in (".jpg", ".jpeg", ".png", ".heic") and not p.name.startswith(".")])
-        if not imgs:
-            continue
-        src = imgs[0]
+                       if p.suffix.lower() in IMG_EXTS and not p.name.startswith(".")])
+
+        recycled = False
+        last_cat = None
+        if imgs:
+            src = imgs[0]
+        else:
+            # 在庫0 → 使用済み/ の30日リサイクル候補（最も古い使用から）を探す
+            candidates = recycle_candidates(st, acct)
+            if not candidates:
+                log(f"{acct}: 在庫0・リサイクル適格0")
+                exhausted.append(acct)
+                continue
+            _used_at, src, last_cat = candidates[0]
+            recycled = True
+
         cat = category_of(src.name)
-        cap = pick_caption(acct, cat)
-        log(f"{acct}: {src.name} (カテゴリ={cat}) を処理")
+        cap_cat = pick_recycle_category(cat, last_cat) if recycled else cat
+        cap = pick_caption(acct, cap_cat)
+        tag = "リサイクル" if recycled else "新規"
+        log(f"{acct}: {src.name} (カテゴリ={cap_cat}・{tag}) を処理")
         if dry:
             log(f"[dry-run] caption:\n{cap}")
             continue
         repo_img = prepare_image(src, acct)
         if repo_img is None:
-            # 壊れた画像は使用済みへ退避してブロックを防ぐ
-            shutil.move(str(src), str(SRC / "使用済み" / acct / ("SKIP_" + src.name)))
+            # 壊れた画像は使用済みへ退避（SKIP_）してブロックを防ぐ。リサイクル元は既に使用済みなのでリネームのみ
+            if recycled:
+                src.rename(src.with_name("SKIP_" + src.name))
+            else:
+                shutil.move(str(src), str(SRC / "使用済み" / acct / ("SKIP_" + src.name)))
             continue
         if not git_push([repo_img], f"chore: image for {acct} [skip ci]"):
             log(f"{acct}: push失敗→今回は見送り")
@@ -241,10 +333,17 @@ def main():
             _mark(st, acct)
             pfile = record_posted(acct, pid, cap)
             git_push([pfile], f"chore: image post log {acct} [skip ci]")
-            shutil.move(str(src), str(SRC / "使用済み" / acct / src.name))
-            log(f"{acct}: ✓ 画像投稿 {pid}")
+            if recycled:
+                _record_used(st, acct, src.name, cap_cat)   # 使用済み内で使用日時のみ更新
+            else:
+                shutil.move(str(src), str(SRC / "使用済み" / acct / src.name))
+                _record_used(st, acct, src.name, cap_cat)
+            log(f"{acct}: ✓ 画像投稿 {pid} ({tag})")
         else:
             log(f"{acct}: 投稿失敗（画像は残置・次回再試行）")
+
+    if exhausted and not dry:
+        notify_stock_empty(st)
 
 
 if __name__ == "__main__":

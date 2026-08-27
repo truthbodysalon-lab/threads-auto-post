@@ -77,7 +77,7 @@ jobs:
       # Mac停止時も50本/日に到達できる。
       - name: Run auto_post (pace-aware batch)
         run: python3 auto_post.py all || true
-        timeout-minutes: 15
+        timeout-minutes: 30
 
       - name: Sync refreshed tokens to GitHub Secrets
         run: python3 token_manager.py --sync-secrets

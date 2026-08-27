@@ -14,3 +14,8 @@ log_truth_posted.jsonl merge=union
 log_nagaoka_posted.jsonl merge=union
 log_masa_posted.jsonl merge=union
 shared_posted_guard.jsonl merge=union
+# append-only台帳は競合時に両方の行を残す（-X theirsで片側が消える事故の恒久対策 2026-08-27）
+log_truth_posted.jsonl merge=union
+log_nagaoka_posted.jsonl merge=union
+log_masa_posted.jsonl merge=union
+shared_posted_guard.jsonl merge=union

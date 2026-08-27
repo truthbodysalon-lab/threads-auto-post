@@ -56,5 +56,5 @@ jobs:
           git diff --cached --quiet || git commit -m "chore: watchdog-ci state [skip ci]"
           for i in 1 2 3; do
             git push && break
-            git pull --rebase origin main
+            git pull --rebase -X theirs origin main || { git rebase --abort 2>/dev/null || true; }
           done

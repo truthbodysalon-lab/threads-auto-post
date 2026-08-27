@@ -24,10 +24,10 @@
     "quote_empathy": 0.18,
     "selfcare_casual": -0.55,
     "education": -0.45,
-    "story": 0.4,
+    "story": 0.38,
     "question": -0.86,
     "workmom": -0.84,
-    "ranking": -0.88
+    "ranking": -0.87
   },
   "line_scores": {}
 }

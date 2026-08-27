@@ -78,12 +78,14 @@ jobs:
       - name: Run auto_post (pace-aware batch)
         run: python3 auto_post.py all || true
         timeout-minutes: 30
+        continue-on-error: true
 
       - name: Sync refreshed tokens to GitHub Secrets
         run: python3 token_manager.py --sync-secrets
         continue-on-error: true
 
       - name: Commit updated log files
+        if: always()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -98,3 +100,4 @@ jobs:
             echo "Push failed (attempt $i), retrying..."
             git pull --rebase origin main
           done
+          git diff --quiet origin/main -- log_nagaoka_posted.jsonl log_truth_posted.jsonl log_masa_posted.jsonl || echo "::warning::posted-log push may have failed"

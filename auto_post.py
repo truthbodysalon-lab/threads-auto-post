@@ -1140,6 +1140,8 @@ def _run_account_batch(acct: str):
     - 遅れていればまとめて回復、進んでいれば控える（Mac休止後のキャッチアップ対応）
     """
     posted = _posted_count_today(acct)
+    ledger_posted = posted
+    api_n = None
     # ログ同期ラグ（pull_syncのreset等）でローカルログが実投稿数を過小カウントし
     # 上限超過する事故（2026-07-16 nagaoka71本）を防ぐため、外形(API実測)と比べて大きい方を使う
     try:
@@ -1156,6 +1158,8 @@ def _run_account_batch(acct: str):
     hour = datetime.now().hour
     want = _target_cumulative_by_now(hour)             # 今あるべき累計
     need = max(0, want - posted)
+    if need == 0 and api_n is not None and (api_n - ledger_posted) > 10:
+        log_info(acct, f"{ACCOUNTS[acct]['name']} 台帳{ledger_posted}本だがAPI実測{api_n}本で目標充足→自パイプライン以外の投稿を検知(差分{api_n - ledger_posted}本)")
     # 遅れ幅を自動検知してバースト量を調整（スリープ復帰時に一気に回復）
     # 通常は MAX_PER_RUN まで。大きく遅れている時は最大15本まで一気に出す。
     burst_cap = MAX_BURST if need > MAX_PER_RUN else MAX_PER_RUN

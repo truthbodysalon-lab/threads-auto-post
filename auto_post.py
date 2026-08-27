@@ -498,6 +498,31 @@ def pick_avoiding_consecutive_url(candidates, last_had_url: bool):
     return candidates[0]
 
 
+_LINE_MENTION_RE = re.compile(r"LINE|ライン", re.IGNORECASE)
+
+def _masa_line_overrate(text: str) -> bool:
+    """masaのLINE言及率キャップ（verify rule:line_rate=5本/日10%対策・2026-08-27）。
+    導線投稿（リストイン/診断/時短CTA=『AI』誘導）は削らない方針のため常時許可し、
+    コンテンツ投稿の付随的なLINE言及だけを本日2本でブロックする（3導線+2=最大5本）。"""
+    if not _LINE_MENTION_RE.search(text):
+        return False
+    if _is_line_listin(text) or _is_shindan(text) or "『AI』" in text:
+        return False
+    today = date.today().strftime("%Y-%m-%d")
+    n = 0
+    try:
+        with open(ACCOUNTS["masa"]["posted"], encoding="utf-8") as f:
+            for l in f:
+                if not l.strip():
+                    continue
+                r = json.loads(l)
+                if r.get("date") == today and _LINE_MENTION_RE.search(r.get("text", "")) \
+                        and not _is_line_listin(r.get("text", "")):
+                    n += 1
+    except Exception:
+        return False
+    return n >= 2
+
 def _posted_count_today(acct: str) -> int:
     """log_{acct}_posted.jsonl の本日の投稿件数（バッチ投稿の打ち切り判定用）"""
     pfile = ACCOUNTS[acct]["posted"]
@@ -909,6 +934,8 @@ def run_account(acct: str):
     _inspect_attempts = 0
     while text is not None:
         _ok, _reasons = inspect_before_post(text, acct)
+        if _ok and acct == "masa" and _masa_line_overrate(text):
+            _ok, _reasons = False, ["LINE言及率上限(コンテンツ枠2本/日)"]
         if _ok:
             break
         log_info(acct, f"{name} [検品NG] {'; '.join(_reasons)[:100]} → {text[:30].replace(chr(10), ' ')}...")

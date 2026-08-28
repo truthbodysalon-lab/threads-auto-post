@@ -2396,11 +2396,14 @@ def generate_30_masa_posts() -> list[str]:
             ai_time_cta_text = tc
             break
 
-    # ── LINE言及率 最終チェック（2026-08-26修正） ──
+    posts = _insert_hero_posts(posts, "masa")   # 全挿入の最後（LINE最終チェックより前に置く）
+
+    # ── LINE言及率 最終チェック（2026-08-29修正） ──
     # 従来のcap(4本)は本ブロックより前段（cta_profile/AI_TIME_CTA挿入前）で
-    # 適用されており、その後の固定挿入(cta_profile 2本 + AI_TIME_CTA 1本)が
-    # capを素通りして実績が14%(7/50)まで超過していた
-    # （note 2026-08-23: LINE言及は前半50本で5本以内）。
+    # 適用されており、その後の固定挿入(cta_profile 2本 + AI_TIME_CTA 1本)と
+    # ヒーロー投稿(hero_masa.jsonにLINE言及が混入することがある)がcapを素通りし
+    # 実績が22%(11/50)まで超過していた（note 2026-08-23: LINE言及は前半50本で5本以内）。
+    # ヒーロー挿入の後にチェックすることで漏れをなくす。
     # 導線として保護すべきcta_profile/AI_TIME_CTAは残し、それ以外の超過分のみ
     # 非LINE投稿に差し替える。
     protected_line_texts = set(prof_cta)
@@ -2423,7 +2426,6 @@ def generate_30_masa_posts() -> list[str]:
                     posts[idx] = repl
                     break
 
-    posts = _insert_hero_posts(posts, "masa")   # 全挿入の最後
     return posts[:100]
 
 

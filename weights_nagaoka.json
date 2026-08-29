@@ -3,25 +3,25 @@
   "pattern_weights": {
     "keisei_target": 7,
     "keisei_risk": 5,
-    "keisei_kyokan": 2,
-    "keisei_casual": 3,
+    "keisei_kyokan": 8,
+    "keisei_casual": 4,
     "quote_empathy": 4,
-    "insight": 12,
+    "insight": 11,
     "education": 2,
-    "story": 2,
-    "ranking": 4,
+    "story": 3,
+    "ranking": 1,
     "question": 1,
     "hochi_risk": 5,
     "variety": 20
   },
   "feedback_scores": {},
   "api_scores": {
-    "insight": 0.26,
-    "story": -0.69,
-    "keisei_kyokan": -0.21,
-    "ranking": 0.81,
-    "quote_empathy": -0.8,
-    "keisei_casual": -0.37
+    "insight": 0.2,
+    "quote_empathy": -0.79,
+    "story": -0.1,
+    "keisei_kyokan": 2.42,
+    "ranking": -1.04,
+    "keisei_casual": 0.27
   },
   "follower_scores": {
     "insight": 3.0,

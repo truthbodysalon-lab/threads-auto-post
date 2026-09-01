@@ -38,7 +38,9 @@ STATE = BASE / "image_post_state.json"     # 日次カウント・使用ログ�
 RAW = "https://raw.githubusercontent.com/truthbodysalon-lab/threads-auto-post/main/images"
 DAILY_IMG_CAP = 2
 TIMEOUT = 30
-RECYCLE_DAYS = 30           # 使用済み画像の再利用しきい値（日）
+RECYCLE_DAYS = 7            # 使用済み画像の再利用しきい値（日）。適格0なら最終手段でLRU再利用
+                            # するため実質の間隔は 画像枚数÷日次上限（例: 8枚÷2本=4日）に収束する
+                            # （2026-08-27 masa指示「定期的に何度も使える様に」＝常設ローテーション化）
 NOTIFY_SCRIPT = Path("/Users/mt112/.claude/scripts/notify.sh")
 IMG_EXTS = (".jpg", ".jpeg", ".png", ".heic")
 
@@ -124,8 +126,8 @@ def _last_used(st, acct: str, filename: str) -> dict | None:
     return st.get("used_log", {}).get(acct, {}).get(filename)
 
 
-def recycle_candidates(st, acct: str) -> list[tuple[datetime, Path, str | None]]:
-    """使用済み/ 内で最終使用から RECYCLE_DAYS 日以上経過した画像を、古い順に返す。
+def recycle_candidates(st, acct: str, min_days: float = RECYCLE_DAYS) -> list[tuple[datetime, Path, str | None]]:
+    """使用済み/ 内で最終使用から min_days 日以上経過した画像を、古い順に返す。
     使用日時は状態ファイルの記録を優先し、記録が無ければファイルのmtimeで代用する。"""
     used_dir = SRC / "使用済み" / acct
     if not used_dir.exists():
@@ -145,17 +147,17 @@ def recycle_candidates(st, acct: str) -> list[tuple[datetime, Path, str | None]]
                 used_at = datetime.fromtimestamp(p.stat().st_mtime)
         else:
             used_at = datetime.fromtimestamp(p.stat().st_mtime)
-        if (now - used_at).total_seconds() / 86400 >= RECYCLE_DAYS:
+        if (now - used_at).total_seconds() / 86400 >= min_days:
             out.append((used_at, p, entry.get("category") if entry else None))
     out.sort(key=lambda t: t[0])   # 最も古い使用から
     return out
 
 
 def pick_recycle_category(default_cat: str, last_cat: str | None) -> str:
-    """再利用時は前回と別カテゴリのキャプションを選ぶ。"""
-    if last_cat and default_cat == last_cat:
-        others = [c for c in CAPTIONS if c != last_cat]
-        return random.choice(others)
+    """再利用時は前回と別のキャプションを選ぶ。写真内容と無関係なカテゴリ
+    （内装写真に図解用など）を当てると不自然なため、振替先は「汎用」に限定する。"""
+    if last_cat and default_cat == last_cat and default_cat != "汎用":
+        return "汎用"
     return default_cat
 
 
@@ -297,10 +299,13 @@ def main():
         if imgs:
             src = imgs[0]
         else:
-            # 在庫0 → 使用済み/ の30日リサイクル候補（最も古い使用から）を探す
+            # 在庫0 → 使用済み/ のリサイクル候補（最も古い使用から）を常設ローテーション利用
             candidates = recycle_candidates(st, acct)
             if not candidates:
-                log(f"{acct}: 在庫0・リサイクル適格0")
+                # クールダウン適格が無くても止めない: 前日以前に使った中で最も古いものを再利用
+                candidates = recycle_candidates(st, acct, min_days=1)
+            if not candidates:
+                log(f"{acct}: 使える画像が1枚も無い（新規在庫0・使用済みも空/本日使用のみ）")
                 exhausted.append(acct)
                 continue
             _used_at, src, last_cat = candidates[0]

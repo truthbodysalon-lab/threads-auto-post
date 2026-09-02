@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-02",
+  "updated_at": "2026-09-03",
   "pattern_weights": {
     "insight": 20,
     "education": 4,
@@ -11,17 +11,17 @@
   },
   "feedback_scores": {},
   "api_scores": {
-    "insight": 0.3,
-    "cta": -2.43,
-    "story": -0.31,
-    "ranking": -1.08
+    "insight": 0.38,
+    "cta": -2.16,
+    "story": -0.98,
+    "ranking": -0.88
   },
   "follower_scores": {
-    "story": -0.24,
+    "story": -0.31,
     "insight": 3.0,
-    "ranking": -0.98,
-    "education": -0.84,
-    "cta": -0.94
+    "ranking": -1.0,
+    "education": -0.87,
+    "cta": -0.82
   },
   "line_scores": {
     "insight": 3.0,

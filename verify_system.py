@@ -256,7 +256,7 @@ def check_execution_gaps():
                 except Exception:
                     pass
         recent_dates = sorted(by_date.keys())[-3:]
-        worst_rate, worst_date, worst_cnt = 0.0, None, 0
+        worst_rate, worst_date, worst_cnt, worst_len = 0.0, None, 0, 0
         for d in recent_dates:
             texts = by_date[d][:50]  # 前半50本
             if not texts:
@@ -264,13 +264,16 @@ def check_execution_gaps():
             cnt = sum(1 for t in texts if ("LINE" in t or "ライン" in t or "lin.ee" in t))
             rate = cnt / len(texts)
             if rate > worst_rate:
-                worst_rate, worst_date, worst_cnt = rate, d, cnt
+                worst_rate, worst_date, worst_cnt, worst_len = rate, d, cnt, len(texts)
         if worst_date is None:
             add("rule:line_rate:masa", "B.ルール反映", "WARN", "masa投稿実績が見つからず判定不可")
         else:
             status = "PASS" if worst_cnt <= 5 else "FAIL"
+            # 2026-09-02修正: 分母を常に「50本」固定表示していたが、当日分は投稿途中で
+            # len(texts)<50のことがあり（例: 9本中2本=22%なのに"2本/50本(22%)"と誤表示）、
+            # 実際に率計算へ使った分母(worst_len)をそのまま表示するよう修正。
             add("rule:line_rate:masa", "B.ルール反映", status,
-                f"直近3日で最大 {worst_date} {worst_cnt}本/50本（{worst_rate*100:.0f}%）LINE言及・上限5本(10%)")
+                f"直近3日で最大 {worst_date} {worst_cnt}本/{worst_len}本（{worst_rate*100:.0f}%）LINE言及・上限5本(10%)")
     except Exception as e:
         add("rule:line_rate:masa", "B.ルール反映", "WARN", f"検査失敗: {e}")
 

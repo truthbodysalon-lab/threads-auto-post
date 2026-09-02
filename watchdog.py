@@ -69,7 +69,11 @@ def _push_once_per_day(acct: str, msg: str):
     if st.get(key) == today:
         return
     try:
-        subprocess.run([PUSH, msg], capture_output=True, timeout=30)
+        # 2026-09-02修正: notify.sh(旧line-push-masahide.sh)はDiscord送信に
+        # 最大3回リトライ(各20秒)し得るため、旧timeout=30だと道半ばでkillされ
+        # 通知未達になっていた（09-01にmasa遅れ通知が複数回timeout実測）。
+        # views_report.pyの実績値(timeout=60)に合わせる。
+        subprocess.run([PUSH, msg], capture_output=True, timeout=60)
         st[key] = today
         _save_state(st)
         log(f"LINE通知送信: {msg[:60]}")

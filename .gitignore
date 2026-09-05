@@ -2,6 +2,7 @@
 __pycache__/
 *.pyc
 *.log
+.DS_Store
 autopost_*.log
 insights.log
 

@@ -77,7 +77,7 @@ jobs:
       # Mac停止時も50本/日に到達できる。
       - name: Run auto_post (pace-aware batch)
         run: python3 auto_post.py all || true
-        timeout-minutes: 30
+        timeout-minutes: 50   # 2026-09-06: MAX_BURST 15→25（3アカウント×25本×約27秒≒34分）に合わせて延長
         continue-on-error: true
 
       - name: Sync refreshed tokens to GitHub Secrets

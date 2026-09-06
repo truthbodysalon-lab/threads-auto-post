@@ -1138,7 +1138,12 @@ def main():
 DAILY_TARGET = int(os.environ.get("DAILY_TARGET", "50"))   # 各アカウント1日の目標本数
 DAILY_CAP = int(os.environ.get("DAILY_CAP", "55"))         # 上限（これ以上は出さない）
 MAX_PER_RUN = int(os.environ.get("MAX_PER_RUN", "8"))      # 通常の1サイクル上限
-MAX_BURST = int(os.environ.get("MAX_BURST", "15"))         # 大きく遅れた時の一気回復上限（スリープ復帰時）
+MAX_BURST = int(os.environ.get("MAX_BURST", "25"))         # 大きく遅れた時の一気回復上限（スリープ復帰時）
+# 先読み時間。GitHub Actionsのcronは実測で4時間以上間引かれる日があり（2026-09-04は投稿時間帯内の
+# 発火が10:03/14:49/18:58の3回のみ→truth40本/masa43本で50本割れ）、「今あるべき累計」まで埋める
+# だけでは次の発火まで進めない。次回発火が LOOKAHEAD_HOURS 後だと仮定してその時点の累計まで先に出す。
+# cronが密な日は曲線が3時間前倒しになるだけ（18時に満了）で、昼に使い切って沈黙する事故は起きない。
+LOOKAHEAD_HOURS = int(os.environ.get("LOOKAHEAD_HOURS", "3"))
 POSTS_PER_RUN = int(os.environ.get("POSTS_PER_RUN", "3"))  # 後方互換
 
 
@@ -1183,12 +1188,12 @@ def _run_account_batch(acct: str):
         log_info(acct, f"{ACCOUNTS[acct]['name']} 本日上限({DAILY_CAP})到達 → スキップ")
         return
     hour = datetime.now().hour
-    want = _target_cumulative_by_now(hour)             # 今あるべき累計
-    need = max(0, want - posted)
+    want = _target_cumulative_by_now(hour + LOOKAHEAD_HOURS)   # 次回発火(先読み)時点であるべき累計
+    need = max(0, min(want, DAILY_TARGET) - posted)
     if need == 0 and api_n is not None and (api_n - ledger_posted) > 10:
         log_info(acct, f"{ACCOUNTS[acct]['name']} 台帳{ledger_posted}本だがAPI実測{api_n}本で目標充足→自パイプライン以外の投稿を検知(差分{api_n - ledger_posted}本)")
     # 遅れ幅を自動検知してバースト量を調整（スリープ復帰時に一気に回復）
-    # 通常は MAX_PER_RUN まで。大きく遅れている時は最大15本まで一気に出す。
+    # 通常は MAX_PER_RUN まで。大きく遅れている時は最大 MAX_BURST 本まで一気に出す。
     burst_cap = MAX_BURST if need > MAX_PER_RUN else MAX_PER_RUN
     n = min(need, burst_cap)
     if n == 0 and posted < DAILY_TARGET and hour >= 20:

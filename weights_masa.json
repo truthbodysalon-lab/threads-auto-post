@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-06",
+  "updated_at": "2026-09-07",
   "pattern_weights": {
     "insight": 20,
     "education": 3,
@@ -11,11 +11,11 @@
   },
   "feedback_scores": {},
   "api_scores": {
-    "cta": -1.67,
-    "insight": 0.37,
-    "story": -0.96,
-    "ranking": -2.01,
-    "education": -0.57
+    "insight": 0.41,
+    "story": -1.21,
+    "ranking": -1.71,
+    "cta": -1.63,
+    "education": -0.78
   },
   "follower_scores": {
     "story": -0.27,

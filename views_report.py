@@ -116,8 +116,12 @@ def fetch_window_views(acct: str, days: int) -> tuple[int, int, int]:
     since = int((datetime.now(timezone.utc) - timedelta(days=days)).timestamp())
     url = (f"https://graph.threads.net/v1.0/{uid}/threads_insights"
            f"?metric=views&since={since}&until={until}&access_token={tok}")
+    # 2026-09-08: 一時障害（DNS/timeout/5xx等のURLError系）は30→60→120秒のバックオフで
+    # 最大3回リトライする（初回含め計4回試行。それ以前は15/30/45秒3回試行だったが、
+    # DNS一時障害の実績（Errno 8 nodename nor servname）を踏まえて延長）。
     last_err: Exception | None = None
-    for attempt in range(3):
+    backoffs = [30, 60, 120]
+    for attempt in range(1 + len(backoffs)):
         try:
             with urllib.request.urlopen(url, timeout=20) as r:
                 data = json.loads(r.read())
@@ -127,7 +131,8 @@ def fetch_window_views(acct: str, days: int) -> tuple[int, int, int]:
             return total, len(vals), today
         except Exception as e:
             last_err = e
-            time.sleep(15 * (attempt + 1))
+            if attempt < len(backoffs):
+                time.sleep(backoffs[attempt])
     print(f"[ERROR] views API取得失敗 acct={acct} days={days}: {last_err}", file=sys.stderr)
     return -1, 0, 0
 
@@ -211,11 +216,37 @@ def main():
         msg = (f"【views_report】Threads views API取得失敗: {', '.join(fetch_failed)}\n"
                f"views_action.json は更新せず前回値を温存。ネットワーク/トークンを確認してください。")
         print(msg, file=sys.stderr)
-        try:
-            subprocess.run(["/Users/mt112/.claude/scripts/line-push-masahide.sh"],
-                           input=msg.encode(), timeout=60, check=False)
-        except Exception as e:
-            print(f"[WARN] LINE通知も失敗: {e}", file=sys.stderr)
+        # 2026-09-08: 通知はDiscord一本化ルールに従いnotify.shを直接呼ぶ（旧line-push-masahide.sh
+        # 経由もnotify.shへの互換シムで実害はなかったが、新規タスクは直接呼ぶ規約のため差し替え）。
+        # Discord送信自体が一時障害（ネットワーク等）で失敗しても、閲覧データの取得結果とは
+        # 独立した問題なのでリトライ後は諦めてファイル記録のみとし、この関数のexit codeには影響させない
+        # （このifブロックはそもそも「閲覧データ取得が失敗した」場合のみ入るため、最終的な
+        #  sys.exit(2)は元々データ取得失敗そのものが理由であり、Discord送信の成否では変えない）。
+        notify_ok = False
+        notify_last_err: Exception | str | None = None
+        for backoff in (0, 30, 60, 120):
+            if backoff:
+                time.sleep(backoff)
+            try:
+                r = subprocess.run(["/Users/mt112/.claude/scripts/notify.sh"],
+                                    input=msg.encode(), timeout=60, check=False)
+                if r.returncode == 0:
+                    notify_ok = True
+                    break
+                notify_last_err = f"notify.sh exit={r.returncode}"
+            except Exception as e:
+                notify_last_err = e
+        if not notify_ok:
+            # Discord送信も失敗した場合はファイル記録のみで完結させる（LINEフォールバック等は
+            # ユーザールールで恒久禁止のため一切行わない）。
+            fallback_dir = Path.home() / ".claude" / "logs" / "notifications"
+            try:
+                fallback_dir.mkdir(parents=True, exist_ok=True)
+                with (fallback_dir / "views_report_notify_failed.log").open("a", encoding="utf-8") as f:
+                    f.write(f"[{datetime.now().astimezone().isoformat()}] notify.sh失敗({notify_last_err}): {msg}\n")
+            except Exception as e:
+                print(f"[WARN] Discord通知失敗のファイル記録にも失敗: {e}", file=sys.stderr)
+            print(f"[WARN] Discord通知も失敗（LINEフォールバックはルール上禁止・行わない）: {notify_last_err}", file=sys.stderr)
         sys.exit(2)
 
     # ── 問題点・改善アクション（レバーを名指しで）──

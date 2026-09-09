@@ -764,6 +764,18 @@ def api_request(url: str, data: bytes = None, retry: int = 0) -> dict:
 
 _URL_RE = re.compile(r'https?://\S+')
 
+# 恒久ルール（検証サブエージェントD運用ルール）: 問いかけ文は「〜ですか？」のように
+# 疑問符で終える。生成テンプレート側の表記揺れ（「ですか。」等の句点終わり）を
+# 投稿直前に一括で統一する。「ですか/でしょうか/ますか」限定でマッチさせ、
+# 「そうか。」等の非疑問文への誤爆を避ける（2026-09-10検証で表記揺れを検出し追加）。
+_Q_END_RE = re.compile(r'(ですか|でしょうか|ますか)。')
+
+
+def _fix_question_endings(text: str) -> str:
+    """疑問文の句点終わりを疑問符に統一する。"""
+    return _Q_END_RE.sub(r'\1？', text or "")
+
+
 def extract_url_and_cta(text: str):
     """
     本文からURLとその直前のCTAラベル行を切り出す。
@@ -976,6 +988,7 @@ def run_account(acct: str):
     # 本文が「👇」で終わって宙に浮かないよう、末尾の指示記号を落としてから使う。
     clean_text, cta_block = extract_url_and_cta(text)
     clean_text = re.sub(r"[\s👇⬇️↓]+$", "", clean_text).strip()
+    clean_text = _fix_question_endings(clean_text)
 
     # テキストをコメント部分に分割する
     # 優先順位: [COMMENT] タグ → 【続き】マーカー → \n\n 段落区切り

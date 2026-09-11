@@ -404,10 +404,31 @@ def check_execution_gaps():
         except Exception as e:
             add(f"exec:pacing:{acct}", "C.実行ギャップ", "WARN", f"配分検査不可: {e}")
 
-    # C11: watchdogが直近24hに動いているか（見張り番自体の死活監視）
-    ok = _recent(BASE / "watchdog.log", 1)
+    # C11: watchdogが直近に動いているか（見張り番自体の死活監視）
+    # 2026-09-12修正: watchdog.logはMac常駐launchd時代（Mac非依存化2026-07-10で廃止済み）
+    # の遺物で更新が止まって当然なのに、24h基準の誤WARNを毎回出していた。
+    # 実体はGitHub Actions health_check.ymlのwatchdog_ci.pyが正（30分毎cron）。
+    # ローカルgit履歴の「chore: watchdog-ci state」コミット（差分がある回のみ記録される
+    # ため猶予は48h）で外形的に確認する。git不可時のみ旧ファイルにフェイルオープン。
+    ok = False
+    detail = ""
+    try:
+        r = subprocess.run(
+            ["git", "log", "-1", "--format=%at", "--grep=watchdog-ci state"],
+            cwd=BASE, capture_output=True, text=True, timeout=10,
+        )
+        ts = r.stdout.strip()
+        if ts:
+            last = datetime.fromtimestamp(int(ts))
+            ok = last >= datetime.now() - timedelta(hours=48)
+            detail = f"最終watchdog-ciコミット {last.strftime('%Y-%m-%d %H:%M')}"
+    except Exception:
+        ts = ""
+    if not ts:
+        ok = _recent(BASE / "watchdog.log", 1)
+        detail = "git履歴取得不可 → 旧watchdog.logで代替判定"
     add("exec:watchdog", "C.実行ギャップ", "PASS" if ok else "WARN",
-        "watchdog稼働中" if ok else "watchdog.logが24h以上更新なし（launchd要確認）")
+        (f"watchdog稼働中（{detail}）" if ok else f"watchdog-ci 48h以上コミットなし・要確認（{detail}）"))
 
     # C13: 整体系の予約誘導はHPB一本化（2026-08-14ユーザールール）。
     #      キューと直近実績で「予約語×非HPB URL」を検出したらFAIL。

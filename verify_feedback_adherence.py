@@ -65,7 +65,15 @@ def verify_line_listin(account):
         expected_str = "<10%"
 
     # 実績を計算
-    line_posts = sum(1 for p in posts if "lin.ee" in p.get("text", ""))
+    # 2026-09-12修正: 2026-08-18のURL全面コメント化以降、log_*_posted.jsonlのtextは
+    # extract_url_and_cta後（URL除去済み）のため "lin.ee" in text では検知できず、常に
+    # ほぼ0%を返す偽陰性になっていた（auto_post.py側の同型バグと同じ根本原因、同日修正）。
+    # mark_posted が付与する is_line フラグを優先し、フラグの無い旧エントリ（Aug 18以前）
+    # のみ従来の "lin.ee" 文字列一致にフォールバックする。
+    line_posts = sum(
+        1 for p in posts
+        if p.get("is_line") or "lin.ee" in p.get("text", "")
+    )
     actual_rate = line_posts / len(posts) if posts else 0
 
     status = "✅反映" if expected_min <= actual_rate <= expected_max else "❌未反映"

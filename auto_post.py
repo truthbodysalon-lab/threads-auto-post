@@ -262,9 +262,17 @@ def get_posted_indices(acct: str, today: str) -> set:
         if l.strip() and json.loads(l).get("date") == today
     }
 
-def mark_posted(acct: str, today: str, index: int, post_id: str, text: str = ""):
+def mark_posted(acct: str, today: str, index: int, post_id: str, text: str = "", is_line: bool = False):
+    entry = {"date": today, "index": index, "post_id": post_id, "text": text}
+    if is_line:
+        # 2026-09-12修正: text は extract_url_and_cta 後の本文（URL除去済み）を保存するため、
+        # _is_line_listin(text) では二度とLINEリストイン投稿だと判定できない
+        # （2026-08-18のURL全面コメント化以降、7日重複ガードが常に空集合を返し無効化していた
+        # 実障害。例: truthの同一テンプレが09-05/09-08/09-10と7日以内に3回連続投稿）。
+        # 判定結果をログ自体に残し、_recent_listin_firstlines 側で再利用する。
+        entry["is_line"] = True
     with open(ACCOUNTS[acct]["posted"], "a") as f:
-        f.write(json.dumps({"date": today, "index": index, "post_id": post_id, "text": text}, ensure_ascii=False) + "\n")
+        f.write(json.dumps(entry, ensure_ascii=False) + "\n")
 
 def get_posted_texts(acct: str) -> set:
     """全期間の投稿済みテキスト一覧（重複防止用）"""
@@ -315,7 +323,11 @@ def _recent_listin_firstlines(acct: str, days: int = 7) -> set:
         if (e.get("date") or "")[:10] < cutoff:
             continue
         t = e.get("text", "")
-        if _is_line_listin(t):
+        # 2026-09-12修正: posted ログの text は URL 抽出後の本文（2026-08-18〜）のため
+        # _is_line_listin(t) 単独では判定できない。mark_posted が付与する is_line フラグを
+        # 優先し、フラグの無い旧エントリ（Aug 18以前・URLが本文に残っていた期間）は
+        # 従来どおり _is_line_listin(t) にフォールバックする。
+        if e.get("is_line") or _is_line_listin(t):
             fls.add(t.split("\n")[0].strip())
     return fls
 
@@ -450,14 +462,21 @@ def _cta_profile_anchor_ok(acct: str, today: str, text: str) -> bool:
 
 # ── URL連続回避（2026-07-21・Brain記事「AIでThreadsを事故ゼロ運用する方法」実測）─
 # URL入り投稿の同日連発はリーチを下げる。導線投稿(goals.json保護)は削らないが、
-# 直前投稿の本文にURLが残っていた（=is_line/is_shindan、他は本文からURLをコメントへ
-# 逃がすため対象外）なら、次はURL無し投稿を優先選択する。無ければそのまま投稿する
+# 直前候補がLINEリストイン/頭痛タイプ診断（=元テキストにURLを含むテンプレ種別）
+# だったなら、次はそれ以外の候補を優先選択する。無ければそのまま投稿する
 # （導線アンカーを削除しない・新規URL枠も追加しない）。
+# 【2026-08-18以降】全テンプレでURLは extract_url_and_cta により本文からコメントへ
+# 移動する統一仕様のため、最終投稿本文にURLがそのまま残ることは無い（この関数は
+# 「元テキストがLINEリストイン/頭痛診断テンプレか」の判定に使っているのみで、
+# 実際に本文にURLが可視で残るという意味ではない。旧仕様の名残でこの名称のままだが
+# 意味を変えないよう関数名・呼び出し側は維持する）。
 
 def _text_has_visible_url(text: str) -> bool:
-    """メイン投稿本文にURLがそのまま残る投稿かどうか。
-    HPB CTA・店舗アクセス等は extract_url_and_cta でURLがコメントへ移動するため対象外。
-    LINEリストイン・頭痛タイプ診断のみ、ルール上URLを本文末尾に残す設計（run_account参照）。"""
+    """元テキスト（抽出前）がLINEリストイン/頭痛タイプ診断テンプレかどうか。
+    HPB CTA・店舗アクセス等も含め、最終投稿本文のURLは extract_url_and_cta で
+    必ずコメント欄へ移動する（2026-08-18社長指示・本文URL全廃）ため、
+    実際に本文にURLが可視で残るテンプレは現在存在しない。この関数はURL連続回避の
+    候補分類にのみ使用する（関数名は後方互換のため維持）。"""
     return _is_line_listin(text or "") or _is_shindan(text or "")
 
 
@@ -1048,7 +1067,7 @@ def run_account(acct: str):
     try:
         # post_to_threads 内部で重複チェック・pending・posted を一括処理
         post_id = post_to_threads(acct, clean_text, skip_dup=(is_line or is_shindan or is_hpb or is_access or is_ctaprofile))
-        mark_posted(acct, today, index, post_id, clean_text)
+        mark_posted(acct, today, index, post_id, clean_text, is_line=is_line)
         if is_line:
             _mark_line_done(acct, today)
         log_info(acct, f"{name} ✓ 完了 (ID: {post_id})")
@@ -1081,7 +1100,7 @@ def run_account(acct: str):
             if refresh_token(acct):
                 try:
                     post_id = post_to_threads(acct, clean_text, skip_dup=(is_line or is_shindan or is_hpb or is_access or is_ctaprofile))
-                    mark_posted(acct, today, index, post_id, clean_text)
+                    mark_posted(acct, today, index, post_id, clean_text, is_line=is_line)
                     if is_line:
                         _mark_line_done(acct, today)
                     log_info(acct, f"{name} ✓ 完了（リフレッシュ後） (ID: {post_id})")

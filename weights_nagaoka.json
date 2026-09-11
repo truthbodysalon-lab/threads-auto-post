@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-11",
+  "updated_at": "2026-09-12",
   "pattern_weights": {
     "keisei_target": 6,
     "keisei_risk": 5,
@@ -28,9 +28,9 @@
     "insight": 3.0,
     "keisei_kyokan": -0.56,
     "education": -0.84,
-    "quote_empathy": 0.45,
-    "ranking": -0.63,
-    "keisei_casual": -0.73,
+    "quote_empathy": 0.46,
+    "ranking": -0.64,
+    "keisei_casual": -0.74,
     "keisei_target": -0.04,
     "story": 0.22,
     "question": -0.86

@@ -1,9 +1,9 @@
 {
   "updated_at": "2026-09-12",
   "pattern_weights": {
-    "quote_empathy": 5,
-    "insight": 12,
-    "education": 5,
+    "quote_empathy": 4,
+    "insight": 13,
+    "education": 3,
     "story": 1,
     "workmom": 1,
     "ranking": 1,
@@ -13,21 +13,22 @@
   },
   "feedback_scores": {},
   "api_scores": {
-    "ranking": -1.21,
-    "insight": 0.57,
-    "quote_empathy": -0.82,
-    "education": 0.38,
-    "story": -1.88
+    "quote_empathy": -1.4,
+    "insight": 0.84,
+    "workmom": -2.59,
+    "ranking": -1.28,
+    "story": -2.38,
+    "education": -0.29
   },
   "follower_scores": {
     "insight": 3.0,
-    "quote_empathy": 0.17,
+    "quote_empathy": 0.19,
     "selfcare_casual": -0.56,
-    "education": -0.47,
-    "story": 0.38,
+    "education": -0.48,
+    "story": 0.35,
     "question": -0.84,
     "workmom": -0.83,
-    "ranking": -0.85
+    "ranking": -0.84
   },
   "line_scores": {}
 }

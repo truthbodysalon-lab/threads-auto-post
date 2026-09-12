@@ -11,18 +11,18 @@
   },
   "feedback_scores": {},
   "api_scores": {
-    "insight": 0.25,
-    "cta": -1.84,
-    "story": -0.79,
-    "education": -1.34,
-    "ranking": -0.79
+    "insight": 0.27,
+    "cta": -1.71,
+    "story": -0.86,
+    "ranking": -1.48,
+    "education": -1.32
   },
   "follower_scores": {
-    "story": -0.25,
+    "story": -0.2,
     "insight": 3.0,
     "ranking": -0.99,
-    "education": -0.85,
-    "cta": -0.91
+    "education": -0.84,
+    "cta": -0.96
   },
   "line_scores": {
     "insight": 3.0,

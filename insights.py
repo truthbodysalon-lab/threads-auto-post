@@ -60,7 +60,7 @@ def fetch_post_insights(mid: str, token: str) -> dict:
       必ずこの media insights エンドポイントを使う。"""
     url = f"{BASE_URL}/{mid}/insights?metric=likes,views,replies&access_token={token}"
     try:
-        with urllib.request.urlopen(url) as r:
+        with urllib.request.urlopen(url, timeout=20) as r:
             data = json.loads(r.read())
     except Exception:
         return {}
@@ -84,11 +84,15 @@ def fetch_posts_with_metrics(acct: str, limit: int = 100) -> list:
         f"&limit={limit}&access_token={a['token']}"
     )
     all_posts = []
-    while url and len(all_posts) < limit:
-        with urllib.request.urlopen(url) as r:
-            data = json.loads(r.read())
-        all_posts.extend(data.get("data", []))
-        url = data.get("paging", {}).get("next")
+    try:
+        while url and len(all_posts) < limit:
+            with urllib.request.urlopen(url, timeout=20) as r:
+                data = json.loads(r.read())
+            all_posts.extend(data.get("data", []))
+            url = data.get("paging", {}).get("next")
+    except Exception:
+        # ネットワーク障害時は取得済み分で打ち切って部分データで継続（全体クラッシュ回避）
+        pass
 
     # 2) 各投稿の指標を insights エッジから取得して付与
     for p in all_posts:

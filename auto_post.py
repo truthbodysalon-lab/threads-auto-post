@@ -460,6 +460,53 @@ def _cta_profile_anchor_ok(acct: str, today: str, text: str) -> bool:
     return True
 
 
+try:
+    # masa: AI活用実例/AI活用でこうなる/AIの基礎知識/AI時短LINE誘導の固定テンプレ一覧
+    # （generate_remix.py 2026-08-23導入）。exact-match判定のため直接import。
+    # generate_remix.py はモジュールトップレベルにファイルI/O等の副作用が無いことを確認済み。
+    from generate_remix import (
+        AI_JITSUREI_TEMPLATES as _AI_JITSUREI_TEMPLATES,
+        AI_DEKIRU_TEMPLATES as _AI_DEKIRU_TEMPLATES,
+        AI_KISO_TEMPLATES as _AI_KISO_TEMPLATES,
+        AI_TIME_CTA_TEMPLATES as _AI_TIME_CTA_TEMPLATES,
+    )
+    _AI_CONTENT_TEMPLATES = set(
+        _AI_JITSUREI_TEMPLATES + _AI_DEKIRU_TEMPLATES + _AI_KISO_TEMPLATES + _AI_TIME_CTA_TEMPLATES
+    )
+except Exception:
+    _AI_CONTENT_TEMPLATES = set()
+
+
+def _is_ai_content(text: str) -> bool:
+    """masa: AI活用実例/AI活用でこうなる/AIの基礎知識/AI時短LINE誘導のアンカー判定
+    （2026-09-13追加）。各プールは15/10/10/8種のみの固定完全一致文で、
+    _hpb_anchor_ok/_cta_profile_anchor_ok と全く同じ障害パターン：
+    全期間dedup(posted_texts)に阻まれ2026-08-23導入からプールが枯渇し、
+    2026-09-12に実質0本化していた（日次検証2026-09-13で発覚）。"""
+    return (text or "") in _AI_CONTENT_TEMPLATES
+
+
+def _ai_content_anchor_ok(acct: str, today: str, text: str) -> bool:
+    """AI活用系アンカーの7日重複ガード緩和判定（2026-09-13追加）。
+    当日まだ同一1文目を使っていなければ通す（_hpb_anchor_ok と同じロジック）。"""
+    if not _is_ai_content(text):
+        return False
+    pfile = ACCOUNTS[acct]["posted"]
+    if not pfile.exists():
+        return True
+    first = (text or "").split("\n")[0].strip()
+    for line in pfile.read_text(encoding="utf-8").splitlines():
+        try:
+            e = json.loads(line)
+        except Exception:
+            continue
+        if (e.get("date") or "")[:10] != today:
+            continue
+        if (e.get("text") or "").split("\n")[0].strip() == first:
+            return False  # 本日すでに同一テンプレ使用済み
+    return True
+
+
 # ── URL連続回避（2026-07-21・Brain記事「AIでThreadsを事故ゼロ運用する方法」実測）─
 # URL入り投稿の同日連発はリーチを下げる。導線投稿(goals.json保護)は削らないが、
 # 直前候補がLINEリストイン/頭痛タイプ診断（=元テキストにURLを含むテンプレ種別）
@@ -689,7 +736,7 @@ def get_next_post(acct: str, today: str, avoid_url: bool = False):
         # 以下の anchor_ok 緩和ルート（既存・HPB/shindanで実績あり）に必ず到達させる。
         is_anchor_pool_type = (
             _is_store_access(text) or _is_shindan(text) or _is_hpb_cta(text)
-            or _is_cta_profile(text)
+            or _is_cta_profile(text) or _is_ai_content(text)
         )
         if already_posted_ever and not is_anchor_pool_type:
             continue
@@ -702,7 +749,8 @@ def get_next_post(acct: str, today: str, avoid_url: bool = False):
             anchor_ok = _access_anchor_ok(acct, today, text) \
                 or _shindan_anchor_ok(acct, today, text) \
                 or _hpb_anchor_ok(acct, today, text) \
-                or _cta_profile_anchor_ok(acct, today, text)
+                or _cta_profile_anchor_ok(acct, today, text) \
+                or _ai_content_anchor_ok(acct, today, text)
             if not anchor_ok:
                 continue
             # アンカー緩和が効いても、本日すでにshared guardに記録済み
@@ -993,6 +1041,7 @@ def run_account(acct: str):
     is_hpb = _is_hpb_cta(text or "")
     is_access = _is_store_access(text or "")
     is_ctaprofile = _is_cta_profile(text or "")
+    is_aicontent = _is_ai_content(text or "")  # AI活用系アンカー判定（2026-09-13追加・同型障害修正）
     if text is None:
         log_info(acct, f"{name} 今日の投稿完了")
         return
@@ -1066,7 +1115,7 @@ def run_account(acct: str):
 
     try:
         # post_to_threads 内部で重複チェック・pending・posted を一括処理
-        post_id = post_to_threads(acct, clean_text, skip_dup=(is_line or is_shindan or is_hpb or is_access or is_ctaprofile))
+        post_id = post_to_threads(acct, clean_text, skip_dup=(is_line or is_shindan or is_hpb or is_access or is_ctaprofile or is_aicontent))
         mark_posted(acct, today, index, post_id, clean_text, is_line=is_line)
         if is_line:
             _mark_line_done(acct, today)
@@ -1099,7 +1148,7 @@ def run_account(acct: str):
             log_info(acct, f"{name} トークン期限切れ → 自動リフレッシュ...")
             if refresh_token(acct):
                 try:
-                    post_id = post_to_threads(acct, clean_text, skip_dup=(is_line or is_shindan or is_hpb or is_access or is_ctaprofile))
+                    post_id = post_to_threads(acct, clean_text, skip_dup=(is_line or is_shindan or is_hpb or is_access or is_ctaprofile or is_aicontent))
                     mark_posted(acct, today, index, post_id, clean_text, is_line=is_line)
                     if is_line:
                         _mark_line_done(acct, today)

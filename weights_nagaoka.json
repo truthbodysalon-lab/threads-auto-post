@@ -1,14 +1,14 @@
 {
-  "updated_at": "2026-09-13",
+  "updated_at": "2026-09-14",
   "pattern_weights": {
-    "keisei_target": 4,
+    "keisei_target": 6,
     "keisei_risk": 5,
-    "keisei_kyokan": 2,
-    "keisei_casual": 1,
-    "quote_empathy": 12,
+    "keisei_kyokan": 1,
+    "keisei_casual": 4,
+    "quote_empathy": 10,
     "insight": 11,
     "education": 2,
-    "story": 2,
+    "story": 1,
     "ranking": 1,
     "question": 1,
     "hochi_risk": 5,
@@ -16,13 +16,12 @@
   },
   "feedback_scores": {},
   "api_scores": {
-    "insight": -0.24,
-    "story": -0.69,
-    "quote_empathy": 3.28,
-    "ranking": -1.41,
-    "keisei_kyokan": -0.3,
-    "keisei_target": -1.67,
-    "keisei_casual": -1.48
+    "insight": 0.11,
+    "story": -1.78,
+    "ranking": -1.47,
+    "quote_empathy": 2.06,
+    "keisei_target": -0.3,
+    "keisei_kyokan": -1.01
   },
   "follower_scores": {
     "insight": 3.0,

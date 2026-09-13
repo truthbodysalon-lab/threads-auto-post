@@ -262,7 +262,7 @@ def main():
         if not s["on_track"]:
             problems.append(
                 f"{NAMES[acct]}: 【軌道遅れ】1投稿あたり(7日) {s['avg_post_7d']:,} < 週{s['ramp_week']}目標 {s['ramp_target']:,}"
-                f"（{deadline}までに666必要）")
+                f"（{deadline}までに{goal.get('target_avg_post', 500):,}必要）")
         if today.isoformat() and s["posts_today"] < 5 and datetime.now().hour >= 12:
             problems.append(f"{NAMES[acct]}: 本日投稿 {s['posts_today']}本（投稿停滞の疑い）")
 
@@ -300,7 +300,7 @@ def main():
         trk = "🟢軌道内" if s["on_track"] else "🔴軌道遅れ"
         lines += [
             f"### {NAMES[acct]} — pace **{s['pace']}%**  `{bar(s['pace'])}`",
-            f"- **{deadline}期限ランプ {trk}**: 1投稿あたり(7日速報) **{s['avg_post_7d']:,}** / 週{s['ramp_week']}目標 **{s['ramp_target']:,}**（最終目標666）",
+            f"- **{deadline}期限ランプ {trk}**: 1投稿あたり(7日速報) **{s['avg_post_7d']:,}** / 週{s['ramp_week']}目標 **{s['ramp_target']:,}**（段階目標{goal.get('target_avg_post', 500):,}）",
             f"- 直近{win}日: **{s['v30']:,}** views / {target:,}（日平均 {s['d_avg']:,} / 必要 {req_daily:,}）",
             f"- 投稿 {s['p30']:,}本 → **1投稿あたり {s['avg_post']:,} views** ｜ 本日 {s['vtoday']:,}views・{s['posts_today']}投稿",
             f"- 月100万に必要: 現投稿数なら1投稿 **{s['need_avg']:,}** views / 現品質なら **{s['need_posts_day']:.0f}** 本/日",

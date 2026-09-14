@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-14",
+  "updated_at": "2026-09-15",
   "pattern_weights": {
     "quote_empathy": 4,
     "insight": 12,
@@ -22,12 +22,12 @@
   },
   "follower_scores": {
     "insight": 3.0,
-    "quote_empathy": 0.19,
+    "quote_empathy": 0.18,
     "selfcare_casual": -0.56,
-    "education": -0.48,
+    "education": -0.47,
     "story": 0.36,
-    "question": -0.85,
-    "workmom": -0.84,
+    "question": -0.84,
+    "workmom": -0.83,
     "ranking": -0.83
   },
   "line_scores": {}

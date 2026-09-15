@@ -1283,22 +1283,29 @@ def _run_account_batch(acct: str):
                 # （2026-07-10 masaが12:56に50本完了→半日沈黙した実障害）。
     if n > MAX_PER_RUN:
         log_info(acct, f"{ACCOUNTS[acct]['name']} 遅れ検知（不足{need}本）→ {n}本まとめて回復")
+    # 2026-09-15: 固定回数ループだと「重複スキップ」で消費した回が投稿ゼロのまま数えられ、
+    # 最終バーストで不足が残る（9/11: 不足14本→重複スキップ2回→12本投稿→48本で終了しDaily Verify FAIL）。
+    # 「実際に増えた本数」が n に達するまで回し、試行回数の上限だけ n+6 で抑える。
     fails = 0
-    for i in range(n):
+    done = 0
+    attempts = 0
+    max_attempts = n + 6
+    while done < n and attempts < max_attempts:
         if _posted_count_today(acct) >= DAILY_CAP:
             break
         before = _posted_count_today(acct)
         run_account(acct)
         after = _posted_count_today(acct)
+        attempts += 1
         if after <= before:
             # 1本の失敗（重複スキップ等）で全体を打ち切らない。連続3回失敗で今回は諦める
-            # （次サイクル5分後に再試行される）。即断打ち切りは1日50本割れの主因だった。
             fails += 1
             if fails >= 3:
                 break
         else:
             fails = 0
-        if i < n - 1:
+            done += after - before
+        if done < n:
             time.sleep(4)
 
 

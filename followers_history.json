@@ -499,6 +499,11 @@
       "date": "2026-09-14",
       "followers": 1423,
       "delta": 1
+    },
+    {
+      "date": "2026-09-15",
+      "followers": 1423,
+      "delta": 0
     }
   ],
   "masa": [
@@ -1001,6 +1006,11 @@
       "date": "2026-09-14",
       "followers": 198,
       "delta": 0
+    },
+    {
+      "date": "2026-09-15",
+      "followers": 198,
+      "delta": 0
     }
   ],
   "nagaoka": [
@@ -1493,6 +1503,11 @@
       "date": "2026-09-14",
       "followers": 521,
       "delta": 0
+    },
+    {
+      "date": "2026-09-15",
+      "followers": 520,
+      "delta": -1
     }
   ]
 }

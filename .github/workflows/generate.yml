@@ -70,5 +70,5 @@ jobs:
           for i in 1 2 3; do
             git push && break
             echo "Push failed (attempt $i), retrying..."
-            git pull --rebase origin main
+            git pull --rebase -X theirs origin main || { git rebase --abort 2>/dev/null || true; }
           done

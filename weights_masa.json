@@ -1,28 +1,28 @@
 {
-  "updated_at": "2026-09-19",
+  "updated_at": "2026-09-20",
   "pattern_weights": {
     "insight": 20,
     "education": 3,
     "story": 1,
     "cta": 1,
-    "ranking": 9,
+    "ranking": 5,
     "question": 3,
     "variety": 20
   },
   "feedback_scores": {},
   "api_scores": {
-    "insight": 0.23,
-    "education": -0.69,
-    "story": 0.87,
-    "cta": -2.42,
-    "ranking": 4.38
+    "insight": 0.21,
+    "story": 0.36,
+    "cta": -1.8,
+    "education": -0.67,
+    "ranking": 2.21
   },
   "follower_scores": {
-    "story": -0.22,
+    "story": -0.26,
     "insight": 3.0,
-    "ranking": -0.99,
+    "ranking": -0.98,
     "education": -0.84,
-    "cta": -0.95
+    "cta": -0.92
   },
   "line_scores": {
     "insight": 3.0,

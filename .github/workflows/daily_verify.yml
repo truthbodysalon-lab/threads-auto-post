@@ -21,7 +21,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 1
+          # 2026-09-20: fetch-depth 1だとexec:watchdog(verify_system.py L417の
+          # `git log --grep="watchdog-ci state"`)が履歴不足で必ず検索失敗しWARNに
+          # 化ける誤検知があったため50へ拡大（実watchdogは直近10回連続success）。
+          fetch-depth: 50
           token: ${{ secrets.GH_PAT }}
 
       - name: Set up Python

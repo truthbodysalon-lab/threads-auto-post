@@ -483,6 +483,19 @@ def check_execution_gaps():
 
     # C7: 月100万ペース（常時アラーム）。views_action.json を読み、未達アカウントを明示。
     #     達成は野心的目標のため未達は WARN（恒常監視・改善誘導が目的。FAILにはしない）。
+    # 2026-09-20: views_action.json は .gitignore L10 で明示除外されたMac専用の
+    # ローカル生成物で、CIのチェックアウトには原理的に絶対に存在しない
+    # （実測: FileNotFoundError '/home/runner/work/.../views_action.json'）。
+    # そのままだとCI実行のたびに100%WARNになる恒常誤検知だったため、CI実行
+    # （GITHUB_ACTIONS環境変数）を検知した場合はWARNではなくSKIPにする。
+    # 注意: SKIPは「問題なし」ではなく「検査していない」ことを表す。ゼロ件と
+    # 検査不能を混同しないよう、detail文言で必ず明示する（単にWARNを消すだけ
+    # の変更にはしない）。
+    if os.environ.get("GITHUB_ACTIONS") == "true":
+        add("exec:views_pace", "C.実行ギャップ", "SKIP",
+            "検査不能（Mac専用チェック）: views_action.jsonはMacローカル専用生成物で"
+            "CI上には存在しない。月100万ペースの監視はMac側のみで実施・CI側では未検査")
+        return
     try:
         va = json.loads((BASE / "views_action.json").read_text())
         per = va.get("per_acct", {})
@@ -571,10 +584,14 @@ def main():
 
     fails = [r for r in results if r["status"] == "FAIL"]
     warns = [r for r in results if r["status"] == "WARN"]
+    # SKIP = 「問題なし」ではなく「検査していない」（例: exec:views_pace のCI実行時）。
+    # ゼロ件と検査不能を混同しないよう、PASS件数には含めず別枠で集計する（2026-09-20）。
+    skips = [r for r in results if r["status"] == "SKIP"]
     summary = {
         "checked_at": datetime.now().strftime("%Y-%m-%d %H:%M"),
         "total": len(results), "fail": len(fails), "warn": len(warns),
-        "pass": len(results) - len(fails) - len(warns),
+        "skip": len(skips),
+        "pass": len(results) - len(fails) - len(warns) - len(skips),
         "overall": "FAIL" if fails else ("WARN" if warns else "PASS"),
     }
 
@@ -600,13 +617,15 @@ def main():
         print(json.dumps({"summary": summary, "results": results}, ensure_ascii=False, indent=2))
     else:
         print(f"=== システム検証 {summary['checked_at']} ===")
-        print(f"総合: {summary['overall']} | PASS {summary['pass']} / WARN {summary['warn']} / FAIL {summary['fail']}\n")
+        print(f"総合: {summary['overall']} | PASS {summary['pass']} / WARN {summary['warn']} / FAIL {summary['fail']} / SKIP {summary['skip']}\n")
         for r in results:
-            mark = {"PASS": "✓", "WARN": "⚠", "FAIL": "✗"}[r["status"]]
+            mark = {"PASS": "✓", "WARN": "⚠", "FAIL": "✗", "SKIP": "・"}[r["status"]]
             if r["status"] != "PASS":
                 print(f"  {mark} [{r['category']}] {r['id']}: {r['detail']}")
-        if not fails and not warns:
+        if not fails and not warns and not skips:
             print("  全項目PASS")
+        elif not fails and not warns:
+            print(f"  PASS/SKIPのみ（SKIP {len(skips)}件はゼロ件ではなく未検査）")
 
     sys.exit(1 if fails else 0)
 

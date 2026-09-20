@@ -27,7 +27,11 @@ HISTORY_FILE = BASE / "line_history.json"
 TODAY = date.today().strftime("%Y-%m-%d")
 
 # masaのLINE harness DB（ローカル）
-HARNESS_DB = Path("/Users/mt112/Desktop/line-harness/data.db")
+# 2026-09-20修正: 旧パス(~/Desktop/line-harness/data.db)は実体が存在せず、かつ
+# このスクリプトはlaunchd(com.threads.review経由・analyze_and_tune.pyからimport)から
+# 起動されるためDesktop配下を読めない(TCC)。.exists()ガードでクラッシュはしないが、
+# 実LINEデータを黙って捨てていた。実体パスへ差し替える。
+HARNESS_DB = Path("/Users/mt112/Library/Application Support/line-harness/data.db")
 
 # どのThreadsアカウントに紐づくか
 ACCT = "masa"
@@ -35,7 +39,10 @@ ACCT = "masa"
 
 def total_friends() -> int | None:
     if not HARNESS_DB.exists():
-        print(f"  harness DB が見つかりません: {HARNESS_DB}（CI環境ではスキップ）")
+        # 2026-09-20修正: 「CI環境ではスキップ」は実態と異なる場合がある
+        # （CIで本当にDBが無い場合もあれば、ローカルでパス誤りにより見つからない場合もある）。
+        # ゼロ件（登録0）と検査不能（DBが見えない）を混同させないため、事実だけを正しく言う。
+        print(f"  harness DB が見つかりません: {HARNESS_DB}（ローカルの正しい実体パスか確認。CIでは元々DB非搭載のため未検出は想定内）")
         return None
     try:
         con = sqlite3.connect(f"file:{HARNESS_DB}?mode=ro", uri=True)

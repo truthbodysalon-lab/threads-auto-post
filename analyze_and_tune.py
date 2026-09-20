@@ -27,6 +27,11 @@ TODAY = date.today().strftime("%Y-%m-%d")
 QUIET = "--quiet" in sys.argv
 
 MYFILES = Path("/Users/mt112/Desktop/my files/myfiles")
+# 2026-09-20調査: このMYFILES/REPORT_DIRはanalyze_and_tune.py内で書き込み専用
+# （save_obsidian_report内のmkdir+write_textのみ。全文grep済みで、このリポジトリ内の
+# どのスクリプトもREPORT_DIRを読み戻していない）。書くジョブは既知パスなら通る非対称性
+# （launchdはDesktop配下の新規ファイル作成はOK・読み取りのみDENIED）に該当するため、
+# 読み戻しが無い今の設計では実害なし。よって変更しない（人がFinder/Obsidianで見るだけの出力）。
 REPORT_DIR = MYFILES / "SNS・Threads" / "分析レポート"
 
 ACCOUNTS = {

@@ -26,9 +26,13 @@ from pathlib import Path
 
 BASE = Path(__file__).parent
 # LINE登録数を測るharness DB（ローカルのみ）。truth/nagaokaは共有LINE(qbRbPAm)。
+# 2026-09-20修正: 旧パス(~/Desktop/line-harness*/data.db)は①実体が存在せず
+# ②本スクリプトはlaunchd(com.threads.views・毎日22:33)から起動されるため
+# launchdはDesktop配下を読めない(TCC)ので二重に失敗し、line_registrations()が
+# 33日間ずっとnullを返し続けていた。実体パス(~/Library/Application Support/配下)へ差し替える。
 _LINE_DBS = {
-    "truth_nagaoka": "/Users/mt112/Desktop/line-harness-zutsu/data.db",  # qbRbPAm 共有
-    "masa": "/Users/mt112/Desktop/line-harness/data.db",                 # 8PsIHHC（現状不在の可能性）
+    "truth_nagaoka": "/Users/mt112/Library/Application Support/line-harness-zutsu/data.db",  # qbRbPAm 共有
+    "masa": "/Users/mt112/Library/Application Support/line-harness/data.db",                 # 8PsIHHC
 }
 
 
@@ -51,7 +55,10 @@ def follower_deltas() -> dict:
 
 def mendan_count() -> dict:
     """masa harness DBの「面談」受信件数（累計/直近7日）。ローカルのみ。"""
-    db = "/Users/mt112/Desktop/line-harness/data.db"
+    # 2026-09-20修正: 旧パス(~/Desktop/line-harness/data.db)は実体が存在せず、かつ
+    # 本スクリプトはlaunchd(com.threads.views)から起動されるためDesktop配下を読めない(TCC)。
+    # _LINE_DBSと同じ理由で二重に失敗し、常にexcept節へ落ちて{}を返していた。実体パスへ差し替える。
+    db = "/Users/mt112/Library/Application Support/line-harness/data.db"
     try:
         con = sqlite3.connect(f"file:{db}?mode=ro", uri=True)
         total = con.execute("SELECT count(*) FROM messages WHERE direction='incoming' AND content LIKE '%面談%'").fetchone()[0]

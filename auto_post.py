@@ -619,7 +619,12 @@ def _line_count_today(acct: str, today: str) -> int:
 
 def _monthly_line_url_count(acct: str) -> int:
     """当月に実投稿済みのLINE URL(lin.ee)付き投稿数。
-    feedbackルール『masa: LINE URLありは月間2本以下』の実投稿側ガード用。"""
+    feedbackルール『masa: LINE URLありは月間2本以下』の実投稿側ガード用。
+    2026-09-22修正: 2026-08-18のURL全面コメント化以降、log_*_posted.jsonlのtextは
+    extract_url_and_cta後（URL除去済み）のため "lin.ee" in text では常に0件になる
+    偽陰性バグだった（同型バグはverify_line_listin側で2026-09-12に同じ理由で修正済み）。
+    mark_posted が付与する is_line フラグを優先し、フラグの無い旧エントリ（Aug 18以前）
+    のみ従来の "lin.ee" 文字列一致にフォールバックする。"""
     pfile = ACCOUNTS[acct]["posted"]
     if not pfile.exists():
         return 0
@@ -630,7 +635,9 @@ def _monthly_line_url_count(acct: str) -> int:
             e = json.loads(line)
         except Exception:
             continue
-        if (e.get("date") or "")[:7] == month and "lin.ee" in (e.get("text") or ""):
+        if (e.get("date") or "")[:7] != month:
+            continue
+        if e.get("is_line") or "lin.ee" in (e.get("text") or ""):
             n += 1
     return n
 

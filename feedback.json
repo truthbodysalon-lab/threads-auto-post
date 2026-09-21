@@ -365,8 +365,13 @@
       "date": "2026-08-23",
       "text": "masaのAI投稿の出口は『店舗経営の時短』→公式LINE（2026-08-23）。AI_TIME_CTA_TEMPLATESを1日1本（URL無し・プロフィール経由）。約束=LINEで『AI』と送ると時短の始め方3ステップが自動で届く（auto_reply登録済み・mendan_alertもAI/時短を検知）。LINE言及は前半50本で5本以内。面談/金額は書かない。",
       "account": "masa"
+    },
+    {
+      "date": "2026-09-22",
+      "text": "【URL配置ポリシー訂正・矛盾解消】2026-06-06(truth)・2026-06-11(masa)のLINEリストインnoteに『URLは本文末尾に残す』とあるのは旧設計で、2026-08-18の社長指示（『URLは最初の投稿に載せるな。コメント欄に掲載しろ』2026-08-06/08-18の2回指摘）により全面的に上書き済み。現在は全投稿・全アンカー（LINEリストイン/頭痛タイプ診断含む）でURLを本文からコメントへ回す設計が正（auto_post.py extract_url_and_cta、コード内『この分岐を元に戻さないこと』注記あり）。旧noteの頻度目標（truth 5-7%・masa 10%未満/月間2本以下）自体は有効、URL配置の記述のみ無効。precedenceルール通り本noteが最新として優先。",
+      "account": "all"
     }
   ],
-  "updated_at": "2026-08-23 14:43",
+  "updated_at": "2026-09-22 08:28",
   "precedence": "ルールの優先順位（2026-07-19監査で制定）: ①goals.json(ゴール・導線保護) ②playbookのactiveルール(構造の勝敗・実測で進化) ③notesの最新日付 ④旧note。同一テーマのnoteは最新日付が旧を上書きする（旧noteとの矛盾はFAILにしない）。導線投稿(HPB/LINE/診断/整体LINE/cta_profile)は閲覧基準の負けテンプレ判定・pruneの対象外"
 }

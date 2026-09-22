@@ -2433,14 +2433,27 @@ def generate_30_masa_posts() -> list[str]:
 # メイン
 # ══════════════════════════════════════════════
 
+_AI_TIME_CTA_TEMPLATE_SET = set(
+    AI_JITSUREI_TEMPLATES + AI_DEKIRU_TEMPLATES + AI_KISO_TEMPLATES + AI_TIME_CTA_TEMPLATES
+)
+
+
 def _is_anchor_post(p: str) -> bool:
-    """goals.json保護の導線投稿判定（削らない対象。auto_post.pyのアンカー判定と同じ基準）。"""
+    """goals.json保護の導線投稿判定（削らない対象。auto_post.pyのアンカー判定と同じ基準）。
+    2026-09-22修正: 本判定はURL文字列の有無のみで導線を判定していたため、masa専用の
+    cta_profile（プロフィール経由の無料診断アンカー）とAI_TIME_CTA系（AI時短→LINE誘導。
+    どちらも設計上テンプレ本文にURLを一切含まず「プロフィールのリンクから」文言のみで
+    誘導する）が_final_inspection_passの検品NGで無条件dropされる穴があった。
+    auto_post.pyで既に稼働実績のある判定基準（_is_cta_profile/_is_ai_content）を
+    そのまま移植し、URL非依存でも導線として保護する。"""
     return (
         "lin.ee" in p
         or SHINDAN_URL in p
         or SEITAI_LINE_URL in p
         or "beauty.hotpepper.jp" in p
         or ("長岡駅" in p and "車で5分" in p)
+        or ("プロフィールのリンク" in p and ("診断" in p or "3問" in p))  # cta_profile（auto_post.py:_is_cta_profileと同基準）
+        or p in _AI_TIME_CTA_TEMPLATE_SET  # AI_TIME_CTA系固定文完全一致（auto_post.py:_is_ai_contentと同基準）
     )
 
 

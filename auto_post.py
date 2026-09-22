@@ -262,7 +262,7 @@ def get_posted_indices(acct: str, today: str) -> set:
         if l.strip() and json.loads(l).get("date") == today
     }
 
-def mark_posted(acct: str, today: str, index: int, post_id: str, text: str = "", is_line: bool = False):
+def mark_posted(acct: str, today: str, index: int, post_id: str, text: str = "", is_line: bool = False, is_shindan: bool = False):
     entry = {"date": today, "index": index, "post_id": post_id, "text": text}
     if is_line:
         # 2026-09-12修正: text は extract_url_and_cta 後の本文（URL除去済み）を保存するため、
@@ -271,6 +271,10 @@ def mark_posted(acct: str, today: str, index: int, post_id: str, text: str = "",
         # 実障害。例: truthの同一テンプレが09-05/09-08/09-10と7日以内に3回連続投稿）。
         # 判定結果をログ自体に残し、_recent_listin_firstlines 側で再利用する。
         entry["is_line"] = True
+    if is_shindan:
+        # 2026-09-22修正: is_lineと同型の障害。判定結果をログに残し、
+        # _last_post_had_visible_url 側でclean_textの再判定を不要にする。
+        entry["is_shindan"] = True
     with open(ACCOUNTS[acct]["posted"], "a") as f:
         f.write(json.dumps(entry, ensure_ascii=False) + "\n")
 
@@ -529,11 +533,18 @@ def _text_has_visible_url(text: str) -> bool:
 
 def _last_post_had_visible_url(acct: str, today: str) -> bool:
     """本日この投稿者の直近投稿がメイン本文にURLを含んでいたか。無ければFalse。
-    単体テスト可能な純粋関数（auto_post.py自体は実行しなくても検証できる）。"""
+    単体テスト可能な純粋関数（auto_post.py自体は実行しなくても検証できる）。
+    2026-09-22修正: 以前はposted.jsonlに保存済みのtext（extract_url_and_cta後の
+    clean_text=URL除去済み）に対して_text_has_visible_url（内部で_is_line_listin/
+    _is_shindanを呼ぶ）を再判定していたため、2026-08-18のURL全文コメント化以降
+    常にFalseを返し続け、URL連続回避機能(pick_avoiding_consecutive_url)が
+    1ヶ月以上無音で死んでいた（mark_posted側で判定済みのis_line/is_shindan
+    フラグをそのままログへ保存し、それを読むよう変更。テキストの再判定はしない。
+    旧ログにフラグが無い行はFalse扱いになるだけで、判定側の安全性は変えない）。"""
     pfile = ACCOUNTS[acct]["posted"]
     if not pfile.exists():
         return False
-    last_text = None
+    last_entry = None
     for line in pfile.read_text(encoding="utf-8").splitlines():
         if not line.strip():
             continue
@@ -543,10 +554,10 @@ def _last_post_had_visible_url(acct: str, today: str) -> bool:
             continue
         if (e.get("date") or "")[:10] != today:
             continue
-        last_text = e.get("text", "")
-    if last_text is None:
+        last_entry = e
+    if last_entry is None:
         return False
-    return _text_has_visible_url(last_text)
+    return bool(last_entry.get("is_line") or last_entry.get("is_shindan"))
 
 
 def pick_avoiding_consecutive_url(candidates, last_had_url: bool):
@@ -1139,7 +1150,7 @@ def run_account(acct: str):
     try:
         # post_to_threads 内部で重複チェック・pending・posted を一括処理
         post_id = post_to_threads(acct, clean_text, skip_dup=(is_line or is_shindan or is_hpb or is_access or is_ctaprofile or is_aicontent))
-        mark_posted(acct, today, index, post_id, clean_text, is_line=is_line)
+        mark_posted(acct, today, index, post_id, clean_text, is_line=is_line, is_shindan=is_shindan)
         if is_line:
             _mark_line_done(acct, today)
         log_info(acct, f"{name} ✓ 完了 (ID: {post_id})")
@@ -1172,7 +1183,7 @@ def run_account(acct: str):
             if refresh_token(acct):
                 try:
                     post_id = post_to_threads(acct, clean_text, skip_dup=(is_line or is_shindan or is_hpb or is_access or is_ctaprofile or is_aicontent))
-                    mark_posted(acct, today, index, post_id, clean_text, is_line=is_line)
+                    mark_posted(acct, today, index, post_id, clean_text, is_line=is_line, is_shindan=is_shindan)
                     if is_line:
                         _mark_line_done(acct, today)
                     log_info(acct, f"{name} ✓ 完了（リフレッシュ後） (ID: {post_id})")

@@ -67,9 +67,14 @@ def main():
         ap.ACCOUNTS["truth"]["posted"] = tmp_posted
         try:
             # 直近投稿がURLありのケース
+            # 2026-09-22修正: _last_post_had_visible_url はposted.jsonlの保存済み
+            # is_line/is_shindanフラグを読むよう変更した（旧実装はclean_text=URL除去済み
+            # テキストへ_text_has_visible_urlを再適用しており、2026-08-18のURL全文
+            # コメント化以降ずっとFalse固定という実障害があった）。このテストも
+            # mark_posted()が実際に書き込む形（フラグ付き・URLは本文に残らない）に合わせる。
             tmp_posted.write_text(json.dumps({
                 "date": "2026-07-21", "index": 0, "post_id": "1",
-                "text": "頭痛の原因\nhttps://lin.ee/qbRbPAm"}) + "\n", encoding="utf-8")
+                "text": "頭痛の原因", "is_shindan": True}) + "\n", encoding="utf-8")
             check("直近投稿がURLありならTrue",
                   ap._last_post_had_visible_url("truth", "2026-07-21") is True)
 

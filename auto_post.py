@@ -1094,6 +1094,22 @@ def run_account(acct: str):
     clean_text   = _strip_markers(clean_text)
     comment_parts = [p for p in (_strip_markers(p) for p in comment_parts) if p]
 
+    if not clean_text.strip():
+        # 2026-09-22: extract_url_and_cta が本文とURLの間に改行が無いテンプレ
+        # （例:「診断できます。\nLINEの...👉 https://...」）を全文CTA扱いし、
+        # clean_textが空になるケースがある。空本文をそのままpost_to_threadsへ
+        # 渡すとThreads API側で拒否され（HTTPError・body空→code=0）、この失敗パスは
+        # dg_mark_pendingを呼ばないため同一候補が延々再選択され続け、バースト予算
+        # （max_attempts = n+6）を消費して目標本数に届かない実障害があった
+        # （2026-09-21 masa 44/50本・run=35563956767で確認、[115本目]表記で毎回本文空）。
+        # 検品NGと同様に消費済みにして見送る（投稿数を増やす変更ではない）。
+        log_info(acct, f"{name} [本文空につき見送り] {text[:40].replace(chr(10), ' ')}...")
+        try:
+            dg_mark_pending(dg_normalize(text), acct)
+        except Exception:
+            pass
+        return
+
     log_info(acct, f"{name} [{index+1}本目]: {clean_text[:40].replace(chr(10), ' ')}...")
 
     # URLがある場合のみ補足説明コメントをAIで事前生成（投稿前に準備）

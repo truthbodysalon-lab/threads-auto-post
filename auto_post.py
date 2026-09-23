@@ -616,6 +616,33 @@ def _posted_count_today(acct: str) -> int:
     return n
 
 
+def _listin_last_used_order(acct: str) -> dict:
+    """LINEリストイン候補のLRU判定用: 台帳(log_<acct>_posted.jsonl)から
+    1文目 → 最終使用日(YYYY-MM-DD) の辞書を返す。未使用は辞書に無い（=空文字扱いで最優先）。
+    2026-09-24: 呼び出し側(get_next_post)だけ残り定義が欠落 → NameErrorで全アカウント
+    処理が停止しmasaが丸1日0本になった障害の復旧で定義を復元。"""
+    order: dict = {}
+    try:
+        with open(ACCOUNTS[acct]["posted"], encoding="utf-8") as f:
+            for line in f:
+                if not line.strip():
+                    continue
+                try:
+                    r = json.loads(line)
+                except Exception:
+                    continue
+                text = r.get("text", "") or ""
+                if not (r.get("is_line") or _is_line_listin(text)):
+                    continue
+                first = text.split("\n")[0].strip()
+                d = r.get("date", "") or ""
+                if first and d >= order.get(first, ""):
+                    order[first] = d
+    except Exception:
+        return {}
+    return order
+
+
 def _line_count_today(acct: str, today: str) -> int:
     """本日すでに投稿したLINEリストインの回数。旧形式（値が日付文字列）も後方互換で解釈。"""
     try:

@@ -1,1 +1,32 @@
-{}
+{
+  "これから開業する人へ。": {
+    "segment": "S1",
+    "hook": "low",
+    "variant": 0,
+    "created": "2026-09-23"
+  },
+  "開業して1年、まだ集客ゼロの院へ。": {
+    "segment": "S2",
+    "hook": "low",
+    "variant": 0,
+    "created": "2026-09-23"
+  },
+  "月商50万の壁で止まっている経営者へ。": {
+    "segment": "S3",
+    "hook": "low",
+    "variant": 0,
+    "created": "2026-09-23"
+  },
+  "スタッフを抱える院長へ。": {
+    "segment": "S4",
+    "hook": "low",
+    "variant": 0,
+    "created": "2026-09-23"
+  },
+  "コースや講座を売っている経営者へ。": {
+    "segment": "S5",
+    "hook": "low",
+    "variant": 0,
+    "created": "2026-09-23"
+  }
+}

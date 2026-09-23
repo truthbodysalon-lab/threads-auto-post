@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-23 13:56",
+  "generated_at": "2026-09-23 14:04",
   "params": {
     "min_n": 5,
     "loser_min_n": 8,
@@ -10,7 +10,7 @@
       30
     ]
   },
-  "registry_loaded": 15,
+  "registry_loaded": 5,
   "log_entries": 6249,
   "windows": {
     "14d": {

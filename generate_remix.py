@@ -4,6 +4,7 @@
 past_posts.json から構造・文体を学習してリミックス生成。
 """
 from __future__ import annotations
+import os
 
 import json
 import random
@@ -2290,6 +2291,9 @@ def _load_segment_registry() -> dict:
 
 
 def _save_segment_registry(registry: dict) -> None:
+    # verify_system 等の検証呼び出しでは本番レジストリを汚染しない（SEGMENT_REGISTRY_DRY=1）
+    if os.environ.get("SEGMENT_REGISTRY_DRY") == "1":
+        return
     try:
         SEGMENT_REGISTRY_FILE.write_text(json.dumps(registry, ensure_ascii=False, indent=2))
     except Exception:

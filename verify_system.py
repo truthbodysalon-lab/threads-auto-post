@@ -60,6 +60,10 @@ def check_imports():
             add(f"import:{m}", "A.コード", "FAIL", f"{type(e).__name__}: {e}")
 
 
+# 検証目的の生成呼び出しが segment_registry.json を汚染しないようにする（2026-09-23）
+os.environ["SEGMENT_REGISTRY_DRY"] = "1"
+
+
 def check_generation():
     try:
         import generate_remix as g

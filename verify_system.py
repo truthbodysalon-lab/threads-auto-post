@@ -481,6 +481,26 @@ def check_execution_gaps():
     except Exception as e:
         add("exec:imagepost", "C.実行ギャップ", "WARN", f"確認不可: {e}")
 
+    # C15: masaのセグメントテスト（小川さんセッション2026-09-22）が実際に回っているか。
+    #      昨日segment_registryに登録済みの投稿が3本未満ならWARN。registryが空（導入初日）
+    #      は「検査していない」ではなく判定材料が無いだけなのでPASS扱い（SKIPにはしない）。
+    try:
+        reg = json.loads((BASE / "segment_registry.json").read_text(encoding="utf-8"))
+        if not isinstance(reg, dict):
+            reg = {}
+    except Exception:
+        reg = {}
+    if not reg:
+        add("exec:segment_test", "C.実行ギャップ", "PASS",
+            "segment_registry.json 空（導入初日 or 未生成）のため判定保留")
+    else:
+        yday = (date.today() - timedelta(days=1)).isoformat()
+        n_yday = sum(1 for v in reg.values() if isinstance(v, dict) and v.get("created") == yday)
+        add("exec:segment_test", "C.実行ギャップ",
+            "PASS" if n_yday >= 3 else "WARN",
+            f"昨日({yday})のsegment_registry登録{n_yday}件" +
+            ("" if n_yday >= 3 else "（3本未満・セグメントテスト投稿が回っていない疑い）"))
+
     # C7: 月100万ペース（常時アラーム）。views_action.json を読み、未達アカウントを明示。
     #     達成は野心的目標のため未達は WARN（恒常監視・改善誘導が目的。FAILにはしない）。
     # 2026-09-20: views_action.json は .gitignore L10 で明示除外されたMac専用の

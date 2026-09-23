@@ -485,47 +485,94 @@ def check_execution_gaps():
     except Exception as e:
         add("exec:imagepost", "C.実行ギャップ", "WARN", f"確認不可: {e}")
 
-    # C15: masaのセグメントテスト（小川さんセッション2026-09-22）が実際に回っているか。
-    #      昨日segment_registryに登録済みの投稿が3本未満ならWARN。registryが空（導入初日）
-    #      は「検査していない」ではなく判定材料が無いだけなのでPASS扱い（SKIPにはしない）。
+    # C15: セグメントテスト（小川さんセッション2026-09-22・masa=S1-S5。
+    #      2026-09-23にtruth/nagaoka=T1-T6へ拡張）が実際に回っているか、acctごとに判定。
+    #      昨日segment_registryにそのacctで登録済みの投稿が3本未満ならWARN。
+    #      registryが空（導入初日）は「検査していない」ではなく判定材料が無いだけなので
+    #      PASS扱い（SKIPにはしない）。truth/nagaokaは原稿投入前のプレースホルダ段階だと
+    #      候補0件で登録も0件になりうるため、その場合は「原稿未投入」の理由を明示してPASSにする
+    #      （担当Cの原稿投入が終わっていないだけで実装の不具合ではないため）。
     try:
         reg = json.loads((BASE / "segment_registry.json").read_text(encoding="utf-8"))
         if not isinstance(reg, dict):
             reg = {}
     except Exception:
         reg = {}
+
+    try:
+        seg_cfg = json.loads((BASE / "segment_config.json").read_text(encoding="utf-8"))
+        if not isinstance(seg_cfg, dict):
+            seg_cfg = {}
+    except Exception:
+        seg_cfg = {}
+
+    try:
+        import generate_remix as _gseg
+        _templates_by_acct = getattr(_gseg, "SEGMENT_TEST_TEMPLATES_BY_ACCT", {})
+    except Exception:
+        _templates_by_acct = {}
+
+    def _acct_of(entry):
+        return (entry.get("acct") or "masa") if isinstance(entry, dict) else None
+
     if not reg:
-        add("exec:segment_test", "C.実行ギャップ", "PASS",
-            "segment_registry.json 空（導入初日 or 未生成）のため判定保留")
+        for acct in ACCTS:
+            add(f"exec:segment_test:{acct}", "C.実行ギャップ", "PASS",
+                "segment_registry.json 空（導入初日 or 未生成）のため判定保留")
     else:
         yday = (date.today() - timedelta(days=1)).isoformat()
-        n_yday = sum(1 for v in reg.values() if isinstance(v, dict) and v.get("created") == yday)
-        add("exec:segment_test", "C.実行ギャップ",
-            "PASS" if n_yday >= 3 else "WARN",
-            f"昨日({yday})のsegment_registry登録{n_yday}件" +
-            ("" if n_yday >= 3 else "（3本未満・セグメントテスト投稿が回っていない疑い）"))
+        for acct in ACCTS:
+            n_yday = sum(1 for v in reg.values()
+                         if isinstance(v, dict) and v.get("created") == yday and _acct_of(v) == acct)
+            has_content = any(
+                any(hooks.get("low") or hooks.get("high"))
+                for hooks in (_templates_by_acct.get(acct) or {}).values()
+            ) if acct != "masa" else True
+            if n_yday >= 3:
+                add(f"exec:segment_test:{acct}", "C.実行ギャップ", "PASS",
+                    f"昨日({yday})のsegment_registry登録{n_yday}件")
+            elif not has_content and acct in seg_cfg:
+                add(f"exec:segment_test:{acct}", "C.実行ギャップ", "PASS",
+                    f"{acct}: セグメントテンプレ原稿未投入（プレースホルダのみ）のため判定保留"
+                    "（担当Cの原稿投入待ち・実装の不具合ではない）")
+            else:
+                add(f"exec:segment_test:{acct}", "C.実行ギャップ", "WARN",
+                    f"昨日({yday})のsegment_registry登録{n_yday}件"
+                    "（3本未満・セグメントテスト投稿が回っていない疑い）")
 
     # C15追加: Obsidian由来の店舗経営の悩み・質問から作った仮説(segment_hypotheses.json)が
-    #          実際に投稿枠へ投入されているか。ファイル不在 or hypotheses 0件は「仮説の中身は
-    #          別エージェントが並行して作成中」で未着手なだけなのでPASS（WARNにしない）。
+    #          実際に投稿枠へ投入されているか、acctごとに判定。ファイル不在 or hypotheses 0件は
+    #          「仮説の中身は別エージェントが並行して作成中」で未着手なだけなのでPASS（WARNにしない）。
     #          仮説が1件以上あるのに直近7日でhypothesis_id付き登録が無ければWARN。
     try:
         hyp_data = json.loads((BASE / "segment_hypotheses.json").read_text(encoding="utf-8"))
     except Exception:
         hyp_data = None
     if not isinstance(hyp_data, dict) or not hyp_data.get("hypotheses"):
-        add("exec:segment_hypothesis", "C.実行ギャップ", "PASS",
-            "segment_hypotheses.json 不在または仮説0件のため判定対象外")
+        for acct in ACCTS:
+            add(f"exec:segment_hypothesis:{acct}", "C.実行ギャップ", "PASS",
+                "segment_hypotheses.json 不在または仮説0件のため判定対象外")
     else:
         cutoff7 = (date.today() - timedelta(days=7)).isoformat()
-        n_hyp_recent = sum(
-            1 for v in reg.values()
-            if isinstance(v, dict) and v.get("hypothesis_id") and v.get("created", "") >= cutoff7
-        )
-        add("exec:segment_hypothesis", "C.実行ギャップ",
-            "PASS" if n_hyp_recent >= 1 else "WARN",
-            f"仮説{len(hyp_data['hypotheses'])}件・直近7日のhypothesis_id付き登録{n_hyp_recent}件" +
-            ("" if n_hyp_recent >= 1 else "（仮説投稿が実際の投稿枠に投入されていない疑い）"))
+        hyps = hyp_data["hypotheses"]
+        for acct in ACCTS:
+            n_hyp_acct = sum(
+                1 for h in hyps
+                if isinstance(h, dict) and (h.get("acct") or "masa") == acct
+            )
+            if n_hyp_acct == 0:
+                add(f"exec:segment_hypothesis:{acct}", "C.実行ギャップ", "PASS",
+                    f"{acct}向け仮説0件のため判定対象外")
+                continue
+            n_hyp_recent = sum(
+                1 for v in reg.values()
+                if isinstance(v, dict) and v.get("hypothesis_id") and _acct_of(v) == acct
+                and v.get("created", "") >= cutoff7
+            )
+            add(f"exec:segment_hypothesis:{acct}", "C.実行ギャップ",
+                "PASS" if n_hyp_recent >= 1 else "WARN",
+                f"仮説{n_hyp_acct}件・直近7日のhypothesis_id付き登録{n_hyp_recent}件" +
+                ("" if n_hyp_recent >= 1 else "（仮説投稿が実際の投稿枠に投入されていない疑い）"))
 
     # C7: 月100万ペース（常時アラーム）。views_action.json を読み、未達アカウントを明示。
     #     達成は野心的目標のため未達は WARN（恒常監視・改善誘導が目的。FAILにはしない）。

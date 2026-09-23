@@ -1,29 +1,37 @@
 #!/usr/bin/env python3
 """
-segment_report.py — masaの売上ステージ別セグメント×フック分析（2026-09-23 小川さんセッション反映）
+segment_report.py — セグメント×フック分析（masa=売上ステージS1-S5・truth/nagaoka=症状生活層T1-T6）
+（2026-09-23 小川さんセッション反映。2026-09-23 truth/nagaokaへ拡張＝ユーザー指示）
 
 なぜ: 「層を名指しした投稿を並べ、どの層が反応するか」をテストするため、
-      segment_registry.json（投稿の1行目→層/フックの登録）× log_masa_posted.jsonl
-      （投稿本文の台帳）× past_posts_masa.json（views/いいね/返信の実測）を
+      segment_registry.json（投稿の1行目→層/フック/acctの登録）× log_<acct>_posted.jsonl
+      （投稿本文の台帳）× past_posts*.json（views/いいね/返信の実測）を
       1行目正規化40字＋post_idで結合し、segment×hook別の指標とindexを出す。
 
 使い方:
-  python3 segment_report.py            # レポート生成のみ
-  python3 segment_report.py --apply    # 加えて segment_config.json の share をwinner/loserで自動調整
-  python3 segment_report.py --json     # JSONを標準出力にも全量出力
+  python3 segment_report.py                     # masaのレポート生成のみ（既定acct）
+  python3 segment_report.py --acct truth         # truthのレポート生成のみ
+  python3 segment_report.py --acct all           # masa/truth/nagaokaを順番に実行
+  python3 segment_report.py --acct nagaoka --apply  # 加えて segment_config.json の
+                                                     # share と segment_hypotheses.json の
+                                                     # status をwinner/loserで自動調整
+  python3 segment_report.py --json               # JSONを標準出力にも全量出力
 
 入力（全てローカルJSON/JSONL。HTTP通信なし）:
-  - log_masa_posted.jsonl : {"date","index","post_id","text"} 1行1件
-  - segment_registry.json : {"<1行目正規化40字>": {"segment","hook","variant","created"}}
-                             （担当A側が生成。無い/空でも空辞書扱いで動く）
-  - past_posts_masa.json  : [{"id","text","views","like_count","replies_count",...}, ...]
-  - segment_config.json   : {"masa": {"per_day","share","hook_rotation","anchors","min_n"}}
-                             （--apply でのみ使用。無ければ調整をスキップ）
+  - log_<acct>_posted.jsonl : {"date","index","post_id","text"} 1行1件
+  - segment_registry.json   : {"<1行目正規化40字>": {"segment","hook","variant","created","acct"}}
+                               （acct省略=masaとして扱う後方互換。担当A/B側が生成。
+                               無い/空でも空辞書扱いで動く）
+  - past_posts_masa.json / past_posts.json(=truth) / past_posts_nagaoka.json
+                             : [{"id","text","views","like_count","replies_count",...}, ...]
+  - segment_config.json     : {"<acct>": {"per_day","share","hook_rotation","anchors","min_n"}}
+                               （--apply でのみ使用。無ければ調整をスキップ）
 
-出力:
-  - segment_report.json（git追跡）
-  - Markdown: "/Users/mt112/Desktop/my files/myfiles/SNS・Threads/分析レポート/セグメント分析_masa.md"（上書き）
-  - 標準出力に1行サマリ
+出力（acctごと）:
+  - JSON: masaのみ後方互換で segment_report.json も出力し、加えて全acct共通で
+          segment_report_<acct>.json（git追跡）
+  - Markdown: "/Users/mt112/Desktop/my files/myfiles/SNS・Threads/分析レポート/セグメント分析_<acct>.md"（上書き）
+  - 標準出力に1行サマリ（acctごと）
 """
 from __future__ import annotations
 
@@ -34,25 +42,62 @@ from datetime import date, datetime, timedelta
 from pathlib import Path
 
 BASE = Path(__file__).parent
-LOG_FILE = BASE / "log_masa_posted.jsonl"
-REGISTRY_FILE = BASE / "segment_registry.json"
-PAST_POSTS_FILE = BASE / "past_posts_masa.json"
 CONFIG_FILE = BASE / "segment_config.json"
+REGISTRY_FILE = BASE / "segment_registry.json"
 HYPOTHESES_FILE = BASE / "segment_hypotheses.json"
-REPORT_JSON = BASE / "segment_report.json"
-REPORT_MD = Path(
-    "/Users/mt112/Desktop/my files/myfiles/SNS・Threads/分析レポート/セグメント分析_masa.md"
-)
+REPORT_MD_DIR = Path("/Users/mt112/Desktop/my files/myfiles/SNS・Threads/分析レポート")
 
-SEGMENTS = ["S1_kaigyo_mae", "S2_shonen", "S3_atamauchi", "S4_staff", "S5_kougaku"]
-# registryのsegment値は短縮形（kaigyo_mae等）で入る想定なので正規化する
-_SEG_ALIASES = {
-    "kaigyo_mae": "S1_kaigyo_mae", "S1": "S1_kaigyo_mae", "s1": "S1_kaigyo_mae",
-    "shonen": "S2_shonen", "S2": "S2_shonen", "s2": "S2_shonen",
-    "atamauchi": "S3_atamauchi", "S3": "S3_atamauchi", "s3": "S3_atamauchi",
-    "staff": "S4_staff", "S4": "S4_staff", "s4": "S4_staff",
-    "kougaku": "S5_kougaku", "S5": "S5_kougaku", "s5": "S5_kougaku",
+ACCTS = ["masa", "truth", "nagaoka"]
+
+LOG_FILES = {
+    "masa": BASE / "log_masa_posted.jsonl",
+    "truth": BASE / "log_truth_posted.jsonl",
+    "nagaoka": BASE / "log_nagaoka_posted.jsonl",
 }
+# 閲覧等の実測ファイル: truthは歴史的経緯でpast_posts.json（アカウント名なし）が正本。
+PAST_POSTS_FILES = {
+    "masa": BASE / "past_posts_masa.json",
+    "truth": BASE / "past_posts.json",
+    "nagaoka": BASE / "past_posts_nagaoka.json",
+}
+
+# セグメントの短縮コード(registry/config内の値)とフルネーム(レポート表示用)の対応。
+# masa=売上ステージS1-S5（既存）。truth/nagaoka=症状・生活層T1-T6（2026-09-23拡張）。
+SEG_CODES = {
+    "masa": ["S1", "S2", "S3", "S4", "S5"],
+    "truth": ["T1", "T2", "T3", "T4", "T5", "T6"],
+    "nagaoka": ["T1", "T2", "T3", "T4", "T5", "T6"],
+}
+SEG_NAMES = {
+    "masa": {"S1": "kaigyo_mae", "S2": "shonen", "S3": "atamauchi", "S4": "staff", "S5": "kougaku"},
+    "truth": {"T1": "desk", "T2": "zutsu", "T3": "sango", "T4": "tachi", "T5": "suimin", "T6": "norikae"},
+    "nagaoka": {"T1": "desk", "T2": "zutsu", "T3": "sango", "T4": "tachi", "T5": "suimin", "T6": "norikae"},
+}
+
+
+def _segments(acct: str) -> list[str]:
+    return [f"{c}_{SEG_NAMES[acct][c]}" for c in SEG_CODES.get(acct, [])]
+
+
+def _seg_aliases(acct: str) -> dict:
+    alias = {}
+    for c in SEG_CODES.get(acct, []):
+        full = f"{c}_{SEG_NAMES[acct][c]}"
+        alias[full] = full
+        alias[c] = full
+        alias[c.lower()] = full
+        alias[SEG_NAMES[acct][c]] = full
+    return alias
+
+
+def _short_code(acct: str, full_seg: str) -> str | None:
+    """フルネーム("T1_desk"等)から config/share が使う短縮コード("T1")へ戻す。"""
+    for c in SEG_CODES.get(acct, []):
+        if f"{c}_{SEG_NAMES[acct][c]}" == full_seg:
+            return c
+    return None
+
+
 HOOKS = ["low", "high"]
 WINDOWS = (14, 30)
 DEFAULT_MIN_N = 5
@@ -82,12 +127,13 @@ def _load_json(path: Path, default):
         return default
 
 
-def _load_log_entries():
-    """log_masa_posted.jsonl を [{"date","index","post_id","text","key"}] で返す。"""
+def _load_log_entries(acct: str):
+    """log_<acct>_posted.jsonl を [{"date","index","post_id","text","key"}] で返す。"""
     out = []
-    if not LOG_FILE.exists():
+    path = LOG_FILES.get(acct)
+    if not path or not path.exists():
         return out
-    for line in LOG_FILE.read_text(encoding="utf-8").splitlines():
+    for line in path.read_text(encoding="utf-8").splitlines():
         line = line.strip()
         if not line:
             continue
@@ -100,8 +146,8 @@ def _load_log_entries():
     return out
 
 
-def _load_past_posts_by_id():
-    posts = _load_json(PAST_POSTS_FILE, [])
+def _load_past_posts_by_id(acct: str):
+    posts = _load_json(PAST_POSTS_FILES.get(acct, Path("__missing__")), [])
     out = {}
     if isinstance(posts, list):
         for p in posts:
@@ -116,6 +162,10 @@ def _load_registry():
     return reg if isinstance(reg, dict) else {}
 
 
+def _entry_acct(entry: dict) -> str:
+    return (entry.get("acct") or "masa") if isinstance(entry, dict) else "masa"
+
+
 def _load_hypotheses():
     """segment_hypotheses.json を読み込む。無い/不正なら None を返す
     （＝仮説機能は「未着手」として静かにスキップ。空リストは{"hypotheses":[]}として
@@ -126,10 +176,12 @@ def _load_hypotheses():
     return data
 
 
-def _norm_segment(raw):
+def _norm_segment(acct: str, raw):
     if not raw:
         return None
-    return _SEG_ALIASES.get(raw, raw if raw in SEGMENTS else None)
+    alias = _seg_aliases(acct)
+    segs = _segments(acct)
+    return alias.get(raw, raw if raw in segs else None)
 
 
 def _norm_hook(raw):
@@ -185,23 +237,29 @@ def _verdict(n, index, min_n):
     return "testing"
 
 
-def build_report():
+def build_report(acct: str):
     today = date.today()
-    log_entries = _load_log_entries()
+    log_entries = _load_log_entries(acct)
     registry = _load_registry()
-    past_by_id = _load_past_posts_by_id()
+    past_by_id = _load_past_posts_by_id(acct)
+    SEGMENTS = _segments(acct)
 
-    # ログ各行に registry(key一致) と past_posts(id一致) を突き合わせる
+    # ログ各行に registry(key一致・acct一致) と past_posts(id一致) を突き合わせる
     joined = []
     for e in log_entries:
         pid = str(e.get("post_id", ""))
         past = past_by_id.get(pid)
         reg = registry.get(e["key"])
+        # registryのキーは1行目正規化40字のみでacctを区別しないため、
+        # 引き当てたエントリのacctがこのレポート対象acctと一致するかを必ず確認する
+        # （偶然の文言一致で他acctの登録を誤って集計しないため）。
+        if reg is not None and _entry_acct(reg) != acct:
+            reg = None
         raw_seg = reg.get("segment") if reg else None
-        # HAKASE（インスタ運用の原則投稿・2026-09-23）はS1-S5と別枠の集計対象なので
-        # SEGMENTSの正規化を通さずそのまま保持する（_norm_segmentはS1-S5以外はNoneを返し
+        # HAKASE（インスタ運用の原則投稿・masa専用・2026-09-23）はS1-S5と別枠の集計対象なので
+        # SEGMENTSの正規化を通さずそのまま保持する（_norm_segmentはSEGMENTS以外はNoneを返し
         # 「未登録」扱いになってしまうため）。
-        seg_val = "HAKASE" if raw_seg == "HAKASE" else (_norm_segment(raw_seg) if reg else None)
+        seg_val = "HAKASE" if raw_seg == "HAKASE" else (_norm_segment(acct, raw_seg) if reg else None)
         joined.append({
             "date": e.get("date", ""),
             "post_id": pid,
@@ -216,14 +274,15 @@ def build_report():
         })
 
     cfg = _load_json(CONFIG_FILE, {})
-    min_n = cfg.get("masa", {}).get("min_n", DEFAULT_MIN_N) if isinstance(cfg, dict) else DEFAULT_MIN_N
+    min_n = cfg.get(acct, {}).get("min_n", DEFAULT_MIN_N) if isinstance(cfg, dict) else DEFAULT_MIN_N
 
     report = {
+        "acct": acct,
         "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M"),
         "params": {"min_n": min_n, "loser_min_n": LOSER_MIN_N,
                     "winner_index": WINNER_INDEX, "loser_index": LOSER_INDEX,
                     "windows_days": list(WINDOWS)},
-        "registry_loaded": len(registry),
+        "registry_loaded": sum(1 for v in registry.values() if _entry_acct(v) == acct),
         "log_entries": len(log_entries),
         "windows": {},
         "segment_summary": {},  # hook問わずsegment単位（--apply判定用）
@@ -267,8 +326,9 @@ def build_report():
                 "verdict": verdict,
             }
 
-        # HAKASE（インスタ運用の原則を店舗向けに翻案した投稿・2026-09-23）はS1-S5の
-        # winner/loser判定(apply_share対象)には含めず、単独の集計行として出す。
+        # HAKASE（インスタ運用の原則を店舗向けに翻案した投稿・masa専用・2026-09-23）は
+        # S1-S5の winner/loser判定(apply_share対象)には含めず、単独の集計行として出す。
+        # truth/nagaokaにはHAKASE投稿が存在しないため常に空集計になる（想定どおり）。
         hakase_cell = [j for j in rows if j["segment"] == "HAKASE"]
         hakase_views = [j["views"] for j in hakase_cell]
         hakase_st = _stats(hakase_views)
@@ -282,12 +342,12 @@ def build_report():
         }
 
         # 仮説別（Obsidian由来の店舗経営の悩み・質問から作った仮説の勝ち負け判定。
-        # 2026-09-23追加。segment_hypotheses.json が無い/空でもクラッシュしない）。
+        # 2026-09-23追加。acctでフィルタする。segment_hypotheses.json が無い/空でもクラッシュしない）。
         hyp_data = _load_hypotheses()
         hyp_ids_from_rows = {j["hypothesis_id"] for j in rows if j["hypothesis_id"]}
         hyp_ids_from_file = {
             h.get("id") for h in (hyp_data or {}).get("hypotheses", [])
-            if isinstance(h, dict) and h.get("id")
+            if isinstance(h, dict) and h.get("id") and (h.get("acct") or "masa") == acct
         }
         hyp_summary = {}
         for hid in sorted(hyp_ids_from_rows | hyp_ids_from_file):
@@ -323,9 +383,10 @@ def build_report():
     return report
 
 
-def write_markdown(report):
+def write_markdown(report, acct: str):
+    SEGMENTS = _segments(acct)
     today = date.today().strftime("%Y-%m-%d")
-    lines = [f"# セグメント分析_masa {today}", "",
+    lines = [f"# セグメント分析_{acct} {today}", "",
              f"registry登録{report['registry_loaded']}件 / 台帳{report['log_entries']}件",
              f"判定基準: index≥{report['params']['winner_index']}かつn≥{report['params']['min_n']}→winner / "
              f"index≤{report['params']['loser_index']}かつn≥{report['params']['loser_min_n']}→loser / "
@@ -355,17 +416,19 @@ def write_markdown(report):
             c = w["segment"][seg]
             lines.append(f"| {seg} | {c['n']} | {c['median_views']} | {c['index']} | {c['verdict']} |")
         lines.append("")
-        lines.append("### HAKASE（原則投稿）")
-        hk = w.get("hakase", {})
-        lines.append("| n | 中央値 | index | いいね率 | 返信率 | 判定 |")
-        lines.append("|---|---|---|---|---|---|")
-        lines.append(f"| {hk.get('n', 0)} | {hk.get('median_views', 0)} | {hk.get('index', 0)} | "
-                      f"{hk.get('like_rate', 0)} | {hk.get('reply_rate', 0)} | {hk.get('verdict', '判定保留')} |")
-        lines.append("")
+        if acct == "masa":
+            lines.append("### HAKASE（原則投稿）")
+            hk = w.get("hakase", {})
+            lines.append("| n | 中央値 | index | いいね率 | 返信率 | 判定 |")
+            lines.append("|---|---|---|---|---|---|")
+            lines.append(f"| {hk.get('n', 0)} | {hk.get('median_views', 0)} | {hk.get('index', 0)} | "
+                          f"{hk.get('like_rate', 0)} | {hk.get('reply_rate', 0)} | {hk.get('verdict', '判定保留')} |")
+            lines.append("")
         lines.append("### 仮説別（Obsidian由来の店舗経営の悩み・質問）")
         hyp = w.get("hypothesis", {})
         if not hyp:
-            lines.append("(仮説データなし。segment_hypotheses.json が空 or 未生成)")
+            lines.append("(仮説データなし。segment_hypotheses.json が空 or 未生成、または"
+                          f"{acct}向け仮説が未投入)")
         else:
             lines.append("| hypothesis_id | segment | n | 中央値 | index | いいね率 | 返信率 | 判定 |")
             lines.append("|---|---|---|---|---|---|---|---|")
@@ -375,52 +438,56 @@ def write_markdown(report):
                              f"{c['index']} | {c['like_rate']} | {c['reply_rate']} | {c['verdict']} |")
         lines.append("")
     try:
-        REPORT_MD.parent.mkdir(parents=True, exist_ok=True)
-        REPORT_MD.write_text("\n".join(lines), encoding="utf-8")
+        REPORT_MD_DIR.mkdir(parents=True, exist_ok=True)
+        (REPORT_MD_DIR / f"セグメント分析_{acct}.md").write_text("\n".join(lines), encoding="utf-8")
     except Exception as e:
-        print(f"[warn] Markdown書き込み失敗: {e}", file=sys.stderr)
+        print(f"[warn] Markdown書き込み失敗({acct}): {e}", file=sys.stderr)
 
 
-def apply_share(report):
+def apply_share(report, acct: str):
     """segment_summary(30日窓)のwinner/loserでsegment_config.jsonのshareを調整する。"""
+    SEGMENTS = _segments(acct)
     cfg = _load_json(CONFIG_FILE, None)
-    if not isinstance(cfg, dict) or "masa" not in cfg:
-        print("[apply] segment_config.json が無い/不正のため share 調整をスキップ")
+    if not isinstance(cfg, dict) or acct not in cfg:
+        print(f"[apply:{acct}] segment_config.json が無い/不正のため share 調整をスキップ")
         return False
-    masa_cfg = cfg["masa"]
-    share = dict(masa_cfg.get("share", {}))
+    acct_cfg = cfg[acct]
+    share = dict(acct_cfg.get("share", {}))
     summary = report.get("segment_summary", {})
 
     winners = [s for s in SEGMENTS if summary.get(s, {}).get("verdict") == "winner"]
     losers = [s for s in SEGMENTS if summary.get(s, {}).get("verdict") == "loser"]
 
     if not winners:
-        print(f"[apply] winnerなし（loser{len(losers)}件）のため share は変更しない")
+        print(f"[apply:{acct}] winnerなし（loser{len(losers)}件）のため share は変更しない")
         return False
 
-    freed = sum(share.get(s, 0) for s in losers)
-    for s in losers:
-        share[s] = 0
+    winner_codes = [_short_code(acct, s) for s in winners]
+    loser_codes = [_short_code(acct, s) for s in losers]
 
-    base_add, rem = divmod(freed, len(winners))
-    for i, s in enumerate(winners):
-        share[s] = share.get(s, 0) + base_add + (1 if i < rem else 0)
+    freed = sum(share.get(c, 0) for c in loser_codes)
+    for c in loser_codes:
+        share[c] = 0
 
-    masa_cfg["share"] = share
-    cfg["masa"] = masa_cfg
+    base_add, rem = divmod(freed, len(winner_codes))
+    for i, c in enumerate(winner_codes):
+        share[c] = share.get(c, 0) + base_add + (1 if i < rem else 0)
+
+    acct_cfg["share"] = share
+    cfg[acct] = acct_cfg
     CONFIG_FILE.write_text(json.dumps(cfg, ensure_ascii=False, indent=2), encoding="utf-8")
-    print(f"[apply] share更新: winner={winners} loser={losers} → {share}")
+    print(f"[apply:{acct}] share更新: winner={winners} loser={losers} → {share}")
     return True
 
 
-def apply_hypotheses(report):
-    """segment_hypotheses.json の各仮説の status と last_result を30日窓の実測で更新する。
+def apply_hypotheses(report, acct: str):
+    """segment_hypotheses.json の該当acctの仮説の status と last_result を30日窓の実測で更新する。
     状態遷移: untested → testing(n≥1) → winner(index≥1.3,n≥min_n) / loser(index≤0.7,n≥8)。
     status=retired の仮説は手動退役なので触らない。ファイル不在/不正なら何もせずFalseを返す
-    （担当Aの仮説投入が未着手でも落ちない）。"""
+    （担当A/Bの仮説投入が未着手でも落ちない）。"""
     data = _load_hypotheses()
     if data is None:
-        print("[apply] segment_hypotheses.json が無い/不正のため仮説status更新をスキップ")
+        print(f"[apply:{acct}] segment_hypotheses.json が無い/不正のため仮説status更新をスキップ")
         return False
 
     hyp_stats = report.get("windows", {}).get("30d", {}).get("hypothesis", {})
@@ -431,6 +498,8 @@ def apply_hypotheses(report):
 
     for h in data.get("hypotheses", []):
         if not isinstance(h, dict):
+            continue
+        if (h.get("acct") or "masa") != acct:
             continue
         hid = h.get("id")
         if not hid:
@@ -467,41 +536,69 @@ def apply_hypotheses(report):
 
     if changed:
         HYPOTHESES_FILE.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
-        print(f"[apply] 仮説status更新: {updated_ids or '(last_resultのみ更新)'}")
+        print(f"[apply:{acct}] 仮説status更新: {updated_ids or '(last_resultのみ更新)'}")
     else:
-        print("[apply] 仮説statusの変更なし")
+        print(f"[apply:{acct}] 仮説statusの変更なし")
     return changed
 
 
-def main():
-    report = build_report()
-    REPORT_JSON.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
-    write_markdown(report)
+def run_for_acct(acct: str, do_apply: bool, do_json: bool):
+    report = build_report(acct)
 
-    if "--apply" in sys.argv:
-        apply_share(report)
-        apply_hypotheses(report)
+    report_json_path = BASE / f"segment_report_{acct}.json"
+    report_json_path.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
+    if acct == "masa":
+        # 後方互換: 既存の segment_report.json（アカウント名なし）も維持する
+        (BASE / "segment_report.json").write_text(
+            json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
+
+    write_markdown(report, acct)
+
+    if do_apply:
+        apply_share(report, acct)
+        apply_hypotheses(report, acct)
 
     w30 = report["windows"].get("30d", {})
     b = w30.get("baseline", {})
     winners = [s for s, c in report.get("segment_summary", {}).items() if c.get("verdict") == "winner"]
     losers = [s for s, c in report.get("segment_summary", {}).items() if c.get("verdict") == "loser"]
-    print(f"segment_report: 30日ベースn={b.get('n', 0)} 中央値{b.get('median_views', 0)} "
+    print(f"segment_report[{acct}]: 30日ベースn={b.get('n', 0)} 中央値{b.get('median_views', 0)} "
           f"winner={winners or 'なし'} loser={losers or 'なし'}")
 
-    hakase_summary = report.get("hakase_summary", {})
-    if hakase_summary:
-        print(f"segment_report(HAKASE原則投稿): n={hakase_summary.get('n', 0)} "
-              f"index={hakase_summary.get('index', 0)} verdict={hakase_summary.get('verdict', '判定保留')}")
+    if acct == "masa":
+        hakase_summary = report.get("hakase_summary", {})
+        if hakase_summary:
+            print(f"segment_report[masa](HAKASE原則投稿): n={hakase_summary.get('n', 0)} "
+                  f"index={hakase_summary.get('index', 0)} verdict={hakase_summary.get('verdict', '判定保留')}")
 
     hyp_summary = report.get("hypothesis_summary", {})
     if hyp_summary:
         hwin = [h for h, c in hyp_summary.items() if c.get("verdict") == "winner"]
         hlose = [h for h, c in hyp_summary.items() if c.get("verdict") == "loser"]
-        print(f"segment_report(仮説): {len(hyp_summary)}件 winner={hwin or 'なし'} loser={hlose or 'なし'}")
+        print(f"segment_report[{acct}](仮説): {len(hyp_summary)}件 winner={hwin or 'なし'} loser={hlose or 'なし'}")
 
-    if "--json" in sys.argv:
+    if do_json:
         print(json.dumps(report, ensure_ascii=False, indent=2))
+
+
+def main():
+    argv = sys.argv[1:]
+    acct = "masa"
+    if "--acct" in argv:
+        idx = argv.index("--acct")
+        if idx + 1 < len(argv):
+            acct = argv[idx + 1]
+    do_apply = "--apply" in argv
+    do_json = "--json" in argv
+
+    if acct == "all":
+        for a in ACCTS:
+            run_for_acct(a, do_apply, do_json)
+    elif acct in ACCTS:
+        run_for_acct(acct, do_apply, do_json)
+    else:
+        print(f"[error] 不明なacct指定: {acct}（masa/truth/nagaoka/all のいずれかを指定）", file=sys.stderr)
+        sys.exit(1)
 
 
 if __name__ == "__main__":

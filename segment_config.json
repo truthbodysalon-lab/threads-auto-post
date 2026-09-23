@@ -11,5 +11,37 @@
     "hook_rotation": "daily_alternate",
     "anchors": [8, 16, 26, 34, 44],
     "min_n": 5
+  },
+  "truth": {
+    "per_day": 4,
+    "share": {
+      "T1": 1,
+      "T2": 2,
+      "T3": 1,
+      "T4": 1,
+      "T5": 1,
+      "T6": 1
+    },
+    "rotation": "round_robin",
+    "hook_rotation": "daily_alternate",
+    "anchors": [11, 16, 25, 30],
+    "anchors_note": "generate_30_posts()を読んで既存固定アンカーの使用済みindexを洗い出した: CTA(肩こり2/頭痛2)=[5,14,23,32]、LINEリストイン=[3,7,12,18]、店舗アクセス=[9,19,28]、整体公式LINE=[21]、頭痛タイプ診断=[6]。これらの和集合{3,5,6,7,9,12,14,18,19,21,23,28,32}を避けて11,16,25,30を採用（_insert_hero_postsは全挿入の最後に呼ばれるため衝突なし）。T2(zutsu=週に何度も頭痛薬)はtruthが頭痛特化アカウントのためshare=2で他層の2倍配分。",
+    "min_n": 5
+  },
+  "nagaoka": {
+    "per_day": 4,
+    "share": {
+      "T1": 1,
+      "T2": 1,
+      "T3": 1,
+      "T4": 1,
+      "T5": 1,
+      "T6": 1
+    },
+    "rotation": "round_robin",
+    "hook_rotation": "daily_alternate",
+    "anchors": [9, 14, 24, 29],
+    "anchors_note": "generate_40_nagaoka_posts()を読んで既存固定アンカーの使用済みindexを洗い出した: CTA(肩こり2/頭痛1)=[6,16,26]、LINEリストイン=[4,10,18]、店舗アクセス=[12,21,30]、頭痛タイプ診断=[8]、長岡市相談型オープニング(nagaoka_soudan_open)=[3,7,11,15,19,23,27,31,35]。これらの和集合{3,4,6,7,8,10,11,12,15,16,18,19,21,23,26,27,30,31,35}を避けて9,14,24,29を採用。いずれも末尾の長岡市率トリム対象(index>35のみ削除対象)より内側のため安全。",
+    "min_n": 5
   }
 }

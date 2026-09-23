@@ -1570,6 +1570,11 @@ def generate_30_posts() -> list[str]:
         pos = min(shindan_anchors[i] if i < len(shindan_anchors) else (i * 10 + 6), len(posts))
         posts.insert(pos, sp_)
 
+    # 症状・生活層別セグメント仮説テスト(T1-T6・2026-09-23 masa基盤の拡張)を固定アンカーに投入。
+    # 既存アンカー使用済み位置{3,5,6,7,9,12,14,18,19,21,23,28,32}(CTA/listin/access/
+    # 整体LINE/頭痛診断)と衝突しない位置(11,16,25,30)をsegment_config.jsonで管理する。
+    posts = _insert_segment_tests(posts, "truth", TODAY)
+
     posts = _insert_hero_posts(posts, "truth")   # 全挿入の最後（位置50超への押し出し防止）
     return posts[:100]
 
@@ -1747,6 +1752,12 @@ def generate_40_nagaoka_posts() -> list[str]:
     # 押し出し、index<=35の保護境界から外れて末尾削除の対象に巻き込まれる不具合があった）。
     for pos, sp in zip(_SOUDAN_ANCHOR_POSITIONS, soudan_posts):
         posts.insert(min(pos, len(posts)), sp)
+
+    # 症状・生活層別セグメント仮説テスト(T1-T6・2026-09-23 masa基盤の拡張)を固定アンカーに投入。
+    # 既存アンカー使用済み位置{3,4,6,7,8,10,11,12,15,16,18,19,21,23,26,27,30,31,35}
+    # (CTA/listin/access/頭痛診断/長岡市相談型オープニング)と衝突しない位置(9,14,24,29)を
+    # segment_config.jsonで管理する（いずれも末尾トリム対象のindex>35より内側で安全）。
+    posts = _insert_segment_tests(posts, "nagaoka", TODAY)
 
     # ── 長岡市言及率の最終調整（アンカー挿入後） ──
     # アンカー挿入で投稿数が増えたため、長岡市率が目標(25%)を超える可能性がある。
@@ -2271,6 +2282,52 @@ SEGMENT_TEST_TEMPLATES = {
 }
 
 
+# ── truth/nagaoka: 症状・生活層別セグメント仮説テスト（2026-09-23 masa基盤の拡張・ユーザー指示）──
+# セグメント設計（整体2アカ共通・変更禁止）:
+#   T1 desk    : デスクワークで肩・首が重い人（30〜40代会社員）
+#   T2 zutsu   : 週に何度も頭痛薬を飲む人（緊張型・気圧・目の奥）※truthは頭痛特化のためshare配分2
+#   T3 sango   : 産後の腰痛・骨盤・抱っこ疲れのママ
+#   T4 tachi   : 立ち仕事・介護・看護で腰と脚がつらい人
+#   T5 suimin  : 寝ても疲れが取れない・眠りが浅い人
+#   T6 norikae : マッサージや他院で一時的にしか良くならない人
+# フックレベル: low=今日からできる1分・寝る前1回・道具なし / high=原因の逆説・断定対比
+#   （数字は施術現場の経験枠組み「来院した10人のうち8人は〜」か行動量のみ。創作統計禁止）
+#
+# 投稿ルール: 1行目で層を名指し（「デスクワークで肩が重い人へ。」等）・中学生語彙・
+# 1文30字以内・全体250字以内・URL無し・予約/LINE誘導無し（純粋にフック反応を測るため）・
+# 症状と対処の不整合禁止（_is_incoherent通過必須）・医療断定（治る/完治/薬をやめろ）禁止・
+# フォロー締め無し。nagaokaは「長岡市」「兄妹」の地域・人柄ワードを1本に1回まで入れてよい。
+# truthは頭痛関連の語彙を優先。
+#
+# 【担当C・原稿投入先】各層 low/high 3本ずつを以下のリストに直接追記する
+# （SEGMENT_TEST_TEMPLATES の masa の書式に合わせる。キーはT1〜T6固定・変更禁止）。
+SEITAI_SEGMENT_TEMPLATES_TRUTH: dict[str, dict[str, list[str]]] = {
+    "T1": {"low": [], "high": []},
+    "T2": {"low": [], "high": []},
+    "T3": {"low": [], "high": []},
+    "T4": {"low": [], "high": []},
+    "T5": {"low": [], "high": []},
+    "T6": {"low": [], "high": []},
+}
+
+SEITAI_SEGMENT_TEMPLATES_NAGAOKA: dict[str, dict[str, list[str]]] = {
+    "T1": {"low": [], "high": []},
+    "T2": {"low": [], "high": []},
+    "T3": {"low": [], "high": []},
+    "T4": {"low": [], "high": []},
+    "T5": {"low": [], "high": []},
+    "T6": {"low": [], "high": []},
+}
+
+# acct別のセグメントテストテンプレ辞書（後方互換: masaは従来のSEGMENT_TEST_TEMPLATESそのもの）。
+# _build_segment_candidates 等はこの辞書経由でacctごとの候補プールを引く。
+SEGMENT_TEST_TEMPLATES_BY_ACCT: dict[str, dict] = {
+    "masa": SEGMENT_TEST_TEMPLATES,
+    "truth": SEITAI_SEGMENT_TEMPLATES_TRUTH,
+    "nagaoka": SEITAI_SEGMENT_TEMPLATES_NAGAOKA,
+}
+
+
 # ── masa: インスタ運用の原則投稿（2026-09-23・ユーザー指示「インスタハカセの勉強内容も
 # 参考に投稿する」を反映）──
 # なぜ: 学習した運用原則（当たりの擦り倒し・長期リサイクル・継続リーチ等）をmasa自身の
@@ -2366,19 +2423,25 @@ def _hypothesis_first_line_names_segment(text: str) -> bool:
 _SEGMENT_NAMING_RE = re.compile(
     r"開業前|開業準備|準備中|開業資金|開業して1年|開業1年|集客ゼロ|"
     r"月商50万|頭打ち|壁にいる|壁で|スタッフ|院長|"
-    r"高額|コース|講座|経営者|都度払い|無料は好評"
+    r"高額|コース|講座|経営者|都度払い|無料は好評|"
+    # truth/nagaoka（整体2アカ・T1〜T6セグメント仮説テスト 2026-09-23）
+    r"デスクワーク|肩|首|頭痛|薬|産後|骨盤|抱っこ|ママ|"
+    r"立ち仕事|介護|看護|腰|脚|眠|疲れ|マッサージ|他院|戻る|人へ"
 )
 
 
-def _build_segment_candidates(seg: str, hook: str, hypotheses: list) -> list[dict]:
-    """seg/hookの投稿候補プールを返す: 固定テンプレ3本 + segment_hypotheses.jsonの
-    該当posts（statusがretired/loser以外）。各候補は
-    {"source":"hypo"|"tmpl","key":<hypothesis_id or variant idx>,"text":str}。"""
+def _build_segment_candidates(seg: str, hook: str, hypotheses: list, acct: str = "masa") -> list[dict]:
+    """seg/hookの投稿候補プールを返す: 固定テンプレ(SEGMENT_TEST_TEMPLATES_BY_ACCT[acct]) +
+    segment_hypotheses.jsonの該当posts（acct一致・statusがretired/loser以外）。各候補は
+    {"source":"hypo"|"tmpl","key":<hypothesis_id or variant idx>,"text":str}。
+    仮説側のacctが無ければmasaとして扱う（既存30件の後方互換）。"""
     candidates = []
     for h in hypotheses:
         if not isinstance(h, dict):
             continue
         if h.get("segment") != seg:
+            continue
+        if (h.get("acct") or "masa") != acct:
             continue
         if h.get("status") in ("retired", "loser"):
             continue
@@ -2388,15 +2451,18 @@ def _build_segment_candidates(seg: str, hook: str, hypotheses: list) -> list[dic
             text = p.get("text")
             if text:
                 candidates.append({"source": "hypo", "key": h.get("id"), "text": text})
-    for i, text in enumerate(SEGMENT_TEST_TEMPLATES.get(seg, {}).get(hook, [])):
+    templates = SEGMENT_TEST_TEMPLATES_BY_ACCT.get(acct, {})
+    for i, text in enumerate(templates.get(seg, {}).get(hook, [])):
         candidates.append({"source": "tmpl", "key": i, "text": text})
     return candidates
 
 
-def _pick_segment_candidate(seg: str, hook: str, candidates: list[dict], registry: dict, today_date: date):
+def _pick_segment_candidate(seg: str, hook: str, candidates: list[dict], registry: dict,
+                             today_date: date, acct: str = "masa"):
     """候補選択順位: (a) 仮説投稿で未使用 → (b) 固定テンプレで未使用 →
     (c) 最終使用が古い順（7日以内は再投入しない既存ルール維持）。
     同一候補の短期再投稿を避ける（playbook L8型疲労ルールに準拠）。
+    registryはacct一致分のみを対象にする（未設定=masaとして扱う後方互換）。
     戻り値は選択candidate dictまたはNone。"""
     def _cid(c):
         return (c["source"], c["key"])
@@ -2406,6 +2472,8 @@ def _pick_segment_candidate(seg: str, hook: str, candidates: list[dict], registr
         if not isinstance(entry, dict):
             continue
         if entry.get("segment") != seg or entry.get("hook") != hook:
+            continue
+        if (entry.get("acct") or "masa") != acct:
             continue
         created = entry.get("created")
         if not created:
@@ -2445,24 +2513,59 @@ def _pick_segment_candidate(seg: str, hook: str, candidates: list[dict], registr
     return None
 
 
+def _rotate_segments(share: dict, per_day: int, rotation: str | None, day_num: int) -> list[str]:
+    """その日投入するsegmentのリストを返す。
+    rotation=="round_robin": shareの重みでサイクルを拡張し(例 T2:2なら[T1,T2,T2,T3,T4,T5,T6])、
+    day_num*per_day 分だけ進めた位置からper_day個の相異なるsegmentを選ぶ
+    （同一層が毎日出続けない・重みが大きい層ほど登場頻度が上がる）。
+    rotation未設定（旧仕様・masa既定）: 後方互換のため share の先頭per_day件を毎日固定で返す
+    （masaのper_day=5・share5件は従来どおり全件が毎日出る挙動のまま変わらない）。"""
+    keys = list(share.keys())
+    if rotation != "round_robin":
+        return keys[:per_day]
+    cycle: list[str] = []
+    for seg in keys:
+        wt = max(1, int(share.get(seg, 1) or 1))
+        cycle.extend([seg] * wt)
+    if not cycle:
+        return []
+    n = len(cycle)
+    start = (day_num * max(1, per_day)) % n
+    picked: list[str] = []
+    i = start
+    guard = 0
+    while len(picked) < min(per_day, len(keys)) and guard < n * 2:
+        seg = cycle[i % n]
+        if seg not in picked:
+            picked.append(seg)
+        i += 1
+        guard += 1
+    return picked
+
+
 def _insert_segment_tests(posts: list[str], acct: str, today: str) -> list[str]:
-    """masa専用: 売上ステージ別セグメント(S1-S5)のテスト投稿をanchors位置に投入し、
-    segment_registry.jsonへ登録する（2026-09-22 小川さんセッション実装。2026-09-23に
-    Obsidian由来の仮説(segment_hypotheses.json)投稿も候補プールに追加）。
-    既存の固定アンカー（AI3本柱=4/20/36、時短CTA=12、プロフィール誘導=9/27等）とは
-    衝突しない位置(8,16,26,34,44)をsegment_config.jsonで管理する。
-    _insert_hero_posts より前に呼ぶこと（ヒーロー投稿の「誘導50超を44へ引き戻し」は
-    HPB/駐車場/lin.eeマーカーのみを対象にしており、セグメント投稿の文面には含まれない
-    ためこの順序でも矛盾は起きない）。
+    """masa/truth/nagaoka共通: セグメント別テスト投稿をanchors位置に投入し、
+    segment_registry.jsonへacct付きで登録する
+    （2026-09-22 小川さんセッション: masaの売上ステージS1-S5で実装。
+    2026-09-23: Obsidian由来の仮説(segment_hypotheses.json)投稿を候補プールに追加。
+    2026-09-23: truth/nagaokaの症状・生活層T1-T6へ拡張=このdocstring該当箇所）。
+    テンプレ・仮説候補プールはacct別（SEGMENT_TEST_TEMPLATES_BY_ACCT / 仮説のacctフィールド）。
+    各acctの既存固定アンカー（masa: AI3本柱=4/20/36・時短CTA=12等 / truth・nagaoka: CTA・
+    LINEリストイン・店舗アクセス等）とは衝突しない位置をsegment_config.jsonのanchorsで管理する。
+    _insert_hero_posts より前に呼ぶこと。
+    候補プールが空（truth/nagaokaは原稿投入前のプレースホルダのためあり得る）の層は
+    スキップして落ちない。
     検証専用呼び出し（verify_system.py等）は環境変数 SEGMENT_REGISTRY_DRY=1 を立てることで
     _save_segment_registry が台帳書き込みだけをスキップする（本関数の呼び出し方は変えない）。"""
-    if acct != "masa":
+    if acct not in ("masa", "truth", "nagaoka"):
         return posts
 
     cfg = _load_segment_config().get(acct, {})
     share = cfg.get("share", {})
-    anchors = cfg.get("anchors", [8, 16, 26, 34, 44])
-    if not share or not SEGMENT_TEST_TEMPLATES:
+    default_anchors = [8, 16, 26, 34, 44] if acct == "masa" else []
+    anchors = cfg.get("anchors", default_anchors)
+    templates_for_acct = SEGMENT_TEST_TEMPLATES_BY_ACCT.get(acct, {})
+    if not share or not templates_for_acct:
         return posts
 
     try:
@@ -2477,20 +2580,26 @@ def _insert_segment_tests(posts: list[str], acct: str, today: str) -> list[str]:
         today_date = date.today()
 
     registry = _load_segment_registry()
-    hypotheses = _load_segment_hypotheses().get("hypotheses", [])
+    all_hypotheses = _load_segment_hypotheses().get("hypotheses", [])
     per_day = int(cfg.get("per_day", len(share)))
-    segments = list(share.keys())[:per_day]
+    segments = _rotate_segments(share, per_day, cfg.get("rotation"), day_num)
 
     selected = []
     for seg in segments:
-        pool = _build_segment_candidates(seg, hook, hypotheses)
+        pool = _build_segment_candidates(seg, hook, all_hypotheses, acct)
         chosen = None
         while pool:
-            cand = _pick_segment_candidate(seg, hook, pool, registry, today_date)
+            cand = _pick_segment_candidate(seg, hook, pool, registry, today_date, acct)
             if cand is None:
                 break
             text = cand["text"]
-            ng = _is_masa_sales_ng(text) or _is_ng(text) or len(text) > 250
+            if acct == "masa":
+                ng = _is_masa_sales_ng(text) or _is_ng(text) or len(text) > 250
+            else:
+                # truth/nagaoka: 面談・金額NG(_is_masa_sales_ng)は対象外。
+                # 代わりに症状不整合(_is_ngが内包する_is_incoherent)と
+                # 整体予約導線ルール違反(_is_seitai_reserve_violation)を検査する。
+                ng = _is_ng(text) or _is_seitai_reserve_violation(text) or len(text) > 250
             if cand["source"] == "hypo" and not ng:
                 ng = not _hypothesis_first_line_names_segment(text)
             if ng:
@@ -2500,13 +2609,15 @@ def _insert_segment_tests(posts: list[str], acct: str, today: str) -> list[str]:
             chosen = cand
             break
         if chosen is None:
+            # 候補プールが空（truth/nagaokaのプレースホルダ段階等）またはNG全滅の層は
+            # スキップし、生成全体は落とさない。
             continue
         selected.append((seg, hook, chosen))
 
     for i, (seg, hk, cand) in enumerate(selected):
         pos = anchors[i] if i < len(anchors) else (anchors[-1] if anchors else len(posts))
         posts.insert(min(pos, len(posts)), cand["text"])
-        entry = {"segment": seg, "hook": hk, "created": today}
+        entry = {"segment": seg, "hook": hk, "created": today, "acct": acct}
         if cand["source"] == "hypo":
             entry["variant"] = None
             entry["hypothesis_id"] = cand["key"]

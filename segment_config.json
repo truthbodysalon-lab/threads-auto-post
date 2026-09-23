@@ -1,0 +1,15 @@
+{
+  "masa": {
+    "per_day": 5,
+    "share": {
+      "S1": 1,
+      "S2": 1,
+      "S3": 1,
+      "S4": 1,
+      "S5": 1
+    },
+    "hook_rotation": "daily_alternate",
+    "anchors": [8, 16, 26, 34, 44],
+    "min_n": 5
+  }
+}

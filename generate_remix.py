@@ -16,6 +16,16 @@ BASE = Path(__file__).parent
 PAST_FILE = BASE / "past_posts.json"
 LOG_FILE = BASE / "log_truth.jsonl"
 LOG_FILE_NAGAOKA = BASE / "log_nagaoka.jsonl"
+SEGMENT_CONFIG_FILE = BASE / "segment_config.json"
+SEGMENT_REGISTRY_FILE = BASE / "segment_registry.json"
+
+# masa専用セグメントテスト（2026-09-22 小川さんセッション実装）の1行目正規化用。
+# duplicate_guard がない環境でも生成が止まらないよう、失敗時は簡易フォールバックにする。
+try:
+    from duplicate_guard import normalize_text as _dup_normalize_text
+except Exception:
+    def _dup_normalize_text(text: str) -> str:
+        return re.sub(r"\n*https?://\S+", "", text or "").strip()
 
 TODAY = date.today().strftime("%Y-%m-%d")
 
@@ -2179,6 +2189,217 @@ AI_TIME_CTA_TEMPLATES = [
 ]
 
 
+# ── masa: 売上ステージ別セグメントテスト（2026-09-22 小川さんセッション実装）──
+# 背景: 「売上ステージで層を切り、1行目でその層を名指しした投稿を並べ、どの層が反応
+# するかテストする」「フックラインを"1日1分でできる"レベルまで下げて"難しそう"仮説を
+# 検証」（高橋先生×小川さんセッション）。売上の柱は高額商品を持つサロン経営者層(S5)。
+#
+# セグメント定義（変更禁止・segment_config.json/segment_registry.jsonと対応）:
+#   S1 kaigyo_mae : 開業前・準備中
+#   S2 shonen     : 開業〜1年・月商50万未満
+#   S3 atamauchi  : 月商50〜100万で頭打ち
+#   S4 staff      : 月商100万超・スタッフあり
+#   S5 kougaku    : 高額商品(コース/講座/物販)を持つサロン・治療院経営者
+# フックレベル: low=難易度を下げる（1日1分/スマホだけ/AIに丸投げ） / high=専門・数字
+#
+# 投稿ルール: 1行目で層を名指し・中学生語彙・1文30字以内・全体250字以内・URL無し・
+# 面談/金額/決済語NG（_is_masa_sales_ng準拠）・否定型フックか数字を必ず含む・
+# フォロー締め無し・LINE誘導無し（純粋にフック反応を測るため）。
+SEGMENT_TEST_TEMPLATES = {
+    "S1": {  # kaigyo_mae: 開業前・準備中
+        "low": [
+            "これから開業する人へ。\n\n集客はオープンしてから考える、では遅い。\n\n1日1分、スマホで投稿するだけでいい。\n開業前から始めれば、開業日にはもうお客さんが見ています。",
+            "開業準備中のあなたへ。\n\n難しい勉強は、まだしなくていい。\n\nスマホでコピペするだけの投稿を\n1日1分、開業日まで続けてください。\nそれだけで最初の一歩は十分です。",
+            "まだ店を持っていない人へ。\n\n『開業したら考える』は一番もったいない。\n\n今日から1日1分、AIに丸投げでいい。\n開業日にゼロから始める人と差がつきます。",
+        ],
+        "high": [
+            "これから開業する人へ。\n\n開業初月の客数は、来店前の発信量で決まります。\n\n開業前3ヶ月の投稿数が、初月のCVRを左右する。\n準備期間は『待つだけの期間』ではありません。",
+            "開業準備中のあなたへ。\n\n開業日にフォロワー0だと、初月は紹介頼みになりやすい。\n\n開業前からSNSでリストを作っておくと\n広告費をかけずに初月の予約が埋まります。",
+            "まだ店を持っていない人へ。\n\n開業後に広告費だけで客を集める店は\nCPAが2倍になりやすい。\n\n開業前からの発信でリピート率の土台ができます。",
+        ],
+    },
+    "S2": {  # shonen: 開業〜1年・月商50万未満
+        "low": [
+            "開業して1年、まだ集客ゼロの院へ。\n\n何から手をつけるか、迷わなくていい。\n\n1日1分、スマホで投稿するだけ。\nまずはこれだけ続けてみてください。",
+            "月商50万に届いていないお店へ。\n\n高い広告費は、まだいらない。\n\n1日1分の投稿を、AIに任せるだけでいい。\n小さく始めて、続けることが一番の近道です。",
+            "開業したばかりで何をすればいいか分からない人へ。\n\n集客は難しい話じゃない。\n\nスマホで1日1分、投稿を続けるだけです。\nそこから景色が変わり始めます。",
+        ],
+        "high": [
+            "開業して1年、まだ集客ゼロの院へ。\n\n投稿数が月30本を切ると、新規流入はほぼ止まります。\n\n粗利より先に見るべき数字は、投稿頻度です。\nここが増えない限り、集客は動きません。",
+            "月商50万に届いていないお店へ。\n\nCVRが低いのではなく、母数の流入が足りていない。\n\n投稿を増やすとプロフィール遷移数が伸び\nそこから初めてCVRの話ができます。",
+            "開業したばかりで何をすればいいか分からない人へ。\n\n最初の壁はリピート率ではなく認知です。\n\n月商50万未満の店の共通点は、投稿数の少なさ。\nそこを増やすだけで数字は動き出します。",
+        ],
+    },
+    "S3": {  # atamauchi: 月商50-100万で頭打ち
+        "low": [
+            "月商50万の壁で止まっている経営者へ。\n\n新しいことを増やさなくていい。\n\n今ある投稿を1日1分、見直すだけ。\nそれだけで反応が変わることがあります。",
+            "リピートが伸びずに悩む経営者へ。\n\n難しい施策はまだいらない。\n\n1日1分、AIに投稿を見直させるだけでいい。\n小さな改善が積み重なります。",
+            "単価が上がらず頭打ちのサロンへ。\n\n値上げより先に、やることがある。\n\n1日1分、投稿の中身を変えるだけ。\nそこから客層は少しずつ変わります。",
+        ],
+        "high": [
+            "月商50万の壁で止まっている経営者へ。\n\nリピート率が下がっていないか、まず確認してください。\n\n多くの店は新規獲得に力を入れすぎて\nリピート率30%割れに気づいていません。",
+            "リピートが伸びずに悩む経営者へ。\n\n頭打ちの原因は新規不足ではなく、単価とリピート率です。\n\n客単価を1000円上げるより\nリピート率を10%上げる方が売上は伸びます。",
+            "単価が上がらず頭打ちのサロンへ。\n\nSNSの投稿内容が、施術内容だけになっていませんか。\n\n単価が上がる店は、価値を伝える投稿が7割を占める。\nそこがリピート率の差になります。",
+        ],
+    },
+    "S4": {  # staff: 月商100万超・スタッフあり
+        "low": [
+            "スタッフを抱える院長へ。\n\n発信は、もう自分でやらなくていい。\n\n1日1分の確認だけ、AIに投稿を任せる。\n空いた時間はスタッフとお客さんに使えます。",
+            "月商100万を超えたのに時間がない人へ。\n\n全部を自分でやる必要はない。\n\n投稿はAIに丸投げして、1日1分だけ確認する。\nそれだけで時間の使い方が変わります。",
+            "採用に悩む経営者へ。\n\n採用も発信も、1人で抱えなくていい。\n\n1日1分、仕組みを確認するだけにする。\n残りの時間を採用の面接に使えます。",
+        ],
+        "high": [
+            "スタッフを抱える院長へ。\n\n院長が投稿を作る店は\n投稿頻度が週2本まで落ちやすい。\n\n仕組み化した店は投稿数が安定し\n採用にも良い影響が出ています。",
+            "月商100万を超えたのに時間がない人へ。\n\n売上が伸びても、院長の稼働時間は増えたままの店が多い。\n\n発信を仕組み化すると粗利率を下げずに\n稼働時間だけ2割減らせます。",
+            "採用に悩む経営者へ。\n\n採用の応募数は、SNSの発信量と比例します。\n\n投稿を止めた店は応募が3割減っている。\n止めないことが一番の採用対策です。",
+        ],
+    },
+    "S5": {  # kougaku: 高額商品を持つサロン経営者（売上の柱・協業層）
+        "low": [
+            "コースや講座を売っている経営者へ。\n\n売れる導線は、複雑じゃなくていい。\n\n1日1分、投稿から興味を集めるだけ。\nそこから先の流れはAIに任せられます。",
+            "高額商品を持つサロン経営者へ。\n\n難しい仕組みはまだいらない。\n\n1日1分の投稿で興味を集める、それだけでいい。\n導線はあとからAIで整えられます。",
+            "物販や講座で売上を作る経営者へ。\n\n売り込む前に、やることがある。\n\n1日1分、価値を伝える投稿を続けるだけ。\n興味を持つ人が自然と増えていきます。",
+        ],
+        "high": [
+            "コースや講座を売っている経営者へ。\n\n高額商品ほど、接点回数がCVRを左右します。\n\n投稿頻度が週3本を切ると見込み客の温度は下がる。\n導線より先に接点回数を見直してください。",
+            "高額商品を持つサロン経営者へ。\n\nLTVの高い商品ほど、成約までの接点が平均5回必要です。\n\n投稿とDMの接点を仕組み化した店ほど\nCVRが安定して高くなっています。",
+            "物販や講座で売上を作る経営者へ。\n\n高額商品のCVRは接点数で決まります。\n\n発信を止めると、見込み客のLTVは1週間で下がり始める。\nそこをAIで自動化するのが一番の近道です。",
+        ],
+    },
+}
+
+
+def _load_segment_config() -> dict:
+    """segment_config.json を読み込む（失敗時は空dict＝セグメントテスト無効化）。"""
+    if SEGMENT_CONFIG_FILE.exists():
+        try:
+            return json.loads(SEGMENT_CONFIG_FILE.read_text())
+        except Exception:
+            pass
+    return {}
+
+
+def _load_segment_registry() -> dict:
+    """segment_registry.json を読み込む（1行目正規化40字 → {segment,hook,variant,created}）。"""
+    if SEGMENT_REGISTRY_FILE.exists():
+        try:
+            return json.loads(SEGMENT_REGISTRY_FILE.read_text())
+        except Exception:
+            pass
+    return {}
+
+
+def _save_segment_registry(registry: dict) -> None:
+    try:
+        SEGMENT_REGISTRY_FILE.write_text(json.dumps(registry, ensure_ascii=False, indent=2))
+    except Exception:
+        pass  # 登録に失敗しても生成は止めない（全停止しない原則）
+
+
+def _segment_registry_key(text: str) -> str:
+    """投稿本文1行目の正規化40字をキーにする（duplicate_guard.normalize_textを流用）。"""
+    first_line = (text or "").split("\n")[0].strip()
+    try:
+        norm = _dup_normalize_text(first_line)
+    except Exception:
+        norm = first_line
+    return norm[:40]
+
+
+def _pick_segment_variant(seg: str, hook: str, variants: list[str], registry: dict, today_date: date):
+    """variant選択順位: registry未使用 → 7日以上前に使った中で最も古いもの →
+    （全滅時のみ）最も古く使ったもの。同一variantの短期再投稿を避ける
+    （playbook L8型疲労ルールに準拠）。戻り値は (variant_index, text) または (None, None)。"""
+    last_used: dict[int, date] = {}
+    for entry in registry.values():
+        if not isinstance(entry, dict):
+            continue
+        if entry.get("segment") != seg or entry.get("hook") != hook:
+            continue
+        idx = entry.get("variant")
+        created = entry.get("created")
+        if idx is None or not created:
+            continue
+        try:
+            d = date.fromisoformat(created)
+        except Exception:
+            continue
+        if idx not in last_used or d > last_used[idx]:
+            last_used[idx] = d
+
+    never_used = [i for i in range(len(variants)) if i not in last_used]
+    if never_used:
+        idx = never_used[0]
+        return idx, variants[idx]
+
+    cooled = [(i, d) for i, d in last_used.items() if (today_date - d).days >= 7]
+    if cooled:
+        cooled.sort(key=lambda x: x[1])
+        idx = cooled[0][0]
+        return idx, variants[idx]
+
+    if last_used:
+        idx = min(last_used, key=lambda i: last_used[i])
+        return idx, variants[idx]
+
+    return None, None
+
+
+def _insert_segment_tests(posts: list[str], acct: str, today: str) -> list[str]:
+    """masa専用: 売上ステージ別セグメント(S1-S5)のテスト投稿をanchors位置に投入し、
+    segment_registry.jsonへ登録する（2026-09-22 小川さんセッション実装）。
+    既存の固定アンカー（AI3本柱=4/20/36、時短CTA=12、プロフィール誘導=9/27等）とは
+    衝突しない位置(8,16,26,34,44)をsegment_config.jsonで管理する。
+    _insert_hero_posts より前に呼ぶこと（ヒーロー投稿の「誘導50超を44へ引き戻し」は
+    HPB/駐車場/lin.eeマーカーのみを対象にしており、セグメント投稿の文面には含まれない
+    ためこの順序でも矛盾は起きない）。"""
+    if acct != "masa":
+        return posts
+
+    cfg = _load_segment_config().get(acct, {})
+    share = cfg.get("share", {})
+    anchors = cfg.get("anchors", [8, 16, 26, 34, 44])
+    if not share or not SEGMENT_TEST_TEMPLATES:
+        return posts
+
+    try:
+        day_num = date.fromisoformat(today).toordinal()
+    except Exception:
+        day_num = date.today().toordinal()
+    hook = "low" if day_num % 2 == 0 else "high"  # 日付偶奇でlow/high交互（hook_rotation: daily_alternate）
+
+    try:
+        today_date = date.fromisoformat(today)
+    except Exception:
+        today_date = date.today()
+
+    registry = _load_segment_registry()
+    per_day = int(cfg.get("per_day", len(share)))
+    segments = list(share.keys())[:per_day]
+
+    selected = []
+    for seg in segments:
+        variants = SEGMENT_TEST_TEMPLATES.get(seg, {}).get(hook, [])
+        if not variants:
+            continue
+        idx, text = _pick_segment_variant(seg, hook, variants, registry, today_date)
+        if text is None:
+            continue
+        if _is_masa_sales_ng(text) or _is_ng(text) or len(text) > 250:
+            continue
+        selected.append((seg, hook, idx, text))
+
+    for i, (seg, hk, idx, text) in enumerate(selected):
+        pos = anchors[i] if i < len(anchors) else (anchors[-1] if anchors else len(posts))
+        posts.insert(min(pos, len(posts)), text)
+        registry[_segment_registry_key(text)] = {
+            "segment": seg, "hook": hk, "variant": idx, "created": today,
+        }
+
+    _save_segment_registry(registry)
+    return posts
+
+
 def generate_ai_jitsurei_post() -> str:
     return random.choice(AI_JITSUREI_TEMPLATES)
 
@@ -2395,6 +2616,10 @@ def generate_30_masa_posts() -> list[str]:
             posts.insert(min(12, len(posts)), tc)
             ai_time_cta_text = tc
             break
+
+    # 売上ステージ別セグメントテスト（S1-S5・2026-09-22）を固定アンカーに投入。
+    # AI3本柱(4/20/36)・時短CTA(12)の後、ヒーロー投稿より前（衝突回避・登録漏れ防止）。
+    posts = _insert_segment_tests(posts, "masa", TODAY)
 
     posts = _insert_hero_posts(posts, "masa")   # 全挿入の最後（LINE最終チェックより前に置く）
 

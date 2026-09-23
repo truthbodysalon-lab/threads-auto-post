@@ -64,6 +64,25 @@ def check_imports():
 os.environ["SEGMENT_REGISTRY_DRY"] = "1"
 
 
+def check_next_post_smoke():
+    """C16: get_next_post が3アカウントとも例外なく動く（2026-09-24: _listin_last_used_order
+    未定義のNameErrorで全停止・masa丸1日0本の再発防止。生成検証だけでは検知できなかった）。"""
+    import os as _os
+    _os.environ["SEGMENT_REGISTRY_DRY"] = "1"
+    try:
+        import auto_post as _ap
+        from datetime import date as _d
+        today = _d.today().strftime("%Y-%m-%d")
+        for acct in ("truth", "nagaoka", "masa"):
+            try:
+                _ap.get_next_post(acct, today, avoid_url=False)
+                add(f"next_post:{acct}", "A.コード", "PASS", "get_next_post 正常")
+            except Exception as e:
+                add(f"next_post:{acct}", "A.コード", "FAIL", f"{type(e).__name__}: {e}")
+    except Exception as e:
+        add("next_post:all", "A.コード", "FAIL", f"auto_post読込失敗: {e}")
+
+
 def check_generation():
     try:
         import generate_remix as g
@@ -662,6 +681,7 @@ def check_sync():
 def run_all():
     check_imports()
     check_generation()
+    check_next_post_smoke()
     check_rules()
     check_rule_hygiene()
     check_execution_gaps()

@@ -1373,14 +1373,24 @@ def _run_account_batch(acct: str):
 def _run_main():
     target = sys.argv[1].lower() if len(sys.argv) > 1 else "all"
 
+    def _safe_batch(acct: str):
+        # 2026-09-24: 1アカウントの例外(NameError等)でプロセスごと落ち、後続のmasaが
+        # 丸1日0本になった障害の再発防止。例外はログに残して次のアカウントへ進む。
+        try:
+            _run_account_batch(acct)
+        except Exception as e:
+            import traceback
+            log_error(acct, f"_run_account_batch 例外: {type(e).__name__}: {e}")
+            traceback.print_exc()
+
     if target in ("truth", "nagaoka", "masa"):
-        _run_account_batch(target)
+        _safe_batch(target)
     else:
-        _run_account_batch("truth")
+        _safe_batch("truth")
         time.sleep(5)
-        _run_account_batch("nagaoka")
+        _safe_batch("nagaoka")
         time.sleep(5)
-        _run_account_batch("masa")
+        _safe_batch("masa")
 
     # 投稿後にObsidianレポートを自動更新
     try:

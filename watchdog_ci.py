@@ -147,8 +147,15 @@ def main():
                 f.write_text(json.dumps(d, ensure_ascii=False))
             except Exception:
                 pass
-            subprocess.run([sys.executable, str(BASE / "auto_post.py"), acct],
-                           capture_output=True, timeout=780)
+            try:
+                subprocess.run([sys.executable, str(BASE / "auto_post.py"), acct],
+                               capture_output=True, timeout=780)
+            except subprocess.TimeoutExpired:
+                # 2026-09-24: 未捕捉だと先のアカウントの修復タイムアウトで落ち、後続(masa)の
+                # 判定に到達しない（9/20・9/23再発）。タイムアウトは記録して次へ進む
+                print(f"{acct}: 修復バッチが780秒でタイムアウト（投稿済み分は有効・次のアカウントへ）")
+            except Exception as e:
+                print(f"{acct}: 修復バッチ例外 {type(e).__name__}: {e}")
             after = api_count_today(acct)
             print(f"{acct}: 修復後 {n}→{after}本")
             if gap > 8 and after - n < 3 and not _notified_today(st, f"stall_{acct}"):

@@ -197,11 +197,16 @@ def build_report():
         pid = str(e.get("post_id", ""))
         past = past_by_id.get(pid)
         reg = registry.get(e["key"])
+        raw_seg = reg.get("segment") if reg else None
+        # HAKASE（インスタ運用の原則投稿・2026-09-23）はS1-S5と別枠の集計対象なので
+        # SEGMENTSの正規化を通さずそのまま保持する（_norm_segmentはS1-S5以外はNoneを返し
+        # 「未登録」扱いになってしまうため）。
+        seg_val = "HAKASE" if raw_seg == "HAKASE" else (_norm_segment(raw_seg) if reg else None)
         joined.append({
             "date": e.get("date", ""),
             "post_id": pid,
             "text": e.get("text", ""),
-            "segment": _norm_segment(reg.get("segment")) if reg else None,
+            "segment": seg_val,
             "hook": _norm_hook(reg.get("hook")) if reg else None,
             "hypothesis_id": (reg.get("hypothesis_id") if reg else None) or None,
             "views": (past or {}).get("views", 0) or 0,
@@ -262,6 +267,20 @@ def build_report():
                 "verdict": verdict,
             }
 
+        # HAKASE（インスタ運用の原則を店舗向けに翻案した投稿・2026-09-23）はS1-S5の
+        # winner/loser判定(apply_share対象)には含めず、単独の集計行として出す。
+        hakase_cell = [j for j in rows if j["segment"] == "HAKASE"]
+        hakase_views = [j["views"] for j in hakase_cell]
+        hakase_st = _stats(hakase_views)
+        hakase_index = round(hakase_st["median_views"] / baseline_median, 3) if baseline_median else 0.0
+        hakase_summary = {
+            **hakase_st,
+            "like_rate": _rate(sum(j["like_count"] for j in hakase_cell), sum(hakase_views)),
+            "reply_rate": _rate(sum(j["replies_count"] for j in hakase_cell), sum(hakase_views)),
+            "index": hakase_index,
+            "verdict": _verdict(hakase_st["n"], hakase_index, min_n),
+        }
+
         # 仮説別（Obsidian由来の店舗経営の悩み・質問から作った仮説の勝ち負け判定。
         # 2026-09-23追加。segment_hypotheses.json が無い/空でもクラッシュしない）。
         hyp_data = _load_hypotheses()
@@ -293,11 +312,13 @@ def build_report():
             "unregistered_n": unregistered,
             "segment_hook": seg_hook,
             "segment": seg_only,
+            "hakase": hakase_summary,
             "hypothesis": hyp_summary,
         }
 
     # --apply の判定基盤は30日窓（サンプルが安定するため）
     report["segment_summary"] = report["windows"].get("30d", {}).get("segment", {})
+    report["hakase_summary"] = report["windows"].get("30d", {}).get("hakase", {})
     report["hypothesis_summary"] = report["windows"].get("30d", {}).get("hypothesis", {})
     return report
 
@@ -333,6 +354,13 @@ def write_markdown(report):
         for seg in SEGMENTS:
             c = w["segment"][seg]
             lines.append(f"| {seg} | {c['n']} | {c['median_views']} | {c['index']} | {c['verdict']} |")
+        lines.append("")
+        lines.append("### HAKASE（原則投稿）")
+        hk = w.get("hakase", {})
+        lines.append("| n | 中央値 | index | いいね率 | 返信率 | 判定 |")
+        lines.append("|---|---|---|---|---|---|")
+        lines.append(f"| {hk.get('n', 0)} | {hk.get('median_views', 0)} | {hk.get('index', 0)} | "
+                      f"{hk.get('like_rate', 0)} | {hk.get('reply_rate', 0)} | {hk.get('verdict', '判定保留')} |")
         lines.append("")
         lines.append("### 仮説別（Obsidian由来の店舗経営の悩み・質問）")
         hyp = w.get("hypothesis", {})
@@ -460,6 +488,11 @@ def main():
     losers = [s for s, c in report.get("segment_summary", {}).items() if c.get("verdict") == "loser"]
     print(f"segment_report: 30日ベースn={b.get('n', 0)} 中央値{b.get('median_views', 0)} "
           f"winner={winners or 'なし'} loser={losers or 'なし'}")
+
+    hakase_summary = report.get("hakase_summary", {})
+    if hakase_summary:
+        print(f"segment_report(HAKASE原則投稿): n={hakase_summary.get('n', 0)} "
+              f"index={hakase_summary.get('index', 0)} verdict={hakase_summary.get('verdict', '判定保留')}")
 
     hyp_summary = report.get("hypothesis_summary", {})
     if hyp_summary:

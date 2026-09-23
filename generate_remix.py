@@ -2271,6 +2271,32 @@ SEGMENT_TEST_TEMPLATES = {
 }
 
 
+# ── masa: インスタ運用の原則投稿（2026-09-23・ユーザー指示「インスタハカセの勉強内容も
+# 参考に投稿する」を反映）──
+# なぜ: 学習した運用原則（当たりの擦り倒し・長期リサイクル・継続リーチ等）をmasa自身の
+# 言葉で店舗経営者向けに翻案した完成原稿。出典名・講義文の逐語は一切含めない（翻案のみ）。
+HAKASE_TEMPLATES = [
+    "同じ投稿を出すのはダメ、と思っていませんか。\n\n僕は同じ話を、言い方を変えて何度も出しています。\n見る人は、いつもはじめましての人だからです。",
+    "当たった話を、1回で終わらせるのはもったいない。\n\n僕は同じ気づきを、切り口だけ変えて何度も投稿します。\n1つの当たりを、何度も使うイメージです。",
+    "投稿のネタが尽きた、と感じる日があります。\n\nでもそれは見ている人が飽きたのではなく\n僕が飽きているだけだと気づきました。",
+    "毎日ネタを変えなきゃ、と思っていませんか。\n\n大事なのは新しさより、見てくれる人との関係を切らさないこと。\nAIが毎朝、続いているかを確認しています。",
+    "新しいやり方を、いきなり大きく始めていませんか。\n\n僕はまず1つだけ小さく試して\n反応が良かったものだけ広げています。",
+    "当たる施策を1回で見つけようとしていませんか。\n\n僕は毎日、いくつも小さく試しています。\n10回のうち1回当たれば十分です。",
+    "何でも自分でやるのが、頑張っている証拠だと思っていませんか。\n\n僕は投稿づくりをAIに任せて\n自分にしかできない話だけをしています。",
+    "良い投稿をすれば信頼される、とは限りません。\n\nプロフィールに、選ばれる理由を1つ書く。\nそれだけで、見る人の反応が変わります。",
+    "自分の名前を売り込む必要はありません。\n\n仕組みの名前で覚えてもらう方が\n人から人へ広がりやすくなります。",
+    "売り先を1つに絞ると、止まった時に困ります。\n\n僕は発信の出口を、いくつも用意しています。\n1つがダメでも、他が動いています。",
+    "フォロワーを増やすことだけが、集客の道じゃない。\n\n人から人へ紹介される仕組みを作る方が\n案外、楽に広がります。",
+    "困っていることを、黙っていませんか。\n\n僕は会う人に、足りないものをはっきり言葉にします。\n10人に1人は、力を貸してくれます。",
+    "1週間で結果が出ないと、諦めていませんか。\n\n僕の仕組みも、軌道に乗るまで1〜2ヶ月かかりました。\n続ける前提を持つだけで、続けられます。",
+    "投稿を出したら終わり、にしていませんか。\n\n僕は毎朝、昨日の反応をAIに確認させています。\n良かった書き方だけを、今日に残します。",
+    "独自性を出さなきゃ、と気負っていませんか。\n\nうまくいっているやり方を、そのまま真似る。\n差は、あとから自然に生まれます。",
+    "同じような発信をする人が増えると不利になる。\nそう思っていませんか。\n\n実際はお客の取り合いにならず\nむしろ市場ごと伸びることが多いです。",
+    "投稿でいきなり売ろうとしていませんか。\n\n僕は投稿では売らず、興味を持たせるだけにしています。\n続きはプロフィールで見てもらいます。",
+    "数字を見ずに、感覚で投稿を続けていませんか。\n\n僕は毎朝、読まれた数と読まれなかった数を見比べます。\n感覚より、数字の方が正直です。",
+]
+
+
 def _load_segment_config() -> dict:
     """segment_config.json を読み込む（失敗時は空dict＝セグメントテスト無効化）。"""
     if SEGMENT_CONFIG_FILE.exists():
@@ -2487,6 +2513,64 @@ def _insert_segment_tests(posts: list[str], acct: str, today: str) -> list[str]:
         else:
             entry["variant"] = cand["key"]
         registry[_segment_registry_key(cand["text"])] = entry
+
+    _save_segment_registry(registry)
+    return posts
+
+
+def _insert_hakase_posts(posts: list[str], acct: str, today: str) -> list[str]:
+    """masa専用: インスタ運用の原則を店舗向けに翻案した完成原稿(HAKASE_TEMPLATES)を
+    毎日2本、anchors[22,30]に投入しsegment_registry.jsonへ{"segment":"HAKASE",
+    "hook":"principle",...}として登録する（2026-09-23）。既存の固定アンカー
+    （AI3本柱=4/20/36、時短CTA=12、セグメントテスト=8/16/26/34/44）とは衝突しない
+    位置。過去7日以内に使った原稿は再投入しない。_insert_segment_tests の後段
+    （ヒーロー投稿より前）で呼ぶこと。SEGMENT_REGISTRY_DRY=1時は台帳を汚さない
+    （_save_segment_registryの既存ガードに従う）。"""
+    if acct != "masa" or not HAKASE_TEMPLATES:
+        return posts
+
+    try:
+        today_date = date.fromisoformat(today)
+    except Exception:
+        today_date = date.today()
+
+    registry = _load_segment_registry()
+
+    recent_keys = set()
+    for key, entry in registry.items():
+        if not isinstance(entry, dict) or entry.get("segment") != "HAKASE":
+            continue
+        created = entry.get("created")
+        if not created:
+            continue
+        try:
+            d = date.fromisoformat(created)
+        except Exception:
+            continue
+        if (today_date - d).days < 7:
+            recent_keys.add(key)
+
+    valid = [
+        t for t in HAKASE_TEMPLATES
+        if not _is_masa_sales_ng(t) and not _is_ng(t) and len(t) <= 250
+    ]
+    pool = [t for t in valid if _segment_registry_key(t) not in recent_keys]
+    if len(pool) < 2:
+        pool = valid  # 直近7日除外で足りない場合はフォールバック（全滅回避）
+
+    random.shuffle(pool)
+    chosen = pool[:2]
+
+    anchors = [22, 30]
+    for i, text in enumerate(chosen):
+        pos = anchors[i] if i < len(anchors) else min(anchors[-1], len(posts))
+        posts.insert(min(pos, len(posts)), text)
+        registry[_segment_registry_key(text)] = {
+            "segment": "HAKASE",
+            "hook": "principle",
+            "variant": HAKASE_TEMPLATES.index(text),
+            "created": today,
+        }
 
     _save_segment_registry(registry)
     return posts
@@ -2712,6 +2796,9 @@ def generate_30_masa_posts() -> list[str]:
     # 売上ステージ別セグメントテスト（S1-S5・2026-09-22）を固定アンカーに投入。
     # AI3本柱(4/20/36)・時短CTA(12)の後、ヒーロー投稿より前（衝突回避・登録漏れ防止）。
     posts = _insert_segment_tests(posts, "masa", TODAY)
+
+    # インスタ運用の原則翻案投稿（HAKASE）を1日2本、22/30に投入（2026-09-23）。
+    posts = _insert_hakase_posts(posts, "masa", TODAY)
 
     posts = _insert_hero_posts(posts, "masa")   # 全挿入の最後（LINE最終チェックより前に置く）
 

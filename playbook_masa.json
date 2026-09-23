@@ -1,6 +1,6 @@
 {
  "acct": "masa",
- "version": 46,
+ "version": 47,
  "updated": "2026-09-23",
  "description": "修正ポイント（勝ち構造・死ぬ構造）の正本。毎朝サブエージェントEが実測データで各ルールを検証し、効かなくなったルールはretired、新発見はtestingで追加、実証されたらactiveに昇格する。ヒーロー投稿と新テンプレはこのプレイブックのactiveルールに従って書く。",
  "rules": [
@@ -309,6 +309,15 @@
    "last_validated": "2026-09-23",
    "rule": "【売上ステージ名指し】1行目で売上ステージ層を名指しする（小川さん助言 2026-09-22）",
    "evidence": "segment_report.json を毎朝参照"
+  },
+  {
+   "id": "W_HAKASE",
+   "type": "win",
+   "status": "testing",
+   "added": "2026-09-23",
+   "last_validated": "2026-09-23",
+   "rule": "インスタ運用の原則（安定型/実験枠・価値パターン擦り倒し・長期リサイクル）を店舗向けに翻案して発信",
+   "evidence": "segment_report.json の HAKASE行（segment=\"HAKASE\"登録）を毎朝参照"
   }
  ],
  "changelog": [
@@ -538,6 +547,11 @@
    "version": 46,
    "date": "2026-09-23",
    "change": "小川さんセッション(2026-09-22)の助言を反映しW_SEGを新規testing追加: 1行目で売上ステージ層(S1開業前/S2初年度/S3頭打ち/S4スタッフ有/S5高額商品層)を名指しする投稿ルール。判定根拠はsegment_report.py(新規)が出すsegment×hook別index。毎朝の検証Dでsegment_report.py --applyを実行しwinner/loserを反映する運用をSKILL.mdに追記。"
+  },
+  {
+   "version": 47,
+   "date": "2026-09-23",
+   "change": "ユーザー指示(2026-09-23)「投稿の発信内容についてはインスタハカセの勉強内容も参考に投稿する」を反映しW_HAKASEを新規testing追加。HAKASE_TEMPLATES(18本)をgenerate_remix.pyに追加し毎日2本をanchors[22,30]に投入、segment_hypotheses.jsonにH23-H30(8件・theme:インスタ運用)を追記。"
   }
  ]
 }

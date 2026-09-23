@@ -2330,7 +2330,18 @@ def _hypothesis_first_line_names_segment(text: str) -> bool:
     first = (text or "").strip().split("\n", 1)[0].strip()
     if not first:
         return False
-    return first.endswith("へ。") or first.endswith("へ") or "へ。" in first
+    if first.endswith("へ。") or first.endswith("へ") or "へ。" in first:
+        return True
+    # 「〜へ。」以外の型（「開業して1年、〜した店は。」「月商50万の壁で〜を見てきて分かったこと。」）
+    # も層の名指しとして認める。売上ステージ／立場を表すキーワードが1行目にあればOK。
+    return bool(_SEGMENT_NAMING_RE.search(first))
+
+
+_SEGMENT_NAMING_RE = re.compile(
+    r"開業前|開業準備|準備中|開業資金|開業して1年|開業1年|集客ゼロ|"
+    r"月商50万|頭打ち|壁にいる|壁で|スタッフ|院長|"
+    r"高額|コース|講座|経営者|都度払い|無料は好評"
+)
 
 
 def _build_segment_candidates(seg: str, hook: str, hypotheses: list) -> list[dict]:

@@ -505,6 +505,28 @@ def check_execution_gaps():
             f"昨日({yday})のsegment_registry登録{n_yday}件" +
             ("" if n_yday >= 3 else "（3本未満・セグメントテスト投稿が回っていない疑い）"))
 
+    # C15追加: Obsidian由来の店舗経営の悩み・質問から作った仮説(segment_hypotheses.json)が
+    #          実際に投稿枠へ投入されているか。ファイル不在 or hypotheses 0件は「仮説の中身は
+    #          別エージェントが並行して作成中」で未着手なだけなのでPASS（WARNにしない）。
+    #          仮説が1件以上あるのに直近7日でhypothesis_id付き登録が無ければWARN。
+    try:
+        hyp_data = json.loads((BASE / "segment_hypotheses.json").read_text(encoding="utf-8"))
+    except Exception:
+        hyp_data = None
+    if not isinstance(hyp_data, dict) or not hyp_data.get("hypotheses"):
+        add("exec:segment_hypothesis", "C.実行ギャップ", "PASS",
+            "segment_hypotheses.json 不在または仮説0件のため判定対象外")
+    else:
+        cutoff7 = (date.today() - timedelta(days=7)).isoformat()
+        n_hyp_recent = sum(
+            1 for v in reg.values()
+            if isinstance(v, dict) and v.get("hypothesis_id") and v.get("created", "") >= cutoff7
+        )
+        add("exec:segment_hypothesis", "C.実行ギャップ",
+            "PASS" if n_hyp_recent >= 1 else "WARN",
+            f"仮説{len(hyp_data['hypotheses'])}件・直近7日のhypothesis_id付き登録{n_hyp_recent}件" +
+            ("" if n_hyp_recent >= 1 else "（仮説投稿が実際の投稿枠に投入されていない疑い）"))
+
     # C7: 月100万ペース（常時アラーム）。views_action.json を読み、未達アカウントを明示。
     #     達成は野心的目標のため未達は WARN（恒常監視・改善誘導が目的。FAILにはしない）。
     # 2026-09-20: views_action.json は .gitignore L10 で明示除外されたMac専用の

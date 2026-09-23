@@ -19,6 +19,7 @@ LOG_FILE = BASE / "log_truth.jsonl"
 LOG_FILE_NAGAOKA = BASE / "log_nagaoka.jsonl"
 SEGMENT_CONFIG_FILE = BASE / "segment_config.json"
 SEGMENT_REGISTRY_FILE = BASE / "segment_registry.json"
+SEGMENT_HYPOTHESES_FILE = BASE / "segment_hypotheses.json"
 
 # masa専用セグメントテスト（2026-09-22 小川さんセッション実装）の1行目正規化用。
 # duplicate_guard がない環境でも生成が止まらないよう、失敗時は簡易フォールバックにする。
@@ -2310,53 +2311,114 @@ def _segment_registry_key(text: str) -> str:
     return norm[:40]
 
 
-def _pick_segment_variant(seg: str, hook: str, variants: list[str], registry: dict, today_date: date):
-    """variant選択順位: registry未使用 → 7日以上前に使った中で最も古いもの →
-    （全滅時のみ）最も古く使ったもの。同一variantの短期再投稿を避ける
-    （playbook L8型疲労ルールに準拠）。戻り値は (variant_index, text) または (None, None)。"""
-    last_used: dict[int, date] = {}
+def _load_segment_hypotheses() -> dict:
+    """segment_hypotheses.json を読み込む（無い/不正なら空hypotheses扱い。仮説の中身は
+    別エージェントが並行して作成中のため、この関数は空/不在でも必ず動く 2026-09-23）。"""
+    if SEGMENT_HYPOTHESES_FILE.exists():
+        try:
+            data = json.loads(SEGMENT_HYPOTHESES_FILE.read_text(encoding="utf-8"))
+            if isinstance(data, dict) and isinstance(data.get("hypotheses"), list):
+                return data
+        except Exception:
+            pass
+    return {"hypotheses": []}
+
+
+def _hypothesis_first_line_names_segment(text: str) -> bool:
+    """仮説投稿の1行目が層を名指ししているか簡易チェック。固定テンプレは全て
+    『〜へ。』で層を名指しする形式のため、同じ形式であることを要求する。"""
+    first = (text or "").strip().split("\n", 1)[0].strip()
+    if not first:
+        return False
+    return first.endswith("へ。") or first.endswith("へ") or "へ。" in first
+
+
+def _build_segment_candidates(seg: str, hook: str, hypotheses: list) -> list[dict]:
+    """seg/hookの投稿候補プールを返す: 固定テンプレ3本 + segment_hypotheses.jsonの
+    該当posts（statusがretired/loser以外）。各候補は
+    {"source":"hypo"|"tmpl","key":<hypothesis_id or variant idx>,"text":str}。"""
+    candidates = []
+    for h in hypotheses:
+        if not isinstance(h, dict):
+            continue
+        if h.get("segment") != seg:
+            continue
+        if h.get("status") in ("retired", "loser"):
+            continue
+        for p in h.get("posts") or []:
+            if not isinstance(p, dict) or p.get("hook") != hook:
+                continue
+            text = p.get("text")
+            if text:
+                candidates.append({"source": "hypo", "key": h.get("id"), "text": text})
+    for i, text in enumerate(SEGMENT_TEST_TEMPLATES.get(seg, {}).get(hook, [])):
+        candidates.append({"source": "tmpl", "key": i, "text": text})
+    return candidates
+
+
+def _pick_segment_candidate(seg: str, hook: str, candidates: list[dict], registry: dict, today_date: date):
+    """候補選択順位: (a) 仮説投稿で未使用 → (b) 固定テンプレで未使用 →
+    (c) 最終使用が古い順（7日以内は再投入しない既存ルール維持）。
+    同一候補の短期再投稿を避ける（playbook L8型疲労ルールに準拠）。
+    戻り値は選択candidate dictまたはNone。"""
+    def _cid(c):
+        return (c["source"], c["key"])
+
+    last_used: dict[tuple, date] = {}
     for entry in registry.values():
         if not isinstance(entry, dict):
             continue
         if entry.get("segment") != seg or entry.get("hook") != hook:
             continue
-        idx = entry.get("variant")
         created = entry.get("created")
-        if idx is None or not created:
+        if not created:
             continue
         try:
             d = date.fromisoformat(created)
         except Exception:
             continue
-        if idx not in last_used or d > last_used[idx]:
-            last_used[idx] = d
+        if entry.get("hypothesis_id"):
+            cid = ("hypo", entry.get("hypothesis_id"))
+        elif entry.get("variant") is not None:
+            cid = ("tmpl", entry.get("variant"))
+        else:
+            continue
+        if cid not in last_used or d > last_used[cid]:
+            last_used[cid] = d
 
-    never_used = [i for i in range(len(variants)) if i not in last_used]
-    if never_used:
-        idx = never_used[0]
-        return idx, variants[idx]
+    hypo_candidates = [c for c in candidates if c["source"] == "hypo"]
+    tmpl_candidates = [c for c in candidates if c["source"] == "tmpl"]
 
-    cooled = [(i, d) for i, d in last_used.items() if (today_date - d).days >= 7]
+    for group in (hypo_candidates, tmpl_candidates):
+        never_used = [c for c in group if _cid(c) not in last_used]
+        if never_used:
+            return never_used[0]
+
+    cooled = [(c, last_used[_cid(c)]) for c in candidates if _cid(c) in last_used
+              and (today_date - last_used[_cid(c)]).days >= 7]
     if cooled:
         cooled.sort(key=lambda x: x[1])
-        idx = cooled[0][0]
-        return idx, variants[idx]
+        return cooled[0][0]
 
-    if last_used:
-        idx = min(last_used, key=lambda i: last_used[i])
-        return idx, variants[idx]
+    used = [(c, last_used[_cid(c)]) for c in candidates if _cid(c) in last_used]
+    if used:
+        used.sort(key=lambda x: x[1])
+        return used[0][0]
 
-    return None, None
+    return None
 
 
 def _insert_segment_tests(posts: list[str], acct: str, today: str) -> list[str]:
     """masa専用: 売上ステージ別セグメント(S1-S5)のテスト投稿をanchors位置に投入し、
-    segment_registry.jsonへ登録する（2026-09-22 小川さんセッション実装）。
+    segment_registry.jsonへ登録する（2026-09-22 小川さんセッション実装。2026-09-23に
+    Obsidian由来の仮説(segment_hypotheses.json)投稿も候補プールに追加）。
     既存の固定アンカー（AI3本柱=4/20/36、時短CTA=12、プロフィール誘導=9/27等）とは
     衝突しない位置(8,16,26,34,44)をsegment_config.jsonで管理する。
     _insert_hero_posts より前に呼ぶこと（ヒーロー投稿の「誘導50超を44へ引き戻し」は
     HPB/駐車場/lin.eeマーカーのみを対象にしており、セグメント投稿の文面には含まれない
-    ためこの順序でも矛盾は起きない）。"""
+    ためこの順序でも矛盾は起きない）。
+    検証専用呼び出し（verify_system.py等）は環境変数 SEGMENT_REGISTRY_DRY=1 を立てることで
+    _save_segment_registry が台帳書き込みだけをスキップする（本関数の呼び出し方は変えない）。"""
     if acct != "masa":
         return posts
 
@@ -2378,27 +2440,42 @@ def _insert_segment_tests(posts: list[str], acct: str, today: str) -> list[str]:
         today_date = date.today()
 
     registry = _load_segment_registry()
+    hypotheses = _load_segment_hypotheses().get("hypotheses", [])
     per_day = int(cfg.get("per_day", len(share)))
     segments = list(share.keys())[:per_day]
 
     selected = []
     for seg in segments:
-        variants = SEGMENT_TEST_TEMPLATES.get(seg, {}).get(hook, [])
-        if not variants:
+        pool = _build_segment_candidates(seg, hook, hypotheses)
+        chosen = None
+        while pool:
+            cand = _pick_segment_candidate(seg, hook, pool, registry, today_date)
+            if cand is None:
+                break
+            text = cand["text"]
+            ng = _is_masa_sales_ng(text) or _is_ng(text) or len(text) > 250
+            if cand["source"] == "hypo" and not ng:
+                ng = not _hypothesis_first_line_names_segment(text)
+            if ng:
+                # NG候補は除外して次点へ（仮説投稿がNGなら固定テンプレへフォールバックする）
+                pool = [c for c in pool if c is not cand]
+                continue
+            chosen = cand
+            break
+        if chosen is None:
             continue
-        idx, text = _pick_segment_variant(seg, hook, variants, registry, today_date)
-        if text is None:
-            continue
-        if _is_masa_sales_ng(text) or _is_ng(text) or len(text) > 250:
-            continue
-        selected.append((seg, hook, idx, text))
+        selected.append((seg, hook, chosen))
 
-    for i, (seg, hk, idx, text) in enumerate(selected):
+    for i, (seg, hk, cand) in enumerate(selected):
         pos = anchors[i] if i < len(anchors) else (anchors[-1] if anchors else len(posts))
-        posts.insert(min(pos, len(posts)), text)
-        registry[_segment_registry_key(text)] = {
-            "segment": seg, "hook": hk, "variant": idx, "created": today,
-        }
+        posts.insert(min(pos, len(posts)), cand["text"])
+        entry = {"segment": seg, "hook": hk, "created": today}
+        if cand["source"] == "hypo":
+            entry["variant"] = None
+            entry["hypothesis_id"] = cand["key"]
+        else:
+            entry["variant"] = cand["key"]
+        registry[_segment_registry_key(cand["text"])] = entry
 
     _save_segment_registry(registry)
     return posts

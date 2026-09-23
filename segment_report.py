@@ -38,6 +38,7 @@ LOG_FILE = BASE / "log_masa_posted.jsonl"
 REGISTRY_FILE = BASE / "segment_registry.json"
 PAST_POSTS_FILE = BASE / "past_posts_masa.json"
 CONFIG_FILE = BASE / "segment_config.json"
+HYPOTHESES_FILE = BASE / "segment_hypotheses.json"
 REPORT_JSON = BASE / "segment_report.json"
 REPORT_MD = Path(
     "/Users/mt112/Desktop/my files/myfiles/SNS・Threads/分析レポート/セグメント分析_masa.md"
@@ -113,6 +114,16 @@ def _load_past_posts_by_id():
 def _load_registry():
     reg = _load_json(REGISTRY_FILE, {})
     return reg if isinstance(reg, dict) else {}
+
+
+def _load_hypotheses():
+    """segment_hypotheses.json を読み込む。無い/不正なら None を返す
+    （＝仮説機能は「未着手」として静かにスキップ。空リストは{"hypotheses":[]}として
+    正常に返す＝ファイルはあるが仮説0件、の意味）。"""
+    data = _load_json(HYPOTHESES_FILE, None)
+    if not isinstance(data, dict) or not isinstance(data.get("hypotheses"), list):
+        return None
+    return data
 
 
 def _norm_segment(raw):
@@ -192,6 +203,7 @@ def build_report():
             "text": e.get("text", ""),
             "segment": _norm_segment(reg.get("segment")) if reg else None,
             "hook": _norm_hook(reg.get("hook")) if reg else None,
+            "hypothesis_id": (reg.get("hypothesis_id") if reg else None) or None,
             "views": (past or {}).get("views", 0) or 0,
             "like_count": (past or {}).get("like_count", 0) or 0,
             "replies_count": (past or {}).get("replies_count", 0) or 0,
@@ -250,16 +262,43 @@ def build_report():
                 "verdict": verdict,
             }
 
+        # 仮説別（Obsidian由来の店舗経営の悩み・質問から作った仮説の勝ち負け判定。
+        # 2026-09-23追加。segment_hypotheses.json が無い/空でもクラッシュしない）。
+        hyp_data = _load_hypotheses()
+        hyp_ids_from_rows = {j["hypothesis_id"] for j in rows if j["hypothesis_id"]}
+        hyp_ids_from_file = {
+            h.get("id") for h in (hyp_data or {}).get("hypotheses", [])
+            if isinstance(h, dict) and h.get("id")
+        }
+        hyp_summary = {}
+        for hid in sorted(hyp_ids_from_rows | hyp_ids_from_file):
+            cell = [j for j in rows if j["hypothesis_id"] == hid]
+            views_l = [j["views"] for j in cell]
+            st = _stats(views_l)
+            index = round(st["median_views"] / baseline_median, 3) if baseline_median else 0.0
+            verdict = _verdict(st["n"], index, min_n)
+            seg_of_hyp = next((j["segment"] for j in cell if j["segment"]), None)
+            hyp_summary[hid] = {
+                **st,
+                "segment": seg_of_hyp,
+                "like_rate": _rate(sum(j["like_count"] for j in cell), sum(views_l)),
+                "reply_rate": _rate(sum(j["replies_count"] for j in cell), sum(views_l)),
+                "index": index,
+                "verdict": verdict,
+            }
+
         unregistered = sum(1 for j in rows if not j["segment"])
         report["windows"][wkey] = {
             "baseline": baseline,
             "unregistered_n": unregistered,
             "segment_hook": seg_hook,
             "segment": seg_only,
+            "hypothesis": hyp_summary,
         }
 
     # --apply の判定基盤は30日窓（サンプルが安定するため）
     report["segment_summary"] = report["windows"].get("30d", {}).get("segment", {})
+    report["hypothesis_summary"] = report["windows"].get("30d", {}).get("hypothesis", {})
     return report
 
 
@@ -294,6 +333,18 @@ def write_markdown(report):
         for seg in SEGMENTS:
             c = w["segment"][seg]
             lines.append(f"| {seg} | {c['n']} | {c['median_views']} | {c['index']} | {c['verdict']} |")
+        lines.append("")
+        lines.append("### 仮説別（Obsidian由来の店舗経営の悩み・質問）")
+        hyp = w.get("hypothesis", {})
+        if not hyp:
+            lines.append("(仮説データなし。segment_hypotheses.json が空 or 未生成)")
+        else:
+            lines.append("| hypothesis_id | segment | n | 中央値 | index | いいね率 | 返信率 | 判定 |")
+            lines.append("|---|---|---|---|---|---|---|---|")
+            for hid in sorted(hyp.keys()):
+                c = hyp[hid]
+                lines.append(f"| {hid} | {c.get('segment') or '-'} | {c['n']} | {c['median_views']} | "
+                             f"{c['index']} | {c['like_rate']} | {c['reply_rate']} | {c['verdict']} |")
         lines.append("")
     try:
         REPORT_MD.parent.mkdir(parents=True, exist_ok=True)
@@ -334,6 +385,66 @@ def apply_share(report):
     return True
 
 
+def apply_hypotheses(report):
+    """segment_hypotheses.json の各仮説の status と last_result を30日窓の実測で更新する。
+    状態遷移: untested → testing(n≥1) → winner(index≥1.3,n≥min_n) / loser(index≤0.7,n≥8)。
+    status=retired の仮説は手動退役なので触らない。ファイル不在/不正なら何もせずFalseを返す
+    （担当Aの仮説投入が未着手でも落ちない）。"""
+    data = _load_hypotheses()
+    if data is None:
+        print("[apply] segment_hypotheses.json が無い/不正のため仮説status更新をスキップ")
+        return False
+
+    hyp_stats = report.get("windows", {}).get("30d", {}).get("hypothesis", {})
+    min_n = report.get("params", {}).get("min_n", DEFAULT_MIN_N)
+    today = date.today().isoformat()
+    changed = False
+    updated_ids = []
+
+    for h in data.get("hypotheses", []):
+        if not isinstance(h, dict):
+            continue
+        hid = h.get("id")
+        if not hid:
+            continue
+        status = h.get("status", "untested")
+        if status == "retired":
+            continue
+
+        st = hyp_stats.get(hid)
+        n = st.get("n", 0) if st else 0
+        index = st.get("index", 0.0) if st else 0.0
+
+        if n == 0:
+            continue  # 実測がまだ無い→untestedのまま（last_resultも更新しない）
+
+        if index >= WINNER_INDEX and n >= min_n:
+            new_status = "winner"
+        elif index <= LOSER_INDEX and n >= LOSER_MIN_N:
+            new_status = "loser"
+        elif n >= 1:
+            new_status = "testing"
+        else:
+            new_status = status
+
+        if new_status != status:
+            h["status"] = new_status
+            changed = True
+            updated_ids.append(f"{hid}:{status}->{new_status}")
+
+        last_result = {"n": n, "index": index, "updated": today}
+        if h.get("last_result") != last_result:
+            h["last_result"] = last_result
+            changed = True
+
+    if changed:
+        HYPOTHESES_FILE.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+        print(f"[apply] 仮説status更新: {updated_ids or '(last_resultのみ更新)'}")
+    else:
+        print("[apply] 仮説statusの変更なし")
+    return changed
+
+
 def main():
     report = build_report()
     REPORT_JSON.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -341,6 +452,7 @@ def main():
 
     if "--apply" in sys.argv:
         apply_share(report)
+        apply_hypotheses(report)
 
     w30 = report["windows"].get("30d", {})
     b = w30.get("baseline", {})
@@ -348,6 +460,12 @@ def main():
     losers = [s for s, c in report.get("segment_summary", {}).items() if c.get("verdict") == "loser"]
     print(f"segment_report: 30日ベースn={b.get('n', 0)} 中央値{b.get('median_views', 0)} "
           f"winner={winners or 'なし'} loser={losers or 'なし'}")
+
+    hyp_summary = report.get("hypothesis_summary", {})
+    if hyp_summary:
+        hwin = [h for h, c in hyp_summary.items() if c.get("verdict") == "winner"]
+        hlose = [h for h, c in hyp_summary.items() if c.get("verdict") == "loser"]
+        print(f"segment_report(仮説): {len(hyp_summary)}件 winner={hwin or 'なし'} loser={hlose or 'なし'}")
 
     if "--json" in sys.argv:
         print(json.dumps(report, ensure_ascii=False, indent=2))

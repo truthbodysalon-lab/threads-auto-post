@@ -127,34 +127,49 @@ def main():
     today = datetime.now(JST).date().isoformat()
     want = want_now()
     repaired = []
+    # 1アカウントの失敗を全体に波及させない（単一障害点の除去。
+    # 2026-09-23 nagaokaの自己修復バッチがタイムアウトしTimeoutExpiredが
+    # 未捕捉のままmain()をクラッシュさせ、後続のmasa監視に到達しなかった事故の再発防止）。
+    # ループ本体は必ずtry/exceptで個別に隔離し、1acct分の失敗は記録して次のacctへcontinueする。
     for acct in ACCTS:
-        n = api_count_today(acct)
-        if n < 0:
+        try:
+            n = api_count_today(acct)
+            if n < 0:
+                continue
+            print(f"{acct}: 実投稿{n} / あるべき{want}")
+            gap = want - n
+            if n > want + 10 and not _notified_today(st, f"front_{acct}"):
+                line_push(f"⚠️Threads {acct}: 投稿が先行しすぎ({n}本/目標{want})。固め打ちバグの疑い(CI watchdog)")
+                st[f"front_{acct}"] = today
+            # 通常は8本超の遅れで修復。21時以降は残り時間が無いため1本の不足でも埋めに行く
+            elif gap > 8 or (h >= 21 and gap > 0):
+                print(f"{acct}: 遅れ{gap}本 → LINE消化フラグ＋修復バッチ")
+                # LINE無限ループの可能性を先に潰す（消化済み扱い）
+                try:
+                    f = BASE / "line_listin_state.json"
+                    d = json.loads(f.read_text()) if f.exists() else {}
+                    d[acct] = {"date": today, "count": 9}
+                    f.write_text(json.dumps(d, ensure_ascii=False))
+                except Exception:
+                    pass
+                try:
+                    subprocess.run([sys.executable, str(BASE / "auto_post.py"), acct],
+                                   capture_output=True, timeout=780)
+                except subprocess.TimeoutExpired:
+                    print(f"{acct}: 修復バッチがタイムアウト(780秒) → 記録してスキップし次のacctへ")
+                    if not _notified_today(st, f"timeout_{acct}"):
+                        line_push(f"⏱️Threads {acct}: 自己修復バッチがタイムアウト(780秒)。手動確認が必要です(CI watchdog)")
+                        st[f"timeout_{acct}"] = today
+                    continue
+                after = api_count_today(acct)
+                print(f"{acct}: 修復後 {n}→{after}本")
+                if gap > 8 and after - n < 3 and not _notified_today(st, f"stall_{acct}"):
+                    line_push(f"🚨Threads {acct}: 投稿停止の疑い({after}本/目標{want}・CI修復でも回復小)。Mac/トークン/キューを確認してください")
+                    st[f"stall_{acct}"] = today
+                repaired.append(acct)
+        except Exception as e:
+            print(f"{acct}: 監視中に想定外エラー {e} → スキップして次へ")
             continue
-        print(f"{acct}: 実投稿{n} / あるべき{want}")
-        gap = want - n
-        if n > want + 10 and not _notified_today(st, f"front_{acct}"):
-            line_push(f"⚠️Threads {acct}: 投稿が先行しすぎ({n}本/目標{want})。固め打ちバグの疑い(CI watchdog)")
-            st[f"front_{acct}"] = today
-        # 通常は8本超の遅れで修復。21時以降は残り時間が無いため1本の不足でも埋めに行く
-        elif gap > 8 or (h >= 21 and gap > 0):
-            print(f"{acct}: 遅れ{gap}本 → LINE消化フラグ＋修復バッチ")
-            # LINE無限ループの可能性を先に潰す（消化済み扱い）
-            try:
-                f = BASE / "line_listin_state.json"
-                d = json.loads(f.read_text()) if f.exists() else {}
-                d[acct] = {"date": today, "count": 9}
-                f.write_text(json.dumps(d, ensure_ascii=False))
-            except Exception:
-                pass
-            subprocess.run([sys.executable, str(BASE / "auto_post.py"), acct],
-                           capture_output=True, timeout=780)
-            after = api_count_today(acct)
-            print(f"{acct}: 修復後 {n}→{after}本")
-            if gap > 8 and after - n < 3 and not _notified_today(st, f"stall_{acct}"):
-                line_push(f"🚨Threads {acct}: 投稿停止の疑い({after}本/目標{want}・CI修復でも回復小)。Mac/トークン/キューを確認してください")
-                st[f"stall_{acct}"] = today
-            repaired.append(acct)
     try:
         STATE.write_text(json.dumps(st, ensure_ascii=False))
     except Exception:

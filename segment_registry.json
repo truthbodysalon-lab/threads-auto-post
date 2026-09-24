@@ -153,5 +153,117 @@
     "variant": 4,
     "acct": "masa",
     "created": "2026-09-24"
+  },
+  "産後の骨盤の歪みが気になるママへ。": {
+    "segment": "T3",
+    "hook": "high",
+    "created": "2026-09-24",
+    "acct": "truth",
+    "variant": 0
+  },
+  "立ち仕事続きで腰が重い人へ。": {
+    "segment": "T4",
+    "hook": "high",
+    "created": "2026-09-24",
+    "acct": "truth",
+    "variant": null,
+    "hypothesis_id": "Z15_truth"
+  },
+  "朝から体が重いと感じる人へ。": {
+    "segment": "T5",
+    "hook": "high",
+    "created": "2026-09-24",
+    "acct": "truth",
+    "variant": 0
+  },
+  "他院で結果が出なかった人へ。": {
+    "segment": "T6",
+    "hook": "high",
+    "created": "2026-09-24",
+    "acct": "truth",
+    "variant": null,
+    "hypothesis_id": "Z21_truth"
+  },
+  "抱っこの負担で肩まで重いママへ。": {
+    "segment": "T3",
+    "hook": "high",
+    "created": "2026-09-24",
+    "acct": "nagaoka",
+    "variant": null,
+    "hypothesis_id": "Z12_nagaoka"
+  },
+  "不規則な勤務で通院を諦めた人へ。": {
+    "segment": "T4",
+    "hook": "high",
+    "created": "2026-09-24",
+    "acct": "nagaoka",
+    "variant": 0
+  },
+  "疲れが取れず気分も沈む人へ。": {
+    "segment": "T5",
+    "hook": "high",
+    "created": "2026-09-24",
+    "acct": "nagaoka",
+    "variant": null,
+    "hypothesis_id": "Z18_nagaoka"
+  },
+  "施術で悪化した経験がある人へ。": {
+    "segment": "T6",
+    "hook": "high",
+    "created": "2026-09-24",
+    "acct": "nagaoka",
+    "variant": 0
+  },
+  "開業前、資格の勉強ばかりしている人は。": {
+    "segment": "S1",
+    "hook": "high",
+    "created": "2026-09-24",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H02"
+  },
+  "開業して1年、集客ゼロの店を見てきて分かったこと。": {
+    "segment": "S2",
+    "hook": "high",
+    "created": "2026-09-24",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H04"
+  },
+  "月商50万の壁でこっそり値上げした店は。": {
+    "segment": "S3",
+    "hook": "high",
+    "created": "2026-09-24",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H08"
+  },
+  "手順書なしでスタッフに任せた院は。": {
+    "segment": "S4",
+    "hook": "high",
+    "created": "2026-09-24",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H13"
+  },
+  "施術時間を長くするほど単価が上がると思う経営者は。": {
+    "segment": "S5",
+    "hook": "high",
+    "created": "2026-09-24",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H17"
+  },
+  "当たる施策を1回で見つけようとしていませんか。": {
+    "segment": "HAKASE",
+    "hook": "principle",
+    "variant": 5,
+    "created": "2026-09-24"
+  },
+  "当たった話を、1回で終わらせるのはもったいない。": {
+    "segment": "HAKASE",
+    "hook": "principle",
+    "variant": 1,
+    "created": "2026-09-24"
   }
 }

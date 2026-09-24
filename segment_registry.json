@@ -265,5 +265,121 @@
     "hook": "principle",
     "variant": 1,
     "created": "2026-09-24"
+  },
+  "在宅勤務で肩こりが悪化した人へ。": {
+    "segment": "T1",
+    "hook": "low",
+    "created": "2026-09-25",
+    "acct": "truth",
+    "variant": null,
+    "hypothesis_id": "Z01_truth"
+  },
+  "月に何度も頭痛薬を飲む人へ。": {
+    "segment": "T2",
+    "hook": "low",
+    "created": "2026-09-25",
+    "acct": "truth",
+    "variant": null,
+    "hypothesis_id": "Z05_truth"
+  },
+  "産後、体の痛みを我慢するママへ。": {
+    "segment": "T3",
+    "hook": "low",
+    "created": "2026-09-25",
+    "acct": "truth",
+    "variant": null,
+    "hypothesis_id": "Z11_truth"
+  },
+  "立ちっぱなしで腰がつらい人へ。": {
+    "segment": "T4",
+    "hook": "low",
+    "created": "2026-09-25",
+    "acct": "truth",
+    "variant": null,
+    "hypothesis_id": "Z13_truth"
+  },
+  "座り仕事で首がつらい人へ。": {
+    "segment": "T1",
+    "hook": "low",
+    "created": "2026-09-25",
+    "acct": "nagaoka",
+    "variant": null,
+    "hypothesis_id": "Z02_nagaoka"
+  },
+  "光や音がつらい頭痛がある人へ。": {
+    "segment": "T2",
+    "hook": "low",
+    "created": "2026-09-25",
+    "acct": "nagaoka",
+    "variant": null,
+    "hypothesis_id": "Z04_nagaoka"
+  },
+  "育児中に自分の体を後回しにするママへ。": {
+    "segment": "T3",
+    "hook": "low",
+    "created": "2026-09-25",
+    "acct": "nagaoka",
+    "variant": null,
+    "hypothesis_id": "Z10_nagaoka"
+  },
+  "重い荷物運びで腰を痛めた人へ。": {
+    "segment": "T4",
+    "hook": "low",
+    "created": "2026-09-25",
+    "acct": "nagaoka",
+    "variant": null,
+    "hypothesis_id": "Z14_nagaoka"
+  },
+  "開業前で、物件がまだ決まらない人へ。": {
+    "segment": "S1",
+    "hook": "low",
+    "created": "2026-09-25",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H01"
+  },
+  "開業して1年、投稿が続かない人へ。": {
+    "segment": "S2",
+    "hook": "low",
+    "created": "2026-09-25",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H03"
+  },
+  "月商50万の壁にいる人へ。": {
+    "segment": "S3",
+    "hook": "low",
+    "created": "2026-09-25",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H07"
+  },
+  "スタッフがいる院長へ。": {
+    "segment": "S4",
+    "hook": "low",
+    "created": "2026-09-25",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H12"
+  },
+  "高額商品を持つ経営者へ。": {
+    "segment": "S5",
+    "hook": "low",
+    "created": "2026-09-25",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H16"
+  },
+  "独自性を出さなきゃ、と気負っていませんか。": {
+    "segment": "HAKASE",
+    "hook": "principle",
+    "variant": 14,
+    "created": "2026-09-25"
+  },
+  "自分の名前を売り込む必要はありません。": {
+    "segment": "HAKASE",
+    "hook": "principle",
+    "variant": 8,
+    "created": "2026-09-25"
   }
 }

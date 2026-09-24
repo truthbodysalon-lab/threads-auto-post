@@ -16,6 +16,13 @@ segment_report.py — セグメント×フック分析（masa=売上ステージ
                                                      # share と segment_hypotheses.json の
                                                      # status をwinner/loserで自動調整
   python3 segment_report.py --json               # JSONを標準出力にも全量出力
+  python3 segment_report.py --acct all --apply --notify-secretary
+                                                  # 上記に加え、3アカウント分を1通の日本語
+                                                  # ブリーフにまとめ秘書Bot経由で#秘書からの連絡へ
+                                                  # 送信する（--acct all専用。2026-09-24 本人指示:
+                                                  # 「セグメントと仮説の分析は秘書経由で報告」）。
+                                                  # 送信失敗時はnotify.sh --to secretaryへフォール
+                                                  # バックし、両方失敗してもexit 0（理由を標準出力へ）
 
 入力（全てローカルJSON/JSONL。HTTP通信なし）:
   - log_<acct>_posted.jsonl : {"date","index","post_id","text"} 1行1件
@@ -37,6 +44,7 @@ from __future__ import annotations
 
 import json
 import statistics
+import subprocess
 import sys
 from datetime import date, datetime, timedelta
 from pathlib import Path
@@ -75,6 +83,27 @@ SEG_NAMES = {
     "nagaoka": {"T1": "desk", "T2": "zutsu", "T3": "sango", "T4": "tachi", "T5": "suimin", "T6": "norikae"},
 }
 
+# 秘書ブリーフィング用の日本語名（専門記号「S2」「T1」等を本文に出さないため。2026-09-24追加）
+SEG_JP = {
+    "masa": {
+        "S1": "開業前の層",
+        "S2": "開業して1年の層",
+        "S3": "月商50万で頭打ちの層",
+        "S4": "スタッフがいる院長の層",
+        "S5": "高額商品を持っている層",
+    },
+    "truth": {
+        "T1": "デスクワークで肩や首がこる層",
+        "T2": "頭痛薬を週に何度も飲む層",
+        "T3": "産後で体がつらい層",
+        "T4": "立ち仕事や介護で腰・脚がつらい層",
+        "T5": "睡眠が浅い・疲れが取れない層",
+        "T6": "他の整体やマッサージを乗り換えてきた層",
+    },
+}
+SEG_JP["nagaoka"] = SEG_JP["truth"]
+ACCT_JP = {"masa": "masahide", "truth": "truth_body_salon", "nagaoka": "truth_nagaoka"}
+
 
 def _segments(acct: str) -> list[str]:
     return [f"{c}_{SEG_NAMES[acct][c]}" for c in SEG_CODES.get(acct, [])]
@@ -100,7 +129,9 @@ def _short_code(acct: str, full_seg: str) -> str | None:
 
 
 HOOKS = ["low", "high"]
-WINDOWS = (14, 30)
+# 7d = 秘書ブリーフィングの週次まとめ（日曜）用ランキング算出のため2026-09-24追加。
+# 14d/30dの判定ロジック（apply_share/apply_hypotheses・Markdown出力）は無変更。
+WINDOWS = (7, 14, 30)
 DEFAULT_MIN_N = 5
 LOSER_MIN_N = 8
 WINNER_INDEX = 1.3
@@ -491,12 +522,15 @@ def write_markdown(report, acct: str):
 
 
 def apply_share(report, acct: str):
-    """segment_summary(30日窓)のwinner/loserでsegment_config.jsonのshareを調整する。"""
+    """segment_summary(30日窓)のwinner/loserでsegment_config.jsonのshareを調整する。
+    戻り値: (変更したか, detail辞書 or None)。detailは秘書ブリーフィング(--notify-secretary)が
+    「配分の変更」欄を作る材料に使う（2026-09-24追加。既存の戻り値bool単体からタプルへ変更したが、
+    呼び出し側run_for_acctは戻り値を無視しても動くため後方互換）。"""
     SEGMENTS = _segments(acct)
     cfg = _load_json(CONFIG_FILE, None)
     if not isinstance(cfg, dict) or acct not in cfg:
         print(f"[apply:{acct}] segment_config.json が無い/不正のため share 調整をスキップ")
-        return False
+        return False, None
     acct_cfg = cfg[acct]
     share = dict(acct_cfg.get("share", {}))
     summary = report.get("segment_summary", {})
@@ -506,10 +540,11 @@ def apply_share(report, acct: str):
 
     if not winners:
         print(f"[apply:{acct}] winnerなし（loser{len(losers)}件）のため share は変更しない")
-        return False
+        return False, None
 
     winner_codes = [_short_code(acct, s) for s in winners]
     loser_codes = [_short_code(acct, s) for s in losers]
+    old_share = dict(share)
 
     freed = sum(share.get(c, 0) for c in loser_codes)
     for c in loser_codes:
@@ -523,18 +558,22 @@ def apply_share(report, acct: str):
     cfg[acct] = acct_cfg
     CONFIG_FILE.write_text(json.dumps(cfg, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"[apply:{acct}] share更新: winner={winners} loser={losers} → {share}")
-    return True
+    detail = {"winners": winners, "losers": losers, "old_share": old_share, "new_share": share}
+    return True, detail
 
 
 def apply_hypotheses(report, acct: str):
     """segment_hypotheses.json の該当acctの仮説の status と last_result を30日窓の実測で更新する。
     状態遷移: untested → testing(n≥1) → winner(index≥1.3,n≥min_n) / loser(index≤0.7,n≥8)。
     status=retired の仮説は手動退役なので触らない。ファイル不在/不正なら何もせずFalseを返す
-    （担当A/Bの仮説投入が未着手でも落ちない）。"""
+    （担当A/Bの仮説投入が未着手でも落ちない）。
+    戻り値: (変更したか, updated_idsリスト)。--notify-secretary の「配分の変更」欄に使う
+    （2026-09-24追加。既存の戻り値bool単体からタプルへ変更したが、呼び出し側run_for_acctは
+    戻り値を無視しても動くため後方互換）。"""
     data = _load_hypotheses()
     if data is None:
         print(f"[apply:{acct}] segment_hypotheses.json が無い/不正のため仮説status更新をスキップ")
-        return False
+        return False, []
 
     hyp_stats = report.get("windows", {}).get("30d", {}).get("hypothesis", {})
     min_n = report.get("params", {}).get("min_n", DEFAULT_MIN_N)
@@ -585,7 +624,7 @@ def apply_hypotheses(report, acct: str):
         print(f"[apply:{acct}] 仮説status更新: {updated_ids or '(last_resultのみ更新)'}")
     else:
         print(f"[apply:{acct}] 仮説statusの変更なし")
-    return changed
+    return changed, updated_ids
 
 
 def run_for_acct(acct: str, do_apply: bool, do_json: bool):
@@ -600,9 +639,16 @@ def run_for_acct(acct: str, do_apply: bool, do_json: bool):
 
     write_markdown(report, acct)
 
+    # apply_detail: --notify-secretary の「配分の変更」欄を作る材料（2026-09-24追加）。
+    # do_apply=Falseの時はNone/空のまま＝「なし」として扱われる。
+    apply_detail = {"share": None, "hypotheses": []}
     if do_apply:
-        apply_share(report, acct)
-        apply_hypotheses(report, acct)
+        changed_s, detail_s = apply_share(report, acct)
+        if changed_s:
+            apply_detail["share"] = detail_s
+        changed_h, updated_ids = apply_hypotheses(report, acct)
+        if changed_h:
+            apply_detail["hypotheses"] = updated_ids
 
     w30 = report["windows"].get("30d", {})
     b = w30.get("baseline", {})
@@ -626,6 +672,255 @@ def run_for_acct(acct: str, do_apply: bool, do_json: bool):
     if do_json:
         print(json.dumps(report, ensure_ascii=False, indent=2))
 
+    return report, apply_detail
+
+
+# ============================================================
+# 秘書ブリーフィング（--notify-secretary・2026-09-24追加）
+# なぜ: 本人指示「セグメントと仮説の分析は秘書経由でわかる形で報告する」に基づき、
+#       3アカウント分を専門用語なしの日本語1通にまとめ「アンナ秘書Bot」名義で
+#       #秘書からの連絡 に送る。失敗時はnotify.sh(Webhook)にフォールバックし、
+#       両方失敗しても exit 0 を維持する（記録が失われてもタスク全体は失敗にしない）。
+# ============================================================
+
+def _seg_jp_name(acct: str, full_seg: str) -> str:
+    """segment_summary等のキー("S1_kaigyo_mae"等)を秘書ブリーフィング用の日本語名にする。
+    未知のコードは万一のフォールバックとしてそのまま返す（記号が漏れるのは既知コード追加漏れ時のみ）。"""
+    code = _short_code(acct, full_seg)
+    return SEG_JP.get(acct, {}).get(code, full_seg)
+
+
+def _hyp_lookup(acct: str) -> dict:
+    data = _load_hypotheses() or {"hypotheses": []}
+    return {h.get("id"): h for h in data.get("hypotheses", []) if isinstance(h, dict) and h.get("id")}
+
+
+def _short_hyp_text(h: dict, n: int = 20) -> str:
+    """hypothesis文を短く要約し、本文中の「」『』を外して返す
+    （呼び出し側が外側を『』で囲むため、二重引用符で読みにくくなるのを防ぐ）。"""
+    text = (h.get("hypothesis") or "")[:n]
+    for ch in "「」『』":
+        text = text.replace(ch, "")
+    return text
+
+
+def _hyp_first_line(h: dict) -> str:
+    posts = h.get("posts") or []
+    line = ""
+    for p in posts:
+        if isinstance(p, dict) and p.get("hook") == "low":
+            line = (p.get("text") or "").strip().split("\n", 1)[0]
+            break
+    if not line and posts and isinstance(posts[0], dict):
+        line = (posts[0].get("text") or "").strip().split("\n", 1)[0]
+    for ch in "「」『』":
+        line = line.replace(ch, "")
+    return line
+
+
+def _reliable_baseline_top(acct: str, baseline: dict | None):
+    """過去ベースラインのうち十分な実測(n>=10)がある層で最もindexが高いものを返す(code, name) or None。
+    n<10の層は参考値として比較対象から除く（segment_baseline.jsonの既存コメントに準拠）。"""
+    if not baseline:
+        return None
+    segs = baseline.get("segments", {})
+    reliable = {c: b for c, b in segs.items() if isinstance(b, dict) and b.get("n", 0) >= 10}
+    if not reliable:
+        return None
+    top_code = max(reliable, key=lambda c: reliable[c].get("index", 0))
+    return top_code, SEG_JP.get(acct, {}).get(top_code, top_code)
+
+
+def _acct_section(acct: str, report: dict, apply_detail: dict, baseline: dict | None,
+                   include_focus: bool = True) -> list[str]:
+    summary = report.get("segment_summary", {})
+    winners = [s for s, c in summary.items() if c.get("verdict") == "winner"]
+    losers = [s for s, c in summary.items() if c.get("verdict") == "loser"]
+    lines = [f"■ {ACCT_JP.get(acct, acct)}"]
+
+    if winners:
+        lines.append("・勝ち：" + "、".join(_seg_jp_name(acct, s) for s in winners))
+    else:
+        lines.append("・勝ち：まだ判定できる層なし")
+
+    if include_focus:
+        hyp_summary = report.get("hypothesis_summary", {})
+        hyp_by_id = _hyp_lookup(acct)
+        candidates = [
+            (hid, c) for hid, c in hyp_summary.items()
+            if c.get("verdict") == "testing" and c.get("index", 0) >= 1.2 and c.get("n", 0) >= 2
+        ]
+        candidates.sort(key=lambda x: x[1].get("index", 0), reverse=True)
+        focus_bits = []
+        for hid, c in candidates[:2]:
+            h = hyp_by_id.get(hid, {})
+            hyp_text = _short_hyp_text(h, 20)
+            first_line = _hyp_first_line(h)
+            n = c.get("n", 0)
+            remain = max(0, 8 - n)
+            gap_txt = "まもなく判定できます" if remain == 0 else f"あと{remain}本で判定"
+            label = f"『{first_line}』" if first_line else f"『{hyp_text}』"
+            focus_bits.append(f"{label}（{hyp_text}）全体の{round(c.get('index', 0), 1)}倍・投稿{n}本・{gap_txt}")
+        if focus_bits:
+            lines.append("・注目：" + " / ".join(focus_bits))
+
+    if losers:
+        lines.append("・負け：" + "、".join(_seg_jp_name(acct, s) for s in losers))
+
+    change_parts = []
+    share_detail = apply_detail.get("share")
+    if share_detail:
+        old_s, new_s = share_detail["old_share"], share_detail["new_share"]
+        diffs = []
+        for code, new_v in new_s.items():
+            old_v = old_s.get(code, 0)
+            if new_v == old_v:
+                continue
+            name = SEG_JP.get(acct, {}).get(code, code)
+            diffs.append(f"{name}を{'増やしました' if new_v > old_v else '減らしました'}")
+        if diffs:
+            change_parts.append("、".join(diffs))
+    hyp_changes = apply_detail.get("hypotheses") or []
+    if hyp_changes:
+        hyp_by_id = _hyp_lookup(acct)
+        st_jp = {"winner": "採用", "loser": "停止", "testing": "検証継続", "untested": "未検証"}
+        readable = []
+        for u in hyp_changes:
+            if ":" not in u or "->" not in u:
+                continue
+            hid, trans = u.split(":", 1)
+            _, new_st = trans.split("->", 1)
+            if new_st not in ("winner", "loser"):
+                continue  # testingへの遷移は日次ノイズになるため配分の変更欄には出さない
+            h = hyp_by_id.get(hid, {})
+            hyp_text = _short_hyp_text(h, 16)
+            readable.append(f"『{hyp_text}』を{st_jp.get(new_st, new_st)}に")
+        if readable:
+            change_parts.append("、".join(readable))
+    lines.append("・配分の変更：" + (" / ".join(change_parts) if change_parts else "なし"))
+
+    top = _reliable_baseline_top(acct, baseline)
+    if top is None:
+        lines.append("・過去データがまだ少なく比較なし")
+    else:
+        top_code, top_name = top
+        winner_codes = {_short_code(acct, s) for s in winners}
+        if not winners:
+            lines.append(f"・過去は{top_name}が強かった→まだ判定できる層はなく様子見")
+        elif top_code in winner_codes:
+            lines.append(f"・過去は{top_name}が強かった→今のところ同じ傾向")
+        else:
+            lines.append(f"・過去は{top_name}が強かった→今のところ別の層に逆転の兆し")
+
+    return lines
+
+
+def _acct_section_weekly(acct: str, report: dict) -> list[str]:
+    lines = [f"■ {ACCT_JP.get(acct, acct)}"]
+    seg_only = report.get("windows", {}).get("7d", {}).get("segment", {})
+    ranked = sorted(
+        ((s, c) for s, c in seg_only.items() if c.get("n", 0) >= 1),
+        key=lambda x: x[1].get("index", 0), reverse=True,
+    )[:3]
+    if ranked:
+        rank_bits = [
+            f"{i}位 {_seg_jp_name(acct, s)}（全体の{round(c.get('index', 0), 1)}倍・投稿{c.get('n', 0)}本）"
+            for i, (s, c) in enumerate(ranked, 1)
+        ]
+        lines.append("・今週の層別ランキング：" + " / ".join(rank_bits))
+    else:
+        lines.append("・今週の層別ランキング：対象データなし")
+
+    summary = report.get("segment_summary", {})
+    winners = [s for s, c in summary.items() if c.get("verdict") == "winner"]
+    losers = [s for s, c in summary.items() if c.get("verdict") == "loser"]
+    w_names = "、".join(_seg_jp_name(acct, s) for s in winners) if winners else "なし"
+    l_names = "、".join(_seg_jp_name(acct, s) for s in losers) if losers else "なし"
+    lines.append(f"・勝ち累計：{w_names} / 負け累計：{l_names}")
+    return lines
+
+
+def _next_watch_line(results: dict) -> str:
+    candidates = []
+    for acct, (report, _apply_detail, _baseline) in results.items():
+        hyp_summary = report.get("hypothesis_summary", {})
+        for hid, c in hyp_summary.items():
+            verdict = c.get("verdict")
+            if verdict not in ("testing", "判定保留"):
+                continue
+            n = c.get("n", 0)
+            target = 5 if verdict == "判定保留" else 8
+            remain = max(0, target - n)
+            candidates.append((remain, acct, hid, n))
+    if not candidates:
+        return "とくに変化なし。このまま様子を見ます。"
+    candidates.sort(key=lambda x: x[0])
+    remain, acct, hid, n = candidates[0]
+    h = _hyp_lookup(acct).get(hid, {})
+    hyp_text = _short_hyp_text(h, 16)
+    acct_jp = ACCT_JP.get(acct, acct)
+    if remain <= 0:
+        return f"{acct_jp}の『{hyp_text}』はまもなく判定できます。"
+    return f"{acct_jp}の『{hyp_text}』はまだ{n}本。あと{remain}本で判定できます。"
+
+
+def _build_secretary_body(results: dict, is_sunday: bool, include_focus: bool = True) -> str:
+    today_str = f"{date.today().month}/{date.today().day}"
+    header = f"📊 セグメントテスト {'週次まとめ' if is_sunday else '日次報告'}（{today_str}）"
+    parts = [header]
+    for acct in ACCTS:
+        report, apply_detail, baseline = results[acct]
+        if is_sunday:
+            parts.extend(_acct_section_weekly(acct, report))
+        else:
+            parts.extend(_acct_section(acct, report, apply_detail, baseline, include_focus=include_focus))
+        parts.append("")
+    parts.append(f"▶ 次に見ること：{_next_watch_line(results)}")
+    parts.append("")
+    parts.append("質問や『この層を増やして』などの指示はこの返信で受け付けます。")
+    return "\n".join(parts).strip()
+
+
+def build_secretary_digest(results: dict, is_sunday: bool) -> str:
+    body = _build_secretary_body(results, is_sunday, include_focus=True)
+    if len(body) > 1500 and not is_sunday:
+        body = _build_secretary_body(results, is_sunday, include_focus=False)
+    if len(body) > 1900:
+        body = body[:1880].rstrip() + "\n…（続きは省略）"
+    return body
+
+
+def _send_secretary(text: str):
+    """秘書Bot経由での送信を試み、失敗したらnotify.sh --to secretaryへフォールバックする。
+    戻り値: (成功したか, 経路/理由の説明文字列)。両方失敗しても例外を投げない
+    （呼び出し元がexit 0を維持できるようにするため）。"""
+    reply_script = Path.home() / ".claude" / "scripts" / "secretary_discord_reply.py"
+    reason_bot = None
+    try:
+        r = subprocess.run(
+            ["python3", str(reply_script), text],
+            capture_output=True, text=True, timeout=30,
+        )
+        if r.returncode == 0:
+            return True, "秘書Bot(secretary_discord_reply.py)で送信"
+        reason_bot = f"secretary_discord_reply.py rc={r.returncode} stderr={r.stderr.strip()[:200]}"
+    except Exception as e:
+        reason_bot = f"secretary_discord_reply.py 例外: {e}"
+
+    notify_sh = Path.home() / ".claude" / "scripts" / "notify.sh"
+    try:
+        r2 = subprocess.run(
+            ["bash", str(notify_sh), "--to", "secretary", text],
+            capture_output=True, text=True, timeout=30,
+        )
+        # notify.shは記録を失わないため常にexit 0を返す仕様。成功可否は標準出力の"OK:"で判定する。
+        if r2.returncode == 0 and "OK:" in r2.stdout:
+            return True, f"notify.sh --to secretaryへフォールバックして送信（秘書Bot失敗理由: {reason_bot}）"
+        reason_notify = f"notify.sh rc={r2.returncode} stdout={r2.stdout.strip()[:200]}"
+        return False, f"両方失敗（ファイル記録のみ）: 秘書Bot={reason_bot} / notify.sh={reason_notify}"
+    except Exception as e2:
+        return False, f"両方失敗（ファイル記録なしの可能性）: 秘書Bot={reason_bot} / notify.sh例外={e2}"
+
 
 def main():
     argv = sys.argv[1:]
@@ -636,10 +931,26 @@ def main():
             acct = argv[idx + 1]
     do_apply = "--apply" in argv
     do_json = "--json" in argv
+    do_notify = "--notify-secretary" in argv
+
+    if do_notify and acct != "all":
+        print("[notify-secretary] --acct all との併用が前提のため、今回はスキップします", file=sys.stderr)
+        do_notify = False
 
     if acct == "all":
+        results = {}
         for a in ACCTS:
-            run_for_acct(a, do_apply, do_json)
+            report, apply_detail = run_for_acct(a, do_apply, do_json)
+            if do_notify:
+                results[a] = (report, apply_detail, _load_baseline(a))
+        if do_notify:
+            is_sunday = date.today().isoweekday() == 7
+            body = build_secretary_digest(results, is_sunday)
+            ok, info = _send_secretary(body)
+            print(f"[notify-secretary] {'送信成功' if ok else '送信失敗（ファイル記録のみ）'}: {info}")
+            print("----- 送信本文 -----")
+            print(body)
+            print("--------------------")
     elif acct in ACCTS:
         run_for_acct(acct, do_apply, do_json)
     else:

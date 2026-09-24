@@ -1473,7 +1473,7 @@
         "P004",
         "P006"
       ],
-      "status": "untested",
+      "status": "testing",
       "posts": [
         {
           "hook": "low",
@@ -1485,9 +1485,9 @@
         }
       ],
       "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
+        "n": 1,
+        "index": 0.0,
+        "updated": "2026-09-24"
       }
     },
     {
@@ -1528,7 +1528,7 @@
         "P052",
         "P053"
       ],
-      "status": "untested",
+      "status": "testing",
       "posts": [
         {
           "hook": "low",
@@ -1540,9 +1540,9 @@
         }
       ],
       "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
+        "n": 1,
+        "index": 0.0,
+        "updated": "2026-09-24"
       }
     },
     {
@@ -1633,7 +1633,7 @@
         "P017",
         "P018"
       ],
-      "status": "untested",
+      "status": "testing",
       "posts": [
         {
           "hook": "low",
@@ -1645,9 +1645,9 @@
         }
       ],
       "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
+        "n": 1,
+        "index": 0.0,
+        "updated": "2026-09-24"
       }
     },
     {
@@ -1765,7 +1765,7 @@
         "P032",
         "P033"
       ],
-      "status": "untested",
+      "status": "testing",
       "posts": [
         {
           "hook": "low",
@@ -1777,9 +1777,9 @@
         }
       ],
       "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
+        "n": 1,
+        "index": 0.0,
+        "updated": "2026-09-24"
       }
     },
     {
@@ -1868,7 +1868,7 @@
         "P041",
         "P042"
       ],
-      "status": "untested",
+      "status": "testing",
       "posts": [
         {
           "hook": "low",
@@ -1880,9 +1880,9 @@
         }
       ],
       "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
+        "n": 1,
+        "index": 0.013,
+        "updated": "2026-09-24"
       }
     },
     {

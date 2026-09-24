@@ -28,5 +28,130 @@
     "hook": "low",
     "variant": 0,
     "created": "2026-09-23"
+  },
+  "マッサージ通いに疲れた人へ。": {
+    "segment": "T6",
+    "hook": "high",
+    "created": "2026-09-24",
+    "acct": "truth",
+    "variant": null,
+    "hypothesis_id": "Z19_truth"
+  },
+  "寝ても疲労感が抜けない人へ。": {
+    "segment": "T5",
+    "hook": "high",
+    "created": "2026-09-24",
+    "acct": "truth",
+    "variant": null,
+    "hypothesis_id": "Z17_truth"
+  },
+  "看護や介護の仕事で脚がだるい人へ。": {
+    "segment": "T4",
+    "hook": "high",
+    "created": "2026-09-24",
+    "acct": "truth",
+    "variant": null,
+    "hypothesis_id": "Z13_truth"
+  },
+  "産後の腰痛が続くママへ。": {
+    "segment": "T3",
+    "hook": "high",
+    "created": "2026-09-24",
+    "acct": "truth",
+    "variant": null,
+    "hypothesis_id": "Z11_truth"
+  },
+  "何をしても一時的にしか変わらない人へ。": {
+    "segment": "T6",
+    "hook": "high",
+    "created": "2026-09-24",
+    "acct": "nagaoka",
+    "variant": null,
+    "hypothesis_id": "Z20_nagaoka"
+  },
+  "朝起きた瞬間からだるい人へ。": {
+    "segment": "T5",
+    "hook": "high",
+    "created": "2026-09-24",
+    "acct": "nagaoka",
+    "variant": null,
+    "hypothesis_id": "Z16_nagaoka"
+  },
+  "夜勤続きで腰が重い人へ。": {
+    "segment": "T4",
+    "hook": "high",
+    "created": "2026-09-24",
+    "acct": "nagaoka",
+    "variant": null,
+    "hypothesis_id": "Z14_nagaoka"
+  },
+  "産後の姿勢崩れが気になるママへ。": {
+    "segment": "T3",
+    "hook": "high",
+    "created": "2026-09-24",
+    "acct": "nagaoka",
+    "variant": null,
+    "hypothesis_id": "Z10_nagaoka"
+  },
+  "開業前に投稿ゼロで迎える人は。": {
+    "segment": "S1",
+    "hook": "high",
+    "variant": null,
+    "hypothesis_id": "H01",
+    "acct": "masa",
+    "created": "2026-09-24"
+  },
+  "開業して1年、AI投稿をやめた人は。": {
+    "segment": "S2",
+    "hook": "high",
+    "variant": null,
+    "hypothesis_id": "H03",
+    "acct": "masa",
+    "created": "2026-09-24"
+  },
+  "投稿のネタが尽きた、と感じる日があります。": {
+    "segment": "HAKASE",
+    "hook": "principle",
+    "variant": 2,
+    "acct": "masa",
+    "created": "2026-09-24"
+  },
+  "月商50万の壁で止まる店を見てきて分かったこと。": {
+    "segment": "S3",
+    "hook": "high",
+    "variant": null,
+    "hypothesis_id": "H07",
+    "acct": "masa",
+    "created": "2026-09-24"
+  },
+  "同じ投稿を出すのはダメ、と思っていませんか。": {
+    "segment": "HAKASE",
+    "hook": "principle",
+    "variant": 0,
+    "acct": "masa",
+    "created": "2026-09-24"
+  },
+  "スタッフが辞めていく院を見てきて分かったこと。": {
+    "segment": "S4",
+    "hook": "high",
+    "variant": null,
+    "hypothesis_id": "H12",
+    "acct": "masa",
+    "created": "2026-09-24"
+  },
+  "無料は好評なのに有料が売れない経営者を見てきて。": {
+    "segment": "S5",
+    "hook": "high",
+    "variant": null,
+    "hypothesis_id": "H16",
+    "acct": "masa",
+    "created": "2026-09-24"
+  },
+  "新しいやり方を、いきなり大きく始めていませんか。": {
+    "segment": "HAKASE",
+    "hook": "principle",
+    "variant": 4,
+    "acct": "masa",
+    "created": "2026-09-24"
   }
 }

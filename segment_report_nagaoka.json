@@ -1,6 +1,6 @@
 {
   "acct": "nagaoka",
-  "generated_at": "2026-09-23 19:51",
+  "generated_at": "2026-09-24 09:48",
   "params": {
     "min_n": 5,
     "loser_min_n": 8,
@@ -11,17 +11,17 @@
       30
     ]
   },
-  "registry_loaded": 0,
-  "log_entries": 4095,
+  "registry_loaded": 4,
+  "log_entries": 4105,
   "windows": {
     "14d": {
       "baseline": {
-        "n": 94,
-        "median_views": 164.5,
-        "mean_views": 204.7,
-        "p90_views": 456.1
+        "n": 83,
+        "median_views": 170,
+        "mean_views": 204.5,
+        "p90_views": 459.4
       },
-      "unregistered_n": 94,
+      "unregistered_n": 83,
       "segment_hook": {
         "T1_desk__low": {
           "n": 0,
@@ -216,16 +216,138 @@
         "index": 0.0,
         "verdict": "判定保留"
       },
-      "hypothesis": {}
+      "hypothesis": {
+        "Z02_nagaoka": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "Z04_nagaoka": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "Z06_nagaoka": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "Z08_nagaoka": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "Z10_nagaoka": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "Z12_nagaoka": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "Z14_nagaoka": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "Z16_nagaoka": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "Z18_nagaoka": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "Z20_nagaoka": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "Z22_nagaoka": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        }
+      }
     },
     "30d": {
       "baseline": {
-        "n": 94,
-        "median_views": 164.5,
-        "mean_views": 204.7,
-        "p90_views": 456.1
+        "n": 83,
+        "median_views": 170,
+        "mean_views": 204.5,
+        "p90_views": 459.4
       },
-      "unregistered_n": 94,
+      "unregistered_n": 83,
       "segment_hook": {
         "T1_desk__low": {
           "n": 0,
@@ -420,7 +542,129 @@
         "index": 0.0,
         "verdict": "判定保留"
       },
-      "hypothesis": {}
+      "hypothesis": {
+        "Z02_nagaoka": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "Z04_nagaoka": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "Z06_nagaoka": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "Z08_nagaoka": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "Z10_nagaoka": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "Z12_nagaoka": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "Z14_nagaoka": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "Z16_nagaoka": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "Z18_nagaoka": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "Z20_nagaoka": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "Z22_nagaoka": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        }
+      }
     }
   },
   "segment_summary": {
@@ -495,5 +739,373 @@
     "index": 0.0,
     "verdict": "判定保留"
   },
-  "hypothesis_summary": {}
+  "hypothesis_summary": {
+    "Z02_nagaoka": {
+      "n": 0,
+      "median_views": 0,
+      "mean_views": 0,
+      "p90_views": 0,
+      "segment": null,
+      "like_rate": 0.0,
+      "reply_rate": 0.0,
+      "index": 0.0,
+      "verdict": "判定保留"
+    },
+    "Z04_nagaoka": {
+      "n": 0,
+      "median_views": 0,
+      "mean_views": 0,
+      "p90_views": 0,
+      "segment": null,
+      "like_rate": 0.0,
+      "reply_rate": 0.0,
+      "index": 0.0,
+      "verdict": "判定保留"
+    },
+    "Z06_nagaoka": {
+      "n": 0,
+      "median_views": 0,
+      "mean_views": 0,
+      "p90_views": 0,
+      "segment": null,
+      "like_rate": 0.0,
+      "reply_rate": 0.0,
+      "index": 0.0,
+      "verdict": "判定保留"
+    },
+    "Z08_nagaoka": {
+      "n": 0,
+      "median_views": 0,
+      "mean_views": 0,
+      "p90_views": 0,
+      "segment": null,
+      "like_rate": 0.0,
+      "reply_rate": 0.0,
+      "index": 0.0,
+      "verdict": "判定保留"
+    },
+    "Z10_nagaoka": {
+      "n": 0,
+      "median_views": 0,
+      "mean_views": 0,
+      "p90_views": 0,
+      "segment": null,
+      "like_rate": 0.0,
+      "reply_rate": 0.0,
+      "index": 0.0,
+      "verdict": "判定保留"
+    },
+    "Z12_nagaoka": {
+      "n": 0,
+      "median_views": 0,
+      "mean_views": 0,
+      "p90_views": 0,
+      "segment": null,
+      "like_rate": 0.0,
+      "reply_rate": 0.0,
+      "index": 0.0,
+      "verdict": "判定保留"
+    },
+    "Z14_nagaoka": {
+      "n": 0,
+      "median_views": 0,
+      "mean_views": 0,
+      "p90_views": 0,
+      "segment": null,
+      "like_rate": 0.0,
+      "reply_rate": 0.0,
+      "index": 0.0,
+      "verdict": "判定保留"
+    },
+    "Z16_nagaoka": {
+      "n": 0,
+      "median_views": 0,
+      "mean_views": 0,
+      "p90_views": 0,
+      "segment": null,
+      "like_rate": 0.0,
+      "reply_rate": 0.0,
+      "index": 0.0,
+      "verdict": "判定保留"
+    },
+    "Z18_nagaoka": {
+      "n": 0,
+      "median_views": 0,
+      "mean_views": 0,
+      "p90_views": 0,
+      "segment": null,
+      "like_rate": 0.0,
+      "reply_rate": 0.0,
+      "index": 0.0,
+      "verdict": "判定保留"
+    },
+    "Z20_nagaoka": {
+      "n": 0,
+      "median_views": 0,
+      "mean_views": 0,
+      "p90_views": 0,
+      "segment": null,
+      "like_rate": 0.0,
+      "reply_rate": 0.0,
+      "index": 0.0,
+      "verdict": "判定保留"
+    },
+    "Z22_nagaoka": {
+      "n": 0,
+      "median_views": 0,
+      "mean_views": 0,
+      "p90_views": 0,
+      "segment": null,
+      "like_rate": 0.0,
+      "reply_rate": 0.0,
+      "index": 0.0,
+      "verdict": "判定保留"
+    }
+  },
+  "past_baseline": {
+    "baseline_median": 126,
+    "sample_total": 200,
+    "none_n": 43,
+    "segments": {
+      "T1": {
+        "name": "デスクワーク肩首",
+        "n": 66,
+        "median": 128,
+        "mean": 173.2,
+        "p90": 340.0,
+        "like_rate_pct": 0.03,
+        "index": 1.02,
+        "top": [
+          {
+            "views": 909,
+            "first_line": "実は、長時間の座りっぱなしが"
+          },
+          {
+            "views": 793,
+            "first_line": "肩こり、月に何回まで『まだ平気』と言えますか？原因は首の前傾のことが多いです。"
+          },
+          {
+            "views": 613,
+            "first_line": "肩こり・頭痛に悩む人の共通点。"
+          }
+        ],
+        "worst": [
+          {
+            "views": 0,
+            "first_line": "水分不足は血流を悪くし、"
+          },
+          {
+            "views": 1,
+            "first_line": "日常の家事を楽しみたいのに、"
+          }
+        ],
+        "win_structures": [
+          "数字(median=271v, n=6)",
+          "問いかけ(median=167v, n=24)"
+        ],
+        "playbook_refs": [
+          "L10",
+          "L8",
+          "L9",
+          "W1",
+          "W10",
+          "W2",
+          "W3",
+          "W6"
+        ]
+      },
+      "T2": {
+        "name": "頭痛薬",
+        "n": 80,
+        "median": 145,
+        "mean": 158.0,
+        "p90": 350.0,
+        "like_rate_pct": 0.08,
+        "index": 1.15,
+        "top": [
+          {
+            "views": 802,
+            "first_line": "週に何度も頭痛薬を飲んでいませんか？"
+          },
+          {
+            "views": 648,
+            "first_line": "こめかみの痛みを悪化させがちなNG習慣、3つあります。"
+          },
+          {
+            "views": 567,
+            "first_line": "頭痛には大きく3タイプあります。"
+          }
+        ],
+        "worst": [
+          {
+            "views": 3,
+            "first_line": "毎朝コーヒーだけで済ませてる人、正直ヤバいです。"
+          },
+          {
+            "views": 4,
+            "first_line": "頭痛薬の効きが前より悪くなってきた、"
+          }
+        ],
+        "win_structures": [
+          "問いかけ(median=184v, n=30)",
+          "リスト(median=178v, n=7)"
+        ],
+        "playbook_refs": [
+          "L2",
+          "L7",
+          "L8",
+          "L9",
+          "W1",
+          "W10",
+          "W2",
+          "W3",
+          "W6"
+        ]
+      },
+      "T3": {
+        "name": "産後ママ",
+        "n": 2,
+        "median": 325,
+        "mean": 325.5,
+        "p90": 577.9,
+        "like_rate_pct": 0.0,
+        "index": 2.57,
+        "top": [
+          {
+            "views": 641,
+            "first_line": "長岡市にある当院は"
+          },
+          {
+            "views": 10,
+            "first_line": "産後の骨盤矯正行った？"
+          }
+        ],
+        "worst": [
+          {
+            "views": 10,
+            "first_line": "産後の骨盤矯正行った？"
+          },
+          {
+            "views": 641,
+            "first_line": "長岡市にある当院は"
+          }
+        ],
+        "win_structures": [],
+        "playbook_refs": [
+          "W5"
+        ]
+      },
+      "T4": {
+        "name": "立ち仕事・介護看護の腰脚",
+        "n": 0,
+        "median": 0,
+        "mean": 0,
+        "p90": 0,
+        "like_rate_pct": 0,
+        "index": 0.0,
+        "top": [],
+        "worst": [],
+        "win_structures": [],
+        "playbook_refs": []
+      },
+      "T5": {
+        "name": "睡眠・疲れ",
+        "n": 7,
+        "median": 80,
+        "mean": 163.4,
+        "p90": 377.6,
+        "like_rate_pct": 0.17,
+        "index": 0.63,
+        "top": [
+          {
+            "views": 677,
+            "first_line": "睡眠が浅い人ほど、頭の重さが長引きやすい。原因は年齢でも気合いでもありません。"
+          },
+          {
+            "views": 178,
+            "first_line": "水分不足という原因、睡眠が浅い人ほど見落としがちです。"
+          },
+          {
+            "views": 178,
+            "first_line": "睡眠不足という原因、スマホを長時間見ている人ほど見落としがちです。"
+          }
+        ],
+        "worst": [
+          {
+            "views": 5,
+            "first_line": "朝起きたときから頭が重い場合、"
+          },
+          {
+            "views": 13,
+            "first_line": "8時間寝ても眠い。"
+          }
+        ],
+        "win_structures": [
+          "その他(median=178v, n=4)",
+          "リスト(median=13v, n=3)"
+        ],
+        "playbook_refs": [
+          "L9",
+          "W1",
+          "W2"
+        ]
+      },
+      "T6": {
+        "name": "マッサージ他院で戻る",
+        "n": 2,
+        "median": 6,
+        "mean": 6.5,
+        "p90": 9.3,
+        "like_rate_pct": 0.0,
+        "index": 0.05,
+        "top": [
+          {
+            "views": 10,
+            "first_line": "揉んでも翌日には戻る。"
+          },
+          {
+            "views": 3,
+            "first_line": "揉んでも翌日には戻る。"
+          }
+        ],
+        "worst": [
+          {
+            "views": 3,
+            "first_line": "揉んでも翌日には戻る。"
+          },
+          {
+            "views": 10,
+            "first_line": "揉んでも翌日には戻る。"
+          }
+        ],
+        "win_structures": [
+          "その他(median=6v, n=2)"
+        ],
+        "playbook_refs": [
+          "W1",
+          "W2"
+        ]
+      }
+    },
+    "share_suggestion": {
+      "by_index_share_pct": {
+        "T1": 36.4,
+        "T2": 41.1,
+        "T5": 22.5
+      },
+      "top_index_segment": "T3",
+      "lowest_index_segment": "T5",
+      "note": "index = セグメント中央値 / 全体中央値。n<3の層は参考値（share計算から除外）。テスト初期配分は index が高い層を厚めに、none率が高い場合は既存投稿がどの層にも当てはまらないテーマに偏っている可能性を示す。"
+    },
+    "keep_patterns": [
+      "T1(デスクワーク肩首): 数字(median=271v, n=6)",
+      "T2(頭痛薬): 問いかけ(median=184v, n=30)",
+      "T5(睡眠・疲れ): その他(median=178v, n=4)"
+    ],
+    "avoid_patterns": [
+      "その他(WORST20中13件)",
+      "問いかけ(WORST20中3件)"
+    ],
+    "generated": "2026-09-23"
+  }
 }

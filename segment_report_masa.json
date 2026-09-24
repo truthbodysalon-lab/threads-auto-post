@@ -1,6 +1,6 @@
 {
   "acct": "masa",
-  "generated_at": "2026-09-23 19:51",
+  "generated_at": "2026-09-24 09:48",
   "params": {
     "min_n": 5,
     "loser_min_n": 8,
@@ -11,17 +11,17 @@
       30
     ]
   },
-  "registry_loaded": 5,
-  "log_entries": 6249,
+  "registry_loaded": 13,
+  "log_entries": 6267,
   "windows": {
     "14d": {
       "baseline": {
         "n": 199,
-        "median_views": 69,
-        "mean_views": 75.9,
-        "p90_views": 160.2
+        "median_views": 78,
+        "mean_views": 77.6,
+        "p90_views": 158.4
       },
-      "unregistered_n": 199,
+      "unregistered_n": 192,
       "segment_hook": {
         "S1_kaigyo_mae__low": {
           "n": 0,
@@ -34,7 +34,7 @@
           "verdict": "判定保留"
         },
         "S1_kaigyo_mae__high": {
-          "n": 0,
+          "n": 1,
           "median_views": 0,
           "mean_views": 0,
           "p90_views": 0,
@@ -54,7 +54,7 @@
           "verdict": "判定保留"
         },
         "S2_shonen__high": {
-          "n": 0,
+          "n": 1,
           "median_views": 0,
           "mean_views": 0,
           "p90_views": 0,
@@ -74,7 +74,7 @@
           "verdict": "判定保留"
         },
         "S3_atamauchi__high": {
-          "n": 0,
+          "n": 1,
           "median_views": 0,
           "mean_views": 0,
           "p90_views": 0,
@@ -94,7 +94,7 @@
           "verdict": "判定保留"
         },
         "S4_staff__high": {
-          "n": 0,
+          "n": 1,
           "median_views": 0,
           "mean_views": 0,
           "p90_views": 0,
@@ -114,19 +114,19 @@
           "verdict": "判定保留"
         },
         "S5_kougaku__high": {
-          "n": 0,
-          "median_views": 0,
-          "mean_views": 0,
-          "p90_views": 0,
-          "like_rate": 0.0,
-          "reply_rate": 0.0,
-          "index": 0.0,
+          "n": 1,
+          "median_views": 1,
+          "mean_views": 1,
+          "p90_views": 1,
+          "like_rate": 1.0,
+          "reply_rate": 1.0,
+          "index": 0.013,
           "verdict": "判定保留"
         }
       },
       "segment": {
         "S1_kaigyo_mae": {
-          "n": 0,
+          "n": 1,
           "median_views": 0,
           "mean_views": 0,
           "p90_views": 0,
@@ -136,7 +136,7 @@
           "verdict": "判定保留"
         },
         "S2_shonen": {
-          "n": 0,
+          "n": 1,
           "median_views": 0,
           "mean_views": 0,
           "p90_views": 0,
@@ -146,7 +146,7 @@
           "verdict": "判定保留"
         },
         "S3_atamauchi": {
-          "n": 0,
+          "n": 1,
           "median_views": 0,
           "mean_views": 0,
           "p90_views": 0,
@@ -156,7 +156,7 @@
           "verdict": "判定保留"
         },
         "S4_staff": {
-          "n": 0,
+          "n": 1,
           "median_views": 0,
           "mean_views": 0,
           "p90_views": 0,
@@ -166,33 +166,33 @@
           "verdict": "判定保留"
         },
         "S5_kougaku": {
-          "n": 0,
-          "median_views": 0,
-          "mean_views": 0,
-          "p90_views": 0,
-          "like_rate": 0.0,
-          "reply_rate": 0.0,
-          "index": 0.0,
+          "n": 1,
+          "median_views": 1,
+          "mean_views": 1,
+          "p90_views": 1,
+          "like_rate": 1.0,
+          "reply_rate": 1.0,
+          "index": 0.013,
           "verdict": "判定保留"
         }
       },
       "hakase": {
-        "n": 0,
-        "median_views": 0,
-        "mean_views": 0,
-        "p90_views": 0,
+        "n": 2,
+        "median_views": 1.5,
+        "mean_views": 1.5,
+        "p90_views": 2.7,
         "like_rate": 0.0,
-        "reply_rate": 0.0,
-        "index": 0.0,
+        "reply_rate": 0.6667,
+        "index": 0.019,
         "verdict": "判定保留"
       },
       "hypothesis": {
         "H01": {
-          "n": 0,
+          "n": 1,
           "median_views": 0,
           "mean_views": 0,
           "p90_views": 0,
-          "segment": null,
+          "segment": "S1_kaigyo_mae",
           "like_rate": 0.0,
           "reply_rate": 0.0,
           "index": 0.0,
@@ -210,11 +210,11 @@
           "verdict": "判定保留"
         },
         "H03": {
-          "n": 0,
+          "n": 1,
           "median_views": 0,
           "mean_views": 0,
           "p90_views": 0,
-          "segment": null,
+          "segment": "S2_shonen",
           "like_rate": 0.0,
           "reply_rate": 0.0,
           "index": 0.0,
@@ -254,11 +254,11 @@
           "verdict": "判定保留"
         },
         "H07": {
-          "n": 0,
+          "n": 1,
           "median_views": 0,
           "mean_views": 0,
           "p90_views": 0,
-          "segment": null,
+          "segment": "S3_atamauchi",
           "like_rate": 0.0,
           "reply_rate": 0.0,
           "index": 0.0,
@@ -309,11 +309,11 @@
           "verdict": "判定保留"
         },
         "H12": {
-          "n": 0,
+          "n": 1,
           "median_views": 0,
           "mean_views": 0,
           "p90_views": 0,
-          "segment": null,
+          "segment": "S4_staff",
           "like_rate": 0.0,
           "reply_rate": 0.0,
           "index": 0.0,
@@ -353,14 +353,14 @@
           "verdict": "判定保留"
         },
         "H16": {
-          "n": 0,
-          "median_views": 0,
-          "mean_views": 0,
-          "p90_views": 0,
-          "segment": null,
-          "like_rate": 0.0,
-          "reply_rate": 0.0,
-          "index": 0.0,
+          "n": 1,
+          "median_views": 1,
+          "mean_views": 1,
+          "p90_views": 1,
+          "segment": "S5_kougaku",
+          "like_rate": 1.0,
+          "reply_rate": 1.0,
+          "index": 0.013,
           "verdict": "判定保留"
         },
         "H17": {
@@ -522,11 +522,11 @@
     "30d": {
       "baseline": {
         "n": 199,
-        "median_views": 69,
-        "mean_views": 75.9,
-        "p90_views": 160.2
+        "median_views": 78,
+        "mean_views": 77.6,
+        "p90_views": 158.4
       },
-      "unregistered_n": 199,
+      "unregistered_n": 192,
       "segment_hook": {
         "S1_kaigyo_mae__low": {
           "n": 0,
@@ -539,7 +539,7 @@
           "verdict": "判定保留"
         },
         "S1_kaigyo_mae__high": {
-          "n": 0,
+          "n": 1,
           "median_views": 0,
           "mean_views": 0,
           "p90_views": 0,
@@ -559,7 +559,7 @@
           "verdict": "判定保留"
         },
         "S2_shonen__high": {
-          "n": 0,
+          "n": 1,
           "median_views": 0,
           "mean_views": 0,
           "p90_views": 0,
@@ -579,7 +579,7 @@
           "verdict": "判定保留"
         },
         "S3_atamauchi__high": {
-          "n": 0,
+          "n": 1,
           "median_views": 0,
           "mean_views": 0,
           "p90_views": 0,
@@ -599,7 +599,7 @@
           "verdict": "判定保留"
         },
         "S4_staff__high": {
-          "n": 0,
+          "n": 1,
           "median_views": 0,
           "mean_views": 0,
           "p90_views": 0,
@@ -619,19 +619,19 @@
           "verdict": "判定保留"
         },
         "S5_kougaku__high": {
-          "n": 0,
-          "median_views": 0,
-          "mean_views": 0,
-          "p90_views": 0,
-          "like_rate": 0.0,
-          "reply_rate": 0.0,
-          "index": 0.0,
+          "n": 1,
+          "median_views": 1,
+          "mean_views": 1,
+          "p90_views": 1,
+          "like_rate": 1.0,
+          "reply_rate": 1.0,
+          "index": 0.013,
           "verdict": "判定保留"
         }
       },
       "segment": {
         "S1_kaigyo_mae": {
-          "n": 0,
+          "n": 1,
           "median_views": 0,
           "mean_views": 0,
           "p90_views": 0,
@@ -641,7 +641,7 @@
           "verdict": "判定保留"
         },
         "S2_shonen": {
-          "n": 0,
+          "n": 1,
           "median_views": 0,
           "mean_views": 0,
           "p90_views": 0,
@@ -651,7 +651,7 @@
           "verdict": "判定保留"
         },
         "S3_atamauchi": {
-          "n": 0,
+          "n": 1,
           "median_views": 0,
           "mean_views": 0,
           "p90_views": 0,
@@ -661,7 +661,7 @@
           "verdict": "判定保留"
         },
         "S4_staff": {
-          "n": 0,
+          "n": 1,
           "median_views": 0,
           "mean_views": 0,
           "p90_views": 0,
@@ -671,33 +671,33 @@
           "verdict": "判定保留"
         },
         "S5_kougaku": {
-          "n": 0,
-          "median_views": 0,
-          "mean_views": 0,
-          "p90_views": 0,
-          "like_rate": 0.0,
-          "reply_rate": 0.0,
-          "index": 0.0,
+          "n": 1,
+          "median_views": 1,
+          "mean_views": 1,
+          "p90_views": 1,
+          "like_rate": 1.0,
+          "reply_rate": 1.0,
+          "index": 0.013,
           "verdict": "判定保留"
         }
       },
       "hakase": {
-        "n": 0,
-        "median_views": 0,
-        "mean_views": 0,
-        "p90_views": 0,
+        "n": 2,
+        "median_views": 1.5,
+        "mean_views": 1.5,
+        "p90_views": 2.7,
         "like_rate": 0.0,
-        "reply_rate": 0.0,
-        "index": 0.0,
+        "reply_rate": 0.6667,
+        "index": 0.019,
         "verdict": "判定保留"
       },
       "hypothesis": {
         "H01": {
-          "n": 0,
+          "n": 1,
           "median_views": 0,
           "mean_views": 0,
           "p90_views": 0,
-          "segment": null,
+          "segment": "S1_kaigyo_mae",
           "like_rate": 0.0,
           "reply_rate": 0.0,
           "index": 0.0,
@@ -715,11 +715,11 @@
           "verdict": "判定保留"
         },
         "H03": {
-          "n": 0,
+          "n": 1,
           "median_views": 0,
           "mean_views": 0,
           "p90_views": 0,
-          "segment": null,
+          "segment": "S2_shonen",
           "like_rate": 0.0,
           "reply_rate": 0.0,
           "index": 0.0,
@@ -759,11 +759,11 @@
           "verdict": "判定保留"
         },
         "H07": {
-          "n": 0,
+          "n": 1,
           "median_views": 0,
           "mean_views": 0,
           "p90_views": 0,
-          "segment": null,
+          "segment": "S3_atamauchi",
           "like_rate": 0.0,
           "reply_rate": 0.0,
           "index": 0.0,
@@ -814,11 +814,11 @@
           "verdict": "判定保留"
         },
         "H12": {
-          "n": 0,
+          "n": 1,
           "median_views": 0,
           "mean_views": 0,
           "p90_views": 0,
-          "segment": null,
+          "segment": "S4_staff",
           "like_rate": 0.0,
           "reply_rate": 0.0,
           "index": 0.0,
@@ -858,14 +858,14 @@
           "verdict": "判定保留"
         },
         "H16": {
-          "n": 0,
-          "median_views": 0,
-          "mean_views": 0,
-          "p90_views": 0,
-          "segment": null,
-          "like_rate": 0.0,
-          "reply_rate": 0.0,
-          "index": 0.0,
+          "n": 1,
+          "median_views": 1,
+          "mean_views": 1,
+          "p90_views": 1,
+          "segment": "S5_kougaku",
+          "like_rate": 1.0,
+          "reply_rate": 1.0,
+          "index": 0.013,
           "verdict": "判定保留"
         },
         "H17": {
@@ -1027,7 +1027,7 @@
   },
   "segment_summary": {
     "S1_kaigyo_mae": {
-      "n": 0,
+      "n": 1,
       "median_views": 0,
       "mean_views": 0,
       "p90_views": 0,
@@ -1037,7 +1037,7 @@
       "verdict": "判定保留"
     },
     "S2_shonen": {
-      "n": 0,
+      "n": 1,
       "median_views": 0,
       "mean_views": 0,
       "p90_views": 0,
@@ -1047,7 +1047,7 @@
       "verdict": "判定保留"
     },
     "S3_atamauchi": {
-      "n": 0,
+      "n": 1,
       "median_views": 0,
       "mean_views": 0,
       "p90_views": 0,
@@ -1057,7 +1057,7 @@
       "verdict": "判定保留"
     },
     "S4_staff": {
-      "n": 0,
+      "n": 1,
       "median_views": 0,
       "mean_views": 0,
       "p90_views": 0,
@@ -1067,33 +1067,33 @@
       "verdict": "判定保留"
     },
     "S5_kougaku": {
-      "n": 0,
-      "median_views": 0,
-      "mean_views": 0,
-      "p90_views": 0,
-      "like_rate": 0.0,
-      "reply_rate": 0.0,
-      "index": 0.0,
+      "n": 1,
+      "median_views": 1,
+      "mean_views": 1,
+      "p90_views": 1,
+      "like_rate": 1.0,
+      "reply_rate": 1.0,
+      "index": 0.013,
       "verdict": "判定保留"
     }
   },
   "hakase_summary": {
-    "n": 0,
-    "median_views": 0,
-    "mean_views": 0,
-    "p90_views": 0,
+    "n": 2,
+    "median_views": 1.5,
+    "mean_views": 1.5,
+    "p90_views": 2.7,
     "like_rate": 0.0,
-    "reply_rate": 0.0,
-    "index": 0.0,
+    "reply_rate": 0.6667,
+    "index": 0.019,
     "verdict": "判定保留"
   },
   "hypothesis_summary": {
     "H01": {
-      "n": 0,
+      "n": 1,
       "median_views": 0,
       "mean_views": 0,
       "p90_views": 0,
-      "segment": null,
+      "segment": "S1_kaigyo_mae",
       "like_rate": 0.0,
       "reply_rate": 0.0,
       "index": 0.0,
@@ -1111,11 +1111,11 @@
       "verdict": "判定保留"
     },
     "H03": {
-      "n": 0,
+      "n": 1,
       "median_views": 0,
       "mean_views": 0,
       "p90_views": 0,
-      "segment": null,
+      "segment": "S2_shonen",
       "like_rate": 0.0,
       "reply_rate": 0.0,
       "index": 0.0,
@@ -1155,11 +1155,11 @@
       "verdict": "判定保留"
     },
     "H07": {
-      "n": 0,
+      "n": 1,
       "median_views": 0,
       "mean_views": 0,
       "p90_views": 0,
-      "segment": null,
+      "segment": "S3_atamauchi",
       "like_rate": 0.0,
       "reply_rate": 0.0,
       "index": 0.0,
@@ -1210,11 +1210,11 @@
       "verdict": "判定保留"
     },
     "H12": {
-      "n": 0,
+      "n": 1,
       "median_views": 0,
       "mean_views": 0,
       "p90_views": 0,
-      "segment": null,
+      "segment": "S4_staff",
       "like_rate": 0.0,
       "reply_rate": 0.0,
       "index": 0.0,
@@ -1254,14 +1254,14 @@
       "verdict": "判定保留"
     },
     "H16": {
-      "n": 0,
-      "median_views": 0,
-      "mean_views": 0,
-      "p90_views": 0,
-      "segment": null,
-      "like_rate": 0.0,
-      "reply_rate": 0.0,
-      "index": 0.0,
+      "n": 1,
+      "median_views": 1,
+      "mean_views": 1,
+      "p90_views": 1,
+      "segment": "S5_kougaku",
+      "like_rate": 1.0,
+      "reply_rate": 1.0,
+      "index": 0.013,
       "verdict": "判定保留"
     },
     "H17": {
@@ -1418,5 +1418,101 @@
       "index": 0.0,
       "verdict": "判定保留"
     }
+  },
+  "past_baseline": {
+    "baseline_median": 69,
+    "sample_total": 200,
+    "none_n": 199,
+    "segments": {
+      "S1": {
+        "name": "開業前",
+        "n": 0,
+        "median": 0,
+        "mean": 0,
+        "p90": 0,
+        "like_rate_pct": 0,
+        "index": 0.0,
+        "top": [],
+        "worst": [],
+        "win_structures": [],
+        "playbook_refs": []
+      },
+      "S2": {
+        "name": "開業〜1年・集客ゼロ",
+        "n": 0,
+        "median": 0,
+        "mean": 0,
+        "p90": 0,
+        "like_rate_pct": 0,
+        "index": 0.0,
+        "top": [],
+        "worst": [],
+        "win_structures": [],
+        "playbook_refs": []
+      },
+      "S3": {
+        "name": "月商50万頭打ち",
+        "n": 0,
+        "median": 0,
+        "mean": 0,
+        "p90": 0,
+        "like_rate_pct": 0,
+        "index": 0.0,
+        "top": [],
+        "worst": [],
+        "win_structures": [],
+        "playbook_refs": []
+      },
+      "S4": {
+        "name": "スタッフあり院長",
+        "n": 0,
+        "median": 0,
+        "mean": 0,
+        "p90": 0,
+        "like_rate_pct": 0,
+        "index": 0.0,
+        "top": [],
+        "worst": [],
+        "win_structures": [],
+        "playbook_refs": [
+          "W21"
+        ]
+      },
+      "S5": {
+        "name": "高額商品持ち",
+        "n": 1,
+        "median": 156,
+        "mean": 156.0,
+        "p90": 156,
+        "like_rate_pct": 0.0,
+        "index": 2.24,
+        "top": [
+          {
+            "views": 156,
+            "first_line": "問い合わせの返信スピードを24時間→1時間に縮めると、成約率はこう動きます。20%→45%。"
+          }
+        ],
+        "worst": [
+          {
+            "views": 156,
+            "first_line": "問い合わせの返信スピードを24時間→1時間に縮めると、成約率はこう動きます。20%→45%。"
+          }
+        ],
+        "win_structures": [],
+        "playbook_refs": []
+      }
+    },
+    "share_suggestion": {
+      "by_index_share_pct": {},
+      "top_index_segment": "S5",
+      "lowest_index_segment": null,
+      "note": "index = セグメント中央値 / 全体中央値。n<3の層は参考値（share計算から除外）。テスト初期配分は index が高い層を厚めに、none率が高い場合は既存投稿がどの層にも当てはまらないテーマに偏っている可能性を示す。"
+    },
+    "keep_patterns": [],
+    "avoid_patterns": [
+      "その他(WORST20中13件)",
+      "名指し(WORST20中4件)"
+    ],
+    "generated": "2026-09-23"
   }
 }

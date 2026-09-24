@@ -1,6 +1,6 @@
 {
   "acct": "truth",
-  "generated_at": "2026-09-23 19:51",
+  "generated_at": "2026-09-24 09:48",
   "params": {
     "min_n": 5,
     "loser_min_n": 8,
@@ -11,15 +11,15 @@
       30
     ]
   },
-  "registry_loaded": 0,
-  "log_entries": 6284,
+  "registry_loaded": 4,
+  "log_entries": 6312,
   "windows": {
     "14d": {
       "baseline": {
         "n": 199,
-        "median_views": 76,
-        "mean_views": 106.4,
-        "p90_views": 211.8
+        "median_views": 95,
+        "mean_views": 119.1,
+        "p90_views": 232.4
       },
       "unregistered_n": 199,
       "segment_hook": {
@@ -216,14 +216,136 @@
         "index": 0.0,
         "verdict": "判定保留"
       },
-      "hypothesis": {}
+      "hypothesis": {
+        "Z01_truth": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "Z03_truth": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "Z05_truth": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "Z07_truth": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "Z09_truth": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "Z11_truth": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "Z13_truth": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "Z15_truth": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "Z17_truth": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "Z19_truth": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "Z21_truth": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        }
+      }
     },
     "30d": {
       "baseline": {
         "n": 199,
-        "median_views": 76,
-        "mean_views": 106.4,
-        "p90_views": 211.8
+        "median_views": 95,
+        "mean_views": 119.1,
+        "p90_views": 232.4
       },
       "unregistered_n": 199,
       "segment_hook": {
@@ -420,7 +542,129 @@
         "index": 0.0,
         "verdict": "判定保留"
       },
-      "hypothesis": {}
+      "hypothesis": {
+        "Z01_truth": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "Z03_truth": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "Z05_truth": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "Z07_truth": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "Z09_truth": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "Z11_truth": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "Z13_truth": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "Z15_truth": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "Z17_truth": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "Z19_truth": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "Z21_truth": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        }
+      }
     }
   },
   "segment_summary": {
@@ -495,5 +739,360 @@
     "index": 0.0,
     "verdict": "判定保留"
   },
-  "hypothesis_summary": {}
+  "hypothesis_summary": {
+    "Z01_truth": {
+      "n": 0,
+      "median_views": 0,
+      "mean_views": 0,
+      "p90_views": 0,
+      "segment": null,
+      "like_rate": 0.0,
+      "reply_rate": 0.0,
+      "index": 0.0,
+      "verdict": "判定保留"
+    },
+    "Z03_truth": {
+      "n": 0,
+      "median_views": 0,
+      "mean_views": 0,
+      "p90_views": 0,
+      "segment": null,
+      "like_rate": 0.0,
+      "reply_rate": 0.0,
+      "index": 0.0,
+      "verdict": "判定保留"
+    },
+    "Z05_truth": {
+      "n": 0,
+      "median_views": 0,
+      "mean_views": 0,
+      "p90_views": 0,
+      "segment": null,
+      "like_rate": 0.0,
+      "reply_rate": 0.0,
+      "index": 0.0,
+      "verdict": "判定保留"
+    },
+    "Z07_truth": {
+      "n": 0,
+      "median_views": 0,
+      "mean_views": 0,
+      "p90_views": 0,
+      "segment": null,
+      "like_rate": 0.0,
+      "reply_rate": 0.0,
+      "index": 0.0,
+      "verdict": "判定保留"
+    },
+    "Z09_truth": {
+      "n": 0,
+      "median_views": 0,
+      "mean_views": 0,
+      "p90_views": 0,
+      "segment": null,
+      "like_rate": 0.0,
+      "reply_rate": 0.0,
+      "index": 0.0,
+      "verdict": "判定保留"
+    },
+    "Z11_truth": {
+      "n": 0,
+      "median_views": 0,
+      "mean_views": 0,
+      "p90_views": 0,
+      "segment": null,
+      "like_rate": 0.0,
+      "reply_rate": 0.0,
+      "index": 0.0,
+      "verdict": "判定保留"
+    },
+    "Z13_truth": {
+      "n": 0,
+      "median_views": 0,
+      "mean_views": 0,
+      "p90_views": 0,
+      "segment": null,
+      "like_rate": 0.0,
+      "reply_rate": 0.0,
+      "index": 0.0,
+      "verdict": "判定保留"
+    },
+    "Z15_truth": {
+      "n": 0,
+      "median_views": 0,
+      "mean_views": 0,
+      "p90_views": 0,
+      "segment": null,
+      "like_rate": 0.0,
+      "reply_rate": 0.0,
+      "index": 0.0,
+      "verdict": "判定保留"
+    },
+    "Z17_truth": {
+      "n": 0,
+      "median_views": 0,
+      "mean_views": 0,
+      "p90_views": 0,
+      "segment": null,
+      "like_rate": 0.0,
+      "reply_rate": 0.0,
+      "index": 0.0,
+      "verdict": "判定保留"
+    },
+    "Z19_truth": {
+      "n": 0,
+      "median_views": 0,
+      "mean_views": 0,
+      "p90_views": 0,
+      "segment": null,
+      "like_rate": 0.0,
+      "reply_rate": 0.0,
+      "index": 0.0,
+      "verdict": "判定保留"
+    },
+    "Z21_truth": {
+      "n": 0,
+      "median_views": 0,
+      "mean_views": 0,
+      "p90_views": 0,
+      "segment": null,
+      "like_rate": 0.0,
+      "reply_rate": 0.0,
+      "index": 0.0,
+      "verdict": "判定保留"
+    }
+  },
+  "past_baseline": {
+    "baseline_median": 75,
+    "sample_total": 200,
+    "none_n": 38,
+    "segments": {
+      "T1": {
+        "name": "デスクワーク肩首",
+        "n": 84,
+        "median": 94,
+        "mean": 113.7,
+        "p90": 213.8,
+        "like_rate_pct": 0.06,
+        "index": 1.25,
+        "top": [
+          {
+            "views": 1309,
+            "first_line": "猫背で座っている日と水分が足りていない日、こめかみの痛みの重さは同じですか？原因はそこにあります。"
+          },
+          {
+            "views": 385,
+            "first_line": "食いしばりという原因を放っておくだけで、肩甲骨まわりのこりはどんどん重くなる。見直してみて。"
+          },
+          {
+            "views": 298,
+            "first_line": "首の前傾が続くと筋肉が常に緊張状態になり、首こりに直結します。"
+          }
+        ],
+        "worst": [
+          {
+            "views": 7,
+            "first_line": "こめかみの痛みのたびにデスクワークのせいにするのをやめたい人へ。"
+          },
+          {
+            "views": 8,
+            "first_line": "【放置NGな頭痛のサイン】・運動習慣がない・水分が足りていないこのどちらかがあれば、原因はデスクワークかもしれません。"
+          }
+        ],
+        "win_structures": [
+          "問いかけ(median=119v, n=22)",
+          "数字(median=107v, n=12)"
+        ],
+        "playbook_refs": [
+          "L10",
+          "L11",
+          "L12",
+          "L13",
+          "W1",
+          "W13",
+          "W2",
+          "W3",
+          "W6",
+          "W7"
+        ]
+      },
+      "T2": {
+        "name": "頭痛薬",
+        "n": 71,
+        "median": 63,
+        "mean": 106.4,
+        "p90": 232.0,
+        "like_rate_pct": 0.03,
+        "index": 0.83,
+        "top": [
+          {
+            "views": 722,
+            "first_line": "月10回以上頭痛薬を飲む人は、一度確かめてみてください。"
+          },
+          {
+            "views": 434,
+            "first_line": "お風呂で頭痛を防ぐコツは「湯船で肩まで浸かって深呼吸5回」。"
+          },
+          {
+            "views": 388,
+            "first_line": "頭痛持ちの人がやりがちなNG、「痛む前から鎮痛薬を予防的に飲む」。"
+          }
+        ],
+        "worst": [
+          {
+            "views": 0,
+            "first_line": "「気圧が変わると頭痛が出る」"
+          },
+          {
+            "views": 0,
+            "first_line": "緊張型頭痛は「仕方ない」じゃない。"
+          }
+        ],
+        "win_structures": [
+          "数字(median=132v, n=22)",
+          "その他(median=66v, n=29)"
+        ],
+        "playbook_refs": [
+          "L7",
+          "L8",
+          "L9",
+          "W1",
+          "W11",
+          "W13",
+          "W2",
+          "W3",
+          "W4",
+          "W6",
+          "W7"
+        ]
+      },
+      "T3": {
+        "name": "産後ママ",
+        "n": 0,
+        "median": 0,
+        "mean": 0,
+        "p90": 0,
+        "like_rate_pct": 0,
+        "index": 0.0,
+        "top": [],
+        "worst": [],
+        "win_structures": [],
+        "playbook_refs": [
+          "W4",
+          "W5"
+        ]
+      },
+      "T4": {
+        "name": "立ち仕事・介護看護の腰脚",
+        "n": 0,
+        "median": 0,
+        "mean": 0,
+        "p90": 0,
+        "like_rate_pct": 0,
+        "index": 0.0,
+        "top": [],
+        "worst": [],
+        "win_structures": [],
+        "playbook_refs": []
+      },
+      "T5": {
+        "name": "睡眠・疲れ",
+        "n": 3,
+        "median": 102,
+        "mean": 175.0,
+        "p90": 346.0,
+        "like_rate_pct": 0.0,
+        "index": 1.35,
+        "top": [
+          {
+            "views": 407,
+            "first_line": "睡眠不足という原因を整えた人に起きる変化、3つ。"
+          },
+          {
+            "views": 102,
+            "first_line": "睡眠不足を1ヶ月放置しただけで、頭の重さの重さは2倍近くになります。"
+          },
+          {
+            "views": 16,
+            "first_line": "水分が足りていないまま仕事への集中力を諦めていませんか？原因は睡眠不足にあることが多いです。"
+          }
+        ],
+        "worst": [
+          {
+            "views": 16,
+            "first_line": "水分が足りていないまま仕事への集中力を諦めていませんか？原因は睡眠不足にあることが多いです。"
+          },
+          {
+            "views": 102,
+            "first_line": "睡眠不足を1ヶ月放置しただけで、頭の重さの重さは2倍近くになります。"
+          }
+        ],
+        "win_structures": [],
+        "playbook_refs": [
+          "W1",
+          "W6"
+        ]
+      },
+      "T6": {
+        "name": "マッサージ他院で戻る",
+        "n": 4,
+        "median": 23,
+        "mean": 33.5,
+        "p90": 61.8,
+        "like_rate_pct": 0.0,
+        "index": 0.31,
+        "top": [
+          {
+            "views": 75,
+            "first_line": "頭の重さは揉んでも治らない。"
+          },
+          {
+            "views": 31,
+            "first_line": "正直に言います。"
+          },
+          {
+            "views": 16,
+            "first_line": "整体に通っても変わらない人には"
+          }
+        ],
+        "worst": [
+          {
+            "views": 12,
+            "first_line": "揉んでもらった直後だけ楽になるのは、首の前傾という原因が残っているサインです。"
+          },
+          {
+            "views": 16,
+            "first_line": "整体に通っても変わらない人には"
+          }
+        ],
+        "win_structures": [
+          "その他(median=43v, n=2)"
+        ],
+        "playbook_refs": [
+          "L2"
+        ]
+      }
+    },
+    "share_suggestion": {
+      "by_index_share_pct": {
+        "T1": 33.4,
+        "T2": 22.2,
+        "T5": 36.1,
+        "T6": 8.3
+      },
+      "top_index_segment": "T5",
+      "lowest_index_segment": "T6",
+      "note": "index = セグメント中央値 / 全体中央値。n<3の層は参考値（share計算から除外）。テスト初期配分は index が高い層を厚めに、none率が高い場合は既存投稿がどの層にも当てはまらないテーマに偏っている可能性を示す。"
+    },
+    "keep_patterns": [
+      "T1(デスクワーク肩首): 問いかけ(median=119v, n=22)",
+      "T2(頭痛薬): 数字(median=132v, n=22)",
+      "T6(マッサージ他院で戻る): その他(median=43v, n=2)"
+    ],
+    "avoid_patterns": [
+      "その他(WORST20中8件)",
+      "否定型(WORST20中6件)"
+    ],
+    "generated": "2026-09-23"
+  }
 }

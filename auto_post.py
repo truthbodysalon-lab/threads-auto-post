@@ -906,6 +906,17 @@ def extract_url_and_cta(text: str):
     if url_idx > 0 and lines[url_idx - 1].strip():
         cta_start = url_idx - 1
 
+    # 2026-09-24: cta_startがテキスト先頭行(0)まで遡ると本文が全消滅するバグへの対処。
+    # 「診断できます。\nLINEの無料・集客の健康診断はこちら👉 https://...」のように、
+    # URL直前の行がCTAラベルではなく本文そのもの（文末が「。」等で終わる通常の文）で、
+    # かつそれが全文の1行目である場合、そこまで吸収するとclean_textが空になり
+    # post_to_threadsでAPI拒否→再選択の無限ループを招く実障害があった
+    # （2026-09-21 masa 44/50、2026-09-23 masa 18/50で確認）。
+    # この場合は前の行を本文側に残し、CTAブロックはURL自身の行（同一行内の
+    # 誘導文言＋URL）のみとする。
+    if cta_start == 0 and url_idx > 0:
+        cta_start = url_idx
+
     # 本文末尾の空行を除去
     body_end = cta_start
     while body_end > 0 and not lines[body_end - 1].strip():

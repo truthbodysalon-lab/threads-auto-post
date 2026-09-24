@@ -22,7 +22,14 @@ segment_report.py — セグメント×フック分析（masa=売上ステージ
                                                   # 送信する（--acct all専用。2026-09-24 本人指示:
                                                   # 「セグメントと仮説の分析は秘書経由で報告」）。
                                                   # 送信失敗時はnotify.sh --to secretaryへフォール
-                                                  # バックし、両方失敗してもexit 0（理由を標準出力へ）
+                                                  # バックし、両方失敗してもexit 0（理由を標準出力へ）。
+                                                  # --apply または --notify-secretary のどちらかが
+                                                  # あればObsidian「セグメントテスト日誌」フォルダに
+                                                  # 上書きされない記録を追記する（日誌・索引・仮説履歴）
+  python3 segment_report.py --acct all --apply --notify-secretary --no-send
+                                                  # 検証用: 本文生成・Obsidian追記は行うがDiscord送信
+                                                  # だけスキップする（同日2回目の検証実行で二重送信
+                                                  # しないため。2026-09-24追加）
 
 入力（全てローカルJSON/JSONL。HTTP通信なし）:
   - log_<acct>_posted.jsonl : {"date","index","post_id","text"} 1行1件
@@ -922,6 +929,219 @@ def _send_secretary(text: str):
         return False, f"両方失敗（ファイル記録なしの可能性）: 秘書Bot={reason_bot} / notify.sh例外={e2}"
 
 
+# ============================================================
+# Obsidian蓄積記録（2026-09-24追加。本人指示「obsidianに記録を残るようにもしておいて」）
+# なぜ: セグメント分析_<acct>.md は毎回上書きで過去が残らない。秘書ブリーフィングも
+#       Discord側の履歴にしか残らないため、Obsidian側に「上書きされない」記録を追加する。
+#       --apply または --notify-secretary（--acct all限定）実行時のみ書く。
+# ============================================================
+
+OBSIDIAN_SEG_DIR = Path(
+    "/Users/mt112/Desktop/my files/myfiles/SNS・Threads/分析レポート/セグメントテスト日誌"
+)
+
+
+def _obsidian_seg_dir_safe():
+    """フォルダ作成に失敗しても（Desktop配下のTCC制限等）タスク全体は落とさずNoneを返す。
+    write_markdown()の既存の try/except 方針に合わせる。"""
+    try:
+        OBSIDIAN_SEG_DIR.mkdir(parents=True, exist_ok=True)
+        return OBSIDIAN_SEG_DIR
+    except Exception as e:
+        print(f"[warn] Obsidian日誌フォルダ作成失敗: {e}", file=sys.stderr)
+        return None
+
+
+def _apply_change_lines(acct: str, apply_detail: dict) -> list[str]:
+    """(c) 配分・仮説statusの変更内容。日誌は人が見返す生データ記録のため、
+    ブリーフィング本文と違い記号(短縮コード)をそのまま使ってよい。"""
+    lines = []
+    share_detail = apply_detail.get("share")
+    if share_detail:
+        diffs = [
+            f"{code}:{share_detail['old_share'].get(code, 0)}→{new_v}"
+            for code, new_v in share_detail["new_share"].items()
+            if new_v != share_detail["old_share"].get(code, 0)
+        ]
+        if diffs:
+            lines.append(
+                f"share変更 {', '.join(diffs)}（winner={share_detail['winners'] or 'なし'} "
+                f"loser={share_detail['losers'] or 'なし'}）"
+            )
+    for u in apply_detail.get("hypotheses") or []:
+        lines.append(f"仮説status変更 {u}")
+    return lines or ["変更なし"]
+
+
+def _segment_hook_table_md(acct: str, report: dict) -> str:
+    SEGMENTS = _segments(acct)
+    seg_hook = report.get("windows", {}).get("30d", {}).get("segment_hook", {})
+    lines = ["| 層 | フック | n | 中央値 | 全体比 | 判定 |", "|---|---|---|---|---|---|"]
+    for seg in SEGMENTS:
+        for hook in HOOKS:
+            c = seg_hook.get(f"{seg}__{hook}", {})
+            lines.append(
+                f"| {seg} | {hook} | {c.get('n', 0)} | {c.get('median_views', 0)} | "
+                f"{c.get('index', 0)} | {c.get('verdict', '判定保留')} |"
+            )
+    return "\n".join(lines)
+
+
+def _hypothesis_table_md(acct: str, report: dict) -> str:
+    hyp = report.get("windows", {}).get("30d", {}).get("hypothesis", {})
+    if not hyp:
+        return "(仮説データなし)"
+    lines = ["| 仮説ID | 層 | n | 中央値 | 全体比 | 判定 |", "|---|---|---|---|---|---|"]
+    for hid in sorted(hyp.keys()):
+        c = hyp[hid]
+        lines.append(
+            f"| {hid} | {c.get('segment') or '-'} | {c.get('n', 0)} | {c.get('median_views', 0)} | "
+            f"{c.get('index', 0)} | {c.get('verdict', '判定保留')} |"
+        )
+    return "\n".join(lines)
+
+
+def _write_obsidian_journal(results: dict, secretary_body: str | None, sent_status: str) -> None:
+    """(1) 日誌フォルダの YYYY-MM-DD.md に追記する。同日複数回実行しても上書きせず、
+    「## 実行 HH:MM」見出しで積み増す。"""
+    seg_dir = _obsidian_seg_dir_safe()
+    if seg_dir is None:
+        return
+    today = date.today().isoformat()
+    now_hm = datetime.now().strftime("%H:%M")
+    path = seg_dir / f"{today}.md"
+
+    parts = [f"## 実行 {now_hm}", ""]
+    if secretary_body is not None:
+        parts.append(f"### (a) 秘書へ送った本文（{sent_status}）")
+        parts.append("```")
+        parts.append(secretary_body)
+        parts.append("```")
+    else:
+        parts.append("### (a) 秘書送信なし（--notify-secretary未指定の--apply単独実行）")
+    parts.append("")
+
+    parts.append("### (b) 層×フック×仮説（30日窓・数値そのまま）")
+    for acct in ACCTS:
+        report, _apply_detail, _baseline = results[acct]
+        parts.append(f"#### {ACCT_JP.get(acct, acct)}")
+        parts.append(_segment_hook_table_md(acct, report))
+        parts.append("")
+        parts.append(_hypothesis_table_md(acct, report))
+        parts.append("")
+
+    parts.append("### (c) 配分・仮説statusの変更")
+    for acct in ACCTS:
+        _report, apply_detail, _baseline = results[acct]
+        parts.append(f"- {ACCT_JP.get(acct, acct)}: " + " / ".join(_apply_change_lines(acct, apply_detail)))
+    parts.append("")
+
+    block = "\n".join(parts) + "\n---\n\n"
+    try:
+        if not path.exists():
+            path.write_text(f"# セグメントテスト日誌 {today}\n\n" + block, encoding="utf-8")
+        else:
+            with path.open("a", encoding="utf-8") as f:
+                f.write(block)
+    except Exception as e:
+        print(f"[warn] Obsidian日誌書き込み失敗: {e}", file=sys.stderr)
+
+
+def _update_obsidian_index(results: dict) -> None:
+    """(2) 索引ファイル セグメントテスト_記録.md の表に1行追記（新しい実行が上）。"""
+    seg_dir = _obsidian_seg_dir_safe()
+    if seg_dir is None:
+        return
+    path = seg_dir / "セグメントテスト_記録.md"
+    today = date.today().isoformat()
+
+    winners_all, losers_all, change_all = [], [], []
+    for acct in ACCTS:
+        report, apply_detail, _baseline = results[acct]
+        summary = report.get("segment_summary", {})
+        w = [s for s, c in summary.items() if c.get("verdict") == "winner"]
+        l = [s for s, c in summary.items() if c.get("verdict") == "loser"]
+        acct_jp = ACCT_JP.get(acct, acct)
+        if w:
+            winners_all.append(f"{acct_jp}:" + "・".join(_seg_jp_name(acct, s) for s in w))
+        if l:
+            losers_all.append(f"{acct_jp}:" + "・".join(_seg_jp_name(acct, s) for s in l))
+        change_lines = _apply_change_lines(acct, apply_detail)
+        if change_lines != ["変更なし"]:
+            change_all.append(f"{acct_jp}:" + "、".join(change_lines))
+
+    row = (
+        f"| [[{today}]] | {'; '.join(winners_all) or 'なし'} | {'; '.join(losers_all) or 'なし'} | "
+        f"{'; '.join(change_all) or 'なし'} | {_next_watch_line(results)} |\n"
+    )
+    header = "# セグメントテスト 記録\n\n| 日付 | 勝ち | 負け | 変更 | 次に見ること |\n|---|---|---|---|---|\n"
+
+    try:
+        if not path.exists():
+            path.write_text(header + row, encoding="utf-8")
+            return
+        existing = path.read_text(encoding="utf-8")
+        marker = "|---|---|---|---|---|"
+        if marker in existing:
+            insert_at = existing.index(marker) + len(marker)
+            nl = existing.index("\n", insert_at)
+            new_content = existing[:nl + 1] + row + existing[nl + 1:]
+        else:
+            # 既存ファイルが想定外の形式の場合は末尾に見出しごと追記する（データを消さない）
+            new_content = existing.rstrip("\n") + "\n\n" + header + row
+        path.write_text(new_content, encoding="utf-8")
+    except Exception as e:
+        print(f"[warn] Obsidian索引書き込み失敗: {e}", file=sys.stderr)
+
+
+def _update_obsidian_hyp_history(results: dict) -> None:
+    """(3) 仮説の履歴.md に今回のstatus遷移を追記する。遷移が無い回は行を足さない
+    （ノイズ防止）が、ファイル自体は初回実行時に見出しだけ作っておく
+    （後続の追記先として、また運用確認のために毎回存在させるため）。"""
+    seg_dir = _obsidian_seg_dir_safe()
+    if seg_dir is None:
+        return
+    path = seg_dir / "仮説の履歴.md"
+    today = date.today().isoformat()
+
+    rows = []
+    for acct in ACCTS:
+        report, apply_detail, _baseline = results[acct]
+        hyp_by_id = _hyp_lookup(acct)
+        hyp_stats = report.get("windows", {}).get("30d", {}).get("hypothesis", {})
+        for u in apply_detail.get("hypotheses") or []:
+            if ":" not in u or "->" not in u:
+                continue
+            hid, trans = u.split(":", 1)
+            old_st, new_st = trans.split("->", 1)
+            h = hyp_by_id.get(hid, {})
+            summary_txt = _short_hyp_text(h, 24)
+            st = hyp_stats.get(hid, {})
+            evidence = f"n={st.get('n', 0)} 全体比{st.get('index', 0)}倍"
+            rows.append(
+                f"| {today} | {ACCT_JP.get(acct, acct)} | {hid} | {summary_txt} | "
+                f"{old_st}→{new_st} | {evidence} |"
+            )
+
+    header = "# 仮説の履歴\n\n| 日付 | アカウント | 仮説ID | 仮説要約 | 遷移 | 根拠数値 |\n|---|---|---|---|---|---|\n"
+    if not rows:
+        try:
+            if not path.exists():
+                path.write_text(header, encoding="utf-8")
+        except Exception as e:
+            print(f"[warn] Obsidian仮説履歴書き込み失敗: {e}", file=sys.stderr)
+        return
+
+    try:
+        if not path.exists():
+            path.write_text(header + "\n".join(rows) + "\n", encoding="utf-8")
+        else:
+            with path.open("a", encoding="utf-8") as f:
+                f.write("\n".join(rows) + "\n")
+    except Exception as e:
+        print(f"[warn] Obsidian仮説履歴書き込み失敗: {e}", file=sys.stderr)
+
+
 def main():
     argv = sys.argv[1:]
     acct = "masa"
@@ -932,6 +1152,9 @@ def main():
     do_apply = "--apply" in argv
     do_json = "--json" in argv
     do_notify = "--notify-secretary" in argv
+    # --no-send: --notify-secretaryは指定するがDiscord送信だけ止める検証用オプション
+    # （2026-09-24追加。同日に2回目の検証実行をしても秘書チャンネルへ二重送信しないため）。
+    no_send = "--no-send" in argv
 
     if do_notify and acct != "all":
         print("[notify-secretary] --acct all との併用が前提のため、今回はスキップします", file=sys.stderr)
@@ -941,16 +1164,30 @@ def main():
         results = {}
         for a in ACCTS:
             report, apply_detail = run_for_acct(a, do_apply, do_json)
-            if do_notify:
-                results[a] = (report, apply_detail, _load_baseline(a))
+            results[a] = (report, apply_detail, _load_baseline(a))
+
+        is_sunday = date.today().isoweekday() == 7
+        secretary_body = None
+        sent_status = "未送信"
         if do_notify:
-            is_sunday = date.today().isoweekday() == 7
-            body = build_secretary_digest(results, is_sunday)
-            ok, info = _send_secretary(body)
-            print(f"[notify-secretary] {'送信成功' if ok else '送信失敗（ファイル記録のみ）'}: {info}")
+            secretary_body = build_secretary_digest(results, is_sunday)
+            if no_send:
+                sent_status = "未送信（--no-send指定のため送信スキップ・検証用）"
+                print("[notify-secretary] --no-send指定のため送信をスキップしました")
+            else:
+                ok, info = _send_secretary(secretary_body)
+                sent_status = ("送信成功: " if ok else "送信失敗（ファイル記録のみ）: ") + info
+                print(f"[notify-secretary] {'送信成功' if ok else '送信失敗（ファイル記録のみ）'}: {info}")
             print("----- 送信本文 -----")
-            print(body)
+            print(secretary_body)
             print("--------------------")
+
+        # Obsidian蓄積記録: --apply または --notify-secretary のどちらかがあれば書く
+        # （本人指示2026-09-24。セグメント分析_<acct>.mdの上書きと違い、ここは積み増し記録）。
+        if do_apply or do_notify:
+            _write_obsidian_journal(results, secretary_body, sent_status)
+            _update_obsidian_index(results)
+            _update_obsidian_hyp_history(results)
     elif acct in ACCTS:
         run_for_acct(acct, do_apply, do_json)
     else:

@@ -45,6 +45,7 @@ BASE = Path(__file__).parent
 CONFIG_FILE = BASE / "segment_config.json"
 REGISTRY_FILE = BASE / "segment_registry.json"
 HYPOTHESES_FILE = BASE / "segment_hypotheses.json"
+BASELINE_FILE = BASE / "segment_baseline.json"
 REPORT_MD_DIR = Path("/Users/mt112/Desktop/my files/myfiles/SNS・Threads/分析レポート")
 
 ACCTS = ["masa", "truth", "nagaoka"]
@@ -164,6 +165,21 @@ def _load_registry():
 
 def _entry_acct(entry: dict) -> str:
     return (entry.get("acct") or "masa") if isinstance(entry, dict) else "masa"
+
+
+def _load_baseline(acct: str):
+    """segment_baseline.json（過去投稿の層別実測。担当A作成・git追跡）を読み込み、
+    該当acctのsegments辞書を返す。ファイル不在/不正/acct無しならNone
+    （＝過去ベースライン節はレポートから省略。ファイルはあるが仮説0件と同様に落ちない設計）。"""
+    data = _load_json(BASELINE_FILE, None)
+    if not isinstance(data, dict):
+        return None
+    acct_data = data.get("accounts", {}).get(acct)
+    if not isinstance(acct_data, dict):
+        return None
+    acct_data = dict(acct_data)
+    acct_data.setdefault("generated", data.get("generated"))
+    return acct_data
 
 
 def _load_hypotheses():
@@ -380,6 +396,10 @@ def build_report(acct: str):
     report["segment_summary"] = report["windows"].get("30d", {}).get("segment", {})
     report["hakase_summary"] = report["windows"].get("30d", {}).get("hakase", {})
     report["hypothesis_summary"] = report["windows"].get("30d", {}).get("hypothesis", {})
+
+    # 過去ベースライン（segment_baseline.json・2026-09-24追加）: テスト結果との比較用に
+    # 併記する。ファイル不在ならキー自体を省略する（write_markdown側もNoneチェックで対応）。
+    report["past_baseline"] = _load_baseline(acct)
     return report
 
 
@@ -437,6 +457,32 @@ def write_markdown(report, acct: str):
                 lines.append(f"| {hid} | {c.get('segment') or '-'} | {c['n']} | {c['median_views']} | "
                              f"{c['index']} | {c['like_rate']} | {c['reply_rate']} | {c['verdict']} |")
         lines.append("")
+
+    # 過去ベースライン（segment_baseline.json・2026-09-24追加）: 直近テスト結果(上記)と
+    # 過去実測を見比べられるよう併記する。ファイル不在ならこの節ごと省略する。
+    baseline = _load_baseline(acct)
+    if baseline:
+        lines.append("### 過去ベースライン（segment_baseline.json）")
+        lines.append(f"生成日: {baseline.get('generated', '-')} / "
+                     f"全体中央値: {baseline.get('baseline_median', '-')} / "
+                     f"サンプル{baseline.get('sample_total', '-')}件(未分類{baseline.get('none_n', '-')}件)")
+        lines.append("")
+        lines.append("| segment | n | 中央値 | index | 勝ちパターン(win_structures) |")
+        lines.append("|---|---|---|---|---|")
+        for seg in SEGMENTS:
+            code = _short_code(acct, seg)
+            b = baseline.get("segments", {}).get(code, {})
+            win = "、".join(b.get("win_structures", [])) or "-"
+            lines.append(f"| {seg} | {b.get('n', 0)} | {b.get('median', 0)} | {b.get('index', 0)} | {win} |")
+        lines.append("")
+        keep = baseline.get("keep_patterns") or []
+        avoid = baseline.get("avoid_patterns") or []
+        if keep:
+            lines.append(f"継続すべきパターン: {' / '.join(keep)}")
+        if avoid:
+            lines.append(f"避けるべきパターン: {' / '.join(avoid)}")
+        lines.append("")
+
     try:
         REPORT_MD_DIR.mkdir(parents=True, exist_ok=True)
         (REPORT_MD_DIR / f"セグメント分析_{acct}.md").write_text("\n".join(lines), encoding="utf-8")

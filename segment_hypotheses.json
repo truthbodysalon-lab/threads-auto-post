@@ -738,6 +738,728 @@
       "sources": [
         "マーケティング学習/インスタハカセ講義/00_講義マスターまとめ.md"
       ]
+    },
+    {
+      "id": "ST01",
+      "text": "夕方になると肩がパンパンに張る",
+      "segment": "T1",
+      "theme": "症状",
+      "count": 8,
+      "sources": [
+        "Truth経営/LP・広告/truth_nagaoka_動画広告案.md(パターン1)",
+        "カウンセリング事例/分析データ_個票一覧.md"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST02",
+      "text": "座りっぱなしで首が前に出て固まる",
+      "segment": "T1",
+      "theme": "症状",
+      "count": 6,
+      "sources": [
+        "threads-auto-post/past_posts_nagaoka.json(#3,#9,#14)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST03",
+      "text": "整形外科で「異常なし」なのに肩甲骨が痛い",
+      "segment": "T1",
+      "theme": "不安",
+      "count": 5,
+      "sources": [
+        "threads-auto-post/past_posts.json(#20,#22)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST04",
+      "text": "猫背が悪化している自覚はあるが直し方が不明",
+      "segment": "T1",
+      "theme": "症状",
+      "count": 7,
+      "sources": [
+        "カウンセリング事例/01-04 顧客相談：小堀さん.md",
+        "Truth経営/LP・広告/truth_nagaoka_動画広告案.md"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST05",
+      "text": "昼休みもデスクでスマホを見ながら食事",
+      "segment": "T1",
+      "theme": "生活",
+      "count": 4,
+      "sources": [
+        "Truth経営/ペルソナ戦略総まとめ_2026-07-05.md"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST06",
+      "text": "週末マッサージも月曜にはもう元通り",
+      "segment": "T1",
+      "theme": "治療歴",
+      "count": 9,
+      "sources": [
+        "Truth経営/訴求統一ガイドライン_2026-07-05.md"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST07",
+      "text": "在宅勤務・PC作業で肩こりが悪化した",
+      "segment": "T1",
+      "theme": "症状",
+      "count": 5,
+      "sources": [
+        "カウンセリング事例/分析データ_個票一覧.md(佐藤様・塚本さん)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST08",
+      "text": "肩の可動域が狭くなり腕が上がりにくい",
+      "segment": "T1",
+      "theme": "症状",
+      "count": 6,
+      "sources": [
+        "カウンセリング事例/分析データ_個票一覧.md(土屋様・小林さん)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST09",
+      "text": "肩こりは「歳のせい」と諦めかけている",
+      "segment": "T1",
+      "theme": "不安",
+      "count": 6,
+      "sources": [
+        "カウンセリング事例/分析データ_個票一覧.md(山口さん・畠山さん)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST10",
+      "text": "ストレッチが3日で続かない",
+      "segment": "T1",
+      "theme": "生活",
+      "count": 8,
+      "sources": [
+        "Truth経営/ペルソナ戦略総まとめ_2026-07-05.md(面倒だと感じていること)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST11",
+      "text": "整体は痛い・怖いというイメージがある",
+      "segment": "T1",
+      "theme": "不安",
+      "count": 5,
+      "sources": [
+        "カウンセリング事例/分析データ_個票一覧.md(山口さん・石原様)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST12",
+      "text": "朝起きた瞬間からこめかみがズーンと重い",
+      "segment": "T2",
+      "theme": "症状",
+      "count": 10,
+      "sources": [
+        "Truth経営/LINE配信/公式LINE_頭痛ステップ配信.md(Day1)",
+        "past_posts.json(#1)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST13",
+      "text": "薬が効いてる間だけで夕方また痛くなる",
+      "segment": "T2",
+      "theme": "治療歴",
+      "count": 9,
+      "sources": [
+        "Truth経営/LINE配信/公式LINE_頭痛ステップ配信.md(Day1・Day2)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST14",
+      "text": "低気圧予報を見ると気持ちが沈む",
+      "segment": "T2",
+      "theme": "不安",
+      "count": 7,
+      "sources": [
+        "Truth経営/LINE配信/公式LINE_頭痛ステップ配信.md(Day1)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST15",
+      "text": "月10回以上の頭痛薬で薬物乱用頭痛が心配",
+      "segment": "T2",
+      "theme": "不安",
+      "count": 6,
+      "sources": [
+        "Truth経営/LINE配信/公式LINE_頭痛ステップ配信.md(Day2)",
+        "past_posts.json(#2)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST16",
+      "text": "頭痛薬をお守りのように常に持ち歩く",
+      "segment": "T2",
+      "theme": "生活",
+      "count": 6,
+      "sources": [
+        "Truth経営/LINE配信/公式LINE_頭痛ステップ配信.md(Day4)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST17",
+      "text": "病院で「異常なし」と言われたのに頭痛が続く",
+      "segment": "T2",
+      "theme": "治療歴",
+      "count": 8,
+      "sources": [
+        "Truth経営/LP・広告/truth_nagaoka_動画広告案.md(頭痛パターン4)",
+        "カウンセリング事例/分析データ_個票一覧.md(石原様)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST18",
+      "text": "頭痛のせいで子どもの行事を楽しめない",
+      "segment": "T2",
+      "theme": "不安",
+      "count": 5,
+      "sources": [
+        "Truth経営/LINE配信/公式LINE_頭痛ステップ配信.md(Day1・Day5)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST19",
+      "text": "薬の効く時間がだんだん短くなっている",
+      "segment": "T2",
+      "theme": "症状",
+      "count": 4,
+      "sources": [
+        "past_posts.json(#27)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST20",
+      "text": "頭痛の頻度を自分で数えたことがない",
+      "segment": "T2",
+      "theme": "生活",
+      "count": 5,
+      "sources": [
+        "past_posts_nagaoka.json(#14,#15)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST21",
+      "text": "週に何度も頭痛薬を飲む生活が当たり前",
+      "segment": "T2",
+      "theme": "症状",
+      "count": 9,
+      "sources": [
+        "past_posts_nagaoka.json(#4)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST22",
+      "text": "光や音に過敏で吐き気を伴う頭痛がある",
+      "segment": "T2",
+      "theme": "症状",
+      "count": 4,
+      "sources": [
+        "カウンセリング事例/分析データ_個票一覧.md(田村様・関さん)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST23",
+      "text": "気圧のせいだと思い他の原因に気づかない",
+      "segment": "T2",
+      "theme": "不安",
+      "count": 6,
+      "sources": [
+        "past_posts.json(#1)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST24",
+      "text": "水分を意識せずコーヒーばかり飲んでいる",
+      "segment": "T2",
+      "theme": "生活",
+      "count": 5,
+      "sources": [
+        "past_posts_nagaoka.json(#13,#26)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST25",
+      "text": "頭痛が出るかもと予定を入れるのが怖い",
+      "segment": "T2",
+      "theme": "不安",
+      "count": 5,
+      "sources": [
+        "Truth経営/LINE配信/公式LINE_頭痛ステップ配信.md(Day1)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST26",
+      "text": "頭痛の原因が骨盤や姿勢にあると知らない",
+      "segment": "T2",
+      "theme": "不安",
+      "count": 7,
+      "sources": [
+        "Truth経営/LINE配信/公式LINE_頭痛ステップ配信.md(Day2)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST27",
+      "text": "抱っこ・授乳の姿勢が続き背中が丸くなる",
+      "segment": "T3",
+      "theme": "症状",
+      "count": 5,
+      "sources": [
+        "カウンセリング事例/06_佐藤様_04-29(抱っこ・授乳の記録)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST28",
+      "text": "産後の全身痛を仕方ないと放置していた",
+      "segment": "T3",
+      "theme": "症状",
+      "count": 4,
+      "sources": [
+        "長岡市整体院口コミ分析レポート.md(すがわら接骨院口コミ#20)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST29",
+      "text": "育児で腰を痛めても自分は後回しにする",
+      "segment": "T3",
+      "theme": "生活",
+      "count": 6,
+      "sources": [
+        "長岡市整体院口コミ分析レポート.md(口コミ#26)",
+        "Truth経営/ペルソナ戦略総まとめ_2026-07-05.md"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST30",
+      "text": "抱っこ・肩乗りで肩や腕に疲労が蓄積",
+      "segment": "T3",
+      "theme": "症状",
+      "count": 5,
+      "sources": [
+        "カウンセリング事例/分析データ_個票一覧.md(抱っこ・肩乗りの記録)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST31",
+      "text": "骨盤が歪んだままでも整える時間がない",
+      "segment": "T3",
+      "theme": "生活",
+      "count": 6,
+      "sources": [
+        "カウンセリング事例(骨盤系82件)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST32",
+      "text": "子連れで通える整体院が少ないと感じる",
+      "segment": "T3",
+      "theme": "不安",
+      "count": 4,
+      "sources": [
+        "カウンセリング事例/01_千野さん_05-17.md"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST33",
+      "text": "産後の姿勢崩れが老け見えにつながる不安",
+      "segment": "T3",
+      "theme": "不安",
+      "count": 3,
+      "sources": [
+        "カウンセリング事例/分析データ_個票一覧.md(松永さん)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST34",
+      "text": "育児・家事で自分の体のケアが最下位",
+      "segment": "T3",
+      "theme": "生活",
+      "count": 5,
+      "sources": [
+        "Truth経営/ペルソナ戦略総まとめ_2026-07-05.md"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST35",
+      "text": "立ち仕事の後半になると腰と脚がつらい",
+      "segment": "T4",
+      "theme": "症状",
+      "count": 6,
+      "sources": [
+        "Truth経営/LP・広告/truth_nagaoka_動画広告案.md(パターン2)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST36",
+      "text": "介護の抱え上げ動作で腰を痛めている",
+      "segment": "T4",
+      "theme": "症状",
+      "count": 5,
+      "sources": [
+        "カウンセリング事例/01-30 整体カウンセリング：古見さん.md"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST37",
+      "text": "家事・育児・介護を一人で背負い限界",
+      "segment": "T4",
+      "theme": "生活",
+      "count": 5,
+      "sources": [
+        "カウンセリング事例/01-30 整体カウンセリング：古見さん.md"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST38",
+      "text": "不規則勤務で通院の計画が立てられない",
+      "segment": "T4",
+      "theme": "生活",
+      "count": 6,
+      "sources": [
+        "カウンセリング事例/分析データ_個票一覧.md(吉原さん)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST39",
+      "text": "除雪や重い荷物運びの後に腰が痛む",
+      "segment": "T4",
+      "theme": "症状",
+      "count": 3,
+      "sources": [
+        "カウンセリング事例/分析データ_個票一覧.md(高橋さん)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST40",
+      "text": "介護サービスに頼れず一人で抱え込む",
+      "segment": "T4",
+      "theme": "不安",
+      "count": 4,
+      "sources": [
+        "カウンセリング事例/01-30 整体カウンセリング：古見さん.md"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST41",
+      "text": "腰にコルセットが手放せない生活",
+      "segment": "T4",
+      "theme": "症状",
+      "count": 4,
+      "sources": [
+        "カウンセリング事例/分析データ_個票一覧.md(戸谷様)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST42",
+      "text": "立ちっぱなし・かがむ動作で腰が慢性化",
+      "segment": "T4",
+      "theme": "症状",
+      "count": 5,
+      "sources": [
+        "カウンセリング事例/分析データ_個票一覧.md(杉本様)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST43",
+      "text": "看護・介護職はシフトが不規則で予約が直前しか取れない",
+      "segment": "T4",
+      "theme": "生活",
+      "count": 4,
+      "sources": [
+        "カウンセリング事例/分析データ_個票一覧.md(吉原さん)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST44",
+      "text": "夜中に1時間ごとに目が覚めてしまう",
+      "segment": "T5",
+      "theme": "症状",
+      "count": 5,
+      "sources": [
+        "カウンセリング事例/分析データ_個票一覧.md(丸山様)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST45",
+      "text": "朝起きても熟眠感がなくだるさが抜けない",
+      "segment": "T5",
+      "theme": "症状",
+      "count": 7,
+      "sources": [
+        "カウンセリング事例/分析データ_個票一覧.md(熊崎さん)",
+        "past_posts_nagaoka.json(#6)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST46",
+      "text": "「歳のせい」で片付けられてきたが違うかも",
+      "segment": "T5",
+      "theme": "不安",
+      "count": 6,
+      "sources": [
+        "past_posts_nagaoka.json(#18)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST47",
+      "text": "疲れているのにやる気が出ず運動も続かない",
+      "segment": "T5",
+      "theme": "生活",
+      "count": 5,
+      "sources": [
+        "カウンセリング事例/分析データ_個票一覧.md(原田さん)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST48",
+      "text": "体が動かない・気分の落ち込みが悪循環",
+      "segment": "T5",
+      "theme": "症状",
+      "count": 4,
+      "sources": [
+        "カウンセリング事例/分析データ_個票一覧.md(小林さん)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST49",
+      "text": "寝ても疲れが取れずストレスと連動している",
+      "segment": "T5",
+      "theme": "症状",
+      "count": 6,
+      "sources": [
+        "カウンセリング事例/分析データ_個票一覧.md(藤田さん)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST50",
+      "text": "睡眠不足のまま生活習慣を変えられない",
+      "segment": "T5",
+      "theme": "生活",
+      "count": 5,
+      "sources": [
+        "カウンセリング事例/分析データ_個票一覧.md(石原様)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST51",
+      "text": "枕や寝具を変えても改善しない",
+      "segment": "T5",
+      "theme": "症状",
+      "count": 3,
+      "sources": [
+        "一般知見(汎用)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST52",
+      "text": "首肩のこりが睡眠の質低下と気づいていない",
+      "segment": "T5",
+      "theme": "不安",
+      "count": 6,
+      "sources": [
+        "past_posts.json(#4,#8)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST53",
+      "text": "睡眠の質低下が頭痛・肩こりを悪化させる",
+      "segment": "T5",
+      "theme": "症状",
+      "count": 6,
+      "sources": [
+        "past_posts.json(#8)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST54",
+      "text": "睡眠アプリで測っても改善方法が分からない",
+      "segment": "T5",
+      "theme": "生活",
+      "count": 3,
+      "sources": [
+        "一般知見(汎用)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST55",
+      "text": "マッサージは気持ちよくなって終わるだけ",
+      "segment": "T6",
+      "theme": "治療歴",
+      "count": 9,
+      "sources": [
+        "Truth経営/ペルソナ分析_LTV上位顧客_2026-07-05.md(久原様)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST56",
+      "text": "20回20万円払ったのに改善しなかった",
+      "segment": "T6",
+      "theme": "費用",
+      "count": 7,
+      "sources": [
+        "Truth経営/ペルソナ戦略総まとめ_2026-07-05.md"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST57",
+      "text": "対症療法は3日も持たないと感じている",
+      "segment": "T6",
+      "theme": "治療歴",
+      "count": 8,
+      "sources": [
+        "Truth経営/ペルソナ戦略総まとめ_2026-07-05.md"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST58",
+      "text": "どこに行っても同じことしか言われない",
+      "segment": "T6",
+      "theme": "治療歴",
+      "count": 8,
+      "sources": [
+        "カウンセリング事例/分析データ_個票一覧.md(上村さん)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST59",
+      "text": "揉んだ直後は楽でも3日後にはまた戻る",
+      "segment": "T6",
+      "theme": "治療歴",
+      "count": 9,
+      "sources": [
+        "past_posts.json(#13,#20)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST60",
+      "text": "施術後に悪化した経験があり施術が怖い",
+      "segment": "T6",
+      "theme": "不安",
+      "count": 5,
+      "sources": [
+        "カウンセリング事例/分析データ_個票一覧.md(古見さん・平沢様)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST61",
+      "text": "高額な一括コースは即決できない",
+      "segment": "T6",
+      "theme": "費用",
+      "count": 8,
+      "sources": [
+        "カウンセリング事例/分析データ_個票一覧.md(多数)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST62",
+      "text": "家族に相談してから決めたく先延ばしにする",
+      "segment": "T6",
+      "theme": "不安",
+      "count": 7,
+      "sources": [
+        "カウンセリング事例/分析データ_個票一覧.md(多数)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST63",
+      "text": "予約に縛られるのが苦手で継続に自信がない",
+      "segment": "T6",
+      "theme": "不安",
+      "count": 5,
+      "sources": [
+        "カウンセリング事例/分析データ_個票一覧.md(渡辺さん)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST64",
+      "text": "効果が続くか半信半疑のまま初回を受ける",
+      "segment": "T6",
+      "theme": "不安",
+      "count": 6,
+      "sources": [
+        "カウンセリング事例/分析データ_個票一覧.md(多数)"
+      ],
+      "acct": "truth_nagaoka"
+    },
+    {
+      "id": "ST65",
+      "text": "院ごとに言うことが違い何を信じていいか迷う",
+      "segment": "T6",
+      "theme": "不安",
+      "count": 5,
+      "sources": [
+        "カウンセリング事例/分析データ_個票一覧.md(上村さん)"
+      ],
+      "acct": "truth_nagaoka"
     }
   ],
   "hypotheses": [
@@ -1509,6 +2231,629 @@
         {
           "hook": "high",
           "text": "月商50万の壁で感覚だけで発信する経営者は。\n\n数字を見ずに続けると、同じ失敗を繰り返しやすい。\n\n読まれた投稿と読まれなかった投稿を毎朝比べると\n次に打つ一手が変わります。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      }
+    },
+    {
+      "id": "Z01_truth",
+      "acct": "truth",
+      "segment": "T1",
+      "theme": "症状",
+      "hypothesis": "デスクワーク層は肩こりの原因を「筋肉の凝り」だと思い込んでいる→「同じ姿勢の時間」が原因と伝えれば1分対策への反応が高い",
+      "pain_ids": [
+        "ST01",
+        "ST02",
+        "ST10"
+      ],
+      "evidence": "T1 index1.25・win構造=問いかけ(median119v,n22)・playbook W1",
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "在宅勤務で肩こりが悪化した人へ。\n\n今日からできる1分、肩を後ろに5回まわすだけ。\n夕方の重さが変わります。"
+        },
+        {
+          "hook": "high",
+          "text": "猫背で肩甲骨が固まった人へ。\n\n揉んで楽になるのは、原因を先延ばしにしているだけです。\n同じ姿勢を変えない限り戻ります。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      }
+    },
+    {
+      "id": "Z03_truth",
+      "acct": "truth",
+      "segment": "T1",
+      "theme": "生活",
+      "hypothesis": "会社員層はストレッチが続かないのは意志が弱いからだと思い込んでいる→負荷を下げれば反応する",
+      "pain_ids": [
+        "ST10",
+        "ST04"
+      ],
+      "evidence": "T1 index1.25・win構造=問いかけ(median119v,n22)・playbook W2",
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "会議続きで首が痛い人へ。\n\n道具なし、椅子に座ったまま肩を上げて3秒キープを3回。\n1分でできます。"
+        },
+        {
+          "hook": "high",
+          "text": "同じ姿勢が続いて肩が重い人へ。\n\n続かないのは、あなたの意志が弱いからではありません。\n負荷が高すぎるだけです。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      }
+    },
+    {
+      "id": "Z05_truth",
+      "acct": "truth",
+      "segment": "T2",
+      "theme": "症状",
+      "hypothesis": "頭痛持ちは気圧だけが原因だと思い込んでいる→水分・噛む力という生活習慣も原因と伝えれば反応する",
+      "pain_ids": [
+        "ST14",
+        "ST23",
+        "ST24"
+      ],
+      "evidence": "T2 index0.83・win構造=数字(median132v,n22)・playbook L7",
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "月に何度も頭痛薬を飲む人へ。\n\n今日からできる1分、コップ1杯の水を朝いちばんに飲むだけ。\n道具はいりません。"
+        },
+        {
+          "hook": "high",
+          "text": "頭痛薬を切らせない人へ。\n\n頭痛の原因は気圧だけとは限りません。\n水分や噛む力も関わっています。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      }
+    },
+    {
+      "id": "Z07_truth",
+      "acct": "truth",
+      "segment": "T2",
+      "theme": "生活",
+      "hypothesis": "頭痛持ちは薬をお守りのように持ち歩くことに違和感がない→手放せる未来像を見せれば反応する",
+      "pain_ids": [
+        "ST16",
+        "ST25"
+      ],
+      "evidence": "T2 index0.83・win構造=数字(median132v,n22)・playbook L8",
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "頭痛薬が常備品になっている人へ。\n\n寝る前1回、深呼吸を5回するだけ。\n翌朝が変わります。"
+        },
+        {
+          "hook": "high",
+          "text": "週の半分は頭痛薬を飲む人へ。\n\n頭痛を気にして行事を我慢する必要はないかもしれません。\n原因を見直せば変わります。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      }
+    },
+    {
+      "id": "Z09_truth",
+      "acct": "truth",
+      "segment": "T2",
+      "theme": "不安",
+      "hypothesis": "頭痛持ちの親は頭痛のせいで子どもの行事を我慢することに罪悪感を抱いている→向き合い方次第で変わると伝えれば反応する",
+      "pain_ids": [
+        "ST18",
+        "ST19"
+      ],
+      "evidence": "T2 index0.83・win構造=数字(median132v,n22)・playbook L9",
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "頭痛薬なしで一日が始まらない人へ。\n\n寝る前1回、後頭部を手のひらで温めるだけ。\n道具はいりません。"
+        },
+        {
+          "hook": "high",
+          "text": "頭痛薬の量が増えている人へ。\n\n効く時間が短くなるのは、原因が消えていないサインです。\n薬に頼るほど気づきにくくなります。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      }
+    },
+    {
+      "id": "Z11_truth",
+      "acct": "truth",
+      "segment": "T3",
+      "theme": "生活",
+      "hypothesis": "産後の母親は自分の体のケアを後回しにするのが当たり前だと思っている→後回しにするほど戻りにくいと伝えれば反応する",
+      "pain_ids": [
+        "ST29",
+        "ST34"
+      ],
+      "evidence": "T3 n=0(白地層)・playbook W4/W5・仮説として要検証",
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "産後、体の痛みを我慢するママへ。\n\n寝る前1回、仰向けで膝を抱えて骨盤を伸ばすだけ。\n1分でできます。"
+        },
+        {
+          "hook": "high",
+          "text": "産後の腰痛が続くママへ。\n\n後回しにした体ほど、戻りにくくなります。\n家事や育児より先に整える価値があります。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      }
+    },
+    {
+      "id": "Z13_truth",
+      "acct": "truth",
+      "segment": "T4",
+      "theme": "症状",
+      "hypothesis": "立ち仕事・介護職は腰の張りを仕事だから仕方ないと諦めている→動作のクセが原因と伝えれば反応する",
+      "pain_ids": [
+        "ST35",
+        "ST39",
+        "ST42"
+      ],
+      "evidence": "T4 n=0(白地層)・playbook該当なし・仮説として要検証",
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "立ちっぱなしで腰がつらい人へ。\n\n今日からできる1分、立ったまま片足ずつ膝を持ち上げるだけ。\n道具はいりません。"
+        },
+        {
+          "hook": "high",
+          "text": "看護や介護の仕事で脚がだるい人へ。\n\n来院した10人のうち8人は、腰ではなく骨盤の動きが原因でした。\n腰だけを揉んでも戻ります。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      }
+    },
+    {
+      "id": "Z15_truth",
+      "acct": "truth",
+      "segment": "T4",
+      "theme": "不安",
+      "hypothesis": "不規則勤務の人は通院を続けられないと最初から諦めている→短時間・柔軟な対応があると伝えれば反応する",
+      "pain_ids": [
+        "ST38",
+        "ST41",
+        "ST43"
+      ],
+      "evidence": "T4 n=0(白地層)・playbook該当なし・仮説として要検証",
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "介護や看護で腰と脚がつらい人へ。\n\n今日からできる1分、かがむ前に膝を軽く曲げるだけ。\n道具はいりません。"
+        },
+        {
+          "hook": "high",
+          "text": "立ち仕事続きで腰が重い人へ。\n\nコルセットが手放せない腰は、腰が原因でないことが多いです。\n短時間の見直しでも変わります。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      }
+    },
+    {
+      "id": "Z17_truth",
+      "acct": "truth",
+      "segment": "T5",
+      "theme": "生活",
+      "hypothesis": "疲れが取れない人は運動不足だと分かっていても行動に移せない→負荷を下げれば反応する",
+      "pain_ids": [
+        "ST47",
+        "ST50",
+        "ST54"
+      ],
+      "evidence": "T5 index1.35(n=3・参考値)・playbook W1・share1(参考値のため据え置き)",
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "熟睡できていない人へ。\n\n今日からできる1分、湯船に肩まで浸かって深呼吸を5回するだけ。\n道具はいりません。"
+        },
+        {
+          "hook": "high",
+          "text": "寝ても疲労感が抜けない人へ。\n\n疲れが取れないのは、運動不足より先に整える場所があるからです。\n負荷を下げる方が続きます。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      }
+    },
+    {
+      "id": "Z19_truth",
+      "acct": "truth",
+      "segment": "T6",
+      "theme": "治療歴",
+      "hypothesis": "他院を転々とした人は整体はどこも同じだと思い込んでいる→対症療法と根本改善の違いを伝えれば反応する",
+      "pain_ids": [
+        "ST55",
+        "ST57",
+        "ST58"
+      ],
+      "evidence": "T6 index0.31・avoid傾向=その他/否定型・playbook L2",
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "何院も渡り歩いてきた人へ。\n\n今日からできる1分、揉むのではなく首をゆっくり伸ばすだけ。\n道具はいりません。"
+        },
+        {
+          "hook": "high",
+          "text": "マッサージ通いに疲れた人へ。\n\n揉んで楽になるのと、原因が変わるのは別のことです。\n対症療法と根本改善は目的が違います。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      }
+    },
+    {
+      "id": "Z21_truth",
+      "acct": "truth",
+      "segment": "T6",
+      "theme": "不安",
+      "hypothesis": "施術で悪化した経験がある人は整体そのものへの不信感を持っている→強さより原因説明を重視する施術もあると伝えれば反応する",
+      "pain_ids": [
+        "ST60",
+        "ST63",
+        "ST65"
+      ],
+      "evidence": "T6 index0.31・avoid傾向=その他/否定型・playbook L2",
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "施術直後だけ楽になる人へ。\n\n今日からできる1分、痛くない範囲で肩をすくめて離すだけ。\n道具はいりません。"
+        },
+        {
+          "hook": "high",
+          "text": "他院で結果が出なかった人へ。\n\n院によって言うことが違うのは、原因の見方が違うからです。\n強さより原因の説明を重視する院もあります。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      }
+    },
+    {
+      "id": "Z02_nagaoka",
+      "acct": "nagaoka",
+      "segment": "T1",
+      "theme": "症状",
+      "hypothesis": "デスクワーク層は肩こりの原因を「筋肉の凝り」だと思い込んでいる→「同じ姿勢の時間」が原因と伝えれば1分対策への反応が高い",
+      "pain_ids": [
+        "ST02"
+      ],
+      "evidence": "nagaoka T1 index1.02・win構造=数字(median271v,n6)・playbook W1",
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "座り仕事で首がつらい人へ。\n\n今日からできる1分、椅子に座ったまま肩を上げ下げするだけ。\n道具はいりません。"
+        },
+        {
+          "hook": "high",
+          "text": "オフィスワークで肩が重い人へ。\n\n長時間の座りっぱなしは、肩こりの原因の代表格です。\n座り方を変えると重さが変わります。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      }
+    },
+    {
+      "id": "Z04_nagaoka",
+      "acct": "nagaoka",
+      "segment": "T2",
+      "theme": "治療歴",
+      "hypothesis": "頭痛薬常用者は薬を飲めば済むと思い込んでいる→薬は痛みの信号を止めるだけと伝えると反応する",
+      "pain_ids": [
+        "ST13",
+        "ST15",
+        "ST19"
+      ],
+      "evidence": "nagaoka T2 index1.15・win構造=問いかけ(median184v,n30)・playbook L7",
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "光や音がつらい頭痛がある人へ。\n\n寝る前1回、こめかみを親指で優しく押すだけ。\n道具はいりません。"
+        },
+        {
+          "hook": "high",
+          "text": "薬の効く時間が短くなってきた人へ。\n\nその生活、手放せる可能性があります。\n原因は薬では消えていません。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      }
+    },
+    {
+      "id": "Z06_nagaoka",
+      "acct": "nagaoka",
+      "segment": "T2",
+      "theme": "不安",
+      "hypothesis": "頭痛持ちは頻度を数えていないため深刻度を過小評価している→数えるだけで気づきが生まれると反応する",
+      "pain_ids": [
+        "ST20",
+        "ST21"
+      ],
+      "evidence": "nagaoka T2 index1.15・win構造=問いかけ(median184v,n30)・playbook L8",
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "朝からこめかみが重い人へ。\n\n今日からできる1分、頭痛が出た日をカレンダーに丸するだけ。\nそれだけです。"
+        },
+        {
+          "hook": "high",
+          "text": "低気圧の日は頭が痛くなる人へ。\n\n月の頭痛日数を数えたことがない人ほど頻度が多い傾向があります。\nまず数えてみてください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      }
+    },
+    {
+      "id": "Z08_nagaoka",
+      "acct": "nagaoka",
+      "segment": "T2",
+      "theme": "症状",
+      "hypothesis": "光や音に過敏な頭痛持ちは片頭痛だから仕方ないと諦めている→首肩の緊張が原因と伝えれば反応する",
+      "pain_ids": [
+        "ST22"
+      ],
+      "evidence": "nagaoka T2 index1.15・win構造=リスト(median178v,n7)・playbook L9",
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "頭痛で仕事に集中できない人へ。\n\n今日からできる1分、首をゆっくり左右に倒すだけ。\n道具はいりません。"
+        },
+        {
+          "hook": "high",
+          "text": "頭痛薬を飲む回数が増えた人へ。\n\n片頭痛だからと諦めていませんか。\n首の緊張が関わっていることがあります。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      }
+    },
+    {
+      "id": "Z10_nagaoka",
+      "acct": "nagaoka",
+      "segment": "T3",
+      "theme": "症状",
+      "hypothesis": "産後の母親は抱っこ・授乳姿勢の負担を一時的なものと思い込んでいる→2〜3年続く負担と伝えれば反応する",
+      "pain_ids": [
+        "ST27",
+        "ST30"
+      ],
+      "evidence": "nagaoka T3 index2.57(n=2・参考値)・playbook W5・share1(参考値のため据え置き)",
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "育児中に自分の体を後回しにするママへ。\n\n今日からできる1分、抱っこの前に肩を1回上げ下げするだけ。\n道具はいりません。"
+        },
+        {
+          "hook": "high",
+          "text": "産後の姿勢崩れが気になるママへ。\n\n抱っこ・授乳の負担は一時的とは限りません。\n数年続くこともあります。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      }
+    },
+    {
+      "id": "Z12_nagaoka",
+      "acct": "nagaoka",
+      "segment": "T3",
+      "theme": "不安",
+      "hypothesis": "産後の母親は骨盤の歪みは自然に戻ると思い込んでいる→歪んだままだと姿勢の崩れが定着すると伝えれば反応する",
+      "pain_ids": [
+        "ST31",
+        "ST33"
+      ],
+      "evidence": "nagaoka T3 index2.57(n=2・参考値)・playbook W5・share1(参考値のため据え置き)",
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "子育てで腰を痛めたママへ。\n\n今日からできる1分、座るとき骨盤を立てて座るだけ。\n道具はいりません。"
+        },
+        {
+          "hook": "high",
+          "text": "抱っこの負担で肩まで重いママへ。\n\n骨盤の歪みは、時間が経てば自然には戻りません。\n姿勢の崩れが定着する前に整えたいところです。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      }
+    },
+    {
+      "id": "Z14_nagaoka",
+      "acct": "nagaoka",
+      "segment": "T4",
+      "theme": "生活",
+      "hypothesis": "介護をひとりで担う人は自分のケアの優先順位が最下位になっていると気づいていない→負担を分けて考える視点を示せば反応する",
+      "pain_ids": [
+        "ST36",
+        "ST37",
+        "ST40"
+      ],
+      "evidence": "nagaoka T4 n=0(白地層)・playbook該当なし・仮説として要検証",
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "重い荷物運びで腰を痛めた人へ。\n\n寝る前1回、腰の下にタオルを丸めて置いて5分横になるだけ。\nそれだけで違います。"
+        },
+        {
+          "hook": "high",
+          "text": "夜勤続きで腰が重い人へ。\n\n一人で背負うほど、体の歪みも戻りにくくなります。\n負担を分けて考える視点も大事です。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      }
+    },
+    {
+      "id": "Z16_nagaoka",
+      "acct": "nagaoka",
+      "segment": "T5",
+      "theme": "症状",
+      "hypothesis": "眠りが浅い人は睡眠の問題を歳のせいだと思い込んでいる→首肩の緊張が原因と伝えれば反応する",
+      "pain_ids": [
+        "ST45",
+        "ST46"
+      ],
+      "evidence": "nagaoka T5 index0.63・win構造=その他(median178v,n4)・playbook L9",
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "寝つきが悪いと感じる人へ。\n\n寝る前1回、うつ伏せで両肩を後ろに引いて10秒キープするだけ。\n道具はいりません。"
+        },
+        {
+          "hook": "high",
+          "text": "朝起きた瞬間からだるい人へ。\n\n夜中に目が覚めるのは、歳のせいとは限りません。\n首や肩の緊張が関わっていることがあります。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      }
+    },
+    {
+      "id": "Z18_nagaoka",
+      "acct": "nagaoka",
+      "segment": "T5",
+      "theme": "不安",
+      "hypothesis": "疲れが取れない人は気分の落ち込みと体の不調を別問題だと思っている→体の緊張が気分にも影響すると伝えれば反応する",
+      "pain_ids": [
+        "ST48",
+        "ST49",
+        "ST52"
+      ],
+      "evidence": "nagaoka T5 index0.63・win構造=その他(median178v,n4)・playbook L9",
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "睡眠の質が落ちたと感じる人へ。\n\n寝る前1回、首の後ろを手のひらで軽く温めるだけ。\n道具はいりません。"
+        },
+        {
+          "hook": "high",
+          "text": "疲れが取れず気分も沈む人へ。\n\nやる気の問題ではなく、体の緊張が関係していることがあります。\n気分と体は別ではありません。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      }
+    },
+    {
+      "id": "Z20_nagaoka",
+      "acct": "nagaoka",
+      "segment": "T6",
+      "theme": "費用",
+      "hypothesis": "高額コースで改善しなかった人はお金をかけても意味がないと思い込んでいる→原因を見誤っていた可能性を伝えれば反応する",
+      "pain_ids": [
+        "ST56",
+        "ST61"
+      ],
+      "evidence": "nagaoka T6 index0.05・avoid傾向=その他・playbook W1",
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "整体巡りに疲れた人へ。\n\n寝る前1回、後頭部と首の境目を軽く押すだけ。\n道具はいりません。"
+        },
+        {
+          "hook": "high",
+          "text": "何をしても一時的にしか変わらない人へ。\n\n変わらなかったのは、原因が別の場所だった可能性があります。\nお金の問題ではありません。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      }
+    },
+    {
+      "id": "Z22_nagaoka",
+      "acct": "nagaoka",
+      "segment": "T1",
+      "theme": "不安",
+      "hypothesis": "デスクワーク層は整体は痛い・怖いというイメージを持っている→気持ちいい強さで行うと伝えれば反応する",
+      "pain_ids": [
+        "ST11"
+      ],
+      "evidence": "nagaoka T1 index1.02・win構造=数字(median271v,n6)・playbook W2",
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "1日中パソコンに向かう人へ。\n\n今日からできる1分、両肩をすくめて3秒止めて落とすだけ。\n道具はいりません。"
+        },
+        {
+          "hook": "high",
+          "text": "デスクワークで首の後ろが痛い人へ。\n\nバキバキ鳴らす施術と、原因から整える施術は全く別物です。\n強さより原因の説明を大事にする院もあります。"
         }
       ],
       "last_result": {

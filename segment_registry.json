@@ -605,5 +605,113 @@
     "hook": "principle",
     "variant": 16,
     "created": "2026-09-25"
+  },
+  "抱っこや授乳で腰が痛むママへ。": {
+    "segment": "T3",
+    "hook": "high",
+    "created": "2026-09-26",
+    "acct": "truth",
+    "variant": 1
+  },
+  "立ち仕事で脚がパンパンな人へ。": {
+    "segment": "T4",
+    "hook": "high",
+    "created": "2026-09-26",
+    "acct": "truth",
+    "variant": 0
+  },
+  "夜中に何度も目が覚める人へ。": {
+    "segment": "T5",
+    "hook": "high",
+    "created": "2026-09-26",
+    "acct": "truth",
+    "variant": 1
+  },
+  "マッサージでは変わらないと感じる人へ。": {
+    "segment": "T6",
+    "hook": "high",
+    "created": "2026-09-26",
+    "acct": "truth",
+    "variant": 0
+  },
+  "骨盤の歪みが気になるママへ。": {
+    "segment": "T3",
+    "hook": "high",
+    "created": "2026-09-26",
+    "acct": "nagaoka",
+    "variant": 0
+  },
+  "立ちっぱなしで脚がパンパンな人へ。": {
+    "segment": "T4",
+    "hook": "high",
+    "created": "2026-09-26",
+    "acct": "nagaoka",
+    "variant": 1
+  },
+  "疲れているのに運動が続かない人へ。": {
+    "segment": "T5",
+    "hook": "high",
+    "created": "2026-09-26",
+    "acct": "nagaoka",
+    "variant": 0
+  },
+  "揉んでもすぐ戻ると感じる人へ。": {
+    "segment": "T6",
+    "hook": "high",
+    "created": "2026-09-26",
+    "acct": "nagaoka",
+    "variant": 1
+  },
+  "開業資金を自己資金だけで考える人は。": {
+    "segment": "S1",
+    "hook": "high",
+    "created": "2026-09-26",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H20"
+  },
+  "開業して1年、経歴中心のプロフィールは。": {
+    "segment": "S2",
+    "hook": "high",
+    "created": "2026-09-26",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H05"
+  },
+  "月商50万の壁で次回を客任せにする店は。": {
+    "segment": "S3",
+    "hook": "high",
+    "created": "2026-09-26",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H09"
+  },
+  "売上が伸びても、稼働時間が減らない院長を見てきて。": {
+    "segment": "S4",
+    "hook": "high",
+    "created": "2026-09-26",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H14"
+  },
+  "都度払いのまま続ける経営者を見てきて。": {
+    "segment": "S5",
+    "hook": "high",
+    "created": "2026-09-26",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H18"
+  },
+  "毎日ネタを変えなきゃ、と思っていませんか。": {
+    "segment": "HAKASE",
+    "hook": "principle",
+    "variant": 3,
+    "created": "2026-09-26"
+  },
+  "困っていることを、黙っていませんか。": {
+    "segment": "HAKASE",
+    "hook": "principle",
+    "variant": 11,
+    "created": "2026-09-26"
   }
 }

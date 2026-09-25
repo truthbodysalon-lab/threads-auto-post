@@ -1485,9 +1485,9 @@
         }
       ],
       "last_result": {
-        "n": 1,
-        "index": 0.0,
-        "updated": "2026-09-24"
+        "n": 2,
+        "index": 2.283,
+        "updated": "2026-09-25"
       }
     },
     {
@@ -1540,9 +1540,9 @@
         }
       ],
       "last_result": {
-        "n": 1,
-        "index": 0.0,
-        "updated": "2026-09-24"
+        "n": 2,
+        "index": 0.928,
+        "updated": "2026-09-25"
       }
     },
     {
@@ -1645,9 +1645,9 @@
         }
       ],
       "last_result": {
-        "n": 1,
-        "index": 0.0,
-        "updated": "2026-09-24"
+        "n": 2,
+        "index": 4.059,
+        "updated": "2026-09-25"
       }
     },
     {
@@ -1777,9 +1777,9 @@
         }
       ],
       "last_result": {
-        "n": 1,
-        "index": 0.0,
-        "updated": "2026-09-24"
+        "n": 2,
+        "index": 1.237,
+        "updated": "2026-09-25"
       }
     },
     {
@@ -1881,8 +1881,8 @@
       ],
       "last_result": {
         "n": 1,
-        "index": 0.013,
-        "updated": "2026-09-24"
+        "index": 0.197,
+        "updated": "2026-09-25"
       }
     },
     {
@@ -2251,7 +2251,7 @@
         "ST10"
       ],
       "evidence": "T1 index1.25・win構造=問いかけ(median119v,n22)・playbook W1",
-      "status": "untested",
+      "status": "testing",
       "posts": [
         {
           "hook": "low",
@@ -2263,9 +2263,9 @@
         }
       ],
       "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
+        "n": 1,
+        "index": 0.121,
+        "updated": "2026-09-25"
       }
     },
     {
@@ -2308,7 +2308,7 @@
         "ST24"
       ],
       "evidence": "T2 index0.83・win構造=数字(median132v,n22)・playbook L7",
-      "status": "untested",
+      "status": "testing",
       "posts": [
         {
           "hook": "low",
@@ -2320,9 +2320,9 @@
         }
       ],
       "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
+        "n": 1,
+        "index": 0.255,
+        "updated": "2026-09-25"
       }
     },
     {
@@ -2392,7 +2392,7 @@
         "ST34"
       ],
       "evidence": "T3 n=0(白地層)・playbook W4/W5・仮説として要検証",
-      "status": "untested",
+      "status": "testing",
       "posts": [
         {
           "hook": "low",
@@ -2404,9 +2404,9 @@
         }
       ],
       "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
+        "n": 2,
+        "index": 0.145,
+        "updated": "2026-09-25"
       }
     },
     {
@@ -2421,7 +2421,7 @@
         "ST42"
       ],
       "evidence": "T4 n=0(白地層)・playbook該当なし・仮説として要検証",
-      "status": "untested",
+      "status": "testing",
       "posts": [
         {
           "hook": "low",
@@ -2433,9 +2433,9 @@
         }
       ],
       "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
+        "n": 2,
+        "index": 0.164,
+        "updated": "2026-09-25"
       }
     },
     {
@@ -2479,7 +2479,7 @@
         "ST54"
       ],
       "evidence": "T5 index1.35(n=3・参考値)・playbook W1・share1(参考値のため据え置き)",
-      "status": "untested",
+      "status": "testing",
       "posts": [
         {
           "hook": "low",
@@ -2491,9 +2491,9 @@
         }
       ],
       "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
+        "n": 1,
+        "index": 0.036,
+        "updated": "2026-09-25"
       }
     },
     {
@@ -2508,7 +2508,7 @@
         "ST58"
       ],
       "evidence": "T6 index0.31・avoid傾向=その他/否定型・playbook L2",
-      "status": "untested",
+      "status": "testing",
       "posts": [
         {
           "hook": "low",
@@ -2520,9 +2520,9 @@
         }
       ],
       "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
+        "n": 1,
+        "index": 0.303,
+        "updated": "2026-09-25"
       }
     },
     {
@@ -2564,7 +2564,7 @@
         "ST02"
       ],
       "evidence": "nagaoka T1 index1.02・win構造=数字(median271v,n6)・playbook W1",
-      "status": "untested",
+      "status": "testing",
       "posts": [
         {
           "hook": "low",
@@ -2576,9 +2576,9 @@
         }
       ],
       "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
+        "n": 1,
+        "index": 3.125,
+        "updated": "2026-09-25"
       }
     },
     {
@@ -2593,7 +2593,7 @@
         "ST19"
       ],
       "evidence": "nagaoka T2 index1.15・win構造=問いかけ(median184v,n30)・playbook L7",
-      "status": "untested",
+      "status": "testing",
       "posts": [
         {
           "hook": "low",
@@ -2605,9 +2605,9 @@
         }
       ],
       "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
+        "n": 1,
+        "index": 2.924,
+        "updated": "2026-09-25"
       }
     },
     {
@@ -2676,7 +2676,7 @@
         "ST30"
       ],
       "evidence": "nagaoka T3 index2.57(n=2・参考値)・playbook W5・share1(参考値のため据え置き)",
-      "status": "untested",
+      "status": "testing",
       "posts": [
         {
           "hook": "low",
@@ -2688,9 +2688,9 @@
         }
       ],
       "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
+        "n": 2,
+        "index": 1.679,
+        "updated": "2026-09-25"
       }
     },
     {
@@ -2733,7 +2733,7 @@
         "ST40"
       ],
       "evidence": "nagaoka T4 n=0(白地層)・playbook該当なし・仮説として要検証",
-      "status": "untested",
+      "status": "testing",
       "posts": [
         {
           "hook": "low",
@@ -2745,9 +2745,9 @@
         }
       ],
       "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
+        "n": 1,
+        "index": 1.185,
+        "updated": "2026-09-25"
       }
     },
     {
@@ -2761,7 +2761,7 @@
         "ST46"
       ],
       "evidence": "nagaoka T5 index0.63・win構造=その他(median178v,n4)・playbook L9",
-      "status": "untested",
+      "status": "testing",
       "posts": [
         {
           "hook": "low",
@@ -2773,9 +2773,9 @@
         }
       ],
       "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
+        "n": 1,
+        "index": 0.174,
+        "updated": "2026-09-25"
       }
     },
     {
@@ -2818,7 +2818,7 @@
         "ST61"
       ],
       "evidence": "nagaoka T6 index0.05・avoid傾向=その他・playbook W1",
-      "status": "untested",
+      "status": "testing",
       "posts": [
         {
           "hook": "low",
@@ -2830,9 +2830,9 @@
         }
       ],
       "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
+        "n": 1,
+        "index": 0.712,
+        "updated": "2026-09-25"
       }
     },
     {

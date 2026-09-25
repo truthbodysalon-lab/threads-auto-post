@@ -495,5 +495,115 @@
     "hook": "principle",
     "variant": 12,
     "created": "2026-09-25"
+  },
+  "デスクワークで肩や首が重い人へ。": {
+    "segment": "T1",
+    "hook": "low",
+    "created": "2026-09-25",
+    "acct": "truth",
+    "variant": 0
+  },
+  "頭痛薬なしで一日が始まらない人へ。": {
+    "segment": "T2",
+    "hook": "low",
+    "created": "2026-09-25",
+    "acct": "truth",
+    "variant": null,
+    "hypothesis_id": "Z09_truth"
+  },
+  "抱っこ疲れで腰が痛いママへ。": {
+    "segment": "T3",
+    "hook": "low",
+    "created": "2026-09-25",
+    "acct": "truth",
+    "variant": 1
+  },
+  "立ち仕事や介護で腰と脚がつらい人へ。": {
+    "segment": "T4",
+    "hook": "low",
+    "created": "2026-09-25",
+    "acct": "truth",
+    "variant": 0
+  },
+  "スマホ首で悩む人へ。": {
+    "segment": "T1",
+    "hook": "low",
+    "created": "2026-09-25",
+    "acct": "nagaoka",
+    "variant": 0
+  },
+  "頭痛で仕事に集中できない人へ。": {
+    "segment": "T2",
+    "hook": "low",
+    "created": "2026-09-25",
+    "acct": "nagaoka",
+    "variant": null,
+    "hypothesis_id": "Z08_nagaoka"
+  },
+  "抱っこ・授乳で背中が丸くなるママへ。": {
+    "segment": "T3",
+    "hook": "low",
+    "created": "2026-09-25",
+    "acct": "nagaoka",
+    "variant": 0
+  },
+  "介護をひとりで抱え込む人へ。": {
+    "segment": "T4",
+    "hook": "low",
+    "created": "2026-09-25",
+    "acct": "nagaoka",
+    "variant": 1
+  },
+  "開業資金で悩んでいる人へ。": {
+    "segment": "S1",
+    "hook": "low",
+    "created": "2026-09-25",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H20"
+  },
+  "開業して1年、プロフィールで悩む人へ。": {
+    "segment": "S2",
+    "hook": "low",
+    "created": "2026-09-25",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H05"
+  },
+  "月商50万の壁でリピートが伸びない人へ。": {
+    "segment": "S3",
+    "hook": "low",
+    "created": "2026-09-25",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H09"
+  },
+  "時間がない院長へ。": {
+    "segment": "S4",
+    "hook": "low",
+    "created": "2026-09-25",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H14"
+  },
+  "都度払いにしている経営者へ。": {
+    "segment": "S5",
+    "hook": "low",
+    "created": "2026-09-25",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H18"
+  },
+  "何でも自分でやるのが、頑張っている証拠だと思っていませんか。": {
+    "segment": "HAKASE",
+    "hook": "principle",
+    "variant": 6,
+    "created": "2026-09-25"
+  },
+  "投稿でいきなり売ろうとしていませんか。": {
+    "segment": "HAKASE",
+    "hook": "principle",
+    "variant": 16,
+    "created": "2026-09-25"
   }
 }

@@ -381,5 +381,119 @@
     "hook": "principle",
     "variant": 8,
     "created": "2026-09-25"
+  },
+  "会議続きで首が痛い人へ。": {
+    "segment": "T1",
+    "hook": "low",
+    "created": "2026-09-25",
+    "acct": "truth",
+    "variant": null,
+    "hypothesis_id": "Z03_truth"
+  },
+  "頭痛薬が常備品になっている人へ。": {
+    "segment": "T2",
+    "hook": "low",
+    "created": "2026-09-25",
+    "acct": "truth",
+    "variant": null,
+    "hypothesis_id": "Z07_truth"
+  },
+  "産後の腰痛や骨盤に悩むママへ。": {
+    "segment": "T3",
+    "hook": "low",
+    "created": "2026-09-25",
+    "acct": "truth",
+    "variant": 0
+  },
+  "介護や看護で腰と脚がつらい人へ。": {
+    "segment": "T4",
+    "hook": "low",
+    "created": "2026-09-25",
+    "acct": "truth",
+    "variant": null,
+    "hypothesis_id": "Z15_truth"
+  },
+  "1日中パソコンに向かう人へ。": {
+    "segment": "T1",
+    "hook": "low",
+    "created": "2026-09-25",
+    "acct": "nagaoka",
+    "variant": null,
+    "hypothesis_id": "Z22_nagaoka"
+  },
+  "朝からこめかみが重い人へ。": {
+    "segment": "T2",
+    "hook": "low",
+    "created": "2026-09-25",
+    "acct": "nagaoka",
+    "variant": null,
+    "hypothesis_id": "Z06_nagaoka"
+  },
+  "子育てで腰を痛めたママへ。": {
+    "segment": "T3",
+    "hook": "low",
+    "created": "2026-09-25",
+    "acct": "nagaoka",
+    "variant": null,
+    "hypothesis_id": "Z12_nagaoka"
+  },
+  "立ち仕事や介護で腰が張る人へ。": {
+    "segment": "T4",
+    "hook": "low",
+    "created": "2026-09-25",
+    "acct": "nagaoka",
+    "variant": 0
+  },
+  "開業前で自信が持てない人へ。": {
+    "segment": "S1",
+    "hook": "low",
+    "created": "2026-09-25",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H02"
+  },
+  "開業して1年、集客ゼロの人へ。": {
+    "segment": "S2",
+    "hook": "low",
+    "created": "2026-09-25",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H04"
+  },
+  "月商50万の壁で値上げが怖い人へ。": {
+    "segment": "S3",
+    "hook": "low",
+    "created": "2026-09-25",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H08"
+  },
+  "スタッフに任せて不安な院長へ。": {
+    "segment": "S4",
+    "hook": "low",
+    "created": "2026-09-25",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H13"
+  },
+  "高い商品を作りたい経営者へ。": {
+    "segment": "S5",
+    "hook": "low",
+    "created": "2026-09-25",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H17"
+  },
+  "フォロワーを増やすことだけが、集客の道じゃない。": {
+    "segment": "HAKASE",
+    "hook": "principle",
+    "variant": 10,
+    "created": "2026-09-25"
+  },
+  "1週間で結果が出ないと、諦めていませんか。": {
+    "segment": "HAKASE",
+    "hook": "principle",
+    "variant": 12,
+    "created": "2026-09-25"
   }
 }

@@ -702,16 +702,16 @@
     "variant": null,
     "hypothesis_id": "H18"
   },
-  "毎日ネタを変えなきゃ、と思っていませんか。": {
+  "同じような発信をする人が増えると不利になる。": {
     "segment": "HAKASE",
     "hook": "principle",
-    "variant": 3,
+    "variant": 15,
     "created": "2026-09-26"
   },
-  "困っていることを、黙っていませんか。": {
+  "投稿を出したら終わり、にしていませんか。": {
     "segment": "HAKASE",
     "hook": "principle",
-    "variant": 11,
+    "variant": 13,
     "created": "2026-09-26"
   }
 }

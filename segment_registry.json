@@ -40,7 +40,7 @@
   "寝ても疲労感が抜けない人へ。": {
     "segment": "T5",
     "hook": "high",
-    "created": "2026-09-24",
+    "created": "2026-09-26",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z17_truth"
@@ -56,7 +56,7 @@
   "産後の腰痛が続くママへ。": {
     "segment": "T3",
     "hook": "high",
-    "created": "2026-09-24",
+    "created": "2026-09-26",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z11_truth"
@@ -64,7 +64,7 @@
   "何をしても一時的にしか変わらない人へ。": {
     "segment": "T6",
     "hook": "high",
-    "created": "2026-09-24",
+    "created": "2026-09-26",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z20_nagaoka"
@@ -80,7 +80,7 @@
   "夜勤続きで腰が重い人へ。": {
     "segment": "T4",
     "hook": "high",
-    "created": "2026-09-24",
+    "created": "2026-09-26",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z14_nagaoka"
@@ -712,6 +712,86 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 13,
+    "created": "2026-09-26"
+  },
+  "介護の抱え上げで腰を痛めた人へ。": {
+    "segment": "T4",
+    "hook": "high",
+    "created": "2026-09-26",
+    "acct": "truth",
+    "variant": 1
+  },
+  "他院に通っても改善しない人へ。": {
+    "segment": "T6",
+    "hook": "high",
+    "created": "2026-09-26",
+    "acct": "truth",
+    "variant": 1
+  },
+  "抱っこで腕がだるいママへ。": {
+    "segment": "T3",
+    "hook": "high",
+    "created": "2026-09-26",
+    "acct": "nagaoka",
+    "variant": 1
+  },
+  "やる気が出ない日が続く人へ。": {
+    "segment": "T5",
+    "hook": "high",
+    "created": "2026-09-26",
+    "acct": "nagaoka",
+    "variant": 1
+  },
+  "開業前に発信の型で迷っている人は。": {
+    "segment": "S1",
+    "hook": "high",
+    "created": "2026-09-26",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H23"
+  },
+  "開業して1年、閲覧数だけ伸びても売れない人は。": {
+    "segment": "S2",
+    "hook": "high",
+    "created": "2026-09-26",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H06"
+  },
+  "月商50万の壁で中身を書かない登録ボタンは。": {
+    "segment": "S3",
+    "hook": "high",
+    "created": "2026-09-26",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H10"
+  },
+  "院長が自分で投稿を作る院は。": {
+    "segment": "S4",
+    "hook": "high",
+    "created": "2026-09-26",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H15"
+  },
+  "高額な教材を買い続ける経営者は。": {
+    "segment": "S5",
+    "hook": "high",
+    "created": "2026-09-26",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H19"
+  },
+  "毎日ネタを変えなきゃ、と思っていませんか。": {
+    "segment": "HAKASE",
+    "hook": "principle",
+    "variant": 3,
+    "created": "2026-09-26"
+  },
+  "困っていることを、黙っていませんか。": {
+    "segment": "HAKASE",
+    "hook": "principle",
+    "variant": 11,
     "created": "2026-09-26"
   }
 }

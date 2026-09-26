@@ -264,7 +264,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 1,
-    "created": "2026-09-24"
+    "created": "2026-09-27"
   },
   "在宅勤務で肩こりが悪化した人へ。": {
     "segment": "T1",
@@ -285,7 +285,7 @@
   "産後、体の痛みを我慢するママへ。": {
     "segment": "T3",
     "hook": "low",
-    "created": "2026-09-25",
+    "created": "2026-09-27",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z11_truth"
@@ -325,7 +325,7 @@
   "重い荷物運びで腰を痛めた人へ。": {
     "segment": "T4",
     "hook": "low",
-    "created": "2026-09-25",
+    "created": "2026-09-27",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z14_nagaoka"
@@ -845,5 +845,93 @@
     "hook": "principle",
     "variant": 7,
     "created": "2026-09-26"
+  },
+  "座りっぱなしで肩がガチガチな人へ。": {
+    "segment": "T1",
+    "hook": "low",
+    "created": "2026-09-27",
+    "acct": "truth",
+    "variant": 1
+  },
+  "週に何度も頭痛薬を飲む人へ。": {
+    "segment": "T2",
+    "hook": "low",
+    "created": "2026-09-27",
+    "acct": "truth",
+    "variant": 0
+  },
+  "看護や介護で腰が痛む人へ。": {
+    "segment": "T4",
+    "hook": "low",
+    "created": "2026-09-27",
+    "acct": "truth",
+    "variant": 1
+  },
+  "肩の可動域が狭くなった人へ。": {
+    "segment": "T1",
+    "hook": "low",
+    "created": "2026-09-27",
+    "acct": "nagaoka",
+    "variant": 1
+  },
+  "頭痛薬をお守りのように持ち歩く人へ。": {
+    "segment": "T2",
+    "hook": "low",
+    "created": "2026-09-27",
+    "acct": "nagaoka",
+    "variant": 0
+  },
+  "育児で自分のケアを後回しにするママへ。": {
+    "segment": "T3",
+    "hook": "low",
+    "created": "2026-09-27",
+    "acct": "nagaoka",
+    "variant": 1
+  },
+  "開業前で、発信のやり方に迷っている人へ。": {
+    "segment": "S1",
+    "hook": "low",
+    "created": "2026-09-27",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H23"
+  },
+  "開業して1年、閲覧は多いのに売れない人へ。": {
+    "segment": "S2",
+    "hook": "low",
+    "created": "2026-09-27",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H06"
+  },
+  "月商50万の壁で登録が増えない人へ。": {
+    "segment": "S3",
+    "hook": "low",
+    "created": "2026-09-27",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H10"
+  },
+  "投稿する時間がない院長へ。": {
+    "segment": "S4",
+    "hook": "low",
+    "created": "2026-09-27",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H15"
+  },
+  "高い教材を買った経営者へ。": {
+    "segment": "S5",
+    "hook": "low",
+    "created": "2026-09-27",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H19"
+  },
+  "売り先を1つに絞ると、止まった時に困ります。": {
+    "segment": "HAKASE",
+    "hook": "principle",
+    "variant": 9,
+    "created": "2026-09-27"
   }
 }

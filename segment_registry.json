@@ -32,7 +32,7 @@
   "マッサージ通いに疲れた人へ。": {
     "segment": "T6",
     "hook": "high",
-    "created": "2026-09-24",
+    "created": "2026-09-26",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z19_truth"
@@ -48,7 +48,7 @@
   "看護や介護の仕事で脚がだるい人へ。": {
     "segment": "T4",
     "hook": "high",
-    "created": "2026-09-24",
+    "created": "2026-09-26",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z13_truth"
@@ -72,7 +72,7 @@
   "朝起きた瞬間からだるい人へ。": {
     "segment": "T5",
     "hook": "high",
-    "created": "2026-09-24",
+    "created": "2026-09-26",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z16_nagaoka"
@@ -88,7 +88,7 @@
   "産後の姿勢崩れが気になるママへ。": {
     "segment": "T3",
     "hook": "high",
-    "created": "2026-09-24",
+    "created": "2026-09-26",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z10_nagaoka"
@@ -157,7 +157,7 @@
   "産後の骨盤の歪みが気になるママへ。": {
     "segment": "T3",
     "hook": "high",
-    "created": "2026-09-24",
+    "created": "2026-09-26",
     "acct": "truth",
     "variant": 0
   },
@@ -172,7 +172,7 @@
   "朝から体が重いと感じる人へ。": {
     "segment": "T5",
     "hook": "high",
-    "created": "2026-09-24",
+    "created": "2026-09-26",
     "acct": "truth",
     "variant": 0
   },
@@ -195,7 +195,7 @@
   "不規則な勤務で通院を諦めた人へ。": {
     "segment": "T4",
     "hook": "high",
-    "created": "2026-09-24",
+    "created": "2026-09-26",
     "acct": "nagaoka",
     "variant": 0
   },
@@ -210,7 +210,7 @@
   "施術で悪化した経験がある人へ。": {
     "segment": "T6",
     "hook": "high",
-    "created": "2026-09-24",
+    "created": "2026-09-26",
     "acct": "nagaoka",
     "variant": 0
   },
@@ -792,6 +792,58 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 11,
+    "created": "2026-09-26"
+  },
+  "開業準備中で集客の正解を探している人は。": {
+    "segment": "S1",
+    "hook": "high",
+    "created": "2026-09-26",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H28"
+  },
+  "開業して1年、商品説明から入る投稿は。": {
+    "segment": "S2",
+    "hook": "high",
+    "created": "2026-09-26",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H21"
+  },
+  "月商50万の壁にいる人ほど。": {
+    "segment": "S3",
+    "hook": "high",
+    "created": "2026-09-26",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H11"
+  },
+  "同業と売上を比べ続ける院長は。": {
+    "segment": "S4",
+    "hook": "high",
+    "created": "2026-09-26",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H22"
+  },
+  "高額商品を自分の名前で売り込む経営者は。": {
+    "segment": "S5",
+    "hook": "high",
+    "created": "2026-09-26",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H27"
+  },
+  "数字を見ずに、感覚で投稿を続けていませんか。": {
+    "segment": "HAKASE",
+    "hook": "principle",
+    "variant": 17,
+    "created": "2026-09-26"
+  },
+  "良い投稿をすれば信頼される、とは限りません。": {
+    "segment": "HAKASE",
+    "hook": "principle",
+    "variant": 7,
     "created": "2026-09-26"
   }
 }

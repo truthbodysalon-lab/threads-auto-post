@@ -301,9 +301,14 @@ def get_posted_texts(acct: str) -> set:
 # masa: lin.ee/8PsIHHC (SNS集客相談LINE)
 _LINE_LISTIN_URLS = ["lin.ee/qbRbPAm", "lin.ee/8PsIHHC"]
 _LINE_STATE_FILE = BASE / "line_listin_state.json"
-# 1日あたりのLINEリストイン投稿回数の上限（LINE登録を伸ばすため truth/nagaoka を2回に）。
+# 1日あたりのLINEリストイン投稿回数の上限。
+# 2026-09-26修正: generate_remix.pyは2026-08-16是正でtruth/nagaokaとも
+# キューに3本（anchor 3件）を積む設計になっているが、ここの上限が2のまま
+# 据え置かれていたため実投稿が常に2/日に頭打ちし、truthのLINEリストイン頻度が
+# 目標5〜7%を割り込み4%/日に固定化していた（30日実測25/1483・検証で発覚）。
+# キュー本数(3)に上限を合わせて是正する。
 # masaは月間URL上限2本の別ルールがあるため1のまま（実質は月2本程度）。
-_LINE_DAILY = {"truth": 2, "nagaoka": 2, "masa": 1}
+_LINE_DAILY = {"truth": 3, "nagaoka": 3, "masa": 1}
 
 
 def _is_line_listin(text: str) -> bool:

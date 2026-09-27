@@ -113,8 +113,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 2,
-    "acct": "masa",
-    "created": "2026-09-24"
+    "created": "2026-09-27"
   },
   "月商50万の壁で止まる店を見てきて分かったこと。": {
     "segment": "S3",
@@ -277,7 +276,7 @@
   "月に何度も頭痛薬を飲む人へ。": {
     "segment": "T2",
     "hook": "low",
-    "created": "2026-09-25",
+    "created": "2026-09-27",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z05_truth"
@@ -309,7 +308,7 @@
   "光や音がつらい頭痛がある人へ。": {
     "segment": "T2",
     "hook": "low",
-    "created": "2026-09-25",
+    "created": "2026-09-27",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z04_nagaoka"
@@ -385,7 +384,7 @@
   "会議続きで首が痛い人へ。": {
     "segment": "T1",
     "hook": "low",
-    "created": "2026-09-25",
+    "created": "2026-09-27",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z03_truth"
@@ -408,7 +407,7 @@
   "介護や看護で腰と脚がつらい人へ。": {
     "segment": "T4",
     "hook": "low",
-    "created": "2026-09-25",
+    "created": "2026-09-27",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z15_truth"
@@ -416,7 +415,7 @@
   "1日中パソコンに向かう人へ。": {
     "segment": "T1",
     "hook": "low",
-    "created": "2026-09-25",
+    "created": "2026-09-27",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z22_nagaoka"
@@ -432,7 +431,7 @@
   "子育てで腰を痛めたママへ。": {
     "segment": "T3",
     "hook": "low",
-    "created": "2026-09-25",
+    "created": "2026-09-27",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z12_nagaoka"
@@ -514,7 +513,7 @@
   "抱っこ疲れで腰が痛いママへ。": {
     "segment": "T3",
     "hook": "low",
-    "created": "2026-09-25",
+    "created": "2026-09-27",
     "acct": "truth",
     "variant": 1
   },
@@ -550,7 +549,7 @@
   "介護をひとりで抱え込む人へ。": {
     "segment": "T4",
     "hook": "low",
-    "created": "2026-09-25",
+    "created": "2026-09-27",
     "acct": "nagaoka",
     "variant": 1
   },
@@ -712,7 +711,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 13,
-    "created": "2026-09-26"
+    "created": "2026-09-27"
   },
   "介護の抱え上げで腰を痛めた人へ。": {
     "segment": "T4",
@@ -987,5 +986,43 @@
     "acct": "masa",
     "variant": null,
     "hypothesis_id": "H27"
+  },
+  "開業準備中のあなたへ。": {
+    "segment": "S1",
+    "hook": "low",
+    "created": "2026-09-27",
+    "acct": "masa",
+    "variant": 1
+  },
+  "開業して1年、投稿のネタに悩む人へ。": {
+    "segment": "S2",
+    "hook": "low",
+    "created": "2026-09-27",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H24"
+  },
+  "月商50万の壁で、投稿が伸び悩む経営者へ。": {
+    "segment": "S3",
+    "hook": "low",
+    "created": "2026-09-27",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H25"
+  },
+  "スタッフを抱える院長で、発信も自分でやる人へ。": {
+    "segment": "S4",
+    "hook": "low",
+    "created": "2026-09-27",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H26"
+  },
+  "高額商品を持つサロン経営者へ。": {
+    "segment": "S5",
+    "hook": "low",
+    "created": "2026-09-27",
+    "acct": "masa",
+    "variant": 1
   }
 }

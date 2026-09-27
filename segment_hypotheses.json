@@ -1,2866 +1,2940 @@
 {
-  "generated": "2026-09-23",
-  "source": "obsidian myfiles 走査 2026-09-23（悩み65件）",
-  "pains": [
-    {
-      "id": "P001",
-      "text": "開業まで半年切ったのに物件が決まらず動けない",
-      "segment": "S1",
-      "theme": "集客",
-      "count": 1,
-      "sources": [
-        "講義ノート/グルコン/グルコン_2026-05-01_UP_LINK.md"
-      ]
-    },
-    {
-      "id": "P002",
-      "text": "創業補助金は狭き門で公庫融資の方が通りやすいと知らない",
-      "segment": "S1",
-      "theme": "仕組み化",
-      "count": 1,
-      "sources": [
-        "講義ノート/グルコン/グルコン_2026-05-01_UP_LINK.md"
-      ]
-    },
-    {
-      "id": "P003",
-      "text": "居抜き物件の探し方を知らずゼロから内装を考えている",
-      "segment": "S1",
-      "theme": "仕組み化",
-      "count": 1,
-      "sources": [
-        "講義ノート/グルコン/グルコン_2026-05-01_UP_LINK.md"
-      ]
-    },
-    {
-      "id": "P004",
-      "text": "開業前に発信せず開業日にフォロワー0のまま迎える",
-      "segment": "S1",
-      "theme": "SNS",
-      "count": 2,
-      "sources": [
-        "講義ノート/グルコン/グルコン_2026-05-01_UP_LINK.md",
-        "YouTube分析/.../2026-06-15_M-ELk_QS7Tw.md"
-      ]
-    },
-    {
-      "id": "P005",
-      "text": "開業前のマーケ学習が動画を少し見た程度で体系立っていない",
-      "segment": "S1",
-      "theme": "AI",
-      "count": 1,
-      "sources": [
-        "YouTube分析/.../2026-09-17_9oJZPzXiRyg.md"
-      ]
-    },
-    {
-      "id": "P006",
-      "text": "開業前の無料体験会に誰も来ない時期が2年続いた",
-      "segment": "S1",
-      "theme": "集客",
-      "count": 1,
-      "sources": [
-        "YouTube分析/.../2026-06-15_M-ELk_QS7Tw.md"
-      ]
-    },
-    {
-      "id": "P007",
-      "text": "開業初月の売上目標を単価×人数で逆算できていない",
-      "segment": "S1",
-      "theme": "単価",
-      "count": 1,
-      "sources": [
-        "商売人の学校/_文字起こし/vm_417028094.txt"
-      ]
-    },
-    {
-      "id": "P008",
-      "text": "開業して間もないのに売上ゼロの日が続いている",
-      "segment": "S2",
-      "theme": "集客",
-      "count": 2,
-      "sources": [
-        "YouTube分析/.../2026-06-15_M-ELk_QS7Tw.md",
-        "商売人の学校/_文字起こし/vm_539647932.txt"
-      ]
-    },
-    {
-      "id": "P009",
-      "text": "開業初期の売上が70万から徐々に下がっていく",
-      "segment": "S2",
-      "theme": "集客",
-      "count": 1,
-      "sources": [
-        "商売人の学校/_文字起こし/vm_323644828.txt"
-      ]
-    },
-    {
-      "id": "P010",
-      "text": "リピート率が42%から下がり続け原因が分からない",
-      "segment": "S2",
-      "theme": "リピート",
-      "count": 1,
-      "sources": [
-        "商売人の学校/_文字起こし/vm_323644828.txt"
-      ]
-    },
-    {
-      "id": "P011",
-      "text": "AI丸投げの投稿が気持ち悪くてやめたが自分の言葉で書けない",
-      "segment": "S2",
-      "theme": "AI",
-      "count": 1,
-      "sources": [
-        "講義ノート/グルコン/グルコン_2026-03-19_UP_LINK.md"
-      ]
-    },
-    {
-      "id": "P012",
-      "text": "プロフィールを見ても誰のどんな悩みを解決する人か伝わらない",
-      "segment": "S2",
-      "theme": "SNS",
-      "count": 3,
-      "sources": [
-        "講義ノート/グルコン/グルコン_2026-03-19_UP_LINK.md",
-        "講義ノート/グルコン/グルコン_2026-03-26_UP_LINK.md",
-        "講義ノート/グルコン/グルコン_2026-04-03_UP_LINK.md"
-      ]
-    },
-    {
-      "id": "P013",
-      "text": "閲覧10万人取れても問い合わせや購入に繋がらない",
-      "segment": "S2",
-      "theme": "集客",
-      "count": 1,
-      "sources": [
-        "講義ノート/グルコン/グルコン_2026-03-19_UP_LINK.md"
-      ]
-    },
-    {
-      "id": "P014",
-      "text": "興味ある方はDMくださいと書くだけでは誰も動かない",
-      "segment": "S2",
-      "theme": "集客",
-      "count": 1,
-      "sources": [
-        "講義ノート/グルコン/グルコン_2026-03-19_UP_LINK.md"
-      ]
-    },
-    {
-      "id": "P015",
-      "text": "自信がなく語尾が曖昧になり信用を落としている",
-      "segment": "S2",
-      "theme": "メンタル",
-      "count": 1,
-      "sources": [
-        "講義ノート/グルコン/グルコン_2026-04-03_UP_LINK.md"
-      ]
-    },
-    {
-      "id": "P016",
-      "text": "資格を取っても難しい質問に即答できず自信が持てない",
-      "segment": "S2",
-      "theme": "メンタル",
-      "count": 1,
-      "sources": [
-        "講義ノート/グルコン/グルコン_2026-04-03_UP_LINK.md"
-      ]
-    },
-    {
-      "id": "P017",
-      "text": "ホットペッパー新規が月30人から14人に減りクーポンも変えていない",
-      "segment": "S3",
-      "theme": "集客",
-      "count": 1,
-      "sources": [
-        "講義ノート/グルコン/グルコン_2026-05-01_UP_LINK.md"
-      ]
-    },
-    {
-      "id": "P018",
-      "text": "新規が25人→15人→月2人と急落し広告のせいだと思っている",
-      "segment": "S3",
-      "theme": "集客",
-      "count": 1,
-      "sources": [
-        "講義ノート/グルコン/グルコン_2026-04-03_UP_LINK.md"
-      ]
-    },
-    {
-      "id": "P019",
-      "text": "リピート率83%あるのに3〜4回目で離脱し単価が伸びない",
-      "segment": "S3",
-      "theme": "リピート",
-      "count": 1,
-      "sources": [
-        "講義ノート/グルコン/グルコン_2026-04-03_UP_LINK.md"
-      ]
-    },
-    {
-      "id": "P020",
-      "text": "次回予約70%取れてもキャンセル込みでリピート率50%まで落ちる",
-      "segment": "S3",
-      "theme": "リピート",
-      "count": 1,
-      "sources": [
-        "講義ノート/グルコン/グルコン_2026-05-01_UP_LINK.md"
-      ]
-    },
-    {
-      "id": "P021",
-      "text": "90分7500円のメニューのまま時間対効果の悪さに気づいていない",
-      "segment": "S3",
-      "theme": "単価",
-      "count": 1,
-      "sources": [
-        "講義ノート/グルコン/グルコン_2026-04-03_UP_LINK.md"
-      ]
-    },
-    {
-      "id": "P022",
-      "text": "新規が30人来て余裕があるせいでバックエンドが決まらない",
-      "segment": "S3",
-      "theme": "単価",
-      "count": 1,
-      "sources": [
-        "講義ノート/グルコン/グルコン_2026-05-01_UP_LINK.md"
-      ]
-    },
-    {
-      "id": "P023",
-      "text": "次回どうされますかと聞き客に予約判断を委ねている",
-      "segment": "S3",
-      "theme": "リピート",
-      "count": 1,
-      "sources": [
-        "講義ノート/グルコン/グルコン_2026-03-26_UP_LINK.md"
-      ]
-    },
-    {
-      "id": "P024",
-      "text": "LINE登録で今すぐスタートと書いても中身が不明で登録されない",
-      "segment": "S3",
-      "theme": "SNS",
-      "count": 1,
-      "sources": [
-        "講義ノート/グルコン/グルコン_2026-03-26_UP_LINK.md"
-      ]
-    },
-    {
-      "id": "P025",
-      "text": "変わる意思の薄い客にどこまで向き合うか線引きできない",
-      "segment": "S3",
-      "theme": "メンタル",
-      "count": 1,
-      "sources": [
-        "講義ノート/グルコン/グルコン_2026-03-19_UP_LINK.md"
-      ]
-    },
-    {
-      "id": "P026",
-      "text": "カルテの枚数が増えず売上も横ばいでリピート問題を放置している",
-      "segment": "S3",
-      "theme": "リピート",
-      "count": 1,
-      "sources": [
-        "商売人の学校/_文字起こし/vm_478275238.txt"
-      ]
-    },
-    {
-      "id": "P027",
-      "text": "値上げをこっそり少しずつしか試せず大きく上げる勇気がない",
-      "segment": "S3",
-      "theme": "単価",
-      "count": 1,
-      "sources": [
-        "商売人の学校/_文字起こし/vm_323644828.txt"
-      ]
-    },
-    {
-      "id": "P028",
-      "text": "セミナーを聞いても売上が上がらずやる気が続かない",
-      "segment": "S3",
-      "theme": "メンタル",
-      "count": 1,
-      "sources": [
-        "商売人の学校/_文字起こし/vm_674272715.txt"
-      ]
-    },
-    {
-      "id": "P029",
-      "text": "単価をどう上げればいいか悩んだまま行動できていない",
-      "segment": "S3",
-      "theme": "単価",
-      "count": 1,
-      "sources": [
-        "商売人の学校/_文字起こし/vm_674272715.txt"
-      ]
-    },
-    {
-      "id": "P030",
-      "text": "スタッフが入っては辞めてを繰り返し店が安定しない",
-      "segment": "S4",
-      "theme": "採用",
-      "count": 2,
-      "sources": [
-        "商売人の学校/_文字起こし/vm_323644828.txt"
-      ]
-    },
-    {
-      "id": "P031",
-      "text": "ベテランスタッフが突然辞め業務が一気に回らなくなった",
-      "segment": "S4",
-      "theme": "採用",
-      "count": 1,
-      "sources": [
-        "商売人の学校/_文字起こし/vm_323644828.txt"
-      ]
-    },
-    {
-      "id": "P032",
-      "text": "採用した人の人間性が合わずわずか2ヶ月でクビにした",
-      "segment": "S4",
-      "theme": "採用",
-      "count": 1,
-      "sources": [
-        "商売人の学校/_文字起こし/vm_323644828.txt"
-      ]
-    },
-    {
-      "id": "P033",
-      "text": "求人を出す時に何を条件にすればいいか分からない",
-      "segment": "S4",
-      "theme": "採用",
-      "count": 1,
-      "sources": [
-        "PROST AIスクール/08_めんたるサロン 講義動画/14｜自分で抱えない仕事の作り方.md"
-      ]
-    },
-    {
-      "id": "P034",
-      "text": "スタッフに現場を任せた途端に接客の質が落ちた",
-      "segment": "S4",
-      "theme": "仕組み化",
-      "count": 1,
-      "sources": [
-        "商売人の学校/_文字起こし/vm_323644828.txt"
-      ]
-    },
-    {
-      "id": "P035",
-      "text": "自分が動けなくなったら店がどうなるか不安で仕組み化が進まない",
-      "segment": "S4",
-      "theme": "メンタル",
-      "count": 1,
-      "sources": [
-        "商売人の学校/_文字起こし/vm_323644828.txt"
-      ]
-    },
-    {
-      "id": "P036",
-      "text": "院長が投稿を作っているせいで発信頻度が落ちる",
-      "segment": "S4",
-      "theme": "SNS",
-      "count": 1,
-      "sources": [
-        "商売人の学校/_文字起こし/vm_323644828.txt"
-      ]
-    },
-    {
-      "id": "P037",
-      "text": "売上は伸びたのに自分の稼働時間は全く減っていない",
-      "segment": "S4",
-      "theme": "時間",
-      "count": 1,
-      "sources": [
-        "商売人の学校/_文字起こし/vm_539647932.txt"
-      ]
-    },
-    {
-      "id": "P038",
-      "text": "時間がないと思っているが実はいらないことに使っている",
-      "segment": "S4",
-      "theme": "時間",
-      "count": 1,
-      "sources": [
-        "講義ノート/グルコン/グルコン_2026-05-01_UP_LINK.md"
-      ]
-    },
-    {
-      "id": "P039",
-      "text": "広告費を続けるか縮小するか単価モデルの判断がつかない",
-      "segment": "S4",
-      "theme": "広告",
-      "count": 1,
-      "sources": [
-        "PROST AIスクール/08_めんたるサロン 講義動画/04｜集客と成約の数字相談.md"
-      ]
-    },
-    {
-      "id": "P040",
-      "text": "販売力のあるスタッフほど独立してしまい抱えきれない",
-      "segment": "S4",
-      "theme": "採用",
-      "count": 1,
-      "sources": [
-        "商売人の学校/_文字起こし/vm_478275238.txt"
-      ]
-    },
-    {
-      "id": "P041",
-      "text": "無料モニターは好評だったのに有料化したら反応がゼロになった",
-      "segment": "S5",
-      "theme": "単価",
-      "count": 1,
-      "sources": [
-        "講義ノート/グルコン/グルコン_2026-04-03_UP_LINK.md"
-      ]
-    },
-    {
-      "id": "P042",
-      "text": "金額を見せても反応がなく高いと思われている理由に気づかない",
-      "segment": "S5",
-      "theme": "単価",
-      "count": 1,
-      "sources": [
-        "講義ノート/グルコン/グルコン_2026-04-03_UP_LINK.md"
-      ]
-    },
-    {
-      "id": "P043",
-      "text": "施術時間を短縮しつつ単価を上げる発想がなく長時間固定のまま",
-      "segment": "S5",
-      "theme": "単価",
-      "count": 1,
-      "sources": [
-        "講義ノート/グルコン/グルコン_2026-05-01_UP_LINK.md"
-      ]
-    },
-    {
-      "id": "P044",
-      "text": "体験価格を安売りしコース販売に誘導できていない",
-      "segment": "S5",
-      "theme": "単価",
-      "count": 1,
-      "sources": [
-        "講義ノート/グルコン/グルコン_2026-05-01_UP_LINK.md"
-      ]
-    },
-    {
-      "id": "P045",
-      "text": "単価を上げる前にサブスクを作るべきか順番に迷っている",
-      "segment": "S5",
-      "theme": "仕組み化",
-      "count": 1,
-      "sources": [
-        "PROST AIスクール/08_めんたるサロン 講義動画/05｜サブスクの設計と集客導線.md"
-      ]
-    },
-    {
-      "id": "P046",
-      "text": "高額商品を教育してから売るフロントエンド設計ができていない",
-      "segment": "S5",
-      "theme": "仕組み化",
-      "count": 1,
-      "sources": [
-        "講義ノート/グルコン/グルコン_2026-04-03_UP_LINK.md"
-      ]
-    },
-    {
-      "id": "P047",
-      "text": "高額塾に投資して借金が増えているのに売上が上がらない",
-      "segment": "S5",
-      "theme": "メンタル",
-      "count": 1,
-      "sources": [
-        "商売人の学校/_文字起こし/vm_548683862.txt"
-      ]
-    },
-    {
-      "id": "P048",
-      "text": "思い込みで単価を上げられず買ってくれる人がいると気づかない",
-      "segment": "S5",
-      "theme": "単価",
-      "count": 1,
-      "sources": [
-        "講義ノート/グルコン/グルコン_2026-05-01_UP_LINK.md"
-      ]
-    },
-    {
-      "id": "P049",
-      "text": "回数券への誘導ができず都度払いのまま離脱される",
-      "segment": "S5",
-      "theme": "リピート",
-      "count": 2,
-      "sources": [
-        "講義ノート/グルコン/グルコン_2026-05-01_UP_LINK.md",
-        "講義ノート/グルコン/グルコン_2026-04-03_UP_LINK.md"
-      ]
-    },
-    {
-      "id": "P050",
-      "text": "新規集客の方法が分からず何をすればいいか迷っている",
-      "segment": "S2",
-      "theme": "集客",
-      "count": 4,
-      "sources": [
-        "商売人の学校/_文字起こし/vm_417028094.txt",
-        "商売人の学校/_文字起こし/vm_674414948.txt"
-      ]
-    },
-    {
-      "id": "P051",
-      "text": "自分の商品の強みを一言で説明できない",
-      "segment": "S1",
-      "theme": "SNS",
-      "count": 2,
-      "sources": [
-        "講義ノート/グルコン/グルコン_2026-03-19_UP_LINK.md",
-        "講義ノート/グルコン/グルコン_2026-03-26_UP_LINK.md"
-      ]
-    },
-    {
-      "id": "P052",
-      "text": "投稿を毎日続けることができず三日坊主になる",
-      "segment": "S2",
-      "theme": "SNS",
-      "count": 1,
-      "sources": [
-        "講義ノート/グルコン/グルコン_2026-04-03_UP_LINK.md"
-      ]
-    },
-    {
-      "id": "P053",
-      "text": "1日30投稿を目標にしたが続かず挫折した",
-      "segment": "S2",
-      "theme": "SNS",
-      "count": 1,
-      "sources": [
-        "講義ノート/グルコン/グルコン_2026-04-03_UP_LINK.md"
-      ]
-    },
-    {
-      "id": "P054",
-      "text": "お客様が本当に困っていることを言語化できていない",
-      "segment": "S1",
-      "theme": "集客",
-      "count": 1,
-      "sources": [
-        "商売人の学校/_文字起こし/vm_417028094.txt"
-      ]
-    },
-    {
-      "id": "P055",
-      "text": "自分の悩みに他人は興味がないと気づかず一人で抱え込む",
-      "segment": "S4",
-      "theme": "メンタル",
-      "count": 1,
-      "sources": [
-        "商売人の学校/_文字起こし/vm_539647932.txt"
-      ]
-    },
-    {
-      "id": "P056",
-      "text": "売上目標を毎月立てても達成できず自己否定が続く",
-      "segment": "S2",
-      "theme": "メンタル",
-      "count": 1,
-      "sources": [
-        "商売人の学校/_文字起こし/vm_323644828.txt"
-      ]
-    },
-    {
-      "id": "P057",
-      "text": "同業他社と比較して落ち込んでしまう",
-      "segment": "S3",
-      "theme": "メンタル",
-      "count": 1,
-      "sources": [
-        "商売人の学校/_文字起こし/vm_539647932.txt"
-      ]
-    },
-    {
-      "id": "P058",
-      "text": "広告のクリック単価が高騰し他の手段を知らない",
-      "segment": "S4",
-      "theme": "広告",
-      "count": 1,
-      "sources": [
-        "商売人の学校/_文字起こし/vm_548683862.txt"
-      ]
-    },
-    {
-      "id": "P059",
-      "text": "スタッフのマニュアルがなく口頭伝達だけで属人化している",
-      "segment": "S4",
-      "theme": "仕組み化",
-      "count": 1,
-      "sources": [
-        "商売人の学校/_文字起こし/vm_478275238.txt"
-      ]
-    },
-    {
-      "id": "P060",
-      "text": "AIを使いたいがどこから手をつければいいか分からない",
-      "segment": "S1",
-      "theme": "AI",
-      "count": 3,
-      "sources": [
-        "PROST AIスクール/00_INDEX.md"
-      ]
-    },
-    {
-      "id": "P061",
-      "text": "開業前の集客不安から闇雲に手を広げてしまう",
-      "segment": "S1",
-      "theme": "集客",
-      "count": 1,
-      "sources": [
-        "商売人の学校/_文字起こし/vm_417028094.txt"
-      ]
-    },
-    {
-      "id": "P062",
-      "text": "高額商品の成約率が低いのはヒアリング不足だと気づいていない",
-      "segment": "S5",
-      "theme": "単価",
-      "count": 1,
-      "sources": [
-        "商売人の学校/_文字起こし/vm_548683862.txt"
-      ]
-    },
-    {
-      "id": "P063",
-      "text": "売上の天井が来ても単価を上げるべきか判断できず足踏みしている",
-      "segment": "S5",
-      "theme": "単価",
-      "count": 1,
-      "sources": [
-        "PROST AIスクール/08_めんたるサロン 講義動画/04｜集客と成約の数字相談.md"
-      ]
-    },
-    {
-      "id": "P064",
-      "text": "同じ施術でも金額を上げれば成立することを知らない",
-      "segment": "S5",
-      "theme": "単価",
-      "count": 1,
-      "sources": [
-        "講義ノート/グルコン/グルコン_2026-05-01_UP_LINK.md"
-      ]
-    },
-    {
-      "id": "P065",
-      "text": "リード獲得単価をいくらに設定すればいいか分からない",
-      "segment": "S4",
-      "theme": "広告",
-      "count": 1,
-      "sources": [
-        "PROST AIスクール/08_めんたるサロン 講義動画/14｜自分で抱えない仕事の作り方.md"
-      ]
-    },
-    {
-      "id": "P066",
-      "text": "開業前は動くのはオープンしてからでいいと思い込んでいる",
-      "segment": "S1",
-      "theme": "インスタ運用",
-      "count": 1,
-      "sources": [
-        "マーケティング学習/インスタハカセ講義/00_講義マスターまとめ.md"
-      ]
-    },
-    {
-      "id": "P067",
-      "text": "開業して1年、毎回新しいネタを探すのに疲れている",
-      "segment": "S2",
-      "theme": "インスタ運用",
-      "count": 1,
-      "sources": [
-        "マーケティング学習/インスタハカセ講義/00_講義マスターまとめ.md"
-      ]
-    },
-    {
-      "id": "P068",
-      "text": "月商50万の壁で、当たった投稿を繰り返さずネタを使い捨てている",
-      "segment": "S3",
-      "theme": "インスタ運用",
-      "count": 1,
-      "sources": [
-        "マーケティング学習/インスタハカセ講義/00_講義マスターまとめ.md"
-      ]
-    },
-    {
-      "id": "P069",
-      "text": "スタッフがいるのに発信を院長が自分で全部やっている",
-      "segment": "S4",
-      "theme": "インスタ運用",
-      "count": 1,
-      "sources": [
-        "マーケティング学習/インスタハカセ講義/00_講義マスターまとめ.md"
-      ]
-    },
-    {
-      "id": "P070",
-      "text": "高額商品を自分の名前だけで売り込み紹介されにくい",
-      "segment": "S5",
-      "theme": "インスタ運用",
-      "count": 1,
-      "sources": [
-        "マーケティング学習/インスタハカセ講義/00_講義マスターまとめ.md"
-      ]
-    },
-    {
-      "id": "P071",
-      "text": "集客の正解を1回の投稿で当てようとして疲弊している",
-      "segment": "S1",
-      "theme": "インスタ運用",
-      "count": 1,
-      "sources": [
-        "マーケティング学習/インスタハカセ講義/00_講義マスターまとめ.md"
-      ]
-    },
-    {
-      "id": "P072",
-      "text": "フォロワーが増えないと紹介の仕組みを考えたことがない",
-      "segment": "S2",
-      "theme": "インスタ運用",
-      "count": 1,
-      "sources": [
-        "マーケティング学習/インスタハカセ講義/00_講義マスターまとめ.md"
-      ]
-    },
-    {
-      "id": "P073",
-      "text": "投稿を感覚で続けていて数字で振り返っていない",
-      "segment": "S3",
-      "theme": "インスタ運用",
-      "count": 1,
-      "sources": [
-        "マーケティング学習/インスタハカセ講義/00_講義マスターまとめ.md"
-      ]
-    },
-    {
-      "id": "ST01",
-      "text": "夕方になると肩がパンパンに張る",
-      "segment": "T1",
-      "theme": "症状",
-      "count": 8,
-      "sources": [
-        "Truth経営/LP・広告/truth_nagaoka_動画広告案.md(パターン1)",
-        "カウンセリング事例/分析データ_個票一覧.md"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST02",
-      "text": "座りっぱなしで首が前に出て固まる",
-      "segment": "T1",
-      "theme": "症状",
-      "count": 6,
-      "sources": [
-        "threads-auto-post/past_posts_nagaoka.json(#3,#9,#14)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST03",
-      "text": "整形外科で「異常なし」なのに肩甲骨が痛い",
-      "segment": "T1",
-      "theme": "不安",
-      "count": 5,
-      "sources": [
-        "threads-auto-post/past_posts.json(#20,#22)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST04",
-      "text": "猫背が悪化している自覚はあるが直し方が不明",
-      "segment": "T1",
-      "theme": "症状",
-      "count": 7,
-      "sources": [
-        "カウンセリング事例/01-04 顧客相談：小堀さん.md",
-        "Truth経営/LP・広告/truth_nagaoka_動画広告案.md"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST05",
-      "text": "昼休みもデスクでスマホを見ながら食事",
-      "segment": "T1",
-      "theme": "生活",
-      "count": 4,
-      "sources": [
-        "Truth経営/ペルソナ戦略総まとめ_2026-07-05.md"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST06",
-      "text": "週末マッサージも月曜にはもう元通り",
-      "segment": "T1",
-      "theme": "治療歴",
-      "count": 9,
-      "sources": [
-        "Truth経営/訴求統一ガイドライン_2026-07-05.md"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST07",
-      "text": "在宅勤務・PC作業で肩こりが悪化した",
-      "segment": "T1",
-      "theme": "症状",
-      "count": 5,
-      "sources": [
-        "カウンセリング事例/分析データ_個票一覧.md(佐藤様・塚本さん)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST08",
-      "text": "肩の可動域が狭くなり腕が上がりにくい",
-      "segment": "T1",
-      "theme": "症状",
-      "count": 6,
-      "sources": [
-        "カウンセリング事例/分析データ_個票一覧.md(土屋様・小林さん)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST09",
-      "text": "肩こりは「歳のせい」と諦めかけている",
-      "segment": "T1",
-      "theme": "不安",
-      "count": 6,
-      "sources": [
-        "カウンセリング事例/分析データ_個票一覧.md(山口さん・畠山さん)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST10",
-      "text": "ストレッチが3日で続かない",
-      "segment": "T1",
-      "theme": "生活",
-      "count": 8,
-      "sources": [
-        "Truth経営/ペルソナ戦略総まとめ_2026-07-05.md(面倒だと感じていること)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST11",
-      "text": "整体は痛い・怖いというイメージがある",
-      "segment": "T1",
-      "theme": "不安",
-      "count": 5,
-      "sources": [
-        "カウンセリング事例/分析データ_個票一覧.md(山口さん・石原様)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST12",
-      "text": "朝起きた瞬間からこめかみがズーンと重い",
-      "segment": "T2",
-      "theme": "症状",
-      "count": 10,
-      "sources": [
-        "Truth経営/LINE配信/公式LINE_頭痛ステップ配信.md(Day1)",
-        "past_posts.json(#1)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST13",
-      "text": "薬が効いてる間だけで夕方また痛くなる",
-      "segment": "T2",
-      "theme": "治療歴",
-      "count": 9,
-      "sources": [
-        "Truth経営/LINE配信/公式LINE_頭痛ステップ配信.md(Day1・Day2)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST14",
-      "text": "低気圧予報を見ると気持ちが沈む",
-      "segment": "T2",
-      "theme": "不安",
-      "count": 7,
-      "sources": [
-        "Truth経営/LINE配信/公式LINE_頭痛ステップ配信.md(Day1)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST15",
-      "text": "月10回以上の頭痛薬で薬物乱用頭痛が心配",
-      "segment": "T2",
-      "theme": "不安",
-      "count": 6,
-      "sources": [
-        "Truth経営/LINE配信/公式LINE_頭痛ステップ配信.md(Day2)",
-        "past_posts.json(#2)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST16",
-      "text": "頭痛薬をお守りのように常に持ち歩く",
-      "segment": "T2",
-      "theme": "生活",
-      "count": 6,
-      "sources": [
-        "Truth経営/LINE配信/公式LINE_頭痛ステップ配信.md(Day4)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST17",
-      "text": "病院で「異常なし」と言われたのに頭痛が続く",
-      "segment": "T2",
-      "theme": "治療歴",
-      "count": 8,
-      "sources": [
-        "Truth経営/LP・広告/truth_nagaoka_動画広告案.md(頭痛パターン4)",
-        "カウンセリング事例/分析データ_個票一覧.md(石原様)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST18",
-      "text": "頭痛のせいで子どもの行事を楽しめない",
-      "segment": "T2",
-      "theme": "不安",
-      "count": 5,
-      "sources": [
-        "Truth経営/LINE配信/公式LINE_頭痛ステップ配信.md(Day1・Day5)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST19",
-      "text": "薬の効く時間がだんだん短くなっている",
-      "segment": "T2",
-      "theme": "症状",
-      "count": 4,
-      "sources": [
-        "past_posts.json(#27)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST20",
-      "text": "頭痛の頻度を自分で数えたことがない",
-      "segment": "T2",
-      "theme": "生活",
-      "count": 5,
-      "sources": [
-        "past_posts_nagaoka.json(#14,#15)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST21",
-      "text": "週に何度も頭痛薬を飲む生活が当たり前",
-      "segment": "T2",
-      "theme": "症状",
-      "count": 9,
-      "sources": [
-        "past_posts_nagaoka.json(#4)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST22",
-      "text": "光や音に過敏で吐き気を伴う頭痛がある",
-      "segment": "T2",
-      "theme": "症状",
-      "count": 4,
-      "sources": [
-        "カウンセリング事例/分析データ_個票一覧.md(田村様・関さん)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST23",
-      "text": "気圧のせいだと思い他の原因に気づかない",
-      "segment": "T2",
-      "theme": "不安",
-      "count": 6,
-      "sources": [
-        "past_posts.json(#1)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST24",
-      "text": "水分を意識せずコーヒーばかり飲んでいる",
-      "segment": "T2",
-      "theme": "生活",
-      "count": 5,
-      "sources": [
-        "past_posts_nagaoka.json(#13,#26)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST25",
-      "text": "頭痛が出るかもと予定を入れるのが怖い",
-      "segment": "T2",
-      "theme": "不安",
-      "count": 5,
-      "sources": [
-        "Truth経営/LINE配信/公式LINE_頭痛ステップ配信.md(Day1)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST26",
-      "text": "頭痛の原因が骨盤や姿勢にあると知らない",
-      "segment": "T2",
-      "theme": "不安",
-      "count": 7,
-      "sources": [
-        "Truth経営/LINE配信/公式LINE_頭痛ステップ配信.md(Day2)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST27",
-      "text": "抱っこ・授乳の姿勢が続き背中が丸くなる",
-      "segment": "T3",
-      "theme": "症状",
-      "count": 5,
-      "sources": [
-        "カウンセリング事例/06_佐藤様_04-29(抱っこ・授乳の記録)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST28",
-      "text": "産後の全身痛を仕方ないと放置していた",
-      "segment": "T3",
-      "theme": "症状",
-      "count": 4,
-      "sources": [
-        "長岡市整体院口コミ分析レポート.md(すがわら接骨院口コミ#20)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST29",
-      "text": "育児で腰を痛めても自分は後回しにする",
-      "segment": "T3",
-      "theme": "生活",
-      "count": 6,
-      "sources": [
-        "長岡市整体院口コミ分析レポート.md(口コミ#26)",
-        "Truth経営/ペルソナ戦略総まとめ_2026-07-05.md"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST30",
-      "text": "抱っこ・肩乗りで肩や腕に疲労が蓄積",
-      "segment": "T3",
-      "theme": "症状",
-      "count": 5,
-      "sources": [
-        "カウンセリング事例/分析データ_個票一覧.md(抱っこ・肩乗りの記録)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST31",
-      "text": "骨盤が歪んだままでも整える時間がない",
-      "segment": "T3",
-      "theme": "生活",
-      "count": 6,
-      "sources": [
-        "カウンセリング事例(骨盤系82件)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST32",
-      "text": "子連れで通える整体院が少ないと感じる",
-      "segment": "T3",
-      "theme": "不安",
-      "count": 4,
-      "sources": [
-        "カウンセリング事例/01_千野さん_05-17.md"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST33",
-      "text": "産後の姿勢崩れが老け見えにつながる不安",
-      "segment": "T3",
-      "theme": "不安",
-      "count": 3,
-      "sources": [
-        "カウンセリング事例/分析データ_個票一覧.md(松永さん)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST34",
-      "text": "育児・家事で自分の体のケアが最下位",
-      "segment": "T3",
-      "theme": "生活",
-      "count": 5,
-      "sources": [
-        "Truth経営/ペルソナ戦略総まとめ_2026-07-05.md"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST35",
-      "text": "立ち仕事の後半になると腰と脚がつらい",
-      "segment": "T4",
-      "theme": "症状",
-      "count": 6,
-      "sources": [
-        "Truth経営/LP・広告/truth_nagaoka_動画広告案.md(パターン2)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST36",
-      "text": "介護の抱え上げ動作で腰を痛めている",
-      "segment": "T4",
-      "theme": "症状",
-      "count": 5,
-      "sources": [
-        "カウンセリング事例/01-30 整体カウンセリング：古見さん.md"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST37",
-      "text": "家事・育児・介護を一人で背負い限界",
-      "segment": "T4",
-      "theme": "生活",
-      "count": 5,
-      "sources": [
-        "カウンセリング事例/01-30 整体カウンセリング：古見さん.md"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST38",
-      "text": "不規則勤務で通院の計画が立てられない",
-      "segment": "T4",
-      "theme": "生活",
-      "count": 6,
-      "sources": [
-        "カウンセリング事例/分析データ_個票一覧.md(吉原さん)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST39",
-      "text": "除雪や重い荷物運びの後に腰が痛む",
-      "segment": "T4",
-      "theme": "症状",
-      "count": 3,
-      "sources": [
-        "カウンセリング事例/分析データ_個票一覧.md(高橋さん)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST40",
-      "text": "介護サービスに頼れず一人で抱え込む",
-      "segment": "T4",
-      "theme": "不安",
-      "count": 4,
-      "sources": [
-        "カウンセリング事例/01-30 整体カウンセリング：古見さん.md"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST41",
-      "text": "腰にコルセットが手放せない生活",
-      "segment": "T4",
-      "theme": "症状",
-      "count": 4,
-      "sources": [
-        "カウンセリング事例/分析データ_個票一覧.md(戸谷様)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST42",
-      "text": "立ちっぱなし・かがむ動作で腰が慢性化",
-      "segment": "T4",
-      "theme": "症状",
-      "count": 5,
-      "sources": [
-        "カウンセリング事例/分析データ_個票一覧.md(杉本様)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST43",
-      "text": "看護・介護職はシフトが不規則で予約が直前しか取れない",
-      "segment": "T4",
-      "theme": "生活",
-      "count": 4,
-      "sources": [
-        "カウンセリング事例/分析データ_個票一覧.md(吉原さん)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST44",
-      "text": "夜中に1時間ごとに目が覚めてしまう",
-      "segment": "T5",
-      "theme": "症状",
-      "count": 5,
-      "sources": [
-        "カウンセリング事例/分析データ_個票一覧.md(丸山様)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST45",
-      "text": "朝起きても熟眠感がなくだるさが抜けない",
-      "segment": "T5",
-      "theme": "症状",
-      "count": 7,
-      "sources": [
-        "カウンセリング事例/分析データ_個票一覧.md(熊崎さん)",
-        "past_posts_nagaoka.json(#6)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST46",
-      "text": "「歳のせい」で片付けられてきたが違うかも",
-      "segment": "T5",
-      "theme": "不安",
-      "count": 6,
-      "sources": [
-        "past_posts_nagaoka.json(#18)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST47",
-      "text": "疲れているのにやる気が出ず運動も続かない",
-      "segment": "T5",
-      "theme": "生活",
-      "count": 5,
-      "sources": [
-        "カウンセリング事例/分析データ_個票一覧.md(原田さん)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST48",
-      "text": "体が動かない・気分の落ち込みが悪循環",
-      "segment": "T5",
-      "theme": "症状",
-      "count": 4,
-      "sources": [
-        "カウンセリング事例/分析データ_個票一覧.md(小林さん)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST49",
-      "text": "寝ても疲れが取れずストレスと連動している",
-      "segment": "T5",
-      "theme": "症状",
-      "count": 6,
-      "sources": [
-        "カウンセリング事例/分析データ_個票一覧.md(藤田さん)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST50",
-      "text": "睡眠不足のまま生活習慣を変えられない",
-      "segment": "T5",
-      "theme": "生活",
-      "count": 5,
-      "sources": [
-        "カウンセリング事例/分析データ_個票一覧.md(石原様)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST51",
-      "text": "枕や寝具を変えても改善しない",
-      "segment": "T5",
-      "theme": "症状",
-      "count": 3,
-      "sources": [
-        "一般知見(汎用)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST52",
-      "text": "首肩のこりが睡眠の質低下と気づいていない",
-      "segment": "T5",
-      "theme": "不安",
-      "count": 6,
-      "sources": [
-        "past_posts.json(#4,#8)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST53",
-      "text": "睡眠の質低下が頭痛・肩こりを悪化させる",
-      "segment": "T5",
-      "theme": "症状",
-      "count": 6,
-      "sources": [
-        "past_posts.json(#8)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST54",
-      "text": "睡眠アプリで測っても改善方法が分からない",
-      "segment": "T5",
-      "theme": "生活",
-      "count": 3,
-      "sources": [
-        "一般知見(汎用)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST55",
-      "text": "マッサージは気持ちよくなって終わるだけ",
-      "segment": "T6",
-      "theme": "治療歴",
-      "count": 9,
-      "sources": [
-        "Truth経営/ペルソナ分析_LTV上位顧客_2026-07-05.md(久原様)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST56",
-      "text": "20回20万円払ったのに改善しなかった",
-      "segment": "T6",
-      "theme": "費用",
-      "count": 7,
-      "sources": [
-        "Truth経営/ペルソナ戦略総まとめ_2026-07-05.md"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST57",
-      "text": "対症療法は3日も持たないと感じている",
-      "segment": "T6",
-      "theme": "治療歴",
-      "count": 8,
-      "sources": [
-        "Truth経営/ペルソナ戦略総まとめ_2026-07-05.md"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST58",
-      "text": "どこに行っても同じことしか言われない",
-      "segment": "T6",
-      "theme": "治療歴",
-      "count": 8,
-      "sources": [
-        "カウンセリング事例/分析データ_個票一覧.md(上村さん)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST59",
-      "text": "揉んだ直後は楽でも3日後にはまた戻る",
-      "segment": "T6",
-      "theme": "治療歴",
-      "count": 9,
-      "sources": [
-        "past_posts.json(#13,#20)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST60",
-      "text": "施術後に悪化した経験があり施術が怖い",
-      "segment": "T6",
-      "theme": "不安",
-      "count": 5,
-      "sources": [
-        "カウンセリング事例/分析データ_個票一覧.md(古見さん・平沢様)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST61",
-      "text": "高額な一括コースは即決できない",
-      "segment": "T6",
-      "theme": "費用",
-      "count": 8,
-      "sources": [
-        "カウンセリング事例/分析データ_個票一覧.md(多数)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST62",
-      "text": "家族に相談してから決めたく先延ばしにする",
-      "segment": "T6",
-      "theme": "不安",
-      "count": 7,
-      "sources": [
-        "カウンセリング事例/分析データ_個票一覧.md(多数)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST63",
-      "text": "予約に縛られるのが苦手で継続に自信がない",
-      "segment": "T6",
-      "theme": "不安",
-      "count": 5,
-      "sources": [
-        "カウンセリング事例/分析データ_個票一覧.md(渡辺さん)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST64",
-      "text": "効果が続くか半信半疑のまま初回を受ける",
-      "segment": "T6",
-      "theme": "不安",
-      "count": 6,
-      "sources": [
-        "カウンセリング事例/分析データ_個票一覧.md(多数)"
-      ],
-      "acct": "truth_nagaoka"
-    },
-    {
-      "id": "ST65",
-      "text": "院ごとに言うことが違い何を信じていいか迷う",
-      "segment": "T6",
-      "theme": "不安",
-      "count": 5,
-      "sources": [
-        "カウンセリング事例/分析データ_個票一覧.md(上村さん)"
-      ],
-      "acct": "truth_nagaoka"
+ "generated": "2026-09-27",
+ "source": "obsidian myfiles 走査 2026-09-23（悩み65件）",
+ "pains": [
+  {
+   "id": "P001",
+   "text": "開業まで半年切ったのに物件が決まらず動けない",
+   "segment": "S1",
+   "theme": "集客",
+   "count": 1,
+   "sources": [
+    "講義ノート/グルコン/グルコン_2026-05-01_UP_LINK.md"
+   ]
+  },
+  {
+   "id": "P002",
+   "text": "創業補助金は狭き門で公庫融資の方が通りやすいと知らない",
+   "segment": "S1",
+   "theme": "仕組み化",
+   "count": 1,
+   "sources": [
+    "講義ノート/グルコン/グルコン_2026-05-01_UP_LINK.md"
+   ]
+  },
+  {
+   "id": "P003",
+   "text": "居抜き物件の探し方を知らずゼロから内装を考えている",
+   "segment": "S1",
+   "theme": "仕組み化",
+   "count": 1,
+   "sources": [
+    "講義ノート/グルコン/グルコン_2026-05-01_UP_LINK.md"
+   ]
+  },
+  {
+   "id": "P004",
+   "text": "開業前に発信せず開業日にフォロワー0のまま迎える",
+   "segment": "S1",
+   "theme": "SNS",
+   "count": 2,
+   "sources": [
+    "講義ノート/グルコン/グルコン_2026-05-01_UP_LINK.md",
+    "YouTube分析/.../2026-06-15_M-ELk_QS7Tw.md"
+   ]
+  },
+  {
+   "id": "P005",
+   "text": "開業前のマーケ学習が動画を少し見た程度で体系立っていない",
+   "segment": "S1",
+   "theme": "AI",
+   "count": 1,
+   "sources": [
+    "YouTube分析/.../2026-09-17_9oJZPzXiRyg.md"
+   ]
+  },
+  {
+   "id": "P006",
+   "text": "開業前の無料体験会に誰も来ない時期が2年続いた",
+   "segment": "S1",
+   "theme": "集客",
+   "count": 1,
+   "sources": [
+    "YouTube分析/.../2026-06-15_M-ELk_QS7Tw.md"
+   ]
+  },
+  {
+   "id": "P007",
+   "text": "開業初月の売上目標を単価×人数で逆算できていない",
+   "segment": "S1",
+   "theme": "単価",
+   "count": 1,
+   "sources": [
+    "商売人の学校/_文字起こし/vm_417028094.txt"
+   ]
+  },
+  {
+   "id": "P008",
+   "text": "開業して間もないのに売上ゼロの日が続いている",
+   "segment": "S2",
+   "theme": "集客",
+   "count": 2,
+   "sources": [
+    "YouTube分析/.../2026-06-15_M-ELk_QS7Tw.md",
+    "商売人の学校/_文字起こし/vm_539647932.txt"
+   ]
+  },
+  {
+   "id": "P009",
+   "text": "開業初期の売上が70万から徐々に下がっていく",
+   "segment": "S2",
+   "theme": "集客",
+   "count": 1,
+   "sources": [
+    "商売人の学校/_文字起こし/vm_323644828.txt"
+   ]
+  },
+  {
+   "id": "P010",
+   "text": "リピート率が42%から下がり続け原因が分からない",
+   "segment": "S2",
+   "theme": "リピート",
+   "count": 1,
+   "sources": [
+    "商売人の学校/_文字起こし/vm_323644828.txt"
+   ]
+  },
+  {
+   "id": "P011",
+   "text": "AI丸投げの投稿が気持ち悪くてやめたが自分の言葉で書けない",
+   "segment": "S2",
+   "theme": "AI",
+   "count": 1,
+   "sources": [
+    "講義ノート/グルコン/グルコン_2026-03-19_UP_LINK.md"
+   ]
+  },
+  {
+   "id": "P012",
+   "text": "プロフィールを見ても誰のどんな悩みを解決する人か伝わらない",
+   "segment": "S2",
+   "theme": "SNS",
+   "count": 3,
+   "sources": [
+    "講義ノート/グルコン/グルコン_2026-03-19_UP_LINK.md",
+    "講義ノート/グルコン/グルコン_2026-03-26_UP_LINK.md",
+    "講義ノート/グルコン/グルコン_2026-04-03_UP_LINK.md"
+   ]
+  },
+  {
+   "id": "P013",
+   "text": "閲覧10万人取れても問い合わせや購入に繋がらない",
+   "segment": "S2",
+   "theme": "集客",
+   "count": 1,
+   "sources": [
+    "講義ノート/グルコン/グルコン_2026-03-19_UP_LINK.md"
+   ]
+  },
+  {
+   "id": "P014",
+   "text": "興味ある方はDMくださいと書くだけでは誰も動かない",
+   "segment": "S2",
+   "theme": "集客",
+   "count": 1,
+   "sources": [
+    "講義ノート/グルコン/グルコン_2026-03-19_UP_LINK.md"
+   ]
+  },
+  {
+   "id": "P015",
+   "text": "自信がなく語尾が曖昧になり信用を落としている",
+   "segment": "S2",
+   "theme": "メンタル",
+   "count": 1,
+   "sources": [
+    "講義ノート/グルコン/グルコン_2026-04-03_UP_LINK.md"
+   ]
+  },
+  {
+   "id": "P016",
+   "text": "資格を取っても難しい質問に即答できず自信が持てない",
+   "segment": "S2",
+   "theme": "メンタル",
+   "count": 1,
+   "sources": [
+    "講義ノート/グルコン/グルコン_2026-04-03_UP_LINK.md"
+   ]
+  },
+  {
+   "id": "P017",
+   "text": "ホットペッパー新規が月30人から14人に減りクーポンも変えていない",
+   "segment": "S3",
+   "theme": "集客",
+   "count": 1,
+   "sources": [
+    "講義ノート/グルコン/グルコン_2026-05-01_UP_LINK.md"
+   ]
+  },
+  {
+   "id": "P018",
+   "text": "新規が25人→15人→月2人と急落し広告のせいだと思っている",
+   "segment": "S3",
+   "theme": "集客",
+   "count": 1,
+   "sources": [
+    "講義ノート/グルコン/グルコン_2026-04-03_UP_LINK.md"
+   ]
+  },
+  {
+   "id": "P019",
+   "text": "リピート率83%あるのに3〜4回目で離脱し単価が伸びない",
+   "segment": "S3",
+   "theme": "リピート",
+   "count": 1,
+   "sources": [
+    "講義ノート/グルコン/グルコン_2026-04-03_UP_LINK.md"
+   ]
+  },
+  {
+   "id": "P020",
+   "text": "次回予約70%取れてもキャンセル込みでリピート率50%まで落ちる",
+   "segment": "S3",
+   "theme": "リピート",
+   "count": 1,
+   "sources": [
+    "講義ノート/グルコン/グルコン_2026-05-01_UP_LINK.md"
+   ]
+  },
+  {
+   "id": "P021",
+   "text": "90分7500円のメニューのまま時間対効果の悪さに気づいていない",
+   "segment": "S3",
+   "theme": "単価",
+   "count": 1,
+   "sources": [
+    "講義ノート/グルコン/グルコン_2026-04-03_UP_LINK.md"
+   ]
+  },
+  {
+   "id": "P022",
+   "text": "新規が30人来て余裕があるせいでバックエンドが決まらない",
+   "segment": "S3",
+   "theme": "単価",
+   "count": 1,
+   "sources": [
+    "講義ノート/グルコン/グルコン_2026-05-01_UP_LINK.md"
+   ]
+  },
+  {
+   "id": "P023",
+   "text": "次回どうされますかと聞き客に予約判断を委ねている",
+   "segment": "S3",
+   "theme": "リピート",
+   "count": 1,
+   "sources": [
+    "講義ノート/グルコン/グルコン_2026-03-26_UP_LINK.md"
+   ]
+  },
+  {
+   "id": "P024",
+   "text": "LINE登録で今すぐスタートと書いても中身が不明で登録されない",
+   "segment": "S3",
+   "theme": "SNS",
+   "count": 1,
+   "sources": [
+    "講義ノート/グルコン/グルコン_2026-03-26_UP_LINK.md"
+   ]
+  },
+  {
+   "id": "P025",
+   "text": "変わる意思の薄い客にどこまで向き合うか線引きできない",
+   "segment": "S3",
+   "theme": "メンタル",
+   "count": 1,
+   "sources": [
+    "講義ノート/グルコン/グルコン_2026-03-19_UP_LINK.md"
+   ]
+  },
+  {
+   "id": "P026",
+   "text": "カルテの枚数が増えず売上も横ばいでリピート問題を放置している",
+   "segment": "S3",
+   "theme": "リピート",
+   "count": 1,
+   "sources": [
+    "商売人の学校/_文字起こし/vm_478275238.txt"
+   ]
+  },
+  {
+   "id": "P027",
+   "text": "値上げをこっそり少しずつしか試せず大きく上げる勇気がない",
+   "segment": "S3",
+   "theme": "単価",
+   "count": 1,
+   "sources": [
+    "商売人の学校/_文字起こし/vm_323644828.txt"
+   ]
+  },
+  {
+   "id": "P028",
+   "text": "セミナーを聞いても売上が上がらずやる気が続かない",
+   "segment": "S3",
+   "theme": "メンタル",
+   "count": 1,
+   "sources": [
+    "商売人の学校/_文字起こし/vm_674272715.txt"
+   ]
+  },
+  {
+   "id": "P029",
+   "text": "単価をどう上げればいいか悩んだまま行動できていない",
+   "segment": "S3",
+   "theme": "単価",
+   "count": 1,
+   "sources": [
+    "商売人の学校/_文字起こし/vm_674272715.txt"
+   ]
+  },
+  {
+   "id": "P030",
+   "text": "スタッフが入っては辞めてを繰り返し店が安定しない",
+   "segment": "S4",
+   "theme": "採用",
+   "count": 2,
+   "sources": [
+    "商売人の学校/_文字起こし/vm_323644828.txt"
+   ]
+  },
+  {
+   "id": "P031",
+   "text": "ベテランスタッフが突然辞め業務が一気に回らなくなった",
+   "segment": "S4",
+   "theme": "採用",
+   "count": 1,
+   "sources": [
+    "商売人の学校/_文字起こし/vm_323644828.txt"
+   ]
+  },
+  {
+   "id": "P032",
+   "text": "採用した人の人間性が合わずわずか2ヶ月でクビにした",
+   "segment": "S4",
+   "theme": "採用",
+   "count": 1,
+   "sources": [
+    "商売人の学校/_文字起こし/vm_323644828.txt"
+   ]
+  },
+  {
+   "id": "P033",
+   "text": "求人を出す時に何を条件にすればいいか分からない",
+   "segment": "S4",
+   "theme": "採用",
+   "count": 1,
+   "sources": [
+    "PROST AIスクール/08_めんたるサロン 講義動画/14｜自分で抱えない仕事の作り方.md"
+   ]
+  },
+  {
+   "id": "P034",
+   "text": "スタッフに現場を任せた途端に接客の質が落ちた",
+   "segment": "S4",
+   "theme": "仕組み化",
+   "count": 1,
+   "sources": [
+    "商売人の学校/_文字起こし/vm_323644828.txt"
+   ]
+  },
+  {
+   "id": "P035",
+   "text": "自分が動けなくなったら店がどうなるか不安で仕組み化が進まない",
+   "segment": "S4",
+   "theme": "メンタル",
+   "count": 1,
+   "sources": [
+    "商売人の学校/_文字起こし/vm_323644828.txt"
+   ]
+  },
+  {
+   "id": "P036",
+   "text": "院長が投稿を作っているせいで発信頻度が落ちる",
+   "segment": "S4",
+   "theme": "SNS",
+   "count": 1,
+   "sources": [
+    "商売人の学校/_文字起こし/vm_323644828.txt"
+   ]
+  },
+  {
+   "id": "P037",
+   "text": "売上は伸びたのに自分の稼働時間は全く減っていない",
+   "segment": "S4",
+   "theme": "時間",
+   "count": 1,
+   "sources": [
+    "商売人の学校/_文字起こし/vm_539647932.txt"
+   ]
+  },
+  {
+   "id": "P038",
+   "text": "時間がないと思っているが実はいらないことに使っている",
+   "segment": "S4",
+   "theme": "時間",
+   "count": 1,
+   "sources": [
+    "講義ノート/グルコン/グルコン_2026-05-01_UP_LINK.md"
+   ]
+  },
+  {
+   "id": "P039",
+   "text": "広告費を続けるか縮小するか単価モデルの判断がつかない",
+   "segment": "S4",
+   "theme": "広告",
+   "count": 1,
+   "sources": [
+    "PROST AIスクール/08_めんたるサロン 講義動画/04｜集客と成約の数字相談.md"
+   ]
+  },
+  {
+   "id": "P040",
+   "text": "販売力のあるスタッフほど独立してしまい抱えきれない",
+   "segment": "S4",
+   "theme": "採用",
+   "count": 1,
+   "sources": [
+    "商売人の学校/_文字起こし/vm_478275238.txt"
+   ]
+  },
+  {
+   "id": "P041",
+   "text": "無料モニターは好評だったのに有料化したら反応がゼロになった",
+   "segment": "S5",
+   "theme": "単価",
+   "count": 1,
+   "sources": [
+    "講義ノート/グルコン/グルコン_2026-04-03_UP_LINK.md"
+   ]
+  },
+  {
+   "id": "P042",
+   "text": "金額を見せても反応がなく高いと思われている理由に気づかない",
+   "segment": "S5",
+   "theme": "単価",
+   "count": 1,
+   "sources": [
+    "講義ノート/グルコン/グルコン_2026-04-03_UP_LINK.md"
+   ]
+  },
+  {
+   "id": "P043",
+   "text": "施術時間を短縮しつつ単価を上げる発想がなく長時間固定のまま",
+   "segment": "S5",
+   "theme": "単価",
+   "count": 1,
+   "sources": [
+    "講義ノート/グルコン/グルコン_2026-05-01_UP_LINK.md"
+   ]
+  },
+  {
+   "id": "P044",
+   "text": "体験価格を安売りしコース販売に誘導できていない",
+   "segment": "S5",
+   "theme": "単価",
+   "count": 1,
+   "sources": [
+    "講義ノート/グルコン/グルコン_2026-05-01_UP_LINK.md"
+   ]
+  },
+  {
+   "id": "P045",
+   "text": "単価を上げる前にサブスクを作るべきか順番に迷っている",
+   "segment": "S5",
+   "theme": "仕組み化",
+   "count": 1,
+   "sources": [
+    "PROST AIスクール/08_めんたるサロン 講義動画/05｜サブスクの設計と集客導線.md"
+   ]
+  },
+  {
+   "id": "P046",
+   "text": "高額商品を教育してから売るフロントエンド設計ができていない",
+   "segment": "S5",
+   "theme": "仕組み化",
+   "count": 1,
+   "sources": [
+    "講義ノート/グルコン/グルコン_2026-04-03_UP_LINK.md"
+   ]
+  },
+  {
+   "id": "P047",
+   "text": "高額塾に投資して借金が増えているのに売上が上がらない",
+   "segment": "S5",
+   "theme": "メンタル",
+   "count": 1,
+   "sources": [
+    "商売人の学校/_文字起こし/vm_548683862.txt"
+   ]
+  },
+  {
+   "id": "P048",
+   "text": "思い込みで単価を上げられず買ってくれる人がいると気づかない",
+   "segment": "S5",
+   "theme": "単価",
+   "count": 1,
+   "sources": [
+    "講義ノート/グルコン/グルコン_2026-05-01_UP_LINK.md"
+   ]
+  },
+  {
+   "id": "P049",
+   "text": "回数券への誘導ができず都度払いのまま離脱される",
+   "segment": "S5",
+   "theme": "リピート",
+   "count": 2,
+   "sources": [
+    "講義ノート/グルコン/グルコン_2026-05-01_UP_LINK.md",
+    "講義ノート/グルコン/グルコン_2026-04-03_UP_LINK.md"
+   ]
+  },
+  {
+   "id": "P050",
+   "text": "新規集客の方法が分からず何をすればいいか迷っている",
+   "segment": "S2",
+   "theme": "集客",
+   "count": 4,
+   "sources": [
+    "商売人の学校/_文字起こし/vm_417028094.txt",
+    "商売人の学校/_文字起こし/vm_674414948.txt"
+   ]
+  },
+  {
+   "id": "P051",
+   "text": "自分の商品の強みを一言で説明できない",
+   "segment": "S1",
+   "theme": "SNS",
+   "count": 2,
+   "sources": [
+    "講義ノート/グルコン/グルコン_2026-03-19_UP_LINK.md",
+    "講義ノート/グルコン/グルコン_2026-03-26_UP_LINK.md"
+   ]
+  },
+  {
+   "id": "P052",
+   "text": "投稿を毎日続けることができず三日坊主になる",
+   "segment": "S2",
+   "theme": "SNS",
+   "count": 1,
+   "sources": [
+    "講義ノート/グルコン/グルコン_2026-04-03_UP_LINK.md"
+   ]
+  },
+  {
+   "id": "P053",
+   "text": "1日30投稿を目標にしたが続かず挫折した",
+   "segment": "S2",
+   "theme": "SNS",
+   "count": 1,
+   "sources": [
+    "講義ノート/グルコン/グルコン_2026-04-03_UP_LINK.md"
+   ]
+  },
+  {
+   "id": "P054",
+   "text": "お客様が本当に困っていることを言語化できていない",
+   "segment": "S1",
+   "theme": "集客",
+   "count": 1,
+   "sources": [
+    "商売人の学校/_文字起こし/vm_417028094.txt"
+   ]
+  },
+  {
+   "id": "P055",
+   "text": "自分の悩みに他人は興味がないと気づかず一人で抱え込む",
+   "segment": "S4",
+   "theme": "メンタル",
+   "count": 1,
+   "sources": [
+    "商売人の学校/_文字起こし/vm_539647932.txt"
+   ]
+  },
+  {
+   "id": "P056",
+   "text": "売上目標を毎月立てても達成できず自己否定が続く",
+   "segment": "S2",
+   "theme": "メンタル",
+   "count": 1,
+   "sources": [
+    "商売人の学校/_文字起こし/vm_323644828.txt"
+   ]
+  },
+  {
+   "id": "P057",
+   "text": "同業他社と比較して落ち込んでしまう",
+   "segment": "S3",
+   "theme": "メンタル",
+   "count": 1,
+   "sources": [
+    "商売人の学校/_文字起こし/vm_539647932.txt"
+   ]
+  },
+  {
+   "id": "P058",
+   "text": "広告のクリック単価が高騰し他の手段を知らない",
+   "segment": "S4",
+   "theme": "広告",
+   "count": 1,
+   "sources": [
+    "商売人の学校/_文字起こし/vm_548683862.txt"
+   ]
+  },
+  {
+   "id": "P059",
+   "text": "スタッフのマニュアルがなく口頭伝達だけで属人化している",
+   "segment": "S4",
+   "theme": "仕組み化",
+   "count": 1,
+   "sources": [
+    "商売人の学校/_文字起こし/vm_478275238.txt"
+   ]
+  },
+  {
+   "id": "P060",
+   "text": "AIを使いたいがどこから手をつければいいか分からない",
+   "segment": "S1",
+   "theme": "AI",
+   "count": 3,
+   "sources": [
+    "PROST AIスクール/00_INDEX.md"
+   ]
+  },
+  {
+   "id": "P061",
+   "text": "開業前の集客不安から闇雲に手を広げてしまう",
+   "segment": "S1",
+   "theme": "集客",
+   "count": 1,
+   "sources": [
+    "商売人の学校/_文字起こし/vm_417028094.txt"
+   ]
+  },
+  {
+   "id": "P062",
+   "text": "高額商品の成約率が低いのはヒアリング不足だと気づいていない",
+   "segment": "S5",
+   "theme": "単価",
+   "count": 1,
+   "sources": [
+    "商売人の学校/_文字起こし/vm_548683862.txt"
+   ]
+  },
+  {
+   "id": "P063",
+   "text": "売上の天井が来ても単価を上げるべきか判断できず足踏みしている",
+   "segment": "S5",
+   "theme": "単価",
+   "count": 1,
+   "sources": [
+    "PROST AIスクール/08_めんたるサロン 講義動画/04｜集客と成約の数字相談.md"
+   ]
+  },
+  {
+   "id": "P064",
+   "text": "同じ施術でも金額を上げれば成立することを知らない",
+   "segment": "S5",
+   "theme": "単価",
+   "count": 1,
+   "sources": [
+    "講義ノート/グルコン/グルコン_2026-05-01_UP_LINK.md"
+   ]
+  },
+  {
+   "id": "P065",
+   "text": "リード獲得単価をいくらに設定すればいいか分からない",
+   "segment": "S4",
+   "theme": "広告",
+   "count": 1,
+   "sources": [
+    "PROST AIスクール/08_めんたるサロン 講義動画/14｜自分で抱えない仕事の作り方.md"
+   ]
+  },
+  {
+   "id": "P066",
+   "text": "開業前は動くのはオープンしてからでいいと思い込んでいる",
+   "segment": "S1",
+   "theme": "インスタ運用",
+   "count": 1,
+   "sources": [
+    "マーケティング学習/インスタハカセ講義/00_講義マスターまとめ.md"
+   ]
+  },
+  {
+   "id": "P067",
+   "text": "開業して1年、毎回新しいネタを探すのに疲れている",
+   "segment": "S2",
+   "theme": "インスタ運用",
+   "count": 1,
+   "sources": [
+    "マーケティング学習/インスタハカセ講義/00_講義マスターまとめ.md"
+   ]
+  },
+  {
+   "id": "P068",
+   "text": "月商50万の壁で、当たった投稿を繰り返さずネタを使い捨てている",
+   "segment": "S3",
+   "theme": "インスタ運用",
+   "count": 1,
+   "sources": [
+    "マーケティング学習/インスタハカセ講義/00_講義マスターまとめ.md"
+   ]
+  },
+  {
+   "id": "P069",
+   "text": "スタッフがいるのに発信を院長が自分で全部やっている",
+   "segment": "S4",
+   "theme": "インスタ運用",
+   "count": 1,
+   "sources": [
+    "マーケティング学習/インスタハカセ講義/00_講義マスターまとめ.md"
+   ]
+  },
+  {
+   "id": "P070",
+   "text": "高額商品を自分の名前だけで売り込み紹介されにくい",
+   "segment": "S5",
+   "theme": "インスタ運用",
+   "count": 1,
+   "sources": [
+    "マーケティング学習/インスタハカセ講義/00_講義マスターまとめ.md"
+   ]
+  },
+  {
+   "id": "P071",
+   "text": "集客の正解を1回の投稿で当てようとして疲弊している",
+   "segment": "S1",
+   "theme": "インスタ運用",
+   "count": 1,
+   "sources": [
+    "マーケティング学習/インスタハカセ講義/00_講義マスターまとめ.md"
+   ]
+  },
+  {
+   "id": "P072",
+   "text": "フォロワーが増えないと紹介の仕組みを考えたことがない",
+   "segment": "S2",
+   "theme": "インスタ運用",
+   "count": 1,
+   "sources": [
+    "マーケティング学習/インスタハカセ講義/00_講義マスターまとめ.md"
+   ]
+  },
+  {
+   "id": "P073",
+   "text": "投稿を感覚で続けていて数字で振り返っていない",
+   "segment": "S3",
+   "theme": "インスタ運用",
+   "count": 1,
+   "sources": [
+    "マーケティング学習/インスタハカセ講義/00_講義マスターまとめ.md"
+   ]
+  },
+  {
+   "id": "ST01",
+   "text": "夕方になると肩がパンパンに張る",
+   "segment": "T1",
+   "theme": "症状",
+   "count": 8,
+   "sources": [
+    "Truth経営/LP・広告/truth_nagaoka_動画広告案.md(パターン1)",
+    "カウンセリング事例/分析データ_個票一覧.md"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST02",
+   "text": "座りっぱなしで首が前に出て固まる",
+   "segment": "T1",
+   "theme": "症状",
+   "count": 6,
+   "sources": [
+    "threads-auto-post/past_posts_nagaoka.json(#3,#9,#14)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST03",
+   "text": "整形外科で「異常なし」なのに肩甲骨が痛い",
+   "segment": "T1",
+   "theme": "不安",
+   "count": 5,
+   "sources": [
+    "threads-auto-post/past_posts.json(#20,#22)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST04",
+   "text": "猫背が悪化している自覚はあるが直し方が不明",
+   "segment": "T1",
+   "theme": "症状",
+   "count": 7,
+   "sources": [
+    "カウンセリング事例/01-04 顧客相談：小堀さん.md",
+    "Truth経営/LP・広告/truth_nagaoka_動画広告案.md"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST05",
+   "text": "昼休みもデスクでスマホを見ながら食事",
+   "segment": "T1",
+   "theme": "生活",
+   "count": 4,
+   "sources": [
+    "Truth経営/ペルソナ戦略総まとめ_2026-07-05.md"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST06",
+   "text": "週末マッサージも月曜にはもう元通り",
+   "segment": "T1",
+   "theme": "治療歴",
+   "count": 9,
+   "sources": [
+    "Truth経営/訴求統一ガイドライン_2026-07-05.md"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST07",
+   "text": "在宅勤務・PC作業で肩こりが悪化した",
+   "segment": "T1",
+   "theme": "症状",
+   "count": 5,
+   "sources": [
+    "カウンセリング事例/分析データ_個票一覧.md(佐藤様・塚本さん)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST08",
+   "text": "肩の可動域が狭くなり腕が上がりにくい",
+   "segment": "T1",
+   "theme": "症状",
+   "count": 6,
+   "sources": [
+    "カウンセリング事例/分析データ_個票一覧.md(土屋様・小林さん)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST09",
+   "text": "肩こりは「歳のせい」と諦めかけている",
+   "segment": "T1",
+   "theme": "不安",
+   "count": 6,
+   "sources": [
+    "カウンセリング事例/分析データ_個票一覧.md(山口さん・畠山さん)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST10",
+   "text": "ストレッチが3日で続かない",
+   "segment": "T1",
+   "theme": "生活",
+   "count": 8,
+   "sources": [
+    "Truth経営/ペルソナ戦略総まとめ_2026-07-05.md(面倒だと感じていること)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST11",
+   "text": "整体は痛い・怖いというイメージがある",
+   "segment": "T1",
+   "theme": "不安",
+   "count": 5,
+   "sources": [
+    "カウンセリング事例/分析データ_個票一覧.md(山口さん・石原様)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST12",
+   "text": "朝起きた瞬間からこめかみがズーンと重い",
+   "segment": "T2",
+   "theme": "症状",
+   "count": 10,
+   "sources": [
+    "Truth経営/LINE配信/公式LINE_頭痛ステップ配信.md(Day1)",
+    "past_posts.json(#1)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST13",
+   "text": "薬が効いてる間だけで夕方また痛くなる",
+   "segment": "T2",
+   "theme": "治療歴",
+   "count": 9,
+   "sources": [
+    "Truth経営/LINE配信/公式LINE_頭痛ステップ配信.md(Day1・Day2)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST14",
+   "text": "低気圧予報を見ると気持ちが沈む",
+   "segment": "T2",
+   "theme": "不安",
+   "count": 7,
+   "sources": [
+    "Truth経営/LINE配信/公式LINE_頭痛ステップ配信.md(Day1)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST15",
+   "text": "月10回以上の頭痛薬で薬物乱用頭痛が心配",
+   "segment": "T2",
+   "theme": "不安",
+   "count": 6,
+   "sources": [
+    "Truth経営/LINE配信/公式LINE_頭痛ステップ配信.md(Day2)",
+    "past_posts.json(#2)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST16",
+   "text": "頭痛薬をお守りのように常に持ち歩く",
+   "segment": "T2",
+   "theme": "生活",
+   "count": 6,
+   "sources": [
+    "Truth経営/LINE配信/公式LINE_頭痛ステップ配信.md(Day4)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST17",
+   "text": "病院で「異常なし」と言われたのに頭痛が続く",
+   "segment": "T2",
+   "theme": "治療歴",
+   "count": 8,
+   "sources": [
+    "Truth経営/LP・広告/truth_nagaoka_動画広告案.md(頭痛パターン4)",
+    "カウンセリング事例/分析データ_個票一覧.md(石原様)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST18",
+   "text": "頭痛のせいで子どもの行事を楽しめない",
+   "segment": "T2",
+   "theme": "不安",
+   "count": 5,
+   "sources": [
+    "Truth経営/LINE配信/公式LINE_頭痛ステップ配信.md(Day1・Day5)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST19",
+   "text": "薬の効く時間がだんだん短くなっている",
+   "segment": "T2",
+   "theme": "症状",
+   "count": 4,
+   "sources": [
+    "past_posts.json(#27)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST20",
+   "text": "頭痛の頻度を自分で数えたことがない",
+   "segment": "T2",
+   "theme": "生活",
+   "count": 5,
+   "sources": [
+    "past_posts_nagaoka.json(#14,#15)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST21",
+   "text": "週に何度も頭痛薬を飲む生活が当たり前",
+   "segment": "T2",
+   "theme": "症状",
+   "count": 9,
+   "sources": [
+    "past_posts_nagaoka.json(#4)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST22",
+   "text": "光や音に過敏で吐き気を伴う頭痛がある",
+   "segment": "T2",
+   "theme": "症状",
+   "count": 4,
+   "sources": [
+    "カウンセリング事例/分析データ_個票一覧.md(田村様・関さん)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST23",
+   "text": "気圧のせいだと思い他の原因に気づかない",
+   "segment": "T2",
+   "theme": "不安",
+   "count": 6,
+   "sources": [
+    "past_posts.json(#1)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST24",
+   "text": "水分を意識せずコーヒーばかり飲んでいる",
+   "segment": "T2",
+   "theme": "生活",
+   "count": 5,
+   "sources": [
+    "past_posts_nagaoka.json(#13,#26)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST25",
+   "text": "頭痛が出るかもと予定を入れるのが怖い",
+   "segment": "T2",
+   "theme": "不安",
+   "count": 5,
+   "sources": [
+    "Truth経営/LINE配信/公式LINE_頭痛ステップ配信.md(Day1)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST26",
+   "text": "頭痛の原因が骨盤や姿勢にあると知らない",
+   "segment": "T2",
+   "theme": "不安",
+   "count": 7,
+   "sources": [
+    "Truth経営/LINE配信/公式LINE_頭痛ステップ配信.md(Day2)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST27",
+   "text": "抱っこ・授乳の姿勢が続き背中が丸くなる",
+   "segment": "T3",
+   "theme": "症状",
+   "count": 5,
+   "sources": [
+    "カウンセリング事例/06_佐藤様_04-29(抱っこ・授乳の記録)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST28",
+   "text": "産後の全身痛を仕方ないと放置していた",
+   "segment": "T3",
+   "theme": "症状",
+   "count": 4,
+   "sources": [
+    "長岡市整体院口コミ分析レポート.md(すがわら接骨院口コミ#20)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST29",
+   "text": "育児で腰を痛めても自分は後回しにする",
+   "segment": "T3",
+   "theme": "生活",
+   "count": 6,
+   "sources": [
+    "長岡市整体院口コミ分析レポート.md(口コミ#26)",
+    "Truth経営/ペルソナ戦略総まとめ_2026-07-05.md"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST30",
+   "text": "抱っこ・肩乗りで肩や腕に疲労が蓄積",
+   "segment": "T3",
+   "theme": "症状",
+   "count": 5,
+   "sources": [
+    "カウンセリング事例/分析データ_個票一覧.md(抱っこ・肩乗りの記録)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST31",
+   "text": "骨盤が歪んだままでも整える時間がない",
+   "segment": "T3",
+   "theme": "生活",
+   "count": 6,
+   "sources": [
+    "カウンセリング事例(骨盤系82件)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST32",
+   "text": "子連れで通える整体院が少ないと感じる",
+   "segment": "T3",
+   "theme": "不安",
+   "count": 4,
+   "sources": [
+    "カウンセリング事例/01_千野さん_05-17.md"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST33",
+   "text": "産後の姿勢崩れが老け見えにつながる不安",
+   "segment": "T3",
+   "theme": "不安",
+   "count": 3,
+   "sources": [
+    "カウンセリング事例/分析データ_個票一覧.md(松永さん)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST34",
+   "text": "育児・家事で自分の体のケアが最下位",
+   "segment": "T3",
+   "theme": "生活",
+   "count": 5,
+   "sources": [
+    "Truth経営/ペルソナ戦略総まとめ_2026-07-05.md"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST35",
+   "text": "立ち仕事の後半になると腰と脚がつらい",
+   "segment": "T4",
+   "theme": "症状",
+   "count": 6,
+   "sources": [
+    "Truth経営/LP・広告/truth_nagaoka_動画広告案.md(パターン2)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST36",
+   "text": "介護の抱え上げ動作で腰を痛めている",
+   "segment": "T4",
+   "theme": "症状",
+   "count": 5,
+   "sources": [
+    "カウンセリング事例/01-30 整体カウンセリング：古見さん.md"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST37",
+   "text": "家事・育児・介護を一人で背負い限界",
+   "segment": "T4",
+   "theme": "生活",
+   "count": 5,
+   "sources": [
+    "カウンセリング事例/01-30 整体カウンセリング：古見さん.md"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST38",
+   "text": "不規則勤務で通院の計画が立てられない",
+   "segment": "T4",
+   "theme": "生活",
+   "count": 6,
+   "sources": [
+    "カウンセリング事例/分析データ_個票一覧.md(吉原さん)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST39",
+   "text": "除雪や重い荷物運びの後に腰が痛む",
+   "segment": "T4",
+   "theme": "症状",
+   "count": 3,
+   "sources": [
+    "カウンセリング事例/分析データ_個票一覧.md(高橋さん)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST40",
+   "text": "介護サービスに頼れず一人で抱え込む",
+   "segment": "T4",
+   "theme": "不安",
+   "count": 4,
+   "sources": [
+    "カウンセリング事例/01-30 整体カウンセリング：古見さん.md"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST41",
+   "text": "腰にコルセットが手放せない生活",
+   "segment": "T4",
+   "theme": "症状",
+   "count": 4,
+   "sources": [
+    "カウンセリング事例/分析データ_個票一覧.md(戸谷様)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST42",
+   "text": "立ちっぱなし・かがむ動作で腰が慢性化",
+   "segment": "T4",
+   "theme": "症状",
+   "count": 5,
+   "sources": [
+    "カウンセリング事例/分析データ_個票一覧.md(杉本様)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST43",
+   "text": "看護・介護職はシフトが不規則で予約が直前しか取れない",
+   "segment": "T4",
+   "theme": "生活",
+   "count": 4,
+   "sources": [
+    "カウンセリング事例/分析データ_個票一覧.md(吉原さん)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST44",
+   "text": "夜中に1時間ごとに目が覚めてしまう",
+   "segment": "T5",
+   "theme": "症状",
+   "count": 5,
+   "sources": [
+    "カウンセリング事例/分析データ_個票一覧.md(丸山様)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST45",
+   "text": "朝起きても熟眠感がなくだるさが抜けない",
+   "segment": "T5",
+   "theme": "症状",
+   "count": 7,
+   "sources": [
+    "カウンセリング事例/分析データ_個票一覧.md(熊崎さん)",
+    "past_posts_nagaoka.json(#6)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST46",
+   "text": "「歳のせい」で片付けられてきたが違うかも",
+   "segment": "T5",
+   "theme": "不安",
+   "count": 6,
+   "sources": [
+    "past_posts_nagaoka.json(#18)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST47",
+   "text": "疲れているのにやる気が出ず運動も続かない",
+   "segment": "T5",
+   "theme": "生活",
+   "count": 5,
+   "sources": [
+    "カウンセリング事例/分析データ_個票一覧.md(原田さん)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST48",
+   "text": "体が動かない・気分の落ち込みが悪循環",
+   "segment": "T5",
+   "theme": "症状",
+   "count": 4,
+   "sources": [
+    "カウンセリング事例/分析データ_個票一覧.md(小林さん)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST49",
+   "text": "寝ても疲れが取れずストレスと連動している",
+   "segment": "T5",
+   "theme": "症状",
+   "count": 6,
+   "sources": [
+    "カウンセリング事例/分析データ_個票一覧.md(藤田さん)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST50",
+   "text": "睡眠不足のまま生活習慣を変えられない",
+   "segment": "T5",
+   "theme": "生活",
+   "count": 5,
+   "sources": [
+    "カウンセリング事例/分析データ_個票一覧.md(石原様)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST51",
+   "text": "枕や寝具を変えても改善しない",
+   "segment": "T5",
+   "theme": "症状",
+   "count": 3,
+   "sources": [
+    "一般知見(汎用)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST52",
+   "text": "首肩のこりが睡眠の質低下と気づいていない",
+   "segment": "T5",
+   "theme": "不安",
+   "count": 6,
+   "sources": [
+    "past_posts.json(#4,#8)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST53",
+   "text": "睡眠の質低下が頭痛・肩こりを悪化させる",
+   "segment": "T5",
+   "theme": "症状",
+   "count": 6,
+   "sources": [
+    "past_posts.json(#8)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST54",
+   "text": "睡眠アプリで測っても改善方法が分からない",
+   "segment": "T5",
+   "theme": "生活",
+   "count": 3,
+   "sources": [
+    "一般知見(汎用)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST55",
+   "text": "マッサージは気持ちよくなって終わるだけ",
+   "segment": "T6",
+   "theme": "治療歴",
+   "count": 9,
+   "sources": [
+    "Truth経営/ペルソナ分析_LTV上位顧客_2026-07-05.md(久原様)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST56",
+   "text": "20回20万円払ったのに改善しなかった",
+   "segment": "T6",
+   "theme": "費用",
+   "count": 7,
+   "sources": [
+    "Truth経営/ペルソナ戦略総まとめ_2026-07-05.md"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST57",
+   "text": "対症療法は3日も持たないと感じている",
+   "segment": "T6",
+   "theme": "治療歴",
+   "count": 8,
+   "sources": [
+    "Truth経営/ペルソナ戦略総まとめ_2026-07-05.md"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST58",
+   "text": "どこに行っても同じことしか言われない",
+   "segment": "T6",
+   "theme": "治療歴",
+   "count": 8,
+   "sources": [
+    "カウンセリング事例/分析データ_個票一覧.md(上村さん)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST59",
+   "text": "揉んだ直後は楽でも3日後にはまた戻る",
+   "segment": "T6",
+   "theme": "治療歴",
+   "count": 9,
+   "sources": [
+    "past_posts.json(#13,#20)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST60",
+   "text": "施術後に悪化した経験があり施術が怖い",
+   "segment": "T6",
+   "theme": "不安",
+   "count": 5,
+   "sources": [
+    "カウンセリング事例/分析データ_個票一覧.md(古見さん・平沢様)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST61",
+   "text": "高額な一括コースは即決できない",
+   "segment": "T6",
+   "theme": "費用",
+   "count": 8,
+   "sources": [
+    "カウンセリング事例/分析データ_個票一覧.md(多数)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST62",
+   "text": "家族に相談してから決めたく先延ばしにする",
+   "segment": "T6",
+   "theme": "不安",
+   "count": 7,
+   "sources": [
+    "カウンセリング事例/分析データ_個票一覧.md(多数)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST63",
+   "text": "予約に縛られるのが苦手で継続に自信がない",
+   "segment": "T6",
+   "theme": "不安",
+   "count": 5,
+   "sources": [
+    "カウンセリング事例/分析データ_個票一覧.md(渡辺さん)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST64",
+   "text": "効果が続くか半信半疑のまま初回を受ける",
+   "segment": "T6",
+   "theme": "不安",
+   "count": 6,
+   "sources": [
+    "カウンセリング事例/分析データ_個票一覧.md(多数)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "ST65",
+   "text": "院ごとに言うことが違い何を信じていいか迷う",
+   "segment": "T6",
+   "theme": "不安",
+   "count": 5,
+   "sources": [
+    "カウンセリング事例/分析データ_個票一覧.md(上村さん)"
+   ],
+   "acct": "truth_nagaoka"
+  },
+  {
+   "id": "P074",
+   "text": "高額なAI導入研修を受けたのに、ファイルの置き場所やバージョン管理が分からず結局使いこなせていない",
+   "segment": "S5",
+   "theme": "AI",
+   "count": 1,
+   "sources": [
+    "AYC講義/AYC講義_2026-09-20.md"
+   ]
+  },
+  {
+   "id": "P075",
+   "text": "複数のセッションやPCでAI作業をしていて、どこまで進んだか・何が最新か分からなくなり手が止まる",
+   "segment": "S5",
+   "theme": "AI",
+   "count": 1,
+   "sources": [
+    "AYC講義/AYC講義_2026-09-21.md"
+   ]
+  }
+ ],
+ "hypotheses": [
+  {
+   "id": "H01",
+   "segment": "S1",
+   "theme": "集客",
+   "hypothesis": "開業前層は『動き出すのは開業してから』と思い込んでいる。物件が決まる前でも1日1分の投稿だけで開業日の来店数が変わると伝えれば低難度フックが反応するはず。",
+   "pain_ids": [
+    "P001",
+    "P004",
+    "P006"
+   ],
+   "status": "testing",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "開業前で、物件がまだ決まらない人へ。\n\n動き出すのは開業してからでいい、はウソ。\n\n1日1分、スマホで一言だけ投稿してみて。\n今日から始められます。"
+    },
+    {
+     "hook": "high",
+     "text": "開業前に投稿ゼロで迎える人は。\n\n開業してから慌てて発信を始めることになる。\n\n物件が決まる前の今日から\n一言だけ投稿してみてください。"
     }
-  ],
-  "hypotheses": [
+   ],
+   "last_result": {
+    "n": 2,
+    "index": 2.283,
+    "updated": "2026-09-26"
+   }
+  },
+  {
+   "id": "H02",
+   "segment": "S1",
+   "theme": "メンタル",
+   "hypothesis": "開業前層は『資格や知識が足りないから自信が持てない』と思い込んでいる。知識より言い切る練習の方が効くと伝えれば刺さるはず。",
+   "pain_ids": [
+    "P015",
+    "P016",
+    "P005"
+   ],
+   "status": "untested",
+   "posts": [
     {
-      "id": "H01",
-      "segment": "S1",
-      "theme": "集客",
-      "hypothesis": "開業前層は『動き出すのは開業してから』と思い込んでいる。物件が決まる前でも1日1分の投稿だけで開業日の来店数が変わると伝えれば低難度フックが反応するはず。",
-      "pain_ids": [
-        "P001",
-        "P004",
-        "P006"
-      ],
-      "status": "testing",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "開業前で、物件がまだ決まらない人へ。\n\n動き出すのは開業してからでいい、はウソ。\n\n1日1分、スマホで一言だけ投稿してみて。\n今日から始められます。"
-        },
-        {
-          "hook": "high",
-          "text": "開業前に投稿ゼロで迎える人は。\n\n開業してから慌てて発信を始めることになる。\n\n物件が決まる前の今日から\n一言だけ投稿してみてください。"
-        }
-      ],
-      "last_result": {
-        "n": 2,
-        "index": 2.283,
-        "updated": "2026-09-26"
-      }
+     "hook": "low",
+     "text": "開業前で自信が持てない人へ。\n\n足りないのは知識じゃない。\n\n1日1分、言い切る練習をするだけでいい。\n今日の一言から始めてみて。"
     },
     {
-      "id": "H02",
-      "segment": "S1",
-      "theme": "メンタル",
-      "hypothesis": "開業前層は『資格や知識が足りないから自信が持てない』と思い込んでいる。知識より言い切る練習の方が効くと伝えれば刺さるはず。",
-      "pain_ids": [
-        "P015",
-        "P016",
-        "P005"
-      ],
-      "status": "untested",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "開業前で自信が持てない人へ。\n\n足りないのは知識じゃない。\n\n1日1分、言い切る練習をするだけでいい。\n今日の一言から始めてみて。"
-        },
-        {
-          "hook": "high",
-          "text": "開業前、資格の勉強ばかりしている人は。\n\n知識が増えても言葉の自信は増えない。\n\n言い切る練習を、今日1回だけしてみてください。"
-        }
-      ],
-      "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
-      }
-    },
-    {
-      "id": "H03",
-      "segment": "S2",
-      "theme": "SNS",
-      "hypothesis": "開業〜1年層はAI投稿は気持ち悪いと思い込み手が止まっている。1日1文だけ自分の言葉に変える低難度フックで再開できるはず。",
-      "pain_ids": [
-        "P011",
-        "P012",
-        "P052",
-        "P053"
-      ],
-      "status": "testing",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "開業して1年、投稿が続かない人へ。\n\nAIに任せるのが気持ち悪い、じゃなくていい。\n\n1日1分、AIの下書きに\n自分の一言だけ足してみて。"
-        },
-        {
-          "hook": "high",
-          "text": "開業して1年、AI投稿をやめた人は。\n\n自分の言葉で0から書こうとして止まる。\n\nやめるより、1文だけ書き足す方が続きます。\n今日、1行足してみてください。"
-        }
-      ],
-      "last_result": {
-        "n": 2,
-        "index": 0.928,
-        "updated": "2026-09-26"
-      }
-    },
-    {
-      "id": "H04",
-      "segment": "S2",
-      "theme": "集客",
-      "hypothesis": "集客ゼロ層は特別な広告が必要だと思い込んでいる。1日1分の投稿だけで十分だと伝える方が反応するはず。",
-      "pain_ids": [
-        "P008",
-        "P009",
-        "P050"
-      ],
-      "status": "untested",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "開業して1年、集客ゼロの人へ。\n\n広告費はまだいらない。\n\n1日1分、スマホで投稿するだけでいい。\n今日1本、出してみて。"
-        },
-        {
-          "hook": "high",
-          "text": "開業して1年、集客ゼロの店を見てきて分かったこと。\n\n共通するのは広告不足じゃなく投稿数の少なさ。\n\nまず今日、1本だけ投稿してみてください。"
-        }
-      ],
-      "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
-      }
-    },
-    {
-      "id": "H05",
-      "segment": "S2",
-      "theme": "SNS",
-      "hypothesis": "開業〜1年層はプロフィールに経歴を書けば伝わると思い込んでいる。誰のどんな悩みを解決するか1行書くだけで反応が変わるはず。",
-      "pain_ids": [
-        "P012",
-        "P051"
-      ],
-      "status": "untested",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "開業して1年、プロフィールで悩む人へ。\n\n経歴を書き直さなくていい。\n\n1日1分、誰の悩みを解決するか\n1行だけ書いてみて。"
-        },
-        {
-          "hook": "high",
-          "text": "開業して1年、経歴中心のプロフィールは。\n\n読んだ人が自分ごとにできず素通りする。\n\n誰のどんな悩みを解決するか、\n1行だけ書き足してください。"
-        }
-      ],
-      "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
-      }
-    },
-    {
-      "id": "H06",
-      "segment": "S2",
-      "theme": "集客",
-      "hypothesis": "閲覧は取れても成約しない層はバズれば売れると思い込んでいる。閲覧と購入の間に1段階足りないだけと伝えれば響くはず。",
-      "pain_ids": [
-        "P013",
-        "P014"
-      ],
-      "status": "untested",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "開業して1年、閲覧は多いのに売れない人へ。\n\n特別な仕掛けはいらない。\n\n1日1分、投稿の最後の一言だけ変えてみて。"
-        },
-        {
-          "hook": "high",
-          "text": "開業して1年、閲覧数だけ伸びても売れない人は。\n\n閲覧と行動の間に1段階足りていない。\n\n投稿の最後に、次にやることを\n1行だけ書き足してみてください。"
-        }
-      ],
-      "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
-      }
-    },
-    {
-      "id": "H07",
-      "segment": "S3",
-      "theme": "集客",
-      "hypothesis": "頭打ち層は新規を増やせば売上が伸びると思い込んでいる。実は継続率の低下がボトルネックと伝えれば刺さるはず。",
-      "pain_ids": [
-        "P017",
-        "P018"
-      ],
-      "status": "testing",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "月商50万の壁にいる人へ。\n\n新規を増やさなくていい。\n\n1日1分、今日来た1人に\nリピートを聞くだけでいい。"
-        },
-        {
-          "hook": "high",
-          "text": "月商50万の壁で止まる店を見てきて分かったこと。\n\n原因は新規不足じゃなく、リピートの離脱だった。\n\n今日会う1人に、次にまた来る日を聞いてみてください。"
-        }
-      ],
-      "last_result": {
-        "n": 2,
-        "index": 4.059,
-        "updated": "2026-09-26"
-      }
-    },
-    {
-      "id": "H08",
-      "segment": "S3",
-      "theme": "単価",
-      "hypothesis": "頭打ち層は値上げすると客が逃げると思い込んでいる。こっそり少し上げるだけでも売上が変わると伝えれば反応するはず。",
-      "pain_ids": [
-        "P021",
-        "P022",
-        "P027"
-      ],
-      "status": "untested",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "月商50万の壁で値上げが怖い人へ。\n\n大きく上げなくていい。\n\n1日1分、メニューを1つだけ\n少し値上げしてみて。"
-        },
-        {
-          "hook": "high",
-          "text": "月商50万の壁でこっそり値上げした店は。\n\n客が離れる数より、残る数の方が多かった。\n\nメニューを1つだけ、今日値上げしてみてください。"
-        }
-      ],
-      "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
-      }
-    },
-    {
-      "id": "H09",
-      "segment": "S3",
-      "theme": "リピート",
-      "hypothesis": "頭打ち層は次回予約は客が決めるものだと思い込んでいる。こちらから日付を提案するだけでリピート率が変わるはず。",
-      "pain_ids": [
-        "P023"
-      ],
-      "status": "untested",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "月商50万の壁でリピートが伸びない人へ。\n\n次回どうしますか、と聞かなくていい。\n\n1日1分、こちらから日付を\n1つ提案するだけでいい。"
-        },
-        {
-          "hook": "high",
-          "text": "月商50万の壁で次回を客任せにする店は。\n\n決める負担を客に渡してしまっている。\n\n今日1人にだけ、日付を1つ提案してみてください。"
-        }
-      ],
-      "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
-      }
-    },
-    {
-      "id": "H10",
-      "segment": "S3",
-      "theme": "SNS",
-      "hypothesis": "頭打ち層はLINE登録ボタンを置けば増えると思い込んでいる。中身を1行明示するだけで登録率が変わるはず。",
-      "pain_ids": [
-        "P024"
-      ],
-      "status": "untested",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "月商50万の壁で登録が増えない人へ。\n\nボタンを増やさなくていい。\n\n1日1分、登録した先に何があるか\n1行だけ書いてみて。"
-        },
-        {
-          "hook": "high",
-          "text": "月商50万の壁で中身を書かない登録ボタンは。\n\n押した先が見えず、素通りされている。\n\n登録の先に何があるか、1行だけ書き足してください。"
-        }
-      ],
-      "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
-      }
-    },
-    {
-      "id": "H11",
-      "segment": "S3",
-      "theme": "メンタル",
-      "hypothesis": "頭打ち層はもっと勉強すれば解決すると思い込んでいる。行動量ではなく1つの意思決定が足りないだけと伝えれば刺さるはず。",
-      "pain_ids": [
-        "P025",
-        "P028",
-        "P029"
-      ],
-      "status": "untested",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "月商50万の壁でセミナーばかり受ける人へ。\n\nもっと学ばなくていい。\n\n1日1分、今日決めたことを\n1つだけ実行して。"
-        },
-        {
-          "hook": "high",
-          "text": "月商50万の壁にいる人ほど。\n\n新しい情報を集めて、行動を後回しにしがち。\n\n今日決めたことを、1つだけ実行してみてください。"
-        }
-      ],
-      "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
-      }
-    },
-    {
-      "id": "H12",
-      "segment": "S4",
-      "theme": "採用",
-      "hypothesis": "スタッフありの層は良い人を採用すれば辞めないと思い込んでいる。募集条件を1つ明確にするだけで定着率が変わるはず。",
-      "pain_ids": [
-        "P030",
-        "P031",
-        "P032",
-        "P033"
-      ],
-      "status": "testing",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "スタッフがいる院長へ。\n\n良い人を探さなくていい。\n\n1日1分、求人の条件を\n1つだけ決めてみて。"
-        },
-        {
-          "hook": "high",
-          "text": "スタッフが辞めていく院を見てきて分かったこと。\n\n条件が曖昧なまま採用している店が多かった。\n\n求人の条件を、今日1つだけ決めてください。"
-        }
-      ],
-      "last_result": {
-        "n": 2,
-        "index": 1.237,
-        "updated": "2026-09-26"
-      }
-    },
-    {
-      "id": "H13",
-      "segment": "S4",
-      "theme": "仕組み化",
-      "hypothesis": "スタッフありの層は任せれば楽になると思い込んでいる。マニュアル化なしで任せると質が落ちると伝えれば響くはず。",
-      "pain_ids": [
-        "P034",
-        "P059"
-      ],
-      "status": "untested",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "スタッフに任せて不安な院長へ。\n\nマニュアルを全部作らなくていい。\n\n1日1分、手順を1つだけ\n書き出してみて。"
-        },
-        {
-          "hook": "high",
-          "text": "手順書なしでスタッフに任せた院は。\n\n接客の質がばらつきやすくなっていた。\n\n今日、手順を1つだけ書き出してみてください。"
-        }
-      ],
-      "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
-      }
-    },
-    {
-      "id": "H14",
-      "segment": "S4",
-      "theme": "時間",
-      "hypothesis": "時間がない層は売上を伸ばせば時間ができると思い込んでいる。実はいらないことをやめる方が時間が増えると伝えれば刺さるはず。",
-      "pain_ids": [
-        "P037",
-        "P038"
-      ],
-      "status": "untested",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "時間がない院長へ。\n\n売上を増やさなくていい。\n\n1日1分、いらないことを\n1つだけやめてみて。"
-        },
-        {
-          "hook": "high",
-          "text": "売上が伸びても、稼働時間が減らない院長を見てきて。\n\n増やす発想しかなく、やめる発想がなかった。\n\n今日、いらないことを1つやめてみてください。"
-        }
-      ],
-      "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
-      }
-    },
-    {
-      "id": "H15",
-      "segment": "S4",
-      "theme": "SNS",
-      "hypothesis": "スタッフありの層は発信は自分がやらないといけないと思い込んでいる。AIに任せて1日1分の確認だけでいいと伝えれば響くはず。",
-      "pain_ids": [
-        "P036"
-      ],
-      "status": "untested",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "投稿する時間がない院長へ。\n\n自分で書かなくていい。\n\n1日1分の確認だけ\nAIに任せてみて。"
-        },
-        {
-          "hook": "high",
-          "text": "院長が自分で投稿を作る院は。\n\n忙しい日に発信が止まりやすい。\n\n今日、1本だけAIに下書きを任せてみてください。"
-        }
-      ],
-      "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
-      }
-    },
-    {
-      "id": "H16",
-      "segment": "S5",
-      "theme": "単価",
-      "hypothesis": "高額商品を持つ層は価値を伝えれば売れると思い込んでいる。無料と有料の間に1段階足りないだけと伝えれば刺さるはず。",
-      "pain_ids": [
-        "P041",
-        "P042"
-      ],
-      "status": "testing",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "高額商品を持つ経営者へ。\n\n価値を伝え直さなくていい。\n\n1日1分、無料と有料の間に\n1段階だけ作ってみて。"
-        },
-        {
-          "hook": "high",
-          "text": "無料は好評なのに有料が売れない経営者を見てきて。\n\n無料からいきなり有料へ飛ばしていた。\n\n間に1段階だけ、今日作ってみてください。"
-        }
-      ],
-      "last_result": {
-        "n": 1,
-        "index": 0.197,
-        "updated": "2026-09-26"
-      }
-    },
-    {
-      "id": "H17",
-      "segment": "S5",
-      "theme": "単価",
-      "hypothesis": "高額商品を持つ層は時間を長くしないと単価は上げられないと思い込んでいる。時間を短くしても単価は上がると伝えれば響くはず。",
-      "pain_ids": [
-        "P043",
-        "P064"
-      ],
-      "status": "untested",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "高い商品を作りたい経営者へ。\n\n時間を延ばさなくていい。\n\n1日1分、施術時間を短くして\n値段を上げてみて。"
-        },
-        {
-          "hook": "high",
-          "text": "施術時間を長くするほど単価が上がると思う経営者は。\n\n実は時間を短くしても値段は上げられる。\n\n次の1メニューで、時間を短くしてみてください。"
-        }
-      ],
-      "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
-      }
-    },
-    {
-      "id": "H18",
-      "segment": "S5",
-      "theme": "リピート",
-      "hypothesis": "高額商品を持つ層は都度払いの方が客に優しいと思い込んでいる。回数券にする方が離脱を防げると伝えれば刺さるはず。",
-      "pain_ids": [
-        "P049"
-      ],
-      "status": "untested",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "都度払いにしている経営者へ。\n\n全員に変えなくていい。\n\n1日1分、次の1人にだけ\n回数券を提案してみて。"
-        },
-        {
-          "hook": "high",
-          "text": "都度払いのまま続ける経営者を見てきて。\n\n2回目で離脱するお客が多かった。\n\n次の1人にだけ、回数券を提案してみてください。"
-        }
-      ],
-      "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
-      }
-    },
-    {
-      "id": "H19",
-      "segment": "S5",
-      "theme": "メンタル",
-      "hypothesis": "高額塾や投資をした層はもっと学べば結果が出ると思い込んでいる。学びより1つの実践が足りないだけと伝えれば響くはず。",
-      "pain_ids": [
-        "P047"
-      ],
-      "status": "untested",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "高い教材を買った経営者へ。\n\nもう1個買わなくていい。\n\n1日1分、学んだことを\n1つだけ試してみて。"
-        },
-        {
-          "hook": "high",
-          "text": "高額な教材を買い続ける経営者は。\n\n学ぶ数は増えても、試す数は増えていない。\n\n今日、学んだことを1つだけ試してみてください。"
-        }
-      ],
-      "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
-      }
-    },
-    {
-      "id": "H20",
-      "segment": "S1",
-      "theme": "仕組み化",
-      "hypothesis": "開業前層は開業資金は自己資金か銀行融資しかないと思い込んでいる。補助金や居抜きなど知らない選択肢があると伝えれば刺さるはず。",
-      "pain_ids": [
-        "P002",
-        "P003"
-      ],
-      "status": "untested",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "開業資金で悩んでいる人へ。\n\n選べる道は、実は1つじゃない。\n\n1日1分、居抜き物件を検索するだけでいい。\n知らない選択肢に気づけます。"
-        },
-        {
-          "hook": "high",
-          "text": "開業資金を自己資金だけで考える人は。\n\n選べる道を最初から狭めている。\n\n居抜き物件を1件だけ調べてみてください。\n見える景色が変わります。"
-        }
-      ],
-      "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
-      }
-    },
-    {
-      "id": "H21",
-      "segment": "S2",
-      "theme": "集客",
-      "hypothesis": "集客に悩む層全般は自分の商品を説明すれば伝わると思い込んでいる。お客の悩みを先に言語化する方が刺さるはず。",
-      "pain_ids": [
-        "P054"
-      ],
-      "status": "untested",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "開業して1年、何を発信すればいいか迷う人へ。\n\n商品の説明から書かなくていい。\n\n1日1分、お客の悩みを\n1つだけ書いてみて。"
-        },
-        {
-          "hook": "high",
-          "text": "開業して1年、商品説明から入る投稿は。\n\n自分の話から始まり、読む人には届きにくい。\n\nお客の悩みを、1つだけ先に書いてみてください。"
-        }
-      ],
-      "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
-      }
-    },
-    {
-      "id": "H22",
-      "segment": "S4",
-      "theme": "メンタル",
-      "hypothesis": "経営者層全般は自分の悩みは特別だと思い込んでいる。数字比較より今日の行動量を見る方が安定すると伝えれば響くはず。",
-      "pain_ids": [
-        "P055",
-        "P056",
-        "P057"
-      ],
-      "status": "untested",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "同業と比べて落ち込む院長へ。\n\n他院を見なくていい。\n\n1日1分、今日やったことを\n1つだけ書いてみて。"
-        },
-        {
-          "hook": "high",
-          "text": "同業と売上を比べ続ける院長は。\n\n比べるほど、差は縮まらず気力だけ減る。\n\n今日やったことを、1つだけ書き出してください。"
-        }
-      ],
-      "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
-      }
-    },
-    {
-      "id": "H23",
-      "segment": "S1",
-      "theme": "インスタ運用",
-      "hypothesis": "開業前層は独自のコンセプトを探すことに時間を使いがち。うまくいっている型をそのまま使ってよいと伝えれば、迷いによる投稿の停滞が減るはず。",
-      "pain_ids": [
-        "P066"
-      ],
-      "status": "untested",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "開業前で、発信のやり方に迷っている人へ。\n\n独自のやり方を考えなくていい。\n\nうまくいっている人のやり方を、そのまま真似ていい。\n差はあとから勝手につきます。"
-        },
-        {
-          "hook": "high",
-          "text": "開業前に発信の型で迷っている人は。\n\n独自路線を探すほど、時間だけが過ぎていく。\n\n伸びている同業の型をそのまま使う方が\n開業初月の立ち上がりが早くなります。"
-        }
-      ],
-      "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
-      }
-    },
-    {
-      "id": "H24",
-      "segment": "S2",
-      "theme": "インスタ運用",
-      "hypothesis": "開業1年未満の層は投稿ネタの枯渇で更新が止まりやすい。同じ気づきを繰り返し使ってよいと伝えれば、投稿頻度の低下を防げるはず。",
-      "pain_ids": [
-        "P067"
-      ],
-      "status": "untested",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "開業して1年、投稿のネタに悩む人へ。\n\n毎回新しいネタを探さなくていい。\n\n同じ話を、言い方だけ変えて出していい。\n見ている人は、毎回はじめましてです。"
-        },
-        {
-          "hook": "high",
-          "text": "開業して1年、ネタ切れに悩む人は。\n\n新しさを追うほど、続かなくなる。\n\n同じ気づきを切り口だけ変えて出す方が\n投稿を止めずに済みます。"
-        }
-      ],
-      "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
-      }
-    },
-    {
-      "id": "H25",
-      "segment": "S3",
-      "theme": "インスタ運用",
-      "hypothesis": "月商50万の壁にいる層は新しい切り口ばかり探し、当たった話を1回で使い捨てている。入り口だけ変えて繰り返す方が伸びると伝えれば反応するはず。",
-      "pain_ids": [
-        "P068"
-      ],
-      "status": "untested",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "月商50万の壁で、投稿が伸び悩む経営者へ。\n\n新しい切り口を探さなくていい。\n\n反応が良かった話を、入り口だけ変えて出す。\nそれだけで伸び方が変わります。"
-        },
-        {
-          "hook": "high",
-          "text": "月商50万の壁で投稿を増やしても伸びない経営者は。\n\n数を増やすより、当たった話を繰り返す方が効く。\n\n1つの気づきを、入り口違いで何度も出すと\n頭打ちが動き出します。"
-        }
-      ],
-      "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
-      }
-    },
-    {
-      "id": "H26",
-      "segment": "S4",
-      "theme": "インスタ運用",
-      "hypothesis": "スタッフを抱える院長層は発信も自分で抱え込みがち。AIに任せてよい範囲を伝えれば、時間の使い方への不安が和らぐはず。",
-      "pain_ids": [
-        "P069"
-      ],
-      "status": "untested",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "スタッフを抱える院長で、発信も自分でやる人へ。\n\n全部自分でやらなくていい。\n\n投稿づくりはAIに任せて\n自分にしかできない仕事だけをしてください。"
-        },
-        {
-          "hook": "high",
-          "text": "スタッフを抱える院長で発信も自分でやる人は。\n\n院長の時間が投稿作りに溶けている店が多い。\n\n発信を仕組みに任せると\n採用や接客にかける時間が増えます。"
-        }
-      ],
-      "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
-      }
-    },
-    {
-      "id": "H27",
-      "segment": "S5",
-      "theme": "インスタ運用",
-      "hypothesis": "高額商品層は個人の名前で売り込みがちで紹介が生まれにくい。仕組みの名前で見せる発想を伝えれば響くはず。",
-      "pain_ids": [
-        "P070"
-      ],
-      "status": "untested",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "高額商品を売る経営者で、自分の名前で売り込む人へ。\n\n人で売らなくていい。\n\n仕組みの名前で見せる方が\n人から人へ広がりやすくなります。"
-        },
-        {
-          "hook": "high",
-          "text": "高額商品を自分の名前で売り込む経営者は。\n\n個人の力で売るほど、他の人が紹介しにくくなる。\n\nサービスに名前をつけて見せる方が\n口コミで広がる速さが変わります。"
-        }
-      ],
-      "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
-      }
-    },
-    {
-      "id": "H28",
-      "segment": "S1",
-      "theme": "インスタ運用",
-      "hypothesis": "開業準備層は集客の正解を1回で当てようとして動けなくなりがち。小さく数を試す発想を伝えれば行動が始まるはず。",
-      "pain_ids": [
-        "P071"
-      ],
-      "status": "untested",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "開業準備中で、集客の正解を探している人へ。\n\n正解を1回で当てようとしなくていい。\n\n小さく試す数を増やすだけでいい。\n当たるのは、そのうちの1つで十分です。"
-        },
-        {
-          "hook": "high",
-          "text": "開業準備中で集客の正解を探している人は。\n\n1つの施策に賭けるほど、外れた時が痛い。\n\n開業前から小さく試す数を増やすと\n開業後の立ち上がりが安定します。"
-        }
-      ],
-      "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
-      }
-    },
-    {
-      "id": "H29",
-      "segment": "S2",
-      "theme": "インスタ運用",
-      "hypothesis": "開業1年未満の層はフォロワー数だけを気にして紹介の仕組みを考えていない。人に言葉で伝える発想を提示すれば響くはず。",
-      "pain_ids": [
-        "P072"
-      ],
-      "status": "untested",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "開業して1年、フォロワーが増えず悩む人へ。\n\nフォロワー集めだけが道じゃない。\n\n困っていることを人に言葉にするだけで\n紹介がうまれることがあります。"
-        },
-        {
-          "hook": "high",
-          "text": "開業して1年、フォロワーが伸びず悩む人は。\n\nフォロワー頼みの集客は、増えるまで時間がかかる。\n\n会う人に足りないものを言葉にする方が\n紹介からの来店が早く生まれます。"
-        }
-      ],
-      "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
-      }
-    },
-    {
-      "id": "H30",
-      "segment": "S3",
-      "theme": "インスタ運用",
-      "hypothesis": "月商50万の壁にいる層は発信を感覚で続け、数字で振り返っていない。AIに反応を確認させる習慣を伝えれば頭打ちの糸口になるはず。",
-      "pain_ids": [
-        "P073"
-      ],
-      "status": "untested",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "月商50万の壁で、感覚で発信を続ける経営者へ。\n\n投稿はなんとなくで続けなくていい。\n\n昨日の反応を、AIに毎朝確認させるだけでいい。\n数字が、次の一歩を教えてくれます。"
-        },
-        {
-          "hook": "high",
-          "text": "月商50万の壁で感覚だけで発信する経営者は。\n\n数字を見ずに続けると、同じ失敗を繰り返しやすい。\n\n読まれた投稿と読まれなかった投稿を毎朝比べると\n次に打つ一手が変わります。"
-        }
-      ],
-      "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
-      }
-    },
-    {
-      "id": "Z01_truth",
-      "acct": "truth",
-      "segment": "T1",
-      "theme": "症状",
-      "hypothesis": "デスクワーク層は肩こりの原因を「筋肉の凝り」だと思い込んでいる→「同じ姿勢の時間」が原因と伝えれば1分対策への反応が高い",
-      "pain_ids": [
-        "ST01",
-        "ST02",
-        "ST10"
-      ],
-      "evidence": "T1 index1.25・win構造=問いかけ(median119v,n22)・playbook W1",
-      "status": "testing",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "在宅勤務で肩こりが悪化した人へ。\n\n今日からできる1分、肩を後ろに5回まわすだけ。\n夕方の重さが変わります。"
-        },
-        {
-          "hook": "high",
-          "text": "猫背で肩甲骨が固まった人へ。\n\n揉んで楽になるのは、原因を先延ばしにしているだけです。\n同じ姿勢を変えない限り戻ります。"
-        }
-      ],
-      "last_result": {
-        "n": 1,
-        "index": 0.121,
-        "updated": "2026-09-26"
-      }
-    },
-    {
-      "id": "Z03_truth",
-      "acct": "truth",
-      "segment": "T1",
-      "theme": "生活",
-      "hypothesis": "会社員層はストレッチが続かないのは意志が弱いからだと思い込んでいる→負荷を下げれば反応する",
-      "pain_ids": [
-        "ST10",
-        "ST04"
-      ],
-      "evidence": "T1 index1.25・win構造=問いかけ(median119v,n22)・playbook W2",
-      "status": "untested",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "会議続きで首が痛い人へ。\n\n道具なし、椅子に座ったまま肩を上げて3秒キープを3回。\n1分でできます。"
-        },
-        {
-          "hook": "high",
-          "text": "同じ姿勢が続いて肩が重い人へ。\n\n続かないのは、あなたの意志が弱いからではありません。\n負荷が高すぎるだけです。"
-        }
-      ],
-      "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
-      }
-    },
-    {
-      "id": "Z05_truth",
-      "acct": "truth",
-      "segment": "T2",
-      "theme": "症状",
-      "hypothesis": "頭痛持ちは気圧だけが原因だと思い込んでいる→水分・噛む力という生活習慣も原因と伝えれば反応する",
-      "pain_ids": [
-        "ST14",
-        "ST23",
-        "ST24"
-      ],
-      "evidence": "T2 index0.83・win構造=数字(median132v,n22)・playbook L7",
-      "status": "testing",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "月に何度も頭痛薬を飲む人へ。\n\n今日からできる1分、コップ1杯の水を朝いちばんに飲むだけ。\n道具はいりません。"
-        },
-        {
-          "hook": "high",
-          "text": "頭痛薬を切らせない人へ。\n\n頭痛の原因は気圧だけとは限りません。\n水分や噛む力も関わっています。"
-        }
-      ],
-      "last_result": {
-        "n": 1,
-        "index": 0.255,
-        "updated": "2026-09-26"
-      }
-    },
-    {
-      "id": "Z07_truth",
-      "acct": "truth",
-      "segment": "T2",
-      "theme": "生活",
-      "hypothesis": "頭痛持ちは薬をお守りのように持ち歩くことに違和感がない→手放せる未来像を見せれば反応する",
-      "pain_ids": [
-        "ST16",
-        "ST25"
-      ],
-      "evidence": "T2 index0.83・win構造=数字(median132v,n22)・playbook L8",
-      "status": "untested",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "頭痛薬が常備品になっている人へ。\n\n寝る前1回、深呼吸を5回するだけ。\n翌朝が変わります。"
-        },
-        {
-          "hook": "high",
-          "text": "週の半分は頭痛薬を飲む人へ。\n\n頭痛を気にして行事を我慢する必要はないかもしれません。\n原因を見直せば変わります。"
-        }
-      ],
-      "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
-      }
-    },
-    {
-      "id": "Z09_truth",
-      "acct": "truth",
-      "segment": "T2",
-      "theme": "不安",
-      "hypothesis": "頭痛持ちの親は頭痛のせいで子どもの行事を我慢することに罪悪感を抱いている→向き合い方次第で変わると伝えれば反応する",
-      "pain_ids": [
-        "ST18",
-        "ST19"
-      ],
-      "evidence": "T2 index0.83・win構造=数字(median132v,n22)・playbook L9",
-      "status": "untested",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "頭痛薬なしで一日が始まらない人へ。\n\n寝る前1回、後頭部を手のひらで温めるだけ。\n道具はいりません。"
-        },
-        {
-          "hook": "high",
-          "text": "頭痛薬の量が増えている人へ。\n\n効く時間が短くなるのは、原因が消えていないサインです。\n薬に頼るほど気づきにくくなります。"
-        }
-      ],
-      "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
-      }
-    },
-    {
-      "id": "Z11_truth",
-      "acct": "truth",
-      "segment": "T3",
-      "theme": "生活",
-      "hypothesis": "産後の母親は自分の体のケアを後回しにするのが当たり前だと思っている→後回しにするほど戻りにくいと伝えれば反応する",
-      "pain_ids": [
-        "ST29",
-        "ST34"
-      ],
-      "evidence": "T3 n=0(白地層)・playbook W4/W5・仮説として要検証",
-      "status": "testing",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "産後、体の痛みを我慢するママへ。\n\n寝る前1回、仰向けで膝を抱えて骨盤を伸ばすだけ。\n1分でできます。"
-        },
-        {
-          "hook": "high",
-          "text": "産後の腰痛が続くママへ。\n\n後回しにした体ほど、戻りにくくなります。\n家事や育児より先に整える価値があります。"
-        }
-      ],
-      "last_result": {
-        "n": 2,
-        "index": 0.145,
-        "updated": "2026-09-26"
-      }
-    },
-    {
-      "id": "Z13_truth",
-      "acct": "truth",
-      "segment": "T4",
-      "theme": "症状",
-      "hypothesis": "立ち仕事・介護職は腰の張りを仕事だから仕方ないと諦めている→動作のクセが原因と伝えれば反応する",
-      "pain_ids": [
-        "ST35",
-        "ST39",
-        "ST42"
-      ],
-      "evidence": "T4 n=0(白地層)・playbook該当なし・仮説として要検証",
-      "status": "testing",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "立ちっぱなしで腰がつらい人へ。\n\n今日からできる1分、立ったまま片足ずつ膝を持ち上げるだけ。\n道具はいりません。"
-        },
-        {
-          "hook": "high",
-          "text": "看護や介護の仕事で脚がだるい人へ。\n\n来院した10人のうち8人は、腰ではなく骨盤の動きが原因でした。\n腰だけを揉んでも戻ります。"
-        }
-      ],
-      "last_result": {
-        "n": 2,
-        "index": 0.164,
-        "updated": "2026-09-26"
-      }
-    },
-    {
-      "id": "Z15_truth",
-      "acct": "truth",
-      "segment": "T4",
-      "theme": "不安",
-      "hypothesis": "不規則勤務の人は通院を続けられないと最初から諦めている→短時間・柔軟な対応があると伝えれば反応する",
-      "pain_ids": [
-        "ST38",
-        "ST41",
-        "ST43"
-      ],
-      "evidence": "T4 n=0(白地層)・playbook該当なし・仮説として要検証",
-      "status": "untested",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "介護や看護で腰と脚がつらい人へ。\n\n今日からできる1分、かがむ前に膝を軽く曲げるだけ。\n道具はいりません。"
-        },
-        {
-          "hook": "high",
-          "text": "立ち仕事続きで腰が重い人へ。\n\nコルセットが手放せない腰は、腰が原因でないことが多いです。\n短時間の見直しでも変わります。"
-        }
-      ],
-      "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
-      }
-    },
-    {
-      "id": "Z17_truth",
-      "acct": "truth",
-      "segment": "T5",
-      "theme": "生活",
-      "hypothesis": "疲れが取れない人は運動不足だと分かっていても行動に移せない→負荷を下げれば反応する",
-      "pain_ids": [
-        "ST47",
-        "ST50",
-        "ST54"
-      ],
-      "evidence": "T5 index1.35(n=3・参考値)・playbook W1・share1(参考値のため据え置き)",
-      "status": "testing",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "熟睡できていない人へ。\n\n今日からできる1分、湯船に肩まで浸かって深呼吸を5回するだけ。\n道具はいりません。"
-        },
-        {
-          "hook": "high",
-          "text": "寝ても疲労感が抜けない人へ。\n\n疲れが取れないのは、運動不足より先に整える場所があるからです。\n負荷を下げる方が続きます。"
-        }
-      ],
-      "last_result": {
-        "n": 1,
-        "index": 0.036,
-        "updated": "2026-09-26"
-      }
-    },
-    {
-      "id": "Z19_truth",
-      "acct": "truth",
-      "segment": "T6",
-      "theme": "治療歴",
-      "hypothesis": "他院を転々とした人は整体はどこも同じだと思い込んでいる→対症療法と根本改善の違いを伝えれば反応する",
-      "pain_ids": [
-        "ST55",
-        "ST57",
-        "ST58"
-      ],
-      "evidence": "T6 index0.31・avoid傾向=その他/否定型・playbook L2",
-      "status": "testing",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "何院も渡り歩いてきた人へ。\n\n今日からできる1分、揉むのではなく首をゆっくり伸ばすだけ。\n道具はいりません。"
-        },
-        {
-          "hook": "high",
-          "text": "マッサージ通いに疲れた人へ。\n\n揉んで楽になるのと、原因が変わるのは別のことです。\n対症療法と根本改善は目的が違います。"
-        }
-      ],
-      "last_result": {
-        "n": 1,
-        "index": 0.303,
-        "updated": "2026-09-26"
-      }
-    },
-    {
-      "id": "Z21_truth",
-      "acct": "truth",
-      "segment": "T6",
-      "theme": "不安",
-      "hypothesis": "施術で悪化した経験がある人は整体そのものへの不信感を持っている→強さより原因説明を重視する施術もあると伝えれば反応する",
-      "pain_ids": [
-        "ST60",
-        "ST63",
-        "ST65"
-      ],
-      "evidence": "T6 index0.31・avoid傾向=その他/否定型・playbook L2",
-      "status": "untested",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "施術直後だけ楽になる人へ。\n\n今日からできる1分、痛くない範囲で肩をすくめて離すだけ。\n道具はいりません。"
-        },
-        {
-          "hook": "high",
-          "text": "他院で結果が出なかった人へ。\n\n院によって言うことが違うのは、原因の見方が違うからです。\n強さより原因の説明を重視する院もあります。"
-        }
-      ],
-      "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
-      }
-    },
-    {
-      "id": "Z02_nagaoka",
-      "acct": "nagaoka",
-      "segment": "T1",
-      "theme": "症状",
-      "hypothesis": "デスクワーク層は肩こりの原因を「筋肉の凝り」だと思い込んでいる→「同じ姿勢の時間」が原因と伝えれば1分対策への反応が高い",
-      "pain_ids": [
-        "ST02"
-      ],
-      "evidence": "nagaoka T1 index1.02・win構造=数字(median271v,n6)・playbook W1",
-      "status": "testing",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "座り仕事で首がつらい人へ。\n\n今日からできる1分、椅子に座ったまま肩を上げ下げするだけ。\n道具はいりません。"
-        },
-        {
-          "hook": "high",
-          "text": "オフィスワークで肩が重い人へ。\n\n長時間の座りっぱなしは、肩こりの原因の代表格です。\n座り方を変えると重さが変わります。"
-        }
-      ],
-      "last_result": {
-        "n": 1,
-        "index": 3.125,
-        "updated": "2026-09-26"
-      }
-    },
-    {
-      "id": "Z04_nagaoka",
-      "acct": "nagaoka",
-      "segment": "T2",
-      "theme": "治療歴",
-      "hypothesis": "頭痛薬常用者は薬を飲めば済むと思い込んでいる→薬は痛みの信号を止めるだけと伝えると反応する",
-      "pain_ids": [
-        "ST13",
-        "ST15",
-        "ST19"
-      ],
-      "evidence": "nagaoka T2 index1.15・win構造=問いかけ(median184v,n30)・playbook L7",
-      "status": "testing",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "光や音がつらい頭痛がある人へ。\n\n寝る前1回、こめかみを親指で優しく押すだけ。\n道具はいりません。"
-        },
-        {
-          "hook": "high",
-          "text": "薬の効く時間が短くなってきた人へ。\n\nその生活、手放せる可能性があります。\n原因は薬では消えていません。"
-        }
-      ],
-      "last_result": {
-        "n": 1,
-        "index": 2.924,
-        "updated": "2026-09-26"
-      }
-    },
-    {
-      "id": "Z06_nagaoka",
-      "acct": "nagaoka",
-      "segment": "T2",
-      "theme": "不安",
-      "hypothesis": "頭痛持ちは頻度を数えていないため深刻度を過小評価している→数えるだけで気づきが生まれると反応する",
-      "pain_ids": [
-        "ST20",
-        "ST21"
-      ],
-      "evidence": "nagaoka T2 index1.15・win構造=問いかけ(median184v,n30)・playbook L8",
-      "status": "untested",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "朝からこめかみが重い人へ。\n\n今日からできる1分、頭痛が出た日をカレンダーに丸するだけ。\nそれだけです。"
-        },
-        {
-          "hook": "high",
-          "text": "低気圧の日は頭が痛くなる人へ。\n\n月の頭痛日数を数えたことがない人ほど頻度が多い傾向があります。\nまず数えてみてください。"
-        }
-      ],
-      "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
-      }
-    },
-    {
-      "id": "Z08_nagaoka",
-      "acct": "nagaoka",
-      "segment": "T2",
-      "theme": "症状",
-      "hypothesis": "光や音に過敏な頭痛持ちは片頭痛だから仕方ないと諦めている→首肩の緊張が原因と伝えれば反応する",
-      "pain_ids": [
-        "ST22"
-      ],
-      "evidence": "nagaoka T2 index1.15・win構造=リスト(median178v,n7)・playbook L9",
-      "status": "untested",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "頭痛で仕事に集中できない人へ。\n\n今日からできる1分、首をゆっくり左右に倒すだけ。\n道具はいりません。"
-        },
-        {
-          "hook": "high",
-          "text": "頭痛薬を飲む回数が増えた人へ。\n\n片頭痛だからと諦めていませんか。\n首の緊張が関わっていることがあります。"
-        }
-      ],
-      "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
-      }
-    },
-    {
-      "id": "Z10_nagaoka",
-      "acct": "nagaoka",
-      "segment": "T3",
-      "theme": "症状",
-      "hypothesis": "産後の母親は抱っこ・授乳姿勢の負担を一時的なものと思い込んでいる→2〜3年続く負担と伝えれば反応する",
-      "pain_ids": [
-        "ST27",
-        "ST30"
-      ],
-      "evidence": "nagaoka T3 index2.57(n=2・参考値)・playbook W5・share1(参考値のため据え置き)",
-      "status": "testing",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "育児中に自分の体を後回しにするママへ。\n\n今日からできる1分、抱っこの前に肩を1回上げ下げするだけ。\n道具はいりません。"
-        },
-        {
-          "hook": "high",
-          "text": "産後の姿勢崩れが気になるママへ。\n\n抱っこ・授乳の負担は一時的とは限りません。\n数年続くこともあります。"
-        }
-      ],
-      "last_result": {
-        "n": 2,
-        "index": 1.679,
-        "updated": "2026-09-26"
-      }
-    },
-    {
-      "id": "Z12_nagaoka",
-      "acct": "nagaoka",
-      "segment": "T3",
-      "theme": "不安",
-      "hypothesis": "産後の母親は骨盤の歪みは自然に戻ると思い込んでいる→歪んだままだと姿勢の崩れが定着すると伝えれば反応する",
-      "pain_ids": [
-        "ST31",
-        "ST33"
-      ],
-      "evidence": "nagaoka T3 index2.57(n=2・参考値)・playbook W5・share1(参考値のため据え置き)",
-      "status": "untested",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "子育てで腰を痛めたママへ。\n\n今日からできる1分、座るとき骨盤を立てて座るだけ。\n道具はいりません。"
-        },
-        {
-          "hook": "high",
-          "text": "抱っこの負担で肩まで重いママへ。\n\n骨盤の歪みは、時間が経てば自然には戻りません。\n姿勢の崩れが定着する前に整えたいところです。"
-        }
-      ],
-      "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
-      }
-    },
-    {
-      "id": "Z14_nagaoka",
-      "acct": "nagaoka",
-      "segment": "T4",
-      "theme": "生活",
-      "hypothesis": "介護をひとりで担う人は自分のケアの優先順位が最下位になっていると気づいていない→負担を分けて考える視点を示せば反応する",
-      "pain_ids": [
-        "ST36",
-        "ST37",
-        "ST40"
-      ],
-      "evidence": "nagaoka T4 n=0(白地層)・playbook該当なし・仮説として要検証",
-      "status": "testing",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "重い荷物運びで腰を痛めた人へ。\n\n寝る前1回、腰の下にタオルを丸めて置いて5分横になるだけ。\nそれだけで違います。"
-        },
-        {
-          "hook": "high",
-          "text": "夜勤続きで腰が重い人へ。\n\n一人で背負うほど、体の歪みも戻りにくくなります。\n負担を分けて考える視点も大事です。"
-        }
-      ],
-      "last_result": {
-        "n": 1,
-        "index": 1.185,
-        "updated": "2026-09-26"
-      }
-    },
-    {
-      "id": "Z16_nagaoka",
-      "acct": "nagaoka",
-      "segment": "T5",
-      "theme": "症状",
-      "hypothesis": "眠りが浅い人は睡眠の問題を歳のせいだと思い込んでいる→首肩の緊張が原因と伝えれば反応する",
-      "pain_ids": [
-        "ST45",
-        "ST46"
-      ],
-      "evidence": "nagaoka T5 index0.63・win構造=その他(median178v,n4)・playbook L9",
-      "status": "testing",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "寝つきが悪いと感じる人へ。\n\n寝る前1回、うつ伏せで両肩を後ろに引いて10秒キープするだけ。\n道具はいりません。"
-        },
-        {
-          "hook": "high",
-          "text": "朝起きた瞬間からだるい人へ。\n\n夜中に目が覚めるのは、歳のせいとは限りません。\n首や肩の緊張が関わっていることがあります。"
-        }
-      ],
-      "last_result": {
-        "n": 1,
-        "index": 0.174,
-        "updated": "2026-09-26"
-      }
-    },
-    {
-      "id": "Z18_nagaoka",
-      "acct": "nagaoka",
-      "segment": "T5",
-      "theme": "不安",
-      "hypothesis": "疲れが取れない人は気分の落ち込みと体の不調を別問題だと思っている→体の緊張が気分にも影響すると伝えれば反応する",
-      "pain_ids": [
-        "ST48",
-        "ST49",
-        "ST52"
-      ],
-      "evidence": "nagaoka T5 index0.63・win構造=その他(median178v,n4)・playbook L9",
-      "status": "untested",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "睡眠の質が落ちたと感じる人へ。\n\n寝る前1回、首の後ろを手のひらで軽く温めるだけ。\n道具はいりません。"
-        },
-        {
-          "hook": "high",
-          "text": "疲れが取れず気分も沈む人へ。\n\nやる気の問題ではなく、体の緊張が関係していることがあります。\n気分と体は別ではありません。"
-        }
-      ],
-      "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
-      }
-    },
-    {
-      "id": "Z20_nagaoka",
-      "acct": "nagaoka",
-      "segment": "T6",
-      "theme": "費用",
-      "hypothesis": "高額コースで改善しなかった人はお金をかけても意味がないと思い込んでいる→原因を見誤っていた可能性を伝えれば反応する",
-      "pain_ids": [
-        "ST56",
-        "ST61"
-      ],
-      "evidence": "nagaoka T6 index0.05・avoid傾向=その他・playbook W1",
-      "status": "testing",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "整体巡りに疲れた人へ。\n\n寝る前1回、後頭部と首の境目を軽く押すだけ。\n道具はいりません。"
-        },
-        {
-          "hook": "high",
-          "text": "何をしても一時的にしか変わらない人へ。\n\n変わらなかったのは、原因が別の場所だった可能性があります。\nお金の問題ではありません。"
-        }
-      ],
-      "last_result": {
-        "n": 1,
-        "index": 0.712,
-        "updated": "2026-09-26"
-      }
-    },
-    {
-      "id": "Z22_nagaoka",
-      "acct": "nagaoka",
-      "segment": "T1",
-      "theme": "不安",
-      "hypothesis": "デスクワーク層は整体は痛い・怖いというイメージを持っている→気持ちいい強さで行うと伝えれば反応する",
-      "pain_ids": [
-        "ST11"
-      ],
-      "evidence": "nagaoka T1 index1.02・win構造=数字(median271v,n6)・playbook W2",
-      "status": "untested",
-      "posts": [
-        {
-          "hook": "low",
-          "text": "1日中パソコンに向かう人へ。\n\n今日からできる1分、両肩をすくめて3秒止めて落とすだけ。\n道具はいりません。"
-        },
-        {
-          "hook": "high",
-          "text": "デスクワークで首の後ろが痛い人へ。\n\nバキバキ鳴らす施術と、原因から整える施術は全く別物です。\n強さより原因の説明を大事にする院もあります。"
-        }
-      ],
-      "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
-      }
+     "hook": "high",
+     "text": "開業前、資格の勉強ばかりしている人は。\n\n知識が増えても言葉の自信は増えない。\n\n言い切る練習を、今日1回だけしてみてください。"
     }
-  ]
+   ],
+   "last_result": {
+    "n": 0,
+    "index": null,
+    "updated": null
+   }
+  },
+  {
+   "id": "H03",
+   "segment": "S2",
+   "theme": "SNS",
+   "hypothesis": "開業〜1年層はAI投稿は気持ち悪いと思い込み手が止まっている。1日1文だけ自分の言葉に変える低難度フックで再開できるはず。",
+   "pain_ids": [
+    "P011",
+    "P012",
+    "P052",
+    "P053"
+   ],
+   "status": "testing",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "開業して1年、投稿が続かない人へ。\n\nAIに任せるのが気持ち悪い、じゃなくていい。\n\n1日1分、AIの下書きに\n自分の一言だけ足してみて。"
+    },
+    {
+     "hook": "high",
+     "text": "開業して1年、AI投稿をやめた人は。\n\n自分の言葉で0から書こうとして止まる。\n\nやめるより、1文だけ書き足す方が続きます。\n今日、1行足してみてください。"
+    }
+   ],
+   "last_result": {
+    "n": 2,
+    "index": 0.928,
+    "updated": "2026-09-26"
+   }
+  },
+  {
+   "id": "H04",
+   "segment": "S2",
+   "theme": "集客",
+   "hypothesis": "集客ゼロ層は特別な広告が必要だと思い込んでいる。1日1分の投稿だけで十分だと伝える方が反応するはず。",
+   "pain_ids": [
+    "P008",
+    "P009",
+    "P050"
+   ],
+   "status": "untested",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "開業して1年、集客ゼロの人へ。\n\n広告費はまだいらない。\n\n1日1分、スマホで投稿するだけでいい。\n今日1本、出してみて。"
+    },
+    {
+     "hook": "high",
+     "text": "開業して1年、集客ゼロの店を見てきて分かったこと。\n\n共通するのは広告不足じゃなく投稿数の少なさ。\n\nまず今日、1本だけ投稿してみてください。"
+    }
+   ],
+   "last_result": {
+    "n": 0,
+    "index": null,
+    "updated": null
+   }
+  },
+  {
+   "id": "H05",
+   "segment": "S2",
+   "theme": "SNS",
+   "hypothesis": "開業〜1年層はプロフィールに経歴を書けば伝わると思い込んでいる。誰のどんな悩みを解決するか1行書くだけで反応が変わるはず。",
+   "pain_ids": [
+    "P012",
+    "P051"
+   ],
+   "status": "untested",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "開業して1年、プロフィールで悩む人へ。\n\n経歴を書き直さなくていい。\n\n1日1分、誰の悩みを解決するか\n1行だけ書いてみて。"
+    },
+    {
+     "hook": "high",
+     "text": "開業して1年、経歴中心のプロフィールは。\n\n読んだ人が自分ごとにできず素通りする。\n\n誰のどんな悩みを解決するか、\n1行だけ書き足してください。"
+    }
+   ],
+   "last_result": {
+    "n": 0,
+    "index": null,
+    "updated": null
+   }
+  },
+  {
+   "id": "H06",
+   "segment": "S2",
+   "theme": "集客",
+   "hypothesis": "閲覧は取れても成約しない層はバズれば売れると思い込んでいる。閲覧と購入の間に1段階足りないだけと伝えれば響くはず。",
+   "pain_ids": [
+    "P013",
+    "P014"
+   ],
+   "status": "untested",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "開業して1年、閲覧は多いのに売れない人へ。\n\n特別な仕掛けはいらない。\n\n1日1分、投稿の最後の一言だけ変えてみて。"
+    },
+    {
+     "hook": "high",
+     "text": "開業して1年、閲覧数だけ伸びても売れない人は。\n\n閲覧と行動の間に1段階足りていない。\n\n投稿の最後に、次にやることを\n1行だけ書き足してみてください。"
+    }
+   ],
+   "last_result": {
+    "n": 0,
+    "index": null,
+    "updated": null
+   }
+  },
+  {
+   "id": "H07",
+   "segment": "S3",
+   "theme": "集客",
+   "hypothesis": "頭打ち層は新規を増やせば売上が伸びると思い込んでいる。実は継続率の低下がボトルネックと伝えれば刺さるはず。",
+   "pain_ids": [
+    "P017",
+    "P018"
+   ],
+   "status": "testing",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "月商50万の壁にいる人へ。\n\n新規を増やさなくていい。\n\n1日1分、今日来た1人に\nリピートを聞くだけでいい。"
+    },
+    {
+     "hook": "high",
+     "text": "月商50万の壁で止まる店を見てきて分かったこと。\n\n原因は新規不足じゃなく、リピートの離脱だった。\n\n今日会う1人に、次にまた来る日を聞いてみてください。"
+    }
+   ],
+   "last_result": {
+    "n": 2,
+    "index": 4.059,
+    "updated": "2026-09-26"
+   }
+  },
+  {
+   "id": "H08",
+   "segment": "S3",
+   "theme": "単価",
+   "hypothesis": "頭打ち層は値上げすると客が逃げると思い込んでいる。こっそり少し上げるだけでも売上が変わると伝えれば反応するはず。",
+   "pain_ids": [
+    "P021",
+    "P022",
+    "P027"
+   ],
+   "status": "untested",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "月商50万の壁で値上げが怖い人へ。\n\n大きく上げなくていい。\n\n1日1分、メニューを1つだけ\n少し値上げしてみて。"
+    },
+    {
+     "hook": "high",
+     "text": "月商50万の壁でこっそり値上げした店は。\n\n客が離れる数より、残る数の方が多かった。\n\nメニューを1つだけ、今日値上げしてみてください。"
+    }
+   ],
+   "last_result": {
+    "n": 0,
+    "index": null,
+    "updated": null
+   }
+  },
+  {
+   "id": "H09",
+   "segment": "S3",
+   "theme": "リピート",
+   "hypothesis": "頭打ち層は次回予約は客が決めるものだと思い込んでいる。こちらから日付を提案するだけでリピート率が変わるはず。",
+   "pain_ids": [
+    "P023"
+   ],
+   "status": "untested",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "月商50万の壁でリピートが伸びない人へ。\n\n次回どうしますか、と聞かなくていい。\n\n1日1分、こちらから日付を\n1つ提案するだけでいい。"
+    },
+    {
+     "hook": "high",
+     "text": "月商50万の壁で次回を客任せにする店は。\n\n決める負担を客に渡してしまっている。\n\n今日1人にだけ、日付を1つ提案してみてください。"
+    }
+   ],
+   "last_result": {
+    "n": 0,
+    "index": null,
+    "updated": null
+   }
+  },
+  {
+   "id": "H10",
+   "segment": "S3",
+   "theme": "SNS",
+   "hypothesis": "頭打ち層はLINE登録ボタンを置けば増えると思い込んでいる。中身を1行明示するだけで登録率が変わるはず。",
+   "pain_ids": [
+    "P024"
+   ],
+   "status": "untested",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "月商50万の壁で登録が増えない人へ。\n\nボタンを増やさなくていい。\n\n1日1分、登録した先に何があるか\n1行だけ書いてみて。"
+    },
+    {
+     "hook": "high",
+     "text": "月商50万の壁で中身を書かない登録ボタンは。\n\n押した先が見えず、素通りされている。\n\n登録の先に何があるか、1行だけ書き足してください。"
+    }
+   ],
+   "last_result": {
+    "n": 0,
+    "index": null,
+    "updated": null
+   }
+  },
+  {
+   "id": "H11",
+   "segment": "S3",
+   "theme": "メンタル",
+   "hypothesis": "頭打ち層はもっと勉強すれば解決すると思い込んでいる。行動量ではなく1つの意思決定が足りないだけと伝えれば刺さるはず。",
+   "pain_ids": [
+    "P025",
+    "P028",
+    "P029"
+   ],
+   "status": "untested",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "月商50万の壁でセミナーばかり受ける人へ。\n\nもっと学ばなくていい。\n\n1日1分、今日決めたことを\n1つだけ実行して。"
+    },
+    {
+     "hook": "high",
+     "text": "月商50万の壁にいる人ほど。\n\n新しい情報を集めて、行動を後回しにしがち。\n\n今日決めたことを、1つだけ実行してみてください。"
+    }
+   ],
+   "last_result": {
+    "n": 0,
+    "index": null,
+    "updated": null
+   }
+  },
+  {
+   "id": "H12",
+   "segment": "S4",
+   "theme": "採用",
+   "hypothesis": "スタッフありの層は良い人を採用すれば辞めないと思い込んでいる。募集条件を1つ明確にするだけで定着率が変わるはず。",
+   "pain_ids": [
+    "P030",
+    "P031",
+    "P032",
+    "P033"
+   ],
+   "status": "testing",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "スタッフがいる院長へ。\n\n良い人を探さなくていい。\n\n1日1分、求人の条件を\n1つだけ決めてみて。"
+    },
+    {
+     "hook": "high",
+     "text": "スタッフが辞めていく院を見てきて分かったこと。\n\n条件が曖昧なまま採用している店が多かった。\n\n求人の条件を、今日1つだけ決めてください。"
+    }
+   ],
+   "last_result": {
+    "n": 2,
+    "index": 1.237,
+    "updated": "2026-09-26"
+   }
+  },
+  {
+   "id": "H13",
+   "segment": "S4",
+   "theme": "仕組み化",
+   "hypothesis": "スタッフありの層は任せれば楽になると思い込んでいる。マニュアル化なしで任せると質が落ちると伝えれば響くはず。",
+   "pain_ids": [
+    "P034",
+    "P059"
+   ],
+   "status": "untested",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "スタッフに任せて不安な院長へ。\n\nマニュアルを全部作らなくていい。\n\n1日1分、手順を1つだけ\n書き出してみて。"
+    },
+    {
+     "hook": "high",
+     "text": "手順書なしでスタッフに任せた院は。\n\n接客の質がばらつきやすくなっていた。\n\n今日、手順を1つだけ書き出してみてください。"
+    }
+   ],
+   "last_result": {
+    "n": 0,
+    "index": null,
+    "updated": null
+   }
+  },
+  {
+   "id": "H14",
+   "segment": "S4",
+   "theme": "時間",
+   "hypothesis": "時間がない層は売上を伸ばせば時間ができると思い込んでいる。実はいらないことをやめる方が時間が増えると伝えれば刺さるはず。",
+   "pain_ids": [
+    "P037",
+    "P038"
+   ],
+   "status": "untested",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "時間がない院長へ。\n\n売上を増やさなくていい。\n\n1日1分、いらないことを\n1つだけやめてみて。"
+    },
+    {
+     "hook": "high",
+     "text": "売上が伸びても、稼働時間が減らない院長を見てきて。\n\n増やす発想しかなく、やめる発想がなかった。\n\n今日、いらないことを1つやめてみてください。"
+    }
+   ],
+   "last_result": {
+    "n": 0,
+    "index": null,
+    "updated": null
+   }
+  },
+  {
+   "id": "H15",
+   "segment": "S4",
+   "theme": "SNS",
+   "hypothesis": "スタッフありの層は発信は自分がやらないといけないと思い込んでいる。AIに任せて1日1分の確認だけでいいと伝えれば響くはず。",
+   "pain_ids": [
+    "P036"
+   ],
+   "status": "untested",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "投稿する時間がない院長へ。\n\n自分で書かなくていい。\n\n1日1分の確認だけ\nAIに任せてみて。"
+    },
+    {
+     "hook": "high",
+     "text": "院長が自分で投稿を作る院は。\n\n忙しい日に発信が止まりやすい。\n\n今日、1本だけAIに下書きを任せてみてください。"
+    }
+   ],
+   "last_result": {
+    "n": 0,
+    "index": null,
+    "updated": null
+   }
+  },
+  {
+   "id": "H16",
+   "segment": "S5",
+   "theme": "単価",
+   "hypothesis": "高額商品を持つ層は価値を伝えれば売れると思い込んでいる。無料と有料の間に1段階足りないだけと伝えれば刺さるはず。",
+   "pain_ids": [
+    "P041",
+    "P042"
+   ],
+   "status": "testing",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "高額商品を持つ経営者へ。\n\n価値を伝え直さなくていい。\n\n1日1分、無料と有料の間に\n1段階だけ作ってみて。"
+    },
+    {
+     "hook": "high",
+     "text": "無料は好評なのに有料が売れない経営者を見てきて。\n\n無料からいきなり有料へ飛ばしていた。\n\n間に1段階だけ、今日作ってみてください。"
+    }
+   ],
+   "last_result": {
+    "n": 1,
+    "index": 0.197,
+    "updated": "2026-09-26"
+   }
+  },
+  {
+   "id": "H17",
+   "segment": "S5",
+   "theme": "単価",
+   "hypothesis": "高額商品を持つ層は時間を長くしないと単価は上げられないと思い込んでいる。時間を短くしても単価は上がると伝えれば響くはず。",
+   "pain_ids": [
+    "P043",
+    "P064"
+   ],
+   "status": "untested",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "高い商品を作りたい経営者へ。\n\n時間を延ばさなくていい。\n\n1日1分、施術時間を短くして\n値段を上げてみて。"
+    },
+    {
+     "hook": "high",
+     "text": "施術時間を長くするほど単価が上がると思う経営者は。\n\n実は時間を短くしても値段は上げられる。\n\n次の1メニューで、時間を短くしてみてください。"
+    }
+   ],
+   "last_result": {
+    "n": 0,
+    "index": null,
+    "updated": null
+   }
+  },
+  {
+   "id": "H18",
+   "segment": "S5",
+   "theme": "リピート",
+   "hypothesis": "高額商品を持つ層は都度払いの方が客に優しいと思い込んでいる。回数券にする方が離脱を防げると伝えれば刺さるはず。",
+   "pain_ids": [
+    "P049"
+   ],
+   "status": "untested",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "都度払いにしている経営者へ。\n\n全員に変えなくていい。\n\n1日1分、次の1人にだけ\n回数券を提案してみて。"
+    },
+    {
+     "hook": "high",
+     "text": "都度払いのまま続ける経営者を見てきて。\n\n2回目で離脱するお客が多かった。\n\n次の1人にだけ、回数券を提案してみてください。"
+    }
+   ],
+   "last_result": {
+    "n": 0,
+    "index": null,
+    "updated": null
+   }
+  },
+  {
+   "id": "H19",
+   "segment": "S5",
+   "theme": "メンタル",
+   "hypothesis": "高額塾や投資をした層はもっと学べば結果が出ると思い込んでいる。学びより1つの実践が足りないだけと伝えれば響くはず。",
+   "pain_ids": [
+    "P047"
+   ],
+   "status": "untested",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "高い教材を買った経営者へ。\n\nもう1個買わなくていい。\n\n1日1分、学んだことを\n1つだけ試してみて。"
+    },
+    {
+     "hook": "high",
+     "text": "高額な教材を買い続ける経営者は。\n\n学ぶ数は増えても、試す数は増えていない。\n\n今日、学んだことを1つだけ試してみてください。"
+    }
+   ],
+   "last_result": {
+    "n": 0,
+    "index": null,
+    "updated": null
+   }
+  },
+  {
+   "id": "H20",
+   "segment": "S1",
+   "theme": "仕組み化",
+   "hypothesis": "開業前層は開業資金は自己資金か銀行融資しかないと思い込んでいる。補助金や居抜きなど知らない選択肢があると伝えれば刺さるはず。",
+   "pain_ids": [
+    "P002",
+    "P003"
+   ],
+   "status": "untested",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "開業資金で悩んでいる人へ。\n\n選べる道は、実は1つじゃない。\n\n1日1分、居抜き物件を検索するだけでいい。\n知らない選択肢に気づけます。"
+    },
+    {
+     "hook": "high",
+     "text": "開業資金を自己資金だけで考える人は。\n\n選べる道を最初から狭めている。\n\n居抜き物件を1件だけ調べてみてください。\n見える景色が変わります。"
+    }
+   ],
+   "last_result": {
+    "n": 0,
+    "index": null,
+    "updated": null
+   }
+  },
+  {
+   "id": "H21",
+   "segment": "S2",
+   "theme": "集客",
+   "hypothesis": "集客に悩む層全般は自分の商品を説明すれば伝わると思い込んでいる。お客の悩みを先に言語化する方が刺さるはず。",
+   "pain_ids": [
+    "P054"
+   ],
+   "status": "untested",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "開業して1年、何を発信すればいいか迷う人へ。\n\n商品の説明から書かなくていい。\n\n1日1分、お客の悩みを\n1つだけ書いてみて。"
+    },
+    {
+     "hook": "high",
+     "text": "開業して1年、商品説明から入る投稿は。\n\n自分の話から始まり、読む人には届きにくい。\n\nお客の悩みを、1つだけ先に書いてみてください。"
+    }
+   ],
+   "last_result": {
+    "n": 0,
+    "index": null,
+    "updated": null
+   }
+  },
+  {
+   "id": "H22",
+   "segment": "S4",
+   "theme": "メンタル",
+   "hypothesis": "経営者層全般は自分の悩みは特別だと思い込んでいる。数字比較より今日の行動量を見る方が安定すると伝えれば響くはず。",
+   "pain_ids": [
+    "P055",
+    "P056",
+    "P057"
+   ],
+   "status": "untested",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "同業と比べて落ち込む院長へ。\n\n他院を見なくていい。\n\n1日1分、今日やったことを\n1つだけ書いてみて。"
+    },
+    {
+     "hook": "high",
+     "text": "同業と売上を比べ続ける院長は。\n\n比べるほど、差は縮まらず気力だけ減る。\n\n今日やったことを、1つだけ書き出してください。"
+    }
+   ],
+   "last_result": {
+    "n": 0,
+    "index": null,
+    "updated": null
+   }
+  },
+  {
+   "id": "H23",
+   "segment": "S1",
+   "theme": "インスタ運用",
+   "hypothesis": "開業前層は独自のコンセプトを探すことに時間を使いがち。うまくいっている型をそのまま使ってよいと伝えれば、迷いによる投稿の停滞が減るはず。",
+   "pain_ids": [
+    "P066"
+   ],
+   "status": "untested",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "開業前で、発信のやり方に迷っている人へ。\n\n独自のやり方を考えなくていい。\n\nうまくいっている人のやり方を、そのまま真似ていい。\n差はあとから勝手につきます。"
+    },
+    {
+     "hook": "high",
+     "text": "開業前に発信の型で迷っている人は。\n\n独自路線を探すほど、時間だけが過ぎていく。\n\n伸びている同業の型をそのまま使う方が\n開業初月の立ち上がりが早くなります。"
+    }
+   ],
+   "last_result": {
+    "n": 0,
+    "index": null,
+    "updated": null
+   }
+  },
+  {
+   "id": "H24",
+   "segment": "S2",
+   "theme": "インスタ運用",
+   "hypothesis": "開業1年未満の層は投稿ネタの枯渇で更新が止まりやすい。同じ気づきを繰り返し使ってよいと伝えれば、投稿頻度の低下を防げるはず。",
+   "pain_ids": [
+    "P067"
+   ],
+   "status": "untested",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "開業して1年、投稿のネタに悩む人へ。\n\n毎回新しいネタを探さなくていい。\n\n同じ話を、言い方だけ変えて出していい。\n見ている人は、毎回はじめましてです。"
+    },
+    {
+     "hook": "high",
+     "text": "開業して1年、ネタ切れに悩む人は。\n\n新しさを追うほど、続かなくなる。\n\n同じ気づきを切り口だけ変えて出す方が\n投稿を止めずに済みます。"
+    }
+   ],
+   "last_result": {
+    "n": 0,
+    "index": null,
+    "updated": null
+   }
+  },
+  {
+   "id": "H25",
+   "segment": "S3",
+   "theme": "インスタ運用",
+   "hypothesis": "月商50万の壁にいる層は新しい切り口ばかり探し、当たった話を1回で使い捨てている。入り口だけ変えて繰り返す方が伸びると伝えれば反応するはず。",
+   "pain_ids": [
+    "P068"
+   ],
+   "status": "untested",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "月商50万の壁で、投稿が伸び悩む経営者へ。\n\n新しい切り口を探さなくていい。\n\n反応が良かった話を、入り口だけ変えて出す。\nそれだけで伸び方が変わります。"
+    },
+    {
+     "hook": "high",
+     "text": "月商50万の壁で投稿を増やしても伸びない経営者は。\n\n数を増やすより、当たった話を繰り返す方が効く。\n\n1つの気づきを、入り口違いで何度も出すと\n頭打ちが動き出します。"
+    }
+   ],
+   "last_result": {
+    "n": 0,
+    "index": null,
+    "updated": null
+   }
+  },
+  {
+   "id": "H26",
+   "segment": "S4",
+   "theme": "インスタ運用",
+   "hypothesis": "スタッフを抱える院長層は発信も自分で抱え込みがち。AIに任せてよい範囲を伝えれば、時間の使い方への不安が和らぐはず。",
+   "pain_ids": [
+    "P069"
+   ],
+   "status": "untested",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "スタッフを抱える院長で、発信も自分でやる人へ。\n\n全部自分でやらなくていい。\n\n投稿づくりはAIに任せて\n自分にしかできない仕事だけをしてください。"
+    },
+    {
+     "hook": "high",
+     "text": "スタッフを抱える院長で発信も自分でやる人は。\n\n院長の時間が投稿作りに溶けている店が多い。\n\n発信を仕組みに任せると\n採用や接客にかける時間が増えます。"
+    }
+   ],
+   "last_result": {
+    "n": 0,
+    "index": null,
+    "updated": null
+   }
+  },
+  {
+   "id": "H27",
+   "segment": "S5",
+   "theme": "インスタ運用",
+   "hypothesis": "高額商品層は個人の名前で売り込みがちで紹介が生まれにくい。仕組みの名前で見せる発想を伝えれば響くはず。",
+   "pain_ids": [
+    "P070"
+   ],
+   "status": "untested",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "高額商品を売る経営者で、自分の名前で売り込む人へ。\n\n人で売らなくていい。\n\n仕組みの名前で見せる方が\n人から人へ広がりやすくなります。"
+    },
+    {
+     "hook": "high",
+     "text": "高額商品を自分の名前で売り込む経営者は。\n\n個人の力で売るほど、他の人が紹介しにくくなる。\n\nサービスに名前をつけて見せる方が\n口コミで広がる速さが変わります。"
+    }
+   ],
+   "last_result": {
+    "n": 0,
+    "index": null,
+    "updated": null
+   }
+  },
+  {
+   "id": "H28",
+   "segment": "S1",
+   "theme": "インスタ運用",
+   "hypothesis": "開業準備層は集客の正解を1回で当てようとして動けなくなりがち。小さく数を試す発想を伝えれば行動が始まるはず。",
+   "pain_ids": [
+    "P071"
+   ],
+   "status": "untested",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "開業準備中で、集客の正解を探している人へ。\n\n正解を1回で当てようとしなくていい。\n\n小さく試す数を増やすだけでいい。\n当たるのは、そのうちの1つで十分です。"
+    },
+    {
+     "hook": "high",
+     "text": "開業準備中で集客の正解を探している人は。\n\n1つの施策に賭けるほど、外れた時が痛い。\n\n開業前から小さく試す数を増やすと\n開業後の立ち上がりが安定します。"
+    }
+   ],
+   "last_result": {
+    "n": 0,
+    "index": null,
+    "updated": null
+   }
+  },
+  {
+   "id": "H29",
+   "segment": "S2",
+   "theme": "インスタ運用",
+   "hypothesis": "開業1年未満の層はフォロワー数だけを気にして紹介の仕組みを考えていない。人に言葉で伝える発想を提示すれば響くはず。",
+   "pain_ids": [
+    "P072"
+   ],
+   "status": "untested",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "開業して1年、フォロワーが増えず悩む人へ。\n\nフォロワー集めだけが道じゃない。\n\n困っていることを人に言葉にするだけで\n紹介がうまれることがあります。"
+    },
+    {
+     "hook": "high",
+     "text": "開業して1年、フォロワーが伸びず悩む人は。\n\nフォロワー頼みの集客は、増えるまで時間がかかる。\n\n会う人に足りないものを言葉にする方が\n紹介からの来店が早く生まれます。"
+    }
+   ],
+   "last_result": {
+    "n": 0,
+    "index": null,
+    "updated": null
+   }
+  },
+  {
+   "id": "H30",
+   "segment": "S3",
+   "theme": "インスタ運用",
+   "hypothesis": "月商50万の壁にいる層は発信を感覚で続け、数字で振り返っていない。AIに反応を確認させる習慣を伝えれば頭打ちの糸口になるはず。",
+   "pain_ids": [
+    "P073"
+   ],
+   "status": "untested",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "月商50万の壁で、感覚で発信を続ける経営者へ。\n\n投稿はなんとなくで続けなくていい。\n\n昨日の反応を、AIに毎朝確認させるだけでいい。\n数字が、次の一歩を教えてくれます。"
+    },
+    {
+     "hook": "high",
+     "text": "月商50万の壁で感覚だけで発信する経営者は。\n\n数字を見ずに続けると、同じ失敗を繰り返しやすい。\n\n読まれた投稿と読まれなかった投稿を毎朝比べると\n次に打つ一手が変わります。"
+    }
+   ],
+   "last_result": {
+    "n": 0,
+    "index": null,
+    "updated": null
+   }
+  },
+  {
+   "id": "Z01_truth",
+   "acct": "truth",
+   "segment": "T1",
+   "theme": "症状",
+   "hypothesis": "デスクワーク層は肩こりの原因を「筋肉の凝り」だと思い込んでいる→「同じ姿勢の時間」が原因と伝えれば1分対策への反応が高い",
+   "pain_ids": [
+    "ST01",
+    "ST02",
+    "ST10"
+   ],
+   "evidence": "T1 index1.25・win構造=問いかけ(median119v,n22)・playbook W1",
+   "status": "testing",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "在宅勤務で肩こりが悪化した人へ。\n\n今日からできる1分、肩を後ろに5回まわすだけ。\n夕方の重さが変わります。"
+    },
+    {
+     "hook": "high",
+     "text": "猫背で肩甲骨が固まった人へ。\n\n揉んで楽になるのは、原因を先延ばしにしているだけです。\n同じ姿勢を変えない限り戻ります。"
+    }
+   ],
+   "last_result": {
+    "n": 1,
+    "index": 0.121,
+    "updated": "2026-09-26"
+   }
+  },
+  {
+   "id": "Z03_truth",
+   "acct": "truth",
+   "segment": "T1",
+   "theme": "生活",
+   "hypothesis": "会社員層はストレッチが続かないのは意志が弱いからだと思い込んでいる→負荷を下げれば反応する",
+   "pain_ids": [
+    "ST10",
+    "ST04"
+   ],
+   "evidence": "T1 index1.25・win構造=問いかけ(median119v,n22)・playbook W2",
+   "status": "untested",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "会議続きで首が痛い人へ。\n\n道具なし、椅子に座ったまま肩を上げて3秒キープを3回。\n1分でできます。"
+    },
+    {
+     "hook": "high",
+     "text": "同じ姿勢が続いて肩が重い人へ。\n\n続かないのは、あなたの意志が弱いからではありません。\n負荷が高すぎるだけです。"
+    }
+   ],
+   "last_result": {
+    "n": 0,
+    "index": null,
+    "updated": null
+   }
+  },
+  {
+   "id": "Z05_truth",
+   "acct": "truth",
+   "segment": "T2",
+   "theme": "症状",
+   "hypothesis": "頭痛持ちは気圧だけが原因だと思い込んでいる→水分・噛む力という生活習慣も原因と伝えれば反応する",
+   "pain_ids": [
+    "ST14",
+    "ST23",
+    "ST24"
+   ],
+   "evidence": "T2 index0.83・win構造=数字(median132v,n22)・playbook L7",
+   "status": "testing",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "月に何度も頭痛薬を飲む人へ。\n\n今日からできる1分、コップ1杯の水を朝いちばんに飲むだけ。\n道具はいりません。"
+    },
+    {
+     "hook": "high",
+     "text": "頭痛薬を切らせない人へ。\n\n頭痛の原因は気圧だけとは限りません。\n水分や噛む力も関わっています。"
+    }
+   ],
+   "last_result": {
+    "n": 1,
+    "index": 0.255,
+    "updated": "2026-09-26"
+   }
+  },
+  {
+   "id": "Z07_truth",
+   "acct": "truth",
+   "segment": "T2",
+   "theme": "生活",
+   "hypothesis": "頭痛持ちは薬をお守りのように持ち歩くことに違和感がない→手放せる未来像を見せれば反応する",
+   "pain_ids": [
+    "ST16",
+    "ST25"
+   ],
+   "evidence": "T2 index0.83・win構造=数字(median132v,n22)・playbook L8",
+   "status": "untested",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "頭痛薬が常備品になっている人へ。\n\n寝る前1回、深呼吸を5回するだけ。\n翌朝が変わります。"
+    },
+    {
+     "hook": "high",
+     "text": "週の半分は頭痛薬を飲む人へ。\n\n頭痛を気にして行事を我慢する必要はないかもしれません。\n原因を見直せば変わります。"
+    }
+   ],
+   "last_result": {
+    "n": 0,
+    "index": null,
+    "updated": null
+   }
+  },
+  {
+   "id": "Z09_truth",
+   "acct": "truth",
+   "segment": "T2",
+   "theme": "不安",
+   "hypothesis": "頭痛持ちの親は頭痛のせいで子どもの行事を我慢することに罪悪感を抱いている→向き合い方次第で変わると伝えれば反応する",
+   "pain_ids": [
+    "ST18",
+    "ST19"
+   ],
+   "evidence": "T2 index0.83・win構造=数字(median132v,n22)・playbook L9",
+   "status": "untested",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "頭痛薬なしで一日が始まらない人へ。\n\n寝る前1回、後頭部を手のひらで温めるだけ。\n道具はいりません。"
+    },
+    {
+     "hook": "high",
+     "text": "頭痛薬の量が増えている人へ。\n\n効く時間が短くなるのは、原因が消えていないサインです。\n薬に頼るほど気づきにくくなります。"
+    }
+   ],
+   "last_result": {
+    "n": 0,
+    "index": null,
+    "updated": null
+   }
+  },
+  {
+   "id": "Z11_truth",
+   "acct": "truth",
+   "segment": "T3",
+   "theme": "生活",
+   "hypothesis": "産後の母親は自分の体のケアを後回しにするのが当たり前だと思っている→後回しにするほど戻りにくいと伝えれば反応する",
+   "pain_ids": [
+    "ST29",
+    "ST34"
+   ],
+   "evidence": "T3 n=0(白地層)・playbook W4/W5・仮説として要検証",
+   "status": "testing",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "産後、体の痛みを我慢するママへ。\n\n寝る前1回、仰向けで膝を抱えて骨盤を伸ばすだけ。\n1分でできます。"
+    },
+    {
+     "hook": "high",
+     "text": "産後の腰痛が続くママへ。\n\n後回しにした体ほど、戻りにくくなります。\n家事や育児より先に整える価値があります。"
+    }
+   ],
+   "last_result": {
+    "n": 2,
+    "index": 0.145,
+    "updated": "2026-09-26"
+   }
+  },
+  {
+   "id": "Z13_truth",
+   "acct": "truth",
+   "segment": "T4",
+   "theme": "症状",
+   "hypothesis": "立ち仕事・介護職は腰の張りを仕事だから仕方ないと諦めている→動作のクセが原因と伝えれば反応する",
+   "pain_ids": [
+    "ST35",
+    "ST39",
+    "ST42"
+   ],
+   "evidence": "T4 n=0(白地層)・playbook該当なし・仮説として要検証",
+   "status": "testing",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "立ちっぱなしで腰がつらい人へ。\n\n今日からできる1分、立ったまま片足ずつ膝を持ち上げるだけ。\n道具はいりません。"
+    },
+    {
+     "hook": "high",
+     "text": "看護や介護の仕事で脚がだるい人へ。\n\n来院した10人のうち8人は、腰ではなく骨盤の動きが原因でした。\n腰だけを揉んでも戻ります。"
+    }
+   ],
+   "last_result": {
+    "n": 2,
+    "index": 0.164,
+    "updated": "2026-09-26"
+   }
+  },
+  {
+   "id": "Z15_truth",
+   "acct": "truth",
+   "segment": "T4",
+   "theme": "不安",
+   "hypothesis": "不規則勤務の人は通院を続けられないと最初から諦めている→短時間・柔軟な対応があると伝えれば反応する",
+   "pain_ids": [
+    "ST38",
+    "ST41",
+    "ST43"
+   ],
+   "evidence": "T4 n=0(白地層)・playbook該当なし・仮説として要検証",
+   "status": "untested",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "介護や看護で腰と脚がつらい人へ。\n\n今日からできる1分、かがむ前に膝を軽く曲げるだけ。\n道具はいりません。"
+    },
+    {
+     "hook": "high",
+     "text": "立ち仕事続きで腰が重い人へ。\n\nコルセットが手放せない腰は、腰が原因でないことが多いです。\n短時間の見直しでも変わります。"
+    }
+   ],
+   "last_result": {
+    "n": 0,
+    "index": null,
+    "updated": null
+   }
+  },
+  {
+   "id": "Z17_truth",
+   "acct": "truth",
+   "segment": "T5",
+   "theme": "生活",
+   "hypothesis": "疲れが取れない人は運動不足だと分かっていても行動に移せない→負荷を下げれば反応する",
+   "pain_ids": [
+    "ST47",
+    "ST50",
+    "ST54"
+   ],
+   "evidence": "T5 index1.35(n=3・参考値)・playbook W1・share1(参考値のため据え置き)",
+   "status": "testing",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "熟睡できていない人へ。\n\n今日からできる1分、湯船に肩まで浸かって深呼吸を5回するだけ。\n道具はいりません。"
+    },
+    {
+     "hook": "high",
+     "text": "寝ても疲労感が抜けない人へ。\n\n疲れが取れないのは、運動不足より先に整える場所があるからです。\n負荷を下げる方が続きます。"
+    }
+   ],
+   "last_result": {
+    "n": 1,
+    "index": 0.036,
+    "updated": "2026-09-26"
+   }
+  },
+  {
+   "id": "Z19_truth",
+   "acct": "truth",
+   "segment": "T6",
+   "theme": "治療歴",
+   "hypothesis": "他院を転々とした人は整体はどこも同じだと思い込んでいる→対症療法と根本改善の違いを伝えれば反応する",
+   "pain_ids": [
+    "ST55",
+    "ST57",
+    "ST58"
+   ],
+   "evidence": "T6 index0.31・avoid傾向=その他/否定型・playbook L2",
+   "status": "testing",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "何院も渡り歩いてきた人へ。\n\n今日からできる1分、揉むのではなく首をゆっくり伸ばすだけ。\n道具はいりません。"
+    },
+    {
+     "hook": "high",
+     "text": "マッサージ通いに疲れた人へ。\n\n揉んで楽になるのと、原因が変わるのは別のことです。\n対症療法と根本改善は目的が違います。"
+    }
+   ],
+   "last_result": {
+    "n": 1,
+    "index": 0.303,
+    "updated": "2026-09-26"
+   }
+  },
+  {
+   "id": "Z21_truth",
+   "acct": "truth",
+   "segment": "T6",
+   "theme": "不安",
+   "hypothesis": "施術で悪化した経験がある人は整体そのものへの不信感を持っている→強さより原因説明を重視する施術もあると伝えれば反応する",
+   "pain_ids": [
+    "ST60",
+    "ST63",
+    "ST65"
+   ],
+   "evidence": "T6 index0.31・avoid傾向=その他/否定型・playbook L2",
+   "status": "untested",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "施術直後だけ楽になる人へ。\n\n今日からできる1分、痛くない範囲で肩をすくめて離すだけ。\n道具はいりません。"
+    },
+    {
+     "hook": "high",
+     "text": "他院で結果が出なかった人へ。\n\n院によって言うことが違うのは、原因の見方が違うからです。\n強さより原因の説明を重視する院もあります。"
+    }
+   ],
+   "last_result": {
+    "n": 0,
+    "index": null,
+    "updated": null
+   }
+  },
+  {
+   "id": "Z02_nagaoka",
+   "acct": "nagaoka",
+   "segment": "T1",
+   "theme": "症状",
+   "hypothesis": "デスクワーク層は肩こりの原因を「筋肉の凝り」だと思い込んでいる→「同じ姿勢の時間」が原因と伝えれば1分対策への反応が高い",
+   "pain_ids": [
+    "ST02"
+   ],
+   "evidence": "nagaoka T1 index1.02・win構造=数字(median271v,n6)・playbook W1",
+   "status": "testing",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "座り仕事で首がつらい人へ。\n\n今日からできる1分、椅子に座ったまま肩を上げ下げするだけ。\n道具はいりません。"
+    },
+    {
+     "hook": "high",
+     "text": "オフィスワークで肩が重い人へ。\n\n長時間の座りっぱなしは、肩こりの原因の代表格です。\n座り方を変えると重さが変わります。"
+    }
+   ],
+   "last_result": {
+    "n": 1,
+    "index": 3.125,
+    "updated": "2026-09-26"
+   }
+  },
+  {
+   "id": "Z04_nagaoka",
+   "acct": "nagaoka",
+   "segment": "T2",
+   "theme": "治療歴",
+   "hypothesis": "頭痛薬常用者は薬を飲めば済むと思い込んでいる→薬は痛みの信号を止めるだけと伝えると反応する",
+   "pain_ids": [
+    "ST13",
+    "ST15",
+    "ST19"
+   ],
+   "evidence": "nagaoka T2 index1.15・win構造=問いかけ(median184v,n30)・playbook L7",
+   "status": "testing",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "光や音がつらい頭痛がある人へ。\n\n寝る前1回、こめかみを親指で優しく押すだけ。\n道具はいりません。"
+    },
+    {
+     "hook": "high",
+     "text": "薬の効く時間が短くなってきた人へ。\n\nその生活、手放せる可能性があります。\n原因は薬では消えていません。"
+    }
+   ],
+   "last_result": {
+    "n": 1,
+    "index": 2.924,
+    "updated": "2026-09-26"
+   }
+  },
+  {
+   "id": "Z06_nagaoka",
+   "acct": "nagaoka",
+   "segment": "T2",
+   "theme": "不安",
+   "hypothesis": "頭痛持ちは頻度を数えていないため深刻度を過小評価している→数えるだけで気づきが生まれると反応する",
+   "pain_ids": [
+    "ST20",
+    "ST21"
+   ],
+   "evidence": "nagaoka T2 index1.15・win構造=問いかけ(median184v,n30)・playbook L8",
+   "status": "untested",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "朝からこめかみが重い人へ。\n\n今日からできる1分、頭痛が出た日をカレンダーに丸するだけ。\nそれだけです。"
+    },
+    {
+     "hook": "high",
+     "text": "低気圧の日は頭が痛くなる人へ。\n\n月の頭痛日数を数えたことがない人ほど頻度が多い傾向があります。\nまず数えてみてください。"
+    }
+   ],
+   "last_result": {
+    "n": 0,
+    "index": null,
+    "updated": null
+   }
+  },
+  {
+   "id": "Z08_nagaoka",
+   "acct": "nagaoka",
+   "segment": "T2",
+   "theme": "症状",
+   "hypothesis": "光や音に過敏な頭痛持ちは片頭痛だから仕方ないと諦めている→首肩の緊張が原因と伝えれば反応する",
+   "pain_ids": [
+    "ST22"
+   ],
+   "evidence": "nagaoka T2 index1.15・win構造=リスト(median178v,n7)・playbook L9",
+   "status": "untested",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "頭痛で仕事に集中できない人へ。\n\n今日からできる1分、首をゆっくり左右に倒すだけ。\n道具はいりません。"
+    },
+    {
+     "hook": "high",
+     "text": "頭痛薬を飲む回数が増えた人へ。\n\n片頭痛だからと諦めていませんか。\n首の緊張が関わっていることがあります。"
+    }
+   ],
+   "last_result": {
+    "n": 0,
+    "index": null,
+    "updated": null
+   }
+  },
+  {
+   "id": "Z10_nagaoka",
+   "acct": "nagaoka",
+   "segment": "T3",
+   "theme": "症状",
+   "hypothesis": "産後の母親は抱っこ・授乳姿勢の負担を一時的なものと思い込んでいる→2〜3年続く負担と伝えれば反応する",
+   "pain_ids": [
+    "ST27",
+    "ST30"
+   ],
+   "evidence": "nagaoka T3 index2.57(n=2・参考値)・playbook W5・share1(参考値のため据え置き)",
+   "status": "testing",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "育児中に自分の体を後回しにするママへ。\n\n今日からできる1分、抱っこの前に肩を1回上げ下げするだけ。\n道具はいりません。"
+    },
+    {
+     "hook": "high",
+     "text": "産後の姿勢崩れが気になるママへ。\n\n抱っこ・授乳の負担は一時的とは限りません。\n数年続くこともあります。"
+    }
+   ],
+   "last_result": {
+    "n": 2,
+    "index": 1.679,
+    "updated": "2026-09-26"
+   }
+  },
+  {
+   "id": "Z12_nagaoka",
+   "acct": "nagaoka",
+   "segment": "T3",
+   "theme": "不安",
+   "hypothesis": "産後の母親は骨盤の歪みは自然に戻ると思い込んでいる→歪んだままだと姿勢の崩れが定着すると伝えれば反応する",
+   "pain_ids": [
+    "ST31",
+    "ST33"
+   ],
+   "evidence": "nagaoka T3 index2.57(n=2・参考値)・playbook W5・share1(参考値のため据え置き)",
+   "status": "untested",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "子育てで腰を痛めたママへ。\n\n今日からできる1分、座るとき骨盤を立てて座るだけ。\n道具はいりません。"
+    },
+    {
+     "hook": "high",
+     "text": "抱っこの負担で肩まで重いママへ。\n\n骨盤の歪みは、時間が経てば自然には戻りません。\n姿勢の崩れが定着する前に整えたいところです。"
+    }
+   ],
+   "last_result": {
+    "n": 0,
+    "index": null,
+    "updated": null
+   }
+  },
+  {
+   "id": "Z14_nagaoka",
+   "acct": "nagaoka",
+   "segment": "T4",
+   "theme": "生活",
+   "hypothesis": "介護をひとりで担う人は自分のケアの優先順位が最下位になっていると気づいていない→負担を分けて考える視点を示せば反応する",
+   "pain_ids": [
+    "ST36",
+    "ST37",
+    "ST40"
+   ],
+   "evidence": "nagaoka T4 n=0(白地層)・playbook該当なし・仮説として要検証",
+   "status": "testing",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "重い荷物運びで腰を痛めた人へ。\n\n寝る前1回、腰の下にタオルを丸めて置いて5分横になるだけ。\nそれだけで違います。"
+    },
+    {
+     "hook": "high",
+     "text": "夜勤続きで腰が重い人へ。\n\n一人で背負うほど、体の歪みも戻りにくくなります。\n負担を分けて考える視点も大事です。"
+    }
+   ],
+   "last_result": {
+    "n": 1,
+    "index": 1.185,
+    "updated": "2026-09-26"
+   }
+  },
+  {
+   "id": "Z16_nagaoka",
+   "acct": "nagaoka",
+   "segment": "T5",
+   "theme": "症状",
+   "hypothesis": "眠りが浅い人は睡眠の問題を歳のせいだと思い込んでいる→首肩の緊張が原因と伝えれば反応する",
+   "pain_ids": [
+    "ST45",
+    "ST46"
+   ],
+   "evidence": "nagaoka T5 index0.63・win構造=その他(median178v,n4)・playbook L9",
+   "status": "testing",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "寝つきが悪いと感じる人へ。\n\n寝る前1回、うつ伏せで両肩を後ろに引いて10秒キープするだけ。\n道具はいりません。"
+    },
+    {
+     "hook": "high",
+     "text": "朝起きた瞬間からだるい人へ。\n\n夜中に目が覚めるのは、歳のせいとは限りません。\n首や肩の緊張が関わっていることがあります。"
+    }
+   ],
+   "last_result": {
+    "n": 1,
+    "index": 0.174,
+    "updated": "2026-09-26"
+   }
+  },
+  {
+   "id": "Z18_nagaoka",
+   "acct": "nagaoka",
+   "segment": "T5",
+   "theme": "不安",
+   "hypothesis": "疲れが取れない人は気分の落ち込みと体の不調を別問題だと思っている→体の緊張が気分にも影響すると伝えれば反応する",
+   "pain_ids": [
+    "ST48",
+    "ST49",
+    "ST52"
+   ],
+   "evidence": "nagaoka T5 index0.63・win構造=その他(median178v,n4)・playbook L9",
+   "status": "untested",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "睡眠の質が落ちたと感じる人へ。\n\n寝る前1回、首の後ろを手のひらで軽く温めるだけ。\n道具はいりません。"
+    },
+    {
+     "hook": "high",
+     "text": "疲れが取れず気分も沈む人へ。\n\nやる気の問題ではなく、体の緊張が関係していることがあります。\n気分と体は別ではありません。"
+    }
+   ],
+   "last_result": {
+    "n": 0,
+    "index": null,
+    "updated": null
+   }
+  },
+  {
+   "id": "Z20_nagaoka",
+   "acct": "nagaoka",
+   "segment": "T6",
+   "theme": "費用",
+   "hypothesis": "高額コースで改善しなかった人はお金をかけても意味がないと思い込んでいる→原因を見誤っていた可能性を伝えれば反応する",
+   "pain_ids": [
+    "ST56",
+    "ST61"
+   ],
+   "evidence": "nagaoka T6 index0.05・avoid傾向=その他・playbook W1",
+   "status": "testing",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "整体巡りに疲れた人へ。\n\n寝る前1回、後頭部と首の境目を軽く押すだけ。\n道具はいりません。"
+    },
+    {
+     "hook": "high",
+     "text": "何をしても一時的にしか変わらない人へ。\n\n変わらなかったのは、原因が別の場所だった可能性があります。\nお金の問題ではありません。"
+    }
+   ],
+   "last_result": {
+    "n": 1,
+    "index": 0.712,
+    "updated": "2026-09-26"
+   }
+  },
+  {
+   "id": "Z22_nagaoka",
+   "acct": "nagaoka",
+   "segment": "T1",
+   "theme": "不安",
+   "hypothesis": "デスクワーク層は整体は痛い・怖いというイメージを持っている→気持ちいい強さで行うと伝えれば反応する",
+   "pain_ids": [
+    "ST11"
+   ],
+   "evidence": "nagaoka T1 index1.02・win構造=数字(median271v,n6)・playbook W2",
+   "status": "untested",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "1日中パソコンに向かう人へ。\n\n今日からできる1分、両肩をすくめて3秒止めて落とすだけ。\n道具はいりません。"
+    },
+    {
+     "hook": "high",
+     "text": "デスクワークで首の後ろが痛い人へ。\n\nバキバキ鳴らす施術と、原因から整える施術は全く別物です。\n強さより原因の説明を大事にする院もあります。"
+    }
+   ],
+   "last_result": {
+    "n": 0,
+    "index": null,
+    "updated": null
+   }
+  },
+  {
+   "id": "H31",
+   "segment": "S5",
+   "theme": "AI",
+   "acct": "masa",
+   "pain_ids": [
+    "P074"
+   ],
+   "hypothesis": "高額なAIツール・研修を導入した院長は「使いこなせていない罪悪感」を持っている→難しい手順ではなく『置き場所を1つに決めるだけ』の簡単な型を見せると反応する",
+   "evidence": "AYC講義2026-09-20（デジイナAI大学）：ファイル置き場・バージョン管理に関する質問が最多論点のひとつ",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "高いAIツールを入れたのに、\n結局使いこなせていない院長へ。"
+    },
+    {
+     "hook": "high",
+     "text": "高いAIツールを入れたのに、結局使いこなせていない院長へ。\n原因は才能じゃなく、置き場所と手順が1つに決まっていないだけです。\n僕は迷ったら『とりあえずここに置く』を1つだけ決めています。"
+    }
+   ],
+   "status": "untested",
+   "last_result": {
+    "index": null,
+    "n": 0,
+    "updated": null
+   }
+  },
+  {
+   "id": "H32",
+   "segment": "S5",
+   "theme": "AI",
+   "acct": "masa",
+   "pain_ids": [
+    "P075"
+   ],
+   "hypothesis": "複数セッション・PCでAI作業が迷子になる院長は『今どこまで進んだか』が見えないと不安になる→進捗を覚えなくていい仕組みを見せると反応する",
+   "evidence": "AYC講義2026-09-21（ゲリラ開発配信14）：セッション管理ツール開発が中心テーマ、進捗が分からなくなる悩みが多数",
+   "posts": [
+    {
+     "hook": "low",
+     "text": "AIに何をどこまで頼んだか、\nもう覚えていない院長へ。"
+    },
+    {
+     "hook": "high",
+     "text": "AIに何をどこまで頼んだか、もう覚えていない院長へ。\n僕は毎朝、前日の結果だけ見て次を決めます。\n覚えておく必要がないから、続けられます。"
+    }
+   ],
+   "status": "untested",
+   "last_result": {
+    "index": null,
+    "n": 0,
+    "updated": null
+   }
+  }
+ ]
 }

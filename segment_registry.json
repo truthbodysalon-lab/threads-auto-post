@@ -1,9 +1,10 @@
 {
   "これから開業する人へ。": {
     "segment": "S1",
-    "hook": "low",
-    "variant": 0,
-    "created": "2026-09-23"
+    "hook": "high",
+    "created": "2026-09-28",
+    "acct": "masa",
+    "variant": 0
   },
   "開業して1年、まだ集客ゼロの院へ。": {
     "segment": "S2",
@@ -40,7 +41,7 @@
   "寝ても疲労感が抜けない人へ。": {
     "segment": "T5",
     "hook": "high",
-    "created": "2026-09-26",
+    "created": "2026-09-28",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z17_truth"
@@ -56,7 +57,7 @@
   "産後の腰痛が続くママへ。": {
     "segment": "T3",
     "hook": "high",
-    "created": "2026-09-26",
+    "created": "2026-09-28",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z11_truth"
@@ -64,7 +65,7 @@
   "何をしても一時的にしか変わらない人へ。": {
     "segment": "T6",
     "hook": "high",
-    "created": "2026-09-26",
+    "created": "2026-09-28",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z20_nagaoka"
@@ -80,7 +81,7 @@
   "夜勤続きで腰が重い人へ。": {
     "segment": "T4",
     "hook": "high",
-    "created": "2026-09-26",
+    "created": "2026-09-28",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z14_nagaoka"
@@ -113,7 +114,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 2,
-    "created": "2026-09-27"
+    "created": "2026-09-28"
   },
   "月商50万の壁で止まる店を見てきて分かったこと。": {
     "segment": "S3",
@@ -163,7 +164,7 @@
   "立ち仕事続きで腰が重い人へ。": {
     "segment": "T4",
     "hook": "high",
-    "created": "2026-09-24",
+    "created": "2026-09-28",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z15_truth"
@@ -178,7 +179,7 @@
   "他院で結果が出なかった人へ。": {
     "segment": "T6",
     "hook": "high",
-    "created": "2026-09-24",
+    "created": "2026-09-28",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z21_truth"
@@ -186,7 +187,7 @@
   "抱っこの負担で肩まで重いママへ。": {
     "segment": "T3",
     "hook": "high",
-    "created": "2026-09-24",
+    "created": "2026-09-28",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z12_nagaoka"
@@ -201,7 +202,7 @@
   "疲れが取れず気分も沈む人へ。": {
     "segment": "T5",
     "hook": "high",
-    "created": "2026-09-24",
+    "created": "2026-09-28",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z18_nagaoka"
@@ -493,7 +494,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 12,
-    "created": "2026-09-27"
+    "created": "2026-09-28"
   },
   "デスクワークで肩や首が重い人へ。": {
     "segment": "T1",
@@ -1024,5 +1025,37 @@
     "created": "2026-09-27",
     "acct": "masa",
     "variant": 1
+  },
+  "開業して1年、ネタ切れに悩む人は。": {
+    "segment": "S2",
+    "hook": "high",
+    "created": "2026-09-28",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H24"
+  },
+  "月商50万の壁で投稿を増やしても伸びない経営者は。": {
+    "segment": "S3",
+    "hook": "high",
+    "created": "2026-09-28",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H25"
+  },
+  "スタッフを抱える院長で発信も自分でやる人は。": {
+    "segment": "S4",
+    "hook": "high",
+    "created": "2026-09-28",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H26"
+  },
+  "高いAIツールを入れたのに、結局使いこなせていない院長へ。": {
+    "segment": "S5",
+    "hook": "high",
+    "created": "2026-09-28",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H31"
   }
 }

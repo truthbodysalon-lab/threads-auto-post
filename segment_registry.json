@@ -269,7 +269,7 @@
   "在宅勤務で肩こりが悪化した人へ。": {
     "segment": "T1",
     "hook": "low",
-    "created": "2026-09-25",
+    "created": "2026-09-27",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z01_truth"
@@ -293,7 +293,7 @@
   "立ちっぱなしで腰がつらい人へ。": {
     "segment": "T4",
     "hook": "low",
-    "created": "2026-09-25",
+    "created": "2026-09-27",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z13_truth"
@@ -301,7 +301,7 @@
   "座り仕事で首がつらい人へ。": {
     "segment": "T1",
     "hook": "low",
-    "created": "2026-09-25",
+    "created": "2026-09-27",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z02_nagaoka"
@@ -317,7 +317,7 @@
   "育児中に自分の体を後回しにするママへ。": {
     "segment": "T3",
     "hook": "low",
-    "created": "2026-09-25",
+    "created": "2026-09-27",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z10_nagaoka"
@@ -401,7 +401,7 @@
   "産後の腰痛や骨盤に悩むママへ。": {
     "segment": "T3",
     "hook": "low",
-    "created": "2026-09-25",
+    "created": "2026-09-27",
     "acct": "truth",
     "variant": 0
   },
@@ -440,7 +440,7 @@
   "立ち仕事や介護で腰が張る人へ。": {
     "segment": "T4",
     "hook": "low",
-    "created": "2026-09-25",
+    "created": "2026-09-27",
     "acct": "nagaoka",
     "variant": 0
   },
@@ -488,13 +488,13 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 10,
-    "created": "2026-09-25"
+    "created": "2026-09-27"
   },
   "1週間で結果が出ないと、諦めていませんか。": {
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 12,
-    "created": "2026-09-25"
+    "created": "2026-09-27"
   },
   "デスクワークで肩や首が重い人へ。": {
     "segment": "T1",
@@ -933,5 +933,59 @@
     "hook": "principle",
     "variant": 9,
     "created": "2026-09-27"
+  },
+  "頭痛薬が手放せない人へ。": {
+    "segment": "T2",
+    "hook": "low",
+    "created": "2026-09-27",
+    "acct": "truth",
+    "variant": 1
+  },
+  "気圧が変わると頭が重くなる人へ。": {
+    "segment": "T2",
+    "hook": "low",
+    "created": "2026-09-27",
+    "acct": "nagaoka",
+    "variant": 1
+  },
+  "開業準備中で、集客の正解を探している人へ。": {
+    "segment": "S1",
+    "hook": "low",
+    "created": "2026-09-27",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H28"
+  },
+  "開業して1年、何を発信すればいいか迷う人へ。": {
+    "segment": "S2",
+    "hook": "low",
+    "created": "2026-09-27",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H21"
+  },
+  "月商50万の壁でセミナーばかり受ける人へ。": {
+    "segment": "S3",
+    "hook": "low",
+    "created": "2026-09-27",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H11"
+  },
+  "同業と比べて落ち込む院長へ。": {
+    "segment": "S4",
+    "hook": "low",
+    "created": "2026-09-27",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H22"
+  },
+  "高額商品を売る経営者で、自分の名前で売り込む人へ。": {
+    "segment": "S5",
+    "hook": "low",
+    "created": "2026-09-27",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H27"
   }
 }

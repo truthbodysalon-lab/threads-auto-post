@@ -1,8 +1,8 @@
 {
   "これから開業する人へ。": {
     "segment": "S1",
-    "hook": "high",
-    "created": "2026-09-28",
+    "hook": "low",
+    "created": "2026-09-29",
     "acct": "masa",
     "variant": 0
   },
@@ -22,15 +22,15 @@
   },
   "スタッフを抱える院長へ。": {
     "segment": "S4",
-    "hook": "high",
-    "created": "2026-09-28",
+    "hook": "low",
+    "created": "2026-09-29",
     "acct": "masa",
     "variant": 0
   },
   "コースや講座を売っている経営者へ。": {
     "segment": "S5",
-    "hook": "high",
-    "created": "2026-09-28",
+    "hook": "low",
+    "created": "2026-09-29",
     "acct": "masa",
     "variant": 0
   },
@@ -289,7 +289,7 @@
   "産後、体の痛みを我慢するママへ。": {
     "segment": "T3",
     "hook": "low",
-    "created": "2026-09-27",
+    "created": "2026-09-29",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z11_truth"
@@ -329,7 +329,7 @@
   "重い荷物運びで腰を痛めた人へ。": {
     "segment": "T4",
     "hook": "low",
-    "created": "2026-09-27",
+    "created": "2026-09-29",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z14_nagaoka"
@@ -397,7 +397,7 @@
   "頭痛薬が常備品になっている人へ。": {
     "segment": "T2",
     "hook": "low",
-    "created": "2026-09-25",
+    "created": "2026-09-29",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z07_truth"
@@ -428,7 +428,7 @@
   "朝からこめかみが重い人へ。": {
     "segment": "T2",
     "hook": "low",
-    "created": "2026-09-25",
+    "created": "2026-09-29",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z06_nagaoka"
@@ -498,12 +498,12 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 12,
-    "created": "2026-09-28"
+    "created": "2026-09-29"
   },
   "デスクワークで肩や首が重い人へ。": {
     "segment": "T1",
     "hook": "low",
-    "created": "2026-09-25",
+    "created": "2026-09-29",
     "acct": "truth",
     "variant": 0
   },
@@ -525,14 +525,14 @@
   "立ち仕事や介護で腰と脚がつらい人へ。": {
     "segment": "T4",
     "hook": "low",
-    "created": "2026-09-25",
+    "created": "2026-09-29",
     "acct": "truth",
     "variant": 0
   },
   "スマホ首で悩む人へ。": {
     "segment": "T1",
     "hook": "low",
-    "created": "2026-09-25",
+    "created": "2026-09-29",
     "acct": "nagaoka",
     "variant": 0
   },
@@ -547,7 +547,7 @@
   "抱っこ・授乳で背中が丸くなるママへ。": {
     "segment": "T3",
     "hook": "low",
-    "created": "2026-09-25",
+    "created": "2026-09-29",
     "acct": "nagaoka",
     "variant": 0
   },
@@ -848,7 +848,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 7,
-    "created": "2026-09-28"
+    "created": "2026-09-29"
   },
   "座りっぱなしで肩がガチガチな人へ。": {
     "segment": "T1",
@@ -1099,5 +1099,21 @@
     "created": "2026-09-28",
     "acct": "masa",
     "variant": 1
+  },
+  "開業して1年、フォロワーが増えず悩む人へ。": {
+    "segment": "S2",
+    "hook": "low",
+    "created": "2026-09-29",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H29"
+  },
+  "月商50万の壁で、感覚で発信を続ける経営者へ。": {
+    "segment": "S3",
+    "hook": "low",
+    "created": "2026-09-29",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H30"
   }
 }

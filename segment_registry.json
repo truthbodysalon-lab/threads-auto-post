@@ -8,15 +8,17 @@
   },
   "開業して1年、まだ集客ゼロの院へ。": {
     "segment": "S2",
-    "hook": "low",
-    "variant": 0,
-    "created": "2026-09-23"
+    "hook": "high",
+    "created": "2026-09-28",
+    "acct": "masa",
+    "variant": 0
   },
   "月商50万の壁で止まっている経営者へ。": {
     "segment": "S3",
-    "hook": "low",
-    "variant": 0,
-    "created": "2026-09-23"
+    "hook": "high",
+    "created": "2026-09-28",
+    "acct": "masa",
+    "variant": 0
   },
   "スタッフを抱える院長へ。": {
     "segment": "S4",
@@ -27,9 +29,10 @@
   },
   "コースや講座を売っている経営者へ。": {
     "segment": "S5",
-    "hook": "low",
-    "variant": 0,
-    "created": "2026-09-23"
+    "hook": "high",
+    "created": "2026-09-28",
+    "acct": "masa",
+    "variant": 0
   },
   "マッサージ通いに疲れた人へ。": {
     "segment": "T6",
@@ -265,7 +268,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 1,
-    "created": "2026-09-27"
+    "created": "2026-09-28"
   },
   "在宅勤務で肩こりが悪化した人へ。": {
     "segment": "T1",
@@ -610,56 +613,56 @@
   "抱っこや授乳で腰が痛むママへ。": {
     "segment": "T3",
     "hook": "high",
-    "created": "2026-09-26",
+    "created": "2026-09-28",
     "acct": "truth",
     "variant": 1
   },
   "立ち仕事で脚がパンパンな人へ。": {
     "segment": "T4",
     "hook": "high",
-    "created": "2026-09-26",
+    "created": "2026-09-28",
     "acct": "truth",
     "variant": 0
   },
   "夜中に何度も目が覚める人へ。": {
     "segment": "T5",
     "hook": "high",
-    "created": "2026-09-26",
+    "created": "2026-09-28",
     "acct": "truth",
     "variant": 1
   },
   "マッサージでは変わらないと感じる人へ。": {
     "segment": "T6",
     "hook": "high",
-    "created": "2026-09-26",
+    "created": "2026-09-28",
     "acct": "truth",
     "variant": 0
   },
   "骨盤の歪みが気になるママへ。": {
     "segment": "T3",
     "hook": "high",
-    "created": "2026-09-26",
+    "created": "2026-09-28",
     "acct": "nagaoka",
     "variant": 0
   },
   "立ちっぱなしで脚がパンパンな人へ。": {
     "segment": "T4",
     "hook": "high",
-    "created": "2026-09-26",
+    "created": "2026-09-28",
     "acct": "nagaoka",
     "variant": 1
   },
   "疲れているのに運動が続かない人へ。": {
     "segment": "T5",
     "hook": "high",
-    "created": "2026-09-26",
+    "created": "2026-09-28",
     "acct": "nagaoka",
     "variant": 0
   },
   "揉んでもすぐ戻ると感じる人へ。": {
     "segment": "T6",
     "hook": "high",
-    "created": "2026-09-26",
+    "created": "2026-09-28",
     "acct": "nagaoka",
     "variant": 1
   },
@@ -845,7 +848,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 7,
-    "created": "2026-09-26"
+    "created": "2026-09-28"
   },
   "座りっぱなしで肩がガチガチな人へ。": {
     "segment": "T1",
@@ -1082,5 +1085,19 @@
     "acct": "masa",
     "variant": null,
     "hypothesis_id": "H32"
+  },
+  "まだ店を持っていない人へ。": {
+    "segment": "S1",
+    "hook": "high",
+    "created": "2026-09-28",
+    "acct": "masa",
+    "variant": 2
+  },
+  "月商100万を超えたのに時間がない人へ。": {
+    "segment": "S4",
+    "hook": "high",
+    "created": "2026-09-28",
+    "acct": "masa",
+    "variant": 1
   }
 }

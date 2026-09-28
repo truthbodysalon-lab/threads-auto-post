@@ -20,9 +20,10 @@
   },
   "スタッフを抱える院長へ。": {
     "segment": "S4",
-    "hook": "low",
-    "variant": 0,
-    "created": "2026-09-23"
+    "hook": "high",
+    "created": "2026-09-28",
+    "acct": "masa",
+    "variant": 0
   },
   "コースや講座を売っている経営者へ。": {
     "segment": "S5",
@@ -33,7 +34,7 @@
   "マッサージ通いに疲れた人へ。": {
     "segment": "T6",
     "hook": "high",
-    "created": "2026-09-26",
+    "created": "2026-09-28",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z19_truth"
@@ -49,7 +50,7 @@
   "看護や介護の仕事で脚がだるい人へ。": {
     "segment": "T4",
     "hook": "high",
-    "created": "2026-09-26",
+    "created": "2026-09-28",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z13_truth"
@@ -73,7 +74,7 @@
   "朝起きた瞬間からだるい人へ。": {
     "segment": "T5",
     "hook": "high",
-    "created": "2026-09-26",
+    "created": "2026-09-28",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z16_nagaoka"
@@ -89,7 +90,7 @@
   "産後の姿勢崩れが気になるママへ。": {
     "segment": "T3",
     "hook": "high",
-    "created": "2026-09-26",
+    "created": "2026-09-28",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z10_nagaoka"
@@ -157,7 +158,7 @@
   "産後の骨盤の歪みが気になるママへ。": {
     "segment": "T3",
     "hook": "high",
-    "created": "2026-09-26",
+    "created": "2026-09-28",
     "acct": "truth",
     "variant": 0
   },
@@ -172,7 +173,7 @@
   "朝から体が重いと感じる人へ。": {
     "segment": "T5",
     "hook": "high",
-    "created": "2026-09-26",
+    "created": "2026-09-28",
     "acct": "truth",
     "variant": 0
   },
@@ -195,7 +196,7 @@
   "不規則な勤務で通院を諦めた人へ。": {
     "segment": "T4",
     "hook": "high",
-    "created": "2026-09-26",
+    "created": "2026-09-28",
     "acct": "nagaoka",
     "variant": 0
   },
@@ -210,7 +211,7 @@
   "施術で悪化した経験がある人へ。": {
     "segment": "T6",
     "hook": "high",
-    "created": "2026-09-26",
+    "created": "2026-09-28",
     "acct": "nagaoka",
     "variant": 0
   },
@@ -990,8 +991,8 @@
   },
   "開業準備中のあなたへ。": {
     "segment": "S1",
-    "hook": "low",
-    "created": "2026-09-27",
+    "hook": "high",
+    "created": "2026-09-28",
     "acct": "masa",
     "variant": 1
   },
@@ -1057,5 +1058,29 @@
     "acct": "masa",
     "variant": null,
     "hypothesis_id": "H31"
+  },
+  "開業して1年、フォロワーが伸びず悩む人は。": {
+    "segment": "S2",
+    "hook": "high",
+    "created": "2026-09-28",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H29"
+  },
+  "月商50万の壁で感覚だけで発信する経営者は。": {
+    "segment": "S3",
+    "hook": "high",
+    "created": "2026-09-28",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H30"
+  },
+  "AIに何をどこまで頼んだか、もう覚えていない院長へ。": {
+    "segment": "S5",
+    "hook": "high",
+    "created": "2026-09-28",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "H32"
   }
 }

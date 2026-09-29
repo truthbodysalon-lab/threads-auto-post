@@ -83,6 +83,37 @@ def check_next_post_smoke():
         add("next_post:all", "A.コード", "FAIL", f"auto_post読込失敗: {e}")
 
 
+def check_dup_reselect_guard():
+    """C17: [API直近重複]で弾かれた候補を同じ実行内で再選択しない（2026-09-29: 選択側のAPI照合が
+    空振り→同じLINE投稿を選び続け3連続失敗で毎ラン諦め、truthが4時間超0本になった障害の回帰テスト）。"""
+    import os as _os
+    _os.environ["SEGMENT_REGISTRY_DRY"] = "1"
+    try:
+        import auto_post as _ap
+        from datetime import date as _d
+        today = _d.today().strftime("%Y-%m-%d")
+        orig = _ap._recent_api_firstlines
+        _ap._recent_api_firstlines = lambda acct, hours=12: set()
+        try:
+            for acct in ("truth", "nagaoka", "masa"):
+                saved = set(_ap._RUN_BLOCKED_FIRSTLINES.get(acct, set()))
+                t1, _ = _ap.get_next_post(acct, today, avoid_url=False)
+                if not t1:
+                    add(f"dup_reselect:{acct}", "A.コード", "PASS", "候補なし（判定対象外）"); continue
+                k = _ap._firstline_key(t1)
+                _ap._RUN_BLOCKED_FIRSTLINES.setdefault(acct, set()).add(k)
+                t2, _ = _ap.get_next_post(acct, today, avoid_url=False)
+                _ap._RUN_BLOCKED_FIRSTLINES[acct] = saved
+                if t2 and _ap._firstline_key(t2) == k:
+                    add(f"dup_reselect:{acct}", "A.コード", "FAIL", f"重複で弾かれた候補を再選択: {k}")
+                else:
+                    add(f"dup_reselect:{acct}", "A.コード", "PASS", "弾かれた候補を再選択しない")
+        finally:
+            _ap._recent_api_firstlines = orig
+    except Exception as e:
+        add("dup_reselect:all", "A.コード", "FAIL", f"{type(e).__name__}: {e}")
+
+
 def check_generation():
     try:
         import generate_remix as g
@@ -682,6 +713,7 @@ def run_all():
     check_imports()
     check_generation()
     check_next_post_smoke()
+    check_dup_reselect_guard()
     check_rules()
     check_rule_hygiene()
     check_execution_gaps()

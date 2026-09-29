@@ -739,7 +739,7 @@ def get_next_post(acct: str, today: str, avoid_url: bool = False):
     line_done = _line_done_today(acct, today)
 
     # API実投稿の直近1文目（CIが先に投稿した分をローカルが再選択しないよう除外）
-    api_recent = _recent_api_firstlines(acct)
+    api_recent = _recent_api_firstlines(acct) | _RUN_BLOCKED_FIRSTLINES.get(acct, set())
 
     # LINEリストインは1日1回、確実に織り込む（重複ガード免除）。
     # フィードバック: truth/nagaoka は5〜7%の頻度で投稿されるべき。
@@ -986,6 +986,16 @@ def _parse_ts(ts: str):
         return None
 
 
+# 2026-09-29: 同一プロセス内で[API直近重複]に弾かれた候補の1文目。選択側の api_recent 取得が
+# CIで空振り(API失敗は空集合で握りつぶす)すると、LINE等 skip_dup 投稿は消費済みにならないため
+# 同じ候補を選び続け「連続3回失敗→諦める」を毎ラン繰り返し、truthが4時間以上0本になった。
+_RUN_BLOCKED_FIRSTLINES: dict = {}
+
+
+def _firstline_key(text: str) -> str:
+    return dg_normalize(_fix_question_endings(text or "")).split("\n")[0].strip()[:40]
+
+
 def _recent_api_firstlines(acct: str, hours: int = 12) -> set:
     """直近 hours 時間に Threads へ実投稿された1文目の集合（選択段階での除外用）。
     get_next_post がこれを使い、CIが先に投稿した記事をローカルが再選択して
@@ -1009,7 +1019,8 @@ def _recent_api_firstlines(acct: str, hours: int = 12) -> set:
             if fl:
                 out.add(fl)
         return out
-    except Exception:
+    except Exception as e:
+        log_error(f"[{acct}] _recent_api_firstlines 取得失敗（選択側の重複回避が無効）: {type(e).__name__}: {e}")
         return set()
 
 
@@ -1201,6 +1212,7 @@ def run_account(acct: str):
 
     except _DuplicatePost as dp:
         log_info(acct, f"{name} [重複スキップ] {str(dp)[:60]}")
+        _RUN_BLOCKED_FIRSTLINES.setdefault(acct, set()).add(_firstline_key(clean_text))
         if is_line:
             # 2026-08-21改訂: 枠(_mark_line_done)は燃やさない。選択側がAPI直近重複を
             # 事前回避するため同一候補の無限再選択は起きない（全滅時はLINE見送りで前進）。
@@ -1233,6 +1245,7 @@ def run_account(acct: str):
                     _post_comments(post_id, "（リフレッシュ後）")
                 except _DuplicatePost as dp:
                     log_info(acct, f"{name} [重複スキップ] {str(dp)[:60]}")
+                    _RUN_BLOCKED_FIRSTLINES.setdefault(acct, set()).add(_firstline_key(clean_text))
                 except Exception as e2:
                     log_error(f"{name} リフレッシュ後も失敗 → 手動で auth.py を実行してください: {e2}")
             else:

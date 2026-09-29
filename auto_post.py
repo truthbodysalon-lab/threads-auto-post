@@ -756,7 +756,7 @@ def get_next_post(acct: str, today: str, avoid_url: bool = False):
             recent_listin = _recent_listin_firstlines(acct)
             line_candidates = [(i, t) for i, t in enumerate(all_posts) if _is_line_listin(t)]
             eligible = [(i, t) for i, t in line_candidates
-                        if dg_normalize(t).split("\n")[0].strip()[:40] not in api_recent]
+                        if dg_normalize(_fix_question_endings(t)).split("\n")[0].strip()[:40] not in api_recent]
             for i, text in eligible:
                 if text.split("\n")[0].strip() not in recent_listin:
                     return text, i
@@ -811,7 +811,7 @@ def get_next_post(acct: str, today: str, avoid_url: bool = False):
             if dg_marked_today(norm, acct):
                 continue
         # API実投稿の直近に同じ1文目があれば飛ばす（系統間ラグ対策）
-        if dg_normalize(text).split("\n")[0].strip()[:40] in api_recent:
+        if dg_normalize(_fix_question_endings(text)).split("\n")[0].strip()[:40] in api_recent:
             continue
         if not avoid_url:
             return text, i  # 従来どおり即返す（挙動不変）
@@ -953,7 +953,7 @@ def _recently_posted_on_threads(acct: str, text: str, hours: int = 12) -> bool:
     """Threads APIの実投稿を正とする最終重複チェック（投稿系統をまたぐ二重投稿を防ぐ）。
     直近 hours 時間内に同じ1文目の投稿があれば True。API失敗時は False（通常フローに委ねる）。"""
     try:
-        target_fl = dg_normalize(text).split("\n")[0].strip()[:40]
+        target_fl = dg_normalize(_fix_question_endings(text)).split("\n")[0].strip()[:40]
         if not target_fl:
             return False
         token = os.environ[ACCOUNTS[acct]["token_key"]]
@@ -972,7 +972,7 @@ def _recently_posted_on_threads(acct: str, text: str, hours: int = 12) -> bool:
                 pts = datetime.now(timezone.utc)
             if pts < cutoff:
                 continue
-            if dg_normalize(ptext).split("\n")[0].strip()[:40] == target_fl:
+            if dg_normalize(_fix_question_endings(ptext)).split("\n")[0].strip()[:40] == target_fl:
                 return True
         return False
     except Exception:
@@ -1005,7 +1005,7 @@ def _recent_api_firstlines(acct: str, hours: int = 12) -> set:
             pts = _parse_ts(p.get("timestamp", ""))
             if pts and pts < cutoff:
                 continue
-            fl = dg_normalize(ptext).split("\n")[0].strip()[:40]
+            fl = dg_normalize(_fix_question_endings(ptext)).split("\n")[0].strip()[:40]
             if fl:
                 out.add(fl)
         return out

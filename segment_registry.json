@@ -1,36 +1,36 @@
 {
   "これから開業する人へ。": {
     "segment": "S1",
-    "hook": "low",
-    "created": "2026-09-29",
+    "hook": "high",
+    "created": "2026-09-30",
     "acct": "masa",
     "variant": 0
   },
   "開業して1年、まだ集客ゼロの院へ。": {
     "segment": "S2",
-    "hook": "low",
-    "created": "2026-09-29",
+    "hook": "high",
+    "created": "2026-09-30",
     "acct": "masa",
     "variant": 0
   },
   "月商50万の壁で止まっている経営者へ。": {
     "segment": "S3",
-    "hook": "low",
-    "created": "2026-09-29",
+    "hook": "high",
+    "created": "2026-09-30",
     "acct": "masa",
     "variant": 0
   },
   "スタッフを抱える院長へ。": {
     "segment": "S4",
-    "hook": "low",
-    "created": "2026-09-29",
+    "hook": "high",
+    "created": "2026-09-30",
     "acct": "masa",
     "variant": 0
   },
   "コースや講座を売っている経営者へ。": {
     "segment": "S5",
-    "hook": "low",
-    "created": "2026-09-29",
+    "hook": "high",
+    "created": "2026-09-30",
     "acct": "masa",
     "variant": 0
   },
@@ -45,7 +45,7 @@
   "寝ても疲労感が抜けない人へ。": {
     "segment": "T5",
     "hook": "high",
-    "created": "2026-09-28",
+    "created": "2026-09-30",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z17_truth"
@@ -61,7 +61,7 @@
   "産後の腰痛が続くママへ。": {
     "segment": "T3",
     "hook": "high",
-    "created": "2026-09-28",
+    "created": "2026-09-30",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z11_truth"
@@ -69,7 +69,7 @@
   "何をしても一時的にしか変わらない人へ。": {
     "segment": "T6",
     "hook": "high",
-    "created": "2026-09-28",
+    "created": "2026-09-30",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z20_nagaoka"
@@ -85,7 +85,7 @@
   "夜勤続きで腰が重い人へ。": {
     "segment": "T4",
     "hook": "high",
-    "created": "2026-09-28",
+    "created": "2026-09-30",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z14_nagaoka"
@@ -492,13 +492,13 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 10,
-    "created": "2026-09-29"
+    "created": "2026-09-30"
   },
   "1週間で結果が出ないと、諦めていませんか。": {
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 12,
-    "created": "2026-09-29"
+    "created": "2026-09-30"
   },
   "デスクワークで肩や首が重い人へ。": {
     "segment": "T1",
@@ -721,28 +721,28 @@
   "介護の抱え上げで腰を痛めた人へ。": {
     "segment": "T4",
     "hook": "high",
-    "created": "2026-09-26",
+    "created": "2026-09-30",
     "acct": "truth",
     "variant": 1
   },
   "他院に通っても改善しない人へ。": {
     "segment": "T6",
     "hook": "high",
-    "created": "2026-09-26",
+    "created": "2026-09-30",
     "acct": "truth",
     "variant": 1
   },
   "抱っこで腕がだるいママへ。": {
     "segment": "T3",
     "hook": "high",
-    "created": "2026-09-26",
+    "created": "2026-09-30",
     "acct": "nagaoka",
     "variant": 1
   },
   "やる気が出ない日が続く人へ。": {
     "segment": "T5",
     "hook": "high",
-    "created": "2026-09-26",
+    "created": "2026-09-30",
     "acct": "nagaoka",
     "variant": 1
   },

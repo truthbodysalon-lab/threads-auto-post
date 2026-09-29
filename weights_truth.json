@@ -1,7 +1,7 @@
 {
   "updated_at": "2026-09-29",
   "pattern_weights": {
-    "quote_empathy": 6,
+    "quote_empathy": 5,
     "insight": 11,
     "education": 4,
     "story": 1,
@@ -13,10 +13,10 @@
   },
   "feedback_scores": {},
   "api_scores": {
-    "insight": 0.16,
-    "story": -1.34,
-    "quote_empathy": -0.13,
-    "ranking": -0.45
+    "insight": 0.24,
+    "quote_empathy": -0.54,
+    "story": -1.15,
+    "ranking": -0.84
   },
   "follower_scores": {
     "insight": 3.0,

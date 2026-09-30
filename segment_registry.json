@@ -37,7 +37,7 @@
   "マッサージ通いに疲れた人へ。": {
     "segment": "T6",
     "hook": "high",
-    "created": "2026-09-28",
+    "created": "2026-09-30",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z19_truth"
@@ -53,7 +53,7 @@
   "看護や介護の仕事で脚がだるい人へ。": {
     "segment": "T4",
     "hook": "high",
-    "created": "2026-09-28",
+    "created": "2026-09-30",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z13_truth"
@@ -77,7 +77,7 @@
   "朝起きた瞬間からだるい人へ。": {
     "segment": "T5",
     "hook": "high",
-    "created": "2026-09-28",
+    "created": "2026-09-30",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z16_nagaoka"
@@ -93,7 +93,7 @@
   "産後の姿勢崩れが気になるママへ。": {
     "segment": "T3",
     "hook": "high",
-    "created": "2026-09-28",
+    "created": "2026-09-30",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z10_nagaoka"
@@ -161,7 +161,7 @@
   "産後の骨盤の歪みが気になるママへ。": {
     "segment": "T3",
     "hook": "high",
-    "created": "2026-09-28",
+    "created": "2026-09-30",
     "acct": "truth",
     "variant": 0
   },
@@ -176,7 +176,7 @@
   "朝から体が重いと感じる人へ。": {
     "segment": "T5",
     "hook": "high",
-    "created": "2026-09-28",
+    "created": "2026-09-30",
     "acct": "truth",
     "variant": 0
   },
@@ -199,7 +199,7 @@
   "不規則な勤務で通院を諦めた人へ。": {
     "segment": "T4",
     "hook": "high",
-    "created": "2026-09-28",
+    "created": "2026-09-30",
     "acct": "nagaoka",
     "variant": 0
   },
@@ -214,7 +214,7 @@
   "施術で悪化した経験がある人へ。": {
     "segment": "T6",
     "hook": "high",
-    "created": "2026-09-28",
+    "created": "2026-09-30",
     "acct": "nagaoka",
     "variant": 0
   },
@@ -608,7 +608,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 16,
-    "created": "2026-09-25"
+    "created": "2026-09-30"
   },
   "抱っこや授乳で腰が痛むママへ。": {
     "segment": "T3",
@@ -710,7 +710,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 15,
-    "created": "2026-09-26"
+    "created": "2026-09-30"
   },
   "投稿を出したら終わり、にしていませんか。": {
     "segment": "HAKASE",
@@ -994,8 +994,8 @@
   },
   "開業準備中のあなたへ。": {
     "segment": "S1",
-    "hook": "low",
-    "created": "2026-09-29",
+    "hook": "high",
+    "created": "2026-09-30",
     "acct": "masa",
     "variant": 1
   },
@@ -1025,8 +1025,8 @@
   },
   "高額商品を持つサロン経営者へ。": {
     "segment": "S5",
-    "hook": "low",
-    "created": "2026-09-27",
+    "hook": "high",
+    "created": "2026-09-30",
     "acct": "masa",
     "variant": 1
   },
@@ -1095,8 +1095,8 @@
   },
   "月商100万を超えたのに時間がない人へ。": {
     "segment": "S4",
-    "hook": "low",
-    "created": "2026-09-29",
+    "hook": "high",
+    "created": "2026-09-30",
     "acct": "masa",
     "variant": 1
   },
@@ -1125,15 +1125,15 @@
   },
   "月商50万に届いていないお店へ。": {
     "segment": "S2",
-    "hook": "low",
-    "created": "2026-09-29",
+    "hook": "high",
+    "created": "2026-09-30",
     "acct": "masa",
     "variant": 1
   },
   "リピートが伸びずに悩む経営者へ。": {
     "segment": "S3",
-    "hook": "low",
-    "created": "2026-09-29",
+    "hook": "high",
+    "created": "2026-09-30",
     "acct": "masa",
     "variant": 1
   },

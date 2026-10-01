@@ -1,36 +1,36 @@
 {
   "これから開業する人へ。": {
     "segment": "S1",
-    "hook": "low",
-    "created": "2026-10-01",
+    "hook": "high",
+    "created": "2026-10-02",
     "acct": "masa",
     "variant": 0
   },
   "開業して1年、まだ集客ゼロの院へ。": {
     "segment": "S2",
-    "hook": "low",
-    "created": "2026-10-01",
+    "hook": "high",
+    "created": "2026-10-02",
     "acct": "masa",
     "variant": 0
   },
   "月商50万の壁で止まっている経営者へ。": {
     "segment": "S3",
-    "hook": "low",
-    "created": "2026-10-01",
+    "hook": "high",
+    "created": "2026-10-02",
     "acct": "masa",
     "variant": 0
   },
   "スタッフを抱える院長へ。": {
     "segment": "S4",
-    "hook": "low",
-    "created": "2026-10-01",
+    "hook": "high",
+    "created": "2026-10-02",
     "acct": "masa",
     "variant": 0
   },
   "コースや講座を売っている経営者へ。": {
     "segment": "S5",
-    "hook": "low",
-    "created": "2026-10-01",
+    "hook": "high",
+    "created": "2026-10-02",
     "acct": "masa",
     "variant": 0
   },
@@ -167,7 +167,7 @@
   "立ち仕事続きで腰が重い人へ。": {
     "segment": "T4",
     "hook": "high",
-    "created": "2026-09-28",
+    "created": "2026-10-02",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z15_truth"
@@ -182,7 +182,7 @@
   "他院で結果が出なかった人へ。": {
     "segment": "T6",
     "hook": "high",
-    "created": "2026-09-28",
+    "created": "2026-10-02",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z21_truth"
@@ -190,7 +190,7 @@
   "抱っこの負担で肩まで重いママへ。": {
     "segment": "T3",
     "hook": "high",
-    "created": "2026-09-28",
+    "created": "2026-10-02",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z12_nagaoka"
@@ -205,7 +205,7 @@
   "疲れが取れず気分も沈む人へ。": {
     "segment": "T5",
     "hook": "high",
-    "created": "2026-09-28",
+    "created": "2026-10-02",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z18_nagaoka"
@@ -383,7 +383,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 8,
-    "created": "2026-09-25"
+    "created": "2026-10-02"
   },
   "会議続きで首が痛い人へ。": {
     "segment": "T1",
@@ -601,7 +601,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 6,
-    "created": "2026-09-25"
+    "created": "2026-10-02"
   },
   "投稿でいきなり売ろうとしていませんか。": {
     "segment": "HAKASE",
@@ -612,7 +612,7 @@
   "抱っこや授乳で腰が痛むママへ。": {
     "segment": "T3",
     "hook": "high",
-    "created": "2026-09-28",
+    "created": "2026-10-02",
     "acct": "truth",
     "variant": 1
   },
@@ -626,7 +626,7 @@
   "夜中に何度も目が覚める人へ。": {
     "segment": "T5",
     "hook": "high",
-    "created": "2026-09-28",
+    "created": "2026-10-02",
     "acct": "truth",
     "variant": 1
   },
@@ -647,7 +647,7 @@
   "立ちっぱなしで脚がパンパンな人へ。": {
     "segment": "T4",
     "hook": "high",
-    "created": "2026-09-28",
+    "created": "2026-10-02",
     "acct": "nagaoka",
     "variant": 1
   },
@@ -661,7 +661,7 @@
   "揉んでもすぐ戻ると感じる人へ。": {
     "segment": "T6",
     "hook": "high",
-    "created": "2026-09-28",
+    "created": "2026-10-02",
     "acct": "nagaoka",
     "variant": 1
   },

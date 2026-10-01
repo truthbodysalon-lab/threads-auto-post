@@ -336,7 +336,7 @@
   "開業前で、物件がまだ決まらない人へ。": {
     "segment": "S1",
     "hook": "low",
-    "created": "2026-09-25",
+    "created": "2026-10-01",
     "acct": "masa",
     "variant": null,
     "hypothesis_id": "H01"
@@ -360,7 +360,7 @@
   "スタッフがいる院長へ。": {
     "segment": "S4",
     "hook": "low",
-    "created": "2026-09-25",
+    "created": "2026-10-01",
     "acct": "masa",
     "variant": null,
     "hypothesis_id": "H12"
@@ -482,7 +482,7 @@
   "高い商品を作りたい経営者へ。": {
     "segment": "S5",
     "hook": "low",
-    "created": "2026-09-25",
+    "created": "2026-10-01",
     "acct": "masa",
     "variant": null,
     "hypothesis_id": "H17"
@@ -497,7 +497,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 12,
-    "created": "2026-09-30"
+    "created": "2026-10-01"
   },
   "デスクワークで肩や首が重い人へ。": {
     "segment": "T1",
@@ -841,7 +841,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 17,
-    "created": "2026-09-26"
+    "created": "2026-10-01"
   },
   "良い投稿をすれば信頼される、とは限りません。": {
     "segment": "HAKASE",
@@ -1140,6 +1140,20 @@
     "segment": "S4",
     "hook": "low",
     "created": "2026-09-29",
+    "acct": "masa",
+    "variant": 2
+  },
+  "開業したばかりで何をすればいいか分からない人へ。": {
+    "segment": "S2",
+    "hook": "low",
+    "created": "2026-10-01",
+    "acct": "masa",
+    "variant": 2
+  },
+  "単価が上がらず頭打ちのサロンへ。": {
+    "segment": "S3",
+    "hook": "low",
+    "created": "2026-10-01",
     "acct": "masa",
     "variant": 2
   }

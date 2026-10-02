@@ -1,0 +1,624 @@
+{
+ "mode": "dry_run",
+ "note": "jst_time=各repoの変更後cron(JST)+2分。since=day:当日0時JST以降のrunが有れば起動しない / slot:枠のjst_time-12分以降。weekdays: 月=0..日=6。enabled:falseで個別OFF、modeをdry_runに戻すと全停止。",
+ "entries": [
+  {
+   "id": "ig-story@07:31",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-story.yml",
+   "jst_time": "07:31",
+   "window_min": 90,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "ig-story@12:05",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-story.yml",
+   "jst_time": "12:05",
+   "window_min": 90,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "ig-story@17:31",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-story.yml",
+   "jst_time": "17:31",
+   "window_min": 90,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "ig-story@21:05",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-story.yml",
+   "jst_time": "21:05",
+   "window_min": 90,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "ig-verify@09:21",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-verify.yml",
+   "jst_time": "09:21",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "ig-verify@13:21",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-verify.yml",
+   "jst_time": "13:21",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "ig-verify@18:55",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-verify.yml",
+   "jst_time": "18:55",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "ig-verify@22:21",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-verify.yml",
+   "jst_time": "22:21",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "ig-feed",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-feed.yml",
+   "jst_time": "11:33",
+   "window_min": 90,
+   "since": "day",
+   "enabled": true
+  },
+  {
+   "id": "ig-reels",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-reels.yml",
+   "jst_time": "08:05",
+   "window_min": 90,
+   "since": "day",
+   "enabled": true
+  },
+  {
+   "id": "ig-analyze",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-analyze.yml",
+   "jst_time": "05:13",
+   "window_min": 90,
+   "since": "day",
+   "enabled": true
+  },
+  {
+   "id": "ig-feed-nagaoka-sun",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-feed-nagaoka.yml",
+   "jst_time": "10:05",
+   "window_min": 90,
+   "since": "day",
+   "enabled": true,
+   "weekdays": [
+    6
+   ]
+  },
+  {
+   "id": "ig-feed-truth-sun",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-feed-truth.yml",
+   "jst_time": "10:09",
+   "window_min": 90,
+   "since": "day",
+   "enabled": true,
+   "weekdays": [
+    6
+   ]
+  },
+  {
+   "id": "ig-feed-nagaoka-thu",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-feed-nagaoka-thursday.yml",
+   "jst_time": "10:05",
+   "window_min": 90,
+   "since": "day",
+   "enabled": true,
+   "weekdays": [
+    3
+   ]
+  },
+  {
+   "id": "ig-story-friday@15:05",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-story-friday.yml",
+   "jst_time": "15:05",
+   "window_min": 90,
+   "since": "slot",
+   "enabled": true,
+   "weekdays": [
+    4
+   ]
+  },
+  {
+   "id": "ig-story-friday@17:05",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-story-friday.yml",
+   "jst_time": "17:05",
+   "window_min": 90,
+   "since": "slot",
+   "enabled": true,
+   "weekdays": [
+    4
+   ]
+  },
+  {
+   "id": "ig-story-friday@19:05",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-story-friday.yml",
+   "jst_time": "19:05",
+   "window_min": 90,
+   "since": "slot",
+   "enabled": true,
+   "weekdays": [
+    4
+   ]
+  },
+  {
+   "id": "ig-story-friday@20:31",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-story-friday.yml",
+   "jst_time": "20:31",
+   "window_min": 90,
+   "since": "slot",
+   "enabled": true,
+   "weekdays": [
+    4
+   ]
+  },
+  {
+   "id": "stepmail@01:25",
+   "repo": "truthbodysalon-lab/line-stepmail-cloud",
+   "workflow": "stepmail.yml",
+   "jst_time": "01:25",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "stepmail@03:25",
+   "repo": "truthbodysalon-lab/line-stepmail-cloud",
+   "workflow": "stepmail.yml",
+   "jst_time": "03:25",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "stepmail@05:25",
+   "repo": "truthbodysalon-lab/line-stepmail-cloud",
+   "workflow": "stepmail.yml",
+   "jst_time": "05:25",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "stepmail@07:25",
+   "repo": "truthbodysalon-lab/line-stepmail-cloud",
+   "workflow": "stepmail.yml",
+   "jst_time": "07:25",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "stepmail@09:25",
+   "repo": "truthbodysalon-lab/line-stepmail-cloud",
+   "workflow": "stepmail.yml",
+   "jst_time": "09:25",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "stepmail@11:25",
+   "repo": "truthbodysalon-lab/line-stepmail-cloud",
+   "workflow": "stepmail.yml",
+   "jst_time": "11:25",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "stepmail@13:25",
+   "repo": "truthbodysalon-lab/line-stepmail-cloud",
+   "workflow": "stepmail.yml",
+   "jst_time": "13:25",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "stepmail@15:25",
+   "repo": "truthbodysalon-lab/line-stepmail-cloud",
+   "workflow": "stepmail.yml",
+   "jst_time": "15:25",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "stepmail@17:25",
+   "repo": "truthbodysalon-lab/line-stepmail-cloud",
+   "workflow": "stepmail.yml",
+   "jst_time": "17:25",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "stepmail@19:25",
+   "repo": "truthbodysalon-lab/line-stepmail-cloud",
+   "workflow": "stepmail.yml",
+   "jst_time": "19:25",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "stepmail@21:25",
+   "repo": "truthbodysalon-lab/line-stepmail-cloud",
+   "workflow": "stepmail.yml",
+   "jst_time": "21:25",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "stepmail@23:25",
+   "repo": "truthbodysalon-lab/line-stepmail-cloud",
+   "workflow": "stepmail.yml",
+   "jst_time": "23:25",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "line-deadman@02:55",
+   "repo": "truthbodysalon-lab/line-stepmail-cloud",
+   "workflow": "deadman.yml",
+   "jst_time": "02:55",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "line-deadman@05:55",
+   "repo": "truthbodysalon-lab/line-stepmail-cloud",
+   "workflow": "deadman.yml",
+   "jst_time": "05:55",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "line-deadman@08:55",
+   "repo": "truthbodysalon-lab/line-stepmail-cloud",
+   "workflow": "deadman.yml",
+   "jst_time": "08:55",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "line-deadman@11:55",
+   "repo": "truthbodysalon-lab/line-stepmail-cloud",
+   "workflow": "deadman.yml",
+   "jst_time": "11:55",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "line-deadman@14:55",
+   "repo": "truthbodysalon-lab/line-stepmail-cloud",
+   "workflow": "deadman.yml",
+   "jst_time": "14:55",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "line-deadman@17:55",
+   "repo": "truthbodysalon-lab/line-stepmail-cloud",
+   "workflow": "deadman.yml",
+   "jst_time": "17:55",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "line-deadman@20:55",
+   "repo": "truthbodysalon-lab/line-stepmail-cloud",
+   "workflow": "deadman.yml",
+   "jst_time": "20:55",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "line-deadman@23:55",
+   "repo": "truthbodysalon-lab/line-stepmail-cloud",
+   "workflow": "deadman.yml",
+   "jst_time": "23:55",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "cloud-deadman@01:15",
+   "repo": "truthbodysalon-lab/cloud-daily-tasks",
+   "workflow": "deadman.yml",
+   "jst_time": "01:15",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "cloud-deadman@03:15",
+   "repo": "truthbodysalon-lab/cloud-daily-tasks",
+   "workflow": "deadman.yml",
+   "jst_time": "03:15",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "cloud-deadman@05:15",
+   "repo": "truthbodysalon-lab/cloud-daily-tasks",
+   "workflow": "deadman.yml",
+   "jst_time": "05:15",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "cloud-deadman@07:15",
+   "repo": "truthbodysalon-lab/cloud-daily-tasks",
+   "workflow": "deadman.yml",
+   "jst_time": "07:15",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "cloud-deadman@09:15",
+   "repo": "truthbodysalon-lab/cloud-daily-tasks",
+   "workflow": "deadman.yml",
+   "jst_time": "09:15",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "cloud-deadman@11:15",
+   "repo": "truthbodysalon-lab/cloud-daily-tasks",
+   "workflow": "deadman.yml",
+   "jst_time": "11:15",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "cloud-deadman@13:15",
+   "repo": "truthbodysalon-lab/cloud-daily-tasks",
+   "workflow": "deadman.yml",
+   "jst_time": "13:15",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "cloud-deadman@15:15",
+   "repo": "truthbodysalon-lab/cloud-daily-tasks",
+   "workflow": "deadman.yml",
+   "jst_time": "15:15",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "cloud-deadman@17:15",
+   "repo": "truthbodysalon-lab/cloud-daily-tasks",
+   "workflow": "deadman.yml",
+   "jst_time": "17:15",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "cloud-deadman@19:15",
+   "repo": "truthbodysalon-lab/cloud-daily-tasks",
+   "workflow": "deadman.yml",
+   "jst_time": "19:15",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "cloud-deadman@21:15",
+   "repo": "truthbodysalon-lab/cloud-daily-tasks",
+   "workflow": "deadman.yml",
+   "jst_time": "21:15",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "cloud-deadman@23:15",
+   "repo": "truthbodysalon-lab/cloud-daily-tasks",
+   "workflow": "deadman.yml",
+   "jst_time": "23:15",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "gmail-notify",
+   "repo": "truthbodysalon-lab/cloud-daily-tasks",
+   "workflow": "gmail-notify.yml",
+   "jst_time": "09:39",
+   "window_min": 90,
+   "since": "day",
+   "enabled": true
+  },
+  {
+   "id": "marketing-learning",
+   "repo": "truthbodysalon-lab/cloud-daily-tasks",
+   "workflow": "marketing-learning.yml",
+   "jst_time": "08:43",
+   "window_min": 90,
+   "since": "day",
+   "enabled": true
+  },
+  {
+   "id": "medical-learning",
+   "repo": "truthbodysalon-lab/cloud-daily-tasks",
+   "workflow": "medical-learning.yml",
+   "jst_time": "22:39",
+   "window_min": 90,
+   "since": "day",
+   "enabled": true
+  },
+  {
+   "id": "subscription-report",
+   "repo": "truthbodysalon-lab/cloud-daily-tasks",
+   "workflow": "subscription-report.yml",
+   "jst_time": "10:25",
+   "window_min": 90,
+   "since": "day",
+   "enabled": true,
+   "weekdays": [
+    1
+   ]
+  },
+  {
+   "id": "note-daily",
+   "repo": "truthbodysalon-lab/note-auto",
+   "workflow": "daily.yml",
+   "jst_time": "03:19",
+   "window_min": 90,
+   "since": "day",
+   "enabled": true
+  },
+  {
+   "id": "blog-post@07:49",
+   "repo": "truthbodysalon-lab/blog-auto-post",
+   "workflow": "blog-post.yml",
+   "jst_time": "07:49",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "blog-post@08:49",
+   "repo": "truthbodysalon-lab/blog-auto-post",
+   "workflow": "blog-post.yml",
+   "jst_time": "08:49",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "blog-post@09:49",
+   "repo": "truthbodysalon-lab/blog-auto-post",
+   "workflow": "blog-post.yml",
+   "jst_time": "09:49",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "blog-post@10:49",
+   "repo": "truthbodysalon-lab/blog-auto-post",
+   "workflow": "blog-post.yml",
+   "jst_time": "10:49",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "blog-post@11:49",
+   "repo": "truthbodysalon-lab/blog-auto-post",
+   "workflow": "blog-post.yml",
+   "jst_time": "11:49",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "blog-post@12:49",
+   "repo": "truthbodysalon-lab/blog-auto-post",
+   "workflow": "blog-post.yml",
+   "jst_time": "12:49",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "blog-post@13:49",
+   "repo": "truthbodysalon-lab/blog-auto-post",
+   "workflow": "blog-post.yml",
+   "jst_time": "13:49",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "blog-post@14:49",
+   "repo": "truthbodysalon-lab/blog-auto-post",
+   "workflow": "blog-post.yml",
+   "jst_time": "14:49",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "blog-post@15:49",
+   "repo": "truthbodysalon-lab/blog-auto-post",
+   "workflow": "blog-post.yml",
+   "jst_time": "15:49",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "blog-post@16:49",
+   "repo": "truthbodysalon-lab/blog-auto-post",
+   "workflow": "blog-post.yml",
+   "jst_time": "16:49",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "ekiten-post",
+   "repo": "truthbodysalon-lab/blog-auto-post",
+   "workflow": "ekiten-post.yml",
+   "jst_time": "18:45",
+   "window_min": 90,
+   "since": "day",
+   "enabled": true
+  }
+ ]
+}

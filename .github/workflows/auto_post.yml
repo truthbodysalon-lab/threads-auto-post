@@ -102,7 +102,7 @@ jobs:
                     insights_truth.json insights_nagaoka.json insights_masa.json \
                     weights_truth.json weights_nagaoka.json weights_masa.json \
                     feedback.json line_listin_state.json shared_posted_guard.jsonl \
-                    segment_registry.json 2>/dev/null || true
+                    segment_registry.json dispatch_state.json 2>/dev/null || true
             git diff --cached --quiet || git commit -q -m "chore: update logs [skip ci]"
             for i in 1 2 3; do
               git push -q && break
@@ -117,6 +117,7 @@ jobs:
             prefill || true
             timeout 50m python3 auto_post.py all || true
             python3 token_manager.py --sync-secrets || true
+            timeout 2m python3 dispatcher.py || true
             commit_logs || true
             echo "::endgroup::"
             SLEEP=$(( 600 - ( $(date +%s) - T0 ) ))

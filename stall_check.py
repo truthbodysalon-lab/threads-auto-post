@@ -30,6 +30,7 @@ BASE = Path(__file__).parent
 JST = timezone(timedelta(hours=9))
 ACCTS = {"truth": "TRUTH", "nagaoka": "NAGAOKA", "masa": "MASA"}
 POST_HOUR_START, POST_HOUR_END = 6, 23
+GOAL_REACHED = {"truth": 50, "masa": 50, "nagaoka": 40}  # 自前投稿の本日目標
 STALL_MIN = 75          # 投稿時間帯にこれ以上空いたら停止疑い
 GH_REPO_DEFAULT = "truthbodysalon-lab/threads-auto-post"
 
@@ -145,6 +146,8 @@ def last_post_gap_minutes(acct: str):
     times = post_times_today(acct)
     if times is None:
         return None
+    if len(times) >= GOAL_REACHED.get(acct, 50):
+        return 0.0  # 本日の目標到達後の停止は正常（誤検知防止）
     ref = max(times[-1], _window_start(now)) if times else _window_start(now)
     return round((now - ref).total_seconds() / 60, 1)
 

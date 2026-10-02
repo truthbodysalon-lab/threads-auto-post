@@ -2,8 +2,8 @@ name: Threads Daily Generate
 
 on:
   schedule:
-    # 毎日 7:00 JST (22:00 UTC 前日)
-    - cron: '0 22 * * *'
+    # 毎日 6:47 JST (21:47 UTC 前日)
+    - cron: '47 21 * * *'
   workflow_dispatch:
 
 concurrency:

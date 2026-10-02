@@ -2,20 +2,21 @@ name: Threads Auto Post
 
 on:
   schedule:
-    # 20分おきに実行（UTC）。スクリプト側でJST 6:00-23:00を判定
-    - cron: '2,12,22,32,42,52 * * * *'
-    # 終盤の取りこぼし対策: JST21-23時(UTC12-13時)は別スケジュールでも発火させ、
-    # GitHub Actionsのcron間引きで終盤が丸ごと飛ぶ確率を下げる
-    - cron: '7,27,47 12-13 * * *'
+    # 連鎖が切れた時の再開用（常駐中は single-keeper 判定で即終了するだけ）
+    - cron: '2,32 * * * *'
   workflow_dispatch:
 
-concurrency:
-  group: threads-auto-post
-  cancel-in-progress: false
+# 2026-10-02: 常駐ループ方式（Mac不要）。GitHubのcronは混雑時に1日3回まで間引かれ5.5時間停止した。
+# 1回の実行が約5時間40分ループして10分ごとに投稿し、終了直前に自分自身を次に起動する（連鎖）。
+# scheduleは「連鎖が切れていたら再開する」保険。重複起動は下の single-keeper で最古の実行だけ残す。
+permissions:
+  contents: write
+  actions: write
 
 jobs:
   post:
     runs-on: ubuntu-latest
+    timeout-minutes: 355
     env:
       TZ: Asia/Tokyo
 
@@ -26,15 +27,31 @@ jobs:
           fetch-depth: 1
           token: ${{ secrets.GH_PAT }}
 
+      - name: Single keeper check
+        id: keeper
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          OLDER=$(gh run list --repo "$GITHUB_REPOSITORY" --workflow=auto_post.yml --status in_progress --limit 20 --json databaseId -q ".[].databaseId" | awk -v me="$GITHUB_RUN_ID" '$1 < me' | head -1)
+          if [ -n "$OLDER" ]; then
+            echo "既に常駐中の実行あり(run $OLDER) → この実行は終了"
+            echo "skip=1" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=0" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Set up Python
+        if: steps.keeper.outputs.skip != '1'
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
       - name: Install dependencies
+        if: steps.keeper.outputs.skip != '1'
         run: pip install PyNaCl --quiet
 
       - name: Create .env from secrets
+        if: steps.keeper.outputs.skip != '1'
         run: |
           cat > .env << EOF
           THREADS_APP_ID=${{ secrets.THREADS_APP_ID }}
@@ -50,9 +67,16 @@ jobs:
           ANTHROPIC_API_KEY=${{ secrets.ANTHROPIC_API_KEY }}
           EOF
 
-      - name: Prefill post queue if empty
+      - name: Post loop (10分ごと・約5時間40分)
+        if: steps.keeper.outputs.skip != '1'
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
         run: |
-          python3 -c "
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          END=$(( $(date +%s) + 340*60 ))
+          prefill() {
+            python3 -c "
           import json, subprocess, sys
           from pathlib import Path
           from datetime import date
@@ -60,45 +84,47 @@ jobs:
           def has_today(f):
               if not Path(f).exists(): return False
               return any(json.loads(l).get('date')==today and json.loads(l).get('posts') for l in Path(f).read_text().splitlines() if l.strip())
-          if not has_today('log_truth.jsonl'):
-              print('truth: キューなし → generate_remix で生成')
-              subprocess.run([sys.executable, 'generate_remix.py', 'truth'], check=False)
-          if not has_today('log_nagaoka.jsonl'):
-              print('nagaoka: キューなし → generate_remix で生成')
-              subprocess.run([sys.executable, 'generate_remix.py', 'nagaoka'], check=False)
-          if not has_today('log_masa.jsonl'):
-              print('masa: キューなし → generate_remix で生成')
-              subprocess.run([sys.executable, 'generate_remix.py', 'masa'], check=False)
+          for a, f in (('truth','log_truth.jsonl'),('nagaoka','log_nagaoka.jsonl'),('masa','log_masa.jsonl')):
+              if not has_today(f):
+                  print(a+': キューなし → generate_remix で生成')
+                  subprocess.run([sys.executable, 'generate_remix.py', a], check=False)
           "
-
-      # 2026-07-10 一本化: orchestrator(旧系統・ペース制御なし・重複ループ対策なし)を廃止し、
-      # ローカルと同一の auto_post.py（ペース回廊・バースト回復・50本/日担保・全修正入り）だけを使う。
-      # GitHub Actionsのschedule遅延で実行が3〜12回/日でも、各回のバースト回復(最大15本)で
-      # Mac停止時も50本/日に到達できる。
-      - name: Run auto_post (pace-aware batch)
-        run: python3 auto_post.py all || true
-        timeout-minutes: 50   # 2026-09-06: MAX_BURST 15→25（3アカウント×25本×約27秒≒34分）に合わせて延長
-        continue-on-error: true
-
-      - name: Sync refreshed tokens to GitHub Secrets
-        run: python3 token_manager.py --sync-secrets
-        continue-on-error: true
-
-      - name: Commit updated log files
-        if: always()
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add log_truth.jsonl log_masa.jsonl log_nagaoka.jsonl \
-                  log_truth_posted.jsonl log_masa_posted.jsonl log_nagaoka_posted.jsonl \
-                  insights_truth.json insights_nagaoka.json insights_masa.json \
-                  weights_truth.json weights_nagaoka.json weights_masa.json \
-                  feedback.json line_listin_state.json shared_posted_guard.jsonl \
-                  segment_registry.json 2>/dev/null || true
-          git diff --cached --quiet || git commit -m "chore: update logs [skip ci]"
-          for i in 1 2 3; do
-            git push && break
-            echo "Push failed (attempt $i), retrying..."
-            git pull --rebase -X theirs origin main || { git rebase --abort 2>/dev/null || true; }
+          }
+          commit_logs() {
+            git add log_truth.jsonl log_masa.jsonl log_nagaoka.jsonl \
+                    log_truth_posted.jsonl log_masa_posted.jsonl log_nagaoka_posted.jsonl \
+                    insights_truth.json insights_nagaoka.json insights_masa.json \
+                    weights_truth.json weights_nagaoka.json weights_masa.json \
+                    feedback.json line_listin_state.json shared_posted_guard.jsonl \
+                    segment_registry.json 2>/dev/null || true
+            git diff --cached --quiet || git commit -q -m "chore: update logs [skip ci]"
+            for i in 1 2 3; do
+              git push -q && break
+              git pull -q --rebase -X theirs origin main || { git rebase --abort 2>/dev/null || true; }
+            done
+          }
+          while [ "$(date +%s)" -lt "$END" ]; do
+            T0=$(date +%s)
+            echo "::group::cycle $(date '+%H:%M')"
+            # 朝の生成・ヒーロー・プレイブック等の最新を取り込む（自分の未pushは直前のcommit_logsで反映済み）
+            git pull -q --rebase -X theirs origin main || { git rebase --abort 2>/dev/null || true; }
+            prefill || true
+            timeout 50m python3 auto_post.py all || true
+            python3 token_manager.py --sync-secrets || true
+            commit_logs || true
+            echo "::endgroup::"
+            SLEEP=$(( 600 - ( $(date +%s) - T0 ) ))
+            [ "$SLEEP" -gt 0 ] && sleep "$SLEEP"
           done
           git diff --quiet origin/main -- log_nagaoka_posted.jsonl log_truth_posted.jsonl log_masa_posted.jsonl || echo "::warning::posted-log push may have failed"
+
+      - name: Chain next keeper
+        if: always() && steps.keeper.outputs.skip != '1'
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          for i in 1 2 3; do
+            gh workflow run auto_post.yml --repo "$GITHUB_REPOSITORY" && echo "次の常駐実行を起動" && exit 0
+            sleep 20
+          done
+          echo "::error::次の常駐実行の起動に失敗（scheduleの保険で再開される）"

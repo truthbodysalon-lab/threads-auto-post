@@ -118,6 +118,37 @@ def _notified_today(st: dict, key: str) -> bool:
     return st.get(key) == datetime.now(JST).date().isoformat()
 
 
+
+def keeper_running() -> bool:
+    """auto_post.yml の常駐ループが動いているか（2026-10-02 常駐化）。動いていれば修復は
+    常駐側に任せ、ここから auto_post.py を並走させない（同時投稿・台帳競合の防止）。"""
+    try:
+        import urllib.request as _u
+        tok = os.environ.get("GH_PAT", "")
+        repo = os.environ.get("GH_REPO", "truthbodysalon-lab/threads-auto-post")
+        req = _u.Request(f"https://api.github.com/repos/{repo}/actions/workflows/auto_post.yml/runs?status=in_progress&per_page=5",
+                         headers={"Authorization": f"Bearer {tok}", "Accept": "application/vnd.github+json"})
+        with _u.urlopen(req, timeout=15) as r:
+            return json.loads(r.read()).get("total_count", 0) > 0
+    except Exception as e:
+        print(f"keeper_running 判定失敗: {e}")
+        return False
+
+
+def dispatch_keeper() -> None:
+    try:
+        import urllib.request as _u
+        tok = os.environ.get("GH_PAT", "")
+        repo = os.environ.get("GH_REPO", "truthbodysalon-lab/threads-auto-post")
+        req = _u.Request(f"https://api.github.com/repos/{repo}/actions/workflows/auto_post.yml/dispatches",
+                         data=json.dumps({"ref": "main"}).encode(), method="POST",
+                         headers={"Authorization": f"Bearer {tok}", "Accept": "application/vnd.github+json"})
+        _u.urlopen(req, timeout=15)
+        print("常駐ループ停止を検知 → auto_post.yml を起動")
+    except Exception as e:
+        print(f"auto_post.yml 起動失敗: {e}")
+
+
 def main():
     h = datetime.now(JST).hour
     if not (POST_HOUR_START <= h < POST_HOUR_END):
@@ -139,6 +170,10 @@ def main():
         # 通常は8本超の遅れで修復。21時以降は残り時間が無いため1本の不足でも埋めに行く
         elif gap > 8 or (h >= 21 and gap > 0):
             print(f"{acct}: 遅れ{gap}本 → LINE消化フラグ＋修復バッチ")
+            if keeper_running():
+                print(f"{acct}: 常駐ループ稼働中 → 修復は常駐側に任せる")
+                continue
+            dispatch_keeper()
             # LINE無限ループの可能性を先に潰す（消化済み扱い）
             try:
                 f = BASE / "line_listin_state.json"

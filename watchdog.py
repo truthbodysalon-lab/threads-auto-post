@@ -81,7 +81,52 @@ def _push_once_per_day(acct: str, msg: str):
         log(f"LINE通知失敗: {e}")
 
 
-def check_account(acct: str) -> None:
+# ── クラウド実行の起動キック（2026-10-02）─────────────────────────────
+# GitHub Actions の schedule は混雑時に大幅に間引かれ、10/2は auto_post が1日3回
+# (6:06/9:43/15:17)しか起動せず全アカウントが5時間半停止した。workflow_dispatch は
+# 間引かれないため、ローカルで遅れを検知したら実行役(クラウド)を起動するだけ行う。
+# 投稿自体は従来どおりクラウドのみ（ローカル投稿は二重運用事故のため禁止のまま）。
+import subprocess, shutil
+GH = shutil.which("gh") or "/opt/homebrew/bin/gh"
+KICK_BEHIND = 5          # この本数以上遅れたら起動
+KICK_COOLDOWN_MIN = 20   # 連続起動の抑止
+
+
+def kick_cloud(reason: str) -> bool:
+    st = _state()
+    last = st.get("last_kick")
+    now = datetime.now()
+    if last:
+        try:
+            if (now - datetime.fromisoformat(last)).total_seconds() < KICK_COOLDOWN_MIN * 60:
+                log(f"kick見送り（{KICK_COOLDOWN_MIN}分以内に起動済み）: {reason}")
+                return False
+        except Exception:
+            pass
+    try:
+        r = subprocess.run([GH, "run", "list", "--repo", "truthbodysalon-lab/threads-auto-post",
+                            "--workflow=auto_post.yml", "--limit", "3", "--json", "status",
+                            "-q", ".[].status"], capture_output=True, text=True, timeout=30)
+        if any(x in r.stdout for x in ("in_progress", "queued", "waiting")):
+            log(f"kick見送り（auto_post実行中）: {reason}")
+            return False
+        r = subprocess.run([GH, "workflow", "run", "auto_post.yml", "--repo",
+                            "truthbodysalon-lab/threads-auto-post"],
+                           capture_output=True, text=True, timeout=30)
+        ok = r.returncode == 0
+        log(f"クラウド起動キック {'成功' if ok else '失敗'}: {reason} {r.stderr.strip()[:120]}")
+        if ok:
+            st["last_kick"] = now.isoformat(timespec="seconds")
+            _save_state(st)
+        else:
+            _push_once_per_day("kick", f"🚨Threads: auto_post の起動キックに失敗（gh: {r.stderr.strip()[:80]}）")
+        return ok
+    except Exception as e:
+        log(f"クラウド起動キック例外: {e}")
+        return False
+
+
+def check_account(acct: str) -> int:
     hour = datetime.now().hour
 
     # 投稿数は外形API実測を第一とする（ローカル台帳はpull_syncの同期ラグで
@@ -94,7 +139,7 @@ def check_account(acct: str) -> None:
             raise RuntimeError("api_count_today failed")
     except Exception as e:
         log(f"{acct}: API実測不可のため監視スキップ ({e})")
-        return
+        return 0
 
     posted = max(ap._posted_count_today(acct), api_n)
     want = ap._target_cumulative_by_now(hour)
@@ -103,27 +148,32 @@ def check_account(acct: str) -> None:
     if posted > want + 10:
         log(f"{acct}: 固め打ち疑い posted={posted} want={want}")
         _push_once_per_day(acct, f"⚠️Threads {acct}: 投稿が先行しすぎ({posted}本/目標{want})。固め打ちバグの疑い。")
-        return
+        return 0
 
     # A-1: 遅れ検知（クラウド側watchdog_ciが遅れ8本超で自動修復するため、
     # ローカルは「クラウド修復が機能していない」深刻な停滞のみ通知する）
     behind = want - posted
     if behind <= 15:
-        return  # 正常回廊内（クラウド修復の猶予込み）
+        return max(0, behind)  # 通知は深刻時のみ。起動キック判定には不足数を返す
 
     log(f"{acct}: 遅れ検知 posted={posted} want={want} (不足{behind})")
     _push_once_per_day(acct, f"🚨Threads {acct}: 投稿ペース停滞（{posted}本/目標{want}・クラウド自己修復が追いついていない疑い）。health_check.ymlの実行状況を確認してください")
+    return behind
 
 
 def main():
     hour = datetime.now().hour
     if not (ap.POST_HOUR_START <= hour < ap.POST_HOUR_END):
         return
+    behind = {}
     for acct in ("truth", "nagaoka", "masa"):
         try:
-            check_account(acct)
+            behind[acct] = check_account(acct) or 0
         except Exception as e:
             log(f"{acct}: watchdog例外 {e}")
+    late = {a: b for a, b in behind.items() if b >= KICK_BEHIND}
+    if late:
+        kick_cloud("遅れ " + ", ".join(f"{a}:{b}本" for a, b in late.items()))
 
 
 if __name__ == "__main__":

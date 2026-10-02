@@ -32,7 +32,12 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
         run: |
-          OLDER=$(gh run list --repo "$GITHUB_REPOSITORY" --workflow=auto_post.yml --status in_progress --limit 20 --json databaseId -q ".[].databaseId" | awk -v me="$GITHUB_RUN_ID" '$1 < me' | head -1)
+          # 引き継ぎ用: 旧runの終了を最大10分待つ（旧runは終了直前にChainするため）
+          for i in $(seq 1 20); do
+            OLDER=$(gh run list --repo "$GITHUB_REPOSITORY" --workflow=auto_post.yml --status in_progress --limit 20 --json databaseId -q ".[].databaseId" | awk -v me="$GITHUB_RUN_ID" '$1 < me' | head -1)
+            [ -z "$OLDER" ] && break
+            sleep 30
+          done
           if [ -n "$OLDER" ]; then
             echo "既に常駐中の実行あり(run $OLDER) → この実行は終了"
             echo "skip=1" >> "$GITHUB_OUTPUT"
@@ -74,7 +79,8 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          END=$(( $(date +%s) + 340*60 ))
+          # 次サイクル開始は経過290分まで。最終サイクル最大(auto_post 50m+commit)でも約345分以内に収まり、355分timeoutの前にChainが走る
+          END=$(( $(date +%s) + 290*60 ))
           prefill() {
             python3 -c "
           import json, subprocess, sys

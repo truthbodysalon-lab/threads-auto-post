@@ -38,7 +38,7 @@ from watchdog_ci import api_count_today  # noqa: E402  (外形API実測)
 
 STATE = BASE / "watchdog_state.json"
 LOG = BASE / "watchdog.log"
-PUSH = "/Users/mt112/.claude/scripts/line-push-masahide.sh"
+PUSH = "/Users/mt112/.claude/scripts/notify.sh"  # Discord通知（LINE送信は禁止）
 
 
 def log(msg: str):
@@ -62,9 +62,10 @@ def _save_state(d: dict):
         pass
 
 
-def _push_once_per_day(acct: str, msg: str):
+def _push_once_per_day(acct: str, msg: str, kind: str = ""):
+    """同一(アカウント×種別)につき1日1回だけ通知。kindで種別を分け同一事象の連投を防ぐ。"""
     st = _state()
-    key = f"push_{acct}"
+    key = f"push_{acct}" + (f"_{kind}" if kind else "")
     today = date.today().isoformat()
     if st.get(key) == today:
         return
@@ -161,7 +162,35 @@ def check_account(acct: str) -> int:
     return behind
 
 
+def check_stall_and_keeper():
+    """2026-10-02 管理体制強化: ペースとは別軸の「停止」検知。
+    (i) 常駐runが0本 → 即kick＋通知  (ii) 投稿時間帯に最後の自前投稿から75分以上 → kick＋通知。"""
+    import stall_check as sc
+    ks = sc.keeper_status()
+    if ks["ok"] and ks["in_progress"] == 0 and ks["queued"] == 0:
+        log("常駐run 0本を検知")
+        kick_cloud("常駐停止")
+        _push_once_per_day("keeper", "🚨Threads: auto_post常駐runが0本（常駐停止）。起動キックを実行しました。"
+                           f"直近run: {sc.latest_run_url() or '取得不可'}", kind="keeperstop")
+    if not sc.in_post_window():
+        return
+    for acct in ("truth", "nagaoka", "masa"):
+        try:
+            gap = sc.last_post_gap_minutes(acct)
+            if gap is None or gap < sc.STALL_MIN:
+                continue
+            log(f"{acct}: 最後の投稿から{gap}分（停止疑い）")
+            kick_cloud(f"{acct} 無投稿{int(gap)}分")
+            _push_once_per_day(acct, sc.stall_message(acct, gap, ks), kind="stall")
+        except Exception as e:
+            log(f"{acct}: 停止検知例外 {e}")
+
+
 def main():
+    try:
+        check_stall_and_keeper()
+    except Exception as e:
+        log(f"停止検知の例外 {e}")
     hour = datetime.now().hour
     if not (ap.POST_HOUR_START <= hour < ap.POST_HOUR_END):
         return

@@ -197,6 +197,27 @@ def main():
                 line_push(f"🚨Threads {acct}: 投稿停止の疑い({after}本/目標{want}・CI修復でも回復小)。Mac/トークン/キューを確認してください")
                 st[f"stall_{acct}"] = today
             repaired.append(acct)
+    # 2026-10-02: 最後の投稿からの経過（ペースとは別軸の停止検知）
+    try:
+        import stall_check as sc
+        ks = None
+        for acct in ACCTS:
+            gap = sc.last_post_gap_minutes(acct)
+            if gap is None or gap < sc.STALL_MIN:
+                continue
+            print(f"{acct}: 最後の投稿から{gap}分（{sc.STALL_MIN}分超・停止疑い）")
+            if not keeper_running():
+                dispatch_keeper()
+            if _notified_today(st, f"gap_{acct}"):
+                continue
+            ks = ks or sc.keeper_status()
+            msg = sc.stall_message(acct, gap, ks) + "（CI watchdog）"
+            if not sc.discord_send(msg):
+                print("Discord未送信（DISCORD_WEBHOOK_URL未設定/失敗）→ 通知記録のみ")
+            line_push(msg)
+            st[f"gap_{acct}"] = today
+    except Exception as e:
+        print(f"停止検知の例外 {type(e).__name__}: {e}")
     try:
         STATE.write_text(json.dumps(st, ensure_ascii=False))
     except Exception:

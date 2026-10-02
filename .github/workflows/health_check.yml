@@ -16,6 +16,7 @@ jobs:
     timeout-minutes: 20
     env:
       TZ: Asia/Tokyo
+      DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
 
     steps:
       - name: Checkout repository

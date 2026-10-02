@@ -5,16 +5,16 @@
     "education": 4,
     "story": 1,
     "cta": 1,
-    "ranking": 1,
+    "ranking": 2,
     "question": 3,
     "variety": 20
   },
   "feedback_scores": {},
   "api_scores": {
-    "insight": 0.54,
-    "cta": -2.07,
-    "story": -1.45,
-    "ranking": 0.13
+    "insight": 0.55,
+    "story": -1.09,
+    "cta": -2.39,
+    "ranking": 0.59
   },
   "follower_scores": {
     "story": -0.34,

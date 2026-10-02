@@ -1,7 +1,7 @@
 {
  "acct": "nagaoka",
- "version": 49,
- "updated": "2026-10-01",
+ "version": 50,
+ "updated": "2026-10-02",
  "description": "修正ポイント（勝ち構造・死ぬ構造）の正本。毎朝サブエージェントEが実測データで各ルールを検証し、効かなくなったルールはretired、新発見はtestingで追加、実証されたらactiveに昇格する。ヒーロー投稿と新テンプレはこのプレイブックのactiveルールに従って書く。",
  "rules": [
   {
@@ -446,6 +446,11 @@
    "version": 49,
    "date": "2026-10-01",
    "change": "毎朝検証: breakout再取得・active/testingルールは据置。軌道遅れ(prune該当0・テンプレ採用追加・フック刷新・ヒーロー10本)。lab_feedback未applied0件。masaはsegment_report S2/S3/S4=winnerを反映(ヒーローに層名指し・AI2本・ハカセ1本・uplink翻案2本)。"
+  },
+  {
+   "version": 50,
+   "date": "2026-10-02",
+   "change": "毎朝検証: breakout再取得(200件)・active/testingルール据置。軌道遅れのためprune実施(該当0)・新テンプレ20件採用(24本中)・フック刷新(問いかけ/数字入り優先)・ヒーロー10本。lab_feedback未applied0件。"
   }
  ]
 }

@@ -709,6 +709,233 @@ def check_sync():
         add("sync:unpushed", "E.同期", "WARN", f"確認失敗: {e}")
 
 
+# ── 停止系の再発検知（2026-10-02追加: C18/C19/C20）──────────────────
+# 共通の弱点=「GitHub上はsuccessなのに止まっている」を人が気付くまで数時間かかった。
+# stall_check.py等に依存せず、ここで自前にGitHub API / Threads APIを叩く。
+GH_REPO_DEFAULT = "truthbodysalon-lab/threads-auto-post"
+JST = timezone(timedelta(hours=9))
+# 台帳(INCIDENTS.md)の「再発防止の検査ID」→ verify_system.py内で add() される検査idの接頭辞。
+# C20がこの対応と実コードの存在を突合する（台帳だけ書いて検査が消える事故を防ぐ）。
+CHECK_REGISTRY = {
+    "C8": "exec:daily50:", "C10": "exec:pacing:", "C11": "exec:watchdog",
+    "C13": "exec:hpb_only", "C14": "exec:imagepost", "C15": "exec:segment_test:",
+    "C16": "next_post:", "C17": "dup_reselect:",
+    "C18": "exec:chain_gap", "C19": "exec:post_interval:", "C20": "ledger:",
+}
+
+
+def _load_dotenv():
+    envf = BASE / ".env"
+    if envf.exists():
+        for _l in envf.read_text().splitlines():
+            if "=" in _l and not _l.startswith("#"):
+                _k, _v = _l.split("=", 1)
+                os.environ.setdefault(_k.strip(), _v.strip())
+
+
+def _gh_token() -> str:
+    _load_dotenv()
+    tok = os.environ.get("GH_PAT") or os.environ.get("GITHUB_TOKEN") or ""
+    if tok:
+        return tok
+    try:
+        r = subprocess.run(["gh", "auth", "token"], capture_output=True, text=True, timeout=10)
+        return r.stdout.strip()
+    except Exception:
+        return ""
+
+
+def _parse_iso(s: str) -> datetime:
+    return datetime.fromisoformat(s.replace("Z", "+00:00"))
+
+
+def check_chain_gap():
+    """C18: 常駐連鎖（auto_post.yml）。直近24hで「どの常駐runも動いていなかった空白」の最大値。
+    30分超WARN・90分超FAIL。現在in_progressが0本ならFAIL（2026-10-02: GitHub cron間引きで
+    5.5時間全アカ停止・runはsuccessのまま気付けなかった障害）。"""
+    import urllib.request as _ur
+    tok = _gh_token()
+    if not tok:
+        add("exec:chain_gap", "C.実行ギャップ", "SKIP", "GH_PAT/gh認証なし（常駐連鎖は未検査）")
+        return
+    repo = os.environ.get("GH_REPO", GH_REPO_DEFAULT)
+    now = datetime.now(timezone.utc)
+    since = now - timedelta(hours=24)
+    try:
+        runs, page = [], 1
+        while page <= 5:
+            url = (f"https://api.github.com/repos/{repo}/actions/workflows/auto_post.yml/runs"
+                   f"?per_page=100&page={page}&created=%3E%3D{(since - timedelta(hours=8)).strftime('%Y-%m-%d')}")
+            req = _ur.Request(url, headers={"Authorization": f"Bearer {tok}",
+                                            "Accept": "application/vnd.github+json"})
+            with _ur.urlopen(req, timeout=20) as r:
+                batch = json.loads(r.read()).get("workflow_runs", [])
+            runs += batch
+            if len(batch) < 100:
+                break
+            page += 1
+    except Exception as e:
+        add("exec:chain_gap", "C.実行ギャップ", "WARN", f"GitHub API取得不可: {e}")
+        return
+    in_prog = [r for r in runs if r.get("status") == "in_progress"]
+    spans = []
+    for r in runs:
+        try:
+            st = _parse_iso(r["run_started_at"])
+            if r.get("status") == "in_progress":
+                en = now
+            else:
+                en = _parse_iso(r["updated_at"])
+                if (en - st).total_seconds() < 300:
+                    continue  # 数秒で終わる single-keeper 即終了run等は「常駐」に数えない
+            spans.append((max(st, since), min(en, now)))
+        except Exception:
+            continue
+    spans = sorted(s for s in spans if s[1] > s[0])
+    cur, gaps = since, []
+    for st, en in spans:
+        if st > cur:
+            gaps.append((st - cur, cur))
+        cur = max(cur, en)
+    if now > cur:
+        gaps.append((now - cur, cur))
+    mx, at = max(gaps, key=lambda g: g[0]) if gaps else (timedelta(0), since)
+    mins = int(mx.total_seconds() // 60)
+    where = at.astimezone(JST).strftime("%m/%d %H:%M")
+    if not in_prog:
+        add("exec:chain_gap", "C.実行ギャップ", "FAIL",
+            f"常駐run(in_progress)が0本＝今この瞬間投稿が止まっている。24h最大空白{mins}分（{where}JST〜）")
+    elif mins > 90:
+        add("exec:chain_gap", "C.実行ギャップ", "FAIL", f"24h最大空白{mins}分（{where}JST〜）> 90分")
+    elif mins > 30:
+        add("exec:chain_gap", "C.実行ギャップ", "WARN", f"24h最大空白{mins}分（{where}JST〜）> 30分")
+    else:
+        add("exec:chain_gap", "C.実行ギャップ", "PASS",
+            f"常駐in_progress {len(in_prog)}本・24h最大空白{mins}分（run {len(spans)}区間）")
+
+
+def _yesterday_api_posts(acct: str):
+    """昨日(JST)の本体投稿 [(post_id, datetime JST)]。取得不可はNone。"""
+    import urllib.request as _ur
+    _load_dotenv()
+    uid = os.environ.get(f"THREADS_USER_ID_{acct.upper()}")
+    tok = os.environ.get(f"THREADS_ACCESS_TOKEN_{acct.upper()}")
+    if not uid or not tok:
+        return None
+    y0 = datetime.now(JST).replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(days=1)
+    url = (f"https://graph.threads.net/v1.0/{uid}/threads?fields=id,timestamp,is_reply"
+           f"&since={int(y0.timestamp())}&until={int((y0 + timedelta(days=1)).timestamp())}"
+           f"&limit=100&access_token={tok}")
+    out, pages = [], 0
+    while url and pages < 6:
+        try:
+            with _ur.urlopen(url, timeout=20) as r:
+                data = json.loads(r.read())
+        except Exception:
+            return None if not out else out
+        for x in data.get("data", []):
+            if x.get("is_reply") or not x.get("timestamp"):
+                continue
+            ts = datetime.strptime(x["timestamp"], "%Y-%m-%dT%H:%M:%S%z").astimezone(JST)
+            out.append((x["id"], ts))
+        url = (data.get("paging") or {}).get("next")
+        pages += 1
+    return out
+
+
+def check_post_interval():
+    """C19: 昨日の自前投稿の6-23時の最大投稿間隔（log_<acct>_posted.jsonlのpost_idと
+    Threads外形APIのtimestampを突合。外部ツール投稿＝台帳に無い投稿は除外）。
+    90分超WARN・180分超FAIL（2026-10-02: 5.5時間0本・50本/日でも日中の空白は件数では見えない）。"""
+    day = (datetime.now(JST) - timedelta(days=1)).strftime("%Y-%m-%d")
+    for acct in ACCTS:
+        cid = f"exec:post_interval:{acct}"
+        try:
+            api = _yesterday_api_posts(acct)
+            if api is None:
+                add(cid, "C.実行ギャップ", "SKIP", "Threads API取得不可/トークンなし（未検査）")
+                continue
+            ids = set()
+            lf = BASE / f"log_{acct}_posted.jsonl"
+            if lf.exists():
+                for line in lf.read_text(encoding="utf-8").splitlines():
+                    try:
+                        d = json.loads(line)
+                        if d.get("post_id"):
+                            ids.add(str(d["post_id"]))
+                    except Exception:
+                        pass
+            own = sorted(ts for pid, ts in api if pid in ids)
+            ext = len(api) - len(own)
+            lo = datetime.strptime(day, "%Y-%m-%d").replace(tzinfo=JST, hour=6)
+            hi = lo.replace(hour=23)
+            pts = [t for t in own if lo <= t <= hi]
+            if len(pts) < 2:
+                add(cid, "C.実行ギャップ", "FAIL" if len(api) else "WARN",
+                    f"{day} 6-23時の自前投稿{len(pts)}本（API全{len(api)}本・台帳突合{len(own)}本）→間隔算出不能")
+                continue
+            seq = [lo] + pts  # 6:00起点（朝の立ち上がり遅れも拾う）
+            gaps = [(seq[i + 1] - seq[i], seq[i]) for i in range(len(seq) - 1)]
+            mx, at = max(gaps, key=lambda g: g[0])
+            mins = int(mx.total_seconds() // 60)
+            note = f"{day} 最大間隔{mins}分（{at.strftime('%H:%M')}〜）・自前{len(pts)}本/外部等{ext}本除外"
+            st = "FAIL" if mins > 180 else ("WARN" if mins > 90 else "PASS")
+            add(cid, "C.実行ギャップ", st, note)
+        except Exception as e:
+            add(cid, "C.実行ギャップ", "WARN", f"検査不可: {e}")
+
+
+def check_incident_ledger():
+    """C20: INCIDENTS.mdの各障害行の「再発防止の検査ID」がverify_system.py内に実在するか。
+    無ければFAIL（台帳だけ書いて検査が消える/最初から無い事故を防ぐ）。"""
+    f = BASE / "INCIDENTS.md"
+    if not f.exists():
+        add("ledger:file", "C.実行ギャップ", "FAIL", "INCIDENTS.md が無い（障害台帳の欠落）")
+        return
+    try:
+        src = Path(__file__).read_text(encoding="utf-8")
+        rows = []
+        for line in f.read_text(encoding="utf-8").splitlines():
+            m = re.match(r"\|\s*(20\d\d-\d\d-\d\d)\s*\|(.*)\|\s*$", line)
+            if m:
+                cells = [c.strip() for c in line.strip().strip("|").split("|")]
+                rows.append(cells)
+        bad = []
+        for cells in rows:
+            day, ids_cell = cells[0], (cells[4] if len(cells) > 4 else "")
+            ids = re.findall(r"\bC\d+\b", ids_cell)
+            if not ids:
+                bad.append(f"{day}:検査ID無し")
+                continue
+            for cid in ids:
+                marker = CHECK_REGISTRY.get(cid)
+                if not marker or not re.search(r'(add\(\s*f?"|cid = f?")' + re.escape(marker), src):
+                    bad.append(f"{day}:{cid}が実在しない")
+        if not rows:
+            add("ledger:rows", "C.実行ギャップ", "FAIL", "INCIDENTS.mdに障害行が1件も無い（表の書式崩れ）")
+        elif bad:
+            add("ledger:rows", "C.実行ギャップ", "FAIL", f"{len(bad)}件: " + " / ".join(bad[:8]))
+        else:
+            add("ledger:rows", "C.実行ギャップ", "PASS", f"障害{len(rows)}件すべて検査IDが実在")
+    except Exception as e:
+        add("ledger:rows", "C.実行ギャップ", "WARN", f"台帳検査不可: {e}")
+
+
+def mirror_incidents_to_obsidian():
+    """INCIDENTS.mdをObsidianへ書き出す（ローカル実行時のみ・失敗しても検査結果に影響させない）。"""
+    if os.environ.get("GITHUB_ACTIONS") == "true":
+        return
+    try:
+        body = (BASE / "INCIDENTS.md").read_text(encoding="utf-8")
+        d = Path("/Users/mt112/Desktop/my files/myfiles/SNS・Threads/分析レポート")
+        d.mkdir(parents=True, exist_ok=True)
+        head = (f"<!-- 正本: threads-auto-post/INCIDENTS.md。verify_system.pyが自動ミラー"
+                f"（{datetime.now().strftime('%Y-%m-%d %H:%M')}）。ここを編集しない -->\n\n")
+        (d / "Threads投稿障害台帳.md").write_text(head + body, encoding="utf-8")
+    except Exception:
+        pass
+
+
 def run_all():
     check_imports()
     check_generation()
@@ -719,6 +946,9 @@ def run_all():
     check_execution_gaps()
     check_logs()
     check_sync()
+    check_chain_gap()
+    check_post_interval()
+    check_incident_ledger()
 
 
 def main():
@@ -772,6 +1002,7 @@ def main():
         elif not fails and not warns:
             print(f"  PASS/SKIPのみ（SKIP {len(skips)}件はゼロ件ではなく未検査）")
 
+    mirror_incidents_to_obsidian()
     sys.exit(1 if fails else 0)
 
 

@@ -17,3 +17,4 @@
 {"ts": "2026-10-02T20:15:18+09:00", "msg": "🚨Threads truth: 最後の投稿から133分。原因候補: 選択ループ/例外（常駐は稼働中なのに投稿が出ていない）。直近run: https://github.com/truthbodysalon-lab/threads-auto-post/actions/runs/36977127507（CI watchdog）"}
 {"ts": "2026-10-02T20:15:20+09:00", "msg": "🚨Threads nagaoka: 最後の投稿から131分。原因候補: 選択ループ/例外（常駐は稼働中なのに投稿が出ていない）。直近run: https://github.com/truthbodysalon-lab/threads-auto-post/actions/runs/36977127507（CI watchdog）"}
 {"ts": "2026-10-02T20:15:22+09:00", "msg": "🚨Threads masa: 最後の投稿から130分。原因候補: 選択ループ/例外（常駐は稼働中なのに投稿が出ていない）。直近run: https://github.com/truthbodysalon-lab/threads-auto-post/actions/runs/36977127507（CI watchdog）"}
+{"ts": "2026-10-03T09:38:39+09:00", "msg": "⚠️Threads masa: 投稿が先行しすぎ(39本/目標12)。固め打ちバグの疑い(CI watchdog)"}

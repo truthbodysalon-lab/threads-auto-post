@@ -13,11 +13,11 @@
   },
   "feedback_scores": {},
   "api_scores": {
-    "quote_empathy": -1.11,
-    "insight": 0.25,
-    "education": 0.75,
-    "story": -1.35,
-    "ranking": 0.47
+    "quote_empathy": -1.29,
+    "insight": 0.33,
+    "story": -1.73,
+    "ranking": 0.14,
+    "education": 0.75
   },
   "follower_scores": {
     "insight": 3.0,

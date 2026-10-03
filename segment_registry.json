@@ -1,36 +1,36 @@
 {
   "これから開業する人へ。": {
     "segment": "S1",
-    "hook": "high",
-    "created": "2026-10-02",
+    "hook": "low",
+    "created": "2026-10-03",
     "acct": "masa",
     "variant": 0
   },
   "開業して1年、まだ集客ゼロの院へ。": {
     "segment": "S2",
-    "hook": "high",
-    "created": "2026-10-02",
+    "hook": "low",
+    "created": "2026-10-03",
     "acct": "masa",
     "variant": 0
   },
   "月商50万の壁で止まっている経営者へ。": {
     "segment": "S3",
-    "hook": "high",
-    "created": "2026-10-02",
+    "hook": "low",
+    "created": "2026-10-03",
     "acct": "masa",
     "variant": 0
   },
   "スタッフを抱える院長へ。": {
     "segment": "S4",
-    "hook": "high",
-    "created": "2026-10-02",
+    "hook": "low",
+    "created": "2026-10-03",
     "acct": "masa",
     "variant": 0
   },
   "コースや講座を売っている経営者へ。": {
     "segment": "S5",
-    "hook": "high",
-    "created": "2026-10-02",
+    "hook": "low",
+    "created": "2026-10-03",
     "acct": "masa",
     "variant": 0
   },
@@ -154,8 +154,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 4,
-    "acct": "masa",
-    "created": "2026-09-24"
+    "created": "2026-10-03"
   },
   "産後の骨盤の歪みが気になるママへ。": {
     "segment": "T3",
@@ -280,7 +279,7 @@
   "月に何度も頭痛薬を飲む人へ。": {
     "segment": "T2",
     "hook": "low",
-    "created": "2026-09-29",
+    "created": "2026-10-03",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z05_truth"
@@ -312,7 +311,7 @@
   "光や音がつらい頭痛がある人へ。": {
     "segment": "T2",
     "hook": "low",
-    "created": "2026-09-29",
+    "created": "2026-10-03",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z04_nagaoka"
@@ -388,7 +387,7 @@
   "会議続きで首が痛い人へ。": {
     "segment": "T1",
     "hook": "low",
-    "created": "2026-09-29",
+    "created": "2026-10-03",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z03_truth"
@@ -411,7 +410,7 @@
   "介護や看護で腰と脚がつらい人へ。": {
     "segment": "T4",
     "hook": "low",
-    "created": "2026-09-29",
+    "created": "2026-10-03",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z15_truth"
@@ -419,7 +418,7 @@
   "1日中パソコンに向かう人へ。": {
     "segment": "T1",
     "hook": "low",
-    "created": "2026-09-29",
+    "created": "2026-10-03",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z22_nagaoka"
@@ -435,7 +434,7 @@
   "子育てで腰を痛めたママへ。": {
     "segment": "T3",
     "hook": "low",
-    "created": "2026-09-29",
+    "created": "2026-10-03",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z12_nagaoka"
@@ -517,7 +516,7 @@
   "抱っこ疲れで腰が痛いママへ。": {
     "segment": "T3",
     "hook": "low",
-    "created": "2026-09-29",
+    "created": "2026-10-03",
     "acct": "truth",
     "variant": 1
   },
@@ -553,7 +552,7 @@
   "介護をひとりで抱え込む人へ。": {
     "segment": "T4",
     "hook": "low",
-    "created": "2026-09-29",
+    "created": "2026-10-03",
     "acct": "nagaoka",
     "variant": 1
   },
@@ -795,7 +794,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 11,
-    "created": "2026-09-26"
+    "created": "2026-10-03"
   },
   "開業準備中で集客の正解を探している人は。": {
     "segment": "S1",

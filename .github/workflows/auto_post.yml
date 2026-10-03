@@ -106,14 +106,14 @@ jobs:
             git diff --cached --quiet || git commit -q -m "chore: update logs [skip ci]"
             for i in 1 2 3; do
               git push -q && break
-              git pull -q --rebase -X theirs origin main || { git rebase --abort 2>/dev/null || true; }
+              git pull -q --rebase --autostash -X theirs origin main || { git rebase --abort 2>/dev/null || true; }
             done
           }
           while [ "$(date +%s)" -lt "$END" ]; do
             T0=$(date +%s)
             echo "::group::cycle $(date '+%H:%M')"
             # 朝の生成・ヒーロー・プレイブック等の最新を取り込む（自分の未pushは直前のcommit_logsで反映済み）
-            git pull -q --rebase -X theirs origin main || { git rebase --abort 2>/dev/null || true; }
+            git pull -q --rebase --autostash -X theirs origin main || { git rebase --abort 2>/dev/null || true; }
             prefill || true
             timeout 50m python3 auto_post.py all || true
             python3 token_manager.py --sync-secrets || true

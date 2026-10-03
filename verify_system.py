@@ -720,7 +720,7 @@ CHECK_REGISTRY = {
     "C8": "exec:daily50:", "C10": "exec:pacing:", "C11": "exec:watchdog",
     "C13": "exec:hpb_only", "C14": "exec:imagepost", "C15": "exec:segment_test:",
     "C16": "next_post:", "C17": "dup_reselect:",
-    "C18": "exec:chain_gap", "C19": "exec:post_interval:", "C20": "ledger:",
+    "C21": "exec:log_sync", "C18": "exec:chain_gap", "C19": "exec:post_interval:", "C20": "ledger:",
 }
 
 
@@ -885,6 +885,37 @@ def check_post_interval():
             add(cid, "C.実行ギャップ", "WARN", f"検査不可: {e}")
 
 
+def check_log_sync():
+    """C21: 投稿ログ(log_*_posted.jsonl)のpush停滞。常駐runがpushに失敗するとログがrunner内に残り
+    重複ガード・集計・検証が全て古い値になる（2026-10-03: 未コミット変更でpull --rebaseが失敗し約16時間停滞）。
+    6-23時JSTにmainの「chore: update logs」コミットが3時間以上無ければFAIL、90分以上でWARN。"""
+    import urllib.request as _ur
+    tok = _gh_token()
+    if not tok:
+        add("exec:log_sync", "C.実行ギャップ", "SKIP", "GH_PAT/gh認証なし")
+        return
+    repo = os.environ.get("GH_REPO", GH_REPO_DEFAULT)
+    try:
+        url = f"https://api.github.com/repos/{repo}/commits?path=log_truth_posted.jsonl&per_page=1"
+        req = _ur.Request(url, headers={"Authorization": f"Bearer {tok}", "Accept": "application/vnd.github+json"})
+        with _ur.urlopen(req, timeout=20) as r:
+            c = json.loads(r.read())[0]
+        ts = _parse_iso(c["commit"]["committer"]["date"])
+        now = datetime.now(timezone.utc)
+        lag = (now - ts).total_seconds() / 60
+        hh = now.astimezone(JST).hour
+        if not (7 <= hh < 23):
+            add("exec:log_sync", "C.実行ギャップ", "PASS", f"夜間のため判定対象外（最終log push {lag:.0f}分前）")
+        elif lag > 180:
+            add("exec:log_sync", "C.実行ギャップ", "FAIL", f"投稿ログのpushが{lag:.0f}分停滞（常駐runのpush失敗の疑い）")
+        elif lag > 90:
+            add("exec:log_sync", "C.実行ギャップ", "WARN", f"投稿ログのpushが{lag:.0f}分前")
+        else:
+            add("exec:log_sync", "C.実行ギャップ", "PASS", f"最終log push {lag:.0f}分前")
+    except Exception as e:
+        add("exec:log_sync", "C.実行ギャップ", "WARN", f"GitHub API取得不可: {e}")
+
+
 def check_incident_ledger():
     """C20: INCIDENTS.mdの各障害行の「再発防止の検査ID」がverify_system.py内に実在するか。
     無ければFAIL（台帳だけ書いて検査が消える/最初から無い事故を防ぐ）。"""
@@ -948,6 +979,7 @@ def run_all():
     check_sync()
     check_chain_gap()
     check_post_interval()
+    check_log_sync()
     check_incident_ledger()
 
 

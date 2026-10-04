@@ -132,6 +132,22 @@ def check_generation():
         add("gen:all", "A.コード", "FAIL", f"generate_remix読込失敗: {e}")
 
 
+def check_masa_insta_theme():
+    """masaの当日生成キュー前半50本のInstagramテーマ比率が50%未満ならWARN（2026-10-04 主テーマ変更の実行ギャップ検知）。"""
+    try:
+        import generate_remix as g
+        posts = g.generate_30_masa_posts()[:50]
+        n = sum(1 for p in posts if g._is_insta_theme(p))
+        ratio = n / max(1, len(posts))
+        if ratio < 0.5:
+            add("masa_insta_theme", "B.ルール反映", "WARN",
+                f"masa前半{len(posts)}本中Instagramテーマ{n}本({ratio:.0%})。目標は過半数(32本)")
+        else:
+            add("masa_insta_theme", "B.ルール反映", "PASS", f"masa前半{len(posts)}本中Instagramテーマ{n}本({ratio:.0%})")
+    except Exception as e:
+        add("masa_insta_theme", "B.ルール反映", "WARN", f"検査失敗: {type(e).__name__}: {e}")
+
+
 # nagaoka専用「長岡市で〜相談が増えてます」型オープニングの1文目パターン（2026-07-24追加）。
 # generate_remix.NAGAOKA_SOUDAN_OPENINGSの実際の書き出しバリエーションに合わせて限定的に許可。
 _NAGAOKA_SOUDAN_OPEN_RE = re.compile(
@@ -973,6 +989,7 @@ def run_all():
     check_next_post_smoke()
     check_dup_reselect_guard()
     check_rules()
+    check_masa_insta_theme()
     check_rule_hygiene()
     check_execution_gaps()
     check_logs()

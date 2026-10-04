@@ -146,7 +146,7 @@ def log_error(msg: str):
 
 ACCOUNT_PERSONAS = {
     "truth": "整体院（truth body salon）のアカウント。首・肩・腰・頭痛など体の不調を根本から改善する整体サロン。",
-    "masa": "整体サロンのオーナー・masahide_takahashiの個人アカウント。集客・SNS運用・動画マーケティングについて発信。",
+    "masa": "整体サロンのオーナー・masahide_takahashiの個人アカウント。店舗経営者向けに「Instagramで集客する方法・ノウハウ・考え方」を、運用のハードルを下げる伝え方（1日1分・スマホだけ・撮影や編集なしでもOK・フォロワーが少なくてもOK・AIに任せて確認だけ）で発信する。中学生にも分かる言葉で、専門用語・面談・金額・店舗名や所在地・創作した統計は書かない。",
 }
 
 _BRIDGE_DISABLED = False  # 2026-07-03: Anthropic API(従量課金)→Gemini API(既存キー・無料枠)に切替

@@ -313,7 +313,7 @@ def build_report(acct: str):
         # HAKASE（インスタ運用の原則投稿・masa専用・2026-09-23）はS1-S5と別枠の集計対象なので
         # SEGMENTSの正規化を通さずそのまま保持する（_norm_segmentはSEGMENTS以外はNoneを返し
         # 「未登録」扱いになってしまうため）。
-        seg_val = "HAKASE" if raw_seg == "HAKASE" else (_norm_segment(acct, raw_seg) if reg else None)
+        seg_val = raw_seg if raw_seg in ("HAKASE", "INSTA_EASY") else (_norm_segment(acct, raw_seg) if reg else None)
         joined.append({
             "date": e.get("date", ""),
             "post_id": pid,

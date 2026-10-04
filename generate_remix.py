@@ -2545,6 +2545,83 @@ INSTA_EASY_TEMPLATES = [
 ]
 
 
+# ── masa: Instagram集客×ハードルを下げる（2026-10-04 本人指示・主テーマ化）──
+# なぜ: masaの主テーマを「店舗経営者のInstagram集客のやり方・考え方」にし、伝え方は一貫して
+# 「ハードルを下げる」（1日1分・スマホだけ・撮影編集なし・フォロワー少でもOK・AIに任せて確認だけ）。
+# 小川さん9/22助言（難しそうと思わせない）と同方向。固定テンプレ60本だけでは7日再投入禁止を
+# 満たせないため、(悩み→小さな言い換え→今日の一手)の組合せ生成を併用する。
+INSTA_THEME_RE = re.compile(r"インスタ|Instagram|リール|ストーリーズ|ハッシュタグ|DM|投稿ネタ|ネタ帳")
+INSTA_THEME_TARGET = 32      # 実投稿される前半50本のうちInstagramテーマにする下限目標（過半数=26超）
+INSTA_FRONT_LEN = 50
+
+# (悩み・やらない理由, 小さな言い換え, 今日の一手)  一手は「今日は、〜。」の中に入る
+INSTA_HURDLES = [
+    ("撮影が面倒", "スマホで1枚撮れば、投稿は成り立ちます", "店内を1枚だけ撮ってください"),
+    ("文章が苦手", "一言だけでも、投稿として十分です", "出来事を一言だけ書いてください"),
+    ("フォロワーが少ない", "数より、見てくれる1人のほうが大事です", "先週来たお客さんを1人思い出してください"),
+    ("時間がない", "1日1分で、続けられる形があります", "タイマーを1分にして、1枚投稿してください"),
+    ("顔を出したくない", "顔なしでも、お店の魅力は伝わります", "手元か道具だけを撮ってください"),
+    ("ネタがない", "お客さんに聞かれたことが、そのままネタです", "昨日聞かれたことを1つメモしてください"),
+    ("編集ができない", "編集しない写真のほうが、自然で伝わります", "加工せずに1枚そのまま出してください"),
+    ("いいねが少ない", "いいねの数と、来店の数は別物です", "今月来たお客さんに、見たきっかけを聞いてください"),
+    ("毎日投稿できない", "週に3回でも、続けば力になります", "今週の投稿の日を3日だけ決めてください"),
+    ("ハッシュタグが分からない", "地域名と業種の2つだけで足ります", "地域名と業種を、2つだけ付けてください"),
+    ("機械が苦手", "スマホのカメラが使えれば、始められます", "スマホのカメラを開いて、1枚撮ってください"),
+    ("スタッフが少ない", "1人でも回る形に、小さく絞れます", "投稿する曜日を1つだけ決めてください"),
+    ("一人で全部やっている", "全部やらなくていい。1つに絞れば続きます", "やることを、投稿1つだけにしてください"),
+    ("続かない", "続かないのは、最初が大きすぎるからです", "目標を、1枚だけにしてください"),
+    ("見られるのが怖い", "最初の数日は、ほぼ誰も見ていません", "まず1枚だけ、出してみてください"),
+    ("写真がうまく撮れない", "窓の近くで撮れば、それだけで明るくなります", "窓の近くで1枚撮ってください"),
+    ("反応がない", "反応がなくても、見ている人はいます", "3日続けて、見た人の数だけ確認してください"),
+    ("難しそうで手が出ない", "やることは、写真を1枚出すだけです", "写真を1枚、投稿してください"),
+    ("広告が不安", "広告は、使わなくても始められます", "広告のことは忘れて、1枚だけ選んでください"),
+    ("競合が気になる", "他店を見る時間は、1日1分で足ります", "他店を見るのは、1分だけにしてください"),
+    ("プロフィールが決まらない", "仮のまま始めて、あとで直せば大丈夫です", "今のプロフィールのまま、1枚出してください"),
+    ("使い方が分からない", "写真を選んで、押すだけで投稿できます", "写真を1枚だけ、出してください"),
+    ("リールが難しそう", "写真を並べるだけでも、リールになります", "写真を3枚、選んでください"),
+    ("DMの返信が不安", "返事は、ありがとうございますの一言で足ります", "来たDMに、お礼の一言だけ返してください"),
+    ("数字が苦手", "見る数字は、保存と来店の2つだけです", "今月の来店数を1つだけ数えてください"),
+    ("営業中は触れない", "営業前の1分だけで、投稿は間に合います", "営業前に、スマホを1回だけ開いてください"),
+    ("お金をかけられない", "無料の機能だけで、十分に始められます", "無料の機能だけで、1枚投稿してください"),
+    ("若い人向けだと思う", "年齢に関係なく、お店を探す人は見ています", "お店の入口を1枚撮ってください"),
+    ("年齢が気になる", "年齢より、丁寧な一言のほうが伝わります", "丁寧な一言を1つ書いてください"),
+    ("意味があるのか不安", "意味が分かるのは、数週間続けたあとです", "1枚出して、記録を1行残してください"),
+    ("AIは難しそう", "AIに文章を作らせて、確認だけすれば足ります", "投稿文を1つ、AIに頼んでください"),
+    ("文章を考える時間がない", "AIに下書きを頼めば、1分で終わります", "AIに頼んだ下書きを、1回だけ読んでください"),
+]
+INSTA_GEN_STRUCTURES = [
+    "インスタで「{h}」と、手が止まっていませんか。\n\n{r}。\n\n今日は、{a}。",
+    "インスタで「{h}」。\nそれは、よくあることです。\n\n{r}。\n\n今日は、{a}。",
+    "「{h}」のままでも、インスタは始められます。\n\n{r}。\n\n今日は、{a}。",
+    "インスタは「{h}」でも、続けられます。\n\n{r}。\n\n今日は、{a}。",
+    "インスタが「{h}」くらいで、やめなくていい。\n\n{r}。\n\n今日は、{a}。",
+]
+
+
+def _is_insta_theme(text: str) -> bool:
+    """Instagram集客テーマの投稿か（キーワード or 固定テンプレ集合。verify_systemも同関数を使う）。"""
+    t = text or ""
+    return bool(INSTA_THEME_RE.search(t)) or t in _INSTA_KNOWN_TEXTS
+
+
+_INSTA_KNOWN_TEXTS = set(INSTA_EASY_TEMPLATES) | set(HAKASE_TEMPLATES)
+
+
+def _insta_sentence_ok(text: str) -> bool:
+    return len(text) <= 250 and all(len(s) <= 30 for s in re.split(r"[。\n]", text) if s)
+
+
+def generate_insta_easy_gen_post() -> str:
+    """悩み×小さな言い換え×今日の一手の組合せ（5構造×悩み=170通り前後）から1本作る。"""
+    for _ in range(40):
+        h, r, a = random.choice(INSTA_HURDLES)
+        text = random.choice(INSTA_GEN_STRUCTURES).format(h=h, r=r, a=a)
+        if _insta_sentence_ok(text):
+            return text
+    h, r, a = INSTA_HURDLES[0]
+    return INSTA_GEN_STRUCTURES[1].format(h=h, r=r, a=a)
+
+
 def _load_segment_config() -> dict:
     """segment_config.json を読み込む（失敗時は空dict＝セグメントテスト無効化）。"""
     if SEGMENT_CONFIG_FILE.exists():
@@ -2878,6 +2955,71 @@ def _insert_hakase_posts(posts: list[str], acct: str, today: str) -> list[str]:
     return posts
 
 
+def _fill_insta_theme_posts(posts: list[str], acct: str, today: str, base_normal: set) -> list[str]:
+    """masa専用: 前半50本のInstagramテーマ本数がINSTA_THEME_TARGET未満なら、通常枠(base_normal)の
+    非Instagram投稿をINSTA_EASY(固定60本・7日以内の再投入なし)＋組合せ生成の投稿へ置換する。
+    導線・AI・セグメント・ハカセ・ヒーローなど挿入済みアンカーは位置・本数とも触らない。
+    segment_registry.jsonへsegment="INSTA_EASY"で登録（SEGMENT_REGISTRY_DRY=1では保存しない既存ガード）。"""
+    if acct != "masa":
+        return posts
+    front = min(INSTA_FRONT_LEN, len(posts))
+    have = sum(1 for p in posts[:front] if _is_insta_theme(p))
+    need = INSTA_THEME_TARGET - have
+    if need <= 0:
+        return posts
+
+    try:
+        today_date = date.fromisoformat(today)
+    except Exception:
+        today_date = date.today()
+    registry = _load_segment_registry()
+    recent_keys = set()
+    for key, entry in registry.items():
+        if not isinstance(entry, dict) or entry.get("segment") != "INSTA_EASY":
+            continue
+        try:
+            if (today_date - date.fromisoformat(entry.get("created", ""))).days < 7:
+                recent_keys.add(key)
+        except Exception:
+            continue
+    recent_first = _get_recent_first_lines("masa", days=4)
+    used_keys = {_segment_registry_key(p) for p in posts}
+
+    def _valid(t: str) -> bool:
+        return (len(t) <= 250 and not _is_ng(t) and not _is_masa_yokokoku_ng(t)
+                and not _is_masa_sales_ng(t)
+                and t.split("\n")[0].strip() not in recent_first
+                and _segment_registry_key(t) not in recent_keys
+                and _segment_registry_key(t) not in used_keys
+                and _inspect_ok(t, "masa", pattern_name="insta_easy", log=False))
+
+    slots = [i for i in range(front) if posts[i] in base_normal and not _is_insta_theme(posts[i])]
+    fixed = list(range(len(INSTA_EASY_TEMPLATES)))
+    random.shuffle(fixed)
+    fixed_iter = iter(fixed)
+    for i in slots[:need]:
+        chosen, variant, hook = None, None, "gen"
+        for idx in fixed_iter:   # まず固定60本（7日以内未使用）から
+            t = INSTA_EASY_TEMPLATES[idx]
+            if _valid(t):
+                chosen, variant, hook = t, idx, "fixed"
+                break
+        if chosen is None:
+            for _ in range(60):
+                t = generate_insta_easy_gen_post()
+                if _valid(t):
+                    chosen = t
+                    break
+        if chosen is None:
+            continue
+        posts[i] = chosen
+        k = _segment_registry_key(chosen)
+        used_keys.add(k)
+        registry[k] = {"segment": "INSTA_EASY", "hook": hook, "variant": variant, "created": today}
+    _save_segment_registry(registry)
+    return posts
+
+
 def generate_ai_jitsurei_post() -> str:
     return random.choice(AI_JITSUREI_TEMPLATES)
 
@@ -2909,7 +3051,9 @@ def generate_30_masa_posts() -> list[str]:
     # 最重要追加: nanimono_kizuki（「自分は何者か」×「気づき1つ」= Threadsの7割はこれ）
     defaults = {
         # ── 多様性拡張（1文目の被りを減らし、重複ガード通過数を増やす本丸）──
-        "variety":        45,  # {topic}×多数テンプレで1文目が爆発的に増える
+        # 2026-10-04: 主テーマをInstagram集客へ移したため経営一般のvarietyは45→15へ縮小
+        # （Instagramテーマ枠は後段の_fill_insta_theme_postsが前半50本のうち32本以上を保証）
+        "variety":        15,  # {topic}×多数テンプレで1文目が爆発的に増える
         # ── 最重要（インスタハカセ理論）──
         "nanimono_kizuki": 7,  # 「自分は何者か」×「気づき1つ」
         # ── 猿でもわかるアナリティクス ──
@@ -3042,6 +3186,10 @@ def generate_30_masa_posts() -> list[str]:
                 idx, _ = line_posts[-(i+1)]  # 後ろから削除
                 posts[idx] = non_line_posts[i]
 
+    # 通常枠（置換可能）の集合。以降に挿入する導線・AI・セグメント・ハカセ・ヒーローは全て保護対象
+    # （_fill_insta_theme_postsが通常枠の非Instagram投稿だけをInstagramテーマへ置換する 2026-10-04）
+    _base_normal_texts = set(posts)
+
     # ── LINE追加リンク(8PsIHHC)を確実に織り込む（コンサル成約の入口）──
     # 月間URL上限(2本)を再チェックしてから挿入する。
     # 上の言及率制御ブロックの後に無条件で挿入していたため毎日超過していたバグを修正(2026-07-03)。
@@ -3073,10 +3221,17 @@ def generate_30_masa_posts() -> list[str]:
         pos = min([9, 27][i] if i < 2 else (i * 9 + 9), len(posts))
         posts.insert(pos, pp)
 
-    # ── AI活用の実例投稿を1日3本、前半に固定配置（商材「AI活用支援」の需要醸成・2026-08-23）──
-    # 3本柱: 実例 / AIを取り入れるとこうなる / AIの基礎知識（各1本・初心者向け）
+    # ── AI活用の投稿を前半に固定配置（商材「AI活用支援」の需要醸成・2026-08-23）──
+    # 3本柱: 実例 / AIを取り入れるとこうなる / AIの基礎知識（初心者向け）
+    # 2026-10-04: 主テーマをInstagram集客へ移したため3本/日→1本/日へ縮小（削除はせず、
+    # 3柱を日替わりで1本ずつ回す。「AIでインスタ運用を楽にする」側は INSTA_EASY の AI時短群が担う）
     ai_posts = []
-    for pool in (AI_JITSUREI_TEMPLATES, AI_DEKIRU_TEMPLATES, AI_KISO_TEMPLATES):
+    _ai_pools = (AI_JITSUREI_TEMPLATES, AI_DEKIRU_TEMPLATES, AI_KISO_TEMPLATES)
+    try:
+        _ai_day = date.fromisoformat(TODAY).toordinal()
+    except Exception:
+        _ai_day = date.today().toordinal()
+    for pool in (_ai_pools[_ai_day % 3],):
         for _ in range(20):
             p = random.choice(pool)
             if p not in ai_posts and not _is_masa_sales_ng(p) and not _is_ng(p):
@@ -3103,6 +3258,9 @@ def generate_30_masa_posts() -> list[str]:
     posts = _insert_hakase_posts(posts, "masa", TODAY)
 
     posts = _insert_hero_posts(posts, "masa")   # 全挿入の最後（LINE最終チェックより前に置く）
+
+    # 主テーマ=Instagram集客（ハードルを下げる）: 前半50本のうち32本以上をInstagramテーマにする（2026-10-04）
+    posts = _fill_insta_theme_posts(posts, "masa", TODAY, _base_normal_texts)
 
     # ── LINE言及率 最終チェック（2026-08-29修正） ──
     # 従来のcap(4本)は本ブロックより前段（cta_profile/AI_TIME_CTA挿入前）で

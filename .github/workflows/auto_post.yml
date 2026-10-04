@@ -97,12 +97,17 @@ jobs:
           "
           }
           commit_logs() {
-            git add log_truth.jsonl log_masa.jsonl log_nagaoka.jsonl \
-                    log_truth_posted.jsonl log_masa_posted.jsonl log_nagaoka_posted.jsonl \
-                    insights_truth.json insights_nagaoka.json insights_masa.json \
-                    weights_truth.json weights_nagaoka.json weights_masa.json \
-                    feedback.json line_listin_state.json shared_posted_guard.jsonl \
-                    segment_registry.json dispatch_state.json 2>/dev/null || true
+            # 1件でも存在しないパスを渡すとgit addは全体を中止する（2026-10-02 dispatch_state.json未生成で
+            # 台帳pushが40時間止まった）。存在するファイルだけを個別に追加する
+            for f in log_truth.jsonl log_masa.jsonl log_nagaoka.jsonl \
+                     log_truth_posted.jsonl log_masa_posted.jsonl log_nagaoka_posted.jsonl \
+                     insights_truth.json insights_nagaoka.json insights_masa.json \
+                     weights_truth.json weights_nagaoka.json weights_masa.json \
+                     feedback.json line_listin_state.json shared_posted_guard.jsonl \
+                     segment_registry.json dispatch_state.json; do
+              [ -e "$f" ] && git add "$f" 2>/dev/null
+            done
+            true
             git diff --cached --quiet || git commit -q -m "chore: update logs [skip ci]"
             for i in 1 2 3; do
               git push -q && break

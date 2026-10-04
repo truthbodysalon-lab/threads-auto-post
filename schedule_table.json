@@ -1,5 +1,5 @@
 {
- "mode": "dry_run",
+ "mode": "live",
  "note": "jst_time=各repoの変更後cron(JST)+2分。since=day:当日0時JST以降のrunが有れば起動しない / slot:枠のjst_time-12分以降。weekdays: 月=0..日=6。enabled:falseで個別OFF、modeをdry_runに戻すと全停止。",
  "entries": [
   {

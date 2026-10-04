@@ -63,18 +63,25 @@ HYPOTHESES_FILE = BASE / "segment_hypotheses.json"
 BASELINE_FILE = BASE / "segment_baseline.json"
 REPORT_MD_DIR = Path("/Users/mt112/Desktop/my files/myfiles/SNS・Threads/分析レポート")
 
-ACCTS = ["masa", "truth", "nagaoka"]
+# masa_repeat = masaの軸2「来店後のリピート・クロージング悩み(R01-R12)」（2026-10-04）。
+# 実体のアカウントではなく masa の2本目のテスト軸を、独立したacctとして集計・判定するための仮想acct。
+# 台帳・実測は masa のものを使い、registryの axis=="repeat_close" と仮説の axis で軸を切り分ける。
+ACCTS = ["masa", "masa_repeat", "truth", "nagaoka"]
+BASE_ACCT = {"masa_repeat": "masa"}            # 仮想acct → 実acct
+AXIS_OF = {"masa": "insta_pain", "masa_repeat": "repeat_close"}   # registryのaxis（masaは未記載も軸1扱い）
 
 LOG_FILES = {
     "masa": BASE / "log_masa_posted.jsonl",
     "truth": BASE / "log_truth_posted.jsonl",
     "nagaoka": BASE / "log_nagaoka_posted.jsonl",
+    "masa_repeat": BASE / "log_masa_posted.jsonl",
 }
 # 閲覧等の実測ファイル: truthは歴史的経緯でpast_posts.json（アカウント名なし）が正本。
 PAST_POSTS_FILES = {
     "masa": BASE / "past_posts_masa.json",
     "truth": BASE / "past_posts.json",
     "nagaoka": BASE / "past_posts_nagaoka.json",
+    "masa_repeat": BASE / "past_posts_masa.json",
 }
 
 # セグメントの短縮コード(registry/config内の値)とフルネーム(レポート表示用)の対応。
@@ -109,7 +116,8 @@ SEG_JP = {
     },
 }
 SEG_JP["nagaoka"] = SEG_JP["truth"]
-ACCT_JP = {"masa": "masahide", "truth": "truth_body_salon", "nagaoka": "truth_nagaoka"}
+ACCT_JP = {"masa": "masahide", "masa_repeat": "masahide", "truth": "truth_body_salon", "nagaoka": "truth_nagaoka"}
+PAIN_TITLE = {"masa": "Instagram集客の悩みランキング", "masa_repeat": "来店後の悩みランキング"}
 
 # ── masaのテスト軸（2026-10-04）: 売上ステージS1-S5 → Instagram集客の悩みカテゴリI01-I16 ──
 # segment_config.json の masa.axis == "insta_pain" の時だけ切り替える（旧軸へ戻せる）。
@@ -138,6 +146,54 @@ def _init_pain_axis():
 
 
 _init_pain_axis()
+
+
+REPEAT_CATEGORIES_FILE = BASE / "repeat_pain_categories.json"
+REPEAT_AXIS = False
+
+
+def _init_repeat_axis():
+    """masa_repeat（軸2 repeat_close）: config の masa.axes.repeat_close がある時だけ有効化する。"""
+    global REPEAT_AXIS
+    try:
+        cfg = json.loads(CONFIG_FILE.read_text(encoding="utf-8"))
+        cats = json.loads(REPEAT_CATEGORIES_FILE.read_text(encoding="utf-8")).get("categories", [])
+    except Exception:
+        return
+    if not ((cfg.get("masa") or {}).get("axes") or {}).get("repeat_close") or not cats:
+        return
+    codes = [c["id"] for c in cats]
+    REPEAT_AXIS = True
+    SEG_CODES["masa_repeat"] = sorted(codes)
+    SEG_NAMES["masa_repeat"] = {c: "" for c in codes}
+    SEG_JP["masa_repeat"] = {c["id"]: c.get("short") or c.get("name") or c["id"] for c in cats}
+
+
+_init_repeat_axis()
+
+
+def _cfg_get(cfg: dict, acct: str) -> dict:
+    """segment_config.json から acct の設定を返す（masa_repeat は masa.axes.repeat_close）。無ければ {}。"""
+    if acct in BASE_ACCT:
+        return (((cfg.get(BASE_ACCT[acct]) or {}).get("axes") or {}).get(AXIS_OF[acct])) or {}
+    return cfg.get(acct) or {}
+
+
+def _cfg_put(cfg: dict, acct: str, value: dict) -> None:
+    if acct in BASE_ACCT:
+        cfg.setdefault(BASE_ACCT[acct], {}).setdefault("axes", {})[AXIS_OF[acct]] = value
+    else:
+        cfg[acct] = value
+
+
+def _hyp_belongs(h: dict, acct: str) -> bool:
+    """仮説hがこのacct（masaは軸ごと）の対象か。masa軸1はaxis未記載(既存IP仮説)も含み、repeat_closeは除く。"""
+    base = BASE_ACCT.get(acct, acct)
+    if (h.get("acct") or "masa") != base:
+        return False
+    if base != "masa":
+        return True
+    return (h.get("axis") or "insta_pain") == AXIS_OF.get(acct, "insta_pain")
 
 
 def _full_name(acct: str, c: str) -> str:
@@ -170,7 +226,7 @@ def _short_code(acct: str, full_seg: str) -> str | None:
 
 
 def _is_pain_axis(acct: str) -> bool:
-    return acct == "masa" and PAIN_AXIS
+    return (acct == "masa" and PAIN_AXIS) or (acct == "masa_repeat" and REPEAT_AXIS)
 
 
 HOOKS = ["low", "high"]
@@ -345,8 +401,13 @@ def build_report(acct: str):
         # registryのキーは1行目正規化40字のみでacctを区別しないため、
         # 引き当てたエントリのacctがこのレポート対象acctと一致するかを必ず確認する
         # （偶然の文言一致で他acctの登録を誤って集計しないため）。
-        if reg is not None and _entry_acct(reg) != acct:
+        if reg is not None and _entry_acct(reg) != BASE_ACCT.get(acct, acct):
             reg = None
+        # masaは2軸（2026-10-04）: registryのaxisが対象軸と違う投稿は未登録扱い（軸をまたいで集計しない）。
+        # 軸未記載のmasa登録（HAKASE/INSTA_EASY/旧S系/軸1）は軸1側に属す。
+        if reg is not None and BASE_ACCT.get(acct, acct) == "masa":
+            if (reg.get("axis") or "insta_pain") != AXIS_OF[acct]:
+                reg = None
         raw_seg = reg.get("segment") if reg else None
         # HAKASE（インスタ運用の原則投稿・masa専用・2026-09-23）はS1-S5と別枠の集計対象なので
         # SEGMENTSの正規化を通さずそのまま保持する（_norm_segmentはSEGMENTS以外はNoneを返し
@@ -366,7 +427,7 @@ def build_report(acct: str):
         })
 
     cfg = _load_json(CONFIG_FILE, {})
-    min_n = cfg.get(acct, {}).get("min_n", DEFAULT_MIN_N) if isinstance(cfg, dict) else DEFAULT_MIN_N
+    min_n = _cfg_get(cfg, acct).get("min_n", DEFAULT_MIN_N) if isinstance(cfg, dict) else DEFAULT_MIN_N
 
     report = {
         "acct": acct,
@@ -374,7 +435,8 @@ def build_report(acct: str):
         "params": {"min_n": min_n, "loser_min_n": LOSER_MIN_N,
                     "winner_index": WINNER_INDEX, "loser_index": LOSER_INDEX,
                     "windows_days": list(WINDOWS)},
-        "registry_loaded": sum(1 for v in registry.values() if _entry_acct(v) == acct),
+        "registry_loaded": sum(1 for v in registry.values() if _entry_acct(v) == BASE_ACCT.get(acct, acct)
+                               and (acct not in AXIS_OF or (v.get("axis") or "insta_pain") == AXIS_OF[acct])),
         "log_entries": len(log_entries),
         "windows": {},
         "segment_summary": {},  # hook問わずsegment単位（--apply判定用）
@@ -439,7 +501,7 @@ def build_report(acct: str):
         hyp_ids_from_rows = {j["hypothesis_id"] for j in rows if j["hypothesis_id"]}
         hyp_ids_from_file = {
             h.get("id") for h in (hyp_data or {}).get("hypotheses", [])
-            if isinstance(h, dict) and h.get("id") and (h.get("acct") or "masa") == acct
+            if isinstance(h, dict) and h.get("id") and _hyp_belongs(h, acct)
             and h.get("status") != "archived"
         }
         hyp_summary = {}
@@ -626,10 +688,10 @@ def apply_share_pain(report, acct: str):
     （30日窓に古いデータが残るため、戻した直後に再停止されるのを防ぐ）。
     winner_categories（index降順）はdaily-marketing-automationがINSTA_EASY通常枠・ヒーロー題材の比率を上げる材料。"""
     cfg = _load_json(CONFIG_FILE, None)
-    if not isinstance(cfg, dict) or acct not in cfg:
+    if not isinstance(cfg, dict) or not _cfg_get(cfg, acct):
         print(f"[apply:{acct}] segment_config.json が無い/不正のため share 調整をスキップ")
         return False, None
-    acct_cfg = cfg[acct]
+    acct_cfg = _cfg_get(cfg, acct)
     old_share = dict(acct_cfg.get("share", {}))
     retest = dict(acct_cfg.get("retest") or {})
     grace = dict(acct_cfg.get("retest_grace") or {})
@@ -675,7 +737,7 @@ def apply_share_pain(report, acct: str):
     new_cfg["winner_categories"] = [_short_code(acct, f) for f in winners]
     changed = (new_cfg != acct_cfg)
     if changed:
-        cfg[acct] = new_cfg
+        _cfg_put(cfg, acct, new_cfg)
         CONFIG_FILE.write_text(json.dumps(cfg, ensure_ascii=False, indent=2), encoding="utf-8")
         print(f"[apply:{acct}] 悩みshare更新: winner={winners} loser(停止→{PAIN_RETEST_DAYS}日後に再テスト)={losers} "
               f"retest={retest} → {new_share}")
@@ -709,7 +771,7 @@ def apply_hypotheses(report, acct: str):
     for h in data.get("hypotheses", []):
         if not isinstance(h, dict):
             continue
-        if (h.get("acct") or "masa") != acct:
+        if not _hyp_belongs(h, acct):
             continue
         hid = h.get("id")
         if not hid:
@@ -872,19 +934,21 @@ def _pain_rows(acct: str, report: dict, window: str = "30d") -> list[dict]:
 def _pain_section(acct: str, report: dict, apply_detail: dict, daily: bool = True) -> list[str]:
     """masaの秘書向け節: Instagram集客の悩みランキング（2026-10-04）。専門記号(I03等)は出さない。"""
     min_n = report.get("params", {}).get("min_n", DEFAULT_MIN_N)
-    lines = [f"■ {ACCT_JP.get(acct, acct)}（Instagram集客の悩みランキング）"]
+    lines = [f"■ {ACCT_JP.get(acct, acct)}（{PAIN_TITLE.get(acct, '悩みランキング')}）"]
+    # 軸2(来店後)は上位2・反応が薄い1、軸1は上位3・反応が薄い2（2026-10-04 本人指示）
+    top_n, weak_n = (2, 1) if acct == "masa_repeat" else (3, 2)
     rows = sorted(_pain_rows(acct, report), key=lambda r: r["index"], reverse=True)
     judged = [r for r in rows if r["n"] >= min_n]
     if not rows:
         lines.append("・まだ集計できる悩み投稿なし（悩み別の配信は始まったばかり。各悩み"
                      f"{min_n}本たまってから順位を判定）")
     else:
-        for i, r in enumerate(rows[:3], 1):
+        for i, r in enumerate(rows[:top_n], 1):
             tag = "" if r["n"] >= min_n else "・参考値"
             lines.append(f"・{i}位 {r['name']}：全体の{round(r['index'], 1)}倍（投稿{r['n']}本{tag}）")
-        top_names = {r["name"] for r in rows[:3]}
+        top_names = {r["name"] for r in rows[:top_n]}
         weak = [r for r in sorted(rows, key=lambda r: r["index"])
-                if r["n"] >= 2 and r["index"] < 1.0 and r["name"] not in top_names][:2]
+                if r["n"] >= 2 and r["index"] < 1.0 and r["name"] not in top_names][:weak_n]
         if weak:
             lines.append("・反応が薄い：" + "、".join(
                 f"{r['name']}（全体の{round(r['index'], 1)}倍・投稿{r['n']}本）" for r in weak))
@@ -900,7 +964,8 @@ def _pain_section(acct: str, report: dict, apply_detail: dict, daily: bool = Tru
     elif judged:
         nxt = "決め手になる差はまだなし。均等に配信を続けて差が出るのを待つ"
     else:
-        nxt = "16個の悩みを毎日6つずつ回し、各悩み5本そろうまで均等に配信"
+        _pd = _cfg_get(_load_json(CONFIG_FILE, {}), acct).get("per_day", "")
+        nxt = f"{len(SEG_CODES.get(acct, []))}個の悩みを毎日{_pd}つずつ回し、各悩み{min_n}本そろうまで均等に配信"
     lines.append(f"・次の打ち手：{nxt}")
     share_detail = apply_detail.get("share") if apply_detail else None
     if share_detail:
@@ -908,7 +973,7 @@ def _pain_section(acct: str, report: dict, apply_detail: dict, daily: bool = Tru
         for code, new_v in share_detail["new_share"].items():
             old_v = share_detail["old_share"].get(code, 0)
             if new_v != old_v:
-                diffs.append(f"{SEG_JP['masa'].get(code, code)}を{'増やしました' if new_v > old_v else '止めました' if new_v == 0 else '戻しました'}")
+                diffs.append(f"{SEG_JP[acct].get(code, code)}を{'増やしました' if new_v > old_v else '止めました' if new_v == 0 else '戻しました'}")
         lines.append("・配分の変更：" + ("、".join(diffs) if diffs else "なし"))
     else:
         lines.append("・配分の変更：なし")
@@ -1229,10 +1294,12 @@ def _write_obsidian_journal(results: dict, secretary_body: str | None, sent_stat
         parts.append(_hypothesis_table_md(acct, report))
         parts.append("")
 
-    if _is_pain_axis("masa"):
-        parts.append("### (b2) masa Instagram集客の悩みランキング（30日窓・全体中央値比）")
-        _rep = results["masa"][0]
-        _rows = sorted(_pain_rows("masa", _rep), key=lambda r: r["index"], reverse=True)
+    for _pa, _lab in (("masa", "(b2) masa Instagram集客の悩みランキング"),
+                      ("masa_repeat", "(b3) masa 来店後のリピート・クロージング悩みランキング")):
+      if _is_pain_axis(_pa) and _pa in results:
+        parts.append(f"### {_lab}（30日窓・全体中央値比）")
+        _rep = results[_pa][0]
+        _rows = sorted(_pain_rows(_pa, _rep), key=lambda r: r["index"], reverse=True)
         if _rows:
             parts.append("| 順位 | 悩み | n | 閲覧中央値 | 全体比 | 判定 |")
             parts.append("|---|---|---|---|---|---|")
@@ -1241,7 +1308,7 @@ def _write_obsidian_journal(results: dict, secretary_body: str | None, sent_stat
         else:
             parts.append("(悩み別の実測データなし・配信開始直後)")
         parts.append("")
-        parts.extend(_pain_map_lines("masa", _rep))
+        parts.extend(_pain_map_lines(_pa, _rep))
         parts.append("")
 
     parts.append("### (c) 配分・仮説statusの変更")
@@ -1405,7 +1472,7 @@ def main():
     elif acct in ACCTS:
         run_for_acct(acct, do_apply, do_json)
     else:
-        print(f"[error] 不明なacct指定: {acct}（masa/truth/nagaoka/all のいずれかを指定）", file=sys.stderr)
+        print(f"[error] 不明なacct指定: {acct}（masa/masa_repeat/truth/nagaoka/all のいずれかを指定）", file=sys.stderr)
         sys.exit(1)
 
 

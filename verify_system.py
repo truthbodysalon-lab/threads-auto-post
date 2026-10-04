@@ -613,6 +613,43 @@ def check_execution_gaps():
                     f"昨日({yday})のsegment_registry登録{n_yday}件"
                     "（3本未満・セグメントテスト投稿が回っていない疑い）")
 
+    # C15追加(2026-10-04): masaの軸2「来店後のリピート・クロージング悩み」(R01-R12・segment_config masa.axes.repeat_close)
+    #   昨日のR系登録(axis=repeat_close)が1本未満ならWARN。導入日(axis_since)前日までは判定保留のPASS。
+    try:
+        _ax2 = ((seg_cfg.get("masa") or {}).get("axes") or {}).get("repeat_close")
+        if _ax2:
+            _yd = (date.today() - timedelta(days=1)).isoformat()
+            _n2 = sum(1 for v in reg.values()
+                      if isinstance(v, dict) and v.get("created") == _yd and _acct_of(v) == "masa"
+                      and v.get("axis") == "repeat_close")
+            _since = _ax2.get("axis_since") or "0000-00-00"
+            if _n2 >= 1:
+                add("exec:segment_test:masa_repeat", "C.実行ギャップ", "PASS", f"昨日({_yd})の軸2(来店後)登録{_n2}件")
+            elif _yd < _since:
+                add("exec:segment_test:masa_repeat", "C.実行ギャップ", "PASS",
+                    f"軸2(来店後のリピート・クロージング)は{_since}導入。前日({_yd})の登録は無くて当然のため判定保留")
+            else:
+                add("exec:segment_test:masa_repeat", "C.実行ギャップ", "WARN",
+                    f"昨日({_yd})の軸2(来店後)登録{_n2}件（1本未満・軸2の投稿が回っていない疑い）")
+            # 全カテゴリにlow/high原稿があるか（欠けるとその日の軸2が2本未満になる）
+            try:
+                _hy2 = json.loads((BASE / "segment_hypotheses.json").read_text(encoding="utf-8")).get("hypotheses", [])
+            except Exception:
+                _hy2 = []
+            _miss2 = []
+            for _c in (_ax2.get("share") or {}):
+                for _hook in ("low", "high"):
+                    if not any(isinstance(h, dict) and (h.get("acct") or "masa") == "masa" and h.get("axis") == "repeat_close"
+                               and h.get("segment") == _c and h.get("status") not in ("archived", "retired", "loser")
+                               and any(isinstance(p, dict) and p.get("hook") == _hook and p.get("text") for p in h.get("posts") or [])
+                               for h in _hy2):
+                        _miss2.append(f"{_c}/{_hook}")
+            add("exec:segment_repeat_pool", "C.実行ギャップ", "PASS" if not _miss2 else "WARN",
+                f"来店後{len(_ax2.get('share') or {})}カテゴリ全てにlow/high原稿あり・per_day={_ax2.get('per_day')}"
+                if not _miss2 else f"原稿の無いカテゴリ/フック: {', '.join(_miss2[:8])}（軸2が2本未満になる）")
+    except Exception as e:
+        add("exec:segment_test:masa_repeat", "C.実行ギャップ", "WARN", f"確認不可: {e}")
+
     # C15追加: Obsidian由来の店舗経営の悩み・質問から作った仮説(segment_hypotheses.json)が
     #          実際に投稿枠へ投入されているか、acctごとに判定。ファイル不在 or hypotheses 0件は
     #          「仮説の中身は別エージェントが並行して作成中」で未着手なだけなのでPASS（WARNにしない）。

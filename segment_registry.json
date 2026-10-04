@@ -159,7 +159,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 4,
-    "created": "2026-10-03"
+    "created": "2026-10-05"
   },
   "産後の骨盤の歪みが気になるママへ。": {
     "segment": "T3",
@@ -292,7 +292,7 @@
   "産後、体の痛みを我慢するママへ。": {
     "segment": "T3",
     "hook": "low",
-    "created": "2026-10-01",
+    "created": "2026-10-05",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z11_truth"
@@ -332,7 +332,7 @@
   "重い荷物運びで腰を痛めた人へ。": {
     "segment": "T4",
     "hook": "low",
-    "created": "2026-10-01",
+    "created": "2026-10-05",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z14_nagaoka"
@@ -400,7 +400,7 @@
   "頭痛薬が常備品になっている人へ。": {
     "segment": "T2",
     "hook": "low",
-    "created": "2026-09-29",
+    "created": "2026-10-05",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z07_truth"
@@ -431,7 +431,7 @@
   "朝からこめかみが重い人へ。": {
     "segment": "T2",
     "hook": "low",
-    "created": "2026-09-29",
+    "created": "2026-10-05",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z06_nagaoka"
@@ -506,7 +506,7 @@
   "デスクワークで肩や首が重い人へ。": {
     "segment": "T1",
     "hook": "low",
-    "created": "2026-09-29",
+    "created": "2026-10-05",
     "acct": "truth",
     "variant": 0
   },
@@ -528,14 +528,14 @@
   "立ち仕事や介護で腰と脚がつらい人へ。": {
     "segment": "T4",
     "hook": "low",
-    "created": "2026-09-29",
+    "created": "2026-10-05",
     "acct": "truth",
     "variant": 0
   },
   "スマホ首で悩む人へ。": {
     "segment": "T1",
     "hook": "low",
-    "created": "2026-09-29",
+    "created": "2026-10-05",
     "acct": "nagaoka",
     "variant": 0
   },
@@ -550,7 +550,7 @@
   "抱っこ・授乳で背中が丸くなるママへ。": {
     "segment": "T3",
     "hook": "low",
-    "created": "2026-09-29",
+    "created": "2026-10-05",
     "acct": "nagaoka",
     "variant": 0
   },
@@ -713,7 +713,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 15,
-    "created": "2026-10-02"
+    "created": "2026-10-05"
   },
   "投稿を出したら終わり、にしていませんか。": {
     "segment": "HAKASE",
@@ -1527,5 +1527,209 @@
     "axis": "repeat_close",
     "variant": null,
     "hypothesis_id": "RP19"
+  },
+  "インスタで、予約のDMを待っている人へ。": {
+    "segment": "I13",
+    "hook": "low",
+    "created": "2026-10-05",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP37"
+  },
+  "インスタの数字が、難しくて見ない人へ。": {
+    "segment": "I14",
+    "hook": "low",
+    "created": "2026-10-05",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP40"
+  },
+  "インスタの広告が、お金がかかりそうで怖い人へ。": {
+    "segment": "I15",
+    "hook": "low",
+    "created": "2026-10-05",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP43"
+  },
+  "インスタの文章に、AIをどう使うか分からない人へ。": {
+    "segment": "I16",
+    "hook": "low",
+    "created": "2026-10-05",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP46"
+  },
+  "インスタに、これでいいのかと迷って出せない人へ。": {
+    "segment": "I17",
+    "hook": "low",
+    "created": "2026-10-05",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP68"
+  },
+  "インスタを何から始めればいいか分からない人へ。": {
+    "segment": "I01",
+    "hook": "low",
+    "created": "2026-10-05",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP01"
+  },
+  "3か月来ていない人に、連絡できない院長へ。": {
+    "segment": "R09",
+    "hook": "low",
+    "created": "2026-10-05",
+    "acct": "masa",
+    "axis": "repeat_close",
+    "variant": null,
+    "hypothesis_id": "RP22"
+  },
+  "紹介が自然に生まれない院長へ。": {
+    "segment": "R10",
+    "hook": "low",
+    "created": "2026-10-05",
+    "acct": "masa",
+    "axis": "repeat_close",
+    "variant": null,
+    "hypothesis_id": "RP24"
+  },
+  "問い合わせが少ないのは、投稿のせいではありません。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 46,
+    "created": "2026-10-05"
+  },
+  "伸びている投稿を、まねして試していい。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 68,
+    "created": "2026-10-05"
+  },
+  "Threadsで伸びた投稿は、インスタでも使えます。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 66,
+    "created": "2026-10-05"
+  },
+  "DMで、売り込もうとしなくていいです。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 43,
+    "created": "2026-10-05"
+  },
+  "インスタを、歯みがきのように習慣にします。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 70,
+    "created": "2026-10-05"
+  },
+  "インスタの投稿は、来週の分を今週に作れます。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 71,
+    "created": "2026-10-05"
+  },
+  "DMが怖い、と感じる人は多いです。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 47,
+    "created": "2026-10-05"
+  },
+  "インスタの肩書きは、15字から17字で足ります。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 74,
+    "created": "2026-10-05"
+  },
+  "DMの返事を、毎回ゼロから考えていませんか。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 44,
+    "created": "2026-10-05"
+  },
+  "プロフィールに、凝ったデザインはいりません。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 1,
+    "created": "2026-10-05"
+  },
+  "インスタは、才能がある人の場所ではありません。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 33,
+    "created": "2026-10-05"
+  },
+  "予約の前の不安は、先に消しておきます。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 79,
+    "created": "2026-10-05"
+  },
+  "インスタの投稿は、60点で出して大丈夫です。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 63,
+    "created": "2026-10-05"
+  },
+  "フォロワーが100人に届かなくても、お店は回ります。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 24,
+    "created": "2026-10-05"
+  },
+  "インスタのネタは、尽きません。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 61,
+    "created": "2026-10-05"
+  },
+  "リールは、毎日出さなくても大丈夫です。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 16,
+    "created": "2026-10-05"
+  },
+  "ストーリーズは、24時間で消えます。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 19,
+    "created": "2026-10-05"
+  },
+  "インスタのストーリーズは、3枚以上に分けます。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 75,
+    "created": "2026-10-05"
+  },
+  "ネタ帳を作ろう、と気負わなくて大丈夫です。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 10,
+    "created": "2026-10-05"
+  },
+  "インスタのハイライトは、4つあれば足ります。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 78,
+    "created": "2026-10-05"
+  },
+  "広告の設定が難しそう、と止まっていませんか。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 50,
+    "created": "2026-10-05"
+  },
+  "数字は、全部見なくていいです。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 36,
+    "created": "2026-10-05"
   }
 }

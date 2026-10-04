@@ -70,6 +70,11 @@ jobs:
           GH_PAT=${{ secrets.GH_PAT }}
           GH_REPO=${{ github.repository }}
           ANTHROPIC_API_KEY=${{ secrets.ANTHROPIC_API_KEY }}
+          X_API_KEY=${{ secrets.X_API_KEY }}
+          X_API_SECRET=${{ secrets.X_API_SECRET }}
+          X_ACCESS_TOKEN=${{ secrets.X_ACCESS_TOKEN }}
+          X_ACCESS_TOKEN_SECRET=${{ secrets.X_ACCESS_TOKEN_SECRET }}
+          DISCORD_WEBHOOK_URL=${{ secrets.DISCORD_WEBHOOK_URL }}
           EOF
 
       - name: Post loop (10分ごと・約5時間40分)
@@ -104,7 +109,7 @@ jobs:
                      insights_truth.json insights_nagaoka.json insights_masa.json \
                      weights_truth.json weights_nagaoka.json weights_masa.json \
                      feedback.json line_listin_state.json shared_posted_guard.jsonl \
-                     segment_registry.json dispatch_state.json; do
+                     segment_registry.json dispatch_state.json log_x_truth_posted.jsonl; do
               [ -e "$f" ] && git add "$f" 2>/dev/null
             done
             true
@@ -123,6 +128,8 @@ jobs:
             timeout 50m python3 auto_post.py all || true
             python3 token_manager.py --sync-secrets || true
             timeout 2m python3 dispatcher.py || true
+            # X整体アカウント（2026-10-04）: 枠時刻に1本ずつ。キー未設定なら即終了
+            timeout 2m python3 x_post.py || true
             commit_logs || true
             echo "::endgroup::"
             SLEEP=$(( 600 - ( $(date +%s) - T0 ) ))

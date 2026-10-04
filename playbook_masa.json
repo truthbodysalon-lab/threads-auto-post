@@ -1,6 +1,6 @@
 {
  "acct": "masa",
- "version": 60,
+ "version": 61,
  "updated": "2026-10-04",
  "description": "修正ポイント（勝ち構造・死ぬ構造）の正本。毎朝サブエージェントEが実測データで各ルールを検証し、効かなくなったルールはretired、新発見はtestingで追加、実証されたらactiveに昇格する。ヒーロー投稿と新テンプレはこのプレイブックのactiveルールに従って書く。",
  "rules": [
@@ -336,6 +336,15 @@
    "last_validated": "2026-10-04",
    "rule": "【Instagram集客の悩みの所在テスト】1行目で『その悩みを持つ人』を名指し（例「投稿ネタが3日で尽きる人へ。」）、悩みカテゴリ16個(I01-I16)×low/highフックで1日6本を回し、どこに悩みが多いか＝どの悩みの投稿が閲覧を集めるかを測る。末尾は今日できる小さな一手1つ。判定=悩み別の閲覧中央値÷アカウント全体中央値(index)。index>=1.3かつn>=5→主題に格上げ(share+1・INSTA_EASY通常枠とヒーローの題材比率UP)／index<=0.7かつn>=8→share0で2週間止め再テスト",
    "evidence": "本人指示2026-10-04『Instagram集客の悩みがどこかをより細かく仮説を立てて投稿し、インプレッションを見ながら方向性を決めて』。悩みマップ=insta_pain_categories.json(根拠は講義・面談・Notion・商売人の学校の原文)、原稿=segment_hypotheses.json IP01-IP48。着手前の実測は4日分(past_posts_masa 200件・中央値53)しかなくカテゴリ別比較は未了＝segment_report.pyが毎朝集計・n>=5で判定。日曜に悩みの地図(カテゴリ別閲覧中央値)を秘書へ報告"
+  },
+  {
+   "id": "W_REPEAT_CLOSE",
+   "type": "win",
+   "status": "testing",
+   "added": "2026-10-04",
+   "last_validated": "2026-10-04",
+   "rule": "【来店後のリピート・クロージング悩みテスト(軸2)】主テーマ(Instagram集客・軸1)は変えず、別軸として1日2本(anchors[11,24])。1行目で『その悩みを持つ人』を名指し（例「2回目の予約が入らない院長へ。」）、悩み12カテゴリ(R01-R12)×low(今日からできる一言1つ)/high(逆説・断定対比)で回す。『クロージング』は投稿で使わず『次回の提案・通い続けてもらう話し方・回数券やコースの伝え方』に言い換える。面談/金額/決済/申込/割引はNG・押し売りを勧めない・店舗名/受講者名/創作統計なし・末尾は今日できる小さな行動1つ。判定=悩み別の閲覧中央値÷アカウント全体中央値(index)。index>=1.3かつn>=5→share+1(最大3)／index<=0.7かつn>=8→share0で2週間止め再テスト。winnerはヒーロー10本のうち1本の題材にする",
+   "evidence": "本人指示2026-10-04『来店後のリピートやクロージングの悩みを別のテストとして回す』。講義要点まとめで来店後リピート・継続・クロージングが最多テーマ(8件以上)。悩みマップ=repeat_pain_categories.json(根拠数は別個の出典箇所数・n小のため仮説。R09は根拠が弱い)、原稿=segment_hypotheses.json RP01-RP29(axis=repeat_close)。着手前の実測なし＝segment_report.py(masa_repeat)が毎朝集計・n>=5で判定。秘書報告のmasa節に来店後の悩みランキング(上位2・反応が薄い1)を出す"
   }
  ],
  "changelog": [
@@ -627,6 +636,11 @@
    "version": 60,
    "date": "2026-10-04",
    "change": "masaのテスト軸を売上ステージ(W_SEG)からInstagram集客の悩みカテゴリへ切替（本人指示）。W_SEGをretired、W_INSTA_PAINをtestingで追加。segment_config masa=axis insta_pain/per_day6/anchors[8,16,18,26,34,44]、仮説IP01-IP48追加・H01-H37 archived、segment_report.pyに悩みランキング/悩みの地図/自動share調整(winner+1・loser0→14日後再テスト)を追加"
+  },
+  {
+   "version": 61,
+   "date": "2026-10-04",
+   "change": "masaに軸2『来店後のリピート・クロージング悩み』(R01-R12・1日2本)を追加（本人指示）。W_REPEAT_CLOSEをtestingで追加。segment_config masa.axes.repeat_close(per_day2/anchors[11,24])、仮説RP01-RP29追加、segment_report.pyにmasa_repeat(軸別集計・判定・秘書節・日誌)、verify C15を軸別化。軸1(W_INSTA_PAIN)・主テーマは不変"
   }
  ]
 }

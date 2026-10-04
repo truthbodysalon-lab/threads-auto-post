@@ -1,6 +1,6 @@
 {
   "acct": "truth",
-  "generated_at": "2026-10-04 14:58",
+  "generated_at": "2026-10-04 15:51",
   "params": {
     "min_n": 5,
     "loser_min_n": 8,
@@ -13,7 +13,7 @@
     ]
   },
   "registry_loaded": 30,
-  "log_entries": 6756,
+  "log_entries": 6759,
   "windows": {
     "7d": {
       "baseline": {

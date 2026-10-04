@@ -2847,7 +2847,7 @@ def _rotate_segments(share: dict, per_day: int, rotation: str | None, day_num: i
     return picked
 
 
-def _insert_segment_tests(posts: list[str], acct: str, today: str) -> list[str]:
+def _insert_segment_tests(posts: list[str], acct: str, today: str, axis: str | None = None) -> list[str]:
     """masa/truth/nagaoka共通: セグメント別テスト投稿をanchors位置に投入し、
     segment_registry.jsonへacct付きで登録する
     （2026-09-22 小川さんセッション: masaの売上ステージS1-S5で実装。
@@ -2860,17 +2860,27 @@ def _insert_segment_tests(posts: list[str], acct: str, today: str) -> list[str]:
     候補プールが空（truth/nagaokaは原稿投入前のプレースホルダのためあり得る）の層は
     スキップして落ちない。
     検証専用呼び出し（verify_system.py等）は環境変数 SEGMENT_REGISTRY_DRY=1 を立てることで
-    _save_segment_registry が台帳書き込みだけをスキップする（本関数の呼び出し方は変えない）。"""
+    _save_segment_registry が台帳書き込みだけをスキップする（本関数の呼び出し方は変えない）。
+    axis（2026-10-04）: masaの複数軸テスト。None=従来の軸（masa.axis=insta_painなど・挙動不変）。
+    axis="repeat_close"=軸2（来店後のリピート・クロージング悩み R01〜R12）で、設定は
+    segment_config.json の masa.axes[axis]。軸2はInstagram外の題材なので_is_insta_themeを要求せず、
+    registryへ axis を記録して segment_report.py が軸ごとに集計する。"""
     if acct not in ("masa", "truth", "nagaoka"):
         return posts
 
-    cfg = _load_segment_config().get(acct, {})
+    _acct_cfg = _load_segment_config().get(acct, {})
+    cfg = _acct_cfg
+    if axis:
+        cfg = (_acct_cfg.get("axes") or {}).get(axis) or {}
+        if acct != "masa" or not cfg:
+            return posts
     share = cfg.get("share", {})
     default_anchors = [8, 16, 26, 34, 44] if acct == "masa" else []
     anchors = cfg.get("anchors", default_anchors)
     templates_for_acct = SEGMENT_TEST_TEMPLATES_BY_ACCT.get(acct, {})
     # axis=insta_pain（masa・2026-10-04）: 原稿は全て segment_hypotheses.json 側（固定テンプレ無し）
-    pain_axis = (acct == "masa" and cfg.get("axis") == "insta_pain")
+    pain_axis = (acct == "masa" and (bool(axis) or cfg.get("axis") == "insta_pain"))
+    axis_name = axis or ("insta_pain" if pain_axis else None)
     if not share or (not templates_for_acct and not pain_axis):
         return posts
 
@@ -2912,7 +2922,8 @@ def _insert_segment_tests(posts: list[str], acct: str, today: str) -> list[str]:
             if acct == "masa":
                 ng = _is_masa_sales_ng(text) or _is_ng(text) or len(text) > 250
                 if pain_axis:
-                    ng = ng or _is_masa_yokokoku_ng(text) or not _is_insta_theme(text) \
+                    ng = ng or _is_masa_yokokoku_ng(text) \
+                        or (axis_name == "insta_pain" and not _is_insta_theme(text)) \
                         or not _inspect_ok(text, "masa", log=False)
             else:
                 # truth/nagaoka: 面談・金額NG(_is_masa_sales_ng)は対象外。
@@ -2937,6 +2948,8 @@ def _insert_segment_tests(posts: list[str], acct: str, today: str) -> list[str]:
         pos = anchors[i] if i < len(anchors) else (anchors[-1] if anchors else len(posts))
         posts.insert(min(pos, len(posts)), cand["text"])
         entry = {"segment": seg, "hook": hk, "created": today, "acct": acct}
+        if axis_name:
+            entry["axis"] = axis_name
         if cand["source"] == "hypo":
             entry["variant"] = None
             entry["hypothesis_id"] = cand["key"]
@@ -3304,6 +3317,9 @@ def generate_30_masa_posts() -> list[str]:
     # 売上ステージ別セグメントテスト（S1-S5・2026-09-22）を固定アンカーに投入。
     # AI3本柱(4/20/36)・時短CTA(12)の後、ヒーロー投稿より前（衝突回避・登録漏れ防止）。
     posts = _insert_segment_tests(posts, "masa", TODAY)
+    # 軸2=来店後のリピート・クロージング悩み（2026-10-04・講義で最多テーマ）を2本/日、軸1と別アンカーに投入。
+    # 主題(Instagram集客)は軸1のまま。軸2は通常枠ではないため_fill_insta_theme_postsの置換対象外。
+    posts = _insert_segment_tests(posts, "masa", TODAY, axis="repeat_close")
 
     # インスタ運用の原則翻案投稿（HAKASE）を1日2本、22/30に投入（2026-09-23）。
     posts = _insert_hakase_posts(posts, "masa", TODAY)
@@ -3339,7 +3355,12 @@ def generate_30_masa_posts() -> list[str]:
                 if (repl and "LINE" not in repl and "ライン" not in repl and "lin.ee" not in repl
                         and not _is_ng(repl) and not _is_masa_sales_ng(repl) and repl not in posts):
                     posts[idx] = repl
+                    _base_normal_texts.add(repl)
                     break
+
+        # LINE超過分の差し替えでInstagramテーマ投稿が非Instagram投稿に置き換わり32本を割ることがあった
+        # （2026-10-04 実測: 前半50本中30〜31本）。差し替え後に不足分だけ再補充する（足りていれば何もしない）。
+        posts = _fill_insta_theme_posts(posts, "masa", TODAY, _base_normal_texts)
 
     return posts[:100]
 

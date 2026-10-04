@@ -4879,6 +4879,760 @@
         "updated": null
       },
       "evidence": "masa講義 2026-03-10 UP LINK『やめる理由を探したりしてしまう』（出典: 講義ノート/自分の講義/00_masa講義_要点まとめ.md・資料ID M01）"
+    },
+    {
+      "id": "RP01",
+      "acct": "masa",
+      "axis": "repeat_close",
+      "segment": "R01",
+      "theme": "リピート・クロージング悩み",
+      "hypothesis": "「次回どうします?」と毎回聞くのが誠実と思い込んでいる→初回に全体の流れを先に伝えれば、売られ感が消えると言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "初回の説明で、次回の話ができない院長へ。\n\n最初に「全体で何回くらい通うか」を話します。\nそれだけで、毎回の次回の話が自然になります。\n\n今日は、初回の最後に回数の目安を一言伝えてください。"
+        },
+        {
+          "hook": "high",
+          "text": "毎回「次はどうします？」と聞いている院長へ。\n\n聞くたびに、売られている感じが残ります。\n最初に全体の流れを話せば、毎回聞かなくて済みます。\n\n今日は、初回の流れを3行で書き出してください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "初回で全体の道筋を伝えられない(根拠4件・中)。出典: CNS / G0403 / L0307N / L0307T（出典IDは repeat_pain_categories.json の source_ids 参照）"
+    },
+    {
+      "id": "RP02",
+      "acct": "masa",
+      "axis": "repeat_close",
+      "segment": "R01",
+      "theme": "リピート・クロージング悩み",
+      "hypothesis": "施術後に「実はコースがあって」と切り出して止まっている→施術前に許可を取れば自然になると言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "コースの話を切り出せない院長へ。\n\n施術の前に「終わったら提案してもいいですか」と聞きます。\n許可があれば、話は唐突になりません。\n\n今日は、施術の前に許可を取る一言を決めてください。"
+        },
+        {
+          "hook": "high",
+          "text": "施術が終わってから「実は…」と話す院長へ。\n\nお客様は、急に売られた気持ちになります。\n話が唐突に聞こえるのは、順番のせいです。\n\n今日は、提案の話を施術の前に回してください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "初回で全体の道筋を伝えられない(根拠4件・中)。出典: CNS / G0403 / L0307N / L0307T（出典IDは repeat_pain_categories.json の source_ids 参照）"
+    },
+    {
+      "id": "RP03",
+      "acct": "masa",
+      "axis": "repeat_close",
+      "segment": "R01",
+      "theme": "リピート・クロージング悩み",
+      "hypothesis": "説明を増やせば伝わると思い込んでいる→説明を1つ減らして終盤に時間を残せと言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "説明が長くて、次回の話ができない院長へ。\n\n説明をひとつ減らします。\nその分の5分を、次回の話に使います。\n\n今日は、説明をひとつ減らしてみてください。"
+        },
+        {
+          "hook": "high",
+          "text": "説明が丁寧すぎる院長へ。\n\n丁寧な説明だけで、時間が終わります。\n肝心の次回の話に、時間が残りません。\n\n今日は、説明を1つ削って最後の5分を空けてください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "初回で全体の道筋を伝えられない(根拠4件・中)。出典: CNS / G0403 / L0307N / L0307T（出典IDは repeat_pain_categories.json の source_ids 参照）"
+    },
+    {
+      "id": "RP04",
+      "acct": "masa",
+      "axis": "repeat_close",
+      "segment": "R02",
+      "theme": "リピート・クロージング悩み",
+      "hypothesis": "コースだから来てくれると油断している→毎回「前回から何が変わったか」を聞けば離脱が減ると言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "コースの途中で来なくなる人が多い院長へ。\n\n施術の前に「前回から何か変わりましたか」と聞きます。\n変化に気づいた人は、通う理由が育ちます。\n\n今日は、この一言を最初のお客様に聞いてください。"
+        },
+        {
+          "hook": "high",
+          "text": "コースだから来てくれると思っている院長へ。\n\n中盤で離れる人は、変化に気づけていません。\n気づかせるのは、こちらの仕事です。\n\n今日は、毎回の変化をひとつ言葉にしてください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "施術中・毎回の会話で通う理由が育たない(根拠4件・中)。出典: L0428 / L0910T（出典IDは repeat_pain_categories.json の source_ids 参照）"
+    },
+    {
+      "id": "RP05",
+      "acct": "masa",
+      "axis": "repeat_close",
+      "segment": "R02",
+      "theme": "リピート・クロージング悩み",
+      "hypothesis": "痛みが取れたら終わりと思われて止まっている→取れた後が本番と伝えれば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "痛みが取れたら来なくなる院長へ。\n\n「痛みが取れた後が本番です」と先に伝えます。\n戻らない体づくりまでが、通う理由になります。\n\n今日は、この一言を施術の終わりに添えてください。"
+        },
+        {
+          "hook": "high",
+          "text": "痛みが消えた日に、お客様が来なくなる院長へ。\n\n良くなった日は、通うのをやめる日になりやすいです。\nだから、取れた後の話を先にしておきます。\n\n今日は、痛みの先の目標をひとつ決めてください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "施術中・毎回の会話で通う理由が育たない(根拠4件・中)。出典: L0428 / L0910T（出典IDは repeat_pain_categories.json の source_ids 参照）"
+    },
+    {
+      "id": "RP06",
+      "acct": "masa",
+      "axis": "repeat_close",
+      "segment": "R03",
+      "theme": "リピート・クロージング悩み",
+      "hypothesis": "「次回どうされますか」が丁寧な聞き方と思い込んでいる→こちらから日付を提案すれば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "会計のときに、次回の話をお客様に任せる院長へ。\n\n「次回どうされますか」ではなく、日付を添えます。\n「次は○日がおすすめです」と言います。\n\n今日は、おすすめの日を決めてから会計に入ってください。"
+        },
+        {
+          "hook": "high",
+          "text": "「次回どうされますか」と聞いている院長へ。\n\n丁寧に見えて、選ぶ手間をお客様に渡しています。\n決める材料を出すのは、こちらの役目です。\n\n今日は、会計の前に次の日付を1つ用意してください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "会計時の次回の話を客に任せてしまう(根拠5件・中)。出典: CNS / G0326/HYP P023 / G0501/HYP P020 / L0307T（出典IDは repeat_pain_categories.json の source_ids 参照）"
+    },
+    {
+      "id": "RP07",
+      "acct": "masa",
+      "axis": "repeat_close",
+      "segment": "R03",
+      "theme": "リピート・クロージング悩み",
+      "hypothesis": "次回予約は後でLINEやネットでと止まっている→変更自由で枠だけ先に押さえると言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "次回の予約を「あとでネットから」で終える院長へ。\n\n「変更はできるので、枠だけ先に取りますね」と言います。\n枠があれば、来る理由が残ります。\n\n今日は、この一言を最初のお客様に使ってください。"
+        },
+        {
+          "hook": "high",
+          "text": "次回の予約が取れない院長へ。\n\n技術の前に、言い方で損をしているかもしれません。\n変更できると伝えるだけで、枠は押さえやすくなります。\n\n今日は、変更はできますと一言添えてください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "会計時の次回の話を客に任せてしまう(根拠5件・中)。出典: CNS / G0326/HYP P023 / G0501/HYP P020 / L0307T（出典IDは repeat_pain_categories.json の source_ids 参照）"
+    },
+    {
+      "id": "RP08",
+      "acct": "masa",
+      "axis": "repeat_close",
+      "segment": "R04",
+      "theme": "リピート・クロージング悩み",
+      "hypothesis": "「考えます」を断りと受け取って引き下がっている→考える材料を足して枠だけ押さえると言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "「考えます」と言われて引き下がる院長へ。\n\n「枠だけ先に押さえますね」と返します。\n変更はいつでもできると、あわせて伝えます。\n\n今日は、この返し方を声に出して1回練習してください。"
+        },
+        {
+          "hook": "high",
+          "text": "「考えます」を断りと受け取る院長へ。\n\n多くの場合、決める材料が足りないだけです。\n引き下がる前に、材料をひとつ足します。\n\n今日は、迷っている理由を1つだけ聞いてください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "提案すると「考えます」で終わる・クロージングが苦手(根拠5件・中)。出典: CL1 / CNS/CL1 / G0319 / G0403 / L0307T（出典IDは repeat_pain_categories.json の source_ids 参照）"
+    },
+    {
+      "id": "RP09",
+      "acct": "masa",
+      "axis": "repeat_close",
+      "segment": "R04",
+      "theme": "リピート・クロージング悩み",
+      "hypothesis": "説得しなければと思ってクロージングが苦手になっている→本人の言葉で目的を言ってもらえば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "説明しすぎて、次が決まらない院長へ。\n\n「良くなったら何がしたいですか」と聞きます。\n本人の言葉が出ると、次の話がしやすくなります。\n\n今日は、この質問をひとり目に使ってください。"
+        },
+        {
+          "hook": "high",
+          "text": "提案が苦手で、話しすぎてしまう院長へ。\n\n説得するほど、お客様は引いていきます。\n先に聞いて、本人の言葉を受け取ります。\n\n今日は、話す前に質問をひとつ入れてください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "提案すると「考えます」で終わる・クロージングが苦手(根拠5件・中)。出典: CL1 / CNS/CL1 / G0319 / G0403 / L0307T（出典IDは repeat_pain_categories.json の source_ids 参照）"
+    },
+    {
+      "id": "RP10",
+      "acct": "masa",
+      "axis": "repeat_close",
+      "segment": "R04",
+      "theme": "リピート・クロージング悩み",
+      "hypothesis": "提案を「やる/やらない」で聞いて止まっている→「どちらが近いか」の二択にすれば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "提案のたびに「やりますか？」と聞く院長へ。\n\n「AとBだと、どちらが近いですか」と聞きます。\n答えやすい聞き方に変えるだけです。\n\n今日は、選択肢を2つだけ用意してください。"
+        },
+        {
+          "hook": "high",
+          "text": "「どうしますか」と聞いている院長へ。\n\nこれは、一番断られやすい聞き方です。\n二択にすると、答えるのが楽になります。\n\n今日は、提案を二択に書き直してください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "提案すると「考えます」で終わる・クロージングが苦手(根拠5件・中)。出典: CL1 / CNS/CL1 / G0319 / G0403 / L0307T（出典IDは repeat_pain_categories.json の source_ids 参照）"
+    },
+    {
+      "id": "RP11",
+      "acct": "masa",
+      "axis": "repeat_close",
+      "segment": "R05",
+      "theme": "リピート・クロージング悩み",
+      "hypothesis": "都度のままでも十分と思い込んでいる→まとまった通い方を選択肢として見せれば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "都度払いのお客様が、そのまま離れる院長へ。\n\n初回に「まとめて通う方法もあります」と伝えます。\n選ぶかどうかは、お客様が決めます。\n\n今日は、この一言を初回の流れに入れてください。"
+        },
+        {
+          "hook": "high",
+          "text": "都度払いのままで十分と思っている院長へ。\n\n離れるのは、続ける道が見えていないからです。\n道を見せることは、押し売りではありません。\n\n今日は、続け方を2つ書き出してください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "回数券・コースの伝え方が分からない(根拠5件・中)。出典: CNS / G0501 / HYP P044(G0501) / HYP P049(G0403/G0501) / L0307T（出典IDは repeat_pain_categories.json の source_ids 参照）"
+    },
+    {
+      "id": "RP12",
+      "acct": "masa",
+      "axis": "repeat_close",
+      "segment": "R05",
+      "theme": "リピート・クロージング悩み",
+      "hypothesis": "回数券は売り込みと思い込んでいる→「通う周期を形にしたもの」と言い換えれば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "回数券を売り込みだと感じる院長へ。\n\n「今の状態なら、週1回が目安です」と伝えます。\n通う周期を話しているだけです。\n\n今日は、症状ごとの目安を1つ決めてください。"
+        },
+        {
+          "hook": "high",
+          "text": "回数券を、売るものだと思っている院長へ。\n\n本当は、通う周期を形にしたものです。\n周期を話せば、押し売りの話になりません。\n\n今日は、回数券を「通う目安」と言い換えてください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "回数券・コースの伝え方が分からない(根拠5件・中)。出典: CNS / G0501 / HYP P044(G0501) / HYP P049(G0403/G0501) / L0307T（出典IDは repeat_pain_categories.json の source_ids 参照）"
+    },
+    {
+      "id": "RP13",
+      "acct": "masa",
+      "axis": "repeat_close",
+      "segment": "R05",
+      "theme": "リピート・クロージング悩み",
+      "hypothesis": "最初から大きなコースを出して止まっている→まず3回から段階で見せれば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "最初から大きなコースを出してしまう院長へ。\n\n最初は「まず3回」とだけ伝えます。\n小さく始めれば、断る理由が減ります。\n\n今日は、3回の目安を話す練習を1回してください。"
+        },
+        {
+          "hook": "high",
+          "text": "いきなり大きなコースを出す院長へ。\n\n断る理由を、お客様に渡しているのと同じです。\n3回から段階で見せると、話が通ります。\n\n今日は、3回の流れを紙に書いてください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "回数券・コースの伝え方が分からない(根拠5件・中)。出典: CNS / G0501 / HYP P044(G0501) / HYP P049(G0403/G0501) / L0307T（出典IDは repeat_pain_categories.json の source_ids 参照）"
+    },
+    {
+      "id": "RP14",
+      "acct": "masa",
+      "axis": "repeat_close",
+      "segment": "R06",
+      "theme": "リピート・クロージング悩み",
+      "hypothesis": "縛りが嫌と言われてコースを諦めている→来たい時だけの通い方から入れば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "縛られるのが嫌と言われる院長へ。\n\n先に「来たい時だけで大丈夫です」と伝えます。\n不安が消えると、通い方の話を聞いてくれます。\n\n今日は、この一言を予約の前に入れてください。"
+        },
+        {
+          "hook": "high",
+          "text": "縛りが嫌な人に、コースを出す院長へ。\n\n1回目まで失うことがあります。\nまず、来たい時に来られる道から入ります。\n\n今日は、縛りのない通い方をひとつ書いてください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "縛り・まとめ払いを嫌がる人への出し方が分からない(根拠4件・中)。出典: CNS / HYP ST61 / HYP ST63 / L0910T（出典IDは repeat_pain_categories.json の source_ids 参照）"
+    },
+    {
+      "id": "RP15",
+      "acct": "masa",
+      "axis": "repeat_close",
+      "segment": "R06",
+      "theme": "リピート・クロージング悩み",
+      "hypothesis": "毎回の予約が面倒な人に気づけていない→月の通う枠を先に決める提案をすれば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "毎回の予約が面倒と言われる院長へ。\n\n「毎月この曜日で、空けておきましょうか」と聞きます。\n決める手間が減ると、通いやすくなります。\n\n今日は、お客様の曜日を1人分メモしてください。"
+        },
+        {
+          "hook": "high",
+          "text": "通う人の本当の負担を見ていない院長へ。\n\n面倒なのは、お金より予約の手間です。\n手間を減らす提案は、喜ばれます。\n\n今日は、予約の手間を1つ減らしてください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "縛り・まとめ払いを嫌がる人への出し方が分からない(根拠4件・中)。出典: CNS / HYP ST61 / HYP ST63 / L0910T（出典IDは repeat_pain_categories.json の source_ids 参照）"
+    },
+    {
+      "id": "RP16",
+      "acct": "masa",
+      "axis": "repeat_close",
+      "segment": "R07",
+      "theme": "リピート・クロージング悩み",
+      "hypothesis": "2回目さえ来れば大丈夫と思い込んでいる→3〜4回目が山と先に伝えれば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "2回目の予約が入らない院長へ。\n\n2回目の最後に「3回目までに何が変わるか」を話します。\n次の山が見えると、予約が入りやすくなります。\n\n今日は、3回目までの変化を一言で書いてください。"
+        },
+        {
+          "hook": "high",
+          "text": "2回目さえ来れば安心と思っている院長へ。\n\nリピートが取れている店でも、3〜4回目で止まる人がいます。\n山は、2回目のあとにあります。\n\n今日は、3〜4回目で止まった人を数えてください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "2回目以降で来なくなる・途中で離脱する(根拠5件・中)。出典: B2212(受講生の悩み) / G0403 / G0501 / L0910T（出典IDは repeat_pain_categories.json の source_ids 参照）"
+    },
+    {
+      "id": "RP17",
+      "acct": "masa",
+      "axis": "repeat_close",
+      "segment": "R07",
+      "theme": "リピート・クロージング悩み",
+      "hypothesis": "新規を増やせば売上が安定すると思い込んでいる→継続の穴を先に塞げと言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "新規を増やしても、売上が安定しない院長へ。\n\n今月、5回目まで来た人を数えてください。\nその数が、安定の土台になります。\n\n今日は、5回目まで来た人の数をメモしてください。"
+        },
+        {
+          "hook": "high",
+          "text": "新規を増やすことに必死な院長へ。\n\n穴の空いた桶に、水を注いでいませんか。\n先に穴を塞ぐほうが、早く安定します。\n\n今日は、通わなくなった人が何回目で止まったか見てください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "2回目以降で来なくなる・途中で離脱する(根拠5件・中)。出典: B2212(受講生の悩み) / G0403 / G0501 / L0910T（出典IDは repeat_pain_categories.json の source_ids 参照）"
+    },
+    {
+      "id": "RP18",
+      "acct": "masa",
+      "axis": "repeat_close",
+      "segment": "R07",
+      "theme": "リピート・クロージング悩み",
+      "hypothesis": "体感が出れば通い続けると思い込んでいる→期間を本人に言ってもらえば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "良くなったのに、来なくなる人が多い院長へ。\n\n「どのくらいで楽になりたいですか」と聞きます。\n期間を本人が言うと、通う目安になります。\n\n今日は、この質問を初回に入れてください。"
+        },
+        {
+          "hook": "high",
+          "text": "体感が出たら終わりにされてしまう院長へ。\n\n良くなった日が、通うのをやめる日になりやすいです。\n先に期間を決めておけば、止まりにくくなります。\n\n今日は、お客様と目標の期間を決めてください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "2回目以降で来なくなる・途中で離脱する(根拠5件・中)。出典: B2212(受講生の悩み) / G0403 / G0501 / L0910T（出典IDは repeat_pain_categories.json の source_ids 参照）"
+    },
+    {
+      "id": "RP19",
+      "acct": "masa",
+      "axis": "repeat_close",
+      "segment": "R08",
+      "theme": "リピート・クロージング悩み",
+      "hypothesis": "最初の契約が最終ゴールと思い込んでいる→終了の2〜3回前に次の話をすれば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "コースが終わると関係も終わる院長へ。\n\n終わる2〜3回前に、次の通い方を話します。\n早めに話せば、押し売りになりません。\n\n今日は、終了が近いお客様を1人選んでください。"
+        },
+        {
+          "hook": "high",
+          "text": "最後の日に、次の話をしている院長へ。\n\n終わる日に話しても、もう遅いです。\n次の話は、2〜3回前に始めます。\n\n今日は、終了が近い人の予定を確認してください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "コース終了後の次の出口がない(再契約・継続)(根拠5件・強)。出典: L0428 / L0910N / L0910T（出典IDは repeat_pain_categories.json の source_ids 参照）"
+    },
+    {
+      "id": "RP20",
+      "acct": "masa",
+      "axis": "repeat_close",
+      "segment": "R08",
+      "theme": "リピート・クロージング悩み",
+      "hypothesis": "コースが決まった月に安心している→翌月の落ち込みは前の月に決まると言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "コースが決まった月に、安心している院長へ。\n\n翌月の売上は、前の月に決まります。\n今月コースが終わる人を、数えてみてください。\n\n今日は、その人数を紙に書いてください。"
+        },
+        {
+          "hook": "high",
+          "text": "売上がガタンと落ちる月がある院長へ。\n\n原因は、前の月にあります。\n終わる人の数を先に見ておけば、防げます。\n\n今日は、来月終わるお客様を書き出してください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "コース終了後の次の出口がない(再契約・継続)(根拠5件・強)。出典: L0428 / L0910N / L0910T（出典IDは repeat_pain_categories.json の source_ids 参照）"
+    },
+    {
+      "id": "RP21",
+      "acct": "masa",
+      "axis": "repeat_close",
+      "segment": "R08",
+      "theme": "リピート・クロージング悩み",
+      "hypothesis": "痛みが消えれば卒業と思っている→月1回の点検という次の出口を見せれば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "痛みが消えたら卒業にしている院長へ。\n\n卒業のときに「月1回の点検もあります」と伝えます。\n次の出口は、選択肢として見せます。\n\n今日は、卒業後の通い方を1つ決めてください。"
+        },
+        {
+          "hook": "high",
+          "text": "次の出口を見せずに、卒業させる院長へ。\n\nそれは見送りではなく、放置かもしれません。\n最終目標は、もう一度選んでもらうことです。\n\n今日は、卒業のときの一言を書いてください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "コース終了後の次の出口がない(再契約・継続)(根拠5件・強)。出典: L0428 / L0910N / L0910T（出典IDは repeat_pain_categories.json の source_ids 参照）"
+    },
+    {
+      "id": "RP22",
+      "acct": "masa",
+      "axis": "repeat_close",
+      "segment": "R09",
+      "theme": "リピート・クロージング悩み",
+      "hypothesis": "離れた人に連絡するのは失礼と思っている→嫌いになったのではなく忘れているだけと言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "3か月来ていない人に、連絡できない院長へ。\n\n「その後いかがですか」と1通だけ送ります。\n嫌いになったのではなく、忘れているだけの人もいます。\n\n今日は、3か月来ていない人を1人選んでください。"
+        },
+        {
+          "hook": "high",
+          "text": "来なくなった人を、放置している院長へ。\n\n多くは、嫌いになったのではなく忘れているだけです。\n思い出すきっかけを渡すのは、失礼ではありません。\n\n今日は、連絡の文を1つ書いてください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "来なくなった人・卒業した人を掘り起こせない(根拠3件・弱(要追加確認))。出典: G0501 / L0411(示唆) / L0428（出典IDは repeat_pain_categories.json の source_ids 参照）"
+    },
+    {
+      "id": "RP23",
+      "acct": "masa",
+      "axis": "repeat_close",
+      "segment": "R09",
+      "theme": "リピート・クロージング悩み",
+      "hypothesis": "離れた理由は聞きにくいと止まっている→1つだけ聞くと言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "離れた人の理由を聞けない院長へ。\n\n「何か気になることはありましたか」と1つだけ聞きます。\n責める聞き方は、いりません。\n\n今日は、聞く一言を決めてください。"
+        },
+        {
+          "hook": "high",
+          "text": "離れた理由を、想像で決めている院長へ。\n\n残っているお客様からは、本当の理由は聞けません。\n離れた本人に、1つだけ聞くのが近道です。\n\n今日は、離れた人に送る質問を1つ書いてください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "来なくなった人・卒業した人を掘り起こせない(根拠3件・弱(要追加確認))。出典: G0501 / L0411(示唆) / L0428（出典IDは repeat_pain_categories.json の source_ids 参照）"
+    },
+    {
+      "id": "RP24",
+      "acct": "masa",
+      "axis": "repeat_close",
+      "segment": "R10",
+      "theme": "リピート・クロージング悩み",
+      "hypothesis": "紹介は待つものと思い込んでいる→変化に気づいてもらう仕組みを作ると言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "紹介が自然に生まれない院長へ。\n\n帰り際に、変わったところを1つ言葉にして伝えます。\n変化に気づいた人は、人に話したくなります。\n\n今日は、帰り際の一言を決めてください。"
+        },
+        {
+          "hook": "high",
+          "text": "紹介を、待つものだと思っている院長へ。\n\n紹介が出ない店は、変化に気づいてもらえていません。\n気づかせる工夫が、紹介の入口です。\n\n今日は、お客様の変化をひとつ見つけてください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "口コミ・紹介が自然に生まれない(根拠4件・中)。出典: HYP P070 / HYP P072 / L0307N / L0428（出典IDは repeat_pain_categories.json の source_ids 参照）"
+    },
+    {
+      "id": "RP25",
+      "acct": "masa",
+      "axis": "repeat_close",
+      "segment": "R10",
+      "theme": "リピート・クロージング悩み",
+      "hypothesis": "紹介のお願いは気が引けると止まっている→話したくなる体験を作ると言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "紹介のお願いに、気が引ける院長へ。\n\n「今日の感想を、一言ください」と聞いてみます。\n頼むより先に、聞くだけで始められます。\n\n今日は、帰り際にこの一言を使ってください。"
+        },
+        {
+          "hook": "high",
+          "text": "口コミを、お願いして集めている院長へ。\n\n口コミは頼むものではなく、話したくなる体験が生みます。\nお願いより先に、体験を整えます。\n\n今日は、お客様が話したくなる場面を1つ探してください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "口コミ・紹介が自然に生まれない(根拠4件・中)。出典: HYP P070 / HYP P072 / L0307N / L0428（出典IDは repeat_pain_categories.json の source_ids 参照）"
+    },
+    {
+      "id": "RP26",
+      "acct": "masa",
+      "axis": "repeat_close",
+      "segment": "R11",
+      "theme": "リピート・クロージング悩み",
+      "hypothesis": "売上だけ見ている→次回予約を取れた人数を見ると言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "リピートの数字を見ていない院長へ。\n\n今週、次回の予約が取れた人を数えます。\n数えるのは、その1つだけで十分です。\n\n今日は、今週の次回予約の人数をメモしてください。"
+        },
+        {
+          "hook": "high",
+          "text": "売上だけ見ている院長へ。\n\n売上は結果です。\nリピートの数字は、売上より先に動きます。\n\n今日は、先月の次回予約の人数を数えてください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "リピート率・次回予約率の見方が分からない(根拠4件・強)。出典: G0326 / HYP P010/VM323 / HYP P026 / L0307T（出典IDは repeat_pain_categories.json の source_ids 参照）"
+    },
+    {
+      "id": "RP27",
+      "acct": "masa",
+      "axis": "repeat_close",
+      "segment": "R11",
+      "theme": "リピート・クロージング悩み",
+      "hypothesis": "数字が苦手でやらないと決めている→数えるのは1つだけと言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "数字が苦手で、リピートを見ていない院長へ。\n\n見るのは「来た人のうち、次を取った人」だけです。\n毎週、その数字ひとつだけメモします。\n\n今日は、今週来た人と次を取った人を書いてください。"
+        },
+        {
+          "hook": "high",
+          "text": "「リピートできている」と感じている院長へ。\n\n感覚だけだと、離れた人は見えません。\n数字はひとつだけで、十分に気づけます。\n\n今日は、次回予約の取れた人数を数えてください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "リピート率・次回予約率の見方が分からない(根拠4件・強)。出典: G0326 / HYP P010/VM323 / HYP P026 / L0307T（出典IDは repeat_pain_categories.json の source_ids 参照）"
+    },
+    {
+      "id": "RP28",
+      "acct": "masa",
+      "axis": "repeat_close",
+      "segment": "R12",
+      "theme": "リピート・クロージング悩み",
+      "hypothesis": "来てくれる人は全員大切にと思い込んでいる→変わる意思のある人に向き合うと言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "来てくれる人に、全員合わせている院長へ。\n\n初回に「どうなりたいですか」と聞きます。\n答えが出る人は、通い続けやすい人です。\n\n今日は、この質問を初回の流れに入れてください。"
+        },
+        {
+          "hook": "high",
+          "text": "全員に合わせて、疲れている院長へ。\n\n全員に合わせると、通い続ける人を逃します。\n変わりたい人に、しっかり向き合います。\n\n今日は、初回で変わりたい理由を1つ聞いてください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "変わる意思が薄い人・売り込みへの線引きができない(根拠4件・中)。出典: G0319 / L0910N / L0910T（出典IDは repeat_pain_categories.json の source_ids 参照）"
+    },
+    {
+      "id": "RP29",
+      "acct": "masa",
+      "axis": "repeat_close",
+      "segment": "R12",
+      "theme": "リピート・クロージング悩み",
+      "hypothesis": "提案は嫌われると怖がっている→予約の前に意思確認をすれば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "提案すると嫌われると、怖がっている院長へ。\n\n予約のときに「改善の提案もしますが、大丈夫ですか」と伝えます。\n先に伝えておけば、提案は自然に聞こえます。\n\n今日は、この一言を予約の案内に入れてください。"
+        },
+        {
+          "hook": "high",
+          "text": "提案を、怖がっている院長へ。\n\n怖いのは、予告なしに話すからです。\n予約の前に伝えておけば、不安は減ります。\n\n今日は、提案の予告を1行で書いてください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "変わる意思が薄い人・売り込みへの線引きができない(根拠4件・中)。出典: G0319 / L0910N / L0910T（出典IDは repeat_pain_categories.json の source_ids 参照）"
     }
   ]
 }

@@ -61,7 +61,40 @@
       "I12": 2,
       "I13": 2
     },
-    "prior_note": "2026-10-04 masa講義(n=52・要点まとめ§2)でI12(プロフ・ハイライト)とI13(導線)の悩みが既存マップの2〜3倍出たため初期値share=2。apply_share_pain()は非winnerのshareをこのprior_shareへ戻す(未記載=1)。loser(index<=0.7&n>=8)は従来どおり0。講義は仮説(n=52・Threads中心)なので実測で外れればloser判定で自動的に降りる。I18(来店後リピート)はInstagram集客外のため軸に入れない。"
+    "prior_note": "2026-10-04 masa講義(n=52・要点まとめ§2)でI12(プロフ・ハイライト)とI13(導線)の悩みが既存マップの2〜3倍出たため初期値share=2。apply_share_pain()は非winnerのshareをこのprior_shareへ戻す(未記載=1)。loser(index<=0.7&n>=8)は従来どおり0。講義は仮説(n=52・Threads中心)なので実測で外れればloser判定で自動的に降りる。I18(来店後リピート)はInstagram集客外のため軸に入れない。",
+    "axes": {
+      "repeat_close": {
+        "axis": "repeat_close",
+        "axis_since": "2026-10-04",
+        "per_day": 2,
+        "share": {
+          "R01": 1,
+          "R02": 1,
+          "R03": 1,
+          "R04": 1,
+          "R05": 1,
+          "R06": 1,
+          "R07": 1,
+          "R08": 1,
+          "R09": 1,
+          "R10": 1,
+          "R11": 1,
+          "R12": 1
+        },
+        "rotation": "round_robin",
+        "hook_rotation": "daily_alternate",
+        "anchors": [
+          11,
+          24
+        ],
+        "anchors_note": "2026-10-04 generate_30_masa_posts()を読んで既存の使用済みindexを洗い出した: AI=4/20/36・LINE=5/14・プロフィールCTA=9/27・時短CTA=12・HAKASE=22/30・軸1=8/16/18/26/34/44・ヒーロー挿入=2+4i(2,6,…,38)。これらと重ならず前半50本に収まる11と24を採用。軸2は軸1より後・HAKASE/ヒーローより前に挿入する。",
+        "min_n": 5,
+        "categories_ref": "repeat_pain_categories.json",
+        "retest": {},
+        "winner_categories": [],
+        "axis_note": "2026-10-04 本人指示: 『来店後のリピート・クロージングの悩み』を別軸のテストとして回す(主テーマInstagram集客は変えない)。測定=閲覧数の中央値÷アカウント全体中央値。index>=1.3&n>=5→share+1(最大3)、index<=0.7&n>=8→share0(retestに+14日)。R09は根拠が弱い(仮説)。"
+      }
+    }
   },
   "truth": {
     "per_day": 4,

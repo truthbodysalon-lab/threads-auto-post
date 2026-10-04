@@ -1509,5 +1509,23 @@
     "acct": "masa",
     "variant": null,
     "hypothesis_id": "IP10"
+  },
+  "2回目さえ来れば安心と思っている院長へ。": {
+    "segment": "R07",
+    "hook": "high",
+    "created": "2026-10-04",
+    "acct": "masa",
+    "axis": "repeat_close",
+    "variant": null,
+    "hypothesis_id": "RP16"
+  },
+  "最後の日に、次の話をしている院長へ。": {
+    "segment": "R08",
+    "hook": "high",
+    "created": "2026-10-04",
+    "acct": "masa",
+    "axis": "repeat_close",
+    "variant": null,
+    "hypothesis_id": "RP19"
   }
 }

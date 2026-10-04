@@ -114,6 +114,26 @@ def check_dup_reselect_guard():
         add("dup_reselect:all", "A.コード", "FAIL", f"{type(e).__name__}: {e}")
 
 
+def check_test_posts_in_first50():
+    """C21: テスト投稿（悩みテスト軸1・軸2）が生成キューの前半50本に全て入るか。
+    2026-10-04: アンカー44がヒーロー挿入で58番目へずれ、毎日1本が投稿されず判定データが欠けていた。"""
+    import os as _os
+    _os.environ["SEGMENT_REGISTRY_DRY"] = "1"
+    try:
+        import generate_remix as _g
+        hyp = json.loads((BASE / "segment_hypotheses.json").read_text(encoding="utf-8")).get("hypotheses", [])
+        texts = {p["text"] for h in hyp if h.get("acct") == "masa" and h.get("status") != "archived" for p in h.get("posts", [])}
+        posts = _g.generate_30_masa_posts()
+        pos = [i for i, t in enumerate(posts) if t in texts]
+        late = [i for i in pos if i >= 50]
+        if late:
+            add("test_in_first50:masa", "B.ルール", "FAIL", f"テスト投稿 {len(late)}本が前半50本の外（位置{late}）＝投稿されない")
+        else:
+            add("test_in_first50:masa", "B.ルール", "PASS", f"テスト投稿{len(pos)}本すべて前半50本内（最後={max(pos) if pos else '-'}）")
+    except Exception as e:
+        add("test_in_first50:masa", "B.ルール", "WARN", f"判定不能: {type(e).__name__}: {e}")
+
+
 def check_generation():
     try:
         import generate_remix as g
@@ -1055,6 +1075,7 @@ def run_all():
     check_generation()
     check_next_post_smoke()
     check_dup_reselect_guard()
+    check_test_posts_in_first50()
     check_rules()
     check_masa_insta_theme()
     check_rule_hygiene()

@@ -1335,6 +1335,31 @@ def generate_post(pattern_key: str) -> str:
     return ""
 
 
+def _own_winner_texts(acct: str) -> list[str]:
+    """own_winners_<acct>.json（自動投稿以外の本人の伸びた投稿・own_winners.pyが毎朝更新）の原文一覧。"""
+    f = BASE / f"own_winners_{acct}.json"
+    if not f.exists():
+        return []
+    try:
+        return [w.get("text", "") for w in json.loads(f.read_text(encoding="utf-8")).get("winners", []) if w.get("text")]
+    except Exception:
+        return []
+
+
+def _is_own_winner_copy(text: str, acct: str, threshold: float = 0.8) -> bool:
+    """ヒーローが「自分の投稿の型」の翻案ではなく原文の丸ごと再投稿になっていないか。
+    なぜ: 同一文面の再投稿は閲覧が1500台→10未満へ落ちる実測があり（型疲労L8）、型だけ借りる運用のため。"""
+    from difflib import SequenceMatcher
+    t = re.sub(r"\s+", "", text or "")
+    if not t:
+        return False
+    for orig in _own_winner_texts(acct):
+        o = re.sub(r"\s+", "", orig)
+        if t == o or t.startswith(o[:30]) and len(o) >= 15 or SequenceMatcher(None, t, o).ratio() >= threshold:
+            return True
+    return False
+
+
 def _load_hero_posts(acct: str) -> list[str]:
     """ヒーロー投稿（毎朝サブエージェントが書く変数無しの完成原稿）を読む。
     hero_<acct>.json = {"date": "YYYY-MM-DD", "posts": [...]}。当日分のみ有効。
@@ -1356,6 +1381,8 @@ def _load_hero_posts(acct: str) -> list[str]:
             out = [p for p in out if _is_valid_first_line(p, acct)]
         if acct in ("truth", "nagaoka"):
             out = [p for p in out if not _is_seitai_reserve_violation(p)]
+        if acct in ("truth", "nagaoka"):
+            out = [p for p in out if not _is_own_winner_copy(p, acct)]   # 自分の伸びた投稿の原文コピーは弾く（翻案のみ可）
         if acct == "masa":
             # 面談/金額/決済の機械ガード＋250字上限（masa10原則）
             out = [p for p in out if not _is_masa_sales_ng(p) and len(p) <= 250]

@@ -43,6 +43,12 @@ jobs:
           GH_REPO=${{ github.repository }}
           EOF
 
+      # 自動投稿以外（本人・外部ツール）の伸びた投稿を抽出 → ヒーロー執筆(SKILL.md)と型の参考に使う。
+      # 失敗しても前回ファイルを維持して続行（朝の生成を止めない）
+      - name: Extract own winners (non-automated posts)
+        continue-on-error: true
+        run: python3 own_winners.py
+
       - name: Run insights
         run: python3 insights.py
 
@@ -66,7 +72,8 @@ jobs:
                   insights_truth.json insights_nagaoka.json insights_masa.json \
                   past_posts.json past_posts_nagaoka.json past_posts_masa.json \
                   weights_truth.json weights_nagaoka.json weights_masa.json \
-                  segment_registry.json 2>/dev/null || true
+                  segment_registry.json \
+                  own_winners_truth.json own_winners_nagaoka.json 2>/dev/null || true
           git diff --cached --quiet || git commit -m "chore: daily generate & tune [skip ci]"
           for i in 1 2 3; do
             git push && break

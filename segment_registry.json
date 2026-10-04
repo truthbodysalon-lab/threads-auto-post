@@ -4,35 +4,40 @@
     "hook": "high",
     "created": "2026-10-04",
     "acct": "masa",
-    "variant": 0
+    "variant": 0,
+    "retired": true
   },
   "開業して1年、まだ集客ゼロの院へ。": {
     "segment": "S2",
     "hook": "high",
     "created": "2026-10-04",
     "acct": "masa",
-    "variant": 0
+    "variant": 0,
+    "retired": true
   },
   "月商50万の壁で止まっている経営者へ。": {
     "segment": "S3",
     "hook": "high",
     "created": "2026-10-04",
     "acct": "masa",
-    "variant": 0
+    "variant": 0,
+    "retired": true
   },
   "スタッフを抱える院長へ。": {
     "segment": "S4",
     "hook": "high",
     "created": "2026-10-04",
     "acct": "masa",
-    "variant": 0
+    "variant": 0,
+    "retired": true
   },
   "コースや講座を売っている経営者へ。": {
     "segment": "S5",
     "hook": "high",
     "created": "2026-10-04",
     "acct": "masa",
-    "variant": 0
+    "variant": 0,
+    "retired": true
   },
   "マッサージ通いに疲れた人へ。": {
     "segment": "T6",
@@ -1456,5 +1461,53 @@
     "variant": 17,
     "created": "2026-10-04",
     "acct": "masa"
+  },
+  "インスタの広告を、怖がっている人へ。": {
+    "segment": "I15",
+    "hook": "high",
+    "created": "2026-10-04",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "IP43"
+  },
+  "インスタの投稿を、AIに丸投げしている人へ。": {
+    "segment": "I16",
+    "hook": "high",
+    "created": "2026-10-04",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "IP46"
+  },
+  "インスタを勉強してから始めたい人へ。": {
+    "segment": "I01",
+    "hook": "high",
+    "created": "2026-10-04",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "IP01"
+  },
+  "インスタのコンセプトを決めてから投稿する人へ。": {
+    "segment": "I02",
+    "hook": "high",
+    "created": "2026-10-04",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "IP04"
+  },
+  "インスタの投稿ネタを、毎日探している人へ。": {
+    "segment": "I03",
+    "hook": "high",
+    "created": "2026-10-04",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "IP07"
+  },
+  "インスタは顔を出さないと伸びない、と思う人へ。": {
+    "segment": "I04",
+    "hook": "high",
+    "created": "2026-10-04",
+    "acct": "masa",
+    "variant": null,
+    "hypothesis_id": "IP10"
   }
 }

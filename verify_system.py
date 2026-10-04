@@ -551,7 +551,7 @@ def check_execution_gaps():
     except Exception as e:
         add("exec:imagepost", "C.実行ギャップ", "WARN", f"確認不可: {e}")
 
-    # C15: セグメントテスト（小川さんセッション2026-09-22・masa=S1-S5。
+    # C15: セグメントテスト（小川さんセッション2026-09-22・masa=S1-S5→2026-10-04からInstagram悩みI01-I16。
     #      2026-09-23にtruth/nagaoka=T1-T6へ拡張）が実際に回っているか、acctごとに判定。
     #      昨日segment_registryにそのacctで登録済みの投稿が3本未満ならWARN。
     #      registryが空（導入初日）は「検査していない」ではなく判定材料が無いだけなので
@@ -588,8 +588,15 @@ def check_execution_gaps():
     else:
         yday = (date.today() - timedelta(days=1)).isoformat()
         for acct in ACCTS:
+            pain_axis = (acct == "masa" and (seg_cfg.get("masa") or {}).get("axis") == "insta_pain")
             n_yday = sum(1 for v in reg.values()
-                         if isinstance(v, dict) and v.get("created") == yday and _acct_of(v) == acct)
+                         if isinstance(v, dict) and v.get("created") == yday and _acct_of(v) == acct
+                         and (not pain_axis or str(v.get("segment", "")).startswith("I")))
+            if pain_axis and yday < (seg_cfg["masa"].get("axis_since") or "0000-00-00") and n_yday < 3:
+                add(f"exec:segment_test:{acct}", "C.実行ギャップ", "PASS",
+                    f"masaはテスト軸をInstagram悩み(I01-I16)へ切替({seg_cfg['masa'].get('axis_since')})。"
+                    f"切替前日({yday})の悩み登録は無くて当然のため判定保留")
+                continue
             has_content = any(
                 any(hooks.get("low") or hooks.get("high"))
                 for hooks in (_templates_by_acct.get(acct) or {}).values()
@@ -639,6 +646,29 @@ def check_execution_gaps():
                 "PASS" if n_hyp_recent >= 1 else "WARN",
                 f"仮説{n_hyp_acct}件・直近7日のhypothesis_id付き登録{n_hyp_recent}件" +
                 ("" if n_hyp_recent >= 1 else "（仮説投稿が実際の投稿枠に投入されていない疑い）"))
+
+    # C15追加(2026-10-04): masaのテスト軸=Instagram悩みカテゴリ(I01-I16)。全カテゴリに
+    #   low/high両方の原稿（archived/retired/loser以外の仮説）があるか＝1日6本を回し続けられるかを検査。
+    #   欠けたカテゴリは固定テンプレ代替が無く、その日のテスト投稿が6本未満になる。
+    try:
+        _mc = seg_cfg.get("masa") or {}
+        if _mc.get("axis") == "insta_pain":
+            _hyps = (hyp_data or {}).get("hypotheses", []) if isinstance(hyp_data, dict) else []
+            _missing = []
+            for _c in (_mc.get("share") or {}):
+                for _hook in ("low", "high"):
+                    ok_ = any(
+                        isinstance(h, dict) and (h.get("acct") or "masa") == "masa" and h.get("segment") == _c
+                        and h.get("status") not in ("archived", "retired", "loser")
+                        and any(isinstance(p, dict) and p.get("hook") == _hook and p.get("text") for p in h.get("posts") or [])
+                        for h in _hyps)
+                    if not ok_:
+                        _missing.append(f"{_c}/{_hook}")
+            add("exec:segment_pain_pool", "C.実行ギャップ", "PASS" if not _missing else "WARN",
+                f"悩み{len(_mc.get('share') or {})}カテゴリ全てにlow/high原稿あり・per_day={_mc.get('per_day')}"
+                if not _missing else f"原稿の無いカテゴリ/フック: {', '.join(_missing[:8])}（テスト投稿が6本未満になる）")
+    except Exception as e:
+        add("exec:segment_pain_pool", "C.実行ギャップ", "WARN", f"確認不可: {e}")
 
     # C7: 月100万ペース（常時アラーム）。views_action.json を読み、未達アカウントを明示。
     #     達成は野心的目標のため未達は WARN（恒常監視・改善誘導が目的。FAILにはしない）。

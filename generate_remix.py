@@ -2703,7 +2703,9 @@ _SEGMENT_NAMING_RE = re.compile(
     r"高額|コース|講座|経営者|都度払い|無料は好評|"
     # truth/nagaoka（整体2アカ・T1〜T6セグメント仮説テスト 2026-09-23）
     r"デスクワーク|肩|首|頭痛|薬|産後|骨盤|抱っこ|ママ|"
-    r"立ち仕事|介護|看護|腰|脚|眠|疲れ|マッサージ|他院|戻る|人へ"
+    r"立ち仕事|介護|看護|腰|脚|眠|疲れ|マッサージ|他院|戻る|人へ|"
+    # masa（Instagram集客の悩みカテゴリI01〜I16・2026-10-04）: 悩みの所在を名指す語
+    r"インスタ|リール|ストーリーズ|ハッシュタグ|フォロワー|投稿ネタ|プロフィール|固定投稿|広告|AI"
 )
 
 
@@ -2720,7 +2722,7 @@ def _build_segment_candidates(seg: str, hook: str, hypotheses: list, acct: str =
             continue
         if (h.get("acct") or "masa") != acct:
             continue
-        if h.get("status") in ("retired", "loser"):
+        if h.get("status") in ("retired", "loser", "archived"):
             continue
         for p in h.get("posts") or []:
             if not isinstance(p, dict) or p.get("hook") != hook:
@@ -2790,7 +2792,8 @@ def _pick_segment_candidate(seg: str, hook: str, candidates: list[dict], registr
     return None
 
 
-def _rotate_segments(share: dict, per_day: int, rotation: str | None, day_num: int) -> list[str]:
+def _rotate_segments(share: dict, per_day: int, rotation: str | None, day_num: int,
+                     skip_zero: bool = False) -> list[str]:
     """その日投入するsegmentのリストを返す。
     rotation=="round_robin": shareの重みでサイクルを拡張し(例 T2:2なら[T1,T2,T2,T3,T4,T5,T6])、
     day_num*per_day 分だけ進めた位置からper_day個の相異なるsegmentを選ぶ
@@ -2798,6 +2801,9 @@ def _rotate_segments(share: dict, per_day: int, rotation: str | None, day_num: i
     rotation未設定（旧仕様・masa既定）: 後方互換のため share の先頭per_day件を毎日固定で返す
     （masaのper_day=5・share5件は従来どおり全件が毎日出る挙動のまま変わらない）。"""
     keys = list(share.keys())
+    if skip_zero:
+        # axis=insta_pain: share 0 = 出さない（loser停止・2週間後に再テスト。2026-10-04）
+        keys = [k for k in keys if int(share.get(k, 0) or 0) > 0]
     if rotation != "round_robin":
         return keys[:per_day]
     cycle: list[str] = []
@@ -2842,7 +2848,9 @@ def _insert_segment_tests(posts: list[str], acct: str, today: str) -> list[str]:
     default_anchors = [8, 16, 26, 34, 44] if acct == "masa" else []
     anchors = cfg.get("anchors", default_anchors)
     templates_for_acct = SEGMENT_TEST_TEMPLATES_BY_ACCT.get(acct, {})
-    if not share or not templates_for_acct:
+    # axis=insta_pain（masa・2026-10-04）: 原稿は全て segment_hypotheses.json 側（固定テンプレ無し）
+    pain_axis = (acct == "masa" and cfg.get("axis") == "insta_pain")
+    if not share or (not templates_for_acct and not pain_axis):
         return posts
 
     try:
@@ -2859,19 +2867,32 @@ def _insert_segment_tests(posts: list[str], acct: str, today: str) -> list[str]:
     registry = _load_segment_registry()
     all_hypotheses = _load_segment_hypotheses().get("hypotheses", [])
     per_day = int(cfg.get("per_day", len(share)))
-    segments = _rotate_segments(share, per_day, cfg.get("rotation"), day_num)
+    segments = _rotate_segments(share, per_day, cfg.get("rotation"), day_num, skip_zero=pain_axis)
 
     selected = []
     for seg in segments:
-        pool = _build_segment_candidates(seg, hook, all_hypotheses, acct)
+        seg_hook = hook
+        if pain_axis:
+            # カテゴリ内でlow/highの登録数が少ない方を出す（同点は日付偶奇）。
+            # 周期が偶数日のため偶奇固定だと1カテゴリが片方のhookしか出ない偏りを防ぐ
+            n_low = sum(1 for v in registry.values() if isinstance(v, dict)
+                        and v.get("segment") == seg and v.get("hook") == "low" and (v.get("acct") or "masa") == acct)
+            n_high = sum(1 for v in registry.values() if isinstance(v, dict)
+                         and v.get("segment") == seg and v.get("hook") == "high" and (v.get("acct") or "masa") == acct)
+            if n_low != n_high:
+                seg_hook = "low" if n_low < n_high else "high"
+        pool = _build_segment_candidates(seg, seg_hook, all_hypotheses, acct)
         chosen = None
         while pool:
-            cand = _pick_segment_candidate(seg, hook, pool, registry, today_date, acct)
+            cand = _pick_segment_candidate(seg, seg_hook, pool, registry, today_date, acct)
             if cand is None:
                 break
             text = cand["text"]
             if acct == "masa":
                 ng = _is_masa_sales_ng(text) or _is_ng(text) or len(text) > 250
+                if pain_axis:
+                    ng = ng or _is_masa_yokokoku_ng(text) or not _is_insta_theme(text) \
+                        or not _inspect_ok(text, "masa", log=False)
             else:
                 # truth/nagaoka: 面談・金額NG(_is_masa_sales_ng)は対象外。
                 # 代わりに症状不整合(_is_ngが内包する_is_incoherent)と
@@ -2889,7 +2910,7 @@ def _insert_segment_tests(posts: list[str], acct: str, today: str) -> list[str]:
             # 候補プールが空（truth/nagaokaのプレースホルダ段階等）またはNG全滅の層は
             # スキップし、生成全体は落とさない。
             continue
-        selected.append((seg, hook, chosen))
+        selected.append((seg, seg_hook, chosen))
 
     for i, (seg, hk, cand) in enumerate(selected):
         pos = anchors[i] if i < len(anchors) else (anchors[-1] if anchors else len(posts))

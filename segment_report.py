@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-segment_report.py — セグメント×フック分析（masa=売上ステージS1-S5・truth/nagaoka=症状生活層T1-T6）
+segment_report.py — セグメント×フック分析（masa=Instagram集客の悩みカテゴリI01-I16〔2026-10-04〜。旧=売上ステージS1-S5はarchived〕・truth/nagaoka=症状生活層T1-T6）
 （2026-09-23 小川さんセッション反映。2026-09-23 truth/nagaokaへ拡張＝ユーザー指示）
 
 なぜ: 「層を名指しした投稿を並べ、どの層が反応するか」をテストするため、
@@ -111,28 +111,66 @@ SEG_JP = {
 SEG_JP["nagaoka"] = SEG_JP["truth"]
 ACCT_JP = {"masa": "masahide", "truth": "truth_body_salon", "nagaoka": "truth_nagaoka"}
 
+# ── masaのテスト軸（2026-10-04）: 売上ステージS1-S5 → Instagram集客の悩みカテゴリI01-I16 ──
+# segment_config.json の masa.axis == "insta_pain" の時だけ切り替える（旧軸へ戻せる）。
+# 悩みカテゴリは1コード=1セグメント（フルネームもコードそのまま。名前は空文字）。
+# カテゴリ定義の正本は insta_pain_categories.json。旧S1-S5のregistry/仮説は集計対象外（archived）。
+PAIN_CATEGORIES_FILE = BASE / "insta_pain_categories.json"
+PAIN_AXIS = False
+PAIN_SHORT: dict = {}
+
+
+def _init_pain_axis():
+    global PAIN_AXIS, PAIN_SHORT
+    try:
+        cfg = json.loads(CONFIG_FILE.read_text(encoding="utf-8"))
+        cats = json.loads(PAIN_CATEGORIES_FILE.read_text(encoding="utf-8")).get("categories", [])
+    except Exception:
+        return
+    if (cfg.get("masa") or {}).get("axis") != "insta_pain" or not cats:
+        return
+    codes = [c["id"] for c in cats]
+    PAIN_AXIS = True
+    PAIN_SHORT = {c["id"]: c.get("short") or c.get("name") or c["id"] for c in cats}
+    SEG_CODES["masa"] = codes
+    SEG_NAMES["masa"] = {c: "" for c in codes}
+    SEG_JP["masa"] = dict(PAIN_SHORT)
+
+
+_init_pain_axis()
+
+
+def _full_name(acct: str, c: str) -> str:
+    name = SEG_NAMES[acct].get(c, "")
+    return f"{c}_{name}" if name else c
+
 
 def _segments(acct: str) -> list[str]:
-    return [f"{c}_{SEG_NAMES[acct][c]}" for c in SEG_CODES.get(acct, [])]
+    return [_full_name(acct, c) for c in SEG_CODES.get(acct, [])]
 
 
 def _seg_aliases(acct: str) -> dict:
     alias = {}
     for c in SEG_CODES.get(acct, []):
-        full = f"{c}_{SEG_NAMES[acct][c]}"
+        full = _full_name(acct, c)
         alias[full] = full
         alias[c] = full
         alias[c.lower()] = full
-        alias[SEG_NAMES[acct][c]] = full
+        if SEG_NAMES[acct].get(c):
+            alias[SEG_NAMES[acct][c]] = full
     return alias
 
 
 def _short_code(acct: str, full_seg: str) -> str | None:
     """フルネーム("T1_desk"等)から config/share が使う短縮コード("T1")へ戻す。"""
     for c in SEG_CODES.get(acct, []):
-        if f"{c}_{SEG_NAMES[acct][c]}" == full_seg:
+        if _full_name(acct, c) == full_seg:
             return c
     return None
+
+
+def _is_pain_axis(acct: str) -> bool:
+    return acct == "masa" and PAIN_AXIS
 
 
 HOOKS = ["low", "high"]
@@ -402,6 +440,7 @@ def build_report(acct: str):
         hyp_ids_from_file = {
             h.get("id") for h in (hyp_data or {}).get("hypotheses", [])
             if isinstance(h, dict) and h.get("id") and (h.get("acct") or "masa") == acct
+            and h.get("status") != "archived"
         }
         hyp_summary = {}
         for hid in sorted(hyp_ids_from_rows | hyp_ids_from_file):
@@ -499,7 +538,7 @@ def write_markdown(report, acct: str):
     # 過去ベースライン（segment_baseline.json・2026-09-24追加）: 直近テスト結果(上記)と
     # 過去実測を見比べられるよう併記する。ファイル不在ならこの節ごと省略する。
     baseline = _load_baseline(acct)
-    if baseline:
+    if baseline and not _is_pain_axis(acct):   # 悩み軸のmasaは旧S1-S5ベースラインと突き合わせない
         lines.append("### 過去ベースライン（segment_baseline.json）")
         lines.append(f"生成日: {baseline.get('generated', '-')} / "
                      f"全体中央値: {baseline.get('baseline_median', '-')} / "
@@ -533,6 +572,8 @@ def apply_share(report, acct: str):
     戻り値: (変更したか, detail辞書 or None)。detailは秘書ブリーフィング(--notify-secretary)が
     「配分の変更」欄を作る材料に使う（2026-09-24追加。既存の戻り値bool単体からタプルへ変更したが、
     呼び出し側run_for_acctは戻り値を無視しても動くため後方互換）。"""
+    if _is_pain_axis(acct):
+        return apply_share_pain(report, acct)
     SEGMENTS = _segments(acct)
     cfg = _load_json(CONFIG_FILE, None)
     if not isinstance(cfg, dict) or acct not in cfg:
@@ -569,10 +610,86 @@ def apply_share(report, acct: str):
     return True, detail
 
 
+PAIN_BASE_SHARE = 1
+PAIN_WINNER_SHARE = 2        # index>=1.3 かつ n>=min_n → 基本1に+1
+PAIN_STRONG_SHARE = 3        # index>=2.0 かつ n>=LOSER_MIN_N（強いwinner）
+PAIN_RETEST_DAYS = 14        # loser停止→再テストまでの日数
+
+
+def apply_share_pain(report, acct: str):
+    """悩みカテゴリ軸(masa・2026-10-04)のshare自動調整。毎日走っても結果が同じになる宣言的な再計算:
+      再テスト待ち(config.retest の日付が未来)       → share 0
+      winner(index>=1.3 & n>=min_n)                   → share 2（index>=2.0 & n>=8なら3）= 主題に格上げ
+      loser (index<=0.7 & n>=8)                       → share 0＋retestへ「今日+14日」を記録
+      それ以外                                         → share 1（均等に戻す）
+    再テスト日が来たカテゴリはshare 1へ戻し、14日間は猶予(retest_grace)としてloser判定を無視する
+    （30日窓に古いデータが残るため、戻した直後に再停止されるのを防ぐ）。
+    winner_categories（index降順）はdaily-marketing-automationがINSTA_EASY通常枠・ヒーロー題材の比率を上げる材料。"""
+    cfg = _load_json(CONFIG_FILE, None)
+    if not isinstance(cfg, dict) or acct not in cfg:
+        print(f"[apply:{acct}] segment_config.json が無い/不正のため share 調整をスキップ")
+        return False, None
+    acct_cfg = cfg[acct]
+    old_share = dict(acct_cfg.get("share", {}))
+    retest = dict(acct_cfg.get("retest") or {})
+    grace = dict(acct_cfg.get("retest_grace") or {})
+    summary = report.get("segment_summary", {})
+    today = date.today()
+    today_s = today.isoformat()
+
+    def _due(d):
+        try:
+            return date.fromisoformat(d) <= today
+        except Exception:
+            return True
+
+    for c in [c for c, d in retest.items() if _due(d)]:          # 再テスト日到来
+        retest.pop(c)
+        grace[c] = (today + timedelta(days=PAIN_RETEST_DAYS)).isoformat()
+    grace = {c: d for c, d in grace.items() if not _due(d)}
+
+    new_share, winners, losers = {}, [], []
+    for full in _segments(acct):
+        c = _short_code(acct, full)
+        cell = summary.get(full, {})
+        verdict = cell.get("verdict")
+        if c in retest:
+            new_share[c] = 0
+        elif verdict == "winner":
+            strong = cell.get("index", 0) >= 2.0 and cell.get("n", 0) >= LOSER_MIN_N
+            new_share[c] = PAIN_STRONG_SHARE if strong else PAIN_WINNER_SHARE
+            winners.append((cell.get("index", 0), full))
+        elif verdict == "loser" and c not in grace:
+            new_share[c] = 0
+            retest[c] = (today + timedelta(days=PAIN_RETEST_DAYS)).isoformat()
+            losers.append(full)
+        else:
+            new_share[c] = PAIN_BASE_SHARE
+    winners = [f for _i, f in sorted(winners, reverse=True)]
+
+    new_cfg = dict(acct_cfg)
+    new_cfg["share"] = new_share
+    new_cfg["retest"] = retest
+    new_cfg["retest_grace"] = grace
+    new_cfg["winner_categories"] = [_short_code(acct, f) for f in winners]
+    changed = (new_cfg != acct_cfg)
+    if changed:
+        cfg[acct] = new_cfg
+        CONFIG_FILE.write_text(json.dumps(cfg, ensure_ascii=False, indent=2), encoding="utf-8")
+        print(f"[apply:{acct}] 悩みshare更新: winner={winners} loser(停止→{PAIN_RETEST_DAYS}日後に再テスト)={losers} "
+              f"retest={retest} → {new_share}")
+    else:
+        print(f"[apply:{acct}] 悩みshareの変更なし")
+    share_changed = old_share != new_share
+    detail = {"winners": winners, "losers": losers, "old_share": old_share, "new_share": new_share,
+              "retest": retest}
+    return share_changed, (detail if share_changed else None)
+
+
 def apply_hypotheses(report, acct: str):
     """segment_hypotheses.json の該当acctの仮説の status と last_result を30日窓の実測で更新する。
     状態遷移: untested → testing(n≥1) → winner(index≥1.3,n≥min_n) / loser(index≤0.7,n≥8)。
-    status=retired の仮説は手動退役なので触らない。ファイル不在/不正なら何もせずFalseを返す
+    status=retired/archived の仮説（手動退役・軸切替で保管）は触らない。ファイル不在/不正なら何もせずFalseを返す
     （担当A/Bの仮説投入が未着手でも落ちない）。
     戻り値: (変更したか, updated_idsリスト)。--notify-secretary の「配分の変更」欄に使う
     （2026-09-24追加。既存の戻り値bool単体からタプルへ変更したが、呼び出し側run_for_acctは
@@ -597,7 +714,7 @@ def apply_hypotheses(report, acct: str):
         if not hid:
             continue
         status = h.get("status", "untested")
-        if status == "retired":
+        if status in ("retired", "archived"):
             continue
 
         st = hyp_stats.get(hid)
@@ -738,8 +855,85 @@ def _reliable_baseline_top(acct: str, baseline: dict | None):
     return top_code, SEG_JP.get(acct, {}).get(top_code, top_code)
 
 
+def _pain_rows(acct: str, report: dict, window: str = "30d") -> list[dict]:
+    """悩みカテゴリ別の集計行（n>=1のものだけ）。index=カテゴリ閲覧中央値÷アカウント全体中央値。"""
+    seg = report.get("windows", {}).get(window, {}).get("segment", {})
+    rows = []
+    for full in _segments(acct):
+        c = seg.get(full, {})
+        if c.get("n", 0) >= 1:
+            rows.append({"code": _short_code(acct, full), "name": _seg_jp_name(acct, full), "n": c["n"],
+                         "median": c.get("median_views", 0), "index": c.get("index", 0),
+                         "verdict": c.get("verdict", "判定保留")})
+    return rows
+
+
+def _pain_section(acct: str, report: dict, apply_detail: dict, daily: bool = True) -> list[str]:
+    """masaの秘書向け節: Instagram集客の悩みランキング（2026-10-04）。専門記号(I03等)は出さない。"""
+    min_n = report.get("params", {}).get("min_n", DEFAULT_MIN_N)
+    lines = [f"■ {ACCT_JP.get(acct, acct)}（Instagram集客の悩みランキング）"]
+    rows = sorted(_pain_rows(acct, report), key=lambda r: r["index"], reverse=True)
+    judged = [r for r in rows if r["n"] >= min_n]
+    if not rows:
+        lines.append("・まだ集計できる悩み投稿なし（悩み別の配信は始まったばかり。各悩み"
+                     f"{min_n}本たまってから順位を判定）")
+    else:
+        for i, r in enumerate(rows[:3], 1):
+            tag = "" if r["n"] >= min_n else "・参考値"
+            lines.append(f"・{i}位 {r['name']}：全体の{round(r['index'], 1)}倍（投稿{r['n']}本{tag}）")
+        top_names = {r["name"] for r in rows[:3]}
+        weak = [r for r in sorted(rows, key=lambda r: r["index"])
+                if r["n"] >= 2 and r["index"] < 1.0 and r["name"] not in top_names][:2]
+        if weak:
+            lines.append("・反応が薄い：" + "、".join(
+                f"{r['name']}（全体の{round(r['index'], 1)}倍・投稿{r['n']}本）" for r in weak))
+    if not judged:
+        most = max((r["n"] for r in rows), default=0)
+        lines.append(f"・判定は保留：どの悩みもまだ{min_n}本未満（最多{most}本）")
+    winners = [s for s, c in report.get("segment_summary", {}).items() if c.get("verdict") == "winner"]
+    losers = [s for s, c in report.get("segment_summary", {}).items() if c.get("verdict") == "loser"]
+    if winners:
+        nxt = "『" + "』『".join(_seg_jp_name(acct, s) for s in winners[:3]) + "』を主題に格上げ（配信を増やし、題材にも使う）"
+    elif losers:
+        nxt = "『" + "』『".join(_seg_jp_name(acct, s) for s in losers[:3]) + "』は2週間止めて、あとで再テスト"
+    elif judged:
+        nxt = "決め手になる差はまだなし。均等に配信を続けて差が出るのを待つ"
+    else:
+        nxt = "16個の悩みを毎日6つずつ回し、各悩み5本そろうまで均等に配信"
+    lines.append(f"・次の打ち手：{nxt}")
+    share_detail = apply_detail.get("share") if apply_detail else None
+    if share_detail:
+        diffs = []
+        for code, new_v in share_detail["new_share"].items():
+            old_v = share_detail["old_share"].get(code, 0)
+            if new_v != old_v:
+                diffs.append(f"{SEG_JP['masa'].get(code, code)}を{'増やしました' if new_v > old_v else '止めました' if new_v == 0 else '戻しました'}")
+        lines.append("・配分の変更：" + ("、".join(diffs) if diffs else "なし"))
+    else:
+        lines.append("・配分の変更：なし")
+    return lines
+
+
+def _pain_map_lines(acct: str, report: dict, width: int = 10) -> list[str]:
+    """悩みの地図: カテゴリ別の閲覧中央値（30日窓）をテキスト棒グラフで。"""
+    rows = {r["code"]: r for r in _pain_rows(acct, report)}
+    top = max((r["median"] for r in rows.values()), default=0) or 1
+    out = ["・悩みの地図（閲覧中央値・30日）"]
+    for c in SEG_CODES.get(acct, []):
+        name = SEG_JP[acct].get(c, c)
+        r = rows.get(c)
+        if not r:
+            out.append(f"　{name} ─ 未配信")
+            continue
+        bar = "█" * max(1, round(r["median"] / top * width)) if r["median"] > 0 else "▏"
+        out.append(f"　{name} {bar} {r['median']}（{r['n']}本）")
+    return out
+
+
 def _acct_section(acct: str, report: dict, apply_detail: dict, baseline: dict | None,
                    include_focus: bool = True) -> list[str]:
+    if _is_pain_axis(acct):
+        return _pain_section(acct, report, apply_detail)
     summary = report.get("segment_summary", {})
     winners = [s for s, c in summary.items() if c.get("verdict") == "winner"]
     losers = [s for s, c in summary.items() if c.get("verdict") == "loser"]
@@ -823,6 +1017,8 @@ def _acct_section(acct: str, report: dict, apply_detail: dict, baseline: dict | 
 
 
 def _acct_section_weekly(acct: str, report: dict) -> list[str]:
+    if _is_pain_axis(acct):
+        return _pain_section(acct, report, {}) + _pain_map_lines(acct, report)
     lines = [f"■ {ACCT_JP.get(acct, acct)}"]
     seg_only = report.get("windows", {}).get("7d", {}).get("segment", {})
     ranked = sorted(
@@ -856,6 +1052,8 @@ def _next_watch_line(results: dict) -> str:
             if verdict not in ("testing", "判定保留"):
                 continue
             n = c.get("n", 0)
+            if n == 0:
+                continue  # 未配信の仮説は「あとN本」の対象にしない（悩み軸の48仮説で毎日同じ文言になるため）
             target = 5 if verdict == "判定保留" else 8
             remain = max(0, target - n)
             candidates.append((remain, acct, hid, n))
@@ -1028,6 +1226,21 @@ def _write_obsidian_journal(results: dict, secretary_body: str | None, sent_stat
         parts.append(_segment_hook_table_md(acct, report))
         parts.append("")
         parts.append(_hypothesis_table_md(acct, report))
+        parts.append("")
+
+    if _is_pain_axis("masa"):
+        parts.append("### (b2) masa Instagram集客の悩みランキング（30日窓・全体中央値比）")
+        _rep = results["masa"][0]
+        _rows = sorted(_pain_rows("masa", _rep), key=lambda r: r["index"], reverse=True)
+        if _rows:
+            parts.append("| 順位 | 悩み | n | 閲覧中央値 | 全体比 | 判定 |")
+            parts.append("|---|---|---|---|---|---|")
+            for i, r in enumerate(_rows, 1):
+                parts.append(f"| {i} | {r['name']}({r['code']}) | {r['n']} | {r['median']} | {r['index']} | {r['verdict']} |")
+        else:
+            parts.append("(悩み別の実測データなし・配信開始直後)")
+        parts.append("")
+        parts.extend(_pain_map_lines("masa", _rep))
         parts.append("")
 
     parts.append("### (c) 配分・仮説statusの変更")

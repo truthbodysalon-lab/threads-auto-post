@@ -1,6 +1,6 @@
 {
-  "generated": "2026-09-27",
-  "source": "obsidian myfiles 走査 2026-09-23（悩み65件）",
+  "generated": "2026-10-04",
+  "source": "obsidian myfiles 走査 2026-09-23（悩み65件） / masa=Instagram悩みマップ2026-10-04(IP01〜IP48)",
   "pains": [
     {
       "id": "P001",
@@ -1493,7 +1493,7 @@
         "P004",
         "P006"
       ],
-      "status": "testing",
+      "status": "archived",
       "posts": [
         {
           "hook": "low",
@@ -1508,7 +1508,9 @@
         "n": 2,
         "index": 2.949,
         "updated": "2026-09-27"
-      }
+      },
+      "archived_at": "2026-10-04",
+      "archived_reason": "masaのテスト軸を売上ステージS1〜S5からInstagram集客の悩みカテゴリI01〜I16へ切替(2026-10-04本人指示)"
     },
     {
       "id": "H02",
@@ -1520,7 +1522,7 @@
         "P016",
         "P005"
       ],
-      "status": "testing",
+      "status": "archived",
       "posts": [
         {
           "hook": "low",
@@ -1535,7 +1537,9 @@
         "n": 1,
         "index": 3.255,
         "updated": "2026-09-27"
-      }
+      },
+      "archived_at": "2026-10-04",
+      "archived_reason": "masaのテスト軸を売上ステージS1〜S5からInstagram集客の悩みカテゴリI01〜I16へ切替(2026-10-04本人指示)"
     },
     {
       "id": "H03",
@@ -1548,7 +1552,7 @@
         "P052",
         "P053"
       ],
-      "status": "testing",
+      "status": "archived",
       "posts": [
         {
           "hook": "low",
@@ -1563,7 +1567,9 @@
         "n": 2,
         "index": 1.168,
         "updated": "2026-09-27"
-      }
+      },
+      "archived_at": "2026-10-04",
+      "archived_reason": "masaのテスト軸を売上ステージS1〜S5からInstagram集客の悩みカテゴリI01〜I16へ切替(2026-10-04本人指示)"
     },
     {
       "id": "H04",
@@ -1575,7 +1581,7 @@
         "P009",
         "P050"
       ],
-      "status": "testing",
+      "status": "archived",
       "posts": [
         {
           "hook": "low",
@@ -1590,7 +1596,9 @@
         "n": 2,
         "index": 2.657,
         "updated": "2026-09-27"
-      }
+      },
+      "archived_at": "2026-10-04",
+      "archived_reason": "masaのテスト軸を売上ステージS1〜S5からInstagram集客の悩みカテゴリI01〜I16へ切替(2026-10-04本人指示)"
     },
     {
       "id": "H05",
@@ -1601,7 +1609,7 @@
         "P012",
         "P051"
       ],
-      "status": "testing",
+      "status": "archived",
       "posts": [
         {
           "hook": "low",
@@ -1616,7 +1624,9 @@
         "n": 1,
         "index": 2.657,
         "updated": "2026-09-27"
-      }
+      },
+      "archived_at": "2026-10-04",
+      "archived_reason": "masaのテスト軸を売上ステージS1〜S5からInstagram集客の悩みカテゴリI01〜I16へ切替(2026-10-04本人指示)"
     },
     {
       "id": "H06",
@@ -1627,7 +1637,7 @@
         "P013",
         "P014"
       ],
-      "status": "testing",
+      "status": "archived",
       "posts": [
         {
           "hook": "low",
@@ -1642,7 +1652,9 @@
         "n": 1,
         "index": 2.962,
         "updated": "2026-09-30"
-      }
+      },
+      "archived_at": "2026-10-04",
+      "archived_reason": "masaのテスト軸を売上ステージS1〜S5からInstagram集客の悩みカテゴリI01〜I16へ切替(2026-10-04本人指示)"
     },
     {
       "id": "H07",
@@ -1653,7 +1665,7 @@
         "P017",
         "P018"
       ],
-      "status": "testing",
+      "status": "archived",
       "posts": [
         {
           "hook": "low",
@@ -1668,7 +1680,9 @@
         "n": 2,
         "index": 5.474,
         "updated": "2026-09-27"
-      }
+      },
+      "archived_at": "2026-10-04",
+      "archived_reason": "masaのテスト軸を売上ステージS1〜S5からInstagram集客の悩みカテゴリI01〜I16へ切替(2026-10-04本人指示)"
     },
     {
       "id": "H08",
@@ -1680,7 +1694,7 @@
         "P022",
         "P027"
       ],
-      "status": "testing",
+      "status": "archived",
       "posts": [
         {
           "hook": "low",
@@ -1695,7 +1709,9 @@
         "n": 2,
         "index": 7.073,
         "updated": "2026-09-27"
-      }
+      },
+      "archived_at": "2026-10-04",
+      "archived_reason": "masaのテスト軸を売上ステージS1〜S5からInstagram集客の悩みカテゴリI01〜I16へ切替(2026-10-04本人指示)"
     },
     {
       "id": "H09",
@@ -1705,7 +1721,7 @@
       "pain_ids": [
         "P023"
       ],
-      "status": "testing",
+      "status": "archived",
       "posts": [
         {
           "hook": "low",
@@ -1720,7 +1736,9 @@
         "n": 1,
         "index": 6.812,
         "updated": "2026-09-30"
-      }
+      },
+      "archived_at": "2026-10-04",
+      "archived_reason": "masaのテスト軸を売上ステージS1〜S5からInstagram集客の悩みカテゴリI01〜I16へ切替(2026-10-04本人指示)"
     },
     {
       "id": "H10",
@@ -1730,7 +1748,7 @@
       "pain_ids": [
         "P024"
       ],
-      "status": "testing",
+      "status": "archived",
       "posts": [
         {
           "hook": "low",
@@ -1745,7 +1763,9 @@
         "n": 1,
         "index": 4.331,
         "updated": "2026-09-30"
-      }
+      },
+      "archived_at": "2026-10-04",
+      "archived_reason": "masaのテスト軸を売上ステージS1〜S5からInstagram集客の悩みカテゴリI01〜I16へ切替(2026-10-04本人指示)"
     },
     {
       "id": "H11",
@@ -1757,7 +1777,7 @@
         "P028",
         "P029"
       ],
-      "status": "testing",
+      "status": "archived",
       "posts": [
         {
           "hook": "low",
@@ -1772,7 +1792,9 @@
         "n": 1,
         "index": 4.06,
         "updated": "2026-09-30"
-      }
+      },
+      "archived_at": "2026-10-04",
+      "archived_reason": "masaのテスト軸を売上ステージS1〜S5からInstagram集客の悩みカテゴリI01〜I16へ切替(2026-10-04本人指示)"
     },
     {
       "id": "H12",
@@ -1785,7 +1807,7 @@
         "P032",
         "P033"
       ],
-      "status": "testing",
+      "status": "archived",
       "posts": [
         {
           "hook": "low",
@@ -1800,7 +1822,9 @@
         "n": 2,
         "index": 1.752,
         "updated": "2026-09-27"
-      }
+      },
+      "archived_at": "2026-10-04",
+      "archived_reason": "masaのテスト軸を売上ステージS1〜S5からInstagram集客の悩みカテゴリI01〜I16へ切替(2026-10-04本人指示)"
     },
     {
       "id": "H13",
@@ -1811,7 +1835,7 @@
         "P034",
         "P059"
       ],
-      "status": "testing",
+      "status": "archived",
       "posts": [
         {
           "hook": "low",
@@ -1826,7 +1850,9 @@
         "n": 2,
         "index": 0.54,
         "updated": "2026-09-27"
-      }
+      },
+      "archived_at": "2026-10-04",
+      "archived_reason": "masaのテスト軸を売上ステージS1〜S5からInstagram集客の悩みカテゴリI01〜I16へ切替(2026-10-04本人指示)"
     },
     {
       "id": "H14",
@@ -1837,7 +1863,7 @@
         "P037",
         "P038"
       ],
-      "status": "testing",
+      "status": "archived",
       "posts": [
         {
           "hook": "low",
@@ -1852,7 +1878,9 @@
         "n": 1,
         "index": 4.451,
         "updated": "2026-09-30"
-      }
+      },
+      "archived_at": "2026-10-04",
+      "archived_reason": "masaのテスト軸を売上ステージS1〜S5からInstagram集客の悩みカテゴリI01〜I16へ切替(2026-10-04本人指示)"
     },
     {
       "id": "H15",
@@ -1862,7 +1890,7 @@
       "pain_ids": [
         "P036"
       ],
-      "status": "testing",
+      "status": "archived",
       "posts": [
         {
           "hook": "low",
@@ -1877,7 +1905,9 @@
         "n": 1,
         "index": 2.12,
         "updated": "2026-09-30"
-      }
+      },
+      "archived_at": "2026-10-04",
+      "archived_reason": "masaのテスト軸を売上ステージS1〜S5からInstagram集客の悩みカテゴリI01〜I16へ切替(2026-10-04本人指示)"
     },
     {
       "id": "H16",
@@ -1888,7 +1918,7 @@
         "P041",
         "P042"
       ],
-      "status": "testing",
+      "status": "archived",
       "posts": [
         {
           "hook": "low",
@@ -1903,7 +1933,9 @@
         "n": 2,
         "index": 2.321,
         "updated": "2026-09-27"
-      }
+      },
+      "archived_at": "2026-10-04",
+      "archived_reason": "masaのテスト軸を売上ステージS1〜S5からInstagram集客の悩みカテゴリI01〜I16へ切替(2026-10-04本人指示)"
     },
     {
       "id": "H17",
@@ -1914,7 +1946,7 @@
         "P043",
         "P064"
       ],
-      "status": "untested",
+      "status": "archived",
       "posts": [
         {
           "hook": "low",
@@ -1929,7 +1961,9 @@
         "n": 0,
         "index": null,
         "updated": null
-      }
+      },
+      "archived_at": "2026-10-04",
+      "archived_reason": "masaのテスト軸を売上ステージS1〜S5からInstagram集客の悩みカテゴリI01〜I16へ切替(2026-10-04本人指示)"
     },
     {
       "id": "H18",
@@ -1939,7 +1973,7 @@
       "pain_ids": [
         "P049"
       ],
-      "status": "testing",
+      "status": "archived",
       "posts": [
         {
           "hook": "low",
@@ -1954,7 +1988,9 @@
         "n": 1,
         "index": 4.752,
         "updated": "2026-09-30"
-      }
+      },
+      "archived_at": "2026-10-04",
+      "archived_reason": "masaのテスト軸を売上ステージS1〜S5からInstagram集客の悩みカテゴリI01〜I16へ切替(2026-10-04本人指示)"
     },
     {
       "id": "H19",
@@ -1964,7 +2000,7 @@
       "pain_ids": [
         "P047"
       ],
-      "status": "testing",
+      "status": "archived",
       "posts": [
         {
           "hook": "low",
@@ -1979,7 +2015,9 @@
         "n": 1,
         "index": 2.376,
         "updated": "2026-09-30"
-      }
+      },
+      "archived_at": "2026-10-04",
+      "archived_reason": "masaのテスト軸を売上ステージS1〜S5からInstagram集客の悩みカテゴリI01〜I16へ切替(2026-10-04本人指示)"
     },
     {
       "id": "H20",
@@ -1990,7 +2028,7 @@
         "P002",
         "P003"
       ],
-      "status": "testing",
+      "status": "archived",
       "posts": [
         {
           "hook": "low",
@@ -2005,7 +2043,9 @@
         "n": 1,
         "index": 5.65,
         "updated": "2026-09-27"
-      }
+      },
+      "archived_at": "2026-10-04",
+      "archived_reason": "masaのテスト軸を売上ステージS1〜S5からInstagram集客の悩みカテゴリI01〜I16へ切替(2026-10-04本人指示)"
     },
     {
       "id": "H21",
@@ -2015,7 +2055,7 @@
       "pain_ids": [
         "P054"
       ],
-      "status": "testing",
+      "status": "archived",
       "posts": [
         {
           "hook": "low",
@@ -2030,7 +2070,9 @@
         "n": 1,
         "index": 2.917,
         "updated": "2026-09-30"
-      }
+      },
+      "archived_at": "2026-10-04",
+      "archived_reason": "masaのテスト軸を売上ステージS1〜S5からInstagram集客の悩みカテゴリI01〜I16へ切替(2026-10-04本人指示)"
     },
     {
       "id": "H22",
@@ -2042,7 +2084,7 @@
         "P056",
         "P057"
       ],
-      "status": "testing",
+      "status": "archived",
       "posts": [
         {
           "hook": "low",
@@ -2057,7 +2099,9 @@
         "n": 1,
         "index": 10.992,
         "updated": "2026-09-30"
-      }
+      },
+      "archived_at": "2026-10-04",
+      "archived_reason": "masaのテスト軸を売上ステージS1〜S5からInstagram集客の悩みカテゴリI01〜I16へ切替(2026-10-04本人指示)"
     },
     {
       "id": "H23",
@@ -2067,7 +2111,7 @@
       "pain_ids": [
         "P066"
       ],
-      "status": "testing",
+      "status": "archived",
       "posts": [
         {
           "hook": "low",
@@ -2082,7 +2126,9 @@
         "n": 1,
         "index": 3.263,
         "updated": "2026-09-30"
-      }
+      },
+      "archived_at": "2026-10-04",
+      "archived_reason": "masaのテスト軸を売上ステージS1〜S5からInstagram集客の悩みカテゴリI01〜I16へ切替(2026-10-04本人指示)"
     },
     {
       "id": "H24",
@@ -2092,7 +2138,7 @@
       "pain_ids": [
         "P067"
       ],
-      "status": "testing",
+      "status": "archived",
       "posts": [
         {
           "hook": "low",
@@ -2107,7 +2153,9 @@
         "n": 1,
         "index": 2.391,
         "updated": "2026-09-30"
-      }
+      },
+      "archived_at": "2026-10-04",
+      "archived_reason": "masaのテスト軸を売上ステージS1〜S5からInstagram集客の悩みカテゴリI01〜I16へ切替(2026-10-04本人指示)"
     },
     {
       "id": "H25",
@@ -2117,7 +2165,7 @@
       "pain_ids": [
         "P068"
       ],
-      "status": "testing",
+      "status": "archived",
       "posts": [
         {
           "hook": "low",
@@ -2132,7 +2180,9 @@
         "n": 1,
         "index": 4.782,
         "updated": "2026-09-30"
-      }
+      },
+      "archived_at": "2026-10-04",
+      "archived_reason": "masaのテスト軸を売上ステージS1〜S5からInstagram集客の悩みカテゴリI01〜I16へ切替(2026-10-04本人指示)"
     },
     {
       "id": "H26",
@@ -2142,7 +2192,7 @@
       "pain_ids": [
         "P069"
       ],
-      "status": "testing",
+      "status": "archived",
       "posts": [
         {
           "hook": "low",
@@ -2157,7 +2207,9 @@
         "n": 1,
         "index": 0.556,
         "updated": "2026-09-30"
-      }
+      },
+      "archived_at": "2026-10-04",
+      "archived_reason": "masaのテスト軸を売上ステージS1〜S5からInstagram集客の悩みカテゴリI01〜I16へ切替(2026-10-04本人指示)"
     },
     {
       "id": "H27",
@@ -2167,7 +2219,7 @@
       "pain_ids": [
         "P070"
       ],
-      "status": "untested",
+      "status": "archived",
       "posts": [
         {
           "hook": "low",
@@ -2182,7 +2234,9 @@
         "n": 0,
         "index": null,
         "updated": null
-      }
+      },
+      "archived_at": "2026-10-04",
+      "archived_reason": "masaのテスト軸を売上ステージS1〜S5からInstagram集客の悩みカテゴリI01〜I16へ切替(2026-10-04本人指示)"
     },
     {
       "id": "H28",
@@ -2192,7 +2246,7 @@
       "pain_ids": [
         "P071"
       ],
-      "status": "testing",
+      "status": "archived",
       "posts": [
         {
           "hook": "low",
@@ -2207,7 +2261,9 @@
         "n": 1,
         "index": 0.12,
         "updated": "2026-09-30"
-      }
+      },
+      "archived_at": "2026-10-04",
+      "archived_reason": "masaのテスト軸を売上ステージS1〜S5からInstagram集客の悩みカテゴリI01〜I16へ切替(2026-10-04本人指示)"
     },
     {
       "id": "H29",
@@ -2217,7 +2273,7 @@
       "pain_ids": [
         "P072"
       ],
-      "status": "testing",
+      "status": "archived",
       "posts": [
         {
           "hook": "low",
@@ -2232,7 +2288,9 @@
         "n": 2,
         "index": 2.173,
         "updated": "2026-09-30"
-      }
+      },
+      "archived_at": "2026-10-04",
+      "archived_reason": "masaのテスト軸を売上ステージS1〜S5からInstagram集客の悩みカテゴリI01〜I16へ切替(2026-10-04本人指示)"
     },
     {
       "id": "H30",
@@ -2242,7 +2300,7 @@
       "pain_ids": [
         "P073"
       ],
-      "status": "testing",
+      "status": "archived",
       "posts": [
         {
           "hook": "low",
@@ -2257,7 +2315,9 @@
         "n": 2,
         "index": 4.88,
         "updated": "2026-09-30"
-      }
+      },
+      "archived_at": "2026-10-04",
+      "archived_reason": "masaのテスト軸を売上ステージS1〜S5からInstagram集客の悩みカテゴリI01〜I16へ切替(2026-10-04本人指示)"
     },
     {
       "id": "Z01_truth",
@@ -2902,12 +2962,14 @@
           "text": "高いAIツールを入れたのに、結局使いこなせていない院長へ。\n原因は才能じゃなく、置き場所と手順が1つに決まっていないだけです。\n僕は迷ったら『とりあえずここに置く』を1つだけ決めています。"
         }
       ],
-      "status": "testing",
+      "status": "archived",
       "last_result": {
         "n": 1,
         "index": 0.376,
         "updated": "2026-09-30"
-      }
+      },
+      "archived_at": "2026-10-04",
+      "archived_reason": "masaのテスト軸を売上ステージS1〜S5からInstagram集客の悩みカテゴリI01〜I16へ切替(2026-10-04本人指示)"
     },
     {
       "id": "H32",
@@ -2929,12 +2991,14 @@
           "text": "AIに何をどこまで頼んだか、もう覚えていない院長へ。\n僕は毎朝、前日の結果だけ見て次を決めます。\n覚えておく必要がないから、続けられます。"
         }
       ],
-      "status": "testing",
+      "status": "archived",
       "last_result": {
         "n": 1,
         "index": 0.165,
         "updated": "2026-09-30"
-      }
+      },
+      "archived_at": "2026-10-04",
+      "archived_reason": "masaのテスト軸を売上ステージS1〜S5からInstagram集客の悩みカテゴリI01〜I16へ切替(2026-10-04本人指示)"
     },
     {
       "id": "H33",
@@ -2942,7 +3006,7 @@
       "theme": "インスタ集客のハードル",
       "hypothesis": "開業前層は完璧な準備を終えてから発信しようとして始められない。1日1分の準備中写真から始めてよいと伝えれば反応するはず。",
       "pain_ids": [],
-      "status": "untested",
+      "status": "archived",
       "posts": [
         {
           "hook": "low",
@@ -2958,7 +3022,9 @@
         "index": null,
         "updated": null
       },
-      "evidence": "本人指示2026-10-04(masa主テーマ=Instagram集客のハードルを下げる)＋小川さん2026-09-22助言"
+      "evidence": "本人指示2026-10-04(masa主テーマ=Instagram集客のハードルを下げる)＋小川さん2026-09-22助言",
+      "archived_at": "2026-10-04",
+      "archived_reason": "masaのテスト軸を売上ステージS1〜S5からInstagram集客の悩みカテゴリI01〜I16へ切替(2026-10-04本人指示)"
     },
     {
       "id": "H34",
@@ -2966,7 +3032,7 @@
       "theme": "インスタ集客のハードル",
       "hypothesis": "開業1年層は毎日投稿を目指して挫折している。週3回・1分に量を絞ると伝えれば続けられるはず。",
       "pain_ids": [],
-      "status": "untested",
+      "status": "archived",
       "posts": [
         {
           "hook": "low",
@@ -2982,7 +3048,9 @@
         "index": null,
         "updated": null
       },
-      "evidence": "本人指示2026-10-04(masa主テーマ=Instagram集客のハードルを下げる)＋小川さん2026-09-22助言"
+      "evidence": "本人指示2026-10-04(masa主テーマ=Instagram集客のハードルを下げる)＋小川さん2026-09-22助言",
+      "archived_at": "2026-10-04",
+      "archived_reason": "masaのテスト軸を売上ステージS1〜S5からInstagram集客の悩みカテゴリI01〜I16へ切替(2026-10-04本人指示)"
     },
     {
       "id": "H35",
@@ -2990,7 +3058,7 @@
       "theme": "インスタ集客のハードル",
       "hypothesis": "月商50万の壁層は時間がなく運用が後回しになる。ストーリーズ1日1枚の1分運用を示せば動けるはず。",
       "pain_ids": [],
-      "status": "untested",
+      "status": "archived",
       "posts": [
         {
           "hook": "low",
@@ -3006,7 +3074,9 @@
         "index": null,
         "updated": null
       },
-      "evidence": "本人指示2026-10-04(masa主テーマ=Instagram集客のハードルを下げる)＋小川さん2026-09-22助言"
+      "evidence": "本人指示2026-10-04(masa主テーマ=Instagram集客のハードルを下げる)＋小川さん2026-09-22助言",
+      "archived_at": "2026-10-04",
+      "archived_reason": "masaのテスト軸を売上ステージS1〜S5からInstagram集客の悩みカテゴリI01〜I16へ切替(2026-10-04本人指示)"
     },
     {
       "id": "H36",
@@ -3014,7 +3084,7 @@
       "theme": "インスタ集客のハードル",
       "hypothesis": "スタッフ有りの院長は投稿を1人で抱えて止まる。撮影はスタッフ・確認は院長と分ければ続くはず。",
       "pain_ids": [],
-      "status": "untested",
+      "status": "archived",
       "posts": [
         {
           "hook": "low",
@@ -3030,7 +3100,9 @@
         "index": null,
         "updated": null
       },
-      "evidence": "本人指示2026-10-04(masa主テーマ=Instagram集客のハードルを下げる)＋小川さん2026-09-22助言"
+      "evidence": "本人指示2026-10-04(masa主テーマ=Instagram集客のハードルを下げる)＋小川さん2026-09-22助言",
+      "archived_at": "2026-10-04",
+      "archived_reason": "masaのテスト軸を売上ステージS1〜S5からInstagram集客の悩みカテゴリI01〜I16へ切替(2026-10-04本人指示)"
     },
     {
       "id": "H37",
@@ -3038,7 +3110,7 @@
       "theme": "インスタ集客のハードル",
       "hypothesis": "高額商品層は長文の発信を難しく考えて止まる。短い投稿とAI下書きなら続くと伝えれば響くはず。",
       "pain_ids": [],
-      "status": "untested",
+      "status": "archived",
       "posts": [
         {
           "hook": "low",
@@ -3054,7 +3126,1209 @@
         "index": null,
         "updated": null
       },
-      "evidence": "本人指示2026-10-04(masa主テーマ=Instagram集客のハードルを下げる)＋小川さん2026-09-22助言"
+      "evidence": "本人指示2026-10-04(masa主テーマ=Instagram集客のハードルを下げる)＋小川さん2026-09-22助言",
+      "archived_at": "2026-10-04",
+      "archived_reason": "masaのテスト軸を売上ステージS1〜S5からInstagram集客の悩みカテゴリI01〜I16へ切替(2026-10-04本人指示)"
+    },
+    {
+      "id": "IP01",
+      "acct": "masa",
+      "segment": "I01",
+      "theme": "Instagram悩み",
+      "hypothesis": "「ちゃんと勉強してから始めないと恥をかく」と思って動けない → 最初の1投稿は1分・スマホだけと言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "インスタを何から始めればいいか分からない人へ。\n\n勉強してから始めなくていい。\nスマホで、1分で出せる1枚から。\n\n今日は、お店の中を1枚だけ撮ってください。"
+        },
+        {
+          "hook": "high",
+          "text": "インスタを勉強してから始めたい人へ。\n\n勉強してから始める人ほど、半年後もゼロのままです。\n先に1枚出した人から、学べます。\n\n今日は、1枚だけ出してから調べてください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "悩みマップ2026-10-04 I01『何から始めればいいか分からない』の根拠『インスタが全然できてない』（Notion/玉城さん打ち合わせ.md）"
+    },
+    {
+      "id": "IP02",
+      "acct": "masa",
+      "segment": "I01",
+      "theme": "Instagram悩み",
+      "hypothesis": "フィード・リール・ストーリーズを全部同時に始めようとして止まっている → 最初は1つだけと言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "インスタで、何から手を付けるか迷う人へ。\n\n最初は1つだけでいい。\nフィードか、リールか、ストーリーズ。\n\n今日は、1つだけ選んで紙に書いてください。"
+        },
+        {
+          "hook": "high",
+          "text": "インスタを全部同時に始めようとする人へ。\n\n全部やろうとする店は、全部止まります。\n1つに絞った店だけが、続きます。\n\n今日は、やらないものを2つ決めてください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "悩みマップ2026-10-04 I01『何から始めればいいか分からない』の根拠『インスタが全然できてない』（Notion/玉城さん打ち合わせ.md）"
+    },
+    {
+      "id": "IP03",
+      "acct": "masa",
+      "segment": "I01",
+      "theme": "Instagram悩み",
+      "hypothesis": "他店のアカウントと比べて差に圧倒され始められない → 最初の10投稿は誰も見ていない練習期間と言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "インスタを、他店と比べて怖くなる人へ。\n\n最初の10投稿は、誰にも見られません。\nだから、うまくなくていい。\n\n今日は、1本だけ気楽に出してみてください。"
+        },
+        {
+          "hook": "high",
+          "text": "インスタで、他店の差に圧倒されている人へ。\n\n最初の10投稿は、誰も見ていません。\n怖がる時間が、一番もったいない。\n\n今日は、1本だけ出してください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "悩みマップ2026-10-04 I01『何から始めればいいか分からない』の根拠『インスタが全然できてない』（Notion/玉城さん打ち合わせ.md）"
+    },
+    {
+      "id": "IP04",
+      "acct": "masa",
+      "segment": "I02",
+      "theme": "Instagram悩み",
+      "hypothesis": "コンセプトを完璧に決めてから投稿しようとして止まっている → 軸は『誰の何を助けるか』1行でよいと言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "インスタのコンセプトが決まらない人へ。\n\n1行でいい。\n誰の、何の悩みを助けるか。それだけです。\n\n今日は、この1行を紙に書いてください。"
+        },
+        {
+          "hook": "high",
+          "text": "インスタのコンセプトを決めてから投稿する人へ。\n\n決めてから始める店は、始まりません。\n投稿しながら、軸は固まります。\n\n今日は、1行だけ仮で決めて出してください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "悩みマップ2026-10-04 I02『軸・コンセプトが決まらない』の根拠『商品設計がしっかりできていないとSNSなどの発信がブレてしまう』（Notion/堀先生講義.md）"
+    },
+    {
+      "id": "IP05",
+      "acct": "masa",
+      "segment": "I02",
+      "theme": "Instagram悩み",
+      "hypothesis": "何でも発信して軸がブレ、誰向けか伝わっていない → 直近10投稿を並べて見るだけでブレが分かると言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "インスタで、毎回違う話をしてしまう人へ。\n\n直近の投稿を10個、並べてみてください。\n1分で、ブレが見えます。\n\n今日は、画面を並べて眺めるだけでいい。"
+        },
+        {
+          "hook": "high",
+          "text": "インスタで、何屋か伝わらない人へ。\n\n毎回違う話をするアカウントは、記憶に残りません。\n見る人は、3秒で離れます。\n\n今日は、直近10投稿を並べてください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "悩みマップ2026-10-04 I02『軸・コンセプトが決まらない』の根拠『商品設計がしっかりできていないとSNSなどの発信がブレてしまう』（Notion/堀先生講義.md）"
+    },
+    {
+      "id": "IP06",
+      "acct": "masa",
+      "segment": "I02",
+      "theme": "Instagram悩み",
+      "hypothesis": "自分の強みが言えず発信が曖昧になる → 強みはお客様に1つ聞けば出ると言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "インスタで、自分の強みが言えない人へ。\n\n自分では見つかりません。\nお客様に、1つ聞くだけでいい。\n\n今日は、1人だけに聞いてみてください。"
+        },
+        {
+          "hook": "high",
+          "text": "インスタで、強みを探し続けている人へ。\n\n強みは、自分では見つかりません。\nお客様が、もう知っています。\n\n今日は、お客様に1つだけ聞いてください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "悩みマップ2026-10-04 I02『軸・コンセプトが決まらない』の根拠『商品設計がしっかりできていないとSNSなどの発信がブレてしまう』（Notion/堀先生講義.md）"
+    },
+    {
+      "id": "IP07",
+      "acct": "masa",
+      "segment": "I03",
+      "theme": "Instagram悩み",
+      "hypothesis": "毎日新しいネタを探して疲弊している → お客様に聞かれたことをそのまま書けばネタになると言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "インスタの投稿ネタが、3日で尽きる人へ。\n\n探さなくていい。\n昨日お客様に聞かれたことを、1つ書く。\n\n今日は、聞かれたことを1つメモしてください。"
+        },
+        {
+          "hook": "high",
+          "text": "インスタの投稿ネタを、毎日探している人へ。\n\nネタは、探している間は見つかりません。\n聞かれたことを書けば、足ります。\n\n今日は、聞かれたことを1つ書いてください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "悩みマップ2026-10-04 I03『投稿ネタが出ない』の根拠『「毎日何を投稿しよう」と悩む時間が最大のボトルネック』（PROST AIスクール/07_AI業務効率化の実践/7-4｜SNS運用を仕組み化する.md）"
+    },
+    {
+      "id": "IP08",
+      "acct": "masa",
+      "segment": "I03",
+      "theme": "Instagram悩み",
+      "hypothesis": "当たった投稿を繰り返すのは恥ずかしいと思っている → 当たった投稿は出し直してよいと言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "インスタで、同じ話を出すのが恥ずかしい人へ。\n\n当たった投稿は、出し直していい。\n見る人は、意外と覚えていません。\n\n今日は、先月の1本を選んでください。"
+        },
+        {
+          "hook": "high",
+          "text": "インスタで、毎回新しい話を探している人へ。\n\n新しいネタを探す店より、同じ話を3回出す店が伸びます。\n\n今日は、当たった投稿を1つ出し直してください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "悩みマップ2026-10-04 I03『投稿ネタが出ない』の根拠『「毎日何を投稿しよう」と悩む時間が最大のボトルネック』（PROST AIスクール/07_AI業務効率化の実践/7-4｜SNS運用を仕組み化する.md）"
+    },
+    {
+      "id": "IP09",
+      "acct": "masa",
+      "segment": "I03",
+      "theme": "Instagram悩み",
+      "hypothesis": "写真がないと投稿できないと思っている → 文字2行だけで投稿できると言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "インスタの写真がなくて、投稿できない人へ。\n\n写真がない日は、文字2行でいい。\n今日あったことを、そのまま書く。\n\n今日は、2行だけ書いてください。"
+        },
+        {
+          "hook": "high",
+          "text": "インスタの写真を探して、手が止まる人へ。\n\n写真を探している時間が、一番のムダです。\n文字だけで、投稿は出せます。\n\n今日は、文字2行で出してください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "悩みマップ2026-10-04 I03『投稿ネタが出ない』の根拠『「毎日何を投稿しよう」と悩む時間が最大のボトルネック』（PROST AIスクール/07_AI業務効率化の実践/7-4｜SNS運用を仕組み化する.md）"
+    },
+    {
+      "id": "IP10",
+      "acct": "masa",
+      "segment": "I04",
+      "theme": "Instagram悩み",
+      "hypothesis": "顔を出さないとインスタは伸びないと思い込んでいる → 手元・お店の中だけで足りると言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "インスタで、顔を出すのが怖い人へ。\n\n顔は出さなくていい。\n手元10秒で、始められます。\n\n今日は、手元だけ10秒撮ってください。"
+        },
+        {
+          "hook": "high",
+          "text": "インスタは顔を出さないと伸びない、と思う人へ。\n\n顔を出さない店のほうが、続いています。\n続く店が、最後に残ります。\n\n今日は、手元だけで1本撮ってください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "悩みマップ2026-10-04 I04『撮影・顔出し・デザインが苦手』の根拠『写真撮るのが面倒くさかったら』（商売人の学校/_文字起こし/vm_417028094.txt）"
+    },
+    {
+      "id": "IP11",
+      "acct": "masa",
+      "segment": "I04",
+      "theme": "Instagram悩み",
+      "hypothesis": "撮影機材や照明が必要と思っている → スマホを棚に立てかけて10秒撮るだけと言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "インスタの撮影に、機材が要ると思う人へ。\n\n三脚もマイクも、要りません。\nスマホを棚に立てかけて、10秒。\n\n今日は、スマホを棚に立てかけてみてください。"
+        },
+        {
+          "hook": "high",
+          "text": "インスタ用に、機材を揃えようとする人へ。\n\n機材を揃えた店ほど、撮らなくなります。\n道具より先に、1本撮ることです。\n\n今日は、今あるスマホで10秒撮ってください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "悩みマップ2026-10-04 I04『撮影・顔出し・デザインが苦手』の根拠『写真撮るのが面倒くさかったら』（商売人の学校/_文字起こし/vm_417028094.txt）"
+    },
+    {
+      "id": "IP12",
+      "acct": "masa",
+      "segment": "I04",
+      "theme": "Instagram悩み",
+      "hypothesis": "デザインセンスがなく見映えが怖い → 文字だけで足りると言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "インスタのデザインが苦手な人へ。\n\nデザインは、文字だけで足ります。\n白い背景に、黒い文字で十分です。\n\n今日は、文字だけの画像を1枚作ってください。"
+        },
+        {
+          "hook": "high",
+          "text": "インスタの見た目に、時間をかける人へ。\n\nおしゃれな画像より、1行目の言葉のほうが効きます。\n見た目は、後回しで構いません。\n\n今日は、1行目だけ書き直してください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "悩みマップ2026-10-04 I04『撮影・顔出し・デザインが苦手』の根拠『写真撮るのが面倒くさかったら』（商売人の学校/_文字起こし/vm_417028094.txt）"
+    },
+    {
+      "id": "IP13",
+      "acct": "masa",
+      "segment": "I05",
+      "theme": "Instagram悩み",
+      "hypothesis": "リールは撮影も編集も難しいと思い込んで手が出ない → 写真3枚を並べるだけでリールになると言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "インスタのリールが難しくて、手が出ない人へ。\n\n写真を3枚並べるだけで、リールになります。\n撮影も編集も、要りません。\n\n今日は、写真を3枚選んでください。"
+        },
+        {
+          "hook": "high",
+          "text": "リールを怖がっている人へ。\n\n怖いのは撮影ではなく、準備です。\n準備を減らせば、すぐ出せます。\n\n今日は、写真を3枚だけ選んでください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "悩みマップ2026-10-04 I05『リールが怖い・難しい』の根拠『リール全然やってないんですよ』（マーケティング学習/インスタハカセ講義/01_プレセミナー_文字起こし.md）"
+    },
+    {
+      "id": "IP14",
+      "acct": "masa",
+      "segment": "I05",
+      "theme": "Instagram悩み",
+      "hypothesis": "話すのが苦手でリールを諦めている → 文字3行のリールで伝わると言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "リールで、話すのが苦手な人へ。\n\nしゃべらなくていい。\n文字3行のリールで、伝わります。\n\n今日は、伝えたいことを3行で書いてください。"
+        },
+        {
+          "hook": "high",
+          "text": "リールで、話し上手になろうとする人へ。\n\nリールは、話し上手より、言い切る人が勝ちます。\n上手さは、いりません。\n\n今日は、言い切る一言を1つ決めてください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "悩みマップ2026-10-04 I05『リールが怖い・難しい』の根拠『リール全然やってないんですよ』（マーケティング学習/インスタハカセ講義/01_プレセミナー_文字起こし.md）"
+    },
+    {
+      "id": "IP15",
+      "acct": "masa",
+      "segment": "I05",
+      "theme": "Instagram悩み",
+      "hypothesis": "リールが伸びないのは才能やセンスのせいと思っている → 原因の多くは最初の1秒（冒頭の一言）と言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "リールが伸びなくて、落ち込んでいる人へ。\n\n原因の多くは、最初の1秒です。\n冒頭の一言を変えるだけでいい。\n\n今日は、冒頭の一言を1つ書き直してください。"
+        },
+        {
+          "hook": "high",
+          "text": "リールが伸びないのは、センスのせいと思う人へ。\n\nセンスの問題ではありません。\n最初の1秒で、見る人が決まります。\n\n今日は、冒頭の一言だけ変えてみてください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "悩みマップ2026-10-04 I05『リールが怖い・難しい』の根拠『リール全然やってないんですよ』（マーケティング学習/インスタハカセ講義/01_プレセミナー_文字起こし.md）"
+    },
+    {
+      "id": "IP16",
+      "acct": "masa",
+      "segment": "I06",
+      "theme": "Instagram悩み",
+      "hypothesis": "毎日投稿しないと意味がないと思って挫折している → 週3回・1分で足りると言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "インスタが、毎日続かない人へ。\n\n毎日じゃなくていい。\n週に3回、1分で十分です。\n\n今日は、投稿する曜日を3つ決めてください。"
+        },
+        {
+          "hook": "high",
+          "text": "インスタを、毎日投稿しようとする人へ。\n\n毎日投稿して潰れる店と、週3で続く店。\n1年後に、差が出ます。\n\n今日は、週3回に目標を下げてください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "悩みマップ2026-10-04 I06『続かない・時間がない』の根拠『投稿を毎日続けることができず三日坊主になる』（segment_hypotheses.json P052（出典 講義ノート/グルコン/グルコン_2026-04-03_UP_LINK.md・要約））"
+    },
+    {
+      "id": "IP17",
+      "acct": "masa",
+      "segment": "I06",
+      "theme": "Instagram悩み",
+      "hypothesis": "まとまった時間が取れず始められない → お客様が帰った直後の1分でよいと言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "インスタを書く時間が、取れない人へ。\n\nお客様が帰った直後の、1分でいい。\n長い時間は、要りません。\n\n今日は、帰った直後に1行だけ書いてください。"
+        },
+        {
+          "hook": "high",
+          "text": "インスタの時間がない、と言う人へ。\n\n時間がないのではなく、投稿が重すぎるだけです。\n軽くすれば、1分で出せます。\n\n今日は、1行だけで出してみてください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "悩みマップ2026-10-04 I06『続かない・時間がない』の根拠『投稿を毎日続けることができず三日坊主になる』（segment_hypotheses.json P052（出典 講義ノート/グルコン/グルコン_2026-04-03_UP_LINK.md・要約））"
+    },
+    {
+      "id": "IP18",
+      "acct": "masa",
+      "segment": "I06",
+      "theme": "Instagram悩み",
+      "hypothesis": "成果が出ず意味を感じなくなって止まる → 最初の3ヶ月は反応がなくて普通と言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "インスタで、反応がなくて続ける気をなくした人へ。\n\n最初の3か月は、反応がなくて普通です。\nそれは、失敗ではありません。\n\n今日は、1本だけ出してください。"
+        },
+        {
+          "hook": "high",
+          "text": "インスタの反応がなくて、やめたい人へ。\n\n反応がないのは、失敗ではなく、途中です。\nここでやめる人が、一番多い。\n\n今日は、やめずに1本だけ出してください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "悩みマップ2026-10-04 I06『続かない・時間がない』の根拠『投稿を毎日続けることができず三日坊主になる』（segment_hypotheses.json P052（出典 講義ノート/グルコン/グルコン_2026-04-03_UP_LINK.md・要約））"
+    },
+    {
+      "id": "IP19",
+      "acct": "masa",
+      "segment": "I07",
+      "theme": "Instagram悩み",
+      "hypothesis": "発信は院長が全部やるものと思っている → スタッフに写真1枚だけ任せればよいと言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "インスタを、全部1人でやっている院長へ。\n\nスタッフに、写真を1枚撮ってもらう。\nそれだけで、負担は減ります。\n\n今日は、スタッフに1枚だけ頼んでください。"
+        },
+        {
+          "hook": "high",
+          "text": "インスタを、院長が全部書いている人へ。\n\n院長が全部書く店は、発信が止まります。\n1人で抱えるほど、続きません。\n\n今日は、1つだけ誰かに任せてください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "悩みマップ2026-10-04 I07『院長一人で回している・任せ方が分からない』の根拠『院長が投稿を作っているせいで発信頻度が落ちる』（segment_hypotheses.json P036（出典 商売人の学校/_文字起こし/vm_323644828.txt・要約））"
+    },
+    {
+      "id": "IP20",
+      "acct": "masa",
+      "segment": "I07",
+      "theme": "Instagram悩み",
+      "hypothesis": "外注すると自分らしさが消えると思っている → ネタは自分・整えるのは任せてよいと言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "インスタを外注すると、自分らしさが消えると思う人へ。\n\nネタは自分で出す。\n文章を整えるのは、人に任せていい。\n\n今日は、ネタを1行だけメモしてください。"
+        },
+        {
+          "hook": "high",
+          "text": "インスタを外注して、伸びなかった人へ。\n\n伸びない店は、丸投げしています。\nネタは自分で出すのが、条件です。\n\n今日は、ネタを1つ自分で書いてください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "悩みマップ2026-10-04 I07『院長一人で回している・任せ方が分からない』の根拠『院長が投稿を作っているせいで発信頻度が落ちる』（segment_hypotheses.json P036（出典 商売人の学校/_文字起こし/vm_323644828.txt・要約））"
+    },
+    {
+      "id": "IP21",
+      "acct": "masa",
+      "segment": "I07",
+      "theme": "Instagram悩み",
+      "hypothesis": "投稿を任せる相手がいない → 最初の下書きだけ人やツールに任せると言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "インスタを任せる相手が、いない人へ。\n\n最初の下書きだけ、人かツールに任せる。\n仕上げは、自分でいい。\n\n今日は、下書きを1本だけ頼んでみてください。"
+        },
+        {
+          "hook": "high",
+          "text": "インスタを、1人で全部やる経営者へ。\n\n1人で全部やる人が、一番続きません。\n下書きだけでも、任せてください。\n\n今日は、下書きを1本だけ頼んでください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "悩みマップ2026-10-04 I07『院長一人で回している・任せ方が分からない』の根拠『院長が投稿を作っているせいで発信頻度が落ちる』（segment_hypotheses.json P036（出典 商売人の学校/_文字起こし/vm_323644828.txt・要約））"
+    },
+    {
+      "id": "IP22",
+      "acct": "masa",
+      "segment": "I08",
+      "theme": "Instagram悩み",
+      "hypothesis": "ハッシュタグや投稿時間で伸びると思っている → 先に1行目（冒頭）を直すと言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "インスタで、ハッシュタグに悩む人へ。\n\nハッシュタグは、今日は触らなくていい。\n先に、1行目を直す。\n\n今日は、1行目だけ書き直してください。"
+        },
+        {
+          "hook": "high",
+          "text": "インスタで、ハッシュタグを毎回変えている人へ。\n\nハッシュタグを変えても、伸びません。\n順番が、逆です。\n\n今日は、先に1行目を直してください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "悩みマップ2026-10-04 I08『見られない・ハッシュタグやアルゴリズムの迷信』の根拠『1日50投稿しても全くインプレッションが伸びず、一桁まで落ち込んでいる』（Notion/__メンタル壁打ち__.md）"
+    },
+    {
+      "id": "IP23",
+      "acct": "masa",
+      "segment": "I08",
+      "theme": "Instagram悩み",
+      "hypothesis": "見られないのはアルゴリズムのせいと思っている → 誰向けかが1行目で伝わっていないせいと言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "インスタが、見られなくて悩む人へ。\n\n誰に向けた投稿か、1行目で言う。\nそれだけで、見られ方が変わります。\n\n今日は、1行目に「〜の人へ」と書いてください。"
+        },
+        {
+          "hook": "high",
+          "text": "インスタが伸びないのは、アルゴリズムのせいと思う人へ。\n\nアルゴリズムのせいではありません。\n誰向けかが、伝わっていないだけです。\n\n今日は、1行目に「〜の人へ」と書いてください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "悩みマップ2026-10-04 I08『見られない・ハッシュタグやアルゴリズムの迷信』の根拠『1日50投稿しても全くインプレッションが伸びず、一桁まで落ち込んでいる』（Notion/__メンタル壁打ち__.md）"
+    },
+    {
+      "id": "IP24",
+      "acct": "masa",
+      "segment": "I08",
+      "theme": "Instagram悩み",
+      "hypothesis": "ベストな投稿時間があると信じて探し続けている → 投稿時間は固定で、伸びた投稿を1つ見る方が先と言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "インスタの投稿時間を、探し続けている人へ。\n\n投稿時間は、毎回同じでいい。\n決めたら、動かさない。\n\n今日は、投稿する時間を1つ決めてください。"
+        },
+        {
+          "hook": "high",
+          "text": "インスタで、ベストな投稿時間を探している人へ。\n\n探す前に、伸びた投稿を1つ見てください。\n答えは、そこにあります。\n\n今日は、一番見られた投稿を1つ開いてください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "悩みマップ2026-10-04 I08『見られない・ハッシュタグやアルゴリズムの迷信』の根拠『1日50投稿しても全くインプレッションが伸びず、一桁まで落ち込んでいる』（Notion/__メンタル壁打ち__.md）"
+    },
+    {
+      "id": "IP25",
+      "acct": "masa",
+      "segment": "I09",
+      "theme": "Instagram悩み",
+      "hypothesis": "ストーリーズはきれいな写真が要ると思っている → 5秒の今日の一言でよいと言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "インスタのストーリーズが、続かない人へ。\n\nきれいな写真は、要りません。\n今日の一言を、5秒で。\n\n今日は、一言だけ載せてください。"
+        },
+        {
+          "hook": "high",
+          "text": "ストーリーズに、きれいな写真が要ると思う人へ。\n\n要りません。\n見る人は、お店の空気を見に来ています。\n\n今日は、目の前のものを1枚撮ってください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "悩みマップ2026-10-04 I09『ストーリーズの使い方が分からない』の根拠『ストーリーズが十分に活用できておらず、投稿からの流入も少ない』（Notion/亮さん面談 __2026-03-11T20_00_00.000+09_00__.md）"
+    },
+    {
+      "id": "IP26",
+      "acct": "masa",
+      "segment": "I09",
+      "theme": "Instagram悩み",
+      "hypothesis": "何を出せばいいか分からず手が止まる → ネタは仕込み・天気・一言の3つで足りると言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "ストーリーズに、何を出すか迷う人へ。\n\nネタは3つだけ。\n今日の仕込み、天気、一言。\n\n今日は、この3つから1つ選んでください。"
+        },
+        {
+          "hook": "high",
+          "text": "ストーリーズが続かない人へ。\n\n続かない店は、毎回売り込もうとしています。\n売り込みは、週に1回で足ります。\n\n今日は、売り込まない1枚を出してください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "悩みマップ2026-10-04 I09『ストーリーズの使い方が分からない』の根拠『ストーリーズが十分に活用できておらず、投稿からの流入も少ない』（Notion/亮さん面談 __2026-03-11T20_00_00.000+09_00__.md）"
+    },
+    {
+      "id": "IP27",
+      "acct": "masa",
+      "segment": "I09",
+      "theme": "Instagram悩み",
+      "hypothesis": "見られていない気がして意味を感じない → 閲覧数より1日1枚の継続で覚えてもらえると言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "ストーリーズが、見られていない気がする人へ。\n\n1日1枚で、覚えてもらえます。\n閲覧数は、気にしなくていい。\n\n今日は、1枚だけ出してください。"
+        },
+        {
+          "hook": "high",
+          "text": "ストーリーズを、意味がないと感じる人へ。\n\n見られていない気がする人にこそ、効きます。\n毎日見る人が、お客様になります。\n\n今日は、1枚出して終わりにしてください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "悩みマップ2026-10-04 I09『ストーリーズの使い方が分からない』の根拠『ストーリーズが十分に活用できておらず、投稿からの流入も少ない』（Notion/亮さん面談 __2026-03-11T20_00_00.000+09_00__.md）"
+    },
+    {
+      "id": "IP28",
+      "acct": "masa",
+      "segment": "I10",
+      "theme": "Instagram悩み",
+      "hypothesis": "フォロワーを増やさないと意味がないと思っている → 100人でも始められる・来店につながる方が大事と言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "インスタのフォロワーが、増えなくて悩む人へ。\n\nフォロワーは、100人いれば始められます。\n人数より、来店につながるかが大事です。\n\n今日は、今の人数を一度だけ見てください。"
+        },
+        {
+          "hook": "high",
+          "text": "インスタのフォロワー数に、こだわる人へ。\n\nフォロワー数より、来店につながるかのほうが大事です。\n人数が多くても、来店は増えません。\n\n今日は、先月の来店経路を思い出してください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "悩みマップ2026-10-04 I10『フォロワーが増えない』の根拠『フォロワー全く増えない』（商売人の学校/_文字起こし/vm_625882740.txt）"
+    },
+    {
+      "id": "IP29",
+      "acct": "masa",
+      "segment": "I10",
+      "theme": "Instagram悩み",
+      "hypothesis": "増やすにはバズるしかないと思っている → お客様の悩み1つに答える投稿でよいと言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "インスタで、フォロワーが増えなくて焦る人へ。\n\nバズらなくていい。\nお客様の悩みに、1つ答えるだけです。\n\n今日は、聞かれたことに1つ答えてください。"
+        },
+        {
+          "hook": "high",
+          "text": "インスタで、フォロワーが増えない人へ。\n\n増えないのは、興味を持たれていないからです。\n悩みに答える投稿が、興味を作ります。\n\n今日は、お客様の悩みに1つ答えてください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "悩みマップ2026-10-04 I10『フォロワーが増えない』の根拠『フォロワー全く増えない』（商売人の学校/_文字起こし/vm_625882740.txt）"
+    },
+    {
+      "id": "IP30",
+      "acct": "masa",
+      "segment": "I10",
+      "theme": "Instagram悩み",
+      "hypothesis": "全国に向けて発信して誰にも届かない → 地元ネタを1つ足すだけで近所に届くと言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "インスタが、誰にも届かない人へ。\n\n地元ネタを1つ入れるだけで、近所の人に届きます。\n\n今日は、近くの場所の名前を1つ入れてください。"
+        },
+        {
+          "hook": "high",
+          "text": "インスタで、全国に向けて発信している人へ。\n\n全国に届けようとして、誰にも届かない店があります。\n来てくれるのは、近所の人です。\n\n今日は、地元の話を1つ書いてください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "悩みマップ2026-10-04 I10『フォロワーが増えない』の根拠『フォロワー全く増えない』（商売人の学校/_文字起こし/vm_625882740.txt）"
+    },
+    {
+      "id": "IP31",
+      "acct": "masa",
+      "segment": "I11",
+      "theme": "Instagram悩み",
+      "hypothesis": "役立つ投稿を出し続ければ来店すると思っている → 来てほしい人を呼ぶ投稿を週1本入れると言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "インスタで、役立つ投稿を出しても予約が入らない人へ。\n\n週に1本だけ、来てほしい人を呼ぶ投稿を入れる。\n\n今日は、来てほしい人を1人思い浮かべてください。"
+        },
+        {
+          "hook": "high",
+          "text": "インスタで、役立つ投稿だけを出している人へ。\n\n役立つ投稿だけでは、予約は入りません。\n来てほしい人を呼ぶ投稿が、必要です。\n\n今日は、その1本の下書きを書いてください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "悩みマップ2026-10-04 I11『役立つ投稿だけで売上につながらない』の根拠『フォロワー獲得投稿は当たりが分かったが、CV投稿が思いつかず反応もない』（Notion/ハカセ勉強会 __2026-08-26T21_00_00.000+09_00__.md）"
+    },
+    {
+      "id": "IP32",
+      "acct": "masa",
+      "segment": "I11",
+      "theme": "Instagram悩み",
+      "hypothesis": "売り込みになるのが怖くて来店を促せない → お客様の声を1つ載せるだけでよいと言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "インスタで、売り込むのが怖い人へ。\n\n売り込まなくていい。\nお客様の声を、1つ載せるだけです。\n\n今日は、もらった言葉を1つ探してください。"
+        },
+        {
+          "hook": "high",
+          "text": "インスタで、売り込めない人へ。\n\n売り込めない店は、お客様に気づかれません。\n声を1つ載せるだけで、伝わります。\n\n今日は、お客様の声を1つ載せてください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "悩みマップ2026-10-04 I11『役立つ投稿だけで売上につながらない』の根拠『フォロワー獲得投稿は当たりが分かったが、CV投稿が思いつかず反応もない』（Notion/ハカセ勉強会 __2026-08-26T21_00_00.000+09_00__.md）"
+    },
+    {
+      "id": "IP33",
+      "acct": "masa",
+      "segment": "I11",
+      "theme": "Instagram悩み",
+      "hypothesis": "反応はあるのに来店しない原因が分からない → 誰に来てほしいかを書くと言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "インスタは見られるのに、来店がない人へ。\n\n来てほしい人を、1人だけ投稿に書く。\n名前ではなく、悩みで書く。\n\n今日は、来てほしい人の悩みを1つ書いてください。"
+        },
+        {
+          "hook": "high",
+          "text": "インスタで見られても、来店しない人へ。\n\n来店しない投稿の共通点は、誰向けかがないことです。\n見る人は、自分のことだと思えません。\n\n今日は、1行目に誰向けかを書いてください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "悩みマップ2026-10-04 I11『役立つ投稿だけで売上につながらない』の根拠『フォロワー獲得投稿は当たりが分かったが、CV投稿が思いつかず反応もない』（Notion/ハカセ勉強会 __2026-08-26T21_00_00.000+09_00__.md）"
+    },
+    {
+      "id": "IP34",
+      "acct": "masa",
+      "segment": "I12",
+      "theme": "Instagram悩み",
+      "hypothesis": "プロフィールは凝らないと見てもらえないと思っている → 3行（誰の何の悩みを助けるか）で足りると言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "インスタのプロフィールを、凝らなきゃと思う人へ。\n\nプロフィールは3行でいい。\n誰の、何の悩みを助けるか。\n\n今日は、この3行を書いてください。"
+        },
+        {
+          "hook": "high",
+          "text": "インスタのプロフィールに、世界観を出そうとする人へ。\n\n世界観は、いりません。\n見る人が知りたいのは、自分の悩みが解けるかです。\n\n今日は、3行に書き直してください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "悩みマップ2026-10-04 I12『プロフィール・固定投稿で伝わらない』の根拠『プロフィールを見ても誰のどんな悩みを解決する人か伝わらない』（segment_hypotheses.json P012（出典 講義ノート/グルコン/グルコン_2026-03-19_UP_LINK.md・要約））"
+    },
+    {
+      "id": "IP35",
+      "acct": "masa",
+      "segment": "I12",
+      "theme": "Instagram悩み",
+      "hypothesis": "固定投稿の使い方が分からず放置している → 来てほしい人向けの1本を置くだけでよいと言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "インスタの固定投稿を、放置している人へ。\n\n固定投稿には、来てほしい人向けの1本を置く。\nそれだけで足ります。\n\n今日は、1本だけ選んで固定してください。"
+        },
+        {
+          "hook": "high",
+          "text": "インスタの固定投稿を、使っていない人へ。\n\n固定投稿を放置している店は、毎日機会を捨てています。\nプロフィールの次に、見られる場所です。\n\n今日は、1本だけ固定してください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "悩みマップ2026-10-04 I12『プロフィール・固定投稿で伝わらない』の根拠『プロフィールを見ても誰のどんな悩みを解決する人か伝わらない』（segment_hypotheses.json P012（出典 講義ノート/グルコン/グルコン_2026-03-19_UP_LINK.md・要約））"
+    },
+    {
+      "id": "IP36",
+      "acct": "masa",
+      "segment": "I12",
+      "theme": "Instagram悩み",
+      "hypothesis": "プロフィールを見ても何をしている人か分からない → 名前や1行目に何をしている人か1語足すと言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "インスタのプロフィールで、何屋か伝わらない人へ。\n\n名前に、何をしている人か1語足す。\n例えば、「花屋」「税理士」など。\n\n今日は、名前に1語だけ足してください。"
+        },
+        {
+          "hook": "high",
+          "text": "インスタのプロフィールが、分かりにくい人へ。\n\nプロフィールを見て分からない店は、選ばれません。\n何屋かは、名前の横で伝えます。\n\n今日は、名前の横に1語足してください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "悩みマップ2026-10-04 I12『プロフィール・固定投稿で伝わらない』の根拠『プロフィールを見ても誰のどんな悩みを解決する人か伝わらない』（segment_hypotheses.json P012（出典 講義ノート/グルコン/グルコン_2026-03-19_UP_LINK.md・要約））"
+    },
+    {
+      "id": "IP37",
+      "acct": "masa",
+      "segment": "I13",
+      "theme": "Instagram悩み",
+      "hypothesis": "DMで予約をもらえばよいと思っている → 次の一歩を具体的に1つに絞ると言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "インスタで、予約のDMを待っている人へ。\n\n「DMください」ではなく、具体的な一言を書く。\n送る側が、迷わなくなります。\n\n今日は、送ってほしい一言を決めてください。"
+        },
+        {
+          "hook": "high",
+          "text": "インスタで、「気軽にご連絡ください」と書く人へ。\n\n気軽にと書いても、誰も連絡しません。\n送る一言が決まっていないからです。\n\n今日は、送ってほしい一言を決めてください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "悩みマップ2026-10-04 I13『DM・LINE・予約への導線が分からない』の根拠『プロフィールアクセス3,000に対しLINE追加は7人のみ』（Notion/たかふみくん相談 __2026-05-26T21_30_00.000+09_00__.md）"
+    },
+    {
+      "id": "IP38",
+      "acct": "masa",
+      "segment": "I13",
+      "theme": "Instagram悩み",
+      "hypothesis": "プロフィールにリンクを複数貼って見た人が迷う → リンクは1つに絞ると言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "インスタのプロフィールに、リンクを複数貼っている人へ。\n\nリンクは、1つに絞ってください。\n見た人が、迷わなくなります。\n\n今日は、リンクを1つだけ残してください。"
+        },
+        {
+          "hook": "high",
+          "text": "インスタに、リンクを5つ貼っている人へ。\n\nリンクを5つ貼る店は、1つも押されません。\n人は、迷うと動きません。\n\n今日は、リンクを1つだけ残してください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "悩みマップ2026-10-04 I13『DM・LINE・予約への導線が分からない』の根拠『プロフィールアクセス3,000に対しLINE追加は7人のみ』（Notion/たかふみくん相談 __2026-05-26T21_30_00.000+09_00__.md）"
+    },
+    {
+      "id": "IP39",
+      "acct": "masa",
+      "segment": "I13",
+      "theme": "Instagram悩み",
+      "hypothesis": "LINEに誘導しても登録されない → 登録で何がもらえるか1行で書くと言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "インスタから、登録ページへ誘導しても増えない人へ。\n\n登録すると何がもらえるか、1行で書く。\nもらえるものが見えないと、人は動けません。\n\n今日は、もらえるものを1行で書いてください。"
+        },
+        {
+          "hook": "high",
+          "text": "インスタで、「登録してください」とだけ書く人へ。\n\n「登録してください」だけでは、誰も登録しません。\n理由が、書いてありません。\n\n今日は、登録でもらえるものを1行書いてください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "悩みマップ2026-10-04 I13『DM・LINE・予約への導線が分からない』の根拠『プロフィールアクセス3,000に対しLINE追加は7人のみ』（Notion/たかふみくん相談 __2026-05-26T21_30_00.000+09_00__.md）"
+    },
+    {
+      "id": "IP40",
+      "acct": "masa",
+      "segment": "I14",
+      "theme": "Instagram悩み",
+      "hypothesis": "数字を見るのは難しいと思っている → 見るのは閲覧数1つだけでよいと言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "インスタの数字が、難しくて見ない人へ。\n\n見るのは、閲覧数の1つだけでいい。\nそれだけで、始められます。\n\n今日は、昨日の閲覧数を1つだけ見てください。"
+        },
+        {
+          "hook": "high",
+          "text": "インスタの数字を、見ていない人へ。\n\n数字を見ない店は、同じ失敗を何度もします。\n見るのは、閲覧数だけで足ります。\n\n今日は、昨日の閲覧数を見てください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "悩みマップ2026-10-04 I14『数字の見方が分からない』の根拠『投稿を感覚で続けていて数字で振り返っていない』（segment_hypotheses.json P073（出典 マーケティング学習/インスタハカセ講義/00_講義マスターまとめ.md・要約））"
+    },
+    {
+      "id": "IP41",
+      "acct": "masa",
+      "segment": "I14",
+      "theme": "Instagram悩み",
+      "hypothesis": "感覚で当たり外れを判断している → 先月いちばん見られた投稿を1つ探すと言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "インスタを、感覚で続けている人へ。\n\n先月いちばん見られた投稿を、1つだけ探す。\nそれが、次の見本になります。\n\n今日は、その1本を探してください。"
+        },
+        {
+          "hook": "high",
+          "text": "インスタの当たり外れを、感覚で決める人へ。\n\n感覚で続ける店と、数字を1つだけ見る店。\n半年で、差が出ます。\n\n今日は、一番見られた投稿を1つ探してください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "悩みマップ2026-10-04 I14『数字の見方が分からない』の根拠『投稿を感覚で続けていて数字で振り返っていない』（segment_hypotheses.json P073（出典 マーケティング学習/インスタハカセ講義/00_講義マスターまとめ.md・要約））"
+    },
+    {
+      "id": "IP42",
+      "acct": "masa",
+      "segment": "I14",
+      "theme": "Instagram悩み",
+      "hypothesis": "何が来店につながったか測れない → 来店された方に『何で知りましたか』と聞くだけでよいと言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "インスタが、来店につながったか分からない人へ。\n\n来店された方に、「何で知りましたか」と1回聞く。\nそれだけで、分かります。\n\n今日は、1人だけに聞いてみてください。"
+        },
+        {
+          "hook": "high",
+          "text": "インスタの効果を、測っていない人へ。\n\n測れない店は、何が効いたか分かりません。\n聞くのは、1回で足ります。\n\n今日は、来店した人に1回聞いてください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "悩みマップ2026-10-04 I14『数字の見方が分からない』の根拠『投稿を感覚で続けていて数字で振り返っていない』（segment_hypotheses.json P073（出典 マーケティング学習/インスタハカセ講義/00_講義マスターまとめ.md・要約））"
+    },
+    {
+      "id": "IP43",
+      "acct": "masa",
+      "segment": "I15",
+      "theme": "Instagram悩み",
+      "hypothesis": "広告は大金が必要と思っている → 1投稿500円から試せると言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "インスタの広告が、お金がかかりそうで怖い人へ。\n\n広告は、少額から試せます。\n大金は、要りません。\n\n今日は、広告の画面を開くだけ開いてください。"
+        },
+        {
+          "hook": "high",
+          "text": "インスタの広告を、怖がっている人へ。\n\n広告を怖がる店ほど、毎日の投稿に時間を使っています。\n少額で試す方が、早い。\n\n今日は、広告の画面を開いてみてください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "悩みマップ2026-10-04 I15『広告はお金がかかりそうで怖い』の根拠『広告で 5 万円溶かすって怖いと思うんですよ』（Notion/MASTER研修 __2026-06-07T10_00_00.000+09_00__.md）"
+    },
+    {
+      "id": "IP44",
+      "acct": "masa",
+      "segment": "I15",
+      "theme": "Instagram悩み",
+      "hypothesis": "広告は失敗したらお金が溶けると怖がっている → 3日で良し悪しが分かると言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "インスタの広告で、失敗するのが怖い人へ。\n\n3日出せば、良し悪しが分かります。\n少額なら、失敗しても小さい。\n\n今日は、出す予算の上限を決めてください。"
+        },
+        {
+          "hook": "high",
+          "text": "インスタの広告で、失敗した人へ。\n\n失敗する店は、最初から大きく出しすぎています。\n最初は、少額で3日だけです。\n\n今日は、予算の上限を小さく決めてください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "悩みマップ2026-10-04 I15『広告はお金がかかりそうで怖い』の根拠『広告で 5 万円溶かすって怖いと思うんですよ』（Notion/MASTER研修 __2026-06-07T10_00_00.000+09_00__.md）"
+    },
+    {
+      "id": "IP45",
+      "acct": "masa",
+      "segment": "I15",
+      "theme": "Instagram悩み",
+      "hypothesis": "広告は専門業者に任せるものと思っている → 『投稿を宣伝』ボタンで自分で始められると言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "インスタの広告を、業者に頼むものと思う人へ。\n\n「投稿を宣伝」のボタンを押すだけで、始められます。\n\n今日は、1つの投稿でボタンを探してください。"
+        },
+        {
+          "hook": "high",
+          "text": "インスタの広告を、代行に任せようとする人へ。\n\n任せる前に、自分で少額だけ試してください。\n仕組みが分かると、任せ方も変わります。\n\n今日は、「投稿を宣伝」の画面を開いてください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "悩みマップ2026-10-04 I15『広告はお金がかかりそうで怖い』の根拠『広告で 5 万円溶かすって怖いと思うんですよ』（Notion/MASTER研修 __2026-06-07T10_00_00.000+09_00__.md）"
+    },
+    {
+      "id": "IP46",
+      "acct": "masa",
+      "segment": "I16",
+      "theme": "Instagram悩み",
+      "hypothesis": "AIは難しい、丸投げは気持ち悪いと思っている → 下書きの1行目だけAIに作らせると言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "インスタの文章に、AIをどう使うか分からない人へ。\n\nAIには、下書きの1行目だけ作らせる。\n続きは、自分で書いてください。\n\n今日は、AIに1行目を3つ出してもらってください。"
+        },
+        {
+          "hook": "high",
+          "text": "インスタの投稿を、AIに丸投げしている人へ。\n\n丸投げする店と、下書きだけ任せる店。\n差は、読まれ方に出ます。\n\n今日は、下書きだけAIに頼んでみてください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "悩みマップ2026-10-04 I16『AIの使い方が分からない』の根拠『AI丸投げの投稿が気持ち悪くてやめたが自分の言葉で書けない』（segment_hypotheses.json P011（出典 講義ノート/グルコン/グルコン_2026-03-19_UP_LINK.md・要約））"
+    },
+    {
+      "id": "IP47",
+      "acct": "masa",
+      "segment": "I16",
+      "theme": "Instagram悩み",
+      "hypothesis": "AIをどこから使えばいいか分からない → 最初は投稿の下書き1本からと言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "インスタに、AIをどこから使うか迷う人へ。\n\n最初の一歩は、投稿の下書き1本です。\n難しい設定は、要りません。\n\n今日は、AIに下書きを1本頼んでください。"
+        },
+        {
+          "hook": "high",
+          "text": "インスタのためにAIを勉強している人へ。\n\nAIを勉強してから使う店は、いつまでも使えません。\n使いながら覚えるのが、早いです。\n\n今日は、AIに下書きを1本頼んでください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "悩みマップ2026-10-04 I16『AIの使い方が分からない』の根拠『AI丸投げの投稿が気持ち悪くてやめたが自分の言葉で書けない』（segment_hypotheses.json P011（出典 講義ノート/グルコン/グルコン_2026-03-19_UP_LINK.md・要約））"
+    },
+    {
+      "id": "IP48",
+      "acct": "masa",
+      "segment": "I16",
+      "theme": "Instagram悩み",
+      "hypothesis": "AIで書くと自分らしさが消えると思っている → 自分の一言を足せば自分の文章になると言えば反応する",
+      "pain_ids": [],
+      "status": "untested",
+      "posts": [
+        {
+          "hook": "low",
+          "text": "インスタで、AIの文章が自分らしくないと感じる人へ。\n\nAIの下書きに、自分の一言を足す。\nそれだけで、あなたの文章になります。\n\n今日は、下書きに一言だけ足してください。"
+        },
+        {
+          "hook": "high",
+          "text": "インスタで、AIの投稿が読まれない人へ。\n\n読まれない理由は、あなたの一言がないことです。\nAIだけの文章は、どこかで見た文になります。\n\n今日は、体験した話を一言だけ足してください。"
+        }
+      ],
+      "last_result": {
+        "n": 0,
+        "index": null,
+        "updated": null
+      },
+      "evidence": "悩みマップ2026-10-04 I16『AIの使い方が分からない』の根拠『AI丸投げの投稿が気持ち悪くてやめたが自分の言葉で書けない』（segment_hypotheses.json P011（出典 講義ノート/グルコン/グルコン_2026-03-19_UP_LINK.md・要約））"
     }
   ]
 }

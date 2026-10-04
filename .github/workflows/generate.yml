@@ -47,7 +47,8 @@ jobs:
       # 失敗しても前回ファイルを維持して続行（朝の生成を止めない）
       - name: Extract own winners (non-automated posts)
         continue-on-error: true
-        run: python3 own_winners.py
+        run: timeout 600 python3 own_winners.py || echo "own_winners 時間切れ/失敗→前回ファイルで続行"
+        timeout-minutes: 12
 
       - name: Run insights
         run: python3 insights.py

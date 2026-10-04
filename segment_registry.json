@@ -1155,5 +1155,306 @@
     "created": "2026-10-01",
     "acct": "masa",
     "variant": 2
+  },
+  "グラフが読めなくても、困りません。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 38,
+    "created": "2026-10-04",
+    "acct": "masa"
+  },
+  "最初の1か月は、反応がなくて普通です。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 34,
+    "created": "2026-10-04",
+    "acct": "masa"
+  },
+  "高額商品を売る経営者で、インスタを難しく考える人は。": {
+    "segment": "INSTA_EASY",
+    "hook": "g30",
+    "variant": null,
+    "created": "2026-10-04",
+    "acct": "masa"
+  },
+  "いいねが少ない日は、失敗ではありません。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 27,
+    "created": "2026-10-04",
+    "acct": "masa"
+  },
+  "分析ツールを、使いこなそうとしなくていい。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 37,
+    "created": "2026-10-04",
+    "acct": "masa"
+  },
+  "インスタは「競合が気になる」でも、続けられます。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-04",
+    "acct": "masa"
+  },
+  "三脚もマイクも、買わなくていいです。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 15,
+    "created": "2026-10-04",
+    "acct": "masa"
+  },
+  "顔を出さないと、リールは伸びない。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 13,
+    "created": "2026-10-04",
+    "acct": "masa"
+  },
+  "「DMの返信が不安」のままでも、インスタは始められます。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-04",
+    "acct": "masa"
+  },
+  "ネタ探しに30分かける人は、手を止めてください。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 8,
+    "created": "2026-10-04",
+    "acct": "masa"
+  },
+  "「見られるのが怖い」のままでも、インスタは始められます。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-04",
+    "acct": "masa"
+  },
+  "DMが来たら、長い返事はいりません。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 42,
+    "created": "2026-10-04",
+    "acct": "masa"
+  },
+  "インスタで「顔を出したくない」。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-04",
+    "acct": "masa"
+  },
+  "インスタで「難しそうで手が出ない」。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-04",
+    "acct": "masa"
+  },
+  "3日休んでも、アカウントは壊れません。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 32,
+    "created": "2026-10-04",
+    "acct": "masa"
+  },
+  "プロフィールを完璧にしてから投稿しよう、は間違いです。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 0,
+    "created": "2026-10-04",
+    "acct": "masa"
+  },
+  "インスタは「いいねが少ない」でも、続けられます。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-04",
+    "acct": "masa"
+  },
+  "インスタが「文章を考える時間がない」くらいで、やめなくていい。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-04",
+    "acct": "masa"
+  },
+  "他の店のフォロワー数と、比べなくていい。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 28,
+    "created": "2026-10-04",
+    "acct": "masa"
+  },
+  "インスタは「難しそうで手が出ない」でも、続けられます。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-04",
+    "acct": "masa"
+  },
+  "数字が悪い日に、投稿をやめるのは早すぎます。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 39,
+    "created": "2026-10-04",
+    "acct": "masa"
+  },
+  "インスタで「撮影が面倒」。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-04",
+    "acct": "masa"
+  },
+  "投稿のネタが思いつかない日は、書かなくていい。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 6,
+    "created": "2026-10-04",
+    "acct": "masa"
+  },
+  "インスタで「スタッフが少ない」と、手が止まっていませんか。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-04",
+    "acct": "masa"
+  },
+  "フォロワーを増やすことが、集客のゴールではありません。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 25,
+    "created": "2026-10-04",
+    "acct": "masa"
+  },
+  "インスタが「年齢が気になる」くらいで、やめなくていい。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-04",
+    "acct": "masa"
+  },
+  "広告は、毎月出さなくても大丈夫です。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 53,
+    "created": "2026-10-04",
+    "acct": "masa"
+  },
+  "ストーリーズの質問スタンプ、怖がらなくて大丈夫です。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 23,
+    "created": "2026-10-04",
+    "acct": "masa"
+  },
+  "プロフィールで悩む時間は、1日5分で十分です。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 4,
+    "created": "2026-10-04",
+    "acct": "masa"
+  },
+  "インスタが「時間がない」くらいで、やめなくていい。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-04",
+    "acct": "masa"
+  },
+  "インスタは「プロフィールが決まらない」でも、続けられます。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-04",
+    "acct": "masa"
+  },
+  "インスタは「お金をかけられない」でも、続けられます。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-04",
+    "acct": "masa"
+  },
+  "リールは、撮影も編集もしなくて始められます。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 12,
+    "created": "2026-10-04",
+    "acct": "masa"
+  },
+  "写真が1枚もない日でも、投稿はできます。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 9,
+    "created": "2026-10-04",
+    "acct": "masa"
+  },
+  "「インスタのハッシュタグ戦略って結局どうすればいいの？」": {
+    "segment": "INSTA_EASY",
+    "hook": "g30",
+    "variant": null,
+    "created": "2026-10-04",
+    "acct": "masa"
+  },
+  "ストーリーズで、売り込まなくていいです。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 22,
+    "created": "2026-10-04",
+    "acct": "masa"
+  },
+  "インスタが「競合が気になる」くらいで、やめなくていい。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-04",
+    "acct": "masa"
+  },
+  "完璧な文章を書こうとして、3日止まっていませんか。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 11,
+    "created": "2026-10-04",
+    "acct": "masa"
+  },
+  "インスタで「文章を考える時間がない」。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-04",
+    "acct": "masa"
+  },
+  "AIは、上手く使えなくても失敗しません。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 59,
+    "created": "2026-10-04",
+    "acct": "masa"
+  },
+  "広告は、大きく始めなくていいです。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 48,
+    "created": "2026-10-04",
+    "acct": "masa"
+  },
+  "AIの文章を、そのまま出さなくても大丈夫です。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 57,
+    "created": "2026-10-04",
+    "acct": "masa"
+  },
+  "しゃべるのが苦手な人は、リールを諦めなくていい。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 17,
+    "created": "2026-10-04",
+    "acct": "masa"
   }
 }

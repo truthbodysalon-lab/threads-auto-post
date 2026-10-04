@@ -2611,12 +2611,21 @@ def _insta_sentence_ok(text: str) -> bool:
     return len(text) <= 250 and all(len(s) <= 30 for s in re.split(r"[。\n]", text) if s)
 
 
+# 同じ動詞・語幹が1本の中で重複すると不自然（「始められます…始められます」「手が止まって…手が出ない」等）
+_INSTA_DUP_STEMS = ("始め", "続", "手が", "やめ")
+
+
+def _insta_combo_ok(text: str) -> bool:
+    """文長OK＋同じ動詞語幹の重複なし（2026-10-04 不自然文の機械チェック）。"""
+    return _insta_sentence_ok(text) and all(text.count(st) < 2 for st in _INSTA_DUP_STEMS)
+
+
 def generate_insta_easy_gen_post() -> str:
-    """悩み×小さな言い換え×今日の一手の組合せ（5構造×悩み=170通り前後）から1本作る。"""
-    for _ in range(40):
+    """悩み×小さな言い換え×今日の一手の組合せ（5構造×悩み）から1本作る。"""
+    for _ in range(60):
         h, r, a = random.choice(INSTA_HURDLES)
         text = random.choice(INSTA_GEN_STRUCTURES).format(h=h, r=r, a=a)
-        if _insta_sentence_ok(text):
+        if _insta_combo_ok(text):
             return text
     h, r, a = INSTA_HURDLES[0]
     return INSTA_GEN_STRUCTURES[1].format(h=h, r=r, a=a)

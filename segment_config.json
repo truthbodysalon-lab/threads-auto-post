@@ -15,11 +15,12 @@
       "I09": 1,
       "I10": 1,
       "I11": 1,
-      "I12": 1,
-      "I13": 1,
+      "I12": 2,
+      "I13": 2,
       "I14": 1,
       "I15": 1,
-      "I16": 1
+      "I16": 1,
+      "I17": 1
     },
     "rotation": "round_robin",
     "hook_rotation": "daily_alternate",
@@ -55,7 +56,12 @@
         34,
         44
       ]
-    }
+    },
+    "prior_share": {
+      "I12": 2,
+      "I13": 2
+    },
+    "prior_note": "2026-10-04 masa講義(n=52・要点まとめ§2)でI12(プロフ・ハイライト)とI13(導線)の悩みが既存マップの2〜3倍出たため初期値share=2。apply_share_pain()は非winnerのshareをこのprior_shareへ戻す(未記載=1)。loser(index<=0.7&n>=8)は従来どおり0。講義は仮説(n=52・Threads中心)なので実測で外れればloser判定で自動的に降りる。I18(来店後リピート)はInstagram集客外のため軸に入れない。"
   },
   "truth": {
     "per_day": 4,

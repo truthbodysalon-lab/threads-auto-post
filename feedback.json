@@ -353,10 +353,10 @@
     {
       "date": "2026-10-04",
       "account": "masa",
-      "text": "【masa・主テーマ変更(本人指示2026-10-04)】masa(@masahide_takahashi_)の主テーマ＝店舗経営者のInstagram集客の方法・ノウハウ・考え方。伝え方は一貫して『運用のハードルを下げる』(1日1分・スマホだけ・撮影や編集なしでも・フォロワーが少なくても・難しいことはしない・AIに任せて確認だけ)。1日の前半50本のうち32本以上をInstagramテーマにする(generate_remix._fill_insta_theme_posts/verify WARN<50%)。優先順位は既存precedence通り=goals.json導線(LINE/cta_profile/AI_TIME_CTA)＞playbook active＞本note。維持するもの=面談・金額・決済NG/店舗情報NG/中学生語彙・1文30字・250字/創作統計禁止/1日50本/型疲労。【AI系の方向性（同日追記・本人指示「事業効率を上げられるAI活用法みたいな感じの方向性にして」）】masaのAI系投稿（AI実例/できること/基礎＋AI時短CTA＋ヒーローのAI1本）の主軸は『店舗経営の事業効率を上げるAI活用法』。題材=予約・問い合わせ返信の下書き/定型文/スタッフ向けマニュアル・研修資料/求人原稿/お客様の声の整理/売上・来店データの集計と気づき/会議メモの要約/見積・請求文面/口コミ返信/発信(Instagram含む)の下書き。Instagramは題材の1つに格下げ（Instagramテーマ前半32本の主題は別枠で維持）。AI実例は実在する自動化の事実のみ（SNS毎日自動投稿・毎朝の数字確認と改善・LINE7日配信・問い合わせの一次返信下書き・動画/本の自動生成）。末尾は今日できる小さな行動1つ。LINEは『AI』と送る導線(AI_TIME_CTA)のみL8(同文7日再投入禁止)。AI投稿は3本/日→1本/日へ縮小(削除せず3柱日替わり)。ヒーロー・Gemini題材もInstagram集客のハードル下げに寄せる。"
+      "text": "【masa・主テーマ変更(本人指示2026-10-04)】masa(@masahide_takahashi_)の主テーマ＝店舗経営者のInstagram集客の方法・ノウハウ・考え方。伝え方は一貫して『運用のハードルを下げる』(1日1分・スマホだけ・撮影や編集なしでも・フォロワーが少なくても・難しいことはしない・AIに任せて確認だけ)。1日の前半50本のうち32本以上をInstagramテーマにする(generate_remix._fill_insta_theme_posts/verify WARN<50%)。優先順位は既存precedence通り=goals.json導線(LINE/cta_profile/AI_TIME_CTA)＞playbook active＞本note。維持するもの=面談・金額・決済NG/店舗情報NG/中学生語彙・1文30字・250字/創作統計禁止/1日50本/型疲労。【AI系の方向性（同日追記・本人指示「事業効率を上げられるAI活用法みたいな感じの方向性にして」）】masaのAI系投稿（AI実例/できること/基礎＋AI時短CTA＋ヒーローのAI1本）の主軸は『店舗経営の事業効率を上げるAI活用法』。題材=予約・問い合わせ返信の下書き/定型文/スタッフ向けマニュアル・研修資料/求人原稿/お客様の声の整理/売上・来店データの集計と気づき/会議メモの要約/見積・請求文面/口コミ返信/発信(Instagram含む)の下書き。Instagramは題材の1つに格下げ（Instagramテーマ前半32本の主題は別枠で維持）。AI実例は実在する自動化の事実のみ（SNS毎日自動投稿・毎朝の数字確認と改善・LINE7日配信・問い合わせの一次返信下書き・動画/本の自動生成）。末尾は今日できる小さな行動1つ。LINEは『AI』と送る導線(AI_TIME_CTA)のみL8(同文7日再投入禁止)。AI投稿は3本/日→1本/日へ縮小(削除せず3柱日替わり)。ヒーロー・Gemini題材もInstagram集客のハードル下げに寄せる。 【参照資料（2026-10-04追記・資料ID M01）】masa本人の過去講義の要点=`~/Desktop/my files/myfiles/講義ノート/自分の講義/00_masa講義_要点まとめ.md`（悩み52件・教えTOP15・口癖・事例）。仮説IP49〜IP70・INSTA_EASY_TEMPLATES末尾20本・カテゴリI17の根拠。masaヒーロー執筆時は必ず開く。台帳=SNS・Threads/資料台帳_masaThreads.md。"
     }
   ],
-  "updated_at": "2026-10-04",
+  "updated_at": "2026-10-04T15:35:07",
   "precedence": "ルールの優先順位（2026-07-19監査で制定）: ①goals.json(ゴール・導線保護) ②playbookのactiveルール(構造の勝敗・実測で進化) ③notesの最新日付 ④旧note。同一テーマのnoteは最新日付が旧を上書きする（旧noteとの矛盾はFAILにしない）。導線投稿(HPB/LINE/診断/整体LINE/cta_profile)は閲覧基準の負けテンプレ判定・pruneの対象外",
   "extra_templates_legacy": {
     "masa": [

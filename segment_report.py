@@ -636,6 +636,7 @@ def apply_share_pain(report, acct: str):
     summary = report.get("segment_summary", {})
     today = date.today()
     today_s = today.isoformat()
+    prior = dict(acct_cfg.get("prior_share") or {})   # 初期見立て(講義由来等)。非winnerの戻り先。未記載=PAIN_BASE_SHARE
 
     def _due(d):
         try:
@@ -657,14 +658,14 @@ def apply_share_pain(report, acct: str):
             new_share[c] = 0
         elif verdict == "winner":
             strong = cell.get("index", 0) >= 2.0 and cell.get("n", 0) >= LOSER_MIN_N
-            new_share[c] = PAIN_STRONG_SHARE if strong else PAIN_WINNER_SHARE
+            new_share[c] = PAIN_STRONG_SHARE if strong else max(PAIN_WINNER_SHARE, int(prior.get(c, 0) or 0))
             winners.append((cell.get("index", 0), full))
         elif verdict == "loser" and c not in grace:
             new_share[c] = 0
             retest[c] = (today + timedelta(days=PAIN_RETEST_DAYS)).isoformat()
             losers.append(full)
         else:
-            new_share[c] = PAIN_BASE_SHARE
+            new_share[c] = max(PAIN_BASE_SHARE, int(prior.get(c, PAIN_BASE_SHARE) or PAIN_BASE_SHARE))
     winners = [f for _i, f in sorted(winners, reverse=True)]
 
     new_cfg = dict(acct_cfg)

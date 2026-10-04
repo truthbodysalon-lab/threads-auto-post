@@ -1,43 +1,43 @@
 {
   "これから開業する人へ。": {
     "segment": "S1",
-    "hook": "low",
-    "created": "2026-10-03",
+    "hook": "high",
+    "created": "2026-10-04",
     "acct": "masa",
     "variant": 0
   },
   "開業して1年、まだ集客ゼロの院へ。": {
     "segment": "S2",
-    "hook": "low",
-    "created": "2026-10-03",
+    "hook": "high",
+    "created": "2026-10-04",
     "acct": "masa",
     "variant": 0
   },
   "月商50万の壁で止まっている経営者へ。": {
     "segment": "S3",
-    "hook": "low",
-    "created": "2026-10-03",
+    "hook": "high",
+    "created": "2026-10-04",
     "acct": "masa",
     "variant": 0
   },
   "スタッフを抱える院長へ。": {
     "segment": "S4",
-    "hook": "low",
-    "created": "2026-10-03",
+    "hook": "high",
+    "created": "2026-10-04",
     "acct": "masa",
     "variant": 0
   },
   "コースや講座を売っている経営者へ。": {
     "segment": "S5",
-    "hook": "low",
-    "created": "2026-10-03",
+    "hook": "high",
+    "created": "2026-10-04",
     "acct": "masa",
     "variant": 0
   },
   "マッサージ通いに疲れた人へ。": {
     "segment": "T6",
     "hook": "high",
-    "created": "2026-09-30",
+    "created": "2026-10-04",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z19_truth"
@@ -53,7 +53,7 @@
   "看護や介護の仕事で脚がだるい人へ。": {
     "segment": "T4",
     "hook": "high",
-    "created": "2026-09-30",
+    "created": "2026-10-04",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z13_truth"
@@ -77,7 +77,7 @@
   "朝起きた瞬間からだるい人へ。": {
     "segment": "T5",
     "hook": "high",
-    "created": "2026-09-30",
+    "created": "2026-10-04",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z16_nagaoka"
@@ -93,7 +93,7 @@
   "産後の姿勢崩れが気になるママへ。": {
     "segment": "T3",
     "hook": "high",
-    "created": "2026-09-30",
+    "created": "2026-10-04",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z10_nagaoka"
@@ -159,7 +159,7 @@
   "産後の骨盤の歪みが気になるママへ。": {
     "segment": "T3",
     "hook": "high",
-    "created": "2026-09-30",
+    "created": "2026-10-04",
     "acct": "truth",
     "variant": 0
   },
@@ -174,7 +174,7 @@
   "朝から体が重いと感じる人へ。": {
     "segment": "T5",
     "hook": "high",
-    "created": "2026-09-30",
+    "created": "2026-10-04",
     "acct": "truth",
     "variant": 0
   },
@@ -197,7 +197,7 @@
   "不規則な勤務で通院を諦めた人へ。": {
     "segment": "T4",
     "hook": "high",
-    "created": "2026-09-30",
+    "created": "2026-10-04",
     "acct": "nagaoka",
     "variant": 0
   },
@@ -212,7 +212,7 @@
   "施術で悪化した経験がある人へ。": {
     "segment": "T6",
     "hook": "high",
-    "created": "2026-09-30",
+    "created": "2026-10-04",
     "acct": "nagaoka",
     "variant": 0
   },
@@ -714,7 +714,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 13,
-    "created": "2026-09-27"
+    "created": "2026-10-04"
   },
   "介護の抱え上げで腰を痛めた人へ。": {
     "segment": "T4",
@@ -934,7 +934,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 9,
-    "created": "2026-09-27"
+    "created": "2026-10-04"
   },
   "頭痛薬が手放せない人へ。": {
     "segment": "T2",

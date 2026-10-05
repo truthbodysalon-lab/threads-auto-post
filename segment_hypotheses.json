@@ -3137,7 +3137,7 @@
       "theme": "Instagram悩み",
       "hypothesis": "「ちゃんと勉強してから始めないと恥をかく」と思って動けない → 最初の1投稿は1分・スマホだけと言えば反応する",
       "pain_ids": [],
-      "status": "untested",
+      "status": "testing",
       "posts": [
         {
           "hook": "low",
@@ -3149,9 +3149,9 @@
         }
       ],
       "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
+        "n": 1,
+        "index": 3.982,
+        "updated": "2026-10-05"
       },
       "evidence": "悩みマップ2026-10-04 I01『何から始めればいいか分からない』の根拠『インスタが全然できてない』（Notion/玉城さん打ち合わせ.md）"
     },
@@ -3212,7 +3212,7 @@
       "theme": "Instagram悩み",
       "hypothesis": "コンセプトを完璧に決めてから投稿しようとして止まっている → 軸は『誰の何を助けるか』1行でよいと言えば反応する",
       "pain_ids": [],
-      "status": "untested",
+      "status": "testing",
       "posts": [
         {
           "hook": "low",
@@ -3224,9 +3224,9 @@
         }
       ],
       "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
+        "n": 1,
+        "index": 3.204,
+        "updated": "2026-10-05"
       },
       "evidence": "悩みマップ2026-10-04 I02『軸・コンセプトが決まらない』の根拠『商品設計がしっかりできていないとSNSなどの発信がブレてしまう』（Notion/堀先生講義.md）"
     },
@@ -3287,7 +3287,7 @@
       "theme": "Instagram悩み",
       "hypothesis": "毎日新しいネタを探して疲弊している → お客様に聞かれたことをそのまま書けばネタになると言えば反応する",
       "pain_ids": [],
-      "status": "untested",
+      "status": "testing",
       "posts": [
         {
           "hook": "low",
@@ -3299,9 +3299,9 @@
         }
       ],
       "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
+        "n": 1,
+        "index": 0.796,
+        "updated": "2026-10-05"
       },
       "evidence": "悩みマップ2026-10-04 I03『投稿ネタが出ない』の根拠『「毎日何を投稿しよう」と悩む時間が最大のボトルネック』（PROST AIスクール/07_AI業務効率化の実践/7-4｜SNS運用を仕組み化する.md）"
     },
@@ -4037,7 +4037,7 @@
       "theme": "Instagram悩み",
       "hypothesis": "DMで予約をもらえばよいと思っている → 次の一歩を具体的に1つに絞ると言えば反応する",
       "pain_ids": [],
-      "status": "untested",
+      "status": "testing",
       "posts": [
         {
           "hook": "low",
@@ -4049,9 +4049,9 @@
         }
       ],
       "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
+        "n": 1,
+        "index": 0.354,
+        "updated": "2026-10-05"
       },
       "evidence": "悩みマップ2026-10-04 I13『DM・LINE・予約への導線が分からない』の根拠『プロフィールアクセス3,000に対しLINE追加は7人のみ』（Notion/たかふみくん相談 __2026-05-26T21_30_00.000+09_00__.md）"
     },
@@ -4112,7 +4112,7 @@
       "theme": "Instagram悩み",
       "hypothesis": "数字を見るのは難しいと思っている → 見るのは閲覧数1つだけでよいと言えば反応する",
       "pain_ids": [],
-      "status": "untested",
+      "status": "testing",
       "posts": [
         {
           "hook": "low",
@@ -4124,9 +4124,9 @@
         }
       ],
       "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
+        "n": 1,
+        "index": 0.796,
+        "updated": "2026-10-05"
       },
       "evidence": "悩みマップ2026-10-04 I14『数字の見方が分からない』の根拠『投稿を感覚で続けていて数字で振り返っていない』（segment_hypotheses.json P073（出典 マーケティング学習/インスタハカセ講義/00_講義マスターまとめ.md・要約））"
     },
@@ -4187,7 +4187,7 @@
       "theme": "Instagram悩み",
       "hypothesis": "広告は大金が必要と思っている → 1投稿500円から試せると言えば反応する",
       "pain_ids": [],
-      "status": "untested",
+      "status": "testing",
       "posts": [
         {
           "hook": "low",
@@ -4199,9 +4199,9 @@
         }
       ],
       "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
+        "n": 2,
+        "index": 0.841,
+        "updated": "2026-10-05"
       },
       "evidence": "悩みマップ2026-10-04 I15『広告はお金がかかりそうで怖い』の根拠『広告で 5 万円溶かすって怖いと思うんですよ』（Notion/MASTER研修 __2026-06-07T10_00_00.000+09_00__.md）"
     },
@@ -4262,7 +4262,7 @@
       "theme": "Instagram悩み",
       "hypothesis": "AIは難しい、丸投げは気持ち悪いと思っている → 下書きの1行目だけAIに作らせると言えば反応する",
       "pain_ids": [],
-      "status": "untested",
+      "status": "testing",
       "posts": [
         {
           "hook": "low",
@@ -4274,9 +4274,9 @@
         }
       ],
       "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
+        "n": 1,
+        "index": 3.15,
+        "updated": "2026-10-05"
       },
       "evidence": "悩みマップ2026-10-04 I16『AIの使い方が分からない』の根拠『AI丸投げの投稿が気持ち悪くてやめたが自分の言葉で書けない』（segment_hypotheses.json P011（出典 講義ノート/グルコン/グルコン_2026-03-19_UP_LINK.md・要約））"
     },
@@ -5278,7 +5278,7 @@
       "theme": "リピート・クロージング悩み",
       "hypothesis": "2回目さえ来れば大丈夫と思い込んでいる→3〜4回目が山と先に伝えれば反応する",
       "pain_ids": [],
-      "status": "untested",
+      "status": "testing",
       "posts": [
         {
           "hook": "low",
@@ -5290,9 +5290,9 @@
         }
       ],
       "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
+        "n": 1,
+        "index": 1.204,
+        "updated": "2026-10-05"
       },
       "evidence": "2回目以降で来なくなる・途中で離脱する(根拠5件・中)。出典: B2212(受講生の悩み) / G0403 / G0501 / L0910T（出典IDは repeat_pain_categories.json の source_ids 参照）"
     },
@@ -5356,7 +5356,7 @@
       "theme": "リピート・クロージング悩み",
       "hypothesis": "最初の契約が最終ゴールと思い込んでいる→終了の2〜3回前に次の話をすれば反応する",
       "pain_ids": [],
-      "status": "untested",
+      "status": "testing",
       "posts": [
         {
           "hook": "low",
@@ -5368,9 +5368,9 @@
         }
       ],
       "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
+        "n": 1,
+        "index": 0.177,
+        "updated": "2026-10-05"
       },
       "evidence": "コース終了後の次の出口がない(再契約・継続)(根拠5件・強)。出典: L0428 / L0910N / L0910T（出典IDは repeat_pain_categories.json の source_ids 参照）"
     },
@@ -5434,7 +5434,7 @@
       "theme": "リピート・クロージング悩み",
       "hypothesis": "離れた人に連絡するのは失礼と思っている→嫌いになったのではなく忘れているだけと言えば反応する",
       "pain_ids": [],
-      "status": "untested",
+      "status": "testing",
       "posts": [
         {
           "hook": "low",
@@ -5446,9 +5446,9 @@
         }
       ],
       "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
+        "n": 1,
+        "index": 2.142,
+        "updated": "2026-10-05"
       },
       "evidence": "来なくなった人・卒業した人を掘り起こせない(根拠3件・弱(要追加確認))。出典: G0501 / L0411(示唆) / L0428（出典IDは repeat_pain_categories.json の source_ids 参照）"
     },

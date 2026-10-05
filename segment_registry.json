@@ -50,7 +50,7 @@
   "寝ても疲労感が抜けない人へ。": {
     "segment": "T5",
     "hook": "high",
-    "created": "2026-10-02",
+    "created": "2026-10-06",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z17_truth"
@@ -66,7 +66,7 @@
   "産後の腰痛が続くママへ。": {
     "segment": "T3",
     "hook": "high",
-    "created": "2026-10-02",
+    "created": "2026-10-06",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z11_truth"
@@ -74,7 +74,7 @@
   "何をしても一時的にしか変わらない人へ。": {
     "segment": "T6",
     "hook": "high",
-    "created": "2026-10-02",
+    "created": "2026-10-06",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z20_nagaoka"
@@ -90,7 +90,7 @@
   "夜勤続きで腰が重い人へ。": {
     "segment": "T4",
     "hook": "high",
-    "created": "2026-10-02",
+    "created": "2026-10-06",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z14_nagaoka"
@@ -123,7 +123,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 2,
-    "created": "2026-09-28"
+    "created": "2026-10-06"
   },
   "月商50万の壁で止まる店を見てきて分かったこと。": {
     "segment": "S3",
@@ -724,28 +724,28 @@
   "介護の抱え上げで腰を痛めた人へ。": {
     "segment": "T4",
     "hook": "high",
-    "created": "2026-09-30",
+    "created": "2026-10-06",
     "acct": "truth",
     "variant": 1
   },
   "他院に通っても改善しない人へ。": {
     "segment": "T6",
     "hook": "high",
-    "created": "2026-09-30",
+    "created": "2026-10-06",
     "acct": "truth",
     "variant": 1
   },
   "抱っこで腕がだるいママへ。": {
     "segment": "T3",
     "hook": "high",
-    "created": "2026-09-30",
+    "created": "2026-10-06",
     "acct": "nagaoka",
     "variant": 1
   },
   "やる気が出ない日が続く人へ。": {
     "segment": "T5",
     "hook": "high",
-    "created": "2026-09-30",
+    "created": "2026-10-06",
     "acct": "nagaoka",
     "variant": 1
   },
@@ -793,7 +793,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 3,
-    "created": "2026-09-29"
+    "created": "2026-10-06"
   },
   "困っていることを、黙っていませんか。": {
     "segment": "HAKASE",
@@ -1929,5 +1929,203 @@
     "hook": "fixed",
     "variant": 58,
     "created": "2026-10-05"
+  },
+  "インスタのコンセプトが決まらない人へ。": {
+    "segment": "I02",
+    "hook": "low",
+    "created": "2026-10-06",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP04"
+  },
+  "インスタの投稿ネタが、3日で尽きる人へ。": {
+    "segment": "I03",
+    "hook": "low",
+    "created": "2026-10-06",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP07"
+  },
+  "インスタで、顔を出すのが怖い人へ。": {
+    "segment": "I04",
+    "hook": "low",
+    "created": "2026-10-06",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP10"
+  },
+  "リールを怖がっている人へ。": {
+    "segment": "I05",
+    "hook": "high",
+    "created": "2026-10-06",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP13"
+  },
+  "インスタを、毎日投稿しようとする人へ。": {
+    "segment": "I06",
+    "hook": "high",
+    "created": "2026-10-06",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP16"
+  },
+  "インスタを、院長が全部書いている人へ。": {
+    "segment": "I07",
+    "hook": "high",
+    "created": "2026-10-06",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP19"
+  },
+  "売上だけ見ている院長へ。": {
+    "segment": "R11",
+    "hook": "high",
+    "created": "2026-10-06",
+    "acct": "masa",
+    "axis": "repeat_close",
+    "variant": null,
+    "hypothesis_id": "RP26"
+  },
+  "全員に合わせて、疲れている院長へ。": {
+    "segment": "R12",
+    "hook": "high",
+    "created": "2026-10-06",
+    "acct": "masa",
+    "axis": "repeat_close",
+    "variant": null,
+    "hypothesis_id": "RP28"
+  },
+  "インスタの投稿は、1行だけ変えれば別の投稿です。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 65,
+    "created": "2026-10-06"
+  },
+  "意図を持った20投稿は、何も考えない100投稿に勝ちます。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 69,
+    "created": "2026-10-06"
+  },
+  "リールは、AIを使えば10分から15分で作れます。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 72,
+    "created": "2026-10-06"
+  },
+  "インスタで、同じ投稿を何度出してもかまいません。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 62,
+    "created": "2026-10-06"
+  },
+  "お客さんを、無理にDMへ呼ばなくていい。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 45,
+    "created": "2026-10-06"
+  },
+  "プロフィールを、毎月書き換えなくていい。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 5,
+    "created": "2026-10-06"
+  },
+  "インスタの投稿は、最初の2行で決まります。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 67,
+    "created": "2026-10-06"
+  },
+  "リールは、まだ知らない人に見つけてもらう場所です。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 77,
+    "created": "2026-10-06"
+  },
+  "インスタは、続けた人が勝つ場所です。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 60,
+    "created": "2026-10-06"
+  },
+  "プロフィール写真を、プロに頼まなくても大丈夫です。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 2,
+    "created": "2026-10-06"
+  },
+  "忙しい日は、やらない日にしていい。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 35,
+    "created": "2026-10-06"
+  },
+  "フォロワー数を、毎日見なくていいです。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 26,
+    "created": "2026-10-06"
+  },
+  "「使い方が分からない」のままでも、インスタは始められます。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-06"
+  },
+  "インスタで「編集ができない」と、手が止まっていませんか。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-06"
+  },
+  "インスタで「営業中は触れない」と、手が止まっていませんか。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-06"
+  },
+  "インスタは「若い人向けだと思う」でも、続けられます。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-06"
+  },
+  "インスタは「文章を考える時間がない」でも、続けられます。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-06"
+  },
+  "インスタが「一人で全部やっている」くらいで、やめなくていい。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-06"
+  },
+  "インスタが「機械が苦手」くらいで、やめなくていい。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-06"
+  },
+  "インスタで「お金をかけられない」と、手が止まっていませんか。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-06"
+  },
+  "インスタが「写真がうまく撮れない」くらいで、やめなくていい。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-06"
   }
 }

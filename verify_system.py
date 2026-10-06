@@ -189,6 +189,22 @@ def check_generation():
         add("gen:all", "A.コード", "FAIL", f"generate_remix読込失敗: {e}")
 
 
+def check_list_habit_in_first50():
+    """truth/nagaokaの当日生成キュー前半50本に【◯◯習慣N選】型(LIST_HABIT)が1本以上あるか（無ければWARN・2026-10-06本人指示）。"""
+    import os as _os
+    _os.environ["SEGMENT_REGISTRY_DRY"] = "1"
+    for acct, fn in (("truth", "generate_30_posts"), ("nagaoka", "generate_40_nagaoka_posts")):
+        try:
+            import generate_remix as _g
+            posts = getattr(_g, fn)()[:50]
+            hits = [i for i, t in enumerate(posts) if _g._list_habit_valid(t)]
+            add(f"list_habit_in_first50:{acct}", "B.ルール反映", "PASS" if hits else "WARN",
+                f"{acct}前半50本中LIST_HABIT型{len(hits)}本（位置{hits}）" if hits else
+                f"{acct}前半50本にLIST_HABIT型(【◯◯習慣N選】)が0本。毎日2本入れる指示の実行ギャップ")
+        except Exception as e:
+            add(f"list_habit_in_first50:{acct}", "B.ルール反映", "WARN", f"検査失敗: {type(e).__name__}: {e}")
+
+
 def check_masa_insta_theme():
     """masaの当日生成キュー前半50本のInstagramテーマ比率が50%未満ならWARN（2026-10-04 主テーマ変更の実行ギャップ検知）。"""
     try:
@@ -1147,6 +1163,7 @@ def run_all():
     check_test_posts_in_first50()
     check_rules()
     check_masa_insta_theme()
+    check_list_habit_in_first50()
     check_rule_hygiene()
     check_execution_gaps()
     check_logs()

@@ -31,6 +31,7 @@ JST = timezone(timedelta(hours=9))
 ACCTS = {"truth": "TRUTH", "nagaoka": "NAGAOKA", "masa": "MASA"}
 POST_HOUR_START, POST_HOUR_END, DAILY_TARGET = 6, 23, 50
 PACE_FULL_HOUR = int(os.environ.get("PACE_FULL_HOUR", "21"))  # auto_post.pyと同じ前倒し按分
+LOOKAHEAD_HOURS = int(os.environ.get("LOOKAHEAD_HOURS", "3"))  # auto_post.pyと同じ先読み（先行判定のみに使用）
 
 for line in (BASE / ".env").read_text().splitlines():
     line = line.strip()
@@ -171,8 +172,14 @@ def main():
             continue
         print(f"{acct}: 実投稿{n} / あるべき{want}")
         gap = want - n
-        if n > want + 10 and not _notified_today(st, f"front_{acct}"):
-            line_push(f"⚠️Threads {acct}: 投稿が先行しすぎ({n}本/目標{want})。固め打ちバグの疑い(CI watchdog)")
+        # 2026-10-06: 先行判定は auto_post.py と同じ先読み曲線(LOOKAHEAD_HOURS=3)を基準にする。
+        # 投稿側は設計上 target(h+3) まで先に出すため、target(h)+10 だと正常運転だけで閾値に張り付き
+        # 外部ツール/手動の数本で誤報になっていた（10/6 truth30本=自動25+手動6、masa27本=通常24+uplink3）。
+        # 7/10型の暴走（masa 12:56に50本）は want_ahead(15時)=31+10=41 を超えるので引き続き検知できる。
+        want_ahead = int(DAILY_TARGET * min(1.0, (h + LOOKAHEAD_HOURS - POST_HOUR_START + 1)
+                                            / max(1, PACE_FULL_HOUR - POST_HOUR_START + 1)))
+        if n > want_ahead + 10 and not _notified_today(st, f"front_{acct}"):
+            line_push(f"⚠️Threads {acct}: 投稿が先行しすぎ({n}本/先読み目標{want_ahead})。固め打ちバグの疑い(CI watchdog)")
             st[f"front_{acct}"] = today
         # 通常は8本超の遅れで修復。21時以降は残り時間が無いため1本の不足でも埋めに行く
         elif gap > 8 or (h >= 21 and gap > 0):

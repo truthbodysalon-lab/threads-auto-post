@@ -2331,5 +2331,33 @@
     "hook": "gen",
     "variant": null,
     "created": "2026-10-06"
+  },
+  "【頭痛の人の朝食チェック項目5選】": {
+    "segment": "LIST_HABIT",
+    "hook": "list",
+    "variant": "inject",
+    "created": "2026-10-06",
+    "acct": "truth"
+  },
+  "【食いしばり頭痛を遠ざける習慣6選】": {
+    "segment": "LIST_HABIT",
+    "hook": "list",
+    "variant": "inject",
+    "created": "2026-10-06",
+    "acct": "truth"
+  },
+  "【眼精疲労と首こりを遠ざける習慣7選】": {
+    "segment": "LIST_HABIT",
+    "hook": "list",
+    "variant": "inject",
+    "created": "2026-10-06",
+    "acct": "nagaoka"
+  },
+  "【首こりの人がやめること6選】": {
+    "segment": "LIST_HABIT",
+    "hook": "list",
+    "variant": "inject",
+    "created": "2026-10-06",
+    "acct": "nagaoka"
   }
 }

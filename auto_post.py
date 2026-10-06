@@ -1319,7 +1319,9 @@ MAX_BURST = int(os.environ.get("MAX_BURST", "25"))         # 大きく遅れた�
 # 発火が10:03/14:49/18:58の3回のみ→truth40本/masa43本で50本割れ）、「今あるべき累計」まで埋める
 # だけでは次の発火まで進めない。次回発火が LOOKAHEAD_HOURS 後だと仮定してその時点の累計まで先に出す。
 # cronが密な日は曲線が3時間前倒しになるだけ（18時に満了）で、昼に使い切って沈黙する事故は起きない。
-LOOKAHEAD_HOURS = int(os.environ.get("LOOKAHEAD_HOURS", "3"))
+# 2026-10-06: 常駐ループ化（10分毎に確実に発火）で先読みは不要になった。先読み3hのままだと
+# 6時に9時分まで出して19時台に50本満了→夜が3時間以上無投稿になっていた（truth/masa 10/6）。
+LOOKAHEAD_HOURS = int(os.environ.get("LOOKAHEAD_HOURS", "0"))
 POSTS_PER_RUN = int(os.environ.get("POSTS_PER_RUN", "3"))  # 後方互換
 
 
@@ -1328,7 +1330,7 @@ POSTS_PER_RUN = int(os.environ.get("POSTS_PER_RUN", "3"))  # 後方互換
 # 22時100%だと21時台以降にcronが発火しない日は取りこぼす
 # （2026-07-21 全アカウント47/50本: 21:45の実行後、時間帯内にcron未発火）。
 # 21時100%なら、21〜23時のどこか1回の発火で残りを埋め切れる。
-PACE_FULL_HOUR = int(os.environ.get("PACE_FULL_HOUR", "21"))
+PACE_FULL_HOUR = int(os.environ.get("PACE_FULL_HOUR", "22"))   # 2026-10-06: 21→22（22時台まで均等に出す）
 
 
 def _target_cumulative_by_now(hour: int) -> int:

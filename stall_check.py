@@ -30,7 +30,11 @@ BASE = Path(__file__).parent
 JST = timezone(timedelta(hours=9))
 ACCTS = {"truth": "TRUTH", "nagaoka": "NAGAOKA", "masa": "MASA"}
 POST_HOUR_START, POST_HOUR_END = 6, 23
-GOAL_REACHED = {"truth": 50, "masa": 50, "nagaoka": 40}  # 自前投稿の本日目標
+try:
+    from uplink_repost import DAILY_N as _UPLINK_N   # masaはuplink追加枠(別枠)の分だけ目標到達判定を上げる
+except Exception:
+    _UPLINK_N = 0
+GOAL_REACHED = {"truth": 50, "masa": 50 + _UPLINK_N, "nagaoka": 40}  # 自前投稿の本日目標
 STALL_MIN = 75          # 投稿時間帯にこれ以上空いたら停止疑い
 GH_REPO_DEFAULT = "truthbodysalon-lab/threads-auto-post"
 

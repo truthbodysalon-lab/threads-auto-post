@@ -425,6 +425,13 @@ def check_execution_gaps():
                 n = len(data.get("data", []))  # リプライ込み概算（過大側）
             except Exception:
                 n = -1
+        if acct == "masa" and n >= 0:
+            # 2026-10-06: uplink追加投稿(別枠)は通常50本の実績に数えない
+            try:
+                import uplink_repost as _ur
+                n = max(0, n - _ur.count_on(y0.strftime("%Y-%m-%d")))
+            except Exception:
+                pass
         _api_count_cache[acct] = n
         return n
 
@@ -438,7 +445,8 @@ def check_execution_gaps():
         if pfile.exists():
             for line in pfile.read_text(encoding="utf-8").splitlines():
                 try:
-                    if json.loads(line).get("date") == yesterday:
+                    _e = json.loads(line)
+                    if _e.get("date") == yesterday and _e.get("kind") != "uplink_repost":
                         n += 1
                 except Exception:
                     pass
@@ -726,6 +734,29 @@ def check_execution_gaps():
                 if not _missing else f"原稿の無いカテゴリ/フック: {', '.join(_missing[:8])}（テスト投稿が6本未満になる）")
     except Exception as e:
         add("exec:segment_pain_pool", "C.実行ギャップ", "WARN", f"確認不可: {e}")
+
+    # C22: uplink追加投稿（2026-10-06 masa指示: 閲覧200以上をそのまま追加枠で出す）
+    #      昨日N本中何本出たか（半分未満WARN）・プール残数（7日分未満でWARN）
+    try:
+        import uplink_repost as _ur
+        yd = (date.today() - timedelta(days=1)).strftime("%Y-%m-%d")
+        out_n = _ur.count_on(yd)
+        pool = _ur.load_pool()
+        q = _ur.queued_count(pool)
+        days_left = q / max(1, _ur.DAILY_N)
+        if not any(i.get("status") == "posted" for i in pool) and out_n == 0:
+            add("exec:uplink_repost", "C.実行ギャップ", "PASS", f"uplink追加投稿 稼働開始前（初回投稿待ち・プール残{q}件）")
+        elif out_n * 2 < _ur.DAILY_N:
+            add("exec:uplink_repost", "C.実行ギャップ", "WARN",
+                f"uplink追加投稿 昨日({yd}) {out_n}/{_ur.DAILY_N}本（半分未満・プール残{q}件）")
+        elif days_left < 7:
+            add("exec:uplink_repost", "C.実行ギャップ", "WARN",
+                f"uplink追加投稿のプール残{q}件＝{days_left:.1f}日分（7日分未満・uplink_repost_refresh.pyの毎朝実行を確認）")
+        else:
+            add("exec:uplink_repost", "C.実行ギャップ", "PASS",
+                f"uplink追加投稿 昨日{out_n}/{_ur.DAILY_N}本・プール残{q}件({days_left:.0f}日分)")
+    except Exception as e:
+        add("exec:uplink_repost", "C.実行ギャップ", "WARN", f"検査不可: {e}")
 
     # C7: 月100万ペース（常時アラーム）。views_action.json を読み、未達アカウントを明示。
     #     達成は野心的目標のため未達は WARN（恒常監視・改善誘導が目的。FAILにはしない）。

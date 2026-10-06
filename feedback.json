@@ -364,9 +364,14 @@
       "date": "2026-10-05",
       "account": "nagaoka",
       "text": "【自分の投稿の型（自動投稿以外で伸びたもの）を参考にする】2026-10-05本人指示「自動投稿以外で伸びたアカウント（自分の投稿）を参考に」。own_winners.py（本文一致で自動化外を判定・毎朝generate.ymlで更新）→own_winners_<acct>.json。60日実測で自動投稿に足りない要素: ①画像・動画つき（自動はほぼ0）②人柄・関係性の開示（兄妹・夫婦）③具体的な地名と出来事（見附・津南・柏崎・東京の道案内）④ママ・子連れの来院ハードルを下げる事実（お子様連れOK）⑤「・」で並べる自己診断リスト⑥日常動作に結びつく1行の具体指示（信号待ちで首を回す等）⑦読者参加を促す開いた問い⑧4行以上で断言に理由を一言添える。nagaoka実測: 外部ツールの使い回し(同文20〜30回)が大半で中央値は自動を下回るが、当たりは自動の最上位より高い（1862/1487）。地名を含む投稿は中央105対15、「・」リスト型は254対17、4行以上は77対15。画像つきの人柄ポスト（兄妹で運営）も上位。 運用=ヒーローの3本を翻案枠にする（コードでの機械翻案は難しいため朝の daily-marketing-automation が担当）。参照資料=資料台帳_整体Threads.md の O01。"
+    },
+    {
+      "date": "2026-10-06",
+      "text": "【masa・uplink閲覧200以上の追加投稿（本人指示2026-10-06）】uplink(uplink0117)で閲覧200以上の投稿を、本文を書き換えずにmasaへ追加枠で出す。通常の50本/日・DAILY_CAP(55)とは別枠で1日6本(UPLINK_REPOST_DAILY)・7〜21時に均等(1サイクル最大1本)。1投稿はmasaへ1回だけ（同じ文面の再投稿はしない・近似1行目も1本に絞る）。プール=uplink_repost_pool.json(queued/posted/skipped)。URL・LINE・note・Square等のリンクやuplink固有の導線/固有名、面談/相談/決済/価格・円・割引、店舗名・所在地、予告型、日付・季節・時事依存、リプライ・引用はプールに入れない（generate_remix._is_masa_sales_ng/_is_masa_yokokoku_ng/_is_ng・inspector.inspect_post('masa')を通らないものも除外。refresh時と投稿直前の二重判定=uplink_repost.judge）。本文は無加工で、[COMMENT]分割・ブリッジコメント・CTAコメントは付けない。台帳log_masa_posted.jsonlにはkind=uplink_repostで記録し通常枠・外形API照合から差し引く。プール更新はMacのみ(uplinkトークンがCI Secretsに無い)=uplink_repost_refresh.py --push を毎朝daily-marketing-automationで実行。検査=verify C22。なぜ: uplinkの閲覧200以上は実測で当たった文面で、翻案せず出す方が確実に閲覧を積めるため（masa指示）。",
+      "account": "masa"
     }
   ],
-  "updated_at": "2026-10-04T15:35:07",
+  "updated_at": "2026-10-06T12:18:56",
   "precedence": "ルールの優先順位（2026-07-19監査で制定）: ①goals.json(ゴール・導線保護) ②playbookのactiveルール(構造の勝敗・実測で進化) ③notesの最新日付 ④旧note。同一テーマのnoteは最新日付が旧を上書きする（旧noteとの矛盾はFAILにしない）。導線投稿(HPB/LINE/診断/整体LINE/cta_profile)は閲覧基準の負けテンプレ判定・pruneの対象外",
   "extra_templates_legacy": {
     "masa": [

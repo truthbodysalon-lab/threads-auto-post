@@ -79,6 +79,13 @@ def api_count_today(acct: str) -> int:
             if stop or not nxt:
                 break
             url = nxt
+        if acct == "masa":
+            # 2026-10-06: uplink追加投稿(別枠)は通常50本の実績に数えない（先行しすぎ誤報・遅れの見落とし防止）
+            try:
+                import uplink_repost as _ur
+                n = max(0, n - _ur.count_today())
+            except Exception:
+                pass
         return n
     except Exception as e:
         print(f"{acct}: APIカウント失敗 {e}")

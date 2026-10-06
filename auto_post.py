@@ -614,7 +614,9 @@ def _posted_count_today(acct: str) -> int:
     n = 0
     for line in pfile.read_text(encoding="utf-8").splitlines():
         try:
-            if json.loads(line).get("date") == today:
+            e = json.loads(line)
+            # 2026-10-06: uplink追加投稿(kind=uplink_repost)は通常50本枠・DAILY_CAPに数えない別カウンタ
+            if e.get("date") == today and e.get("kind") != "uplink_repost":
                 n += 1
         except Exception:
             pass
@@ -1399,6 +1401,60 @@ def _run_account_batch(acct: str):
             time.sleep(4)
 
 
+def _run_uplink_repost():
+    """uplink閲覧200以上の投稿を、本文そのままmasaへ追加枠で出す（2026-10-06 masa指示）。
+    - 通常50本・DAILY_CAPとは別カウンタ（台帳 kind=uplink_repost）。1サイクル最大1本＝時間帯が自然に分散
+    - 本文は無加工（URL移動・[COMMENT]分割・ブリッジコメント・CTAコメントを一切付けない）
+    - 重複/検品NG/失敗は status=skipped にして次へ（同じものを選び続けない＝9/29障害の教訓）"""
+    import uplink_repost as ur
+    acct = "masa"
+    hour = datetime.now().hour
+    if not (POST_HOUR_START <= hour < POST_HOUR_END):
+        return
+    done = ur.count_today()
+    if done >= ur.DAILY_N or done >= ur.want_cumulative(hour):
+        return
+    pool = ur.load_pool()
+    item = ur.next_item(pool)
+    if item is None:
+        log_info(acct, "[uplink追加] プール空（queued 0件）")
+        return
+    text = item["text"]
+    why = ur.judge(text)   # 投稿直前に再判定（ルール更新・masa既出に追従）
+    if why:
+        item["status"] = "skipped"
+        item["skip_reason"] = "judge:" + ",".join(why)[:80]
+        ur.save_pool(pool)
+        log_info(acct, f"[uplink追加] 検品NGでskip: {item['id']} {why}")
+        return
+    try:
+        post_id = post_to_threads(acct, text)   # 重複ガード＋API直近重複チェックを通る。本文は無加工
+    except _DuplicatePost as e:
+        item["status"] = "skipped"
+        item["skip_reason"] = "duplicate"
+        ur.save_pool(pool)
+        log_info(acct, f"[uplink追加] 重複でskip: {e}")
+        return
+    except Exception as e:
+        item["fail"] = item.get("fail", 0) + 1
+        if item["fail"] >= ur.MAX_FAIL:
+            item["status"] = "skipped"
+            item["skip_reason"] = f"error:{type(e).__name__}"
+        ur.save_pool(pool)
+        log_error(f"[{acct}] uplink追加投稿失敗({item['id']} fail={item['fail']}): {type(e).__name__}: {e}")
+        return
+    now = datetime.now()
+    item["status"] = "posted"
+    item["posted_at"] = now.strftime("%Y-%m-%dT%H:%M:%S")
+    item["masa_post_id"] = post_id
+    ur.save_pool(pool)
+    entry = {"date": now.strftime("%Y-%m-%d"), "index": -1, "post_id": post_id, "text": text,
+             "kind": "uplink_repost", "source_id": item["id"], "source_views": item.get("views")}
+    with open(ACCOUNTS[acct]["posted"], "a", encoding="utf-8") as f:
+        f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+    log_info(acct, f"[uplink追加] 投稿 {done + 1}/{ur.DAILY_N}本目 src={item['id']}({item.get('views')}v) → {post_id}")
+
+
 def _run_main():
     target = sys.argv[1].lower() if len(sys.argv) > 1 else "all"
 
@@ -1420,6 +1476,13 @@ def _run_main():
         _safe_batch("nagaoka")
         time.sleep(5)
         _safe_batch("masa")
+
+    # uplink追加枠（masaのみ・通常枠の後・失敗しても通常運用に影響させない）
+    if target in ("masa", "all"):
+        try:
+            _run_uplink_repost()
+        except Exception as e:
+            log_error(f"[masa] _run_uplink_repost 例外: {type(e).__name__}: {e}")
 
     # 投稿後にObsidianレポートを自動更新
     try:

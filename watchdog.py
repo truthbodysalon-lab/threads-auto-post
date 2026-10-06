@@ -146,9 +146,12 @@ def check_account(acct: str) -> int:
     want = ap._target_cumulative_by_now(hour)
 
     # A-2: 固め打ち検知（ペースより大幅先行 = フロア/暴走バグの再発）
-    if posted > want + 10:
-        log(f"{acct}: 固め打ち疑い posted={posted} want={want}")
-        _push_once_per_day(acct, f"⚠️Threads {acct}: 投稿が先行しすぎ({posted}本/目標{want})。固め打ちバグの疑い。")
+    # 2026-10-06: 投稿側は設計上 LOOKAHEAD_HOURS 先まで先に出すので、先行判定も同じ先読み曲線を基準にする
+    # （watchdog_ci.pyと同修正。基準が現在時刻だと正常運転だけで閾値に張り付き誤報になる）
+    want_ahead = ap._target_cumulative_by_now(hour + ap.LOOKAHEAD_HOURS)
+    if posted > want_ahead + 10:
+        log(f"{acct}: 固め打ち疑い posted={posted} want_ahead={want_ahead}")
+        _push_once_per_day(acct, f"⚠️Threads {acct}: 投稿が先行しすぎ({posted}本/先読み目標{want_ahead})。固め打ちバグの疑い。")
         return 0
 
     # A-1: 遅れ検知（クラウド側watchdog_ciが遅れ8本超で自動修復するため、

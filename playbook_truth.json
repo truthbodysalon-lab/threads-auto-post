@@ -1,7 +1,7 @@
 {
   "acct": "truth",
-  "version": 57,
-  "updated": "2026-10-05",
+  "version": 58,
+  "updated": "2026-10-06",
   "description": "修正ポイント（勝ち構造・死ぬ構造）の正本。毎朝サブエージェントEが実測データで各ルールを検証し、効かなくなったルールはretired、新発見はtestingで追加、実証されたらactiveに昇格する。ヒーロー投稿と新テンプレはこのプレイブックのactiveルールに従って書く。",
   "rules": [
     {
@@ -524,6 +524,11 @@
       "version": 57,
       "date": "2026-10-05",
       "change": "2026-10-05 検証: breakout_truth(中央値96/P90 248/TOP1 578)は数字自己診断・呼びかけ・行動提案で既存W3/W10/W7の範囲。W_OWN/W_SEGは判定母数不足でtesting継続。active/retired変更なし"
+    },
+    {
+      "version": 58,
+      "date": "2026-10-06",
+      "change": "2026-10-06 検証: breakout_truth(TOP1 579)は数字自己診断・耳引っ張り行動・問い止めで既存W3/W7/W2の範囲。新規構造なし。W_OWN/W_SEGは母数不足でtesting継続。active/retired変更なし"
     }
   ]
 }

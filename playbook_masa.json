@@ -1,7 +1,7 @@
 {
   "acct": "masa",
-  "version": 62,
-  "updated": "2026-10-05",
+  "version": 63,
+  "updated": "2026-10-06",
   "description": "修正ポイント（勝ち構造・死ぬ構造）の正本。毎朝サブエージェントEが実測データで各ルールを検証し、効かなくなったルールはretired、新発見はtestingで追加、実証されたらactiveに昇格する。ヒーロー投稿と新テンプレはこのプレイブックのactiveルールに従って書く。",
   "rules": [
     {
@@ -646,6 +646,11 @@
       "version": 62,
       "date": "2026-10-05",
       "change": "2026-10-05 検証: breakout_masa(中央値42/P90 159)のTOP30は経営数字・離職・月商50万の壁系で既存W6/W22の範囲、新規構造なし。W_INSTA_EASY/PAIN/REPEATは各カテゴリn<=1で判定保留(segment_report全て判定保留)＝testing継続。active/retired変更なし。"
+    },
+    {
+      "version": 63,
+      "date": "2026-10-06",
+      "change": "2026-10-06 検証: breakout_masa TOP1 752「客単価1.3倍で月商50万は65万」(数字対比W6)・離職/月商50万の壁が引き続き上位。W_INSTA系はn<=1で判定保留=testing継続。変更なし"
     }
   ]
 }

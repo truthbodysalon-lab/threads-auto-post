@@ -123,7 +123,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 2,
-    "created": "2026-10-06"
+    "created": "2026-10-07"
   },
   "月商50万の壁で止まる店を見てきて分かったこと。": {
     "segment": "S3",
@@ -271,7 +271,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 1,
-    "created": "2026-10-01"
+    "created": "2026-10-07"
   },
   "在宅勤務で肩こりが悪化した人へ。": {
     "segment": "T1",
@@ -2373,5 +2373,303 @@
     "variant": 0,
     "created": "2026-10-06",
     "acct": "nagaoka"
+  },
+  "座り仕事で首が詰まる感じがする人へ。": {
+    "segment": "T1",
+    "hook": "low",
+    "created": "2026-10-07",
+    "acct": "truth",
+    "variant": null,
+    "hypothesis_id": "ZC01_truth"
+  },
+  "頭が重い日が続く人へ。": {
+    "segment": "T2",
+    "hook": "low",
+    "created": "2026-10-07",
+    "acct": "truth",
+    "variant": null,
+    "hypothesis_id": "ZC02_truth"
+  },
+  "抱っこで肩がつらいママへ。": {
+    "segment": "T3",
+    "hook": "low",
+    "created": "2026-10-07",
+    "acct": "truth",
+    "variant": null,
+    "hypothesis_id": "ZC03_truth"
+  },
+  "水を飲む時間がない仕事の人へ。": {
+    "segment": "T4",
+    "hook": "low",
+    "created": "2026-10-07",
+    "acct": "truth",
+    "variant": null,
+    "hypothesis_id": "ZC04_truth"
+  },
+  "【頭痛の人の通勤中の習慣5選】": {
+    "segment": "LIST_HABIT",
+    "hook": "list",
+    "variant": 30,
+    "created": "2026-10-07",
+    "acct": "truth"
+  },
+  "【水をほとんど飲まない人が始める習慣7選】": {
+    "segment": "LIST_HABIT",
+    "hook": "list",
+    "variant": 42,
+    "created": "2026-10-07",
+    "acct": "truth"
+  },
+  "『睡眠不足の翌日は、ほぼ頭痛が出る』という声を、よく聞きます。": {
+    "segment": "CUSTOMER_VOICE",
+    "hook": "voice",
+    "variant": 6,
+    "created": "2026-10-07",
+    "acct": "truth"
+  },
+  "座り仕事で肩が重い人へ。": {
+    "segment": "T1",
+    "hook": "low",
+    "created": "2026-10-07",
+    "acct": "nagaoka",
+    "variant": null,
+    "hypothesis_id": "ZC01_nagaoka"
+  },
+  "頭が重い日がときどきある人へ。": {
+    "segment": "T2",
+    "hook": "low",
+    "created": "2026-10-07",
+    "acct": "nagaoka",
+    "variant": null,
+    "hypothesis_id": "ZC02_nagaoka"
+  },
+  "子育て中で肩や腰がつらいママへ。": {
+    "segment": "T3",
+    "hook": "low",
+    "created": "2026-10-07",
+    "acct": "nagaoka",
+    "variant": null,
+    "hypothesis_id": "ZC03_nagaoka"
+  },
+  "立ち仕事で腰が重い人へ。": {
+    "segment": "T4",
+    "hook": "low",
+    "created": "2026-10-07",
+    "acct": "nagaoka",
+    "variant": null,
+    "hypothesis_id": "ZC04_nagaoka"
+  },
+  "【首が前に出ていると言われた人の習慣6選】": {
+    "segment": "LIST_HABIT",
+    "hook": "list",
+    "variant": 40,
+    "created": "2026-10-07",
+    "acct": "nagaoka"
+  },
+  "【スマホ首を防ぐ習慣6選】": {
+    "segment": "LIST_HABIT",
+    "hook": "list",
+    "variant": 5,
+    "created": "2026-10-07",
+    "acct": "nagaoka"
+  },
+  "朝、首や肩が一番つらい人へ。": {
+    "segment": "CUSTOMER_VOICE",
+    "hook": "voice",
+    "variant": 23,
+    "created": "2026-10-07",
+    "acct": "nagaoka"
+  },
+  "インスタで、ハッシュタグに悩む人へ。": {
+    "segment": "I08",
+    "hook": "low",
+    "created": "2026-10-07",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP22"
+  },
+  "インスタのストーリーズが、続かない人へ。": {
+    "segment": "I09",
+    "hook": "low",
+    "created": "2026-10-07",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP25"
+  },
+  "インスタのフォロワーが、増えなくて悩む人へ。": {
+    "segment": "I10",
+    "hook": "low",
+    "created": "2026-10-07",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP28"
+  },
+  "インスタで、役立つ投稿を出しても予約が入らない人へ。": {
+    "segment": "I11",
+    "hook": "low",
+    "created": "2026-10-07",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP31"
+  },
+  "インスタのプロフィールを、凝らなきゃと思う人へ。": {
+    "segment": "I12",
+    "hook": "low",
+    "created": "2026-10-07",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP34"
+  },
+  "インスタのプロフィールに、リンクを複数貼っている人へ。": {
+    "segment": "I13",
+    "hook": "low",
+    "created": "2026-10-07",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP38"
+  },
+  "初回の説明で、次回の話ができない院長へ。": {
+    "segment": "R01",
+    "hook": "low",
+    "created": "2026-10-07",
+    "acct": "masa",
+    "axis": "repeat_close",
+    "variant": null,
+    "hypothesis_id": "RP01"
+  },
+  "コースの途中で来なくなる人が多い院長へ。": {
+    "segment": "R02",
+    "hook": "low",
+    "created": "2026-10-07",
+    "acct": "masa",
+    "axis": "repeat_close",
+    "variant": null,
+    "hypothesis_id": "RP04"
+  },
+  "インスタで「AIは難しそう」と、手が止まっていませんか。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-07"
+  },
+  "インスタで「機械が苦手」と、手が止まっていませんか。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-07"
+  },
+  "インスタが「スタッフが少ない」くらいで、やめなくていい。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-07"
+  },
+  "「毎日投稿できない」のままでも、インスタは始められます。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-07"
+  },
+  "インスタで「若い人向けだと思う」。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-07"
+  },
+  "インスタで「数字が苦手」。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-07"
+  },
+  "インスタで「一人で全部やっている」と、手が止まっていませんか。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-07"
+  },
+  "インスタで「若い人向けだと思う」と、手が止まっていませんか。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-07"
+  },
+  "インスタは「ネタがない」でも、続けられます。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-07"
+  },
+  "インスタで「一人で全部やっている」。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-07"
+  },
+  "インスタは「見られるのが怖い」でも、続けられます。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-07"
+  },
+  "インスタで「営業中は触れない」。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-07"
+  },
+  "「撮影が面倒」のままでも、インスタは始められます。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-07"
+  },
+  "インスタが「撮影が面倒」くらいで、やめなくていい。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-07"
+  },
+  "インスタが「リールが難しそう」くらいで、やめなくていい。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-07"
+  },
+  "インスタで「編集ができない」。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-07"
+  },
+  "インスタで「AIは難しそう」。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-07"
+  },
+  "インスタが「お金をかけられない」くらいで、やめなくていい。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-07"
+  },
+  "インスタで「文章が苦手」と、手が止まっていませんか。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-07"
+  },
+  "「スタッフが少ない」のままでも、インスタは始められます。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-07"
   }
 }

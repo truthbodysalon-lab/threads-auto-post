@@ -2359,5 +2359,19 @@
     "variant": "inject",
     "created": "2026-10-06",
     "acct": "nagaoka"
+  },
+  "『肩こりが頭痛に変わる、いつものパターンがある』という声を、よく聞きます。": {
+    "segment": "CUSTOMER_VOICE",
+    "hook": "voice",
+    "variant": 0,
+    "created": "2026-10-06",
+    "acct": "truth"
+  },
+  "『座り仕事が続くと、首が詰まった感じがする』という声を、よく聞きます。": {
+    "segment": "CUSTOMER_VOICE",
+    "hook": "voice",
+    "variant": 0,
+    "created": "2026-10-06",
+    "acct": "nagaoka"
   }
 }

@@ -114,6 +114,43 @@ def check_dup_reselect_guard():
         add("dup_reselect:all", "A.コード", "FAIL", f"{type(e).__name__}: {e}")
 
 
+def check_same_day_anchor_and_git_conflict():
+    """C23: 2026-10-06障害の回帰テスト。
+    (1) 頭痛診断アンカーの当日重複判定が、URL抽出後の台帳本文でも効くか（_is_shindan(台帳text)が常にFalseで
+        同日二重投稿が常態化していた）。
+    (2) auto_post.yml が autostash復元の競合(未解決U)を自動解消するか（手元pushとの衝突で70分commit全失敗）。"""
+    import os as _os, tempfile as _tf, json as _json
+    from pathlib import Path as _P
+    _os.environ["SEGMENT_REGISTRY_DRY"] = "1"
+    try:
+        import auto_post as _ap
+        first = "C22回帰テスト用の診断1文目です。"
+        with _tf.TemporaryDirectory() as d:
+            pf = _P(d) / "posted.jsonl"
+            pf.write_text(_json.dumps({"date": "2099-01-01", "index": 6, "post_id": "x",
+                                       "text": first, "is_shindan": True}, ensure_ascii=False) + "\n")
+            orig = _ap.ACCOUNTS["truth"]["posted"]
+            _ap.ACCOUNTS["truth"]["posted"] = pf
+            try:
+                ok = _ap._shindan_anchor_ok("truth", "2099-01-01", first + "\n" + _ap._SHINDAN_URL)
+            finally:
+                _ap.ACCOUNTS["truth"]["posted"] = orig
+        if ok:
+            add("same_day_anchor:shindan", "A.コード", "FAIL", "診断アンカーが同日同一テンプレを再許可（台帳本文URL除去で判定不能）")
+        else:
+            add("same_day_anchor:shindan", "A.コード", "PASS", "同日同一テンプレの診断アンカーを弾く")
+    except Exception as e:
+        add("same_day_anchor:shindan", "A.コード", "FAIL", f"{type(e).__name__}: {e}")
+    try:
+        y = (BASE / ".github/workflows/auto_post.yml").read_text(encoding="utf-8")
+        if "--diff-filter=U" in y and "stash drop" in y:
+            add("same_day_anchor:git_unmerged", "A.コード", "PASS", "autostash競合の自動解消あり")
+        else:
+            add("same_day_anchor:git_unmerged", "A.コード", "FAIL", "auto_post.ymlにautostash競合(U)の自動解消が無い（10/06に70分commit全失敗）")
+    except Exception as e:
+        add("same_day_anchor:git_unmerged", "A.コード", "WARN", f"検査不可: {e}")
+
+
 def check_test_posts_in_first50():
     """C21: テスト投稿（悩みテスト軸1・軸2）が生成キューの前半50本に全て入るか。
     2026-10-04: アンカー44がヒーロー挿入で58番目へずれ、毎日1本が投稿されず判定データが欠けていた。"""
@@ -853,7 +890,7 @@ JST = timezone(timedelta(hours=9))
 CHECK_REGISTRY = {
     "C8": "exec:daily50:", "C10": "exec:pacing:", "C11": "exec:watchdog",
     "C13": "exec:hpb_only", "C14": "exec:imagepost", "C15": "exec:segment_test:",
-    "C16": "next_post:", "C17": "dup_reselect:",
+    "C16": "next_post:", "C17": "dup_reselect:", "C23": "same_day_anchor:",
     "C21": "exec:log_sync", "C18": "exec:chain_gap", "C19": "exec:post_interval:", "C20": "ledger:",
 }
 
@@ -1106,6 +1143,7 @@ def run_all():
     check_generation()
     check_next_post_smoke()
     check_dup_reselect_guard()
+    check_same_day_anchor_and_git_conflict()
     check_test_posts_in_first50()
     check_rules()
     check_masa_insta_theme()

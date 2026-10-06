@@ -368,7 +368,10 @@ def _shindan_anchor_ok(acct: str, today: str, text: str) -> bool:
         if (e.get("date") or "")[:10] != today:
             continue
         t = e.get("text", "")
-        if _is_shindan(t) and t.split("\n")[0].strip() == first:
+        # 2026-10-06修正: 台帳textはURL抽出後の本文（2026-08-18〜）のため _is_shindan(t) は常にFalseで、
+        # 当日同一テンプレの判定が一度も効かず同日二重投稿が常態化していた（10/06 06:09と13:05ほか
+        # 8/27〜10月に多数）。_hpb_anchor_ok と同様、種別を問わず1文目一致で判定する。
+        if t.split("\n")[0].strip() == first:
             return False  # 本日すでに同一テンプレ使用済み
     return True
 

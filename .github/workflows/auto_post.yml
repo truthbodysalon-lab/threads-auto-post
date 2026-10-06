@@ -101,7 +101,21 @@ jobs:
                   subprocess.run([sys.executable, 'generate_remix.py', a], check=False)
           "
           }
+          # 2026-10-06: 手元pushと常駐ループの同一ファイル(uplink_repost_pool.json)更新が衝突し、
+          # autostash復元が競合→未解決(U)のまま残り、以後70分 pull/commit が全失敗した。
+          # pull直後に未解決ファイルがあれば手元(CI側の最新状態=stash)を採用して解消する。
+          safe_pull() {
+            git pull -q --rebase --autostash -X theirs origin main || { git rebase --abort 2>/dev/null || true; }
+            U=$(git diff --name-only --diff-filter=U)
+            if [ -n "$U" ]; then
+              echo "::warning::autostash衝突を自動解消（CI側を採用）: $U"
+              for f in $U; do git checkout --theirs -- "$f" 2>/dev/null || git checkout HEAD -- "$f"; done
+              git reset -q
+              git stash drop -q 2>/dev/null || true
+            fi
+          }
           commit_logs() {
+            [ -n "$(git diff --name-only --diff-filter=U)" ] && safe_pull
             # 1件でも存在しないパスを渡すとgit addは全体を中止する（2026-10-02 dispatch_state.json未生成で
             # 台帳pushが40時間止まった）。存在するファイルだけを個別に追加する
             for f in log_truth.jsonl log_masa.jsonl log_nagaoka.jsonl \
@@ -117,14 +131,14 @@ jobs:
             git diff --cached --quiet || git commit -q -m "chore: update logs [skip ci]"
             for i in 1 2 3; do
               git push -q && break
-              git pull -q --rebase --autostash -X theirs origin main || { git rebase --abort 2>/dev/null || true; }
+              safe_pull
             done
           }
           while [ "$(date +%s)" -lt "$END" ]; do
             T0=$(date +%s)
             echo "::group::cycle $(date '+%H:%M')"
             # 朝の生成・ヒーロー・プレイブック等の最新を取り込む（自分の未pushは直前のcommit_logsで反映済み）
-            git pull -q --rebase --autostash -X theirs origin main || { git rebase --abort 2>/dev/null || true; }
+            safe_pull
             prefill || true
             timeout 50m python3 auto_post.py all || true
             python3 token_manager.py --sync-secrets || true

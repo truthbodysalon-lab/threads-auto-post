@@ -12,6 +12,7 @@ C20（台帳整合）が「台帳の検査IDが実コードに実在するか」
 
 | 発生日 | 症状（何時間・どのアカウント） | 根本原因 | 修正commit | 再発防止の検査ID | 検知までの時間 |
 |---|---|---|---|---|---|
+| 2026-10-06 | 12:34〜13:44の約70分、CIの台帳commit/pullが全失敗・uplink追加枠がJSONDecodeError停止（truth 13:05分3本が台帳欠落）／truth診断アンカー「頭痛改善の第一歩は…」が06:09と13:05に同日二重投稿 | ①手元から uplink_repost_pool.json をpush→常駐runの旧ymlはこのファイルをcommit対象外で未コミット保持→autostash復元が競合し未解決(U)のまま残り以後のcommit/pullが全滅 ②_shindan_anchor_okが台帳text(URL抽出後)に_is_shindanを掛けており当日同一テンプレ判定が8/18以降一度も効いていなかった（台帳失敗とは独立・8/27〜多数） | auto_post.yml safe_pull（U自動解消）＋auto_post.py 1文目一致判定（本commit） | C23 | 約70分（ログ）／二重投稿は約1.5か月未検知 |
 | 2026-10-03 | 全アカウントの投稿ログpushが約16時間停滞（10/02 18:04以降。投稿自体は継続・ログ/重複ガード/集計が古い） | 常駐runのpull --rebaseが未コミット変更（unstaged）で毎回失敗しpush rejectedが続いた | auto_post.yml `pull --rebase --autostash`（本commit） | C21 | 約16時間（検証D） |
 | 2026-10-02 | 全アカウント約5.5時間0本（6:06/9:43/15:17の3回しか起動せず） | GitHub Actionsのschedule(cron)が混雑時に1日3回へ間引かれた。runはsuccessで気付けず | ea3bdceb / 9a7e231f / 0c9457ca（常駐ループ化＋keeper連鎖＋ローカルwatchdogのdispatch起動） | C18, C19 | 約5.5時間（人が気付くまで） |
 | 2026-09-29 | truth 約4時間0本 | 重複で弾かれたLINE候補を同一実行内で再選択し続け、3連続失敗で毎ラン諦めた（疑問符正規化の漏れも併発） | 01487898 / 392087dd（実行内ブロックリスト） | C17 | 約4時間 |
@@ -35,6 +36,7 @@ C20（台帳整合）が「台帳の検査IDが実コードに実在するか」
 - C18 `exec:chain_gap` … 常駐連鎖(auto_post.yml)の24h最大空白（30分WARN/90分FAIL・in_progress0本はFAIL）
 - C19 `exec:post_interval` … 昨日6-23時の最大投稿間隔（90分WARN/180分FAIL・外部ツール投稿は除外）
 - C21 `exec:log_sync` … 投稿ログpushの停滞（7-23時に90分WARN/180分FAIL）
+- C23 `same_day_anchor` … 診断アンカーの同日同一テンプレ拒否＋auto_post.ymlのautostash競合自動解消
 - C20 `ledger` … 本台帳の検査IDが実コードに実在するか
 
 - 2026-10-04追記: 上記ログ停滞の副作用で10/03分の台帳(log_*_posted.jsonl)が欠落（API実投稿は50/55/50本）。10/04分は10:23のpushから復旧済み。C19 `exec:post_interval` は10/03を見るため、10/04 JSTの翌日判定でPASSに戻る見込み（欠落分は復元不能・修正は d1de7c30 で済み）。

@@ -25,3 +25,5 @@
 {"ts": "2026-10-04T22:47:34+09:00", "msg": "🚨Threads nagaoka: 最後の投稿から280分。原因候補: 選択ループ/例外（常駐は稼働中なのに投稿が出ていない）。直近run: https://github.com/truthbodysalon-lab/threads-auto-post/actions/runs/37193049919（CI watchdog）"}
 {"ts": "2026-10-05T15:02:12+09:00", "msg": "🚨Threads Daily Verify: FAIL 3件検出\n・[exec:post_interval:truth] 2026-10-04 最大間隔183分（06:00〜）・自前32本/外部等18本除外\n・[exec:post_interval:nagaoka] 2026-10-04 最大間隔185分（06:00〜）・自前23本/外部等33本除外\n・[exec:post_interval:masa] 2026-10-04 最大間隔186分（06:00〜）・自前32本/外部等18本除外\nhttps://github.com/truthbodysalon-lab/threads-auto-post/actions/runs/37270386600"}
 {"ts": "2026-10-05T21:30:56+09:00", "msg": "🚨Threads nagaoka: 最後の投稿から206分。原因候補: 選択ループ/例外（常駐は稼働中なのに投稿が出ていない）。直近run: https://github.com/truthbodysalon-lab/threads-auto-post/actions/runs/37293739457（CI watchdog）"}
+{"ts": "2026-10-06T10:41:03+09:00", "msg": "⚠️Threads truth: 投稿が先行しすぎ(30本/目標15)。固め打ちバグの疑い(CI watchdog)"}
+{"ts": "2026-10-06T10:41:09+09:00", "msg": "⚠️Threads masa: 投稿が先行しすぎ(27本/目標15)。固め打ちバグの疑い(CI watchdog)"}

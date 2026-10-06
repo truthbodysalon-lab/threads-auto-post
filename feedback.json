@@ -369,9 +369,19 @@
       "date": "2026-10-06",
       "text": "【masa・uplink閲覧200以上の追加投稿（本人指示2026-10-06）】uplink(uplink0117)で閲覧200以上の投稿を、本文を書き換えずにmasaへ追加枠で出す。通常の50本/日・DAILY_CAP(55)とは別枠で1日6本(UPLINK_REPOST_DAILY)・7〜21時に均等(1サイクル最大1本)。1投稿はmasaへ1回だけ（同じ文面の再投稿はしない・近似1行目も1本に絞る）。プール=uplink_repost_pool.json(queued/posted/skipped)。URL・LINE・note・Square等のリンクやuplink固有の導線/固有名、面談/相談/決済/価格・円・割引、店舗名・所在地、予告型、日付・季節・時事依存、リプライ・引用はプールに入れない（generate_remix._is_masa_sales_ng/_is_masa_yokokoku_ng/_is_ng・inspector.inspect_post('masa')を通らないものも除外。refresh時と投稿直前の二重判定=uplink_repost.judge）。本文は無加工で、[COMMENT]分割・ブリッジコメント・CTAコメントは付けない。台帳log_masa_posted.jsonlにはkind=uplink_repostで記録し通常枠・外形API照合から差し引く。プール更新はMacのみ(uplinkトークンがCI Secretsに無い)=uplink_repost_refresh.py --push を毎朝daily-marketing-automationで実行。検査=verify C22。なぜ: uplinkの閲覧200以上は実測で当たった文面で、翻案せず出す方が確実に閲覧を積めるため（masa指示）。",
       "account": "masa"
+    },
+    {
+      "date": "2026-10-06",
+      "account": "truth",
+      "text": "【truth・【◯◯習慣N選】型（本人指示2026-10-06）】「【サロン経営で絶対必要な習慣9選】・毎朝、目標を確認する…積み重ねた1年が、結果を作る。」の型で、肩こり・頭痛の内容の投稿を毎日2本出す。型=1行目【◯◯N選】（N=5〜9・変種:やめること/チェック項目/NG行動/朝の習慣）／「・」で始まる10〜18字程度の動詞終わりの具体行動をN行／最後に短い格言1行。URL・CTA・ハッシュタグ・予約誘導なし。頭痛特化寄り・もう一方のtruth系アカと文面を重複させない。項目は安全なセルフケア（水分・休憩・温め・姿勢・呼吸）に限り、強い運動・医療行為・薬の指示・治る等の断定・創作統計は不可。generate_remixのLIST_HABIT_TEMPLATES_TRUTHと組合せ生成が前半アンカーへ投入（segment=LIST_HABIT）。なぜ: 勝ち構造の【】リスト型/「・」リスト型の実測と整合し、本人が型を指定したため。"
+    },
+    {
+      "date": "2026-10-06",
+      "account": "nagaoka",
+      "text": "【nagaoka・【◯◯習慣N選】型（本人指示2026-10-06）】「【サロン経営で絶対必要な習慣9選】・毎朝、目標を確認する…積み重ねた1年が、結果を作る。」の型で、肩こり・頭痛の内容の投稿を毎日2本出す。型=1行目【◯◯N選】（N=5〜9・変種:やめること/チェック項目/NG行動/朝の習慣）／「・」で始まる10〜18字程度の動詞終わりの具体行動をN行／最後に短い格言1行。URL・CTA・ハッシュタグ・予約誘導なし。肩こり・首こり・生活習慣寄り・もう一方のtruth系アカと文面を重複させない。項目は安全なセルフケア（水分・休憩・温め・姿勢・呼吸）に限り、強い運動・医療行為・薬の指示・治る等の断定・創作統計は不可。generate_remixのLIST_HABIT_TEMPLATES_NAGAOKAと組合せ生成が前半アンカーへ投入（segment=LIST_HABIT）。なぜ: 勝ち構造の【】リスト型/「・」リスト型の実測と整合し、本人が型を指定したため。"
     }
   ],
-  "updated_at": "2026-10-06T12:18:56",
+  "updated_at": "2026-10-06T19:13:38",
   "precedence": "ルールの優先順位（2026-07-19監査で制定）: ①goals.json(ゴール・導線保護) ②playbookのactiveルール(構造の勝敗・実測で進化) ③notesの最新日付 ④旧note。同一テーマのnoteは最新日付が旧を上書きする（旧noteとの矛盾はFAILにしない）。導線投稿(HPB/LINE/診断/整体LINE/cta_profile)は閲覧基準の負けテンプレ判定・pruneの対象外",
   "extra_templates_legacy": {
     "masa": [

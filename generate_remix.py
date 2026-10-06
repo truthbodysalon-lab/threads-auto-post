@@ -1543,6 +1543,21 @@ def _render_list_habit(heading: str, items: list[str], closer: str) -> str:
     return f"【{heading}{len(items)}選】\n" + "\n".join(f"・{it}" for it in items) + "\n" + closer
 
 
+# お客様の声由来の題材を追加（2026-10-06 本人指示。匿名化・一般化済みの文面のみ＝customer_voice_templates.py。
+# なぜ: Plaudカウンセリングで多く出た悩みの言い方を、投稿の題材にも反映するため。元データはリポジトリに入れない）
+try:
+    from customer_voice_templates import (
+        VOICE_HABIT_TEMPLATES_TRUTH, VOICE_HABIT_TEMPLATES_NAGAOKA, VOICE_HABIT_POOLS,
+        CUSTOMER_VOICE_TEMPLATES_TRUTH, CUSTOMER_VOICE_TEMPLATES_NAGAOKA,
+    )
+    LIST_HABIT_TEMPLATES_TRUTH.extend(VOICE_HABIT_TEMPLATES_TRUTH)
+    LIST_HABIT_TEMPLATES_NAGAOKA.extend(VOICE_HABIT_TEMPLATES_NAGAOKA)
+    for _acct, _pools in VOICE_HABIT_POOLS.items():
+        LIST_HABIT_POOLS.setdefault(_acct, []).extend(_pools)
+except Exception:   # 追加分が読めなくても既存の固定原稿だけで動く
+    CUSTOMER_VOICE_TEMPLATES_TRUTH = []
+    CUSTOMER_VOICE_TEMPLATES_NAGAOKA = []
+
 LIST_HABIT_RENDERED_TRUTH = [_render_list_habit(h, it, c) for h, it, c in LIST_HABIT_TEMPLATES_TRUTH]
 LIST_HABIT_RENDERED_NAGAOKA = [_render_list_habit(h, it, c) for h, it, c in LIST_HABIT_TEMPLATES_NAGAOKA]
 
@@ -1642,6 +1657,72 @@ def _insert_list_habit_posts(posts: list[str], acct: str, today: str, anchors: l
         posts.insert(min(pos, len(posts)), text)
         registry[_segment_registry_key(text)] = {"segment": "LIST_HABIT", "hook": "list", "variant": variant,
                                                   "created": today, "acct": acct}
+    _save_segment_registry(registry)
+    return posts
+
+
+# 個人特定につながる語（お客様の声の一般化が崩れていないかの最終ガード）
+_CV_PRIVACY = re.compile(r"[一-龥ぁ-んァ-ヶー]{1,6}(様|さん)|\d+\s*(歳|才)|\d+代|円|(?<!長岡)[一-龥]{1,4}(市|町|村|県|区)")
+_CV_FORBID = re.compile(r"予約|LINE|ライン|ホットペッパー|フォロー|診断|治る|完治|http|#|＃|%|％")
+
+
+def _customer_voice_valid(text: str) -> bool:
+    """お客様の声型の機械チェック: 1行目=『…』という声を、よく聞きます。 or …な人へ。／250字以内／
+    既存ガード（NG・症状不整合・予約誘導）／個人特定語・導線語なし。"""
+    first = (text or "").split("\n")[0]
+    if not (re.fullmatch(r"『[^』]{4,40}』という声を、よく聞きます。", first) or re.fullmatch(r"[^\n]{4,40}(な|る|い|た)人へ。", first)
+            or re.fullmatch(r"『[^』]{4,40}』と後回しにしている人へ。", first)):
+        return False
+    return (len(text) <= 250 and not _is_ng(text) and not _is_seitai_reserve_violation(text)
+            and not _CV_PRIVACY.search(text) and not _CV_FORBID.search(text))
+
+
+def _insert_customer_voice_post(posts: list[str], acct: str, today: str, anchor: int | None = None) -> list[str]:
+    """truth/nagaoka: お客様の声型(CUSTOMER_VOICE)を毎日1本、前半の固定アンカーへ投入しsegment_registry.jsonへ
+    segment="CUSTOMER_VOICE"（acct付き）で登録する（2026-10-06 本人指示）。7日以内の再投入なし・直近1行目と被らない。
+    anchor既定: truth=20 / nagaoka=17（既存アンカー・LIST_HABIT 13/27・13/22・テスト・ヒーローと非衝突）。
+    _insert_list_habit_posts の後・_insert_hero_posts の前で呼ぶ。SEGMENT_REGISTRY_DRY=1では台帳を保存しない。"""
+    if acct not in ("truth", "nagaoka"):
+        return posts
+    anchor = anchor if anchor is not None else (20 if acct == "truth" else 17)
+    pool = CUSTOMER_VOICE_TEMPLATES_TRUTH if acct == "truth" else CUSTOMER_VOICE_TEMPLATES_NAGAOKA
+    other = CUSTOMER_VOICE_TEMPLATES_NAGAOKA if acct == "truth" else CUSTOMER_VOICE_TEMPLATES_TRUTH
+    if not pool:
+        return posts
+    try:
+        today_date = date.fromisoformat(today)
+    except Exception:
+        today_date = date.today()
+    registry = _load_segment_registry()
+    last_used: dict[str, date] = {}
+    for key, entry in registry.items():
+        if not isinstance(entry, dict) or entry.get("segment") != "CUSTOMER_VOICE":
+            continue
+        try:
+            last_used[key] = date.fromisoformat(entry.get("created", ""))
+        except Exception:
+            continue
+    try:
+        recent_first = _get_recent_first_lines(acct, days=4)
+    except Exception:
+        recent_first = set()
+    used_keys = {_segment_registry_key(p) for p in posts} | {_segment_registry_key(t) for t in other}
+    cands = []
+    for i, t in enumerate(pool):
+        k = _segment_registry_key(t)
+        if not _customer_voice_valid(t) or k in used_keys or t.split("\n")[0].strip() in recent_first:
+            continue
+        lu = last_used.get(k)
+        if lu is not None and (today_date - lu).days < 7:
+            continue
+        cands.append((lu or date.min, random.random(), i, t))   # 未使用→最終使用が古い順
+    if not cands:
+        return posts
+    cands.sort()
+    _, _, idx, text = cands[0]
+    posts.insert(min(anchor, len(posts)), text)
+    registry[_segment_registry_key(text)] = {"segment": "CUSTOMER_VOICE", "hook": "voice", "variant": idx,
+                                              "created": today, "acct": acct}
     _save_segment_registry(registry)
     return posts
 
@@ -1860,6 +1941,8 @@ def generate_30_posts() -> list[str]:
     # 【◯◯習慣N選】型(LIST_HABIT・2026-10-06本人指示)を毎日2本、前半アンカー13/27へ投入。
     # 既存アンカー{3,5,6,7,9,11,12,14,16,18,19,21,23,25,28,30,32}と別位置。後段のヒーロー(最大+10)でも前半50本に収まる
     posts = _insert_list_habit_posts(posts, "truth", TODAY)
+    # お客様の声型(CUSTOMER_VOICE・2026-10-06本人指示)を毎日1本、前半アンカー20へ投入
+    posts = _insert_customer_voice_post(posts, "truth", TODAY)
 
     posts = _insert_hero_posts(posts, "truth")   # 全挿入の最後（位置50超への押し出し防止）
     return posts[:100]
@@ -2070,6 +2153,9 @@ def generate_40_nagaoka_posts() -> list[str]:
                 final_posts.pop(i)
                 deleted += 1
 
+    # お客様の声型(CUSTOMER_VOICE・2026-10-06本人指示)を毎日1本、前半アンカー17へ投入。
+    # 長岡市言及率の削除(index>35)の後に入れる＝先に入れると+1ずれて位置35の導線アンカーが削除対象に落ちるため
+    final_posts = _insert_customer_voice_post(final_posts, "nagaoka", TODAY)
     final_posts = _insert_hero_posts(final_posts, "nagaoka")   # 全挿入の最後
     return final_posts
 

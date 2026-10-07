@@ -33,12 +33,23 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_PAT }}
         run: |
           # 引き継ぎ用: 旧runの終了を最大10分待つ（旧runは終了直前にChainするため）
+          # 2026-10-07: 照会が失敗して空を返すと「旧run無し」と誤判定し、常駐runが2本並走して
+          # 同じ投稿を3秒差で二重投稿した（masa 10/7 06:05）。照会失敗は「不明」として起動しない。
+          older_of() {
+            gh api "repos/$GITHUB_REPOSITORY/actions/workflows/auto_post.yml/runs?status=in_progress&per_page=30" \
+              --jq ".workflow_runs[].id" > /tmp/inprog.txt 2>/tmp/inprog.err || return 2
+            awk -v me="$GITHUB_RUN_ID" '$1 < me' /tmp/inprog.txt | head -1
+          }
+          OLDER=""; UNKNOWN=0
           for i in $(seq 1 20); do
-            OLDER=$(gh run list --repo "$GITHUB_REPOSITORY" --workflow=auto_post.yml --status in_progress --limit 20 --json databaseId -q ".[].databaseId" | awk -v me="$GITHUB_RUN_ID" '$1 < me' | head -1)
+            if R=$(older_of); then UNKNOWN=0; OLDER="$R"; else UNKNOWN=1; echo "照会失敗($i): $(head -c 200 /tmp/inprog.err)"; sleep 15; continue; fi
             [ -z "$OLDER" ] && break
             sleep 30
           done
-          if [ -n "$OLDER" ]; then
+          if [ "$UNKNOWN" = "1" ]; then
+            echo "旧runの有無を確認できない → 二重起動を避けて終了（scheduleで再試行される）"
+            echo "skip=1" >> "$GITHUB_OUTPUT"
+          elif [ -n "$OLDER" ]; then
             echo "既に常駐中の実行あり(run $OLDER) → この実行は終了"
             echo "skip=1" >> "$GITHUB_OUTPUT"
           else
@@ -136,6 +147,9 @@ jobs:
           }
           while [ "$(date +%s)" -lt "$END" ]; do
             T0=$(date +%s)
+            # 2026-10-07: 並走の第2防衛。自分より古い常駐runが動いていれば、こちらが降りる（Chainもしない）
+            OLD2=$(gh api "repos/$GITHUB_REPOSITORY/actions/workflows/auto_post.yml/runs?status=in_progress&per_page=30" --jq ".workflow_runs[].id" 2>/dev/null | awk -v me="$GITHUB_RUN_ID" '$1 < me' | head -1)
+            if [ -n "$OLD2" ]; then echo "古い常駐run $OLD2 が稼働中 → 並走を避けてこのrunは降りる"; echo "yielded" > /tmp/yielded; break; fi
             echo "::group::cycle $(date '+%H:%M')"
             # 朝の生成・ヒーロー・プレイブック等の最新を取り込む（自分の未pushは直前のcommit_logsで反映済み）
             safe_pull
@@ -157,6 +171,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
         run: |
+          if [ -f /tmp/yielded ]; then echo "並走回避で降りたのでChainしない"; exit 0; fi
           for i in 1 2 3; do
             gh workflow run auto_post.yml --repo "$GITHUB_REPOSITORY" && echo "次の常駐実行を起動" && exit 0
             sleep 20

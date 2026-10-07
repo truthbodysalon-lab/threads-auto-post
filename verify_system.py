@@ -171,6 +171,38 @@ def check_test_posts_in_first50():
         add("test_in_first50:masa", "B.ルール", "WARN", f"判定不能: {type(e).__name__}: {e}")
 
 
+def check_same_day_duplicates():
+    """C23: 同じ本文(1行目)が同日に2回以上投稿されていないか（外形API・直近100本）。
+    2026-10-07: 常駐run並走で masa に同文が3秒差で2本出た。uplink追加投稿は元から1回限りなので対象に含める。"""
+    import urllib.request, urllib.parse
+    from datetime import datetime, timedelta, timezone
+    JST = timezone(timedelta(hours=9))
+    for acct, key in (("truth", "TRUTH"), ("nagaoka", "NAGAOKA"), ("masa", "MASA")):
+        tok = os.environ.get(f"THREADS_ACCESS_TOKEN_{key}"); uid = os.environ.get(f"THREADS_USER_ID_{key}")
+        if not tok or not uid:
+            add(f"dup_sameday:{acct}", "C.実行ギャップ", "SKIP", "トークン無し"); continue
+        try:
+            url = f"https://graph.threads.net/v1.0/{uid}/threads?" + urllib.parse.urlencode({"fields": "text,timestamp,is_reply", "limit": "100", "access_token": tok})
+            with urllib.request.urlopen(url, timeout=20) as r:
+                data = json.loads(r.read()).get("data", [])
+            seen = {}
+            for p in data:
+                if p.get("is_reply") or not p.get("text"):
+                    continue
+                d = datetime.strptime(p["timestamp"], "%Y-%m-%dT%H:%M:%S%z").astimezone(JST).date().isoformat()
+                k = (d, p["text"].split("\n")[0].strip()[:40])
+                seen[k] = seen.get(k, 0) + 1
+            dups = [f"{d} {t}" for (d, t), n in seen.items() if n >= 2]
+            if acct == "nagaoka":
+                add(f"dup_sameday:{acct}", "C.実行ギャップ", "PASS", f"外部ツール併用のため参考: 同日重複{len(dups)}件")
+            elif dups:
+                add(f"dup_sameday:{acct}", "C.実行ギャップ", "FAIL", f"同日に同じ投稿が2回以上: {dups[:3]}")
+            else:
+                add(f"dup_sameday:{acct}", "C.実行ギャップ", "PASS", "同日重複なし")
+        except Exception as e:
+            add(f"dup_sameday:{acct}", "C.実行ギャップ", "WARN", f"判定不能: {type(e).__name__}")
+
+
 def check_generation():
     try:
         import generate_remix as g
@@ -1177,6 +1209,7 @@ def run_all():
     check_generation()
     check_next_post_smoke()
     check_dup_reselect_guard()
+    check_same_day_duplicates()
     check_same_day_anchor_and_git_conflict()
     check_test_posts_in_first50()
     check_rules()

@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-06",
+  "updated_at": "2026-10-07",
   "pattern_weights": {
     "quote_empathy": 6,
     "insight": 12,
@@ -21,7 +21,7 @@
   },
   "follower_scores": {
     "insight": 3.0,
-    "quote_empathy": 0.2,
+    "quote_empathy": 0.19,
     "selfcare_casual": -0.56,
     "education": -0.47,
     "story": 0.37,

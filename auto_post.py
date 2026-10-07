@@ -48,13 +48,26 @@ except Exception:
 
 def inspect_before_post(text: str, acct: str):
     """投稿直前の検品ゲート（2026-07-21）。inspector未読込・例外時はフェイルオープン
-    （検品で全停止しない。既存の自動エラー回復方針と同じ思想）。"""
-    if _inspector is None or not text:
+    （検品で全停止しない。既存の自動エラー回復方針と同じ思想）。
+    2026-10-07: masaのみ抽象度チェック(_is_abstract_masa)を追加。本文＋コメント部分の両方を見る。
+    NGは呼び出し側が既存の検品NG処理（消費済みにして次候補へ・全停止しない）で扱う。"""
+    if not text:
         return True, []
-    try:
-        return _inspector.inspect_post(text, acct)
-    except Exception:
-        return True, []
+    ok, reasons = True, []
+    if _inspector is not None:
+        try:
+            ok, reasons = _inspector.inspect_post(text, acct)
+        except Exception:
+            ok, reasons = True, []
+    if ok and acct == "masa":
+        try:
+            from generate_remix import _abstract_reasons_masa
+            ar = _abstract_reasons_masa(text)
+            if ar:
+                ok, reasons = False, ["masa抽象度NG: " + "; ".join(ar)]
+        except Exception:
+            pass
+    return ok, reasons
 
 # get_next_post / get_posted_texts で使う正規化（duplicate_guard と同じロジック）
 _normalize_post_key = dg_normalize
@@ -146,7 +159,9 @@ def log_error(msg: str):
 
 ACCOUNT_PERSONAS = {
     "truth": "整体院（truth body salon）のアカウント。首・肩・腰・頭痛など体の不調を根本から改善する整体サロン。",
-    "masa": "整体サロンのオーナー・masahide_takahashiの個人アカウント。店舗経営者向けに「Instagramで集客する方法・ノウハウ・考え方」を、運用のハードルを下げる伝え方（1日1分・スマホだけ・撮影や編集なしでもOK・フォロワーが少なくてもOK・AIに任せて確認だけ）で発信する。中学生にも分かる言葉で、専門用語・面談・金額・店舗名や所在地・創作した統計は書かない。",
+    "masa": "整体サロンのオーナー・masahide_takahashiの個人アカウント。店舗経営者向けに「Instagramで集客する方法・ノウハウ・考え方」を、運用のハードルを下げる伝え方（1日1分・スマホだけ・撮影や編集なしでもOK・フォロワーが少なくてもOK・AIに任せて確認だけ）で発信する。中学生にも分かる言葉で、専門用語・面談・金額・店舗名や所在地・創作した統計は書かない。"
+        # 2026-10-07 masa指示: 問いかけの対象が不明・コメントが抽象的で読まれない、への対応（ルールA〜C）
+        "【必須ルール】A.問いかけには必ず対象（院長・店主・サロンオーナー等）を書く。B.コメントは具体的な手順（①②③の番号付き2〜4ステップ）か、実際に書く文言の例（「」で囲む）だけで書き、Instagramの具体的な機能・操作名（プロフィール1行目・ハイライト・固定投稿・リールの冒頭1秒・ストーリーズのスタンプ・保存数・インサイトのリーチ等）を必ず入れる。「大切なのは継続です」「意識してください」「工夫が必要です」「価値を届けましょう」のような抽象的な文は書かない。C.ノウハウは言い切り、最後は今日やる1つを何を・どこに・何分で書く。",
 }
 
 _BRIDGE_DISABLED = False  # 2026-07-03: Anthropic API(従量課金)→Gemini API(既存キー・無料枠)に切替
@@ -171,34 +186,76 @@ def _load_gemini_key() -> str:
     return ""
 
 
+def _bridge_default(clean_text: str, acct: str) -> str:
+    """Gemini不可・不採用時の既定コメント。masaは情報量のある固定の具体ノウハウ（投稿テーマ別の手順）を返す
+    （2026-10-07: 「詳しくはこちら」だけの空コメントを廃止）。他アカウントは従来どおり。"""
+    if acct == "masa":
+        try:
+            from masa_insta_content import masa_bridge_fallback
+            return masa_bridge_fallback(clean_text)
+        except Exception:
+            pass
+    return ACCOUNTS[acct].get("bridge_text", "詳しくはこちら 👇")
+
+
+def _masa_bridge_bad(text: str) -> list[str]:
+    """masaのブリッジコメントが抽象的ならNG理由を返す（空=合格）。検査器が読めない時はフェイルオープン。"""
+    try:
+        from generate_remix import _abstract_reasons_masa_comment
+        return _abstract_reasons_masa_comment(text)
+    except Exception:
+        return []
+
+
 def generate_bridge_comment(clean_text: str, acct: str) -> str:
-    """メイン投稿の内容をもとにGemini APIで補足説明コメントを生成する。失敗時はデフォルトテキストを返す。"""
+    """メイン投稿の内容をもとにGemini APIで補足説明コメントを生成する。失敗時はデフォルトテキストを返す。
+    masaは抽象的なコメント(手順/具体例＋機能名なし・抽象語)を弾き、1回だけ再生成→それでもNGなら固定の具体ノウハウ。"""
     global _BRIDGE_DISABLED
     api_key = _load_gemini_key()
     if not api_key or _BRIDGE_DISABLED:
-        return ACCOUNTS[acct].get("bridge_text", "詳しくはこちら 👇")
+        return _bridge_default(clean_text, acct)
 
     persona = ACCOUNT_PERSONAS.get(acct, "")
+    if acct == "masa":
+        conditions = (
+            "【条件】\n"
+            "- 投稿内容を、読んだ人が今日そのまま実行できる具体的なノウハウに落とす\n"
+            "- 手順は「① ② ③」の番号付き2〜4ステップ。実際に書く文言は「」で囲んで例を示す\n"
+            "- Instagramの具体的な機能・操作名（プロフィール1行目・ハイライト・固定投稿・リールの冒頭1秒・ストーリーズのスタンプ・保存数・インサイトのリーチ等）を必ず入れる\n"
+            "- 誰に向けた話かが分かるように、院長・店主・サロンオーナー等の対象を明示する\n"
+            "- 「大切なのは」「意識して」「工夫が必要」「価値を届ける」のような抽象的な文は絶対に書かない\n"
+            "- 最後は『今日は、〇〇を△分でやってください』のように、何を・どこに・何分で、を1つだけ書く\n"
+            "- 150〜350文字程度。絵文字は使わない\n"
+            "- URLや「ご予約はこちら」などの案内は絶対に含めない\n"
+            "- コメント本文のみを出力（前置き・説明不要）\n\n"
+        )
+        max_len = 400
+    else:
+        conditions = (
+            "【条件】\n"
+            "- 投稿内容の原因・メカニズム・具体的な補足情報を解説する\n"
+            "- 100〜180文字程度\n"
+            "- 自然な話し言葉。絵文字は1〜2個まで\n"
+            "- URLや「ご予約はこちら」などの案内は絶対に含めない\n"
+            "- コメント本文のみを出力（前置き・説明不要）\n\n"
+        )
+        max_len = 250
     prompt = (
         f"あなたは{persona}\n\n"
         "以下のThreads投稿（1/3）に続く、2/3のコメントを書いてください。\n"
-        "【条件】\n"
-        "- 投稿内容の原因・メカニズム・具体的な補足情報を解説する\n"
-        "- 100〜180文字程度\n"
-        "- 自然な話し言葉。絵文字は1〜2個まで\n"
-        "- URLや「ご予約はこちら」などの案内は絶対に含めない\n"
-        "- コメント本文のみを出力（前置き・説明不要）\n\n"
+        + conditions +
         f"【投稿内容】\n{clean_text}"
     )
 
     payload = json.dumps({
         "contents": [{"parts": [{"text": prompt}]}],
         # thinkingBudget:0 で思考トークンを止めないと、maxOutputTokens を思考が食い潰して本文が途切れる
-        "generationConfig": {"maxOutputTokens": 512, "thinkingConfig": {"thinkingBudget": 0}},
+        "generationConfig": {"maxOutputTokens": 768 if acct == "masa" else 512, "thinkingConfig": {"thinkingBudget": 0}},
     }, ensure_ascii=False).encode()
 
     # 503(高負荷)・429(レート制限)は一時的なので、モデルを変えつつ最大3回試す
     attempts = ["gemini-flash-latest", "gemini-flash-lite-latest", "gemini-flash-latest"]
+    regen_used = False  # masa: 抽象的だった場合の再生成は1回だけ
     for i, model in enumerate(attempts):
         req = urllib.request.Request(
             f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={api_key}",
@@ -212,8 +269,17 @@ def generate_bridge_comment(clean_text: str, acct: str) -> str:
             parts = result["candidates"][0]["content"].get("parts", [])
             text = "".join(p.get("text", "") for p in parts).strip()
             # 途切れ・極端な長短は不採用（デフォルト文の方がマシ）
-            if text and 40 <= len(text) <= 250 and result["candidates"][0].get("finishReason") == "STOP":
-                return text
+            if text and 40 <= len(text) <= max_len and result["candidates"][0].get("finishReason") == "STOP":
+                if acct != "masa":
+                    return text
+                bad = _masa_bridge_bad(text)
+                if not bad:
+                    return text
+                print(f"[generate_bridge_comment] masaコメントが抽象的のため不採用: {'; '.join(bad)[:80]}", file=sys.stderr)
+                if regen_used:
+                    break  # 2回連続NG → 固定の具体ノウハウ
+                regen_used = True
+                continue  # 1回だけ再生成
         except Exception as e:
             body = ""
             if isinstance(e, urllib.error.HTTPError):
@@ -229,7 +295,7 @@ def generate_bridge_comment(clean_text: str, acct: str) -> str:
                 break
             if i < len(attempts) - 1:
                 time.sleep(3)
-    return ACCOUNTS[acct].get("bridge_text", "詳しくはこちら 👇")
+    return _bridge_default(clean_text, acct)
 
 
 # ── トークン自動リフレッシュ ──────────────────────────────

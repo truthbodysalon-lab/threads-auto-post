@@ -221,6 +221,24 @@ def check_masa_insta_theme():
         add("masa_insta_theme", "B.ルール反映", "WARN", f"検査失敗: {type(e).__name__}: {e}")
 
 
+def check_masa_abstract():
+    """masaの当日生成キュー前半50本のうち、抽象的な投稿（対象なし問いかけ・手順/具体例＋機能名のないコメント・抽象語）が
+    1本でもあればWARN（2026-10-07 masa指示「問いかけの対象が不明・コメントが抽象的」の実行ギャップ検知。
+    判定=generate_remix._is_abstract_masa。生成ループ・最終掃除・auto_post検品ゲートと同じ基準）。"""
+    try:
+        import generate_remix as g
+        posts = g.generate_30_masa_posts()[:50]
+        bad = [(i, g._abstract_reasons_masa(p)) for i, p in enumerate(posts) if g._is_abstract_masa(p)]
+        if bad:
+            detail = " / ".join(f"位置{i}:{'、'.join(r)[:30]}" for i, r in bad[:3])
+            add("masa_abstract", "B.ルール反映", "WARN",
+                f"masa前半{len(posts)}本中、抽象的な投稿{len(bad)}本（{detail}）。対象のない問いかけ・手順なしコメントの再発")
+        else:
+            add("masa_abstract", "B.ルール反映", "PASS", f"masa前半{len(posts)}本に抽象的な投稿なし（対象つき問いかけ・具体手順）")
+    except Exception as e:
+        add("masa_abstract", "B.ルール反映", "WARN", f"検査失敗: {type(e).__name__}: {e}")
+
+
 # nagaoka専用「長岡市で〜相談が増えてます」型オープニングの1文目パターン（2026-07-24追加）。
 # generate_remix.NAGAOKA_SOUDAN_OPENINGSの実際の書き出しバリエーションに合わせて限定的に許可。
 _NAGAOKA_SOUDAN_OPEN_RE = re.compile(
@@ -1163,6 +1181,7 @@ def run_all():
     check_test_posts_in_first50()
     check_rules()
     check_masa_insta_theme()
+    check_masa_abstract()
     check_list_habit_in_first50()
     check_rule_hygiene()
     check_execution_gaps()

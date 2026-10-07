@@ -292,7 +292,7 @@
   "産後、体の痛みを我慢するママへ。": {
     "segment": "T3",
     "hook": "low",
-    "created": "2026-10-05",
+    "created": "2026-10-07",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z11_truth"
@@ -332,7 +332,7 @@
   "重い荷物運びで腰を痛めた人へ。": {
     "segment": "T4",
     "hook": "low",
-    "created": "2026-10-05",
+    "created": "2026-10-07",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z14_nagaoka"
@@ -392,7 +392,7 @@
   "会議続きで首が痛い人へ。": {
     "segment": "T1",
     "hook": "low",
-    "created": "2026-10-03",
+    "created": "2026-10-07",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z03_truth"
@@ -415,7 +415,7 @@
   "介護や看護で腰と脚がつらい人へ。": {
     "segment": "T4",
     "hook": "low",
-    "created": "2026-10-03",
+    "created": "2026-10-07",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z15_truth"
@@ -423,7 +423,7 @@
   "1日中パソコンに向かう人へ。": {
     "segment": "T1",
     "hook": "low",
-    "created": "2026-10-03",
+    "created": "2026-10-07",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z22_nagaoka"
@@ -439,7 +439,7 @@
   "子育てで腰を痛めたママへ。": {
     "segment": "T3",
     "hook": "low",
-    "created": "2026-10-03",
+    "created": "2026-10-07",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z12_nagaoka"
@@ -944,14 +944,14 @@
   "頭痛薬が手放せない人へ。": {
     "segment": "T2",
     "hook": "low",
-    "created": "2026-10-01",
+    "created": "2026-10-07",
     "acct": "truth",
     "variant": 1
   },
   "気圧が変わると頭が重くなる人へ。": {
     "segment": "T2",
     "hook": "low",
-    "created": "2026-10-01",
+    "created": "2026-10-07",
     "acct": "nagaoka",
     "variant": 1
   },
@@ -2940,6 +2940,258 @@
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 19,
+    "created": "2026-10-07"
+  },
+  "【夕方に後頭部がズキズキする人の習慣6選】": {
+    "segment": "LIST_HABIT",
+    "hook": "list",
+    "variant": 38,
+    "created": "2026-10-07",
+    "acct": "truth"
+  },
+  "【季節の変わり目に頭痛を遠ざける習慣7選】": {
+    "segment": "LIST_HABIT",
+    "hook": "list",
+    "variant": 21,
+    "created": "2026-10-07",
+    "acct": "truth"
+  },
+  "『マッサージに行っても、すぐ元に戻る』という声を、よく聞きます。": {
+    "segment": "CUSTOMER_VOICE",
+    "hook": "voice",
+    "variant": 11,
+    "created": "2026-10-07",
+    "acct": "truth"
+  },
+  "【抱っこの多いママの肩首ケア習慣6選】": {
+    "segment": "LIST_HABIT",
+    "hook": "list",
+    "variant": 10,
+    "created": "2026-10-07",
+    "acct": "nagaoka"
+  },
+  "【デスク環境のチェック項目8選】": {
+    "segment": "LIST_HABIT",
+    "hook": "list",
+    "variant": 29,
+    "created": "2026-10-07",
+    "acct": "nagaoka"
+  },
+  "『子どもを追いかけるのが、つらくなってきた』という声を、よく聞きます。": {
+    "segment": "CUSTOMER_VOICE",
+    "hook": "voice",
+    "variant": 21,
+    "created": "2026-10-07",
+    "acct": "nagaoka"
+  },
+  "インスタで、見られないのはアルゴリズムのせいだと思っている院長へ質問です。": {
+    "segment": "I08",
+    "hook": "low",
+    "created": "2026-10-07",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP23"
+  },
+  "ストーリーズで何を出すか迷う院長へ質問です。": {
+    "segment": "I09",
+    "hook": "low",
+    "created": "2026-10-07",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP26"
+  },
+  "インスタ運用で、バズらないと増えないと思っている院長へ質問です。": {
+    "segment": "I10",
+    "hook": "low",
+    "created": "2026-10-07",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP29"
+  },
+  "インスタ運用で、売り込みになるのが怖い院長へ質問です。": {
+    "segment": "I11",
+    "hook": "low",
+    "created": "2026-10-07",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP32"
+  },
+  "インスタで、固定投稿を使っていない院長へ質問です。": {
+    "segment": "I12",
+    "hook": "low",
+    "created": "2026-10-07",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP35"
+  },
+  "インスタ運用で、プロフィールのリンクから登録ページに誘導しても、登録されない院長": {
+    "segment": "I13",
+    "hook": "low",
+    "created": "2026-10-07",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP39"
+  },
+  "コースの話を切り出せない院長へ。": {
+    "segment": "R01",
+    "hook": "low",
+    "created": "2026-10-07",
+    "acct": "masa",
+    "axis": "repeat_close",
+    "variant": null,
+    "hypothesis_id": "RP02"
+  },
+  "痛みが取れたら来なくなる院長へ。": {
+    "segment": "R02",
+    "hook": "low",
+    "created": "2026-10-07",
+    "acct": "masa",
+    "axis": "repeat_close",
+    "variant": null,
+    "hypothesis_id": "RP05"
+  },
+  "当たる投稿を、1回で見つけようとしている院長へ。": {
+    "segment": "HAKASE",
+    "hook": "principle",
+    "variant": 5,
+    "created": "2026-10-07"
+  },
+  "良い投稿を出せば信頼されると思っている店主へ。": {
+    "segment": "HAKASE",
+    "hook": "principle",
+    "variant": 7,
+    "created": "2026-10-07"
+  },
+  "DMで売り込もうとするサロンオーナーへ。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 43,
+    "created": "2026-10-07"
+  },
+  "完璧な文章を書こうとして、3日止まっている院長へ質問です。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 11,
+    "created": "2026-10-07"
+  },
+  "AIに頼む言葉が分からないサロンオーナーへ。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 55,
+    "created": "2026-10-07"
+  },
+  "投稿の型が決まらない院長へ。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 64,
+    "created": "2026-10-07"
+  },
+  "ストーリーズを1枚で終わらせている院長へ質問です。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 75,
+    "created": "2026-10-07"
+  },
+  "三脚とマイクを買おうとしている店主へ質問です。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 15,
+    "created": "2026-10-07"
+  },
+  "広告は大金が要ると思っている院長へ。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 48,
+    "created": "2026-10-07"
+  },
+  "ネタが思いつかない日がある院長へ質問です。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 6,
+    "created": "2026-10-07"
+  },
+  "ネタ帳を作ろうと気負っている店主へ。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 10,
+    "created": "2026-10-07"
+  },
+  "問い合わせが少ない院長へ質問です。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 46,
+    "created": "2026-10-07"
+  },
+  "質問スタンプが怖い店主へ質問です。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 23,
+    "created": "2026-10-07"
+  },
+  "肩書きが長い院長へ質問です。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 74,
+    "created": "2026-10-07"
+  },
+  "毎日ちがうネタを探している整体院の院長へ質問です。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 7,
+    "created": "2026-10-07"
+  },
+  "広告の結果を1日で見ている院長へ質問です。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 52,
+    "created": "2026-10-07"
+  },
+  "プロフィールを毎月書き換えている院長へ質問です。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 5,
+    "created": "2026-10-07"
+  },
+  "数字を全部見ようとしている院長へ。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 36,
+    "created": "2026-10-07"
+  },
+  "フォロワーが少ないと集客できないと思っている院長へ質問です。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 29,
+    "created": "2026-10-07"
+  },
+  "文字を考えるのが面倒なサロンオーナーへ質問です。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 21,
+    "created": "2026-10-07"
+  },
+  "伸びている投稿をまねしていいか迷う店主へ。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 68,
+    "created": "2026-10-07"
+  },
+  "投稿文を毎回ゼロから書いている院長へ質問です。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 54,
+    "created": "2026-10-07"
+  },
+  "自己紹介欄を150文字まで埋めようとしている院長へ。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 3,
     "created": "2026-10-07"
   }
 }

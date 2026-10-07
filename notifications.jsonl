@@ -27,3 +27,4 @@
 {"ts": "2026-10-05T21:30:56+09:00", "msg": "🚨Threads nagaoka: 最後の投稿から206分。原因候補: 選択ループ/例外（常駐は稼働中なのに投稿が出ていない）。直近run: https://github.com/truthbodysalon-lab/threads-auto-post/actions/runs/37293739457（CI watchdog）"}
 {"ts": "2026-10-06T10:41:03+09:00", "msg": "⚠️Threads truth: 投稿が先行しすぎ(30本/目標15)。固め打ちバグの疑い(CI watchdog)"}
 {"ts": "2026-10-06T10:41:09+09:00", "msg": "⚠️Threads masa: 投稿が先行しすぎ(27本/目標15)。固め打ちバグの疑い(CI watchdog)"}
+{"ts": "2026-10-07T15:17:57+09:00", "msg": "🚨Threads Daily Verify: FAIL 3件検出\n・[dup_sameday:truth] 同日に同じ投稿が2回以上: ['2026-10-06 頭痛改善の第一歩は、自分のタイプを知ることです。']\n・[dup_sameday:masa] 同日に同じ投稿が2回以上: ['2026-10-07 インスタで「機械が苦手」と、手が止まっていませんか。']\n・[exec:post_interval:truth] 2026-10-06 最大間隔238分（10:07〜）・自前41本/外部等10本除外\nhttps://github.com/truthbodysalon-lab/threads-auto-post/actions/runs/37580680934"}

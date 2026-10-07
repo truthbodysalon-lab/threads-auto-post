@@ -1,7 +1,7 @@
 {
   "acct": "truth",
-  "version": 60,
-  "updated": "2026-10-06",
+  "version": 61,
+  "updated": "2026-10-07",
   "description": "修正ポイント（勝ち構造・死ぬ構造）の正本。毎朝サブエージェントEが実測データで各ルールを検証し、効かなくなったルールはretired、新発見はtestingで追加、実証されたらactiveに昇格する。ヒーロー投稿と新テンプレはこのプレイブックのactiveルールに従って書く。",
   "rules": [
     {
@@ -557,6 +557,11 @@
       "version": 60,
       "date": "2026-10-06",
       "change": "本人指示によりお客様の声型W_CUSTOMER_VOICEをtestingで追加。generate_remixにCUSTOMER_VOICE固定24本を実装し毎日1本を前半アンカーへ投入。習慣N選にも声由来の題材を追加。元データは匿名化・ローカル保存のみ。"
+    },
+    {
+      "version": 61,
+      "date": "2026-10-07",
+      "change": "2026-10-07 朝のプレイブック検証: breakout TOP30(中央値98/p90 253)でW3数字自己診断・W6医療否定・W7軽量断定が上位維持、変更なし。前日ヒーロー(10/6)は閲覧未成熟でtesting(W_OWN/W_LIST_HABIT/W_CUSTOMER_VOICE)判定保留。軌道遅れ(179<295)のためヒーロー10本・新テンプレ24本。"
     }
   ]
 }

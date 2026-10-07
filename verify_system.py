@@ -172,7 +172,7 @@ def check_test_posts_in_first50():
 
 
 def check_same_day_duplicates():
-    """C23: 同じ本文(1行目)が同日に2回以上投稿されていないか（外形API・直近100本）。
+    """C24: 同じ本文(1行目)が同日に2回以上投稿されていないか（外形API・直近100本）。
     2026-10-07: 常駐run並走で masa に同文が3秒差で2本出た。uplink追加投稿は元から1回限りなので対象に含める。"""
     import urllib.request, urllib.parse
     from datetime import datetime, timedelta, timezone
@@ -956,7 +956,7 @@ JST = timezone(timedelta(hours=9))
 CHECK_REGISTRY = {
     "C8": "exec:daily50:", "C10": "exec:pacing:", "C11": "exec:watchdog",
     "C13": "exec:hpb_only", "C14": "exec:imagepost", "C15": "exec:segment_test:",
-    "C16": "next_post:", "C17": "dup_reselect:", "C23": "same_day_anchor:",
+    "C16": "next_post:", "C17": "dup_reselect:", "C23": "same_day_anchor:", "C24": "dup_sameday:",
     "C21": "exec:log_sync", "C18": "exec:chain_gap", "C19": "exec:post_interval:", "C20": "ledger:",
 }
 

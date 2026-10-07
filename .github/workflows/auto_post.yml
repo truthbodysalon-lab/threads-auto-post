@@ -157,8 +157,6 @@ jobs:
             timeout 50m python3 auto_post.py all || true
             python3 token_manager.py --sync-secrets || true
             timeout 2m python3 dispatcher.py || true
-            # X整体アカウント（2026-10-04）: 枠時刻に1本ずつ。キー未設定なら即終了
-            timeout 2m python3 x_post.py || true
             commit_logs || true
             echo "::endgroup::"
             SLEEP=$(( 600 - ( $(date +%s) - T0 ) ))

@@ -12,6 +12,9 @@ C20（台帳整合）が「台帳の検査IDが実コードに実在するか」
 
 | 発生日 | 症状（何時間・どのアカウント） | 根本原因 | 修正commit | 再発防止の検査ID | 検知までの時間 |
 |---|---|---|---|---|---|
+| 2026-10-07 | 【対象: Threads全3アカ】10/03(全3アカ50本)・10/04(truth/masa32・nagaoka23)・10/06(truth41)の投稿台帳(log_*_posted.jsonl)が欠落し、重複ガードが効かず同文が6〜9時間後に再投稿（truth6組/nagaoka4組/masa2組）。9/25 21:04の並走で秒差二重投稿(truth2組・masa5組) | 台帳commit全失敗(10/03・d1de7c30で修正済み)と並走run(10/07修正済み)。台帳欠落を検知する検査自体が無かった | 本commit: verify_system.py C25 ledger_gap（API実投稿数と台帳行数の突合） | C25, C24 | 約4日（監査で発覚） |
+| 2026-10-07 | 【対象: Instagram(masa リール)】`v0703_reel_04.mp4` が08:06:56と08:08:19に二重公開（media_id 18029372639916743/17887746264653239） | IG Reels が workflow_dispatch で2本同時起動。concurrencyで直列化されても後発runは起動時SHAをcheckoutするため先発のposted.jsonl更新を見ずalready_posted()が空振り（13本の投稿WFは実行前pullなし） | ig-autopost-cloud d91e3bf: 全13WFにmain同期step追加・already_posted()を対象日でも判定 | C24（IG版=ig_verify.py 4b同日重複検知） | 約1日（監査） |
+| 2026-10-07 | 【対象: uplink(@uplink0117)】同日再投稿572件・全文一致10分以内4組(91〜122秒差) | テンプレ枯渇(ユニーク1行目203種)でDEDUP_LOOKBACK=80を超え、15回重複で最終フォールバックが重複チェック無しで出力(14日で1034件)。並走の証拠なし | ~/threads-uplink threads_auto_post.py: 最終フォールバックで本日投稿済みを避ける＋flock排他、status.pyに同日同文表示（※テンプレ素材追加と同文許容はmasa判断） | C24（uplink版=status.py「同日同文の重複」） | 長期（監査で発覚） |
 | 2026-10-07 | masa「インスタで『機械が苦手』と…」が06:05に3秒差で2本（同日重複） | 常駐runのsingle-keeper判定で、in_progress照会が失敗→空を『旧run無し』と誤判定し2本目が起動、2本の常駐runが並走して同じ候補を同時投稿 | auto_post.yml: 照会失敗時は起動しない＋毎サイクル古いrunがいれば降りる | C24 | 約1日（ユーザー指摘） |
 | 2026-10-06 | 12:34〜13:44の約70分、CIの台帳commit/pullが全失敗・uplink追加枠がJSONDecodeError停止（truth 13:05分3本が台帳欠落）／truth診断アンカー「頭痛改善の第一歩は…」が06:09と13:05に同日二重投稿 | ①手元から uplink_repost_pool.json をpush→常駐runの旧ymlはこのファイルをcommit対象外で未コミット保持→autostash復元が競合し未解決(U)のまま残り以後のcommit/pullが全滅 ②_shindan_anchor_okが台帳text(URL抽出後)に_is_shindanを掛けており当日同一テンプレ判定が8/18以降一度も効いていなかった（台帳失敗とは独立・8/27〜多数） | auto_post.yml safe_pull（U自動解消）＋auto_post.py 1文目一致判定（本commit） | C23 | 約70分（ログ）／二重投稿は約1.5か月未検知 |
 | 2026-10-03 | 全アカウントの投稿ログpushが約16時間停滞（10/02 18:04以降。投稿自体は継続・ログ/重複ガード/集計が古い） | 常駐runのpull --rebaseが未コミット変更（unstaged）で毎回失敗しpush rejectedが続いた | auto_post.yml `pull --rebase --autostash`（本commit） | C21 | 約16時間（検証D） |
@@ -37,6 +40,7 @@ C20（台帳整合）が「台帳の検査IDが実コードに実在するか」
 - C18 `exec:chain_gap` … 常駐連鎖(auto_post.yml)の24h最大空白（30分WARN/90分FAIL・in_progress0本はFAIL）
 - C19 `exec:post_interval` … 昨日6-23時の最大投稿間隔（90分WARN/180分FAIL・外部ツール投稿は除外）
 - C21 `exec:log_sync` … 投稿ログpushの停滞（7-23時に90分WARN/180分FAIL）
+- C25 `ledger_gap` … 昨日のAPI実投稿数に対し台帳(log_*_posted.jsonl)が欠けていないか（0行/半数未満でFAIL）
 - C24 `dup_sameday` … 同日に同じ投稿が2回以上（外形API）。常駐run並走の検知
 - C23 `same_day_anchor` … 診断アンカーの同日同一テンプレ拒否＋auto_post.ymlのautostash競合自動解消
 - C20 `ledger` … 本台帳の検査IDが実コードに実在するか

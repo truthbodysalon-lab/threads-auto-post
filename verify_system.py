@@ -957,7 +957,7 @@ CHECK_REGISTRY = {
     "C8": "exec:daily50:", "C10": "exec:pacing:", "C11": "exec:watchdog",
     "C13": "exec:hpb_only", "C14": "exec:imagepost", "C15": "exec:segment_test:",
     "C16": "next_post:", "C17": "dup_reselect:", "C23": "same_day_anchor:", "C24": "dup_sameday:",
-    "C21": "exec:log_sync", "C18": "exec:chain_gap", "C19": "exec:post_interval:", "C20": "ledger:",
+    "C21": "exec:log_sync", "C25": "ledger_gap:", "C18": "exec:chain_gap", "C19": "exec:post_interval:", "C20": "ledger:",
 }
 
 
@@ -1122,6 +1122,33 @@ def check_post_interval():
             add(cid, "C.実行ギャップ", "WARN", f"検査不可: {e}")
 
 
+def check_ledger_gap():
+    """C25: 昨日の実投稿(外形API)に対し台帳(log_<acct>_posted.jsonl)が欠けていないか。
+    2026-10-07監査: 10/03が3アカウントとも台帳0行・10/04,10/06も欠落→重複ガードが効かず同文が数時間後に再投稿された。
+    台帳が0行、またはAPI件数の半分未満(truth/masa)ならFAIL（nagaokaは外部ツール投稿があるため0行のみFAIL）。"""
+    day = (datetime.now(JST) - timedelta(days=1)).strftime("%Y-%m-%d")
+    for acct in ACCTS:
+        cid = f"ledger_gap:{acct}"
+        try:
+            api = _yesterday_api_posts(acct)
+            if api is None:
+                add(cid, "C.実行ギャップ", "SKIP", "Threads API取得不可（未検査）")
+                continue
+            n = 0
+            lf = BASE / f"log_{acct}_posted.jsonl"
+            if lf.exists():
+                for line in lf.read_text(encoding="utf-8").splitlines():
+                    try:
+                        if json.loads(line).get("date") == day:
+                            n += 1
+                    except Exception:
+                        pass
+            bad = (n == 0 and len(api) > 0) or (acct != "nagaoka" and len(api) >= 10 and n < len(api) * 0.5)
+            add(cid, "C.実行ギャップ", "FAIL" if bad else "PASS", f"{day} 台帳{n}行 / API実投稿{len(api)}本")
+        except Exception as e:
+            add(cid, "C.実行ギャップ", "WARN", f"検査不可: {e}")
+
+
 def check_log_sync():
     """C21: 投稿ログ(log_*_posted.jsonl)のpush停滞。常駐runがpushに失敗するとログがrunner内に残り
     重複ガード・集計・検証が全て古い値になる（2026-10-03: 未コミット変更でpull --rebaseが失敗し約16時間停滞）。
@@ -1223,6 +1250,7 @@ def run_all():
     check_chain_gap()
     check_post_interval()
     check_log_sync()
+    check_ledger_gap()
     check_incident_ledger()
 
 

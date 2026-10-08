@@ -1,21 +1,21 @@
 {
  "account": "truth",
- "generated": "2026-10-07",
+ "generated": "2026-10-08",
  "window_days": 90,
  "note": "自動投稿システム以外から出た本人の投稿のうち伸びたもの。翻案必須・同一文面の再投稿は禁止（型疲労L8）。構造（フックの型・展開・締め）だけを借りる",
- "fetched_posts": 4552,
+ "fetched_posts": 4561,
  "own_posts": 56,
  "classification": {
-  "exact_body80": 4427,
+  "exact_body80": 4436,
   "OWN": 56,
-  "exact_line1": 53,
-  "template_regex": 9,
+  "exact_line1": 54,
+  "template_regex": 8,
   "tail_sig": 5,
   "skeleton": 1,
   "template_prefix": 1
  },
- "account_median_views": 105.5,
- "winner_threshold": 158.25,
+ "account_median_views": 97.0,
+ "winner_threshold": 145.5,
  "winners": [
   {
    "id": "18072443966381133",
@@ -47,7 +47,7 @@
   },
   {
    "id": "17940826602068752",
-   "views": 1424,
+   "views": 1425,
    "date": "2026-08-02",
    "media": "CAROUSEL_ALBUM",
    "first_line": "おはようございます！",
@@ -90,7 +90,7 @@
   },
   {
    "id": "18118667561505817",
-   "views": 557,
+   "views": 559,
    "date": "2026-07-31",
    "media": "TEXT_POST",
    "first_line": "7月無事に目標達成できました。",
@@ -103,7 +103,7 @@
   },
   {
    "id": "17896381050611682",
-   "views": 537,
+   "views": 540,
    "date": "2026-10-06",
    "media": "TEXT_POST",
    "first_line": "見た目は元気だけど",
@@ -281,6 +281,45 @@
    ],
    "repeats_in_window": 1,
    "text": "お客様にとうもろこしを\nいただいたんですが\nオススメの食べ方はありますか？\n\nやっぱり塩茹でですかね？"
+  },
+  {
+   "id": "18147832405523604",
+   "views": 157,
+   "date": "2026-08-04",
+   "media": "VIDEO",
+   "first_line": "動画は違いますが",
+   "labels": [
+    "画像・動画つき",
+    "日常動作の指示",
+    "日常・ご報告",
+    "4行以上"
+   ],
+   "repeats_in_window": 1,
+   "text": "動画は違いますが\n今朝はインスタライブ参加させて頂きました！\n\n朝からセルフイメージが爆上がりです！\n@takuo_masuda \n\n自分がどうするべきなのかを\nちゃんと明確にしていきます！"
+  },
+  {
+   "id": "17906249631284685",
+   "views": 157,
+   "date": "2026-07-22",
+   "media": "TEXT_POST",
+   "first_line": "朝の重さを消すのに、",
+   "labels": [
+    "日常動作の指示"
+   ],
+   "repeats_in_window": 1,
+   "text": "朝の重さを消すのに、\n睡眠時間を増やそうとする前に、\nまず“寝る前の30秒”を変えてみて。"
+  },
+  {
+   "id": "18158222971474334",
+   "views": 148,
+   "date": "2026-07-18",
+   "media": "TEXT_POST",
+   "first_line": "ひらちさんのおっしゃる通りで",
+   "labels": [
+    "4行以上"
+   ],
+   "repeats_in_window": 1,
+   "text": "ひらちさんのおっしゃる通りで\n僕はその甲斐あってかなり時間短縮できて\n\nさらにアイデアに時間を\n割く事ができたので\n今ではAIさんが\n1日20時間働いてくれるようになりました。"
   }
  ]
 }

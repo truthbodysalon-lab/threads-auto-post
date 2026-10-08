@@ -520,8 +520,9 @@
       "change": "2026-10-07 朝のプレイブック検証: breakout TOP30(中央値120/p90 534)で水分系短文断定(W1)・兄妹エピソード(W7)が上位維持、変更なし。軌道内(452>438)のためヒーロー6本。testing判定は前日分の閲覧未成熟で保留。"
     },
     {
+      "version": 58,
       "date": "2026-10-08",
-      "note": "breakout再検証: TOP30でW1/W2/W6/W7/W11が継続機能(頭痛×姿勢/水分/兄妹)。testing(W_OWN/W_LIST_HABIT/W_CUSTOMER_VOICE)はTOP30/WORST20に出ず判定データ不足のため据え置き。"
+      "change": "breakout再検証: TOP30でW1/W2/W6/W7/W11が継続機能(頭痛×姿勢/水分/兄妹)。testing(W_OWN/W_LIST_HABIT/W_CUSTOMER_VOICE)はTOP30/WORST20に出ず判定データ不足のため据え置き。"
     }
   ]
 }

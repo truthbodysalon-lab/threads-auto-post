@@ -564,8 +564,9 @@
       "change": "2026-10-07 朝のプレイブック検証: breakout TOP30(中央値98/p90 253)でW3数字自己診断・W6医療否定・W7軽量断定が上位維持、変更なし。前日ヒーロー(10/6)は閲覧未成熟でtesting(W_OWN/W_LIST_HABIT/W_CUSTOMER_VOICE)判定保留。軌道遅れ(179<295)のためヒーロー10本・新テンプレ24本。"
     },
     {
+      "version": 62,
       "date": "2026-10-08",
-      "note": "breakout再検証: 最新TOP30でW1〜W4/W6/W7/W10は継続機能。testing(W_OWN/W_LIST_HABIT/W_CUSTOMER_VOICE/W11/W12)は前日分がTOP30/WORST20に出ず判定データ不足のため据え置き。"
+      "change": "breakout再検証: 最新TOP30でW1〜W4/W6/W7/W10は継続機能。testing(W_OWN/W_LIST_HABIT/W_CUSTOMER_VOICE/W11/W12)は前日分がTOP30/WORST20に出ず判定データ不足のため据え置き。"
     }
   ]
 }

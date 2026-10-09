@@ -1,7 +1,7 @@
 {
   "acct": "nagaoka",
-  "version": 58,
-  "updated": "2026-10-08",
+  "version": 59,
+  "updated": "2026-10-09",
   "description": "修正ポイント（勝ち構造・死ぬ構造）の正本。毎朝サブエージェントEが実測データで各ルールを検証し、効かなくなったルールはretired、新発見はtestingで追加、実証されたらactiveに昇格する。ヒーロー投稿と新テンプレはこのプレイブックのactiveルールに従って書く。",
   "rules": [
     {
@@ -523,6 +523,11 @@
       "version": 58,
       "date": "2026-10-08",
       "change": "breakout再検証: TOP30でW1/W2/W6/W7/W11が継続機能(頭痛×姿勢/水分/兄妹)。testing(W_OWN/W_LIST_HABIT/W_CUSTOMER_VOICE)はTOP30/WORST20に出ず判定データ不足のため据え置き。"
+    },
+    {
+      "version": 59,
+      "date": "2026-10-09",
+      "change": "breakout再検証: W1/W2/W6/W7/W8/W11継続(兄妹・広域来院・水分)。ramp軌道内(457>=438)で維持。testing(W_OWN/W_LIST_HABIT/W_CUSTOMER_VOICE)は判定データ不足で据え置き。"
     }
   ]
 }

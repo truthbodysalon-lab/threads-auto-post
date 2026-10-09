@@ -1,7 +1,7 @@
 {
   "acct": "truth",
-  "version": 62,
-  "updated": "2026-10-08",
+  "version": 63,
+  "updated": "2026-10-09",
   "description": "修正ポイント（勝ち構造・死ぬ構造）の正本。毎朝サブエージェントEが実測データで各ルールを検証し、効かなくなったルールはretired、新発見はtestingで追加、実証されたらactiveに昇格する。ヒーロー投稿と新テンプレはこのプレイブックのactiveルールに従って書く。",
   "rules": [
     {
@@ -567,6 +567,11 @@
       "version": 62,
       "date": "2026-10-08",
       "change": "breakout再検証: 最新TOP30でW1〜W4/W6/W7/W10は継続機能。testing(W_OWN/W_LIST_HABIT/W_CUSTOMER_VOICE/W11/W12)は前日分がTOP30/WORST20に出ず判定データ不足のため据え置き。"
+    },
+    {
+      "version": 63,
+      "date": "2026-10-09",
+      "change": "breakout再検証: W1〜W4/W6/W7/W10継続。own_winnersは開いた問い・地名・短文が上位→ヒーローに開いた問い2本/日常指示1本を反映。testing(W_OWN/W_LIST_HABIT/W_CUSTOMER_VOICE)は判定データ不足で据え置き。segment全て判定保留。"
     }
   ]
 }

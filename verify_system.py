@@ -1104,6 +1104,11 @@ def check_post_interval():
                         pass
             own = sorted(ts for pid, ts in api if pid in ids)
             ext = len(api) - len(own)
+            if acct == "nagaoka":
+                # 2026-10-09: nagaokaは外部ツール(約20本/日・正常)の投稿もペース計算に算入され自前の開始が遅れる設計
+                # （auto_post._run_account_batch はAPI実測数を採用）。自前のみだと朝の空白が誤FAILになるため全投稿で判定
+                own = sorted(ts for pid, ts in api)
+                ext = 0
             lo = datetime.strptime(day, "%Y-%m-%d").replace(tzinfo=JST, hour=6)
             hi = lo.replace(hour=23)
             pts = [t for t in own if lo <= t <= hi]

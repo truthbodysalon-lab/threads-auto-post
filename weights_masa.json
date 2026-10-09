@@ -11,11 +11,11 @@
   },
   "feedback_scores": {},
   "api_scores": {
-    "cta": -2.51,
     "insight": 0.23,
-    "ranking": -2.63,
-    "story": -0.39,
-    "education": -2.63
+    "story": 0.03,
+    "education": -2.68,
+    "ranking": -2.48,
+    "cta": -2.67
   },
   "follower_scores": {
     "story": -0.4,

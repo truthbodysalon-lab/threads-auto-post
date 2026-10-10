@@ -190,7 +190,7 @@ def check_same_day_duplicates():
                 if p.get("is_reply") or not p.get("text"):
                     continue
                 d = datetime.strptime(p["timestamp"], "%Y-%m-%dT%H:%M:%S%z").astimezone(JST).date().isoformat()
-                k = (d, p["text"].split("\n")[0].strip()[:40])
+                k = (d, p["text"].strip()[:80])  # 1行目だけだと別本文の同フック(外部ツール等)を誤検知する(2026-10-10)
                 seen[k] = seen.get(k, 0) + 1
             dups = [f"{d} {t}" for (d, t), n in seen.items() if n >= 2]
             if acct == "nagaoka":

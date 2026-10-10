@@ -42,7 +42,7 @@
   "マッサージ通いに疲れた人へ。": {
     "segment": "T6",
     "hook": "high",
-    "created": "2026-10-08",
+    "created": "2026-10-10",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z19_truth"
@@ -58,7 +58,7 @@
   "看護や介護の仕事で脚がだるい人へ。": {
     "segment": "T4",
     "hook": "high",
-    "created": "2026-10-08",
+    "created": "2026-10-10",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z13_truth"
@@ -98,7 +98,7 @@
   "産後の姿勢崩れが気になるママへ。": {
     "segment": "T3",
     "hook": "high",
-    "created": "2026-10-08",
+    "created": "2026-10-10",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z10_nagaoka"
@@ -164,7 +164,7 @@
   "産後の骨盤の歪みが気になるママへ。": {
     "segment": "T3",
     "hook": "high",
-    "created": "2026-10-08",
+    "created": "2026-10-10",
     "acct": "truth",
     "variant": 0
   },
@@ -179,7 +179,7 @@
   "朝から体が重いと感じる人へ。": {
     "segment": "T5",
     "hook": "high",
-    "created": "2026-10-08",
+    "created": "2026-10-10",
     "acct": "truth",
     "variant": 0
   },
@@ -217,7 +217,7 @@
   "施術で悪化した経験がある人へ。": {
     "segment": "T6",
     "hook": "high",
-    "created": "2026-10-08",
+    "created": "2026-10-10",
     "acct": "nagaoka",
     "variant": 0
   },
@@ -745,7 +745,7 @@
   "やる気が出ない日が続く人へ。": {
     "segment": "T5",
     "hook": "high",
-    "created": "2026-10-06",
+    "created": "2026-10-10",
     "acct": "nagaoka",
     "variant": 1
   },
@@ -3218,7 +3218,7 @@
   "『仕事の後半になると、足腰がきつい』という声を、よく聞きます。": {
     "segment": "T4",
     "hook": "high",
-    "created": "2026-10-08",
+    "created": "2026-10-10",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "ZC04_nagaoka"
@@ -4735,6 +4735,216 @@
     "created": "2026-10-10"
   },
   "インスタで、いいねの数が気になる院長さん、": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-10"
+  },
+  "【頭痛の記録をつけたい人の習慣5選】": {
+    "segment": "LIST_HABIT",
+    "hook": "list",
+    "variant": 48,
+    "created": "2026-10-10",
+    "acct": "truth"
+  },
+  "【朝起きた瞬間から首が重い人の習慣7選】": {
+    "segment": "LIST_HABIT",
+    "hook": "list",
+    "variant": 34,
+    "created": "2026-10-10",
+    "acct": "truth"
+  },
+  "朝起きるのがつらい人へ。": {
+    "segment": "CUSTOMER_VOICE",
+    "hook": "voice",
+    "variant": 22,
+    "created": "2026-10-10",
+    "acct": "truth"
+  },
+  "【水を飲む時間がない仕事の人の習慣6選】": {
+    "segment": "LIST_HABIT",
+    "hook": "list",
+    "variant": 43,
+    "created": "2026-10-10",
+    "acct": "nagaoka"
+  },
+  "【肩こりの人のお風呂の習慣5選】": {
+    "segment": "LIST_HABIT",
+    "hook": "list",
+    "variant": 6,
+    "created": "2026-10-10",
+    "acct": "nagaoka"
+  },
+  "『楽になるのに、1週間でまた戻る』という声を、よく聞きます。": {
+    "segment": "CUSTOMER_VOICE",
+    "hook": "voice",
+    "variant": 18,
+    "created": "2026-10-10",
+    "acct": "nagaoka"
+  },
+  "インスタで、任せる人がいなくて、一人で抱えている院長へ。": {
+    "segment": "I07",
+    "hook": "high",
+    "created": "2026-10-10",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP21"
+  },
+  "インスタ運用で、ベストな投稿時間を探している院長へ質問です。": {
+    "segment": "I08",
+    "hook": "low",
+    "created": "2026-10-10",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP24"
+  },
+  "ストーリーズが見られていない気がする院長へ質問です。": {
+    "segment": "I09",
+    "hook": "low",
+    "created": "2026-10-10",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP27"
+  },
+  "インスタ運用で、全国に向けて発信している院長へ質問です。": {
+    "segment": "I10",
+    "hook": "low",
+    "created": "2026-10-10",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP30"
+  },
+  "インスタ運用で、反応はあるのに、来店がない院長へ質問です。": {
+    "segment": "I11",
+    "hook": "low",
+    "created": "2026-10-10",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP33"
+  },
+  "インスタで、プロフィールを見ても何をしているか分からないと言われる院長へ質問です": {
+    "segment": "I12",
+    "hook": "low",
+    "created": "2026-10-10",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP36"
+  },
+  "新規を増やしても、売上が安定しない院長へ。": {
+    "segment": "R07",
+    "hook": "low",
+    "created": "2026-10-10",
+    "acct": "masa",
+    "axis": "repeat_close",
+    "variant": null,
+    "hypothesis_id": "RP17"
+  },
+  "コースが決まった月に、安心している院長へ。": {
+    "segment": "R08",
+    "hook": "low",
+    "created": "2026-10-10",
+    "acct": "masa",
+    "axis": "repeat_close",
+    "variant": null,
+    "hypothesis_id": "RP20"
+  },
+  "投稿でいきなり売ろうとしているサロンオーナーへ。": {
+    "segment": "HAKASE",
+    "hook": "principle",
+    "variant": 16,
+    "created": "2026-10-10"
+  },
+  "何でも自分でやるのが頑張りだと思っている院長へ質問です。": {
+    "segment": "HAKASE",
+    "hook": "principle",
+    "variant": 6,
+    "created": "2026-10-10"
+  },
+  "インスタ運用で、反応がなくて落ち込む整体院の院長へ質問です。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-10"
+  },
+  "【インスタで、撮影が面倒で止まっている院長へ】": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-10"
+  },
+  "インスタで、ハッシュタグが分からない整体院の院長に聞きます。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-10"
+  },
+  "インスタで、毎日投稿できない店主に聞きます。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-10"
+  },
+  "インスタ運用で、一人で全部やっているサロンオーナーさん、": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-10"
+  },
+  "インスタで、毎日投稿できない店主さん、": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-10"
+  },
+  "リールが難しそうな整体院の院長さん、": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-10"
+  },
+  "インスタ運用で、写真がうまく撮れない院長へ質問です。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-10"
+  },
+  "インスタで、DMの返信が不安な院長に聞きます。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-10"
+  },
+  "インスタ運用で、文章が苦手な整体院の院長へ質問です。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-10"
+  },
+  "インスタで、施術の合間しか時間がない院長に聞きます。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-10"
+  },
+  "インスタ運用で、数字が苦手な整体院の院長に聞きます。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-10"
+  },
+  "【インスタで、毎日投稿できない店主へ】": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-10"
+  },
+  "インスタ運用で、写真の編集ができない店主さん、": {
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,

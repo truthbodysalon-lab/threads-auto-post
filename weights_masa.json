@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-10",
+  "updated_at": "2026-10-11",
   "pattern_weights": {
     "insight": 20,
     "education": 1,
@@ -18,10 +18,10 @@
     "education": -2.68
   },
   "follower_scores": {
-    "story": -0.43,
+    "story": -0.45,
     "insight": 3.0,
-    "ranking": -0.98,
-    "education": -0.83,
+    "ranking": -0.97,
+    "education": -0.82,
     "cta": -0.76
   },
   "line_scores": {

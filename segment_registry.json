@@ -521,7 +521,7 @@
   "抱っこ疲れで腰が痛いママへ。": {
     "segment": "T3",
     "hook": "low",
-    "created": "2026-10-07",
+    "created": "2026-10-11",
     "acct": "truth",
     "variant": 1
   },
@@ -557,7 +557,7 @@
   "介護をひとりで抱え込む人へ。": {
     "segment": "T4",
     "hook": "low",
-    "created": "2026-10-07",
+    "created": "2026-10-11",
     "acct": "nagaoka",
     "variant": 1
   },
@@ -2377,7 +2377,7 @@
   "座り仕事で首が詰まる感じがする人へ。": {
     "segment": "T1",
     "hook": "low",
-    "created": "2026-10-07",
+    "created": "2026-10-11",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "ZC01_truth"
@@ -2385,7 +2385,7 @@
   "頭が重い日が続く人へ。": {
     "segment": "T2",
     "hook": "low",
-    "created": "2026-10-07",
+    "created": "2026-10-11",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "ZC02_truth"
@@ -2401,7 +2401,7 @@
   "水を飲む時間がない仕事の人へ。": {
     "segment": "T4",
     "hook": "low",
-    "created": "2026-10-07",
+    "created": "2026-10-11",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "ZC04_truth"
@@ -2430,7 +2430,7 @@
   "座り仕事で肩が重い人へ。": {
     "segment": "T1",
     "hook": "low",
-    "created": "2026-10-07",
+    "created": "2026-10-11",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "ZC01_nagaoka"
@@ -2438,7 +2438,7 @@
   "頭が重い日がときどきある人へ。": {
     "segment": "T2",
     "hook": "low",
-    "created": "2026-10-07",
+    "created": "2026-10-11",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "ZC02_nagaoka"
@@ -2446,7 +2446,7 @@
   "子育て中で肩や腰がつらいママへ。": {
     "segment": "T3",
     "hook": "low",
-    "created": "2026-10-07",
+    "created": "2026-10-11",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "ZC03_nagaoka"
@@ -4348,7 +4348,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 4,
-    "created": "2026-10-10"
+    "created": "2026-10-11"
   },
   "当たった話を1回で終わらせている院長へ。": {
     "segment": "HAKASE",
@@ -5099,5 +5099,119 @@
     "hook": "gen",
     "variant": null,
     "created": "2026-10-11"
+  },
+  "【気圧の日に絶対必要な過ごし方5選】": {
+    "segment": "LIST_HABIT",
+    "hook": "list",
+    "variant": 2,
+    "created": "2026-10-11",
+    "acct": "truth"
+  },
+  "【頭痛の日に避けたいNG行動7選】": {
+    "segment": "LIST_HABIT",
+    "hook": "list",
+    "variant": 11,
+    "created": "2026-10-11",
+    "acct": "truth"
+  },
+  "『頭痛薬が手放せなくて、外出が不安』という声を、よく聞きます。": {
+    "segment": "CUSTOMER_VOICE",
+    "hook": "voice",
+    "variant": 3,
+    "created": "2026-10-11",
+    "acct": "truth"
+  },
+  "【同じ姿勢のあとが一番つらい人の習慣6選】": {
+    "segment": "LIST_HABIT",
+    "hook": "list",
+    "variant": 47,
+    "created": "2026-10-11",
+    "acct": "nagaoka"
+  },
+  "【長時間座る人の習慣9選】": {
+    "segment": "LIST_HABIT",
+    "hook": "list",
+    "variant": 31,
+    "created": "2026-10-11",
+    "acct": "nagaoka"
+  },
+  "『腕が耳まで上がらないのに、今まで気づかなかった』という声を、よく聞きます。": {
+    "segment": "CUSTOMER_VOICE",
+    "hook": "voice",
+    "variant": 2,
+    "created": "2026-10-11",
+    "acct": "nagaoka"
+  },
+  "インスタ運用で、プロフィールに自信がない院長へ。": {
+    "segment": "I12",
+    "hook": "high",
+    "created": "2026-10-11",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP60"
+  },
+  "インスタで、投稿の先の流れが見えない院長へ質問です。": {
+    "segment": "I13",
+    "hook": "low",
+    "created": "2026-10-11",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP64"
+  },
+  "インスタ運用で、来店の理由を測れない院長へ。": {
+    "segment": "I14",
+    "hook": "high",
+    "created": "2026-10-11",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP42"
+  },
+  "インスタで、予約が埋まっているから、広告を出さない院長へ質問です。": {
+    "segment": "I15",
+    "hook": "low",
+    "created": "2026-10-11",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP66"
+  },
+  "インスタで、AIで作った投稿は気持ち悪いと思われないか不安な院長へ質問です。": {
+    "segment": "I16",
+    "hook": "low",
+    "created": "2026-10-11",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP67"
+  },
+  "インスタ運用で、やめる理由を探している院長へ。": {
+    "segment": "I17",
+    "hook": "high",
+    "created": "2026-10-11",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP70"
+  },
+  "離れた理由を、想像で決めている院長へ。": {
+    "segment": "R09",
+    "hook": "high",
+    "created": "2026-10-11",
+    "acct": "masa",
+    "axis": "repeat_close",
+    "variant": null,
+    "hypothesis_id": "RP23"
+  },
+  "口コミを、お願いして集めている院長へ。": {
+    "segment": "R10",
+    "hook": "high",
+    "created": "2026-10-11",
+    "acct": "masa",
+    "axis": "repeat_close",
+    "variant": null,
+    "hypothesis_id": "RP25"
   }
 }

@@ -42,7 +42,7 @@
   "マッサージ通いに疲れた人へ。": {
     "segment": "T6",
     "hook": "high",
-    "created": "2026-10-10",
+    "created": "2026-10-12",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z19_truth"
@@ -58,7 +58,7 @@
   "看護や介護の仕事で脚がだるい人へ。": {
     "segment": "T4",
     "hook": "high",
-    "created": "2026-10-10",
+    "created": "2026-10-12",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z13_truth"
@@ -90,7 +90,7 @@
   "夜勤続きで腰が重い人へ。": {
     "segment": "T4",
     "hook": "high",
-    "created": "2026-10-10",
+    "created": "2026-10-12",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z14_nagaoka"
@@ -98,7 +98,7 @@
   "産後の姿勢崩れが気になるママへ。": {
     "segment": "T3",
     "hook": "high",
-    "created": "2026-10-10",
+    "created": "2026-10-12",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z10_nagaoka"
@@ -164,7 +164,7 @@
   "産後の骨盤の歪みが気になるママへ。": {
     "segment": "T3",
     "hook": "high",
-    "created": "2026-10-10",
+    "created": "2026-10-12",
     "acct": "truth",
     "variant": 0
   },
@@ -179,7 +179,7 @@
   "朝から体が重いと感じる人へ。": {
     "segment": "T5",
     "hook": "high",
-    "created": "2026-10-10",
+    "created": "2026-10-12",
     "acct": "truth",
     "variant": 0
   },
@@ -217,7 +217,7 @@
   "施術で悪化した経験がある人へ。": {
     "segment": "T6",
     "hook": "high",
-    "created": "2026-10-10",
+    "created": "2026-10-12",
     "acct": "nagaoka",
     "variant": 0
   },
@@ -658,7 +658,7 @@
   "疲れているのに運動が続かない人へ。": {
     "segment": "T5",
     "hook": "high",
-    "created": "2026-10-08",
+    "created": "2026-10-12",
     "acct": "nagaoka",
     "variant": 0
   },
@@ -3066,7 +3066,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 7,
-    "created": "2026-10-07"
+    "created": "2026-10-12"
   },
   "DMで売り込もうとするサロンオーナーへ。": {
     "segment": "INSTA_EASY",
@@ -3328,7 +3328,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 9,
-    "created": "2026-10-08"
+    "created": "2026-10-12"
   },
   "1週間で結果が出ないと諦める店主へ質問です。": {
     "segment": "HAKASE",
@@ -5363,5 +5363,119 @@
     "hook": "fixed",
     "variant": 49,
     "created": "2026-10-12"
+  },
+  "【デスクワークの頭痛チェック項目7選】": {
+    "segment": "LIST_HABIT",
+    "hook": "list",
+    "variant": 3,
+    "created": "2026-10-12",
+    "acct": "truth"
+  },
+  "【マッサージで3日しか持たない人がやめること6選】": {
+    "segment": "LIST_HABIT",
+    "hook": "list",
+    "variant": 35,
+    "created": "2026-10-12",
+    "acct": "truth"
+  },
+  "『検査では問題ないと言われたのに、つらさが続く』という声を、よく聞きます。": {
+    "segment": "CUSTOMER_VOICE",
+    "hook": "voice",
+    "variant": 12,
+    "created": "2026-10-12",
+    "acct": "truth"
+  },
+  "【首が前に出る人が見直すこと6選】": {
+    "segment": "LIST_HABIT",
+    "hook": "list",
+    "variant": 19,
+    "created": "2026-10-12",
+    "acct": "nagaoka"
+  },
+  "【肩こりの人のお風呂上がりの習慣5選】": {
+    "segment": "LIST_HABIT",
+    "hook": "list",
+    "variant": 33,
+    "created": "2026-10-12",
+    "acct": "nagaoka"
+  },
+  "『立ち仕事の後半になると、腰が重くなる』という声を、よく聞きます。": {
+    "segment": "CUSTOMER_VOICE",
+    "hook": "voice",
+    "variant": 8,
+    "created": "2026-10-12",
+    "acct": "nagaoka"
+  },
+  "インスタで、これでいいのかと迷って出せない院長へ質問です。": {
+    "segment": "I17",
+    "hook": "low",
+    "created": "2026-10-12",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP68"
+  },
+  "インスタで、勉強してから始めるつもりの院長へ。": {
+    "segment": "I01",
+    "hook": "high",
+    "created": "2026-10-12",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP01"
+  },
+  "インスタで、プロフィールが名刺になっていない院長へ。": {
+    "segment": "I02",
+    "hook": "high",
+    "created": "2026-10-12",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP50"
+  },
+  "インスタ運用で、毎回ゼロからネタを考えている院長へ。": {
+    "segment": "I03",
+    "hook": "high",
+    "created": "2026-10-12",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP51"
+  },
+  "インスタが苦手だと感じている院長へ。": {
+    "segment": "I04",
+    "hook": "high",
+    "created": "2026-10-12",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP52"
+  },
+  "リールが伸びないと悩む院長へ質問です。": {
+    "segment": "I05",
+    "hook": "low",
+    "created": "2026-10-12",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP15"
+  },
+  "数字が苦手で、リピートを見ていない院長へ。": {
+    "segment": "R11",
+    "hook": "low",
+    "created": "2026-10-12",
+    "acct": "masa",
+    "axis": "repeat_close",
+    "variant": null,
+    "hypothesis_id": "RP27"
+  },
+  "提案すると嫌われると、怖がっている院長へ。": {
+    "segment": "R12",
+    "hook": "low",
+    "created": "2026-10-12",
+    "acct": "masa",
+    "axis": "repeat_close",
+    "variant": null,
+    "hypothesis_id": "RP29"
   }
 }

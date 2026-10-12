@@ -1029,7 +1029,7 @@ def _recently_posted_on_threads(acct: str, text: str, hours: int = 12) -> bool:
             return False
         token = os.environ[ACCOUNTS[acct]["token_key"]]
         uid = os.environ[ACCOUNTS[acct]["uid_key"]]
-        url = f"{BASE_URL}/{uid}/threads?fields=id,text,timestamp&limit=25&access_token={token}"
+        url = f"{BASE_URL}/{uid}/threads?fields=id,text,timestamp&limit=100&access_token={token}"
         with urllib.request.urlopen(url, timeout=15) as r:
             data = json.loads(r.read())
         cutoff = datetime.now(timezone.utc) - timedelta(hours=hours)
@@ -1074,7 +1074,7 @@ def _recent_api_firstlines(acct: str, hours: int = 12) -> set:
     try:
         token = os.environ[ACCOUNTS[acct]["token_key"]]
         uid = os.environ[ACCOUNTS[acct]["uid_key"]]
-        url = f"{BASE_URL}/{uid}/threads?fields=id,text,timestamp&limit=25&access_token={token}"
+        url = f"{BASE_URL}/{uid}/threads?fields=id,text,timestamp&limit=100&access_token={token}"
         with urllib.request.urlopen(url, timeout=15) as r:
             data = json.loads(r.read())
         cutoff = datetime.now(timezone.utc) - timedelta(hours=hours)

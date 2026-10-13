@@ -392,7 +392,7 @@
   "会議続きで首が痛い人へ。": {
     "segment": "T1",
     "hook": "low",
-    "created": "2026-10-11",
+    "created": "2026-10-13",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z03_truth"
@@ -400,7 +400,7 @@
   "頭痛薬が常備品になっている人へ。": {
     "segment": "T2",
     "hook": "low",
-    "created": "2026-10-09",
+    "created": "2026-10-13",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z07_truth"
@@ -415,7 +415,7 @@
   "介護や看護で腰と脚がつらい人へ。": {
     "segment": "T4",
     "hook": "low",
-    "created": "2026-10-11",
+    "created": "2026-10-13",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z15_truth"
@@ -423,7 +423,7 @@
   "1日中パソコンに向かう人へ。": {
     "segment": "T1",
     "hook": "low",
-    "created": "2026-10-11",
+    "created": "2026-10-13",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z22_nagaoka"
@@ -431,7 +431,7 @@
   "朝からこめかみが重い人へ。": {
     "segment": "T2",
     "hook": "low",
-    "created": "2026-10-09",
+    "created": "2026-10-13",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z06_nagaoka"
@@ -439,7 +439,7 @@
   "子育てで腰を痛めたママへ。": {
     "segment": "T3",
     "hook": "low",
-    "created": "2026-10-11",
+    "created": "2026-10-13",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z12_nagaoka"
@@ -521,7 +521,7 @@
   "抱っこ疲れで腰が痛いママへ。": {
     "segment": "T3",
     "hook": "low",
-    "created": "2026-10-11",
+    "created": "2026-10-13",
     "acct": "truth",
     "variant": 1
   },
@@ -557,7 +557,7 @@
   "介護をひとりで抱え込む人へ。": {
     "segment": "T4",
     "hook": "low",
-    "created": "2026-10-11",
+    "created": "2026-10-13",
     "acct": "nagaoka",
     "variant": 1
   },
@@ -2537,7 +2537,7 @@
   "初回の説明で、次回の話ができない院長へ。": {
     "segment": "R01",
     "hook": "low",
-    "created": "2026-10-07",
+    "created": "2026-10-13",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -2717,7 +2717,7 @@
   "インスタで、ハッシュタグと投稿時間で伸ばそうとしている院長へ。": {
     "segment": "I08",
     "hook": "high",
-    "created": "2026-10-07",
+    "created": "2026-10-13",
     "acct": "masa",
     "axis": "insta_pain",
     "variant": null,
@@ -2726,7 +2726,7 @@
   "ストーリーズに時間をかけている院長へ。": {
     "segment": "I09",
     "hook": "high",
-    "created": "2026-10-07",
+    "created": "2026-10-13",
     "acct": "masa",
     "axis": "insta_pain",
     "variant": null,
@@ -2735,7 +2735,7 @@
   "インスタ運用で、フォロワー数ばかり見ている院長へ。": {
     "segment": "I10",
     "hook": "high",
-    "created": "2026-10-07",
+    "created": "2026-10-13",
     "acct": "masa",
     "axis": "insta_pain",
     "variant": null,
@@ -2744,7 +2744,7 @@
   "インスタ運用で、役立つ投稿だけで来店を待っている院長へ。": {
     "segment": "I11",
     "hook": "high",
-    "created": "2026-10-07",
+    "created": "2026-10-13",
     "acct": "masa",
     "axis": "insta_pain",
     "variant": null,
@@ -3598,7 +3598,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 15,
-    "created": "2026-10-08"
+    "created": "2026-10-13"
   },
   "新しい投稿を毎回作っている院長へ質問です。": {
     "segment": "INSTA_EASY",
@@ -4858,7 +4858,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 16,
-    "created": "2026-10-10"
+    "created": "2026-10-13"
   },
   "何でも自分でやるのが頑張りだと思っている院長へ質問です。": {
     "segment": "HAKASE",
@@ -5839,5 +5839,65 @@
     "axis": "repeat_close",
     "variant": null,
     "hypothesis_id": "RP03"
+  },
+  "【休み明けの月曜に頭が重い人の習慣6選】": {
+    "segment": "LIST_HABIT",
+    "hook": "list",
+    "variant": 37,
+    "created": "2026-10-13",
+    "acct": "truth"
+  },
+  "【頭痛の人の仕事中の習慣9選】": {
+    "segment": "LIST_HABIT",
+    "hook": "list",
+    "variant": 25,
+    "created": "2026-10-13",
+    "acct": "truth"
+  },
+  "頭痛で予定を諦めることが増えた人へ。": {
+    "segment": "CUSTOMER_VOICE",
+    "hook": "voice",
+    "variant": 23,
+    "created": "2026-10-13",
+    "acct": "truth"
+  },
+  "【在宅ワークの肩こり対策チェック項目8選】": {
+    "segment": "LIST_HABIT",
+    "hook": "list",
+    "variant": 12,
+    "created": "2026-10-13",
+    "acct": "nagaoka"
+  },
+  "【足を組むクセがやめられない人が見直すこと5選】": {
+    "segment": "LIST_HABIT",
+    "hook": "list",
+    "variant": 37,
+    "created": "2026-10-13",
+    "acct": "nagaoka"
+  },
+  "『足を組むとラクで、ついやってしまう』という声を、よく聞きます。": {
+    "segment": "CUSTOMER_VOICE",
+    "hook": "voice",
+    "variant": 4,
+    "created": "2026-10-13",
+    "acct": "nagaoka"
+  },
+  "インスタ運用で、気分に左右されて続かない院長へ。": {
+    "segment": "I06",
+    "hook": "high",
+    "created": "2026-10-13",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP54"
+  },
+  "インスタ運用で、投稿を全部自分でやっている院長へ質問です。": {
+    "segment": "I07",
+    "hook": "low",
+    "created": "2026-10-13",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP19"
   }
 }

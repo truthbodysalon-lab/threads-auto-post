@@ -5,24 +5,24 @@
     "education": 1,
     "story": 1,
     "cta": 1,
-    "ranking": 2,
+    "ranking": 8,
     "question": 3,
     "variety": 20
   },
   "feedback_scores": {},
   "api_scores": {
-    "insight": 0.18,
-    "story": -0.09,
-    "cta": -2.2,
-    "education": -1.74,
-    "ranking": 0.77
+    "insight": 0.3,
+    "story": -0.94,
+    "cta": -2.18,
+    "education": -1.57,
+    "ranking": 3.62
   },
   "follower_scores": {
-    "story": -0.53,
+    "story": -0.47,
     "insight": 3.0,
-    "ranking": -0.99,
-    "education": -0.87,
-    "cta": -0.61
+    "ranking": -0.97,
+    "education": -0.85,
+    "cta": -0.71
   },
   "line_scores": {
     "insight": 3.0,

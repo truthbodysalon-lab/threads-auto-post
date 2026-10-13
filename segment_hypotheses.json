@@ -2741,7 +2741,7 @@
       ],
       "last_result": {
         "n": 1,
-        "index": 1.377,
+        "index": 1.436,
         "updated": "2026-10-13"
       }
     },
@@ -2797,7 +2797,7 @@
       ],
       "last_result": {
         "n": 1,
-        "index": 0.713,
+        "index": 0.752,
         "updated": "2026-10-13"
       }
     },
@@ -2938,7 +2938,7 @@
       ],
       "last_result": {
         "n": 1,
-        "index": 0.18,
+        "index": 0.188,
         "updated": "2026-10-13"
       }
     },
@@ -3149,9 +3149,9 @@
         }
       ],
       "last_result": {
-        "n": 2,
-        "index": 6.638,
-        "updated": "2026-10-08"
+        "n": 1,
+        "index": 0.6,
+        "updated": "2026-10-13"
       },
       "evidence": "悩みマップ2026-10-04 I01『何から始めればいいか分からない』の根拠『インスタが全然できてない』（Notion/玉城さん打ち合わせ.md）"
     },
@@ -3275,7 +3275,7 @@
       ],
       "last_result": {
         "n": 1,
-        "index": 3.767,
+        "index": 3.52,
         "updated": "2026-10-13"
       },
       "evidence": "悩みマップ2026-10-04 I02『軸・コンセプトが決まらない』の根拠『商品設計がしっかりできていないとSNSなどの発信がブレてしまう』（Notion/堀先生講義.md）"
@@ -3337,7 +3337,7 @@
       "theme": "Instagram悩み",
       "hypothesis": "写真がないと投稿できないと思っている → 文字2行だけで投稿できると言えば反応する",
       "pain_ids": [],
-      "status": "untested",
+      "status": "testing",
       "posts": [
         {
           "hook": "low",
@@ -3349,9 +3349,9 @@
         }
       ],
       "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
+        "n": 1,
+        "index": 0.32,
+        "updated": "2026-10-13"
       },
       "evidence": "悩みマップ2026-10-04 I03『投稿ネタが出ない』の根拠『「毎日何を投稿しよう」と悩む時間が最大のボトルネック』（PROST AIスクール/07_AI業務効率化の実践/7-4｜SNS運用を仕組み化する.md）"
     },
@@ -3412,7 +3412,7 @@
       "theme": "Instagram悩み",
       "hypothesis": "デザインセンスがなく見映えが怖い → 文字だけで足りると言えば反応する",
       "pain_ids": [],
-      "status": "untested",
+      "status": "testing",
       "posts": [
         {
           "hook": "low",
@@ -3424,9 +3424,9 @@
         }
       ],
       "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
+        "n": 1,
+        "index": 2.72,
+        "updated": "2026-10-13"
       },
       "evidence": "悩みマップ2026-10-04 I04『撮影・顔出し・デザインが苦手』の根拠『写真撮るのが面倒くさかったら』（商売人の学校/_文字起こし/vm_417028094.txt）"
     },
@@ -3487,7 +3487,7 @@
       "theme": "Instagram悩み",
       "hypothesis": "リールが伸びないのは才能やセンスのせいと思っている → 原因の多くは最初の1秒（冒頭の一言）と言えば反応する",
       "pain_ids": [],
-      "status": "untested",
+      "status": "testing",
       "posts": [
         {
           "hook": "low",
@@ -3499,9 +3499,9 @@
         }
       ],
       "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
+        "n": 2,
+        "index": 3.88,
+        "updated": "2026-10-13"
       },
       "evidence": "悩みマップ2026-10-04 I05『リールが怖い・難しい』の根拠『リール全然やってないんですよ』（マーケティング学習/インスタハカセ講義/01_プレセミナー_文字起こし.md）"
     },
@@ -3562,7 +3562,7 @@
       "theme": "Instagram悩み",
       "hypothesis": "成果が出ず意味を感じなくなって止まる → 最初の3ヶ月は反応がなくて普通と言えば反応する",
       "pain_ids": [],
-      "status": "untested",
+      "status": "testing",
       "posts": [
         {
           "hook": "low",
@@ -3574,9 +3574,9 @@
         }
       ],
       "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
+        "n": 1,
+        "index": 3.08,
+        "updated": "2026-10-13"
       },
       "evidence": "悩みマップ2026-10-04 I06『続かない・時間がない』の根拠『投稿を毎日続けることができず三日坊主になる』（segment_hypotheses.json P052（出典 講義ノート/グルコン/グルコン_2026-04-03_UP_LINK.md・要約））"
     },
@@ -3625,7 +3625,7 @@
       ],
       "last_result": {
         "n": 1,
-        "index": 4.651,
+        "index": 4.0,
         "updated": "2026-10-13"
       },
       "evidence": "悩みマップ2026-10-04 I07『院長一人で回している・任せ方が分からない』の根拠『院長が投稿を作っているせいで発信頻度が落ちる』（segment_hypotheses.json P036（出典 商売人の学校/_文字起こし/vm_323644828.txt・要約））"
@@ -3637,7 +3637,7 @@
       "theme": "Instagram悩み",
       "hypothesis": "投稿を任せる相手がいない → 最初の下書きだけ人やツールに任せると言えば反応する",
       "pain_ids": [],
-      "status": "untested",
+      "status": "testing",
       "posts": [
         {
           "hook": "low",
@@ -3649,9 +3649,9 @@
         }
       ],
       "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
+        "n": 1,
+        "index": 0.4,
+        "updated": "2026-10-13"
       },
       "evidence": "悩みマップ2026-10-04 I07『院長一人で回している・任せ方が分からない』の根拠『院長が投稿を作っているせいで発信頻度が落ちる』（segment_hypotheses.json P036（出典 商売人の学校/_文字起こし/vm_323644828.txt・要約））"
     },
@@ -3700,7 +3700,7 @@
       ],
       "last_result": {
         "n": 1,
-        "index": 1.302,
+        "index": 1.12,
         "updated": "2026-10-13"
       },
       "evidence": "悩みマップ2026-10-04 I08『見られない・ハッシュタグやアルゴリズムの迷信』の根拠『1日50投稿しても全くインプレッションが伸びず、一桁まで落ち込んでいる』（Notion/__メンタル壁打ち__.md）"
@@ -3775,7 +3775,7 @@
       ],
       "last_result": {
         "n": 1,
-        "index": 2.558,
+        "index": 2.2,
         "updated": "2026-10-13"
       },
       "evidence": "悩みマップ2026-10-04 I09『ストーリーズの使い方が分からない』の根拠『ストーリーズが十分に活用できておらず、投稿からの流入も少ない』（Notion/亮さん面談 __2026-03-11T20_00_00.000+09_00__.md）"
@@ -3850,7 +3850,7 @@
       ],
       "last_result": {
         "n": 1,
-        "index": 0.93,
+        "index": 0.8,
         "updated": "2026-10-13"
       },
       "evidence": "悩みマップ2026-10-04 I10『フォロワーが増えない』の根拠『フォロワー全く増えない』（商売人の学校/_文字起こし/vm_625882740.txt）"
@@ -3925,7 +3925,7 @@
       ],
       "last_result": {
         "n": 1,
-        "index": 0.791,
+        "index": 0.68,
         "updated": "2026-10-13"
       },
       "evidence": "悩みマップ2026-10-04 I11『役立つ投稿だけで売上につながらない』の根拠『フォロワー獲得投稿は当たりが分かったが、CV投稿が思いつかず反応もない』（Notion/ハカセ勉強会 __2026-08-26T21_00_00.000+09_00__.md）"
@@ -4000,7 +4000,7 @@
       ],
       "last_result": {
         "n": 1,
-        "index": 1.86,
+        "index": 1.6,
         "updated": "2026-10-13"
       },
       "evidence": "悩みマップ2026-10-04 I12『プロフィール・固定投稿で伝わらない』の根拠『プロフィールを見ても誰のどんな悩みを解決する人か伝わらない』（segment_hypotheses.json P012（出典 講義ノート/グルコン/グルコン_2026-03-19_UP_LINK.md・要約））"
@@ -4175,7 +4175,7 @@
       ],
       "last_result": {
         "n": 2,
-        "index": 3.326,
+        "index": 2.88,
         "updated": "2026-10-13"
       },
       "evidence": "悩みマップ2026-10-04 I14『数字の見方が分からない』の根拠『投稿を感覚で続けていて数字で振り返っていない』（segment_hypotheses.json P073（出典 マーケティング学習/インスタハカセ講義/00_講義マスターまとめ.md・要約））"
@@ -4250,7 +4250,7 @@
       ],
       "last_result": {
         "n": 1,
-        "index": 0.651,
+        "index": 0.56,
         "updated": "2026-10-13"
       },
       "evidence": "悩みマップ2026-10-04 I15『広告はお金がかかりそうで怖い』の根拠『広告で 5 万円溶かすって怖いと思うんですよ』（Notion/MASTER研修 __2026-06-07T10_00_00.000+09_00__.md）"
@@ -4325,7 +4325,7 @@
       ],
       "last_result": {
         "n": 1,
-        "index": 1.907,
+        "index": 1.64,
         "updated": "2026-10-13"
       },
       "evidence": "悩みマップ2026-10-04 I16『AIの使い方が分からない』の根拠『AI丸投げの投稿が気持ち悪くてやめたが自分の言葉で書けない』（segment_hypotheses.json P011（出典 講義ノート/グルコン/グルコン_2026-03-19_UP_LINK.md・要約））"
@@ -4350,7 +4350,7 @@
       ],
       "last_result": {
         "n": 1,
-        "index": 0.419,
+        "index": 0.64,
         "updated": "2026-10-13"
       },
       "evidence": "masa講義 2026-03-10 UP LINK『100点出せないから投稿できません』（出典: 講義ノート/自分の講義/00_masa講義_要点まとめ.md・資料ID M01）"
@@ -4362,7 +4362,7 @@
       "theme": "Instagram悩み",
       "hypothesis": "プロフィールが何屋か伝わらない → 名刺として1行目で言い切ると言えば反応する",
       "pain_ids": [],
-      "status": "untested",
+      "status": "testing",
       "posts": [
         {
           "hook": "low",
@@ -4374,9 +4374,9 @@
         }
       ],
       "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
+        "n": 1,
+        "index": 1.6,
+        "updated": "2026-10-13"
       },
       "evidence": "masa講義 2026-03-26 グルコン『プロフ文が何屋か伝わらない』（出典: 講義ノート/自分の講義/00_masa講義_要点まとめ.md・資料ID M01）"
     },
@@ -4387,7 +4387,7 @@
       "theme": "Instagram悩み",
       "hypothesis": "毎回新しいネタを考えて疲れる → 型を作って1行だけ変えると言えば反応する",
       "pain_ids": [],
-      "status": "untested",
+      "status": "testing",
       "posts": [
         {
           "hook": "low",
@@ -4399,9 +4399,9 @@
         }
       ],
       "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
+        "n": 1,
+        "index": 1.56,
+        "updated": "2026-10-13"
       },
       "evidence": "masa講義 2026-03-10 UP LINK『毎回新しいものばっかり考えてる』（出典: 講義ノート/自分の講義/00_masa講義_要点まとめ.md・資料ID M01）"
     },
@@ -4412,7 +4412,7 @@
       "theme": "Instagram悩み",
       "hypothesis": "インスタが苦手・画面づくりが苦手 → 文字だけ・型3つで整うと言えば反応する",
       "pain_ids": [],
-      "status": "untested",
+      "status": "testing",
       "posts": [
         {
           "hook": "low",
@@ -4424,9 +4424,9 @@
         }
       ],
       "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
+        "n": 1,
+        "index": 5.48,
+        "updated": "2026-10-13"
       },
       "evidence": "masa講義 2026-03-10 UP LINK『私もインスタが大嫌いで、できないんです』（出典: 講義ノート/自分の講義/00_masa講義_要点まとめ.md・資料ID M01）"
     },
@@ -4512,7 +4512,7 @@
       "theme": "Instagram悩み",
       "hypothesis": "投稿時間やタグで迷う → 続けることと最初の2行が先と言えば反応する",
       "pain_ids": [],
-      "status": "untested",
+      "status": "testing",
       "posts": [
         {
           "hook": "low",
@@ -4524,9 +4524,9 @@
         }
       ],
       "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
+        "n": 1,
+        "index": 0.28,
+        "updated": "2026-10-13"
       },
       "evidence": "masa講義 2026-03-10 UP LINK『同じ時間に投稿した方がいいのかどうか』（出典: 講義ノート/自分の講義/00_masa講義_要点まとめ.md・資料ID M01）"
     },
@@ -4537,7 +4537,7 @@
       "theme": "Instagram悩み",
       "hypothesis": "ストーリーズが予約につながらない → 3枚以上・起承転結で次の行動へつなぐと言えば反応する",
       "pain_ids": [],
-      "status": "untested",
+      "status": "testing",
       "posts": [
         {
           "hook": "low",
@@ -4549,9 +4549,9 @@
         }
       ],
       "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
+        "n": 1,
+        "index": 1.96,
+        "updated": "2026-10-13"
       },
       "evidence": "masa講義 2026-03-07 BASIC『マッサージ写真に手書き文字を重ねたストーリー1枚(予約に至らず)』（出典: 講義ノート/自分の講義/00_masa講義_要点まとめ.md・資料ID M01）"
     },
@@ -4562,7 +4562,7 @@
       "theme": "Instagram悩み",
       "hypothesis": "フォロワー数を目標にしている → 来てほしい1人に絞ると言えば反応する",
       "pain_ids": [],
-      "status": "untested",
+      "status": "testing",
       "posts": [
         {
           "hook": "low",
@@ -4574,9 +4574,9 @@
         }
       ],
       "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
+        "n": 1,
+        "index": 0.32,
+        "updated": "2026-10-13"
       },
       "evidence": "masa講義 2026-05-06 講義『認知のゴールはインスタのフォロー数、8月までに1000人』（出典: 講義ノート/自分の講義/00_masa講義_要点まとめ.md・資料ID M01）"
     },
@@ -4587,7 +4587,7 @@
       "theme": "Instagram悩み",
       "hypothesis": "見られても売上につながらない → 見てほしい人に絞り次の一歩を添えると言えば反応する",
       "pain_ids": [],
-      "status": "untested",
+      "status": "testing",
       "posts": [
         {
           "hook": "low",
@@ -4599,9 +4599,9 @@
         }
       ],
       "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
+        "n": 1,
+        "index": 2.52,
+        "updated": "2026-10-13"
       },
       "evidence": "masa講義 2026-03-19 グルコン『閲覧10万を取れたが買う人と一致しない』（出典: 講義ノート/自分の講義/00_masa講義_要点まとめ.md・資料ID M01）"
     },
@@ -4625,7 +4625,7 @@
       ],
       "last_result": {
         "n": 2,
-        "index": 0.884,
+        "index": 0.78,
         "updated": "2026-10-13"
       },
       "evidence": "masa講義 2026-03-19 グルコン『プロフィール欄を添削してほしい』（出典: 講義ノート/自分の講義/00_masa講義_要点まとめ.md・資料ID M01）"
@@ -4700,7 +4700,7 @@
       ],
       "last_result": {
         "n": 1,
-        "index": 0.884,
+        "index": 0.76,
         "updated": "2026-10-13"
       },
       "evidence": "masa講義 2026-03-19 グルコン『興味ある方はDMくださいだけでは動かない』（出典: 講義ノート/自分の講義/00_masa講義_要点まとめ.md・資料ID M01）"
@@ -4725,7 +4725,7 @@
       ],
       "last_result": {
         "n": 1,
-        "index": 0.233,
+        "index": 0.24,
         "updated": "2026-10-13"
       },
       "evidence": "masa講義 2026-04-08 無料勉強会『どこでリスト取ってんのかなっていうのが疑問』（出典: 講義ノート/自分の講義/00_masa講義_要点まとめ.md・資料ID M01）"
@@ -4775,7 +4775,7 @@
       ],
       "last_result": {
         "n": 1,
-        "index": 1.349,
+        "index": 1.2,
         "updated": "2026-10-13"
       },
       "evidence": "masa講義 2026-05-06 講義『予約枠がないから広告は回さない』（出典: 講義ノート/自分の講義/00_masa講義_要点まとめ.md・資料ID M01）"
@@ -4800,7 +4800,7 @@
       ],
       "last_result": {
         "n": 1,
-        "index": 1.721,
+        "index": 1.56,
         "updated": "2026-10-13"
       },
       "evidence": "masa講義 2026-03-19 グルコン『チャットGPT丸出しの投稿は気持ち悪くてやめた』（出典: 講義ノート/自分の講義/00_masa講義_要点まとめ.md・資料ID M01）"
@@ -4824,8 +4824,8 @@
         }
       ],
       "last_result": {
-        "n": 1,
-        "index": 6.884,
+        "n": 2,
+        "index": 3.44,
         "updated": "2026-10-13"
       },
       "evidence": "masa講義 2026-03-10 UP LINK『これでいいんかみたいなので』（出典: 講義ノート/自分の講義/00_masa講義_要点まとめ.md・資料ID M01）"
@@ -4875,7 +4875,7 @@
       ],
       "last_result": {
         "n": 2,
-        "index": 1.07,
+        "index": 0.94,
         "updated": "2026-10-13"
       },
       "evidence": "masa講義 2026-03-10 UP LINK『やめる理由を探したりしてしまう』（出典: 講義ノート/自分の講義/00_masa講義_要点まとめ.md・資料ID M01）"
@@ -4914,7 +4914,7 @@
       "theme": "リピート・クロージング悩み",
       "hypothesis": "施術後に「実はコースがあって」と切り出して止まっている→施術前に許可を取れば自然になると言えば反応する",
       "pain_ids": [],
-      "status": "untested",
+      "status": "testing",
       "posts": [
         {
           "hook": "low",
@@ -4926,9 +4926,9 @@
         }
       ],
       "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
+        "n": 1,
+        "index": 15.16,
+        "updated": "2026-10-13"
       },
       "evidence": "初回で全体の道筋を伝えられない(根拠4件・中)。出典: CNS / G0403 / L0307N / L0307T（出典IDは repeat_pain_categories.json の source_ids 参照）"
     },
@@ -4992,7 +4992,7 @@
       "theme": "リピート・クロージング悩み",
       "hypothesis": "痛みが取れたら終わりと思われて止まっている→取れた後が本番と伝えれば反応する",
       "pain_ids": [],
-      "status": "untested",
+      "status": "testing",
       "posts": [
         {
           "hook": "low",
@@ -5004,9 +5004,9 @@
         }
       ],
       "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
+        "n": 1,
+        "index": 4.8,
+        "updated": "2026-10-13"
       },
       "evidence": "施術中・毎回の会話で通う理由が育たない(根拠4件・中)。出典: L0428 / L0910T（出典IDは repeat_pain_categories.json の source_ids 参照）"
     },
@@ -5291,7 +5291,7 @@
       ],
       "last_result": {
         "n": 1,
-        "index": 8.233,
+        "index": 7.08,
         "updated": "2026-10-13"
       },
       "evidence": "2回目以降で来なくなる・途中で離脱する(根拠5件・中)。出典: B2212(受講生の悩み) / G0403 / G0501 / L0910T（出典IDは repeat_pain_categories.json の source_ids 参照）"
@@ -5369,7 +5369,7 @@
       ],
       "last_result": {
         "n": 1,
-        "index": 3.395,
+        "index": 2.92,
         "updated": "2026-10-13"
       },
       "evidence": "コース終了後の次の出口がない(再契約・継続)(根拠5件・強)。出典: L0428 / L0910N / L0910T（出典IDは repeat_pain_categories.json の source_ids 参照）"
@@ -5473,7 +5473,7 @@
       ],
       "last_result": {
         "n": 2,
-        "index": 4.14,
+        "index": 3.62,
         "updated": "2026-10-13"
       },
       "evidence": "来なくなった人・卒業した人を掘り起こせない(根拠3件・弱(要追加確認))。出典: G0501 / L0411(示唆) / L0428（出典IDは repeat_pain_categories.json の source_ids 参照）"
@@ -5525,7 +5525,7 @@
       ],
       "last_result": {
         "n": 2,
-        "index": 0.581,
+        "index": 0.52,
         "updated": "2026-10-13"
       },
       "evidence": "口コミ・紹介が自然に生まれない(根拠4件・中)。出典: HYP P070 / HYP P072 / L0307N / L0428（出典IDは repeat_pain_categories.json の source_ids 参照）"
@@ -5576,8 +5576,8 @@
         }
       ],
       "last_result": {
-        "n": 1,
-        "index": 6.977,
+        "n": 2,
+        "index": 4.0,
         "updated": "2026-10-13"
       },
       "evidence": "リピート率・次回予約率の見方が分からない(根拠4件・強)。出典: G0326 / HYP P010/VM323 / HYP P026 / L0307T（出典IDは repeat_pain_categories.json の source_ids 参照）"
@@ -5628,8 +5628,8 @@
         }
       ],
       "last_result": {
-        "n": 1,
-        "index": 0.744,
+        "n": 2,
+        "index": 3.74,
         "updated": "2026-10-13"
       },
       "evidence": "変わる意思が薄い人・売り込みへの線引きができない(根拠4件・中)。出典: G0319 / L0910N / L0910T（出典IDは repeat_pain_categories.json の source_ids 参照）"

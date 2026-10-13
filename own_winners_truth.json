@@ -1,19 +1,19 @@
 {
  "account": "truth",
- "generated": "2026-10-13",
+ "generated": "2026-10-14",
  "window_days": 90,
  "note": "自動投稿システム以外から出た本人の投稿のうち伸びたもの。翻案必須・同一文面の再投稿は禁止（型疲労L8）。構造（フックの型・展開・締め）だけを借りる",
- "fetched_posts": 4492,
+ "fetched_posts": 4495,
  "own_posts": 63,
  "classification": {
-  "exact_body80": 4369,
+  "exact_body80": 4372,
   "OWN": 63,
   "exact_line1": 48,
   "skeleton": 4,
   "tail_sig": 8
  },
- "account_median_views": 59.5,
- "winner_threshold": 89.25,
+ "account_median_views": 74.0,
+ "winner_threshold": 111.0,
  "winners": [
   {
    "id": "18072443966381133",
@@ -238,6 +238,19 @@
    "text": "帝京長岡が星稜に勝った！\n長高は惜しかった、、、"
   },
   {
+   "id": "17873950812636219",
+   "views": 235,
+   "date": "2026-10-09",
+   "media": "TEXT_POST",
+   "first_line": "毎週頭痛が起きる",
+   "labels": [
+    "開いた問い",
+    "地名・出来事"
+   ],
+   "repeats_in_window": 1,
+   "text": "毎週頭痛が起きる\nこれが当たり前になっている人\n長岡市でいますか？"
+  },
+  {
    "id": "17879166777630527",
    "views": 234,
    "date": "2026-10-11",
@@ -248,19 +261,6 @@
    ],
    "repeats_in_window": 1,
    "text": "三連休だからといって\n夜更かしやいつもより遅い起床\n生活リズムが大きく変わると\n頭痛を引き起こしますよ"
-  },
-  {
-   "id": "17873950812636219",
-   "views": 234,
-   "date": "2026-10-09",
-   "media": "TEXT_POST",
-   "first_line": "毎週頭痛が起きる",
-   "labels": [
-    "開いた問い",
-    "地名・出来事"
-   ],
-   "repeats_in_window": 1,
-   "text": "毎週頭痛が起きる\nこれが当たり前になっている人\n長岡市でいますか？"
   },
   {
    "id": "18014607882004139",
@@ -357,7 +357,7 @@
   },
   {
    "id": "18158222971474334",
-   "views": 148,
+   "views": 149,
    "date": "2026-07-18",
    "media": "TEXT_POST",
    "first_line": "ひらちさんのおっしゃる通りで",

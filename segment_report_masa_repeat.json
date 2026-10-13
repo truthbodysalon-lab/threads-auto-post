@@ -1,6 +1,6 @@
 {
   "acct": "masa_repeat",
-  "generated_at": "2026-10-13 01:39",
+  "generated_at": "2026-10-13 23:48",
   "params": {
     "min_n": 5,
     "loser_min_n": 8,
@@ -12,17 +12,17 @@
       30
     ]
   },
-  "registry_loaded": 40,
-  "log_entries": 7153,
+  "registry_loaded": 42,
+  "log_entries": 7199,
   "windows": {
     "7d": {
       "baseline": {
-        "n": 190,
-        "median_views": 21.5,
-        "mean_views": 41.9,
-        "p90_views": 114.0
+        "n": 185,
+        "median_views": 25,
+        "mean_views": 46.9,
+        "p90_views": 116.4
       },
-      "unregistered_n": 180,
+      "unregistered_n": 173,
       "segment_hook": {
         "R01__low": {
           "n": 0,
@@ -35,13 +35,13 @@
           "verdict": "判定保留"
         },
         "R01__high": {
-          "n": 0,
-          "median_views": 0,
-          "mean_views": 0,
-          "p90_views": 0,
+          "n": 1,
+          "median_views": 379,
+          "mean_views": 379,
+          "p90_views": 379,
           "like_rate": 0.0,
-          "reply_rate": 0.0,
-          "index": 0.0,
+          "reply_rate": 0.0026,
+          "index": 15.16,
           "verdict": "判定保留"
         },
         "R02__low": {
@@ -55,13 +55,13 @@
           "verdict": "判定保留"
         },
         "R02__high": {
-          "n": 0,
-          "median_views": 0,
-          "mean_views": 0,
-          "p90_views": 0,
+          "n": 1,
+          "median_views": 120,
+          "mean_views": 120,
+          "p90_views": 120,
           "like_rate": 0.0,
-          "reply_rate": 0.0,
-          "index": 0.0,
+          "reply_rate": 0.0083,
+          "index": 4.8,
           "verdict": "判定保留"
         },
         "R03__low": {
@@ -105,13 +105,13 @@
           "verdict": "判定保留"
         },
         "R05__low": {
-          "n": 1,
-          "median_views": 62,
-          "mean_views": 62,
-          "p90_views": 62,
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
           "like_rate": 0.0,
-          "reply_rate": 0.0161,
-          "index": 2.884,
+          "reply_rate": 0.0,
+          "index": 0.0,
           "verdict": "判定保留"
         },
         "R05__high": {
@@ -125,13 +125,13 @@
           "verdict": "判定保留"
         },
         "R06__low": {
-          "n": 1,
-          "median_views": 28,
-          "mean_views": 28,
-          "p90_views": 28,
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
           "like_rate": 0.0,
-          "reply_rate": 0.0357,
-          "index": 1.302,
+          "reply_rate": 0.0,
+          "index": 0.0,
           "verdict": "判定保留"
         },
         "R06__high": {
@@ -151,7 +151,7 @@
           "p90_views": 177,
           "like_rate": 0.0056,
           "reply_rate": 0.0056,
-          "index": 8.233,
+          "index": 7.08,
           "verdict": "判定保留"
         },
         "R07__high": {
@@ -171,7 +171,7 @@
           "p90_views": 73,
           "like_rate": 0.0,
           "reply_rate": 0.0137,
-          "index": 3.395,
+          "index": 2.92,
           "verdict": "判定保留"
         },
         "R08__high": {
@@ -186,22 +186,22 @@
         },
         "R09__low": {
           "n": 1,
-          "median_views": 132,
-          "mean_views": 132,
-          "p90_views": 132,
+          "median_views": 133,
+          "mean_views": 133,
+          "p90_views": 133,
           "like_rate": 0.0,
-          "reply_rate": 0.0076,
-          "index": 6.14,
+          "reply_rate": 0.0075,
+          "index": 5.32,
           "verdict": "判定保留"
         },
         "R09__high": {
           "n": 1,
-          "median_views": 46,
-          "mean_views": 46,
-          "p90_views": 46,
+          "median_views": 48,
+          "mean_views": 48,
+          "p90_views": 48,
           "like_rate": 0.0,
-          "reply_rate": 0.0217,
-          "index": 2.14,
+          "reply_rate": 0.0208,
+          "index": 1.92,
           "verdict": "判定保留"
         },
         "R10__low": {
@@ -211,79 +211,79 @@
           "p90_views": 14,
           "like_rate": 0.0,
           "reply_rate": 0.0714,
-          "index": 0.651,
+          "index": 0.56,
           "verdict": "判定保留"
         },
         "R10__high": {
           "n": 1,
-          "median_views": 11,
-          "mean_views": 11,
-          "p90_views": 11,
+          "median_views": 12,
+          "mean_views": 12,
+          "p90_views": 12,
           "like_rate": 0.0,
-          "reply_rate": 0.0909,
-          "index": 0.512,
+          "reply_rate": 0.0833,
+          "index": 0.48,
           "verdict": "判定保留"
         },
         "R11__low": {
-          "n": 0,
-          "median_views": 0,
-          "mean_views": 0,
-          "p90_views": 0,
+          "n": 1,
+          "median_views": 45,
+          "mean_views": 45,
+          "p90_views": 45,
           "like_rate": 0.0,
-          "reply_rate": 0.0,
-          "index": 0.0,
+          "reply_rate": 0.0222,
+          "index": 1.8,
           "verdict": "判定保留"
         },
         "R11__high": {
           "n": 1,
-          "median_views": 150,
-          "mean_views": 150,
-          "p90_views": 150,
+          "median_views": 155,
+          "mean_views": 155,
+          "p90_views": 155,
           "like_rate": 0.0,
-          "reply_rate": 0.0067,
-          "index": 6.977,
+          "reply_rate": 0.0065,
+          "index": 6.2,
           "verdict": "判定保留"
         },
         "R12__low": {
-          "n": 0,
-          "median_views": 0,
-          "mean_views": 0,
-          "p90_views": 0,
+          "n": 1,
+          "median_views": 74,
+          "mean_views": 74,
+          "p90_views": 74,
           "like_rate": 0.0,
-          "reply_rate": 0.0,
-          "index": 0.0,
+          "reply_rate": 0.0135,
+          "index": 2.96,
           "verdict": "判定保留"
         },
         "R12__high": {
           "n": 1,
-          "median_views": 16,
-          "mean_views": 16,
-          "p90_views": 16,
+          "median_views": 113,
+          "mean_views": 113,
+          "p90_views": 113,
           "like_rate": 0.0,
-          "reply_rate": 0.0625,
-          "index": 0.744,
+          "reply_rate": 0.0088,
+          "index": 4.52,
           "verdict": "判定保留"
         }
       },
       "segment": {
         "R01": {
-          "n": 0,
-          "median_views": 0,
-          "mean_views": 0,
-          "p90_views": 0,
+          "n": 1,
+          "median_views": 379,
+          "mean_views": 379,
+          "p90_views": 379,
           "like_rate": 0.0,
-          "reply_rate": 0.0,
-          "index": 0.0,
+          "reply_rate": 0.0026,
+          "index": 15.16,
           "verdict": "判定保留"
         },
         "R02": {
-          "n": 0,
-          "median_views": 0,
-          "mean_views": 0,
-          "p90_views": 0,
+          "n": 1,
+          "median_views": 120,
+          "mean_views": 120,
+          "p90_views": 120,
           "like_rate": 0.0,
-          "reply_rate": 0.0,
-          "index": 0.0,
+          "reply_rate": 0.0083,
+          "index": 4.8,
           "verdict": "判定保留"
         },
         "R03": {
@@ -307,23 +307,23 @@
           "verdict": "判定保留"
         },
         "R05": {
-          "n": 1,
-          "median_views": 62,
-          "mean_views": 62,
-          "p90_views": 62,
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
           "like_rate": 0.0,
-          "reply_rate": 0.0161,
-          "index": 2.884,
+          "reply_rate": 0.0,
+          "index": 0.0,
           "verdict": "判定保留"
         },
         "R06": {
-          "n": 1,
-          "median_views": 28,
-          "mean_views": 28,
-          "p90_views": 28,
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
           "like_rate": 0.0,
-          "reply_rate": 0.0357,
-          "index": 1.302,
+          "reply_rate": 0.0,
+          "index": 0.0,
           "verdict": "判定保留"
         },
         "R07": {
@@ -333,7 +333,7 @@
           "p90_views": 177,
           "like_rate": 0.0056,
           "reply_rate": 0.0056,
-          "index": 8.233,
+          "index": 7.08,
           "verdict": "判定保留"
         },
         "R08": {
@@ -343,47 +343,47 @@
           "p90_views": 73,
           "like_rate": 0.0,
           "reply_rate": 0.0137,
-          "index": 3.395,
+          "index": 2.92,
           "verdict": "判定保留"
         },
         "R09": {
           "n": 2,
-          "median_views": 89.0,
-          "mean_views": 89,
-          "p90_views": 123.4,
+          "median_views": 90.5,
+          "mean_views": 90.5,
+          "p90_views": 124.5,
           "like_rate": 0.0,
-          "reply_rate": 0.0112,
-          "index": 4.14,
+          "reply_rate": 0.011,
+          "index": 3.62,
           "verdict": "判定保留"
         },
         "R10": {
           "n": 2,
-          "median_views": 12.5,
-          "mean_views": 12.5,
-          "p90_views": 13.7,
+          "median_views": 13.0,
+          "mean_views": 13,
+          "p90_views": 13.8,
           "like_rate": 0.0,
-          "reply_rate": 0.08,
-          "index": 0.581,
+          "reply_rate": 0.0769,
+          "index": 0.52,
           "verdict": "判定保留"
         },
         "R11": {
-          "n": 1,
-          "median_views": 150,
-          "mean_views": 150,
-          "p90_views": 150,
+          "n": 2,
+          "median_views": 100.0,
+          "mean_views": 100,
+          "p90_views": 144.0,
           "like_rate": 0.0,
-          "reply_rate": 0.0067,
-          "index": 6.977,
+          "reply_rate": 0.01,
+          "index": 4.0,
           "verdict": "判定保留"
         },
         "R12": {
-          "n": 1,
-          "median_views": 16,
-          "mean_views": 16,
-          "p90_views": 16,
+          "n": 2,
+          "median_views": 93.5,
+          "mean_views": 93.5,
+          "p90_views": 109.1,
           "like_rate": 0.0,
-          "reply_rate": 0.0625,
-          "index": 0.744,
+          "reply_rate": 0.0107,
+          "index": 3.74,
           "verdict": "判定保留"
         }
       },
@@ -410,14 +410,14 @@
           "verdict": "判定保留"
         },
         "RP02": {
-          "n": 0,
-          "median_views": 0,
-          "mean_views": 0,
-          "p90_views": 0,
-          "segment": null,
+          "n": 1,
+          "median_views": 379,
+          "mean_views": 379,
+          "p90_views": 379,
+          "segment": "R01",
           "like_rate": 0.0,
-          "reply_rate": 0.0,
-          "index": 0.0,
+          "reply_rate": 0.0026,
+          "index": 15.16,
           "verdict": "判定保留"
         },
         "RP03": {
@@ -443,14 +443,14 @@
           "verdict": "判定保留"
         },
         "RP05": {
-          "n": 0,
-          "median_views": 0,
-          "mean_views": 0,
-          "p90_views": 0,
-          "segment": null,
+          "n": 1,
+          "median_views": 120,
+          "mean_views": 120,
+          "p90_views": 120,
+          "segment": "R02",
           "like_rate": 0.0,
-          "reply_rate": 0.0,
-          "index": 0.0,
+          "reply_rate": 0.0083,
+          "index": 4.8,
           "verdict": "判定保留"
         },
         "RP06": {
@@ -509,14 +509,14 @@
           "verdict": "判定保留"
         },
         "RP11": {
-          "n": 1,
-          "median_views": 62,
-          "mean_views": 62,
-          "p90_views": 62,
-          "segment": "R05",
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
           "like_rate": 0.0,
-          "reply_rate": 0.0161,
-          "index": 2.884,
+          "reply_rate": 0.0,
+          "index": 0.0,
           "verdict": "判定保留"
         },
         "RP12": {
@@ -542,14 +542,14 @@
           "verdict": "判定保留"
         },
         "RP14": {
-          "n": 1,
-          "median_views": 28,
-          "mean_views": 28,
-          "p90_views": 28,
-          "segment": "R06",
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
           "like_rate": 0.0,
-          "reply_rate": 0.0357,
-          "index": 1.302,
+          "reply_rate": 0.0,
+          "index": 0.0,
           "verdict": "判定保留"
         },
         "RP15": {
@@ -571,7 +571,7 @@
           "segment": "R07",
           "like_rate": 0.0056,
           "reply_rate": 0.0056,
-          "index": 8.233,
+          "index": 7.08,
           "verdict": "判定保留"
         },
         "RP17": {
@@ -604,7 +604,7 @@
           "segment": "R08",
           "like_rate": 0.0,
           "reply_rate": 0.0137,
-          "index": 3.395,
+          "index": 2.92,
           "verdict": "判定保留"
         },
         "RP20": {
@@ -642,13 +642,13 @@
         },
         "RP23": {
           "n": 2,
-          "median_views": 89.0,
-          "mean_views": 89,
-          "p90_views": 123.4,
+          "median_views": 90.5,
+          "mean_views": 90.5,
+          "p90_views": 124.5,
           "segment": "R09",
           "like_rate": 0.0,
-          "reply_rate": 0.0112,
-          "index": 4.14,
+          "reply_rate": 0.011,
+          "index": 3.62,
           "verdict": "判定保留"
         },
         "RP24": {
@@ -664,13 +664,13 @@
         },
         "RP25": {
           "n": 2,
-          "median_views": 12.5,
-          "mean_views": 12.5,
-          "p90_views": 13.7,
+          "median_views": 13.0,
+          "mean_views": 13,
+          "p90_views": 13.8,
           "segment": "R10",
           "like_rate": 0.0,
-          "reply_rate": 0.08,
-          "index": 0.581,
+          "reply_rate": 0.0769,
+          "index": 0.52,
           "verdict": "判定保留"
         },
         "RP26": {
@@ -685,14 +685,14 @@
           "verdict": "判定保留"
         },
         "RP27": {
-          "n": 1,
-          "median_views": 150,
-          "mean_views": 150,
-          "p90_views": 150,
+          "n": 2,
+          "median_views": 100.0,
+          "mean_views": 100,
+          "p90_views": 144.0,
           "segment": "R11",
           "like_rate": 0.0,
-          "reply_rate": 0.0067,
-          "index": 6.977,
+          "reply_rate": 0.01,
+          "index": 4.0,
           "verdict": "判定保留"
         },
         "RP28": {
@@ -707,26 +707,26 @@
           "verdict": "判定保留"
         },
         "RP29": {
-          "n": 1,
-          "median_views": 16,
-          "mean_views": 16,
-          "p90_views": 16,
+          "n": 2,
+          "median_views": 93.5,
+          "mean_views": 93.5,
+          "p90_views": 109.1,
           "segment": "R12",
           "like_rate": 0.0,
-          "reply_rate": 0.0625,
-          "index": 0.744,
+          "reply_rate": 0.0107,
+          "index": 3.74,
           "verdict": "判定保留"
         }
       }
     },
     "14d": {
       "baseline": {
-        "n": 190,
-        "median_views": 21.5,
-        "mean_views": 41.9,
-        "p90_views": 114.0
+        "n": 185,
+        "median_views": 25,
+        "mean_views": 46.9,
+        "p90_views": 116.4
       },
-      "unregistered_n": 180,
+      "unregistered_n": 173,
       "segment_hook": {
         "R01__low": {
           "n": 0,
@@ -739,13 +739,13 @@
           "verdict": "判定保留"
         },
         "R01__high": {
-          "n": 0,
-          "median_views": 0,
-          "mean_views": 0,
-          "p90_views": 0,
+          "n": 1,
+          "median_views": 379,
+          "mean_views": 379,
+          "p90_views": 379,
           "like_rate": 0.0,
-          "reply_rate": 0.0,
-          "index": 0.0,
+          "reply_rate": 0.0026,
+          "index": 15.16,
           "verdict": "判定保留"
         },
         "R02__low": {
@@ -759,13 +759,13 @@
           "verdict": "判定保留"
         },
         "R02__high": {
-          "n": 0,
-          "median_views": 0,
-          "mean_views": 0,
-          "p90_views": 0,
+          "n": 1,
+          "median_views": 120,
+          "mean_views": 120,
+          "p90_views": 120,
           "like_rate": 0.0,
-          "reply_rate": 0.0,
-          "index": 0.0,
+          "reply_rate": 0.0083,
+          "index": 4.8,
           "verdict": "判定保留"
         },
         "R03__low": {
@@ -809,13 +809,13 @@
           "verdict": "判定保留"
         },
         "R05__low": {
-          "n": 1,
-          "median_views": 62,
-          "mean_views": 62,
-          "p90_views": 62,
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
           "like_rate": 0.0,
-          "reply_rate": 0.0161,
-          "index": 2.884,
+          "reply_rate": 0.0,
+          "index": 0.0,
           "verdict": "判定保留"
         },
         "R05__high": {
@@ -829,13 +829,13 @@
           "verdict": "判定保留"
         },
         "R06__low": {
-          "n": 1,
-          "median_views": 28,
-          "mean_views": 28,
-          "p90_views": 28,
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
           "like_rate": 0.0,
-          "reply_rate": 0.0357,
-          "index": 1.302,
+          "reply_rate": 0.0,
+          "index": 0.0,
           "verdict": "判定保留"
         },
         "R06__high": {
@@ -855,7 +855,7 @@
           "p90_views": 177,
           "like_rate": 0.0056,
           "reply_rate": 0.0056,
-          "index": 8.233,
+          "index": 7.08,
           "verdict": "判定保留"
         },
         "R07__high": {
@@ -875,7 +875,7 @@
           "p90_views": 73,
           "like_rate": 0.0,
           "reply_rate": 0.0137,
-          "index": 3.395,
+          "index": 2.92,
           "verdict": "判定保留"
         },
         "R08__high": {
@@ -890,22 +890,22 @@
         },
         "R09__low": {
           "n": 1,
-          "median_views": 132,
-          "mean_views": 132,
-          "p90_views": 132,
+          "median_views": 133,
+          "mean_views": 133,
+          "p90_views": 133,
           "like_rate": 0.0,
-          "reply_rate": 0.0076,
-          "index": 6.14,
+          "reply_rate": 0.0075,
+          "index": 5.32,
           "verdict": "判定保留"
         },
         "R09__high": {
           "n": 1,
-          "median_views": 46,
-          "mean_views": 46,
-          "p90_views": 46,
+          "median_views": 48,
+          "mean_views": 48,
+          "p90_views": 48,
           "like_rate": 0.0,
-          "reply_rate": 0.0217,
-          "index": 2.14,
+          "reply_rate": 0.0208,
+          "index": 1.92,
           "verdict": "判定保留"
         },
         "R10__low": {
@@ -915,79 +915,79 @@
           "p90_views": 14,
           "like_rate": 0.0,
           "reply_rate": 0.0714,
-          "index": 0.651,
+          "index": 0.56,
           "verdict": "判定保留"
         },
         "R10__high": {
           "n": 1,
-          "median_views": 11,
-          "mean_views": 11,
-          "p90_views": 11,
+          "median_views": 12,
+          "mean_views": 12,
+          "p90_views": 12,
           "like_rate": 0.0,
-          "reply_rate": 0.0909,
-          "index": 0.512,
+          "reply_rate": 0.0833,
+          "index": 0.48,
           "verdict": "判定保留"
         },
         "R11__low": {
-          "n": 0,
-          "median_views": 0,
-          "mean_views": 0,
-          "p90_views": 0,
+          "n": 1,
+          "median_views": 45,
+          "mean_views": 45,
+          "p90_views": 45,
           "like_rate": 0.0,
-          "reply_rate": 0.0,
-          "index": 0.0,
+          "reply_rate": 0.0222,
+          "index": 1.8,
           "verdict": "判定保留"
         },
         "R11__high": {
           "n": 1,
-          "median_views": 150,
-          "mean_views": 150,
-          "p90_views": 150,
+          "median_views": 155,
+          "mean_views": 155,
+          "p90_views": 155,
           "like_rate": 0.0,
-          "reply_rate": 0.0067,
-          "index": 6.977,
+          "reply_rate": 0.0065,
+          "index": 6.2,
           "verdict": "判定保留"
         },
         "R12__low": {
-          "n": 0,
-          "median_views": 0,
-          "mean_views": 0,
-          "p90_views": 0,
+          "n": 1,
+          "median_views": 74,
+          "mean_views": 74,
+          "p90_views": 74,
           "like_rate": 0.0,
-          "reply_rate": 0.0,
-          "index": 0.0,
+          "reply_rate": 0.0135,
+          "index": 2.96,
           "verdict": "判定保留"
         },
         "R12__high": {
           "n": 1,
-          "median_views": 16,
-          "mean_views": 16,
-          "p90_views": 16,
+          "median_views": 113,
+          "mean_views": 113,
+          "p90_views": 113,
           "like_rate": 0.0,
-          "reply_rate": 0.0625,
-          "index": 0.744,
+          "reply_rate": 0.0088,
+          "index": 4.52,
           "verdict": "判定保留"
         }
       },
       "segment": {
         "R01": {
-          "n": 0,
-          "median_views": 0,
-          "mean_views": 0,
-          "p90_views": 0,
+          "n": 1,
+          "median_views": 379,
+          "mean_views": 379,
+          "p90_views": 379,
           "like_rate": 0.0,
-          "reply_rate": 0.0,
-          "index": 0.0,
+          "reply_rate": 0.0026,
+          "index": 15.16,
           "verdict": "判定保留"
         },
         "R02": {
-          "n": 0,
-          "median_views": 0,
-          "mean_views": 0,
-          "p90_views": 0,
+          "n": 1,
+          "median_views": 120,
+          "mean_views": 120,
+          "p90_views": 120,
           "like_rate": 0.0,
-          "reply_rate": 0.0,
-          "index": 0.0,
+          "reply_rate": 0.0083,
+          "index": 4.8,
           "verdict": "判定保留"
         },
         "R03": {
@@ -1011,23 +1011,23 @@
           "verdict": "判定保留"
         },
         "R05": {
-          "n": 1,
-          "median_views": 62,
-          "mean_views": 62,
-          "p90_views": 62,
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
           "like_rate": 0.0,
-          "reply_rate": 0.0161,
-          "index": 2.884,
+          "reply_rate": 0.0,
+          "index": 0.0,
           "verdict": "判定保留"
         },
         "R06": {
-          "n": 1,
-          "median_views": 28,
-          "mean_views": 28,
-          "p90_views": 28,
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
           "like_rate": 0.0,
-          "reply_rate": 0.0357,
-          "index": 1.302,
+          "reply_rate": 0.0,
+          "index": 0.0,
           "verdict": "判定保留"
         },
         "R07": {
@@ -1037,7 +1037,7 @@
           "p90_views": 177,
           "like_rate": 0.0056,
           "reply_rate": 0.0056,
-          "index": 8.233,
+          "index": 7.08,
           "verdict": "判定保留"
         },
         "R08": {
@@ -1047,47 +1047,47 @@
           "p90_views": 73,
           "like_rate": 0.0,
           "reply_rate": 0.0137,
-          "index": 3.395,
+          "index": 2.92,
           "verdict": "判定保留"
         },
         "R09": {
           "n": 2,
-          "median_views": 89.0,
-          "mean_views": 89,
-          "p90_views": 123.4,
+          "median_views": 90.5,
+          "mean_views": 90.5,
+          "p90_views": 124.5,
           "like_rate": 0.0,
-          "reply_rate": 0.0112,
-          "index": 4.14,
+          "reply_rate": 0.011,
+          "index": 3.62,
           "verdict": "判定保留"
         },
         "R10": {
           "n": 2,
-          "median_views": 12.5,
-          "mean_views": 12.5,
-          "p90_views": 13.7,
+          "median_views": 13.0,
+          "mean_views": 13,
+          "p90_views": 13.8,
           "like_rate": 0.0,
-          "reply_rate": 0.08,
-          "index": 0.581,
+          "reply_rate": 0.0769,
+          "index": 0.52,
           "verdict": "判定保留"
         },
         "R11": {
-          "n": 1,
-          "median_views": 150,
-          "mean_views": 150,
-          "p90_views": 150,
+          "n": 2,
+          "median_views": 100.0,
+          "mean_views": 100,
+          "p90_views": 144.0,
           "like_rate": 0.0,
-          "reply_rate": 0.0067,
-          "index": 6.977,
+          "reply_rate": 0.01,
+          "index": 4.0,
           "verdict": "判定保留"
         },
         "R12": {
-          "n": 1,
-          "median_views": 16,
-          "mean_views": 16,
-          "p90_views": 16,
+          "n": 2,
+          "median_views": 93.5,
+          "mean_views": 93.5,
+          "p90_views": 109.1,
           "like_rate": 0.0,
-          "reply_rate": 0.0625,
-          "index": 0.744,
+          "reply_rate": 0.0107,
+          "index": 3.74,
           "verdict": "判定保留"
         }
       },
@@ -1114,14 +1114,14 @@
           "verdict": "判定保留"
         },
         "RP02": {
-          "n": 0,
-          "median_views": 0,
-          "mean_views": 0,
-          "p90_views": 0,
-          "segment": null,
+          "n": 1,
+          "median_views": 379,
+          "mean_views": 379,
+          "p90_views": 379,
+          "segment": "R01",
           "like_rate": 0.0,
-          "reply_rate": 0.0,
-          "index": 0.0,
+          "reply_rate": 0.0026,
+          "index": 15.16,
           "verdict": "判定保留"
         },
         "RP03": {
@@ -1147,14 +1147,14 @@
           "verdict": "判定保留"
         },
         "RP05": {
-          "n": 0,
-          "median_views": 0,
-          "mean_views": 0,
-          "p90_views": 0,
-          "segment": null,
+          "n": 1,
+          "median_views": 120,
+          "mean_views": 120,
+          "p90_views": 120,
+          "segment": "R02",
           "like_rate": 0.0,
-          "reply_rate": 0.0,
-          "index": 0.0,
+          "reply_rate": 0.0083,
+          "index": 4.8,
           "verdict": "判定保留"
         },
         "RP06": {
@@ -1213,14 +1213,14 @@
           "verdict": "判定保留"
         },
         "RP11": {
-          "n": 1,
-          "median_views": 62,
-          "mean_views": 62,
-          "p90_views": 62,
-          "segment": "R05",
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
           "like_rate": 0.0,
-          "reply_rate": 0.0161,
-          "index": 2.884,
+          "reply_rate": 0.0,
+          "index": 0.0,
           "verdict": "判定保留"
         },
         "RP12": {
@@ -1246,14 +1246,14 @@
           "verdict": "判定保留"
         },
         "RP14": {
-          "n": 1,
-          "median_views": 28,
-          "mean_views": 28,
-          "p90_views": 28,
-          "segment": "R06",
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
           "like_rate": 0.0,
-          "reply_rate": 0.0357,
-          "index": 1.302,
+          "reply_rate": 0.0,
+          "index": 0.0,
           "verdict": "判定保留"
         },
         "RP15": {
@@ -1275,7 +1275,7 @@
           "segment": "R07",
           "like_rate": 0.0056,
           "reply_rate": 0.0056,
-          "index": 8.233,
+          "index": 7.08,
           "verdict": "判定保留"
         },
         "RP17": {
@@ -1308,7 +1308,7 @@
           "segment": "R08",
           "like_rate": 0.0,
           "reply_rate": 0.0137,
-          "index": 3.395,
+          "index": 2.92,
           "verdict": "判定保留"
         },
         "RP20": {
@@ -1346,13 +1346,13 @@
         },
         "RP23": {
           "n": 2,
-          "median_views": 89.0,
-          "mean_views": 89,
-          "p90_views": 123.4,
+          "median_views": 90.5,
+          "mean_views": 90.5,
+          "p90_views": 124.5,
           "segment": "R09",
           "like_rate": 0.0,
-          "reply_rate": 0.0112,
-          "index": 4.14,
+          "reply_rate": 0.011,
+          "index": 3.62,
           "verdict": "判定保留"
         },
         "RP24": {
@@ -1368,13 +1368,13 @@
         },
         "RP25": {
           "n": 2,
-          "median_views": 12.5,
-          "mean_views": 12.5,
-          "p90_views": 13.7,
+          "median_views": 13.0,
+          "mean_views": 13,
+          "p90_views": 13.8,
           "segment": "R10",
           "like_rate": 0.0,
-          "reply_rate": 0.08,
-          "index": 0.581,
+          "reply_rate": 0.0769,
+          "index": 0.52,
           "verdict": "判定保留"
         },
         "RP26": {
@@ -1389,14 +1389,14 @@
           "verdict": "判定保留"
         },
         "RP27": {
-          "n": 1,
-          "median_views": 150,
-          "mean_views": 150,
-          "p90_views": 150,
+          "n": 2,
+          "median_views": 100.0,
+          "mean_views": 100,
+          "p90_views": 144.0,
           "segment": "R11",
           "like_rate": 0.0,
-          "reply_rate": 0.0067,
-          "index": 6.977,
+          "reply_rate": 0.01,
+          "index": 4.0,
           "verdict": "判定保留"
         },
         "RP28": {
@@ -1411,26 +1411,26 @@
           "verdict": "判定保留"
         },
         "RP29": {
-          "n": 1,
-          "median_views": 16,
-          "mean_views": 16,
-          "p90_views": 16,
+          "n": 2,
+          "median_views": 93.5,
+          "mean_views": 93.5,
+          "p90_views": 109.1,
           "segment": "R12",
           "like_rate": 0.0,
-          "reply_rate": 0.0625,
-          "index": 0.744,
+          "reply_rate": 0.0107,
+          "index": 3.74,
           "verdict": "判定保留"
         }
       }
     },
     "30d": {
       "baseline": {
-        "n": 190,
-        "median_views": 21.5,
-        "mean_views": 41.9,
-        "p90_views": 114.0
+        "n": 185,
+        "median_views": 25,
+        "mean_views": 46.9,
+        "p90_views": 116.4
       },
-      "unregistered_n": 180,
+      "unregistered_n": 173,
       "segment_hook": {
         "R01__low": {
           "n": 0,
@@ -1443,13 +1443,13 @@
           "verdict": "判定保留"
         },
         "R01__high": {
-          "n": 0,
-          "median_views": 0,
-          "mean_views": 0,
-          "p90_views": 0,
+          "n": 1,
+          "median_views": 379,
+          "mean_views": 379,
+          "p90_views": 379,
           "like_rate": 0.0,
-          "reply_rate": 0.0,
-          "index": 0.0,
+          "reply_rate": 0.0026,
+          "index": 15.16,
           "verdict": "判定保留"
         },
         "R02__low": {
@@ -1463,13 +1463,13 @@
           "verdict": "判定保留"
         },
         "R02__high": {
-          "n": 0,
-          "median_views": 0,
-          "mean_views": 0,
-          "p90_views": 0,
+          "n": 1,
+          "median_views": 120,
+          "mean_views": 120,
+          "p90_views": 120,
           "like_rate": 0.0,
-          "reply_rate": 0.0,
-          "index": 0.0,
+          "reply_rate": 0.0083,
+          "index": 4.8,
           "verdict": "判定保留"
         },
         "R03__low": {
@@ -1513,13 +1513,13 @@
           "verdict": "判定保留"
         },
         "R05__low": {
-          "n": 1,
-          "median_views": 62,
-          "mean_views": 62,
-          "p90_views": 62,
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
           "like_rate": 0.0,
-          "reply_rate": 0.0161,
-          "index": 2.884,
+          "reply_rate": 0.0,
+          "index": 0.0,
           "verdict": "判定保留"
         },
         "R05__high": {
@@ -1533,13 +1533,13 @@
           "verdict": "判定保留"
         },
         "R06__low": {
-          "n": 1,
-          "median_views": 28,
-          "mean_views": 28,
-          "p90_views": 28,
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
           "like_rate": 0.0,
-          "reply_rate": 0.0357,
-          "index": 1.302,
+          "reply_rate": 0.0,
+          "index": 0.0,
           "verdict": "判定保留"
         },
         "R06__high": {
@@ -1559,7 +1559,7 @@
           "p90_views": 177,
           "like_rate": 0.0056,
           "reply_rate": 0.0056,
-          "index": 8.233,
+          "index": 7.08,
           "verdict": "判定保留"
         },
         "R07__high": {
@@ -1579,7 +1579,7 @@
           "p90_views": 73,
           "like_rate": 0.0,
           "reply_rate": 0.0137,
-          "index": 3.395,
+          "index": 2.92,
           "verdict": "判定保留"
         },
         "R08__high": {
@@ -1594,22 +1594,22 @@
         },
         "R09__low": {
           "n": 1,
-          "median_views": 132,
-          "mean_views": 132,
-          "p90_views": 132,
+          "median_views": 133,
+          "mean_views": 133,
+          "p90_views": 133,
           "like_rate": 0.0,
-          "reply_rate": 0.0076,
-          "index": 6.14,
+          "reply_rate": 0.0075,
+          "index": 5.32,
           "verdict": "判定保留"
         },
         "R09__high": {
           "n": 1,
-          "median_views": 46,
-          "mean_views": 46,
-          "p90_views": 46,
+          "median_views": 48,
+          "mean_views": 48,
+          "p90_views": 48,
           "like_rate": 0.0,
-          "reply_rate": 0.0217,
-          "index": 2.14,
+          "reply_rate": 0.0208,
+          "index": 1.92,
           "verdict": "判定保留"
         },
         "R10__low": {
@@ -1619,79 +1619,79 @@
           "p90_views": 14,
           "like_rate": 0.0,
           "reply_rate": 0.0714,
-          "index": 0.651,
+          "index": 0.56,
           "verdict": "判定保留"
         },
         "R10__high": {
           "n": 1,
-          "median_views": 11,
-          "mean_views": 11,
-          "p90_views": 11,
+          "median_views": 12,
+          "mean_views": 12,
+          "p90_views": 12,
           "like_rate": 0.0,
-          "reply_rate": 0.0909,
-          "index": 0.512,
+          "reply_rate": 0.0833,
+          "index": 0.48,
           "verdict": "判定保留"
         },
         "R11__low": {
-          "n": 0,
-          "median_views": 0,
-          "mean_views": 0,
-          "p90_views": 0,
+          "n": 1,
+          "median_views": 45,
+          "mean_views": 45,
+          "p90_views": 45,
           "like_rate": 0.0,
-          "reply_rate": 0.0,
-          "index": 0.0,
+          "reply_rate": 0.0222,
+          "index": 1.8,
           "verdict": "判定保留"
         },
         "R11__high": {
           "n": 1,
-          "median_views": 150,
-          "mean_views": 150,
-          "p90_views": 150,
+          "median_views": 155,
+          "mean_views": 155,
+          "p90_views": 155,
           "like_rate": 0.0,
-          "reply_rate": 0.0067,
-          "index": 6.977,
+          "reply_rate": 0.0065,
+          "index": 6.2,
           "verdict": "判定保留"
         },
         "R12__low": {
-          "n": 0,
-          "median_views": 0,
-          "mean_views": 0,
-          "p90_views": 0,
+          "n": 1,
+          "median_views": 74,
+          "mean_views": 74,
+          "p90_views": 74,
           "like_rate": 0.0,
-          "reply_rate": 0.0,
-          "index": 0.0,
+          "reply_rate": 0.0135,
+          "index": 2.96,
           "verdict": "判定保留"
         },
         "R12__high": {
           "n": 1,
-          "median_views": 16,
-          "mean_views": 16,
-          "p90_views": 16,
+          "median_views": 113,
+          "mean_views": 113,
+          "p90_views": 113,
           "like_rate": 0.0,
-          "reply_rate": 0.0625,
-          "index": 0.744,
+          "reply_rate": 0.0088,
+          "index": 4.52,
           "verdict": "判定保留"
         }
       },
       "segment": {
         "R01": {
-          "n": 0,
-          "median_views": 0,
-          "mean_views": 0,
-          "p90_views": 0,
+          "n": 1,
+          "median_views": 379,
+          "mean_views": 379,
+          "p90_views": 379,
           "like_rate": 0.0,
-          "reply_rate": 0.0,
-          "index": 0.0,
+          "reply_rate": 0.0026,
+          "index": 15.16,
           "verdict": "判定保留"
         },
         "R02": {
-          "n": 0,
-          "median_views": 0,
-          "mean_views": 0,
-          "p90_views": 0,
+          "n": 1,
+          "median_views": 120,
+          "mean_views": 120,
+          "p90_views": 120,
           "like_rate": 0.0,
-          "reply_rate": 0.0,
-          "index": 0.0,
+          "reply_rate": 0.0083,
+          "index": 4.8,
           "verdict": "判定保留"
         },
         "R03": {
@@ -1715,23 +1715,23 @@
           "verdict": "判定保留"
         },
         "R05": {
-          "n": 1,
-          "median_views": 62,
-          "mean_views": 62,
-          "p90_views": 62,
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
           "like_rate": 0.0,
-          "reply_rate": 0.0161,
-          "index": 2.884,
+          "reply_rate": 0.0,
+          "index": 0.0,
           "verdict": "判定保留"
         },
         "R06": {
-          "n": 1,
-          "median_views": 28,
-          "mean_views": 28,
-          "p90_views": 28,
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
           "like_rate": 0.0,
-          "reply_rate": 0.0357,
-          "index": 1.302,
+          "reply_rate": 0.0,
+          "index": 0.0,
           "verdict": "判定保留"
         },
         "R07": {
@@ -1741,7 +1741,7 @@
           "p90_views": 177,
           "like_rate": 0.0056,
           "reply_rate": 0.0056,
-          "index": 8.233,
+          "index": 7.08,
           "verdict": "判定保留"
         },
         "R08": {
@@ -1751,47 +1751,47 @@
           "p90_views": 73,
           "like_rate": 0.0,
           "reply_rate": 0.0137,
-          "index": 3.395,
+          "index": 2.92,
           "verdict": "判定保留"
         },
         "R09": {
           "n": 2,
-          "median_views": 89.0,
-          "mean_views": 89,
-          "p90_views": 123.4,
+          "median_views": 90.5,
+          "mean_views": 90.5,
+          "p90_views": 124.5,
           "like_rate": 0.0,
-          "reply_rate": 0.0112,
-          "index": 4.14,
+          "reply_rate": 0.011,
+          "index": 3.62,
           "verdict": "判定保留"
         },
         "R10": {
           "n": 2,
-          "median_views": 12.5,
-          "mean_views": 12.5,
-          "p90_views": 13.7,
+          "median_views": 13.0,
+          "mean_views": 13,
+          "p90_views": 13.8,
           "like_rate": 0.0,
-          "reply_rate": 0.08,
-          "index": 0.581,
+          "reply_rate": 0.0769,
+          "index": 0.52,
           "verdict": "判定保留"
         },
         "R11": {
-          "n": 1,
-          "median_views": 150,
-          "mean_views": 150,
-          "p90_views": 150,
+          "n": 2,
+          "median_views": 100.0,
+          "mean_views": 100,
+          "p90_views": 144.0,
           "like_rate": 0.0,
-          "reply_rate": 0.0067,
-          "index": 6.977,
+          "reply_rate": 0.01,
+          "index": 4.0,
           "verdict": "判定保留"
         },
         "R12": {
-          "n": 1,
-          "median_views": 16,
-          "mean_views": 16,
-          "p90_views": 16,
+          "n": 2,
+          "median_views": 93.5,
+          "mean_views": 93.5,
+          "p90_views": 109.1,
           "like_rate": 0.0,
-          "reply_rate": 0.0625,
-          "index": 0.744,
+          "reply_rate": 0.0107,
+          "index": 3.74,
           "verdict": "判定保留"
         }
       },
@@ -1818,14 +1818,14 @@
           "verdict": "判定保留"
         },
         "RP02": {
-          "n": 0,
-          "median_views": 0,
-          "mean_views": 0,
-          "p90_views": 0,
-          "segment": null,
+          "n": 1,
+          "median_views": 379,
+          "mean_views": 379,
+          "p90_views": 379,
+          "segment": "R01",
           "like_rate": 0.0,
-          "reply_rate": 0.0,
-          "index": 0.0,
+          "reply_rate": 0.0026,
+          "index": 15.16,
           "verdict": "判定保留"
         },
         "RP03": {
@@ -1851,14 +1851,14 @@
           "verdict": "判定保留"
         },
         "RP05": {
-          "n": 0,
-          "median_views": 0,
-          "mean_views": 0,
-          "p90_views": 0,
-          "segment": null,
+          "n": 1,
+          "median_views": 120,
+          "mean_views": 120,
+          "p90_views": 120,
+          "segment": "R02",
           "like_rate": 0.0,
-          "reply_rate": 0.0,
-          "index": 0.0,
+          "reply_rate": 0.0083,
+          "index": 4.8,
           "verdict": "判定保留"
         },
         "RP06": {
@@ -1917,14 +1917,14 @@
           "verdict": "判定保留"
         },
         "RP11": {
-          "n": 1,
-          "median_views": 62,
-          "mean_views": 62,
-          "p90_views": 62,
-          "segment": "R05",
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
           "like_rate": 0.0,
-          "reply_rate": 0.0161,
-          "index": 2.884,
+          "reply_rate": 0.0,
+          "index": 0.0,
           "verdict": "判定保留"
         },
         "RP12": {
@@ -1950,14 +1950,14 @@
           "verdict": "判定保留"
         },
         "RP14": {
-          "n": 1,
-          "median_views": 28,
-          "mean_views": 28,
-          "p90_views": 28,
-          "segment": "R06",
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
           "like_rate": 0.0,
-          "reply_rate": 0.0357,
-          "index": 1.302,
+          "reply_rate": 0.0,
+          "index": 0.0,
           "verdict": "判定保留"
         },
         "RP15": {
@@ -1979,7 +1979,7 @@
           "segment": "R07",
           "like_rate": 0.0056,
           "reply_rate": 0.0056,
-          "index": 8.233,
+          "index": 7.08,
           "verdict": "判定保留"
         },
         "RP17": {
@@ -2012,7 +2012,7 @@
           "segment": "R08",
           "like_rate": 0.0,
           "reply_rate": 0.0137,
-          "index": 3.395,
+          "index": 2.92,
           "verdict": "判定保留"
         },
         "RP20": {
@@ -2050,13 +2050,13 @@
         },
         "RP23": {
           "n": 2,
-          "median_views": 89.0,
-          "mean_views": 89,
-          "p90_views": 123.4,
+          "median_views": 90.5,
+          "mean_views": 90.5,
+          "p90_views": 124.5,
           "segment": "R09",
           "like_rate": 0.0,
-          "reply_rate": 0.0112,
-          "index": 4.14,
+          "reply_rate": 0.011,
+          "index": 3.62,
           "verdict": "判定保留"
         },
         "RP24": {
@@ -2072,13 +2072,13 @@
         },
         "RP25": {
           "n": 2,
-          "median_views": 12.5,
-          "mean_views": 12.5,
-          "p90_views": 13.7,
+          "median_views": 13.0,
+          "mean_views": 13,
+          "p90_views": 13.8,
           "segment": "R10",
           "like_rate": 0.0,
-          "reply_rate": 0.08,
-          "index": 0.581,
+          "reply_rate": 0.0769,
+          "index": 0.52,
           "verdict": "判定保留"
         },
         "RP26": {
@@ -2093,14 +2093,14 @@
           "verdict": "判定保留"
         },
         "RP27": {
-          "n": 1,
-          "median_views": 150,
-          "mean_views": 150,
-          "p90_views": 150,
+          "n": 2,
+          "median_views": 100.0,
+          "mean_views": 100,
+          "p90_views": 144.0,
           "segment": "R11",
           "like_rate": 0.0,
-          "reply_rate": 0.0067,
-          "index": 6.977,
+          "reply_rate": 0.01,
+          "index": 4.0,
           "verdict": "判定保留"
         },
         "RP28": {
@@ -2115,14 +2115,14 @@
           "verdict": "判定保留"
         },
         "RP29": {
-          "n": 1,
-          "median_views": 16,
-          "mean_views": 16,
-          "p90_views": 16,
+          "n": 2,
+          "median_views": 93.5,
+          "mean_views": 93.5,
+          "p90_views": 109.1,
           "segment": "R12",
           "like_rate": 0.0,
-          "reply_rate": 0.0625,
-          "index": 0.744,
+          "reply_rate": 0.0107,
+          "index": 3.74,
           "verdict": "判定保留"
         }
       }
@@ -2130,23 +2130,23 @@
   },
   "segment_summary": {
     "R01": {
-      "n": 0,
-      "median_views": 0,
-      "mean_views": 0,
-      "p90_views": 0,
+      "n": 1,
+      "median_views": 379,
+      "mean_views": 379,
+      "p90_views": 379,
       "like_rate": 0.0,
-      "reply_rate": 0.0,
-      "index": 0.0,
+      "reply_rate": 0.0026,
+      "index": 15.16,
       "verdict": "判定保留"
     },
     "R02": {
-      "n": 0,
-      "median_views": 0,
-      "mean_views": 0,
-      "p90_views": 0,
+      "n": 1,
+      "median_views": 120,
+      "mean_views": 120,
+      "p90_views": 120,
       "like_rate": 0.0,
-      "reply_rate": 0.0,
-      "index": 0.0,
+      "reply_rate": 0.0083,
+      "index": 4.8,
       "verdict": "判定保留"
     },
     "R03": {
@@ -2170,23 +2170,23 @@
       "verdict": "判定保留"
     },
     "R05": {
-      "n": 1,
-      "median_views": 62,
-      "mean_views": 62,
-      "p90_views": 62,
+      "n": 0,
+      "median_views": 0,
+      "mean_views": 0,
+      "p90_views": 0,
       "like_rate": 0.0,
-      "reply_rate": 0.0161,
-      "index": 2.884,
+      "reply_rate": 0.0,
+      "index": 0.0,
       "verdict": "判定保留"
     },
     "R06": {
-      "n": 1,
-      "median_views": 28,
-      "mean_views": 28,
-      "p90_views": 28,
+      "n": 0,
+      "median_views": 0,
+      "mean_views": 0,
+      "p90_views": 0,
       "like_rate": 0.0,
-      "reply_rate": 0.0357,
-      "index": 1.302,
+      "reply_rate": 0.0,
+      "index": 0.0,
       "verdict": "判定保留"
     },
     "R07": {
@@ -2196,7 +2196,7 @@
       "p90_views": 177,
       "like_rate": 0.0056,
       "reply_rate": 0.0056,
-      "index": 8.233,
+      "index": 7.08,
       "verdict": "判定保留"
     },
     "R08": {
@@ -2206,47 +2206,47 @@
       "p90_views": 73,
       "like_rate": 0.0,
       "reply_rate": 0.0137,
-      "index": 3.395,
+      "index": 2.92,
       "verdict": "判定保留"
     },
     "R09": {
       "n": 2,
-      "median_views": 89.0,
-      "mean_views": 89,
-      "p90_views": 123.4,
+      "median_views": 90.5,
+      "mean_views": 90.5,
+      "p90_views": 124.5,
       "like_rate": 0.0,
-      "reply_rate": 0.0112,
-      "index": 4.14,
+      "reply_rate": 0.011,
+      "index": 3.62,
       "verdict": "判定保留"
     },
     "R10": {
       "n": 2,
-      "median_views": 12.5,
-      "mean_views": 12.5,
-      "p90_views": 13.7,
+      "median_views": 13.0,
+      "mean_views": 13,
+      "p90_views": 13.8,
       "like_rate": 0.0,
-      "reply_rate": 0.08,
-      "index": 0.581,
+      "reply_rate": 0.0769,
+      "index": 0.52,
       "verdict": "判定保留"
     },
     "R11": {
-      "n": 1,
-      "median_views": 150,
-      "mean_views": 150,
-      "p90_views": 150,
+      "n": 2,
+      "median_views": 100.0,
+      "mean_views": 100,
+      "p90_views": 144.0,
       "like_rate": 0.0,
-      "reply_rate": 0.0067,
-      "index": 6.977,
+      "reply_rate": 0.01,
+      "index": 4.0,
       "verdict": "判定保留"
     },
     "R12": {
-      "n": 1,
-      "median_views": 16,
-      "mean_views": 16,
-      "p90_views": 16,
+      "n": 2,
+      "median_views": 93.5,
+      "mean_views": 93.5,
+      "p90_views": 109.1,
       "like_rate": 0.0,
-      "reply_rate": 0.0625,
-      "index": 0.744,
+      "reply_rate": 0.0107,
+      "index": 3.74,
       "verdict": "判定保留"
     }
   },
@@ -2273,14 +2273,14 @@
       "verdict": "判定保留"
     },
     "RP02": {
-      "n": 0,
-      "median_views": 0,
-      "mean_views": 0,
-      "p90_views": 0,
-      "segment": null,
+      "n": 1,
+      "median_views": 379,
+      "mean_views": 379,
+      "p90_views": 379,
+      "segment": "R01",
       "like_rate": 0.0,
-      "reply_rate": 0.0,
-      "index": 0.0,
+      "reply_rate": 0.0026,
+      "index": 15.16,
       "verdict": "判定保留"
     },
     "RP03": {
@@ -2306,14 +2306,14 @@
       "verdict": "判定保留"
     },
     "RP05": {
-      "n": 0,
-      "median_views": 0,
-      "mean_views": 0,
-      "p90_views": 0,
-      "segment": null,
+      "n": 1,
+      "median_views": 120,
+      "mean_views": 120,
+      "p90_views": 120,
+      "segment": "R02",
       "like_rate": 0.0,
-      "reply_rate": 0.0,
-      "index": 0.0,
+      "reply_rate": 0.0083,
+      "index": 4.8,
       "verdict": "判定保留"
     },
     "RP06": {
@@ -2372,14 +2372,14 @@
       "verdict": "判定保留"
     },
     "RP11": {
-      "n": 1,
-      "median_views": 62,
-      "mean_views": 62,
-      "p90_views": 62,
-      "segment": "R05",
+      "n": 0,
+      "median_views": 0,
+      "mean_views": 0,
+      "p90_views": 0,
+      "segment": null,
       "like_rate": 0.0,
-      "reply_rate": 0.0161,
-      "index": 2.884,
+      "reply_rate": 0.0,
+      "index": 0.0,
       "verdict": "判定保留"
     },
     "RP12": {
@@ -2405,14 +2405,14 @@
       "verdict": "判定保留"
     },
     "RP14": {
-      "n": 1,
-      "median_views": 28,
-      "mean_views": 28,
-      "p90_views": 28,
-      "segment": "R06",
+      "n": 0,
+      "median_views": 0,
+      "mean_views": 0,
+      "p90_views": 0,
+      "segment": null,
       "like_rate": 0.0,
-      "reply_rate": 0.0357,
-      "index": 1.302,
+      "reply_rate": 0.0,
+      "index": 0.0,
       "verdict": "判定保留"
     },
     "RP15": {
@@ -2434,7 +2434,7 @@
       "segment": "R07",
       "like_rate": 0.0056,
       "reply_rate": 0.0056,
-      "index": 8.233,
+      "index": 7.08,
       "verdict": "判定保留"
     },
     "RP17": {
@@ -2467,7 +2467,7 @@
       "segment": "R08",
       "like_rate": 0.0,
       "reply_rate": 0.0137,
-      "index": 3.395,
+      "index": 2.92,
       "verdict": "判定保留"
     },
     "RP20": {
@@ -2505,13 +2505,13 @@
     },
     "RP23": {
       "n": 2,
-      "median_views": 89.0,
-      "mean_views": 89,
-      "p90_views": 123.4,
+      "median_views": 90.5,
+      "mean_views": 90.5,
+      "p90_views": 124.5,
       "segment": "R09",
       "like_rate": 0.0,
-      "reply_rate": 0.0112,
-      "index": 4.14,
+      "reply_rate": 0.011,
+      "index": 3.62,
       "verdict": "判定保留"
     },
     "RP24": {
@@ -2527,13 +2527,13 @@
     },
     "RP25": {
       "n": 2,
-      "median_views": 12.5,
-      "mean_views": 12.5,
-      "p90_views": 13.7,
+      "median_views": 13.0,
+      "mean_views": 13,
+      "p90_views": 13.8,
       "segment": "R10",
       "like_rate": 0.0,
-      "reply_rate": 0.08,
-      "index": 0.581,
+      "reply_rate": 0.0769,
+      "index": 0.52,
       "verdict": "判定保留"
     },
     "RP26": {
@@ -2548,14 +2548,14 @@
       "verdict": "判定保留"
     },
     "RP27": {
-      "n": 1,
-      "median_views": 150,
-      "mean_views": 150,
-      "p90_views": 150,
+      "n": 2,
+      "median_views": 100.0,
+      "mean_views": 100,
+      "p90_views": 144.0,
       "segment": "R11",
       "like_rate": 0.0,
-      "reply_rate": 0.0067,
-      "index": 6.977,
+      "reply_rate": 0.01,
+      "index": 4.0,
       "verdict": "判定保留"
     },
     "RP28": {
@@ -2570,14 +2570,14 @@
       "verdict": "判定保留"
     },
     "RP29": {
-      "n": 1,
-      "median_views": 16,
-      "mean_views": 16,
-      "p90_views": 16,
+      "n": 2,
+      "median_views": 93.5,
+      "mean_views": 93.5,
+      "p90_views": 109.1,
       "segment": "R12",
       "like_rate": 0.0,
-      "reply_rate": 0.0625,
-      "index": 0.744,
+      "reply_rate": 0.0107,
+      "index": 3.74,
       "verdict": "判定保留"
     }
   },

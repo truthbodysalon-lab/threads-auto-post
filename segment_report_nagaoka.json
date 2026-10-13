@@ -1,6 +1,6 @@
 {
   "acct": "nagaoka",
-  "generated_at": "2026-10-13 01:39",
+  "generated_at": "2026-10-13 23:48",
   "params": {
     "min_n": 5,
     "loser_min_n": 8,
@@ -12,17 +12,17 @@
       30
     ]
   },
-  "registry_loaded": 83,
-  "log_entries": 4634,
+  "registry_loaded": 92,
+  "log_entries": 4665,
   "windows": {
     "7d": {
       "baseline": {
-        "n": 113,
-        "median_views": 122,
-        "mean_views": 143.4,
-        "p90_views": 287.2
+        "n": 114,
+        "median_views": 117.0,
+        "mean_views": 141.2,
+        "p90_views": 268.0
       },
-      "unregistered_n": 108,
+      "unregistered_n": 111,
       "segment_hook": {
         "T1_desk__low": {
           "n": 1,
@@ -31,7 +31,7 @@
           "p90_views": 22,
           "like_rate": 0.0,
           "reply_rate": 0.0455,
-          "index": 0.18,
+          "index": 0.188,
           "verdict": "判定保留"
         },
         "T1_desk__high": {
@@ -51,7 +51,7 @@
           "p90_views": 168,
           "like_rate": 0.0,
           "reply_rate": 0.006,
-          "index": 1.377,
+          "index": 1.436,
           "verdict": "判定保留"
         },
         "T2_zutsu__high": {
@@ -66,12 +66,12 @@
         },
         "T3_sango__low": {
           "n": 1,
-          "median_views": 87,
-          "mean_views": 87,
-          "p90_views": 87,
+          "median_views": 88,
+          "mean_views": 88,
+          "p90_views": 88,
           "like_rate": 0.0,
-          "reply_rate": 0.0115,
-          "index": 0.713,
+          "reply_rate": 0.0114,
+          "index": 0.752,
           "verdict": "判定保留"
         },
         "T3_sango__high": {
@@ -85,13 +85,13 @@
           "verdict": "判定保留"
         },
         "T4_tachi__low": {
-          "n": 1,
-          "median_views": 411,
-          "mean_views": 411,
-          "p90_views": 411,
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
           "like_rate": 0.0,
-          "reply_rate": 0.0024,
-          "index": 3.369,
+          "reply_rate": 0.0,
+          "index": 0.0,
           "verdict": "判定保留"
         },
         "T4_tachi__high": {
@@ -115,13 +115,13 @@
           "verdict": "判定保留"
         },
         "T5_suimin__high": {
-          "n": 1,
-          "median_views": 17,
-          "mean_views": 17,
-          "p90_views": 17,
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
           "like_rate": 0.0,
-          "reply_rate": 0.0588,
-          "index": 0.139,
+          "reply_rate": 0.0,
+          "index": 0.0,
           "verdict": "判定保留"
         },
         "T6_norikae__low": {
@@ -153,7 +153,7 @@
           "p90_views": 22,
           "like_rate": 0.0,
           "reply_rate": 0.0455,
-          "index": 0.18,
+          "index": 0.188,
           "verdict": "判定保留"
         },
         "T2_zutsu": {
@@ -163,37 +163,37 @@
           "p90_views": 168,
           "like_rate": 0.0,
           "reply_rate": 0.006,
-          "index": 1.377,
+          "index": 1.436,
           "verdict": "判定保留"
         },
         "T3_sango": {
           "n": 1,
-          "median_views": 87,
-          "mean_views": 87,
-          "p90_views": 87,
+          "median_views": 88,
+          "mean_views": 88,
+          "p90_views": 88,
           "like_rate": 0.0,
-          "reply_rate": 0.0115,
-          "index": 0.713,
+          "reply_rate": 0.0114,
+          "index": 0.752,
           "verdict": "判定保留"
         },
         "T4_tachi": {
-          "n": 1,
-          "median_views": 411,
-          "mean_views": 411,
-          "p90_views": 411,
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
           "like_rate": 0.0,
-          "reply_rate": 0.0024,
-          "index": 3.369,
+          "reply_rate": 0.0,
+          "index": 0.0,
           "verdict": "判定保留"
         },
         "T5_suimin": {
-          "n": 1,
-          "median_views": 17,
-          "mean_views": 17,
-          "p90_views": 17,
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
           "like_rate": 0.0,
-          "reply_rate": 0.0588,
-          "index": 0.139,
+          "reply_rate": 0.0,
+          "index": 0.0,
           "verdict": "判定保留"
         },
         "T6_norikae": {
@@ -259,7 +259,7 @@
           "segment": "T2_zutsu",
           "like_rate": 0.0,
           "reply_rate": 0.006,
-          "index": 1.377,
+          "index": 1.436,
           "verdict": "判定保留"
         },
         "Z10_nagaoka": {
@@ -275,13 +275,13 @@
         },
         "Z12_nagaoka": {
           "n": 1,
-          "median_views": 87,
-          "mean_views": 87,
-          "p90_views": 87,
+          "median_views": 88,
+          "mean_views": 88,
+          "p90_views": 88,
           "segment": "T3_sango",
           "like_rate": 0.0,
-          "reply_rate": 0.0115,
-          "index": 0.713,
+          "reply_rate": 0.0114,
+          "index": 0.752,
           "verdict": "判定保留"
         },
         "Z14_nagaoka": {
@@ -336,7 +336,7 @@
           "segment": "T1_desk",
           "like_rate": 0.0,
           "reply_rate": 0.0455,
-          "index": 0.18,
+          "index": 0.188,
           "verdict": "判定保留"
         },
         "ZC01_nagaoka": {
@@ -384,14 +384,14 @@
           "verdict": "判定保留"
         },
         "ZC05_nagaoka": {
-          "n": 1,
-          "median_views": 17,
-          "mean_views": 17,
-          "p90_views": 17,
-          "segment": "T5_suimin",
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
           "like_rate": 0.0,
-          "reply_rate": 0.0588,
-          "index": 0.139,
+          "reply_rate": 0.0,
+          "index": 0.0,
           "verdict": "判定保留"
         },
         "ZC06_nagaoka": {
@@ -409,12 +409,12 @@
     },
     "14d": {
       "baseline": {
-        "n": 113,
-        "median_views": 122,
-        "mean_views": 143.4,
-        "p90_views": 287.2
+        "n": 114,
+        "median_views": 117.0,
+        "mean_views": 141.2,
+        "p90_views": 268.0
       },
-      "unregistered_n": 108,
+      "unregistered_n": 111,
       "segment_hook": {
         "T1_desk__low": {
           "n": 1,
@@ -423,7 +423,7 @@
           "p90_views": 22,
           "like_rate": 0.0,
           "reply_rate": 0.0455,
-          "index": 0.18,
+          "index": 0.188,
           "verdict": "判定保留"
         },
         "T1_desk__high": {
@@ -443,7 +443,7 @@
           "p90_views": 168,
           "like_rate": 0.0,
           "reply_rate": 0.006,
-          "index": 1.377,
+          "index": 1.436,
           "verdict": "判定保留"
         },
         "T2_zutsu__high": {
@@ -458,12 +458,12 @@
         },
         "T3_sango__low": {
           "n": 1,
-          "median_views": 87,
-          "mean_views": 87,
-          "p90_views": 87,
+          "median_views": 88,
+          "mean_views": 88,
+          "p90_views": 88,
           "like_rate": 0.0,
-          "reply_rate": 0.0115,
-          "index": 0.713,
+          "reply_rate": 0.0114,
+          "index": 0.752,
           "verdict": "判定保留"
         },
         "T3_sango__high": {
@@ -477,13 +477,13 @@
           "verdict": "判定保留"
         },
         "T4_tachi__low": {
-          "n": 1,
-          "median_views": 411,
-          "mean_views": 411,
-          "p90_views": 411,
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
           "like_rate": 0.0,
-          "reply_rate": 0.0024,
-          "index": 3.369,
+          "reply_rate": 0.0,
+          "index": 0.0,
           "verdict": "判定保留"
         },
         "T4_tachi__high": {
@@ -507,13 +507,13 @@
           "verdict": "判定保留"
         },
         "T5_suimin__high": {
-          "n": 1,
-          "median_views": 17,
-          "mean_views": 17,
-          "p90_views": 17,
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
           "like_rate": 0.0,
-          "reply_rate": 0.0588,
-          "index": 0.139,
+          "reply_rate": 0.0,
+          "index": 0.0,
           "verdict": "判定保留"
         },
         "T6_norikae__low": {
@@ -545,7 +545,7 @@
           "p90_views": 22,
           "like_rate": 0.0,
           "reply_rate": 0.0455,
-          "index": 0.18,
+          "index": 0.188,
           "verdict": "判定保留"
         },
         "T2_zutsu": {
@@ -555,37 +555,37 @@
           "p90_views": 168,
           "like_rate": 0.0,
           "reply_rate": 0.006,
-          "index": 1.377,
+          "index": 1.436,
           "verdict": "判定保留"
         },
         "T3_sango": {
           "n": 1,
-          "median_views": 87,
-          "mean_views": 87,
-          "p90_views": 87,
+          "median_views": 88,
+          "mean_views": 88,
+          "p90_views": 88,
           "like_rate": 0.0,
-          "reply_rate": 0.0115,
-          "index": 0.713,
+          "reply_rate": 0.0114,
+          "index": 0.752,
           "verdict": "判定保留"
         },
         "T4_tachi": {
-          "n": 1,
-          "median_views": 411,
-          "mean_views": 411,
-          "p90_views": 411,
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
           "like_rate": 0.0,
-          "reply_rate": 0.0024,
-          "index": 3.369,
+          "reply_rate": 0.0,
+          "index": 0.0,
           "verdict": "判定保留"
         },
         "T5_suimin": {
-          "n": 1,
-          "median_views": 17,
-          "mean_views": 17,
-          "p90_views": 17,
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
           "like_rate": 0.0,
-          "reply_rate": 0.0588,
-          "index": 0.139,
+          "reply_rate": 0.0,
+          "index": 0.0,
           "verdict": "判定保留"
         },
         "T6_norikae": {
@@ -651,7 +651,7 @@
           "segment": "T2_zutsu",
           "like_rate": 0.0,
           "reply_rate": 0.006,
-          "index": 1.377,
+          "index": 1.436,
           "verdict": "判定保留"
         },
         "Z10_nagaoka": {
@@ -667,13 +667,13 @@
         },
         "Z12_nagaoka": {
           "n": 1,
-          "median_views": 87,
-          "mean_views": 87,
-          "p90_views": 87,
+          "median_views": 88,
+          "mean_views": 88,
+          "p90_views": 88,
           "segment": "T3_sango",
           "like_rate": 0.0,
-          "reply_rate": 0.0115,
-          "index": 0.713,
+          "reply_rate": 0.0114,
+          "index": 0.752,
           "verdict": "判定保留"
         },
         "Z14_nagaoka": {
@@ -728,7 +728,7 @@
           "segment": "T1_desk",
           "like_rate": 0.0,
           "reply_rate": 0.0455,
-          "index": 0.18,
+          "index": 0.188,
           "verdict": "判定保留"
         },
         "ZC01_nagaoka": {
@@ -776,14 +776,14 @@
           "verdict": "判定保留"
         },
         "ZC05_nagaoka": {
-          "n": 1,
-          "median_views": 17,
-          "mean_views": 17,
-          "p90_views": 17,
-          "segment": "T5_suimin",
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
           "like_rate": 0.0,
-          "reply_rate": 0.0588,
-          "index": 0.139,
+          "reply_rate": 0.0,
+          "index": 0.0,
           "verdict": "判定保留"
         },
         "ZC06_nagaoka": {
@@ -801,12 +801,12 @@
     },
     "30d": {
       "baseline": {
-        "n": 113,
-        "median_views": 122,
-        "mean_views": 143.4,
-        "p90_views": 287.2
+        "n": 114,
+        "median_views": 117.0,
+        "mean_views": 141.2,
+        "p90_views": 268.0
       },
-      "unregistered_n": 108,
+      "unregistered_n": 111,
       "segment_hook": {
         "T1_desk__low": {
           "n": 1,
@@ -815,7 +815,7 @@
           "p90_views": 22,
           "like_rate": 0.0,
           "reply_rate": 0.0455,
-          "index": 0.18,
+          "index": 0.188,
           "verdict": "判定保留"
         },
         "T1_desk__high": {
@@ -835,7 +835,7 @@
           "p90_views": 168,
           "like_rate": 0.0,
           "reply_rate": 0.006,
-          "index": 1.377,
+          "index": 1.436,
           "verdict": "判定保留"
         },
         "T2_zutsu__high": {
@@ -850,12 +850,12 @@
         },
         "T3_sango__low": {
           "n": 1,
-          "median_views": 87,
-          "mean_views": 87,
-          "p90_views": 87,
+          "median_views": 88,
+          "mean_views": 88,
+          "p90_views": 88,
           "like_rate": 0.0,
-          "reply_rate": 0.0115,
-          "index": 0.713,
+          "reply_rate": 0.0114,
+          "index": 0.752,
           "verdict": "判定保留"
         },
         "T3_sango__high": {
@@ -869,13 +869,13 @@
           "verdict": "判定保留"
         },
         "T4_tachi__low": {
-          "n": 1,
-          "median_views": 411,
-          "mean_views": 411,
-          "p90_views": 411,
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
           "like_rate": 0.0,
-          "reply_rate": 0.0024,
-          "index": 3.369,
+          "reply_rate": 0.0,
+          "index": 0.0,
           "verdict": "判定保留"
         },
         "T4_tachi__high": {
@@ -899,13 +899,13 @@
           "verdict": "判定保留"
         },
         "T5_suimin__high": {
-          "n": 1,
-          "median_views": 17,
-          "mean_views": 17,
-          "p90_views": 17,
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
           "like_rate": 0.0,
-          "reply_rate": 0.0588,
-          "index": 0.139,
+          "reply_rate": 0.0,
+          "index": 0.0,
           "verdict": "判定保留"
         },
         "T6_norikae__low": {
@@ -937,7 +937,7 @@
           "p90_views": 22,
           "like_rate": 0.0,
           "reply_rate": 0.0455,
-          "index": 0.18,
+          "index": 0.188,
           "verdict": "判定保留"
         },
         "T2_zutsu": {
@@ -947,37 +947,37 @@
           "p90_views": 168,
           "like_rate": 0.0,
           "reply_rate": 0.006,
-          "index": 1.377,
+          "index": 1.436,
           "verdict": "判定保留"
         },
         "T3_sango": {
           "n": 1,
-          "median_views": 87,
-          "mean_views": 87,
-          "p90_views": 87,
+          "median_views": 88,
+          "mean_views": 88,
+          "p90_views": 88,
           "like_rate": 0.0,
-          "reply_rate": 0.0115,
-          "index": 0.713,
+          "reply_rate": 0.0114,
+          "index": 0.752,
           "verdict": "判定保留"
         },
         "T4_tachi": {
-          "n": 1,
-          "median_views": 411,
-          "mean_views": 411,
-          "p90_views": 411,
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
           "like_rate": 0.0,
-          "reply_rate": 0.0024,
-          "index": 3.369,
+          "reply_rate": 0.0,
+          "index": 0.0,
           "verdict": "判定保留"
         },
         "T5_suimin": {
-          "n": 1,
-          "median_views": 17,
-          "mean_views": 17,
-          "p90_views": 17,
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
           "like_rate": 0.0,
-          "reply_rate": 0.0588,
-          "index": 0.139,
+          "reply_rate": 0.0,
+          "index": 0.0,
           "verdict": "判定保留"
         },
         "T6_norikae": {
@@ -1043,7 +1043,7 @@
           "segment": "T2_zutsu",
           "like_rate": 0.0,
           "reply_rate": 0.006,
-          "index": 1.377,
+          "index": 1.436,
           "verdict": "判定保留"
         },
         "Z10_nagaoka": {
@@ -1059,13 +1059,13 @@
         },
         "Z12_nagaoka": {
           "n": 1,
-          "median_views": 87,
-          "mean_views": 87,
-          "p90_views": 87,
+          "median_views": 88,
+          "mean_views": 88,
+          "p90_views": 88,
           "segment": "T3_sango",
           "like_rate": 0.0,
-          "reply_rate": 0.0115,
-          "index": 0.713,
+          "reply_rate": 0.0114,
+          "index": 0.752,
           "verdict": "判定保留"
         },
         "Z14_nagaoka": {
@@ -1120,7 +1120,7 @@
           "segment": "T1_desk",
           "like_rate": 0.0,
           "reply_rate": 0.0455,
-          "index": 0.18,
+          "index": 0.188,
           "verdict": "判定保留"
         },
         "ZC01_nagaoka": {
@@ -1168,14 +1168,14 @@
           "verdict": "判定保留"
         },
         "ZC05_nagaoka": {
-          "n": 1,
-          "median_views": 17,
-          "mean_views": 17,
-          "p90_views": 17,
-          "segment": "T5_suimin",
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
           "like_rate": 0.0,
-          "reply_rate": 0.0588,
-          "index": 0.139,
+          "reply_rate": 0.0,
+          "index": 0.0,
           "verdict": "判定保留"
         },
         "ZC06_nagaoka": {
@@ -1200,7 +1200,7 @@
       "p90_views": 22,
       "like_rate": 0.0,
       "reply_rate": 0.0455,
-      "index": 0.18,
+      "index": 0.188,
       "verdict": "判定保留"
     },
     "T2_zutsu": {
@@ -1210,37 +1210,37 @@
       "p90_views": 168,
       "like_rate": 0.0,
       "reply_rate": 0.006,
-      "index": 1.377,
+      "index": 1.436,
       "verdict": "判定保留"
     },
     "T3_sango": {
       "n": 1,
-      "median_views": 87,
-      "mean_views": 87,
-      "p90_views": 87,
+      "median_views": 88,
+      "mean_views": 88,
+      "p90_views": 88,
       "like_rate": 0.0,
-      "reply_rate": 0.0115,
-      "index": 0.713,
+      "reply_rate": 0.0114,
+      "index": 0.752,
       "verdict": "判定保留"
     },
     "T4_tachi": {
-      "n": 1,
-      "median_views": 411,
-      "mean_views": 411,
-      "p90_views": 411,
+      "n": 0,
+      "median_views": 0,
+      "mean_views": 0,
+      "p90_views": 0,
       "like_rate": 0.0,
-      "reply_rate": 0.0024,
-      "index": 3.369,
+      "reply_rate": 0.0,
+      "index": 0.0,
       "verdict": "判定保留"
     },
     "T5_suimin": {
-      "n": 1,
-      "median_views": 17,
-      "mean_views": 17,
-      "p90_views": 17,
+      "n": 0,
+      "median_views": 0,
+      "mean_views": 0,
+      "p90_views": 0,
       "like_rate": 0.0,
-      "reply_rate": 0.0588,
-      "index": 0.139,
+      "reply_rate": 0.0,
+      "index": 0.0,
       "verdict": "判定保留"
     },
     "T6_norikae": {
@@ -1306,7 +1306,7 @@
       "segment": "T2_zutsu",
       "like_rate": 0.0,
       "reply_rate": 0.006,
-      "index": 1.377,
+      "index": 1.436,
       "verdict": "判定保留"
     },
     "Z10_nagaoka": {
@@ -1322,13 +1322,13 @@
     },
     "Z12_nagaoka": {
       "n": 1,
-      "median_views": 87,
-      "mean_views": 87,
-      "p90_views": 87,
+      "median_views": 88,
+      "mean_views": 88,
+      "p90_views": 88,
       "segment": "T3_sango",
       "like_rate": 0.0,
-      "reply_rate": 0.0115,
-      "index": 0.713,
+      "reply_rate": 0.0114,
+      "index": 0.752,
       "verdict": "判定保留"
     },
     "Z14_nagaoka": {
@@ -1383,7 +1383,7 @@
       "segment": "T1_desk",
       "like_rate": 0.0,
       "reply_rate": 0.0455,
-      "index": 0.18,
+      "index": 0.188,
       "verdict": "判定保留"
     },
     "ZC01_nagaoka": {
@@ -1431,14 +1431,14 @@
       "verdict": "判定保留"
     },
     "ZC05_nagaoka": {
-      "n": 1,
-      "median_views": 17,
-      "mean_views": 17,
-      "p90_views": 17,
-      "segment": "T5_suimin",
+      "n": 0,
+      "median_views": 0,
+      "mean_views": 0,
+      "p90_views": 0,
+      "segment": null,
       "like_rate": 0.0,
-      "reply_rate": 0.0588,
-      "index": 0.139,
+      "reply_rate": 0.0,
+      "index": 0.0,
       "verdict": "判定保留"
     },
     "ZC06_nagaoka": {

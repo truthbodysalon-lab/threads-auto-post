@@ -1,0 +1,112 @@
+name: Threads HPB空き状況告知（truth=月木・nagaoka=水土）
+
+# 2026-10-14 masa指示: 2つの整体アカウントでThreadsは週2回ずつ違う曜日に空き状況を画像で告知。
+# 空き状況はHPB公開予約ページから毎回取得。取れなければ投稿しない。画像は images/hpb/ に置き raw URL で投稿。
+on:
+  schedule:
+    - cron: '13 3 * * 1,4'   # JST 月・木 12:13 → @truth_body_salon
+    - cron: '47 3 * * 1,4'   # 予備（当日投稿済みなら何もしない）
+    - cron: '13 3 * * 3,6'   # JST 水・土 12:13 → @truth_nagaoka
+    - cron: '47 3 * * 3,6'   # 予備
+  workflow_dispatch:
+    inputs:
+      account:
+        description: 'アカウント（truth / nagaoka）'
+        type: choice
+        options: [truth, nagaoka]
+        default: truth
+      dry_run:
+        description: 'DRY_RUN（画像だけ作り投稿しない）'
+        type: boolean
+        default: false
+
+concurrency:
+  group: threads-hpb-availability
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      TZ: Asia/Tokyo
+      DRY_RUN: ${{ github.event.inputs.dry_run == 'true' && '1' || '' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          token: ${{ secrets.GH_PAT }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install fonts and deps
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq fonts-noto-cjk
+          pip install -r requirements.txt pillow
+
+      - name: Decide account
+        id: acct
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            ACCT="${{ github.event.inputs.account }}"
+          else
+            case "$(date +%u)" in 1|4) ACCT=truth ;; *) ACCT=nagaoka ;; esac
+          fi
+          echo "account=$ACCT" >> "$GITHUB_OUTPUT"; echo "対象: $ACCT"
+
+      - name: Create .env from secrets
+        run: |
+          cat > .env << EOF
+          THREADS_ACCESS_TOKEN_TRUTH=${{ secrets.THREADS_ACCESS_TOKEN_TRUTH }}
+          THREADS_USER_ID_TRUTH=${{ secrets.THREADS_USER_ID_TRUTH }}
+          THREADS_ACCESS_TOKEN_NAGAOKA=${{ secrets.THREADS_ACCESS_TOKEN_NAGAOKA }}
+          THREADS_USER_ID_NAGAOKA=${{ secrets.THREADS_USER_ID_NAGAOKA }}
+          EOF
+
+      - name: Render image from HPB availability
+        id: render
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          set +e
+          python threads_hpb_availability.py render --account "${{ steps.acct.outputs.account }}"
+          rc=$?
+          echo "rc=$rc" >> "$GITHUB_OUTPUT"
+          [ "$rc" = "1" ] && exit 1 || exit 0
+
+      - name: Publish image (commit to images/hpb)
+        if: steps.render.outputs.rc == '0' && env.DRY_RUN != '1'
+        run: |
+          git config user.name "threads-hpb-bot"
+          git config user.email "threads-hpb-bot@users.noreply.github.com"
+          git add images/hpb/
+          git commit -m "chore: HPB空き状況画像 (${{ steps.acct.outputs.account }}) [skip ci]"
+          for i in 1 2 3 4 5; do
+            git pull --rebase origin main && git push origin HEAD:main && break
+            git rebase --abort 2>/dev/null || true; sleep $((i * 5))
+          done
+          sleep 20
+
+      - name: Post to Threads
+        if: steps.render.outputs.rc == '0'
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: python threads_hpb_availability.py post --account "${{ steps.acct.outputs.account }}"
+
+      - name: Save state
+        if: steps.render.outputs.rc == '0' && env.DRY_RUN != '1'
+        run: |
+          git add hpb_availability_state.json images/hpb/ || true
+          git diff --cached --quiet && exit 0
+          git commit -m "chore: HPB空き状況告知の状態 [skip ci]"
+          for i in 1 2 3 4 5; do
+            git pull --rebase origin main && git push origin HEAD:main && exit 0
+            git rebase --abort 2>/dev/null || true; sleep $((i * 5))
+          done
+          exit 1

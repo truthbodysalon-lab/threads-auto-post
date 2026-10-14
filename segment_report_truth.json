@@ -1,6 +1,6 @@
 {
   "acct": "truth",
-  "generated_at": "2026-10-13 23:48",
+  "generated_at": "2026-10-14 10:44",
   "params": {
     "min_n": 5,
     "loser_min_n": 8,
@@ -12,17 +12,17 @@
       30
     ]
   },
-  "registry_loaded": 91,
-  "log_entries": 7199,
+  "registry_loaded": 95,
+  "log_entries": 7213,
   "windows": {
     "7d": {
       "baseline": {
-        "n": 191,
-        "median_views": 71,
-        "mean_views": 92.7,
-        "p90_views": 187.0
+        "n": 194,
+        "median_views": 78.5,
+        "mean_views": 94.4,
+        "p90_views": 184.6
       },
-      "unregistered_n": 190,
+      "unregistered_n": 193,
       "segment_hook": {
         "T1_desk__low": {
           "n": 0,
@@ -71,7 +71,7 @@
           "p90_views": 33,
           "like_rate": 0.0,
           "reply_rate": 0.0303,
-          "index": 0.465,
+          "index": 0.42,
           "verdict": "判定保留"
         },
         "T3_sango__high": {
@@ -173,7 +173,7 @@
           "p90_views": 33,
           "like_rate": 0.0,
           "reply_rate": 0.0303,
-          "index": 0.465,
+          "index": 0.42,
           "verdict": "判定保留"
         },
         "T4_tachi": {
@@ -409,12 +409,12 @@
     },
     "14d": {
       "baseline": {
-        "n": 191,
-        "median_views": 71,
-        "mean_views": 92.7,
-        "p90_views": 187.0
+        "n": 194,
+        "median_views": 78.5,
+        "mean_views": 94.4,
+        "p90_views": 184.6
       },
-      "unregistered_n": 190,
+      "unregistered_n": 193,
       "segment_hook": {
         "T1_desk__low": {
           "n": 0,
@@ -463,7 +463,7 @@
           "p90_views": 33,
           "like_rate": 0.0,
           "reply_rate": 0.0303,
-          "index": 0.465,
+          "index": 0.42,
           "verdict": "判定保留"
         },
         "T3_sango__high": {
@@ -565,7 +565,7 @@
           "p90_views": 33,
           "like_rate": 0.0,
           "reply_rate": 0.0303,
-          "index": 0.465,
+          "index": 0.42,
           "verdict": "判定保留"
         },
         "T4_tachi": {
@@ -801,12 +801,12 @@
     },
     "30d": {
       "baseline": {
-        "n": 191,
-        "median_views": 71,
-        "mean_views": 92.7,
-        "p90_views": 187.0
+        "n": 194,
+        "median_views": 78.5,
+        "mean_views": 94.4,
+        "p90_views": 184.6
       },
-      "unregistered_n": 190,
+      "unregistered_n": 193,
       "segment_hook": {
         "T1_desk__low": {
           "n": 0,
@@ -855,7 +855,7 @@
           "p90_views": 33,
           "like_rate": 0.0,
           "reply_rate": 0.0303,
-          "index": 0.465,
+          "index": 0.42,
           "verdict": "判定保留"
         },
         "T3_sango__high": {
@@ -957,7 +957,7 @@
           "p90_views": 33,
           "like_rate": 0.0,
           "reply_rate": 0.0303,
-          "index": 0.465,
+          "index": 0.42,
           "verdict": "判定保留"
         },
         "T4_tachi": {
@@ -1220,7 +1220,7 @@
       "p90_views": 33,
       "like_rate": 0.0,
       "reply_rate": 0.0303,
-      "index": 0.465,
+      "index": 0.42,
       "verdict": "判定保留"
     },
     "T4_tachi": {

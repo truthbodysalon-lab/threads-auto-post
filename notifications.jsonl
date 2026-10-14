@@ -35,3 +35,4 @@
 {"ts": "2026-10-11T07:50:25+09:00", "msg": "🚨Threads nagaoka: 最後の投稿から110分。原因候補: 選択ループ/例外（常駐は稼働中なのに投稿が出ていない）。直近run: https://github.com/truthbodysalon-lab/threads-auto-post/actions/runs/38089427643（CI watchdog）"}
 {"ts": "2026-10-12T08:04:48+09:00", "msg": "🚨Threads nagaoka: 最後の投稿から124分。原因候補: 選択ループ/例外（常駐は稼働中なのに投稿が出ていない）。直近run: https://github.com/truthbodysalon-lab/threads-auto-post/actions/runs/38181199009（CI watchdog）"}
 {"ts": "2026-10-13T15:58:31+09:00", "msg": "🚨Threads Daily Verify: FAIL 2件検出\n・[dup_sameday:truth] 同日に同じ投稿が2回以上: ['2026-10-12 自分の頭痛のタイプ、答えられますか？\\n緊張型か、片頭痛か、薬の使いすぎか。']\n・[dup_sameday:masa] 同日に同じ投稿が2回以上: ['2026-10-13 本当にありがとうございました！！']\nhttps://github.com/truthbodysalon-lab/threads-auto-post/actions/runs/38359729996"}
+{"ts": "2026-10-14T20:24:50+09:00", "msg": "🚨Threads truth: 最後の投稿から78分。原因候補: 選択ループ/例外（常駐は稼働中なのに投稿が出ていない）。直近run: https://github.com/truthbodysalon-lab/threads-auto-post/actions/runs/38549330730（CI watchdog）"}

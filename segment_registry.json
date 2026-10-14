@@ -292,7 +292,7 @@
   "産後、体の痛みを我慢するママへ。": {
     "segment": "T3",
     "hook": "low",
-    "created": "2026-10-13",
+    "created": "2026-10-15",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z11_truth"
@@ -332,7 +332,7 @@
   "重い荷物運びで腰を痛めた人へ。": {
     "segment": "T4",
     "hook": "low",
-    "created": "2026-10-13",
+    "created": "2026-10-15",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z14_nagaoka"
@@ -513,7 +513,7 @@
   "頭痛薬なしで一日が始まらない人へ。": {
     "segment": "T2",
     "hook": "low",
-    "created": "2026-10-11",
+    "created": "2026-10-15",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z09_truth"
@@ -542,7 +542,7 @@
   "頭痛で仕事に集中できない人へ。": {
     "segment": "T2",
     "hook": "low",
-    "created": "2026-10-11",
+    "created": "2026-10-15",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z08_nagaoka"
@@ -2342,8 +2342,8 @@
   "【食いしばり頭痛を遠ざける習慣6選】": {
     "segment": "LIST_HABIT",
     "hook": "list",
-    "variant": "inject",
-    "created": "2026-10-06",
+    "variant": 6,
+    "created": "2026-10-15",
     "acct": "truth"
   },
   "【眼精疲労と首こりを遠ざける習慣7選】": {
@@ -2377,7 +2377,7 @@
   "座り仕事で首が詰まる感じがする人へ。": {
     "segment": "T1",
     "hook": "low",
-    "created": "2026-10-11",
+    "created": "2026-10-15",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "ZC01_truth"
@@ -2401,7 +2401,7 @@
   "水を飲む時間がない仕事の人へ。": {
     "segment": "T4",
     "hook": "low",
-    "created": "2026-10-11",
+    "created": "2026-10-15",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "ZC04_truth"
@@ -2430,7 +2430,7 @@
   "座り仕事で肩が重い人へ。": {
     "segment": "T1",
     "hook": "low",
-    "created": "2026-10-11",
+    "created": "2026-10-15",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "ZC01_nagaoka"
@@ -2446,7 +2446,7 @@
   "子育て中で肩や腰がつらいママへ。": {
     "segment": "T3",
     "hook": "low",
-    "created": "2026-10-11",
+    "created": "2026-10-15",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "ZC03_nagaoka"
@@ -2704,7 +2704,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 22,
-    "created": "2026-10-07",
+    "created": "2026-10-15",
     "acct": "nagaoka"
   },
   "『原因を、ちゃんと説明してほしい』という声を、よく聞きます。": {
@@ -2796,7 +2796,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 3,
-    "created": "2026-10-07"
+    "created": "2026-10-15"
   },
   "3日休んで、再開できない店主へ。": {
     "segment": "INSTA_EASY",
@@ -2838,7 +2838,7 @@
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 63,
-    "created": "2026-10-07"
+    "created": "2026-10-15"
   },
   "プロフィールのデザインに凝る店主へ質問です。": {
     "segment": "INSTA_EASY",
@@ -2850,7 +2850,7 @@
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 4,
-    "created": "2026-10-07"
+    "created": "2026-10-15"
   },
   "広告でいきなり売ろうとするサロンオーナーへ。": {
     "segment": "INSTA_EASY",
@@ -3114,7 +3114,7 @@
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 6,
-    "created": "2026-10-07"
+    "created": "2026-10-15"
   },
   "ネタ帳を作ろうと気負っている店主へ。": {
     "segment": "INSTA_EASY",
@@ -3156,7 +3156,7 @@
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 5,
-    "created": "2026-10-07"
+    "created": "2026-10-15"
   },
   "数字を全部見ようとしている院長へ。": {
     "segment": "INSTA_EASY",
@@ -3192,7 +3192,7 @@
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 3,
-    "created": "2026-10-07"
+    "created": "2026-10-15"
   },
   "【目の疲れからくる頭痛を遠ざける習慣7選】": {
     "segment": "LIST_HABIT",
@@ -3242,7 +3242,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 35,
-    "created": "2026-10-08",
+    "created": "2026-10-15",
     "acct": "nagaoka"
   },
   "『湯船に浸かる習慣が、もう長くない』という声を、よく聞きます。": {
@@ -3340,7 +3340,7 @@
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 9,
-    "created": "2026-10-08"
+    "created": "2026-10-15"
   },
   "リールを30分以上かけて作っている院長へ質問です。": {
     "segment": "INSTA_EASY",
@@ -3352,7 +3352,7 @@
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 73,
-    "created": "2026-10-08"
+    "created": "2026-10-15"
   },
   "DMの返事に悩む院長へ質問です。": {
     "segment": "INSTA_EASY",
@@ -3364,19 +3364,19 @@
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 35,
-    "created": "2026-10-08"
+    "created": "2026-10-15"
   },
   "数字の目標を大きく立てている店主へ質問です。": {
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 41,
-    "created": "2026-10-08"
+    "created": "2026-10-15"
   },
   "広告を毎月出さなければと思っている店主へ。": {
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 53,
-    "created": "2026-10-08"
+    "created": "2026-10-15"
   },
   "プロフィール写真をプロに頼もうとしているサロンオーナーへ質問です。": {
     "segment": "INSTA_EASY",
@@ -3436,13 +3436,13 @@
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 62,
-    "created": "2026-10-08"
+    "created": "2026-10-15"
   },
   "投稿の本文を頑張って書いている院長へ質問です。": {
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 67,
-    "created": "2026-10-08"
+    "created": "2026-10-15"
   },
   "いいねが少ない日に落ち込む院長へ質問です。": {
     "segment": "INSTA_EASY",
@@ -3454,19 +3454,19 @@
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 70,
-    "created": "2026-10-08"
+    "created": "2026-10-15"
   },
   "毎日投稿しなければと思っているサロンオーナーへ質問です。": {
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 31,
-    "created": "2026-10-08"
+    "created": "2026-10-15"
   },
   "来週の投稿を今週作れると知らない院長へ。": {
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 71,
-    "created": "2026-10-08"
+    "created": "2026-10-15"
   },
   "ストーリーズが続かないサロンオーナーへ。": {
     "segment": "INSTA_EASY",
@@ -3555,7 +3555,7 @@
   "インスタ運用で、どう思われるか怖くて出せない院長へ質問です。": {
     "segment": "I17",
     "hook": "low",
-    "created": "2026-10-08",
+    "created": "2026-10-15",
     "acct": "masa",
     "axis": "insta_pain",
     "variant": null,
@@ -3592,7 +3592,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 0,
-    "created": "2026-10-08"
+    "created": "2026-10-15"
   },
   "同じ発信をする人が増えると不利だと思う院長へ質問です。": {
     "segment": "HAKASE",
@@ -3604,13 +3604,13 @@
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 65,
-    "created": "2026-10-08"
+    "created": "2026-10-15"
   },
   "インスタは才能が要ると思っている店主へ。": {
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 60,
-    "created": "2026-10-08"
+    "created": "2026-10-15"
   },
   "予約前の不安を先に消したい院長へ質問です。": {
     "segment": "INSTA_EASY",
@@ -3622,7 +3622,7 @@
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 57,
-    "created": "2026-10-08"
+    "created": "2026-10-15"
   },
   "ハッシュタグを自分で考えている院長へ質問です。": {
     "segment": "INSTA_EASY",
@@ -3634,7 +3634,7 @@
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 24,
-    "created": "2026-10-08"
+    "created": "2026-10-15"
   },
   "【インスタで、ハッシュタグが分からない整体院の院長へ】": {
     "segment": "INSTA_EASY",
@@ -6081,5 +6081,89 @@
     "axis": "repeat_close",
     "variant": null,
     "hypothesis_id": "RP09"
+  },
+  "【睡眠不足の翌日に頭が痛くなる人の習慣6選】": {
+    "segment": "LIST_HABIT",
+    "hook": "list",
+    "variant": 45,
+    "created": "2026-10-15",
+    "acct": "truth"
+  },
+  "『休み明けの月曜に、必ず頭が重くなる』という声を、よく聞きます。": {
+    "segment": "CUSTOMER_VOICE",
+    "hook": "voice",
+    "variant": 4,
+    "created": "2026-10-15",
+    "acct": "truth"
+  },
+  "『運動を始めたいのに、体がだるい日が続く』という声を、よく聞きます。": {
+    "segment": "CUSTOMER_VOICE",
+    "hook": "voice",
+    "variant": 10,
+    "created": "2026-10-15",
+    "acct": "nagaoka"
+  },
+  "インスタで、AIは難しい、丸投げは気持ち悪いと思っている院長へ質問です。": {
+    "segment": "I16",
+    "hook": "low",
+    "created": "2026-10-15",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP46"
+  },
+  "フィードもリールもストーリーズも始めようとしている院長へ質問です。": {
+    "segment": "I01",
+    "hook": "low",
+    "created": "2026-10-15",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP02"
+  },
+  "インスタ運用で、コンセプトが決まらない院長へ質問です。": {
+    "segment": "I02",
+    "hook": "low",
+    "created": "2026-10-15",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP04"
+  },
+  "インスタ運用で、毎日ネタを探して疲れている院長へ質問です。": {
+    "segment": "I03",
+    "hook": "low",
+    "created": "2026-10-15",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP07"
+  },
+  "インスタ運用で、顔を出さないと伸びないと思っている院長へ質問です。": {
+    "segment": "I04",
+    "hook": "low",
+    "created": "2026-10-15",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP10"
+  },
+  "回数券を売り込みだと感じる院長へ。": {
+    "segment": "R05",
+    "hook": "low",
+    "created": "2026-10-15",
+    "acct": "masa",
+    "axis": "repeat_close",
+    "variant": null,
+    "hypothesis_id": "RP12"
+  },
+  "毎回の予約が面倒と言われる院長へ。": {
+    "segment": "R06",
+    "hook": "low",
+    "created": "2026-10-15",
+    "acct": "masa",
+    "axis": "repeat_close",
+    "variant": null,
+    "hypothesis_id": "RP15"
   }
 }

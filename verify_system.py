@@ -193,6 +193,18 @@ def check_same_day_duplicates():
                 k = (d, p["text"].strip()[:80])  # 1行目だけだと別本文の同フック(外部ツール等)を誤検知する(2026-10-10)
                 seen[k] = seen.get(k, 0) + 1
             dups = [f"{d} {t}" for (d, t), n in seen.items() if n >= 2]
+            # 2026-10-14: 自システムの台帳に無い本文＝外部ツール投稿（masaの「本当にありがとうございました！！」等）は対象外
+            try:
+                _own = set()
+                for _l in (Path(__file__).parent / f"log_{acct}_posted.jsonl").read_text(encoding="utf-8").splitlines():
+                    try:
+                        _own.add(json.loads(_l).get("text", "").strip()[:80])
+                    except Exception:
+                        pass
+                if _own:
+                    dups = [x for x in dups if x.split(" ", 1)[1] in _own]
+            except Exception:
+                pass
             if acct == "nagaoka":
                 add(f"dup_sameday:{acct}", "C.実行ギャップ", "PASS", f"外部ツール併用のため参考: 同日重複{len(dups)}件")
             elif dups:

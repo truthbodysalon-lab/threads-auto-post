@@ -146,21 +146,37 @@ def ranges(times):
     return [a if a == b else f"{a}〜{b}" for a, b in out]
 
 
-def level(times):
-    n = len(times)
-    if n == 0:
+COURSE_MIN = 90  # 空き状況を見るクーポンの施術時間（分）
+
+
+def slots_left(times, course=COURSE_MIN):
+    """あと何件入れられるか。開始可能時刻の連続区間ごとに、施術時間ぶん間をあけて詰めた件数の合計。
+    例: 11:00〜14:10 が開始可能（＝11:00〜15:40が空き）なら 11:00/12:30/14:00 の3件"""
+    total, run = 0, []
+    for t in times + ["99:99"]:
+        if run and (t == "99:99" or _m(t) - _m(run[-1]) > 10):
+            total += (_m(run[-1]) - _m(run[0])) // course + 1
+            run = []
+        if t != "99:99":
+            run.append(t)
+    return total
+
+
+def level(left):
+    if left == 0:
         return "×", "空きなし"
-    if n <= 6:
-        return "△", "残りわずか"
-    return "◎", "空きあり"
+    if left <= 2:
+        return "△", f"残りわずか あと{left}件"
+    return "◎", f"あと{left}件"
 
 
 def summary(avail):
     rows = []
     for d, times in avail.items():
-        mark, label = level(times)
+        left = slots_left(times)
+        mark, label = level(left)
         rows.append({"date": d, "label": f"{d.month}/{d.day}（{WEEKDAYS[d.weekday()]}）",
-                     "mark": mark, "status": label, "ranges": ranges(times), "n": len(times),
+                     "mark": mark, "status": label, "ranges": ranges(times), "n": left,
                      "weekend": d.weekday() >= 5})
     return rows
 
@@ -215,11 +231,10 @@ def render(rows, out_path, account="truth", coupon_name="", fetched_at=None, cha
             dr.text((420, y + ch // 2), "空きなし", font=_font("bold", 34), fill=C["ng"], anchor="lm")
         else:
             txt = "　".join(r["ranges"][:3]) + ("　ほか" if len(r["ranges"]) > 3 else "")
-            f = _font("bold", 32 if len(txt) <= 26 else 27)
-            dr.text((420, y + ch // 2 - 20), r["status"], font=_font("bold", 26), fill=mc, anchor="lm")
-            dr.text((420, y + ch // 2 + 20), txt, font=f, fill=C["ink"], anchor="lm")
+            dr.text((420, y + ch // 2 - 18), r["status"], font=_font("bold", 40), fill=mc, anchor="lm")
+            dr.text((420, y + ch // 2 + 26), txt, font=_font("reg", 24 if len(txt) <= 30 else 21), fill=C["mut"], anchor="lm")
     # フッター
-    dr.text((W // 2, 1170), "◎ 空きあり　△ 残りわずか　× 空きなし（時刻はご来店の開始時間）",
+    dr.text((W // 2, 1170), "あと○件＝90分コースで予約できる人数　小さい数字は開始できる時間",
             font=_font("reg", 26), fill=C["mut"], anchor="mm")
     dr.rounded_rectangle([120, 1205, W - 120, 1285], radius=40, fill=C["acc"])
     cta = "ご予約はプロフィールのリンク（ホットペッパー）から" if channel == "instagram" else "ご予約はホットペッパーから（リンクはコメント欄）"
@@ -237,7 +252,7 @@ def caption_text(rows, channel="instagram", account="truth"):
     weekend = [r for r in open_days if r["weekend"]]
     lines = ["【今週の空き状況】", ""]
     for r in rows:
-        lines.append(f"{r['mark']} {r['label']} " + ("空きなし" if r["n"] == 0 else "・".join(r["ranges"][:2])))
+        lines.append(f"{r['mark']} {r['label']} " + ("空きなし" if r["n"] == 0 else f"あと{r['n']}件（{'・'.join(r['ranges'][:2])}）"))
     lines.append("")
     if weekend:
         lines.append(f"土日も {'・'.join(r['label'] for r in weekend)} に空きがあります。")

@@ -1248,6 +1248,21 @@ def run_account(acct: str):
 
     log_info(acct, f"{name} [{index+1}本目]: {clean_text[:40].replace(chr(10), ' ')}...")
 
+    # 2026-10-14: 診断アンカーは skip_dup=True で投稿されるため、選定後〜投稿直前に台帳が更新された場合
+    # （常駐run重複・再選択）に同日同文が2本出ていた（10/12 truth index6が2回）。投稿直前に台帳を再読して弾く。
+    if is_shindan:
+        _first = clean_text.split("\n")[0].strip()
+        _pf = ACCOUNTS[acct]["posted"]
+        if _pf.exists():
+            for _l in _pf.read_text(encoding="utf-8").splitlines():
+                try:
+                    _e = json.loads(_l)
+                except Exception:
+                    continue
+                if (_e.get("date") or "")[:10] == today and (_e.get("text", "").split("\n")[0].strip() == _first):
+                    log_info(acct, f"{name} [同日同文の診断アンカー済みにつき見送り] {_first[:30]}")
+                    return
+
     # URLがある場合のみ補足説明コメントをAIで事前生成（投稿前に準備）
     bridge = generate_bridge_comment(clean_text, acct) if cta_block else None
 

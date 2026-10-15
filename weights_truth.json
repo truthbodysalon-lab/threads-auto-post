@@ -6,18 +6,18 @@
     "education": 4,
     "story": 1,
     "workmom": 1,
-    "ranking": 4,
+    "ranking": 2,
     "question": 1,
     "selfcare_casual": 2,
     "variety": 20
   },
   "feedback_scores": {},
   "api_scores": {
-    "insight": 0.41,
-    "story": -1.62,
-    "quote_empathy": -0.69,
-    "selfcare_casual": -1.05,
-    "ranking": 0.91
+    "insight": 0.32,
+    "selfcare_casual": -1.18,
+    "quote_empathy": -0.5,
+    "story": -1.53,
+    "ranking": 0.04
   },
   "follower_scores": {
     "insight": 3.0,

@@ -2797,8 +2797,8 @@
       ],
       "last_result": {
         "n": 1,
-        "index": 0.957,
-        "updated": "2026-10-14"
+        "index": 0.898,
+        "updated": "2026-10-15"
       }
     },
     {
@@ -3574,9 +3574,9 @@
         }
       ],
       "last_result": {
-        "n": 2,
-        "index": 2.566,
-        "updated": "2026-10-14"
+        "n": 1,
+        "index": 2.8,
+        "updated": "2026-10-15"
       },
       "evidence": "悩みマップ2026-10-04 I06『続かない・時間がない』の根拠『投稿を毎日続けることができず三日坊主になる』（segment_hypotheses.json P052（出典 講義ノート/グルコン/グルコン_2026-04-03_UP_LINK.md・要約））"
     },
@@ -4050,8 +4050,8 @@
       ],
       "last_result": {
         "n": 1,
-        "index": 0.308,
-        "updated": "2026-10-09"
+        "index": 1.0,
+        "updated": "2026-10-15"
       },
       "evidence": "悩みマップ2026-10-04 I13『DM・LINE・予約への導線が分からない』の根拠『プロフィールアクセス3,000に対しLINE追加は7人のみ』（Notion/たかふみくん相談 __2026-05-26T21_30_00.000+09_00__.md）"
     },
@@ -4274,9 +4274,9 @@
         }
       ],
       "last_result": {
-        "n": 2,
-        "index": 5.172,
-        "updated": "2026-10-08"
+        "n": 1,
+        "index": 0.7,
+        "updated": "2026-10-15"
       },
       "evidence": "悩みマップ2026-10-04 I16『AIの使い方が分からない』の根拠『AI丸投げの投稿が気持ち悪くてやめたが自分の言葉で書けない』（segment_hypotheses.json P011（出典 講義ノート/グルコン/グルコン_2026-03-19_UP_LINK.md・要約））"
     },
@@ -4500,8 +4500,8 @@
       ],
       "last_result": {
         "n": 1,
-        "index": 1.283,
-        "updated": "2026-10-14"
+        "index": 1.75,
+        "updated": "2026-10-15"
       },
       "evidence": "masa講義 2026-07-11 room夜1『ほぼ一人だと思った方が私もやりやすい』（出典: 講義ノート/自分の講義/00_masa講義_要点まとめ.md・資料ID M01）"
     },
@@ -4524,9 +4524,9 @@
         }
       ],
       "last_result": {
-        "n": 2,
-        "index": 0.736,
-        "updated": "2026-10-14"
+        "n": 1,
+        "index": 1.45,
+        "updated": "2026-10-15"
       },
       "evidence": "masa講義 2026-03-10 UP LINK『同じ時間に投稿した方がいいのかどうか』（出典: 講義ノート/自分の講義/00_masa講義_要点まとめ.md・資料ID M01）"
     },
@@ -4649,9 +4649,9 @@
         }
       ],
       "last_result": {
-        "n": 1,
-        "index": 0.264,
-        "updated": "2026-10-14"
+        "n": 2,
+        "index": 0.8,
+        "updated": "2026-10-15"
       },
       "evidence": "masa講義 2026-03-07 BASIC『ハイライトの一枚にトイレの写真も入れるといいですか』（出典: 講義ノート/自分の講義/00_masa講義_要点まとめ.md・資料ID M01）"
     },
@@ -4725,8 +4725,8 @@
       ],
       "last_result": {
         "n": 1,
-        "index": 0.226,
-        "updated": "2026-10-14"
+        "index": 0.3,
+        "updated": "2026-10-15"
       },
       "evidence": "masa講義 2026-04-08 無料勉強会『どこでリスト取ってんのかなっていうのが疑問』（出典: 講義ノート/自分の講義/00_masa講義_要点まとめ.md・資料ID M01）"
     },
@@ -4737,7 +4737,7 @@
       "theme": "Instagram悩み",
       "hypothesis": "数字が苦手で見ないふり → 見る数字を1つに絞ると言えば反応する",
       "pain_ids": [],
-      "status": "untested",
+      "status": "testing",
       "posts": [
         {
           "hook": "low",
@@ -4749,9 +4749,9 @@
         }
       ],
       "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
+        "n": 1,
+        "index": 1.35,
+        "updated": "2026-10-15"
       },
       "evidence": "masa講義 2026-07-11 room夜1『数字は苦手な方だと自負しております』（出典: 講義ノート/自分の講義/00_masa講義_要点まとめ.md・資料ID M01）"
     },
@@ -4775,8 +4775,8 @@
       ],
       "last_result": {
         "n": 1,
-        "index": 1.132,
-        "updated": "2026-10-14"
+        "index": 1.15,
+        "updated": "2026-10-15"
       },
       "evidence": "masa講義 2026-05-06 講義『予約枠がないから広告は回さない』（出典: 講義ノート/自分の講義/00_masa講義_要点まとめ.md・資料ID M01）"
     },
@@ -4800,8 +4800,8 @@
       ],
       "last_result": {
         "n": 1,
-        "index": 1.472,
-        "updated": "2026-10-14"
+        "index": 1.6,
+        "updated": "2026-10-15"
       },
       "evidence": "masa講義 2026-03-19 グルコン『チャットGPT丸出しの投稿は気持ち悪くてやめた』（出典: 講義ノート/自分の講義/00_masa講義_要点まとめ.md・資料ID M01）"
     },
@@ -4953,8 +4953,8 @@
       ],
       "last_result": {
         "n": 1,
-        "index": 0.604,
-        "updated": "2026-10-14"
+        "index": 0.85,
+        "updated": "2026-10-15"
       },
       "evidence": "初回で全体の道筋を伝えられない(根拠4件・中)。出典: CNS / G0403 / L0307N / L0307T（出典IDは repeat_pain_categories.json の source_ids 参照）"
     },
@@ -5056,9 +5056,9 @@
         }
       ],
       "last_result": {
-        "n": 1,
-        "index": 0.868,
-        "updated": "2026-10-14"
+        "n": 2,
+        "index": 1.425,
+        "updated": "2026-10-15"
       },
       "evidence": "会計時の次回の話を客に任せてしまう(根拠5件・中)。出典: CNS / G0326/HYP P023 / G0501/HYP P020 / L0307T（出典IDは repeat_pain_categories.json の source_ids 参照）"
     },
@@ -5096,7 +5096,7 @@
       "theme": "リピート・クロージング悩み",
       "hypothesis": "説得しなければと思ってクロージングが苦手になっている→本人の言葉で目的を言ってもらえば反応する",
       "pain_ids": [],
-      "status": "untested",
+      "status": "testing",
       "posts": [
         {
           "hook": "low",
@@ -5108,9 +5108,9 @@
         }
       ],
       "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
+        "n": 1,
+        "index": 5.8,
+        "updated": "2026-10-15"
       },
       "evidence": "提案すると「考えます」で終わる・クロージングが苦手(根拠5件・中)。出典: CL1 / CNS/CL1 / G0319 / G0403 / L0307T（出典IDは repeat_pain_categories.json の source_ids 参照）"
     },
@@ -5174,7 +5174,7 @@
       "theme": "リピート・クロージング悩み",
       "hypothesis": "回数券は売り込みと思い込んでいる→「通う周期を形にしたもの」と言い換えれば反応する",
       "pain_ids": [],
-      "status": "untested",
+      "status": "testing",
       "posts": [
         {
           "hook": "low",
@@ -5186,9 +5186,9 @@
         }
       ],
       "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
+        "n": 1,
+        "index": 3.9,
+        "updated": "2026-10-15"
       },
       "evidence": "回数券・コースの伝え方が分からない(根拠5件・中)。出典: CNS / G0501 / HYP P044(G0501) / HYP P049(G0403/G0501) / L0307T（出典IDは repeat_pain_categories.json の source_ids 参照）"
     },

@@ -3282,7 +3282,7 @@
   "インスタで、AIの使い道が分からない院長へ。": {
     "segment": "I16",
     "hook": "high",
-    "created": "2026-10-08",
+    "created": "2026-10-15",
     "acct": "masa",
     "axis": "insta_pain",
     "variant": null,
@@ -3346,7 +3346,7 @@
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 72,
-    "created": "2026-10-08"
+    "created": "2026-10-15"
   },
   "プロフィールが何屋か伝わっていない院長へ。": {
     "segment": "INSTA_EASY",
@@ -3400,13 +3400,13 @@
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 66,
-    "created": "2026-10-08"
+    "created": "2026-10-15"
   },
   "DMが怖い店主へ質問です。": {
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 47,
-    "created": "2026-10-08"
+    "created": "2026-10-15"
   },
   "続かないのは意志が弱いからだと思っている院長へ。": {
     "segment": "INSTA_EASY",
@@ -3424,7 +3424,7 @@
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 14,
-    "created": "2026-10-08"
+    "created": "2026-10-15"
   },
   "AIが難しそうな店主へ質問です。": {
     "segment": "INSTA_EASY",
@@ -3564,7 +3564,7 @@
   "インスタ運用で、他店との差に圧倒されている院長へ。": {
     "segment": "I01",
     "hook": "high",
-    "created": "2026-10-08",
+    "created": "2026-10-15",
     "acct": "masa",
     "axis": "insta_pain",
     "variant": null,
@@ -3646,19 +3646,19 @@
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-10-08"
+    "created": "2026-10-15"
   },
   "インスタ運用で、反応がなくて落ち込む整体院の院長さん、": {
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-10-08"
+    "created": "2026-10-15"
   },
   "インスタ運用で、機械が苦手な店主さん、": {
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-10-08"
+    "created": "2026-10-15"
   },
   "インスタで、フォロワーが100人未満の店主に聞きます。": {
     "segment": "INSTA_EASY",
@@ -3670,19 +3670,19 @@
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-10-08"
+    "created": "2026-10-15"
   },
   "インスタで、DMの返信が不安な院長へ質問です。": {
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-10-08"
+    "created": "2026-10-15"
   },
   "インスタ運用で、営業中はスマホを触れない院長に聞きます。": {
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-10-08"
+    "created": "2026-10-15"
   },
   "インスタで、投稿を見られるのが怖い店主に聞きます。": {
     "segment": "INSTA_EASY",
@@ -3694,7 +3694,7 @@
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-10-08"
+    "created": "2026-10-15"
   },
   "インスタで、いいねの数が気になる院長へ質問です。": {
     "segment": "INSTA_EASY",
@@ -3706,7 +3706,7 @@
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-10-08"
+    "created": "2026-10-15"
   },
   "インスタで、プロフィールが決まらないサロンオーナーに聞きます。": {
     "segment": "INSTA_EASY",
@@ -3780,7 +3780,7 @@
   "インスタで、毎回違う話をしてしまうサロンオーナーへ質問です。": {
     "segment": "I02",
     "hook": "low",
-    "created": "2026-10-09",
+    "created": "2026-10-15",
     "acct": "masa",
     "axis": "insta_pain",
     "variant": null,
@@ -3789,7 +3789,7 @@
   "インスタで、当たった投稿をもう一度出すのが恥ずかしい院長へ質問です。": {
     "segment": "I03",
     "hook": "low",
-    "created": "2026-10-09",
+    "created": "2026-10-15",
     "acct": "masa",
     "axis": "insta_pain",
     "variant": null,
@@ -3798,7 +3798,7 @@
   "インスタ運用で、撮影機材が必要だと思っている院長へ質問です。": {
     "segment": "I04",
     "hook": "low",
-    "created": "2026-10-09",
+    "created": "2026-10-15",
     "acct": "masa",
     "axis": "insta_pain",
     "variant": null,
@@ -3834,7 +3834,7 @@
   "縛られるのが嫌と言われる院長へ。": {
     "segment": "R06",
     "hook": "low",
-    "created": "2026-10-09",
+    "created": "2026-10-15",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -3850,7 +3850,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 13,
-    "created": "2026-10-11"
+    "created": "2026-10-15"
   },
   "インスタ運用で、数字が苦手な整体院の院長へ質問です。": {
     "segment": "INSTA_EASY",
@@ -5409,7 +5409,7 @@
   "インスタで、これでいいのかと迷って出せない院長へ質問です。": {
     "segment": "I17",
     "hook": "low",
-    "created": "2026-10-12",
+    "created": "2026-10-15",
     "acct": "masa",
     "axis": "insta_pain",
     "variant": null,
@@ -6254,5 +6254,14 @@
     "axis": "repeat_close",
     "variant": null,
     "hypothesis_id": "RP15"
+  },
+  "最初から大きなコースを出してしまう院長へ。": {
+    "segment": "R05",
+    "hook": "low",
+    "created": "2026-10-15",
+    "acct": "masa",
+    "axis": "repeat_close",
+    "variant": null,
+    "hypothesis_id": "RP13"
   }
 }

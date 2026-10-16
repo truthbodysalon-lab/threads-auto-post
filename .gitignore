@@ -22,3 +22,4 @@ image_post_err.log
 *.jsonl.bak-*
 inspection_log.jsonl
 watchdog_state.json
+uplink_history300.json

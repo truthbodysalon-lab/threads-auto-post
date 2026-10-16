@@ -12,6 +12,7 @@ from pathlib import Path
 
 SRC = Path.home() / "threads-uplink" / "threads_stats.json"
 OUT = Path(__file__).parent / "uplink_top.json"
+HIST = Path(__file__).parent / "uplink_history300.json"   # 2026-10-17 全期間の閲覧300以上(168文面・git追跡しない)
 
 def main():
     if not SRC.exists():
@@ -25,8 +26,19 @@ def main():
         "angle": p.get("angle", ""),
         "text": p.get("text_preview", ""),
     } for p in ranked[:20] if (p.get("insights") or {}).get("views", 0) > 0]
-    OUT.write_text(json.dumps({"source": "threads-uplink", "note": "翻案必須・同一文面の再投稿禁止",
-                               "top": top}, ensure_ascii=False, indent=1), encoding="utf-8")
+    # 全期間の閲覧300以上上位30を統合（直近だけだと過去の当たり文面が参照から落ちるため）
+    hist = []
+    if HIST.exists():
+        try:
+            seen = {t["text"][:40] for t in top}
+            for h in json.loads(HIST.read_text(encoding="utf-8")).get("items", [])[:30]:
+                if h["text"][:40] not in seen:
+                    seen.add(h["text"][:40])
+                    hist.append({"views": h["views"], "kind": "history300", "angle": "", "text": h["text"]})
+        except Exception as e:
+            print(f"history300読込失敗: {e}")
+    OUT.write_text(json.dumps({"source": "threads-uplink", "note": "翻案必須・同一文面の再投稿禁止（history300=全期間の閲覧300以上上位）",
+                               "top": top + hist}, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"uplink_top.json: {len(top)}件（TOP1 {top[0]['views']}v）")
 
 if __name__ == "__main__":

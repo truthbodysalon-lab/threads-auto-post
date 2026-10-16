@@ -20,7 +20,7 @@ POOL = BASE / "uplink_repost_pool.json"
 LEDGER = BASE / "log_masa_posted.jsonl"
 KIND = "uplink_repost"
 
-DAILY_N = int(os.environ.get("UPLINK_REPOST_DAILY", "6"))   # 1日の追加本数（通常50本とは別枠）
+DAILY_N = int(os.environ.get("UPLINK_REPOST_DAILY", "8"))   # 1日の追加本数（通常50本とは別枠。2026-10-17 過去300+取り込みでqueued60本超→6から8へ）
 START_HOUR = int(os.environ.get("UPLINK_REPOST_START", "7"))
 FULL_HOUR = int(os.environ.get("UPLINK_REPOST_FULL", "21"))  # この時刻までに当日分を出し切るペース
 MIN_VIEWS = 200

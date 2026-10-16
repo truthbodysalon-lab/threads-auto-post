@@ -74,7 +74,7 @@
   },
   "rules": [
     "閲覧はゴールでなく上流指標。ゴール1-3の導線投稿（HPB/LINE/診断/プロフィール誘導）は閲覧が低くても削らない（意図的トレードオフ）",
-    "投稿ではmasaの面談・金額・決済に触れない（LINE Day6-7のみ）",
+    "投稿ではmasaの面談・金額・決済に触れない（LINE Day6-7のみ）。例外(本人指示2026-10-17): uplink高閲覧の書き直し投稿(source=uplink_rewrite_mendan・1日1本)に限り個別面談への誘導を本文に入れてよい。金額・決済・割引は引き続き全面NG",
     "フォロワー増の主レバー=ヒーロー投稿の質＋プロフィール遷移を生む問い止め型（W2）",
     "【整体系の予約誘導はHPB一本化(2026-08-14)】truth/nagaokaで予約に誘導する投稿は必ずbeauty.hotpepper.jpへ案内する。LINE(GwQ0FSx/qbRbPAm)は相談・情報配信専用で予約語を使わない。コードガード=_is_seitai_reserve_violation・検証=C13",
     "【masaの主テーマ=Instagram集客のハードルを下げる(2026-10-04)】前半50本の過半数をInstagramテーマにする。導線投稿(cta_profile/AI_TIME_CTA/LINE)は本数・位置とも維持。コード=_fill_insta_theme_posts・検証=verify_system check_masa_insta_theme"

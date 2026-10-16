@@ -178,8 +178,13 @@ _MASA_SALES_NG = re.compile(
     r"(料金|価格)(は|表)|円で(提供|販売|案内)|コース(料金|価格)")
 
 
-def _is_masa_sales_ng(text: str) -> bool:
-    return bool(_MASA_SALES_NG.search(text or ""))
+# 2026-10-17 本人指示: source=uplink_rewrite_mendan の書き直し投稿に限り「面談」語を許可（金額・決済・割引は従来どおりNG）
+_MASA_SALES_NG_NO_MENDAN = re.compile(_MASA_SALES_NG.pattern.replace("面談|", "", 1))
+
+
+def _is_masa_sales_ng(text: str, allow_mendan: bool = False) -> bool:
+    rx = _MASA_SALES_NG_NO_MENDAN if allow_mendan else _MASA_SALES_NG
+    return bool(rx.search(text or ""))
 
 
 # masa専用: 予告型NGパターンチェック（feedback.json 2026-05-13ルール）

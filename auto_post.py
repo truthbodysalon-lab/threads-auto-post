@@ -1506,7 +1506,9 @@ def _run_uplink_repost():
         log_info(acct, "[uplink追加] プール空（queued 0件）")
         return
     text = item["text"]
-    why = ur.judge(text)   # 投稿直前に再判定（ルール更新・masa既出に追従）
+    src = item.get("source")
+    comment = item.get("comment")
+    why = ur.judge(text, src, comment)   # 投稿直前に再判定（面談例外はsource=uplink_rewrite_mendanのみ）（ルール更新・masa既出に追従）
     if why:
         item["status"] = "skipped"
         item["skip_reason"] = "judge:" + ",".join(why)[:80]
@@ -1534,8 +1536,17 @@ def _run_uplink_repost():
     item["posted_at"] = now.strftime("%Y-%m-%dT%H:%M:%S")
     item["masa_post_id"] = post_id
     ur.save_pool(pool)
+    if src == ur.SRC_MENDAN and comment:
+        # 書き直し投稿: 公式LINE(URL)と個別面談の案内はコメント欄へ（本文にURLを置かない既存ルール）
+        try:
+            time.sleep(3)
+            post_reply_to_threads(acct, post_id, comment)
+        except Exception as e:
+            log_error(f"[{acct}] uplink面談コメント投稿失敗({item['id']}): {type(e).__name__}: {e}")
     entry = {"date": now.strftime("%Y-%m-%d"), "index": -1, "post_id": post_id, "text": text,
              "kind": "uplink_repost", "source_id": item["id"], "source_views": item.get("views")}
+    if src:
+        entry["source"] = src
     with open(ACCOUNTS[acct]["posted"], "a", encoding="utf-8") as f:
         f.write(json.dumps(entry, ensure_ascii=False) + "\n")
     log_info(acct, f"[uplink追加] 投稿 {done + 1}/{ur.DAILY_N}本目 src={item['id']}({item.get('views')}v) → {post_id}")

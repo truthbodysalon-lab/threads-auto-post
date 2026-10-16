@@ -94,6 +94,8 @@ _MASA_SALES_NG_RE = re.compile(
     r"(料金|価格)(は|表)|円で(提供|販売|案内)|コース(料金|価格)"
 )
 
+_MASA_SALES_NG_RE_NO_MENDAN = re.compile(_MASA_SALES_NG_RE.pattern.replace("面談|", "", 1))
+
 # 個人情報（検品7項目④・2026-07-21）: 個人名はtruth/nagaokaで投稿禁止
 # （feedback.json 2026-05-13ルール）。誤検知回避のため「さん」付き完全一致のみ。
 _PERSONAL_NAMES_TRUTH_NAGAOKA = ["まぁさん", "ゆうさん"]
@@ -241,7 +243,7 @@ def _check_achievement_numbers(text: str) -> list[str]:
 
 # ── ④ 既存ng_words＋誇大・規制表現 ─────────────────────────────
 
-def _check_hype_and_ng(text: str, account: str) -> list[str]:
+def _check_hype_and_ng(text: str, account: str, allow_mendan: bool = False) -> list[str]:
     t = text or ""
     reasons = []
 
@@ -263,7 +265,8 @@ def _check_hype_and_ng(text: str, account: str) -> list[str]:
         for w in _HYPE_WORDS_MASA:
             if w in t:
                 reasons.append(f"誇大・規制表現(masa): {w}")
-        m = _MASA_SALES_NG_RE.search(t)
+        # allow_mendan: 2026-10-17本人指示。uplink書き直し(source=uplink_rewrite_mendan)のみ「面談」語を許可。金額・決済・割引は有効のまま
+        m = (_MASA_SALES_NG_RE_NO_MENDAN if allow_mendan else _MASA_SALES_NG_RE).search(t)
         if m:
             reasons.append(f"masa面談/金額/決済NG: {m.group()}")
 
@@ -343,7 +346,7 @@ def _log_ng(account: str, reasons: list[str], text: str):
 # ── 公開API ──────────────────────────────────────────────
 
 def inspect_post(text: str, account: str = "truth", pattern_name: str | None = None,
-                  log: bool = True) -> tuple[bool, list[str]]:
+                  log: bool = True, allow_mendan: bool = False) -> tuple[bool, list[str]]:
     """投稿本文を検品する。
 
     Args:
@@ -365,7 +368,7 @@ def inspect_post(text: str, account: str = "truth", pattern_name: str | None = N
     reasons += _check_dead_openings(text, account, pattern_name)
     reasons += _check_grammar(text)
     reasons += _check_achievement_numbers(text)
-    reasons += _check_hype_and_ng(text, account)
+    reasons += _check_hype_and_ng(text, account, allow_mendan)
     reasons += _check_url_count(text)
     reasons += _check_first_line_length(text)
     reasons += _check_jargon_first_line(text, account)

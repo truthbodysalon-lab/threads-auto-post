@@ -37,27 +37,99 @@ _RULES = [
 ]
 
 
+# 2026-10-17 本人指示: uplink高閲覧の書き直し投稿(source)に限り、個別面談への誘導(面談/相談・LINE・コメント欄)を許可。
+# 金額・価格・決済・割引・外部URLは従来どおり全面NG。例外はこのsource限定（judge(source=...)でのみ有効）。
+SRC_MENDAN = "uplink_rewrite_mendan"
+LINE_URL = "lin.ee/8PsIHHC"
+_MENDAN_URL_RULE = re.compile(r"https?://|lin\.ee|line\.me|note\.com|square\.link|Square", re.I)
+_MENDAN_BIZ_RULE = re.compile(r"決済|申し?込|お支払|円|¥|￥|割引|値引|価格|料金|税込|モニター|キャンペーン|定員|枠|満席|募集|無料")
+_MENDAN_GUIDE_RULE = re.compile(r"uplink|UP ?LINK|アップリンク|プロフ(ィール)?(から|の|へ|に)|リンク|DM|無料(プレゼント|配布|診断)|配布|受け取|サロン経営者向け|フォロー(して|を)|保存(して|を)|@\w+")
+_MENDAN_BODY_MAX = 250
+
+
+def judge_mendan_comment(comment: str) -> list:
+    """書き直し投稿のコメント検品: URLは公式LINE(lin.ee/8PsIHHC)1つのみ・金額/決済/割引語ゼロ。"""
+    r = []
+    c = comment or ""
+    urls = re.findall(r"https?://\S+", c)
+    if len(urls) != 1 or LINE_URL not in urls[0]:
+        r.append("comment:URLは公式LINE1つのみ")
+    if _MENDAN_BIZ_RULE.search(c):
+        r.append("comment:金額/決済語")
+    if "[COMMENT]" in c:
+        r.append("comment:COMMENT区切り")
+    return r
+
+
+def mendan_line_overrate(limit: int = 5) -> bool:
+    """masa前半50本のLINE言及(verify C5b と同じ数え方)が上限に達した日は面談導線を翌日に回す。"""
+    if not LEDGER.exists():
+        return False
+    today = date.today().strftime("%Y-%m-%d")
+    texts = []
+    for l in LEDGER.read_text(encoding="utf-8").splitlines():
+        try:
+            e = json.loads(l)
+        except Exception:
+            continue
+        if e.get("date") == today:
+            texts.append(e.get("text", ""))
+    texts = texts[:50]
+    n = sum(1 for t in texts if ("LINE" in t or "ライン" in t or "lin.ee" in t))
+    return n >= limit
+
+
+def mendan_posted_today() -> bool:
+    if not LEDGER.exists():
+        return False
+    today = date.today().strftime("%Y-%m-%d")
+    for l in LEDGER.read_text(encoding="utf-8").splitlines():
+        try:
+            e = json.loads(l)
+        except Exception:
+            continue
+        if e.get("date") == today and e.get("source") == SRC_MENDAN:
+            return True
+    return False
+
+
 def _norm_first(text: str) -> str:
     from duplicate_guard import normalize_text
     return normalize_text(text).split("\n")[0].strip()
 
 
-def judge(text: str) -> list:
-    """出せない理由のリスト（空なら出せる）。generate_remix/inspector のmasaルールも通す。"""
+def judge(text: str, source: str | None = None, comment: str | None = None) -> list:
+    """出せない理由のリスト（空なら出せる）。generate_remix/inspector のmasaルールも通す。
+    source==SRC_MENDAN のときだけ「面談/相談・LINE・コメント欄」を許可（金額・決済・割引・外部URLは有効のまま）。"""
     t = (text or "").strip()
+    mendan = source == SRC_MENDAN
     r = []
     if not t:
         return ["空"]
     if "[COMMENT]" in t:
         r.append("COMMENT区切り")
-    if len(t) > 500:
-        r.append("500字超")
-    for name, rx in _RULES:
-        if rx.search(t):
-            r.append(name)
+    if len(t) > (_MENDAN_BODY_MAX if mendan else 500):
+        r.append(f"{_MENDAN_BODY_MAX if mendan else 500}字超")
+    if mendan:
+        if _MENDAN_URL_RULE.search(t):
+            r.append("URL/外部リンク")
+        if _MENDAN_BIZ_RULE.search(t):
+            r.append("金額/決済/割引語")
+        if _MENDAN_GUIDE_RULE.search(t):
+            r.append("導線/固有名")
+        for name, rx in _RULES[3:]:
+            if rx.search(t):
+                r.append(name)
+        if re.search(r"LINE|ライン", t):
+            r.append("本文にLINE語(言及率のためコメント側のみ)")
+        r += judge_mendan_comment(comment or "")
+    else:
+        for name, rx in _RULES:
+            if rx.search(t):
+                r.append(name)
     try:
         import generate_remix as g
-        if g._is_masa_sales_ng(t):
+        if g._is_masa_sales_ng(t, allow_mendan=mendan):
             r.append("masa_sales_ng")
         if g._is_masa_yokokoku_ng(t):
             r.append("masa_yokokoku_ng")
@@ -67,7 +139,7 @@ def judge(text: str) -> list:
         r.append(f"generate_remix読込不可:{type(e).__name__}")
     try:
         import inspector
-        ok, rs = inspector.inspect_post(t, "masa", log=False)
+        ok, rs = inspector.inspect_post(t, "masa", log=False, allow_mendan=mendan)
         if not ok:
             r.append("inspector:" + "|".join(str(x)[:30] for x in rs))
     except Exception as e:
@@ -120,8 +192,11 @@ def queued_count(items: list | None = None) -> int:
 
 
 def next_item(items: list):
-    """views上位のqueued。失敗回数が少ないものを優先（同じものを選び続けない）。"""
+    """views上位のqueued。失敗回数が少ないものを優先（同じものを選び続けない）。
+    面談導線の書き直し(SRC_MENDAN)は1日1本まで・LINE言及率が上限の日は出さない（翌日に回る）。"""
     q = [i for i in items if i.get("status") == "queued"]
+    if mendan_posted_today() or mendan_line_overrate():
+        q = [i for i in q if i.get("source") != SRC_MENDAN]
     if not q:
         return None
     return sorted(q, key=lambda i: (i.get("fail", 0), -i.get("views", 0)))[0]

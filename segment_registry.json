@@ -1513,7 +1513,7 @@
   "2回目さえ来れば安心と思っている院長へ。": {
     "segment": "R07",
     "hook": "high",
-    "created": "2026-10-04",
+    "created": "2026-10-16",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -1522,7 +1522,7 @@
   "最後の日に、次の話をしている院長へ。": {
     "segment": "R08",
     "hook": "high",
-    "created": "2026-10-04",
+    "created": "2026-10-16",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -2717,7 +2717,7 @@
   "インスタで、ハッシュタグと投稿時間で伸ばそうとしている院長へ。": {
     "segment": "I08",
     "hook": "high",
-    "created": "2026-10-13",
+    "created": "2026-10-16",
     "acct": "masa",
     "axis": "insta_pain",
     "variant": null,
@@ -2726,7 +2726,7 @@
   "ストーリーズに時間をかけている院長へ。": {
     "segment": "I09",
     "hook": "high",
-    "created": "2026-10-13",
+    "created": "2026-10-16",
     "acct": "masa",
     "axis": "insta_pain",
     "variant": null,
@@ -2735,7 +2735,7 @@
   "インスタ運用で、フォロワー数ばかり見ている院長へ。": {
     "segment": "I10",
     "hook": "high",
-    "created": "2026-10-13",
+    "created": "2026-10-16",
     "acct": "masa",
     "axis": "insta_pain",
     "variant": null,
@@ -3712,7 +3712,7 @@
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-10-08"
+    "created": "2026-10-16"
   },
   "インスタで、プロフィールが決まらないサロンオーナーへ質問です。": {
     "segment": "INSTA_EASY",
@@ -3724,7 +3724,7 @@
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-10-08"
+    "created": "2026-10-16"
   },
   "【頭痛を呼ぶスマホ時間のやめること5選】": {
     "segment": "LIST_HABIT",
@@ -3892,7 +3892,7 @@
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-10-09"
+    "created": "2026-10-16"
   },
   "インスタ運用で、営業中はスマホを触れない院長へ質問です。": {
     "segment": "INSTA_EASY",
@@ -3904,13 +3904,13 @@
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-10-09"
+    "created": "2026-10-16"
   },
   "インスタの使い方が分からない店主へ質問です。": {
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-10-09"
+    "created": "2026-10-16"
   },
   "インスタ運用で、機械が苦手な店主に聞きます。": {
     "segment": "INSTA_EASY",
@@ -3946,13 +3946,13 @@
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-10-09"
+    "created": "2026-10-16"
   },
   "インスタ運用で、写真の編集ができない店主に聞きます。": {
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-10-09"
+    "created": "2026-10-16"
   },
   "【インスタ運用で、文章が苦手な整体院の院長へ】": {
     "segment": "INSTA_EASY",
@@ -3976,7 +3976,7 @@
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-10-09"
+    "created": "2026-10-16"
   },
   "【頭痛を遠ざける姿勢のチェック項目7選】": {
     "segment": "LIST_HABIT",
@@ -4068,7 +4068,7 @@
   "インスタ運用で、まとまった時間がなくて始められない院長へ。": {
     "segment": "I06",
     "hook": "high",
-    "created": "2026-10-09",
+    "created": "2026-10-16",
     "acct": "masa",
     "axis": "insta_pain",
     "variant": null,
@@ -4156,7 +4156,7 @@
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-10-09"
+    "created": "2026-10-16"
   },
   "【インスタ運用で、年齢を気にして投稿できない院長へ】": {
     "segment": "INSTA_EASY",
@@ -4174,7 +4174,7 @@
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-10-09"
+    "created": "2026-10-16"
   },
   "インスタで、施術の合間しか時間がない院長へ質問です。": {
     "segment": "INSTA_EASY",
@@ -4222,7 +4222,7 @@
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-10-09"
+    "created": "2026-10-16"
   },
   "【インスタ運用で、機械が苦手な店主へ】": {
     "segment": "INSTA_EASY",
@@ -4606,7 +4606,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 10,
-    "created": "2026-10-15"
+    "created": "2026-10-16"
   },
   "困っていることを、黙っている院長へ。": {
     "segment": "HAKASE",
@@ -4785,7 +4785,7 @@
   "インスタで、任せる人がいなくて、一人で抱えている院長へ。": {
     "segment": "I07",
     "hook": "high",
-    "created": "2026-10-10",
+    "created": "2026-10-16",
     "acct": "masa",
     "axis": "insta_pain",
     "variant": null,
@@ -6379,5 +6379,14 @@
     "axis": "repeat_close",
     "variant": null,
     "hypothesis_id": "RP21"
+  },
+  "リールは撮影も編集も難しいと思っている院長へ質問です。": {
+    "segment": "I05",
+    "hook": "low",
+    "created": "2026-10-16",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP13"
   }
 }

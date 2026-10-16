@@ -547,12 +547,24 @@ try:
         AI_DEKIRU_TEMPLATES as _AI_DEKIRU_TEMPLATES,
         AI_KISO_TEMPLATES as _AI_KISO_TEMPLATES,
         AI_TIME_CTA_TEMPLATES as _AI_TIME_CTA_TEMPLATES,
+        PRESENT_CTA_TEMPLATES as _PRESENT_CTA_TEMPLATES,
     )
+    # 2026-10-17: プレゼント誘導(PRESENT_CTA)も固定テンプレのアンカー扱い（全期間dedupでプールが枯渇しない）
+    _PRESENT_CTA_SET = set(_PRESENT_CTA_TEMPLATES)
     _AI_CONTENT_TEMPLATES = set(
         _AI_JITSUREI_TEMPLATES + _AI_DEKIRU_TEMPLATES + _AI_KISO_TEMPLATES + _AI_TIME_CTA_TEMPLATES
-    )
+    ) | _PRESENT_CTA_SET
 except Exception:
     _AI_CONTENT_TEMPLATES = set()
+    _PRESENT_CTA_SET = set()
+
+# プレゼント誘導の受け取り先（公式LINE）。本文にはURLを置かず、投稿後にコメント欄へ足す（2026-10-17 本人指示）。
+PRESENT_CTA_COMMENT = "▶ 受け取りはこちら（公式LINE）\nhttps://lin.ee/8PsIHHC"
+PRESENT_BRIDGE = "受け取りはこちら 👇"
+
+
+def _is_present_cta(text: str) -> bool:
+    return (text or "") in _PRESENT_CTA_SET
 
 
 def _is_ai_content(text: str) -> bool:
@@ -657,7 +669,7 @@ def _masa_line_overrate(text: str) -> bool:
     コンテンツ投稿の付随的なLINE言及だけを本日2本でブロックする（3導線+2=最大5本）。"""
     if not _LINE_MENTION_RE.search(text):
         return False
-    if _is_line_listin(text) or _is_shindan(text) or "『AI』" in text:
+    if _is_line_listin(text) or _is_shindan(text) or "『AI』" in text or _is_present_cta(text):
         return False
     today = date.today().strftime("%Y-%m-%d")
     n = 0
@@ -1198,6 +1210,9 @@ def run_account(acct: str):
     # 「👇」等でURLを指し示す文言は extract_url_and_cta 側で本文から除去されるため、
     # 本文が「👇」で終わって宙に浮かないよう、末尾の指示記号を落としてから使う。
     clean_text, cta_block = extract_url_and_cta(text)
+    is_present = _is_present_cta(text)
+    if is_present and cta_block is None:
+        cta_block = PRESENT_CTA_COMMENT   # プレゼント誘導: 公式LINEのURLはコメント欄に置く（本文は無URL）
     clean_text = re.sub(r"[\s👇⬇️↓]+$", "", clean_text).strip()
     clean_text = _fix_question_endings(clean_text)
 
@@ -1264,7 +1279,7 @@ def run_account(acct: str):
                     return
 
     # URLがある場合のみ補足説明コメントをAIで事前生成（投稿前に準備）
-    bridge = generate_bridge_comment(clean_text, acct) if cta_block else None
+    bridge = PRESENT_BRIDGE if is_present else (generate_bridge_comment(clean_text, acct) if cta_block else None)
 
     def _post_comments(post_id: str, suffix: str = ""):
         """コメント部分→CTAを順番に投稿するヘルパー"""

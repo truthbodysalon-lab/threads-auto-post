@@ -1,0 +1,9 @@
+{
+  "enabled": true,
+  "name": "インスタ集客 1日1分スタートキット",
+  "keyword": "インスタ",
+  "line": "lin.ee/8PsIHHC",
+  "notion_url": "https://adorable-syzygy-fae.notion.site/3fb0235f23a281d49525f87fe5dc6122",
+  "notion_public_checked": "2026-10-17",
+  "note": "enabled:true の間だけ generate_remix._insert_present_cta が誘導投稿を1日1本(前半アンカー18)に投入する。Notionが非公開になったら false にする。本文にURLは置かず、auto_postが投稿後にコメント欄へ公式LINEのURLを足す。"
+}

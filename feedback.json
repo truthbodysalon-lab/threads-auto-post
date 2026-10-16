@@ -389,9 +389,14 @@
       "date": "2026-10-17",
       "account": "masa",
       "text": "【masa・uplink高閲覧の書き直し投稿に限り個別面談誘導を許可（本人指示2026-10-17）】10/17 本人指示: uplink高閲覧の書き直し投稿(source=uplink_rewrite_mendan)に限り個別面談への誘導を本文に入れてよい（金額・決済・割引・価格は引き続き全面NG／外部URLなし・公式LINE lin.ee/8PsIHHC はコメント欄のみ／LINEキーワードは実在する「相談」／1日1本まで／本文にLINE語を入れない＝line_rate対策）。例外は uplink_repost.judge(source=...) と inspector.inspect_post(allow_mendan=True) の source 限定で、通常投稿の面談NGは不変。"
+    },
+    {
+      "date": "2026-10-17",
+      "account": "masa",
+      "text": "【masa・Instagram投稿はuplink型で書く／プレゼント誘導を1日1本（本人指示2026-10-17）】@masahide_takahashi_のInstagram関連の投稿は文章がいまいち、と指摘。UPLINKの投稿を参考にする。ルール: 本文120〜200字(上限250)／1行目は宛名にせず結論・数字・否定・対比・『ぶっちゃけ』の断言(対象は2行目か【】内)／本文にリスト(名詞→具体行動3〜5行・①〜④・やめたこと3つ・Aではなく B)を置く／最後は格言1行か5分以内の行動1つ／質問で始めず質問で終わらない(質問を使う時は10/7ルールA=対象を書く)／金額・店名・創作統計NG・URLはコメント欄。正本=SNS・Threads/masa_インスタ投稿_uplink型ルール_2026-10-17.md。固定原稿(masa_insta_content.py)は同日この型へ作り直し済み。プレゼント企画: 公式LINE(lin.ee/8PsIHHC)で『インスタ』と送ると『インスタ集客 1日1分スタートキット』(Notion公開ページ)が届く(LINE harness auto_replies id=6)。誘導投稿PRESENT_CTA20本を1日1本アンカー18に投入(present_campaign.json enabled)。本文にURLは置かずauto_postが投稿後にコメント欄へ公式LINEのURLを足す。LINE言及は前半50本で5本以内(AI時短CTAと重なって超える日だけ交互)。月2本のURL付きLINE投稿上限(_monthly_line_url_count)の対象外にするため本文は無URL。なぜ: masa直近60本の閲覧中央値7に対しuplink上位は107字・リスト・格言締めで桁違いだったため。"
     }
   ],
-  "updated_at": "2026-10-06T19:13:38",
+  "updated_at": "2026-10-17T12:00:00",
   "precedence": "ルールの優先順位（2026-07-19監査で制定）: ①goals.json(ゴール・導線保護) ②playbookのactiveルール(構造の勝敗・実測で進化) ③notesの最新日付 ④旧note。同一テーマのnoteは最新日付が旧を上書きする（旧noteとの矛盾はFAILにしない）。導線投稿(HPB/LINE/診断/整体LINE/cta_profile)は閲覧基準の負けテンプレ判定・pruneの対象外",
   "extra_templates_legacy": {
     "masa": [

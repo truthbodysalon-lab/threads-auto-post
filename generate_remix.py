@@ -2932,6 +2932,57 @@ SEGMENT_TEST_TEMPLATES_BY_ACCT: dict[str, dict] = {
 # 言葉で店舗経営者向けに翻案した完成原稿。出典名・講義文の逐語は一切含めない（翻案のみ）。
 # 2026-10-07: 原稿は masa_insta_content.py へ移動（問いかけに対象・コメントに具体手順。_is_abstract_masaで機械検査）
 from masa_insta_content import HAKASE_TEMPLATES  # noqa: E402
+from masa_insta_content import PRESENT_CTA_TEMPLATES  # noqa: E402
+
+# ── masa: プレゼント誘導投稿（PRESENT_CTA・2026-10-17 本人指示）──────────────
+# 公式LINE(8PsIHHC)のキーワード『インスタ』で「インスタ集客 1日1分スタートキット」(Notion公開ページ)を配る企画の誘導投稿。
+# present_campaign.json の enabled:true の間だけ、1日1本を前半アンカー(PRESENT_ANCHOR)へ投入する。
+# 本文にURLは置かない（auto_postが投稿後にコメント欄へ公式LINEのURLを足す）。
+PRESENT_CAMPAIGN_FILE = BASE / "present_campaign.json"
+PRESENT_ANCHOR = 18   # 既存アンカー(4/5/8/9/12/14/16/22/26/27/30/34/44)と重ならない位置
+_PRESENT_CTA_SET = set(PRESENT_CTA_TEMPLATES)
+
+
+def _present_campaign_enabled() -> bool:
+    try:
+        return bool(json.loads(PRESENT_CAMPAIGN_FILE.read_text(encoding="utf-8")).get("enabled"))
+    except Exception:
+        return False
+
+
+def _insert_present_cta(posts: list[str], acct: str, today: str):
+    """masa専用: プレゼント誘導投稿を1日1本 PRESENT_ANCHOR に投入し、segment_registry.jsonへ
+    segment="PRESENT_CTA" で登録する。過去7日以内に使った原稿は再投入しない。
+    戻り値=(posts, 投入した原稿 or None)。キャンペーン無効(present_campaign.json)なら何もしない。"""
+    if acct != "masa" or not PRESENT_CTA_TEMPLATES or not _present_campaign_enabled():
+        return posts, None
+    try:
+        today_date = date.fromisoformat(today)
+    except Exception:
+        today_date = date.today()
+    registry = _load_segment_registry()
+    recent_keys = set()
+    for key, entry in registry.items():
+        if not isinstance(entry, dict) or entry.get("segment") != "PRESENT_CTA":
+            continue
+        try:
+            if (today_date - date.fromisoformat(entry.get("created", ""))).days < 7:
+                recent_keys.add(key)
+        except Exception:
+            continue
+    valid = [t for t in PRESENT_CTA_TEMPLATES
+             if not _is_masa_sales_ng(t) and not _is_ng(t) and _masa_len_ok(t) and not _is_abstract_masa(t)]
+    pool = [t for t in valid if _segment_registry_key(t) not in recent_keys] or valid
+    if not pool:
+        return posts, None
+    text = random.choice(pool)
+    posts.insert(min(PRESENT_ANCHOR, len(posts)), text)
+    registry[_segment_registry_key(text)] = {
+        "segment": "PRESENT_CTA", "hook": "present",
+        "variant": PRESENT_CTA_TEMPLATES.index(text), "created": today,
+    }
+    _save_segment_registry(registry)
+    return posts, text
 
 
 # ── masa専用: 「Instagram集客のハードルを下げる」完成原稿（2026-10-04 masa指示）─────────
@@ -3700,6 +3751,7 @@ def generate_30_masa_posts() -> list[str]:
 
     # インスタ運用の原則翻案投稿（HAKASE）を1日2本、22/30に投入（2026-09-23）。
     posts = _insert_hakase_posts(posts, "masa", TODAY)
+    posts, present_cta_text = _insert_present_cta(posts, "masa", TODAY)   # プレゼント誘導（present_campaign.json enabled時のみ）
 
     posts = _insert_hero_posts(posts, "masa")   # 全挿入の最後（LINE最終チェックより前に置く）
 
@@ -3718,6 +3770,27 @@ def generate_30_masa_posts() -> list[str]:
     if ai_time_cta_text is not None:
         protected_line_texts.add(ai_time_cta_text)
     line_target = 5
+    # プレゼント誘導(PRESENT_CTA)とAI時短CTAは、同日に重なって前半50本のLINE言及が上限を超える日は交互にする
+    # （偶数日=プレゼント優先・奇数日=AI時短優先。超えない日は両方出す）。
+    if present_cta_text is not None:
+        # 導線として確保する枠(プロフィール診断×2・URL付きLINE追加・AI時短・プレゼント)が上限を超える日だけ交互にする
+        _committed = set(prof_cta) | set(line_add) | {present_cta_text} | ({ai_time_cta_text} if ai_time_cta_text else set())
+        _line_front = sum(1 for p in posts[:50] if p in _committed)
+        if _line_front > line_target and ai_time_cta_text is not None and ai_time_cta_text in posts[:50]:
+            try:
+                _odd = date.fromisoformat(TODAY).toordinal() % 2
+            except Exception:
+                _odd = date.today().toordinal() % 2
+            _drop = present_cta_text if _odd else ai_time_cta_text
+            if _drop in posts:
+                posts.remove(_drop)
+            if _drop == present_cta_text:
+                present_cta_text = None
+            else:
+                ai_time_cta_text = None
+                protected_line_texts.discard(_drop)
+        if present_cta_text is not None:
+            protected_line_texts.add(present_cta_text)
     front_half_len = min(50, len(posts))
     line_idx_all = [
         i for i in range(front_half_len)
@@ -3752,7 +3825,7 @@ def generate_30_masa_posts() -> list[str]:
 
 _AI_TIME_CTA_TEMPLATE_SET = set(
     AI_JITSUREI_TEMPLATES + AI_DEKIRU_TEMPLATES + AI_KISO_TEMPLATES + AI_TIME_CTA_TEMPLATES
-)
+) | set(PRESENT_CTA_TEMPLATES)   # 2026-10-17: プレゼント誘導(PRESENT_CTA)も導線として保護
 
 
 def _is_anchor_post(p: str) -> bool:

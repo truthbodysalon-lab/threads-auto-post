@@ -2,6 +2,7 @@
 """masa抽象度チェック(_is_abstract_masa)と固定原稿のテスト（2026-10-07）。
 実行: cd ~/threads-auto-post && python3 test_masa_abstract.py"""
 import os
+import re
 import sys
 import unittest
 
@@ -86,6 +87,28 @@ class TestFixedContent(unittest.TestCase):
                 self._all_ok(m.build_gen_post(si, h))
         for _ in range(50):
             self._all_ok(g.generate_insta_easy_gen_post())
+
+    def test_uplink_style(self):
+        """2026-10-17 uplink型: 1行目は宛名・質問にしない／質問で締めない／本文にリストがある。"""
+        texts = list(g.INSTA_EASY_TEMPLATES) + list(g.HAKASE_TEMPLATES)
+        texts += [m.build_gen_post(si, h) for h in g.INSTA_HURDLES for si in range(len(g.INSTA_GEN_STRUCTURES))]
+        for t in texts:
+            body = t.split("\n[COMMENT]\n")[0]
+            lines = [x for x in body.split("\n") if x.strip()]
+            self.assertFalse(re.search(r"[？?]$", lines[0]), t)
+            self.assertFalse(re.search(r"[？?]$", lines[-1]), t)
+            self.assertGreaterEqual(len(lines), 5, t)   # 1行目・対象・リスト3行以上・締め
+
+    def test_present_cta(self):
+        self.assertEqual(len(g.PRESENT_CTA_TEMPLATES), 20)
+        firsts = [t.split("\n")[0] for t in g.PRESENT_CTA_TEMPLATES]
+        self.assertEqual(len(firsts), len(set(firsts)))
+        for t in g.PRESENT_CTA_TEMPLATES:
+            self._all_ok(t)
+            body = t.split("\n[COMMENT]\n")[0]
+            self.assertIn("『インスタ』", body)
+            self.assertNotIn("lin.ee", t)      # URLは本文にもコメントにも置かない（auto_postが投稿後に足す）
+            self.assertNotRegex(t, r"円|申し?込|決済|割引|面談")
 
     def test_hypotheses_ip(self):
         hyp = g._load_segment_hypotheses()["hypotheses"]

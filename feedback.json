@@ -394,9 +394,14 @@
       "date": "2026-10-17",
       "account": "masa",
       "text": "【masa・Instagram投稿はuplink型で書く／プレゼント誘導を1日1本（本人指示2026-10-17）】@masahide_takahashi_のInstagram関連の投稿は文章がいまいち、と指摘。UPLINKの投稿を参考にする。ルール: 本文120〜200字(上限250)／1行目は宛名にせず結論・数字・否定・対比・『ぶっちゃけ』の断言(対象は2行目か【】内)／本文にリスト(名詞→具体行動3〜5行・①〜④・やめたこと3つ・Aではなく B)を置く／最後は格言1行か5分以内の行動1つ／質問で始めず質問で終わらない(質問を使う時は10/7ルールA=対象を書く)／金額・店名・創作統計NG・URLはコメント欄。正本=SNS・Threads/masa_インスタ投稿_uplink型ルール_2026-10-17.md。固定原稿(masa_insta_content.py)は同日この型へ作り直し済み。プレゼント企画: 公式LINE(lin.ee/8PsIHHC)で『インスタ』と送ると『インスタ集客 1日1分スタートキット』(Notion公開ページ)が届く(LINE harness auto_replies id=6)。誘導投稿PRESENT_CTA20本を1日1本アンカー18に投入(present_campaign.json enabled)。本文にURLは置かずauto_postが投稿後にコメント欄へ公式LINEのURLを足す。LINE言及は前半50本で5本以内(AI時短CTAと重なって超える日だけ交互)。月2本のURL付きLINE投稿上限(_monthly_line_url_count)の対象外にするため本文は無URL。なぜ: masa直近60本の閲覧中央値7に対しuplink上位は107字・リスト・格言締めで桁違いだったため。"
+    },
+    {
+      "date": "2026-10-17",
+      "text": "【masa・投稿はAI/自動と明かさない／プレゼントは1つずつ（本人指示2026-10-17）】(1)@masahide_takahashi_の投稿は個人が自分で発信している体で出す。『この投稿はAI』『僕のSNSは毎日AIが出している』『1日150本自動』『YouTube/Kindleは自動生成』『誰も書いていない』は書かない。お店の作業にAIをどう使うか(返事・お礼・口コミ返信・マニュアル・求人・数字の見直し)だけ書く。8/23の『自動化の事実を見せる』方針(AI活用実例型)は廃止。検品=disclosure_check.py(inspector masa・生成・投稿直前)。(2)プレゼントは一気に出さず1期1つ(水曜切替・7日)。順番=インスタ→時短ガイド→MEO→AI→診断。正本=present_calendar.json。投稿の誘導はその日の1つだけ、『AI』誘導は④の期間のみ。(3)既存友だちにも同じ順番で1通ずつ案内(harness present_broadcast.py・送信済み台帳・既定dry_run・実送信は本人承認後)。",
+      "account": "masa"
     }
   ],
-  "updated_at": "2026-10-17T12:00:00",
+  "updated_at": "2026-10-17",
   "precedence": "ルールの優先順位（2026-07-19監査で制定）: ①goals.json(ゴール・導線保護) ②playbookのactiveルール(構造の勝敗・実測で進化) ③notesの最新日付 ④旧note。同一テーマのnoteは最新日付が旧を上書きする（旧noteとの矛盾はFAILにしない）。導線投稿(HPB/LINE/診断/整体LINE/cta_profile)は閲覧基準の負けテンプレ判定・pruneの対象外",
   "extra_templates_legacy": {
     "masa": [

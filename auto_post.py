@@ -550,7 +550,8 @@ try:
         PRESENT_CTA_TEMPLATES as _PRESENT_CTA_TEMPLATES,
     )
     # 2026-10-17: プレゼント誘導(PRESENT_CTA)も固定テンプレのアンカー扱い（全期間dedupでプールが枯渇しない）
-    _PRESENT_CTA_SET = set(_PRESENT_CTA_TEMPLATES)
+    from present_calendar import all_present_cta_texts as _cal_texts
+    _PRESENT_CTA_SET = set(_PRESENT_CTA_TEMPLATES) | _cal_texts()   # 2026-10-17 プレゼント順番表の各期の誘導
     _AI_CONTENT_TEMPLATES = set(
         _AI_JITSUREI_TEMPLATES + _AI_DEKIRU_TEMPLATES + _AI_KISO_TEMPLATES + _AI_TIME_CTA_TEMPLATES
     ) | _PRESENT_CTA_SET

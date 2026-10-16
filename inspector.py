@@ -343,6 +343,18 @@ def _log_ng(account: str, reasons: list[str], text: str):
         pass  # ログ失敗で検品自体を止めない（全停止しない原則）
 
 
+# ── ⑧ 自動投稿・AI投稿の開示（masa専用・2026-10-17 本人指示）──
+# masaは「個人が自分で発信している」体で出す。投稿をAI/自動で出していると明かす文は不採用にする。
+def _check_disclosure(text: str, account: str) -> list[str]:
+    if account != "masa":
+        return []
+    try:
+        from disclosure_check import disclosure_reasons
+        return disclosure_reasons(text)
+    except Exception:
+        return []  # 検査自体が壊れても生成は止めない（全停止しない原則）
+
+
 # ── 公開API ──────────────────────────────────────────────
 
 def inspect_post(text: str, account: str = "truth", pattern_name: str | None = None,
@@ -372,6 +384,7 @@ def inspect_post(text: str, account: str = "truth", pattern_name: str | None = N
     reasons += _check_url_count(text)
     reasons += _check_first_line_length(text)
     reasons += _check_jargon_first_line(text, account)
+    reasons += _check_disclosure(text, account)
 
     ok = len(reasons) == 0
     if not ok and log:

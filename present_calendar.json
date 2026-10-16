@@ -1,0 +1,22 @@
+{
+  "_doc": "masa公式LINE『今週のプレゼント』順番表(2026-10-17)。1期=1プレゼント・7日ずつ・水曜切替。5期で一巡し繰り返す。投稿側(present_calendar.py)とLINE配布ジョブ(line-harness/present_broadcast.py)の共通の正本。",
+  "anchor": "2026-10-21",
+  "days": 7,
+  "presents": [
+    {"order": 1, "key": "insta_kit", "name": "インスタ集客 1日1分スタートキット", "keyword": "インスタ",
+     "url": "https://adorable-syzygy-fae.notion.site/3fb0235f23a281d49525f87fe5dc6122",
+     "hook": "プロフィール3行テンプレ、投稿ネタ27本表、1日1分で進める1週間の表が入っています。"},
+    {"order": 2, "key": "jitan_guide", "name": "店舗経営の時短AI活用ガイド", "keyword": "時短ガイド",
+     "url": "https://adorable-syzygy-fae.notion.site/3fb0235f23a281c7966ce058345adaab",
+     "hook": "AIに任せていいお店の作業10個と、コピペで使えるプロンプト10本が入っています。"},
+    {"order": 3, "key": "meo_50", "name": "MEO被リンク50選", "keyword": "MEO",
+     "url": "https://adorable-syzygy-fae.notion.site/MEO-50-3a20235f23a28122b5b8e67e912e4440",
+     "hook": "Googleマップ対策で登録するサイト50選と、4週間の登録スケジュールが入っています。"},
+    {"order": 4, "key": "ai_starter", "name": "AI時短スターター3ステップ", "keyword": "AI",
+     "url": "",
+     "hook": "お店の時短にAIを使う、最初の3ステップをお送りします。"},
+    {"order": 5, "key": "free_shindan", "name": "無料診断", "keyword": "診断",
+     "url": "",
+     "hook": "3つの質問に答えるだけで、お店に合わせたアドバイスをお返しします。"}
+  ]
+}

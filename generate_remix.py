@@ -172,9 +172,10 @@ def _is_ng(text: str) -> bool:
     return _is_incoherent(text)
 
 # masa専用: 面談・金額・決済の言及禁止（クロージング戦略の根幹。goals.json/2026-07-07指示）。
+# 強化書(有料教材)は2026-10-17本人決定でLINE育成配信Day6-7のみ販売＝投稿・プレゼント誘導では名前も出さない。
 # 面談案内はLINE Day6-7のみ。教育的な金額（月商50万等）は許可し、自社オファーの価格・申込を遮断する。
 _MASA_SALES_NG = re.compile(
-    r"面談|決済|お?申し?込み|お支払い|購入はこちら|税込|割引|モニター価格|キャンペーン価格|Square|"
+    r"面談|強化書|決済|お?申し?込み|お支払い|購入はこちら|税込|割引|モニター価格|キャンペーン価格|Square|"
     r"(料金|価格)(は|表)|円で(提供|販売|案内)|コース(料金|価格)")
 
 
@@ -2627,22 +2628,22 @@ MASA_BAD_HABITS = [x for x in MASA_BAD_HABITS if not _MASA_ABSTRACT_RE.search(x)
 
 # ── masa: AI活用の実例投稿（2026-08-23・商材「AI活用支援」の需要醸成）──
 # 2026-10-04: AI系の方向性＝「店舗経営の事業効率を上げるAI活用法」（返信・マニュアル・求人・口コミ・数字・会議メモ等。Instagramは題材の1つ）。
-# 全て実際に稼働している自動化の事実のみ。秘密情報(トークン等)・未確認の数値・面談/金額は書かない。
+# 2026-10-17 本人指示: 『自分の投稿・SNS・LINEをAI/自動で運用している』と明かす文は書かない（個人が発信している体）。お店の作業にAIをどう使うかだけ書く。秘密情報(トークン等)・未確認の数値・面談/金額は書かない。
 AI_JITSUREI_TEMPLATES = [
-    "僕のSNS投稿は、毎日AIが出しています。\n僕は1本も書いていません。\nお店の仕事も、文章の作業は任せられます。\n今日は、毎日書いている文章を1つ思い出してください。",
-    "毎朝、AIが前日の投稿を見直しています。\nどれが読まれたか、数字で出してくれます。\nお店なら、先月の来店数の見直しに使えます。\n今日は、先月の来店数を1つ書き出してください。",
-    "友だち登録した人に、7日間メッセージが届きます。\n全部、AIの仕組みが送っています。\nお店の予約前の案内も、同じ形にできます。\n今日は、お客さんによく送る文を1つ探してください。",
+    "返事を書く時間が、毎日30分ありました。\n今は、最初の下書きだけAIに頼んでいます。\n読んで、自分の言葉に直して送ります。\n今日は、昨日書いた返事を1つ選んでください。",
+    "先月の来店数を、数字で見直してみてください。\n数字を貼ってAIに「気づくことは？」と聞くと、見落としが出ます。\nどれが多かったかも、すぐ分かります。\n今日は、先月の来店数を1つ書き出してください。",
+    "来店前の案内を、毎回ゼロから書いていませんか。\n僕は、よく送る案内を1つの型にして、AIに整えてもらいました。\n来店後のお礼も、同じ形にできます。\n今日は、お客さんによく送る文を1つ探してください。",
     "お客さんからの問い合わせ。\n最初の返事の下書きは、AIが作っています。\n僕は読んで直して、送るだけです。\n今日は、よく来る質問を3つ書き出してください。",
     "スタッフ向けのマニュアル作り。\n白紙から書くと、時間がかかります。\n僕は文章の作業を、AIの下書きから始めています。\n今日は、1つの作業の流れを3行で書いてください。",
-    "YouTubeの動画も、毎朝AIが作っています。\n公開も、夕方に勝手にされます。\nお店の紹介動画も、台本まではAIに頼めます。\n今日は、お店の紹介を3行で書いてください。",
-    "Kindleの本も、AIが書いています。\nもう何冊か、出版しました。\nお店の求人原稿も、最初の下書きはAIが得意です。\n今日は、募集したい仕事を3つ書いてください。",
-    "毎朝の数字の確認は、AIがやっています。\n人がやると、忙しい日は忘れます。\nお店の売上の記録も、見る日を決めると続きます。\n今日は、売上を見る曜日を1つ決めてください。",
-    "僕が毎朝やるのは、AIの案を選ぶだけです。\n口コミへの返事も、同じ形で回せます。\nAIが下書きして、人が最後に読みます。\n今日は、最近の口コミを1件読み返してください。",
+    "お店の紹介動画の台本は、AIに頼めます。\nお店の特徴を3つ伝えると、30秒分の台本が出ます。\n撮影の前に、声に出して読んで直します。\n今日は、お店の紹介を3行で書いてください。",
+    "求人原稿の最初の下書きは、AIが得意です。\n仕事内容、時間、雰囲気を伝えるだけで形になります。\n僕は、出てきた文を必ず自分で読んで直します。\n今日は、募集したい仕事を3つ書いてください。",
+    "売上の数字は、見る曜日を決めると続きます。\n数字を貼ってAIに「先週との違いは？」と聞くと、変化が見えます。\n忙しい日は忘れるので、曜日を先に決めます。\n今日は、売上を見る曜日を1つ決めてください。",
+    "口コミへの返事は、AIの案から選ぶと形になります。\nお礼を先に書く型で頼むと、角が立ちません。\nAIが下書きして、人が最後に読みます。\n今日は、最近の口コミを1件読み返してください。",
     "問い合わせの返事を、全部手で書くと1日が終わります。\n僕は最初の返事だけ、AIに下書きさせています。\n大事なところは、自分の言葉に直します。\n今日は、毎回同じ返事を1つ選んでください。",
-    "AIに任せる順番を、決めています。\nまず、毎日同じ作業。次に、文章の下書き。\n投稿も返事も、この順番で任せました。\n今日は、毎日同じ作業を1つ選んでください。",
-    "閉店後にSNSを書く時間は、ほぼゼロになりました。\n空いた時間で、お客さんと話しています。\n発信も返事も、下書きはAIです。\n今日は、閉店後の作業を1つ書き出してください。",
-    "AIの仕事が止まったら、AIが気づいて直します。\n直らない時だけ、僕のスマホに知らせが来ます。\nお店の予約表も、見る人を決めると安心です。\n今日は、毎日見る場所を1つ決めてください。",
-    "7日間のメッセージを、僕は1通ずつ送っていません。\n最初に作って、あとはAIの仕組みに任せました。\n来店後のお礼も、同じ形にできます。\n今日は、来店後に送る一言を1つ書いてください。",
+    "AIに任せる順番を決めると、失敗しません。\nまず、毎日同じ作業。次に、文章の下書き。\n返事も案内も、この順番で試すと迷いません。\n今日は、毎日同じ作業を1つ選んでください。",
+    "閉店後の書き物が長引く店主さんへ。\n返事やお知らせの下書きをAIに頼むと、時間が空きます。\n空いた時間で、お客さんと話せます。\n今日は、閉店後の作業を1つ書き出してください。",
+    "AIの答えが間違っていたら、どうするか。\n僕は、日付と数字だけ必ず自分で確かめます。\n直らない時は、AIに聞き直します。\n今日は、確かめる場所を1つ決めてください。",
+    "来店後のお礼は、毎回手で書くと続きません。\n最初に型を作って、AIに言い換えてもらうと楽です。\n数字や日付は、人が必ず確かめます。\n今日は、来店後に送る一言を1つ書いてください。",
     "「AIに任せたら、冷たくなりませんか？」\nよく聞かれます。\nならないように、最後は僕が読んでいます。\n今日は、お客さんへの返事を1通、声に出して読んでください。",
 ]
 
@@ -2680,7 +2681,7 @@ AI_KISO_TEMPLATES = [
 # 約束＝実物: LINEで「AI」と送ると時短の始め方3ステップが自動で届く（auto_reply登録済み）。
 AI_TIME_CTA_TEMPLATES = [
     "返事、記録、書類づくり。\nお店の毎日の作業は、AIで軽くできます。\nでも何から任せるかが分からない。\nLINEで『AI』と送ると、時短の始め方の3ステップが届きます。プロフィールのリンクから。",
-    "閉店後にSNSや返事を書く時間は、ほぼゼロになりました。\n同じことをやりたい方へ。\nLINEで『AI』と送ってもらえれば、最初の一歩をお伝えします。入口はプロフィールのリンクです。",
+    "閉店後に返事や書類を書く時間は、AIの下書きで短くできます。\n同じことをやりたい方へ。\nLINEで『AI』と送ってもらえれば、最初の一歩をお伝えします。入口はプロフィールのリンクです。",
     "AIで時短したい。でも難しそう。\nそんな方のために、最初の3ステップだけをLINEで配っています。\n返事や書類の作業から始められます。『AI』と送るだけ。プロフィールのリンクからどうぞ。",
     "1日30分、返事や記録の作業をAIに任せる。\nそれだけで、月に15時間ほど空きます。\nその時間で何をするかは、あなた次第。\n時短の始め方はLINEで『AI』と送ってください。プロフィールのリンクから。",
     "予約の返事、求人、数字の確認。\nお店ごとに、AIに任せる順番は違います。\nLINEで『AI』と送ると時短の始め方が届き、そのまま質問もできます。プロフィールのリンクへ。",
@@ -2940,7 +2941,18 @@ from masa_insta_content import PRESENT_CTA_TEMPLATES  # noqa: E402
 # 本文にURLは置かない（auto_postが投稿後にコメント欄へ公式LINEのURLを足す）。
 PRESENT_CAMPAIGN_FILE = BASE / "present_campaign.json"
 PRESENT_ANCHOR = 18   # 既存アンカー(4/5/8/9/12/14/16/22/26/27/30/34/44)と重ならない位置
-_PRESENT_CTA_SET = set(PRESENT_CTA_TEMPLATES)
+from present_calendar import current_present as _cal_current_present, PRESENT_CTA as _CAL_PRESENT_CTA, all_present_cta_texts as _cal_all_cta_texts  # noqa: E402
+# 2026-10-17: プレゼントは1期1つずつ（present_calendar.json）。インスタ期は masa_insta_content の20本、他の期は present_calendar.py の各10本。
+_PRESENT_CTA_SET = set(PRESENT_CTA_TEMPLATES) | _cal_all_cta_texts()
+
+
+def _present_pool(today: str):
+    """その日に有効なプレゼント1つ分の誘導原稿だけを返す。戻り値=(key, [原稿...])。"""
+    p = _cal_current_present(today, pre_anchor_first=True)
+    key = p["key"] if p else "insta_kit"
+    if key == "insta_kit":
+        return key, list(PRESENT_CTA_TEMPLATES)
+    return key, list(_CAL_PRESENT_CTA.get(key, []))
 
 
 def _present_campaign_enabled() -> bool:
@@ -2954,7 +2966,7 @@ def _insert_present_cta(posts: list[str], acct: str, today: str):
     """masa専用: プレゼント誘導投稿を1日1本 PRESENT_ANCHOR に投入し、segment_registry.jsonへ
     segment="PRESENT_CTA" で登録する。過去7日以内に使った原稿は再投入しない。
     戻り値=(posts, 投入した原稿 or None)。キャンペーン無効(present_campaign.json)なら何もしない。"""
-    if acct != "masa" or not PRESENT_CTA_TEMPLATES or not _present_campaign_enabled():
+    if acct != "masa" or not _present_campaign_enabled():
         return posts, None
     try:
         today_date = date.fromisoformat(today)
@@ -2970,7 +2982,8 @@ def _insert_present_cta(posts: list[str], acct: str, today: str):
                 recent_keys.add(key)
         except Exception:
             continue
-    valid = [t for t in PRESENT_CTA_TEMPLATES
+    _pkey, _ppool = _present_pool(today)
+    valid = [t for t in _ppool
              if not _is_masa_sales_ng(t) and not _is_ng(t) and _masa_len_ok(t) and not _is_abstract_masa(t)]
     pool = [t for t in valid if _segment_registry_key(t) not in recent_keys] or valid
     if not pool:
@@ -2978,8 +2991,8 @@ def _insert_present_cta(posts: list[str], acct: str, today: str):
     text = random.choice(pool)
     posts.insert(min(PRESENT_ANCHOR, len(posts)), text)
     registry[_segment_registry_key(text)] = {
-        "segment": "PRESENT_CTA", "hook": "present",
-        "variant": PRESENT_CTA_TEMPLATES.index(text), "created": today,
+        "segment": "PRESENT_CTA", "hook": "present", "present_key": _pkey,
+        "variant": _ppool.index(text), "created": today,
     }
     _save_segment_registry(registry)
     return posts, text
@@ -3735,7 +3748,10 @@ def generate_30_masa_posts() -> list[str]:
 
     # AI→時短→LINE誘導を1日1本（URL無し・プロフィール経由。LINE言及枠内）
     ai_time_cta_text = None
-    for _ in range(20):
+    # 2026-10-17: 『AI』キーワードの誘導は④(ai_starter)の期間だけ。他の期は出さない（プレゼントは1期1つ）。
+    _cur_pres = _cal_current_present(TODAY, pre_anchor_first=True)
+    _ai_time_on = bool(_cur_pres and _cur_pres["key"] == "ai_starter")
+    for _ in range(20 if _ai_time_on else 0):
         tc = random.choice(AI_TIME_CTA_TEMPLATES)
         if not _is_masa_sales_ng(tc) and not _is_ng(tc):
             posts.insert(min(12, len(posts)), tc)
@@ -3825,7 +3841,7 @@ def generate_30_masa_posts() -> list[str]:
 
 _AI_TIME_CTA_TEMPLATE_SET = set(
     AI_JITSUREI_TEMPLATES + AI_DEKIRU_TEMPLATES + AI_KISO_TEMPLATES + AI_TIME_CTA_TEMPLATES
-) | set(PRESENT_CTA_TEMPLATES)   # 2026-10-17: プレゼント誘導(PRESENT_CTA)も導線として保護
+) | _PRESENT_CTA_SET   # 2026-10-17: プレゼント誘導(PRESENT_CTA・順番表の全期)も導線として保護
 
 
 def _is_anchor_post(p: str) -> bool:

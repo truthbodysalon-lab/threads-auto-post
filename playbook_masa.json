@@ -1,6 +1,6 @@
 {
   "acct": "masa",
-  "version": 74,
+  "version": 75,
   "updated": "2026-10-17",
   "description": "修正ポイント（勝ち構造・死ぬ構造）の正本。毎朝サブエージェントEが実測データで各ルールを検証し、効かなくなったルールはretired、新発見はtestingで追加、実証されたらactiveに昇格する。ヒーロー投稿と新テンプレはこのプレイブックのactiveルールに従って書く。",
   "rules": [
@@ -381,6 +381,15 @@
       "last_validated": "2026-10-17",
       "rule": "【プレゼント誘導は『中身を具体的に1つ見せる→公式LINEで『インスタ』と送ると受け取れます』】1日1本、前半アンカー18。本文はuplink型(1行目=断言/【】見出し)で、プレゼント『インスタ集客 1日1分スタートキット』の中身(プロフィール3行テンプレ／投稿ネタ27本表／ストーリーズ4枚の型／ハイライト4つ／見る数字2つ／最初の1週間／AIプロンプト3本)から1つを見せる。本文にURLは置かず、投稿後にコメント欄へ公式LINE(lin.ee/8PsIHHC)を足す。金額・申込・誇大表現なし。LINE言及は前半50本で5本以内(AI時短CTAと重なって超える日だけ交互)。判定=前日の誘導投稿の閲覧(中央値比)と、LINE『インスタ』キーワードの返信数(auto_replies id=6)。",
       "evidence": "本人指示2026-10-17『プレゼント企画をする。公式LINE(LINE harness)と連携してプレゼントを作成し、キーワードでプレゼントする。その誘導投稿も作成して』。プレゼント本体=Notion公開ページ(担当A作成・公開確認済み)・LINE harness auto_replies id=6『インスタ』。固定20本=masa_insta_content.PRESENT_CTA_TEMPLATES・有効化=present_campaign.json enabled。"
+    },
+    {
+      "id": "L13",
+      "type": "lose",
+      "status": "active",
+      "added": "2026-10-17",
+      "last_validated": "2026-10-17",
+      "rule": "【『自分の投稿・SNS・LINEをAI/自動で運用している』と明かす文は負け】masaは個人が自分で発信している体で出す。不可=『この投稿はAI』『僕のSNSは毎日AIが出している・1本も書いていない』『1日○本自動投稿』『誰も書いていない』『7日間のメッセージは僕が送っていない』『YouTube・Kindleは自動生成』など。可=『お店の作業(返事・お礼・口コミ返信・マニュアル・求人・数字の見直し)をAIの下書きから始める』『僕は下書きを必ず自分で読んで直す』。判定=disclosure_check.py(inspector.inspect_post masa・生成検品・投稿直前検品)。なぜ: 発信者がAIだと分かると信頼と個人感が落ちるため。W21(AI活用実例型)の『自動化の事実を見せる』方針はこれにより廃止。",
+      "evidence": "本人指示2026-10-17『投稿に関してはAIで投稿しているとかはやめてあくまで個人が発信していることを装って』。AI_JITSUREI15本中11本・AI_TIME_CTA1本・variety1本を店舗作業の例へ書き換え済み。"
     }
   ],
   "changelog": [
@@ -742,6 +751,11 @@
       "version": 74,
       "date": "2026-10-17",
       "change": "uplink型の書き方ルール(W_UPLINK_STYLE)とプレゼント誘導(W_PRESENT_CTA)をtestingで追加。Instagram固定原稿(INSTA_EASY80・HAKASE18・組合せ生成・IP01〜IP70)をuplink型(1行目=断言・本文にリスト・格言締め)へ作り直し。PRESENT_CTA20本を1日1本アンカー18へ。なぜ: 本人指示『インスタ関連の投稿の文章がいまいち』(masa直近60本の閲覧中央値7)。"
+    },
+    {
+      "version": 75,
+      "date": "2026-10-17",
+      "change": "L13(自動投稿/AI投稿の開示は負け)をactiveで追加。AI_JITSUREI・AI_TIME_CTA・variety_templatesの開示表現を店舗作業の例へ書き換え、disclosure_check.pyを検品3箇所に配線。プレゼントは1期1つずつ(present_calendar.json・水曜切替5期)に変更し、AI時短CTAは④の期間のみ。なぜ: 本人指示『個人が発信していることを装って』『プレゼントは1つ1つ別で』。"
     }
   ]
 }

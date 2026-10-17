@@ -50,7 +50,7 @@
   "寝ても疲労感が抜けない人へ。": {
     "segment": "T5",
     "hook": "high",
-    "created": "2026-10-16",
+    "created": "2026-10-18",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z17_truth"
@@ -66,7 +66,7 @@
   "産後の腰痛が続くママへ。": {
     "segment": "T3",
     "hook": "high",
-    "created": "2026-10-16",
+    "created": "2026-10-18",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z11_truth"
@@ -74,7 +74,7 @@
   "何をしても一時的にしか変わらない人へ。": {
     "segment": "T6",
     "hook": "high",
-    "created": "2026-10-16",
+    "created": "2026-10-18",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z20_nagaoka"
@@ -82,7 +82,7 @@
   "朝起きた瞬間からだるい人へ。": {
     "segment": "T5",
     "hook": "high",
-    "created": "2026-10-14",
+    "created": "2026-10-18",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z16_nagaoka"
@@ -651,7 +651,7 @@
   "立ちっぱなしで脚がパンパンな人へ。": {
     "segment": "T4",
     "hook": "high",
-    "created": "2026-10-14",
+    "created": "2026-10-18",
     "acct": "nagaoka",
     "variant": 1
   },
@@ -724,21 +724,21 @@
   "介護の抱え上げで腰を痛めた人へ。": {
     "segment": "T4",
     "hook": "high",
-    "created": "2026-10-14",
+    "created": "2026-10-18",
     "acct": "truth",
     "variant": 1
   },
   "他院に通っても改善しない人へ。": {
     "segment": "T6",
     "hook": "high",
-    "created": "2026-10-14",
+    "created": "2026-10-18",
     "acct": "truth",
     "variant": 1
   },
   "抱っこで腕がだるいママへ。": {
     "segment": "T3",
     "hook": "high",
-    "created": "2026-10-14",
+    "created": "2026-10-18",
     "acct": "nagaoka",
     "variant": 1
   },
@@ -1172,8 +1172,7 @@
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 34,
-    "created": "2026-10-04",
-    "acct": "masa"
+    "created": "2026-10-18"
   },
   "高額商品を売る経営者で、インスタを難しく考える人は。": {
     "segment": "INSTA_EASY",
@@ -1263,8 +1262,7 @@
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 32,
-    "created": "2026-10-04",
-    "acct": "masa"
+    "created": "2026-10-18"
   },
   "プロフィールを完璧にしてから投稿しよう、は間違いです。": {
     "segment": "INSTA_EASY",
@@ -3212,7 +3210,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 7,
-    "created": "2026-10-08",
+    "created": "2026-10-18",
     "acct": "truth"
   },
   "『仕事の後半になると、足腰がきつい』という声を、よく聞きます。": {
@@ -3249,7 +3247,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 15,
-    "created": "2026-10-08",
+    "created": "2026-10-18",
     "acct": "nagaoka"
   },
   "インスタ運用で、登録ページに誘導しているのに、登録がない院長へ。": {
@@ -3730,7 +3728,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 27,
-    "created": "2026-10-09",
+    "created": "2026-10-18",
     "acct": "truth"
   },
   "【寝る前にスマホを手放せない人が見直すこと5選】": {
@@ -5313,7 +5311,7 @@
   "「リピートできている」と感じている院長へ。": {
     "segment": "R11",
     "hook": "high",
-    "created": "2026-10-12",
+    "created": "2026-10-18",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -5322,7 +5320,7 @@
   "提案を、怖がっている院長へ。": {
     "segment": "R12",
     "hook": "high",
-    "created": "2026-10-12",
+    "created": "2026-10-18",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -6756,6 +6754,172 @@
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 7,
+    "created": "2026-10-18"
+  },
+  "【緊張型頭痛の人が毎日やる習慣7選】": {
+    "segment": "LIST_HABIT",
+    "hook": "list",
+    "variant": 16,
+    "created": "2026-10-18",
+    "acct": "truth"
+  },
+  "【腕が耳まで上がらない人が確認すること6選】": {
+    "segment": "LIST_HABIT",
+    "hook": "list",
+    "variant": 41,
+    "created": "2026-10-18",
+    "acct": "nagaoka"
+  },
+  "【湯船から遠ざかっている人が始める習慣6選】": {
+    "segment": "LIST_HABIT",
+    "hook": "list",
+    "variant": 44,
+    "created": "2026-10-18",
+    "acct": "nagaoka"
+  },
+  "名前を売るより、仕組みに名前を付ける。": {
+    "segment": "HAKASE",
+    "hook": "principle",
+    "variant": 8,
+    "created": "2026-10-18"
+  },
+  "フォロワーを増やすだけが、集客じゃない。": {
+    "segment": "HAKASE",
+    "hook": "principle",
+    "variant": 10,
+    "created": "2026-10-18"
+  },
+  "ハイライトを、後回しにしない。": {
+    "segment": "PRESENT_CTA",
+    "hook": "present",
+    "present_key": "insta_kit",
+    "variant": 11,
+    "created": "2026-10-18"
+  },
+  "自己紹介の1行目は、名刺です。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 73,
+    "created": "2026-10-18"
+  },
+  "ぶっちゃけ、下書きは出した方が勝ちです。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 11,
+    "created": "2026-10-18"
+  },
+  "広告にする投稿は、保存が一番多い1本。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 49,
+    "created": "2026-10-18"
+  },
+  "広告で最初に押すのは、このボタンだけ。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 50,
+    "created": "2026-10-18"
+  },
+  "ストーリーズは、3枚で1セット。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 75,
+    "created": "2026-10-18"
+  },
+  "DMで、売り込まない。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 43,
+    "created": "2026-10-18"
+  },
+  "肩書きは、15〜17字で足ります。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 74,
+    "created": "2026-10-18"
+  },
+  "同じ投稿は、何度出してもいい。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 62,
+    "created": "2026-10-18"
+  },
+  "投稿ネタは、3×3×3で27本できる。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 61,
+    "created": "2026-10-18"
+  },
+  "投稿の型は、3つあれば足ります。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 64,
+    "created": "2026-10-18"
+  },
+  "他店と比べるのは、やめる。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 28,
+    "created": "2026-10-18"
+  },
+  "リールは、毎日出さなくていい。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 16,
+    "created": "2026-10-18"
+  },
+  "見る数字は、3つだけ。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 36,
+    "created": "2026-10-18"
+  },
+  "DMの返信は、1日1回で足ります。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 47,
+    "created": "2026-10-18"
+  },
+  "ストーリーズは、24時間で消える。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 19,
+    "created": "2026-10-18"
+  },
+  "見る数字は、2つだけ。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-18"
+  },
+  "1人なら、投稿の曜日を固定する。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-18"
+  },
+  "自己紹介欄に、150文字はいらない。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-18"
+  },
+  "インスタ運用で、顔を出したくないサロンオーナーへ。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-18"
+  },
+  "お店を探す人は、地名と悩みで調べる。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-18"
+  },
+  "ぶっちゃけ、他店は、1日1分見れば足ります。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
     "created": "2026-10-18"
   }
 }

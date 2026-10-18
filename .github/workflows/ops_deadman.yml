@@ -1,0 +1,40 @@
+name: Ops Deadman (manual check)
+
+# 2026-10-18 Actions無料枠対策: Mac死活監視(見張り2本)の本体は、10分ごとの常駐ループ(auto_post.yml → dispatcher.py → ops_deadman.py)で
+# 動いている。このworkflowは「手動で1回だけ確認/試験通知を送る」ためのもの(scheduleなし)。公開repoなのでActions分は無料。
+# 公開ログに出るのは経過秒数と OK/ALERT の語だけ(API応答の本文・Webhook URL・トークンは出さない)。
+on:
+  workflow_dispatch:
+    inputs:
+      test_alert:
+        description: '試験通知: 「[試験]」付きで両方の警告文をDiscordへ送る(実データ・状態は使わない)'
+        type: boolean
+        default: false
+      dry:
+        description: 'DRY: Discordへ送らずログだけ'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ops-deadman-manual
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: ops_deadman
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          OPS_DEADMAN_TEST: ${{ github.event.inputs.test_alert == 'true' && '1' || '' }}
+          OPS_DEADMAN_DRY: ${{ github.event.inputs.dry == 'true' && '1' || '' }}
+        run: python3 ops_deadman.py

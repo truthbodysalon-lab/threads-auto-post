@@ -92,6 +92,8 @@ jobs:
         if: steps.keeper.outputs.skip != '1'
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
+          # 2026-10-18: dispatcher.py が呼ぶ ops_deadman.py(Mac死活監視)の通知先。公開ログには値は出ない(Secretsはマスクされる)
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -134,7 +136,7 @@ jobs:
                      insights_truth.json insights_nagaoka.json insights_masa.json \
                      weights_truth.json weights_nagaoka.json weights_masa.json \
                      feedback.json line_listin_state.json shared_posted_guard.jsonl \
-                     segment_registry.json dispatch_state.json log_x_truth_posted.jsonl \
+                     segment_registry.json dispatch_state.json deadman_state.json log_x_truth_posted.jsonl \
                      uplink_repost_pool.json; do
               [ -e "$f" ] && git add "$f" 2>/dev/null
             done

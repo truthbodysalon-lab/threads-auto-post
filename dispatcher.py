@@ -230,7 +230,20 @@ def main():
             warn(f"state書込失敗: {ex}")
 
 
+def run_ops_deadman():
+    """Mac死活監視(cloud-daily-tasks / line-stepmail-cloud の2本)を公開repoのこのループで行う(2026-10-18 施策A)。
+    非公開repoのActionsで3時間・2時間おきに起動していた見張りは99%が空振りの1分課金だったため、ここへ移した。
+    別プロセス+timeoutで隔離し、失敗してもディスパッチャ本体には影響させない。auto_post.yml のループ起動済みの
+    旧ステップでも毎サイクル git pull で本ファイルが更新されるので、workflow の再起動を待たずに有効になる。"""
+    try:
+        import subprocess
+        subprocess.run([sys.executable, str(HERE / "ops_deadman.py")], timeout=45, check=False)
+    except Exception as ex:
+        print(f"::warning::ops_deadman 起動失敗: {type(ex).__name__}", flush=True)
+
+
 if __name__ == "__main__":
+    run_ops_deadman()   # 見張りは先に実行(数秒)。ゲート判定などで時間を使っても監視は必ず走る
     try:
         main()
     except BaseException as e:

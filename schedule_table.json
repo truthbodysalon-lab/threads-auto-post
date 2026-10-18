@@ -70,7 +70,7 @@
    "repo": "truthbodysalon-lab/ig-autopost-cloud",
    "workflow": "ig-verify.yml",
    "jst_time": "22:21",
-   "window_min": 60,
+   "window_min": 90,
    "since": "slot",
    "enabled": true
   },
@@ -857,6 +857,32 @@
    "window_min": 90,
    "since": "day",
    "enabled": true
+  },
+  {
+   "id": "e2etest-pool",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-story-pool.yml",
+   "jst_time": "16:35",
+   "window_min": 40,
+   "since": "slot",
+   "enabled": true,
+   "gate": "pool",
+   "inputs": {
+    "dry_run": "true"
+   }
+  },
+  {
+   "id": "e2etest-qa",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-story-qa.yml",
+   "jst_time": "16:35",
+   "window_min": 40,
+   "since": "slot",
+   "enabled": true,
+   "gate": "qa",
+   "inputs": {
+    "dry_run": "true"
+   }
   }
  ]
 }

@@ -25,9 +25,27 @@ def log(msg):
 
 def warn(msg):
     print(f"::warning::dispatcher: {msg}", flush=True)
+    # 2026-10-18: discord_push はこのリポに無く警告が Discord に届いていなかった。
+    # 見張り(ops_deadman.py)の discord_send を使う（LINEは使わない。失敗してもループは止めない）
+    # 同じ内容の警告は6時間に1回だけ（10分ごとのループで同じ失敗を連投しない）
     try:
-        import discord_push
-        discord_push.send(f"dispatcher: {msg}")
+        import hashlib
+        import re
+        import json as _json
+        import time as _time
+        key = hashlib.sha1(re.sub(r"\d+", "#", msg)[:120].encode()).hexdigest()[:12]
+        path = "/tmp/dispatcher_warn_sent.json"
+        try:
+            sent = _json.load(open(path))
+        except Exception:
+            sent = {}
+        now = _time.time()
+        if now - sent.get(key, 0) < 6 * 3600:
+            return
+        from ops_deadman import discord_send
+        if discord_send(f"dispatcher: {msg}"):
+            sent[key] = now
+            _json.dump(sent, open(path, "w"))
     except Exception:
         pass
 

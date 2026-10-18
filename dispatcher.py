@@ -58,6 +58,36 @@ def runs_since(repo, wf, since_utc):
     return d.get("total_count", 0)
 
 
+def fetch_plan(repo, acct):
+    """ig-autopost-cloud の state/<acct>/story_plan.json を取得。無ければ {}、取得失敗は None（ゲートはフェイルオープン）。"""
+    import base64
+    try:
+        _, d = api("GET", f"/repos/{repo}/contents/state/{acct}/story_plan.json")
+        return json.loads(base64.b64decode(d["content"]).decode("utf-8"))
+    except urllib.error.HTTPError as ex:
+        return {} if ex.code == 404 else None
+    except Exception:
+        return None
+
+
+def gate_skip(e, repo, now):
+    """起動前ゲート（M10・2026-10-18）。entry の "gate": pool|qa|offer|features が付いたものだけ、
+    「確実に何も起きない」時に起動を省略する。判定ロジックは story_gate.py（ig-autopost-cloud 本体の複製）。
+    取得失敗・想定外・importエラーは全て False（=従来どおり起動）。entry から "gate" を消せば元の挙動。"""
+    g = e.get("gate")
+    if not g:
+        return False
+    try:
+        import story_gate
+        plans = {a: fetch_plan(repo, a) for a in story_gate.MODES[g]["accounts"]}
+        skip, why = story_gate.decide(g, plans, now)
+        log(f"{e['id']}: gate({g}) {'SKIP' if skip else 'RUN'} {why}")
+        return bool(skip)
+    except Exception as ex:
+        log(f"{e['id']}: gate例外のため起動側へ: {type(ex).__name__}: {ex}")
+        return False
+
+
 def load_state():
     try:
         return json.loads(STATE.read_text())
@@ -107,6 +137,8 @@ def main():
             if mode != "live":
                 log(f"{e['id']}: 起動予定 {repo} {wf} (dry_run)")
                 continue
+            if gate_skip(e, repo, now):
+                continue   # 完了済み等で確実に空振り → 起動しない（マーカーは付けず、次ループで再判定）
             ref = default_branch(repo)
             body = {"ref": ref}
             if e.get("inputs"):  # workflow_dispatch の入力（例: hpb の account）

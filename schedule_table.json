@@ -1,6 +1,6 @@
 {
  "mode": "live",
- "note": "jst_time=各repoの変更後cron(JST)+2分。since=day:当日0時JST以降のrunが有れば起動しない / slot:枠のjst_time-12分以降。weekdays: 月=0..日=6。enabled:falseで個別OFF、modeをdry_runに戻すと全停止。 skip_until:YYYY-MM-DD未満の日は起動しない(一時停止中の空振り防止。2026-10-18追加)。inputs:workflow_dispatchへ渡す入力。",
+ "note": "jst_time=各repoの変更後cron(JST)+2分。since=day:当日0時JST以降のrunが有れば起動しない / slot:枠のjst_time-12分以降。weekdays: 月=0..日=6。enabled:falseで個別OFF、modeをdry_runに戻すと全停止。 skip_until:YYYY-MM-DD未満の日は起動しない(一時停止中の空振り防止。2026-10-18追加)。inputs:workflow_dispatchへ渡す入力。 gate:pool|qa|offer|features=起動前ゲート(story_gate.py)。確実に何も起きない時だけ起動を省略、取得失敗等は起動(フェイルオープン)。無効化=entryからgateキーを削除。",
  "entries": [
   {
    "id": "ig-story@07:31",
@@ -148,7 +148,8 @@
    "enabled": true,
    "weekdays": [
     4
-   ]
+   ],
+   "gate": "features"
   },
   {
    "id": "ig-story-friday@17:05",
@@ -160,7 +161,8 @@
    "enabled": true,
    "weekdays": [
     4
-   ]
+   ],
+   "gate": "features"
   },
   {
    "id": "ig-story-friday@19:05",
@@ -172,7 +174,8 @@
    "enabled": true,
    "weekdays": [
     4
-   ]
+   ],
+   "gate": "features"
   },
   {
    "id": "ig-story-friday@20:31",
@@ -184,7 +187,8 @@
    "enabled": true,
    "weekdays": [
     4
-   ]
+   ],
+   "gate": "features"
   },
   {
    "id": "ig-story-pool@18:04",
@@ -193,7 +197,8 @@
    "jst_time": "18:04",
    "window_min": 60,
    "since": "slot",
-   "enabled": true
+   "enabled": true,
+   "gate": "pool"
   },
   {
    "id": "ig-story-pool@19:04",
@@ -202,7 +207,8 @@
    "jst_time": "19:04",
    "window_min": 60,
    "since": "slot",
-   "enabled": true
+   "enabled": true,
+   "gate": "pool"
   },
   {
    "id": "ig-story-pool@20:04",
@@ -211,7 +217,8 @@
    "jst_time": "20:04",
    "window_min": 60,
    "since": "slot",
-   "enabled": true
+   "enabled": true,
+   "gate": "pool"
   },
   {
    "id": "ig-story-pool@21:04",
@@ -220,7 +227,8 @@
    "jst_time": "21:04",
    "window_min": 60,
    "since": "slot",
-   "enabled": true
+   "enabled": true,
+   "gate": "pool"
   },
   {
    "id": "ig-story-pool@21:49",
@@ -229,7 +237,8 @@
    "jst_time": "21:49",
    "window_min": 60,
    "since": "slot",
-   "enabled": true
+   "enabled": true,
+   "gate": "pool"
   },
   {
    "id": "ig-story-qa@15:04",
@@ -242,7 +251,8 @@
    "weekdays": [
     5,
     6
-   ]
+   ],
+   "gate": "qa"
   },
   {
    "id": "ig-story-qa@17:04",
@@ -255,7 +265,8 @@
    "weekdays": [
     5,
     6
-   ]
+   ],
+   "gate": "qa"
   },
   {
    "id": "ig-story-qa@19:04",
@@ -268,7 +279,8 @@
    "weekdays": [
     5,
     6
-   ]
+   ],
+   "gate": "qa"
   },
   {
    "id": "ig-story-qa@20:34",
@@ -281,7 +293,8 @@
    "weekdays": [
     5,
     6
-   ]
+   ],
+   "gate": "qa"
   },
   {
    "id": "ig-story-qa@21:49",
@@ -294,7 +307,8 @@
    "weekdays": [
     5,
     6
-   ]
+   ],
+   "gate": "qa"
   },
   {
    "id": "ig-story-offer@15:04",
@@ -307,7 +321,8 @@
    "weekdays": [
     1,
     2
-   ]
+   ],
+   "gate": "offer"
   },
   {
    "id": "ig-story-offer@17:04",
@@ -320,7 +335,8 @@
    "weekdays": [
     1,
     2
-   ]
+   ],
+   "gate": "offer"
   },
   {
    "id": "ig-story-offer@19:04",
@@ -333,7 +349,8 @@
    "weekdays": [
     1,
     2
-   ]
+   ],
+   "gate": "offer"
   },
   {
    "id": "ig-story-offer@20:34",
@@ -346,7 +363,8 @@
    "weekdays": [
     1,
     2
-   ]
+   ],
+   "gate": "offer"
   },
   {
    "id": "ig-story-offer@21:34",
@@ -359,7 +377,8 @@
    "weekdays": [
     1,
     2
-   ]
+   ],
+   "gate": "offer"
   },
   {
    "id": "ig-story-friday@21:49",
@@ -371,7 +390,8 @@
    "enabled": true,
    "weekdays": [
     4
-   ]
+   ],
+   "gate": "features"
   },
   {
    "id": "ig-hpb-availability-tue",

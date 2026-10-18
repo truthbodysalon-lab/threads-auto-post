@@ -859,24 +859,23 @@
    "enabled": true
   },
   {
-   "id": "e2etest-pool",
+   "id": "e2etest-pool2",
    "repo": "truthbodysalon-lab/ig-autopost-cloud",
    "workflow": "ig-story-pool.yml",
-   "jst_time": "17:10",
-   "window_min": 38,
+   "jst_time": "17:30",
+   "window_min": 20,
    "since": "slot",
    "enabled": true,
-   "gate": "pool",
    "inputs": {
     "dry_run": "true"
    }
   },
   {
-   "id": "e2etest-qa",
+   "id": "e2etest-qa2",
    "repo": "truthbodysalon-lab/ig-autopost-cloud",
    "workflow": "ig-story-qa.yml",
-   "jst_time": "17:10",
-   "window_min": 38,
+   "jst_time": "17:30",
+   "window_min": 20,
    "since": "slot",
    "enabled": true,
    "gate": "qa",

@@ -168,7 +168,8 @@ def decide(mode, plans, now=None):
 
 # --- 取得（Mac: gh CLI） -------------------------------------------------------------
 def fetch_plan_gh(gh, repo, acct):
-    """gh api でmainのplanを取得。ファイル無し(404)は {}、その他の失敗は None。"""
+    """gh api でmainのplanを取得。取得できなければ（404含む）None＝ゲートは判定せず必ず起動する。
+    （404を「planなし」と扱うと、権限不足のトークンでも404になり得るため誤ってスキップする恐れがある）"""
     path = PLAN_PATH.format(acct=acct)
     try:
         out = subprocess.run([gh, "api", f"repos/{repo}/contents/{path}"],
@@ -176,8 +177,6 @@ def fetch_plan_gh(gh, repo, acct):
     except Exception:
         return None
     if out.returncode != 0:
-        if "404" in (out.stderr + out.stdout) or "Not Found" in (out.stderr + out.stdout):
-            return {}
         return None
     try:
         meta = json.loads(out.stdout)

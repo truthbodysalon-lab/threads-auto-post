@@ -59,13 +59,12 @@ def runs_since(repo, wf, since_utc):
 
 
 def fetch_plan(repo, acct):
-    """ig-autopost-cloud の state/<acct>/story_plan.json を取得。無ければ {}、取得失敗は None（ゲートはフェイルオープン）。"""
+    """ig-autopost-cloud の state/<acct>/story_plan.json を取得。取得できなければ（404・権限不足含む）None
+    ＝ゲートは判定せず従来どおり起動する（フェイルオープン）。"""
     import base64
     try:
         _, d = api("GET", f"/repos/{repo}/contents/state/{acct}/story_plan.json")
         return json.loads(base64.b64decode(d["content"]).decode("utf-8"))
-    except urllib.error.HTTPError as ex:
-        return {} if ex.code == 404 else None
     except Exception:
         return None
 

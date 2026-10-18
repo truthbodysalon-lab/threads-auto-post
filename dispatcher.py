@@ -69,6 +69,31 @@ def fetch_plan(repo, acct):
         return None
 
 
+_sync_cache = {}
+
+
+def gate_in_sync(repo):
+    """story_gate.py の複製（このrepo）が ig-autopost-cloud 本体と同一かを確認する（2026-10-18）。
+    2か所にあるコードが片方だけ変わると、古い判定で『必要な起動』を省く恐れがあるため、
+    食い違い・取得失敗のときは False（=ゲートを使わず従来どおり起動する）。結果は1時間キャッシュ。"""
+    import base64
+    c = _sync_cache.get(repo)
+    if c and time.time() - c[0] < 3600:
+        return c[1]
+    ok = False
+    try:
+        _, d = api("GET", f"/repos/{repo}/contents/story_gate.py")
+        remote = base64.b64decode(d["content"]).decode("utf-8")
+        local = (HERE / "story_gate.py").read_text(encoding="utf-8")
+        ok = remote.replace("\r\n", "\n") == local.replace("\r\n", "\n")
+        if not ok:
+            log("story_gate.py が本体(ig-autopost-cloud)と食い違い → ゲートを使わず従来どおり起動する。複製を同期すること")
+    except Exception as ex:
+        log(f"story_gate.py 同期確認失敗（{type(ex).__name__}）→ ゲートを使わず従来どおり起動する")
+    _sync_cache[repo] = (time.time(), ok)
+    return ok
+
+
 def gate_skip(e, repo, now):
     """起動前ゲート（M10・2026-10-18）。entry の "gate": pool|qa|offer|features が付いたものだけ、
     「確実に何も起きない」時に起動を省略する。判定ロジックは story_gate.py（ig-autopost-cloud 本体の複製）。
@@ -77,6 +102,8 @@ def gate_skip(e, repo, now):
     if not g:
         return False
     try:
+        if not gate_in_sync(repo):
+            return False
         import story_gate
         plans = {a: fetch_plan(repo, a) for a in story_gate.MODES[g]["accounts"]}
         skip, why = story_gate.decide(g, plans, now)

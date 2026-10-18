@@ -1,6 +1,6 @@
 {
  "mode": "live",
- "note": "jst_time=各repoの変更後cron(JST)+2分。since=day:当日0時JST以降のrunが有れば起動しない / slot:枠のjst_time-12分以降。weekdays: 月=0..日=6。enabled:falseで個別OFF、modeをdry_runに戻すと全停止。 skip_until:YYYY-MM-DD未満の日は起動しない(固定日付)。pause_file:repo内のJSON(until=YYYY-MM-DD)の日付以前は起動しない(ig-feed。feed_pause.jsonの正本に従う)。queue_file:repo内のJSON(items[].date)に本日分が無ければ起動しない(ig-reels。連載終了後の空振り防止)。取得失敗はいずれも起動(フェイルオープン)。inputs:workflow_dispatchへ渡す入力。 gate:pool|qa|offer|features=起動前ゲート(story_gate.py)。確実に何も起きない時だけ起動を省略、取得失敗等は起動(フェイルオープン)。無効化=entryからgateキーを削除。",
+ "note": "jst_time=各repoの変更後cron(JST)+2分。since=day:当日0時JST以降のrunが有れば起動しない / slot:枠のjst_time-12分以降。weekdays: 月=0..日=6。enabled:falseで個別OFF、modeをdry_runに戻すと全停止。 skip_until:YYYY-MM-DD未満の日は起動しない(固定日付)。pause_file:repo内のJSON(until=YYYY-MM-DD)の日付以前は起動しない(ig-feed。feed_pause.jsonの正本に従う)。queue_file:repo内のJSON(items[].date)に本日分が無ければ起動しない(ig-reels。連載終了後の空振り防止)。取得失敗はいずれも起動(フェイルオープン)。inputs:workflow_dispatchへ渡す入力。 gate:pool|qa|offer|features=起動前ゲート(story_gate.py)。確実に何も起きない時だけ起動を省略、取得失敗等は起動(フェイルオープン)。無効化=entryからgateキーを削除。 2026-10-18追記: gate:stepmail=ステップ配信の起動前ゲート(dispatcher.py stepmail_gate)。枠ごとに1回だけ、本物のstepmail.mjsをDRY_RUN=1で動かし『送るものがある枠』だけ起動(判定不能は起動=フェイルオープン・ログは件数のみ)。無効化=entryからgateキーを削除。Mac死活監視(cloud/line deadman)はops_deadman.pyへ移設し本テーブルから削除。gmail/marketing/subscription/stepmailは非公開repo側のcronを撤去済みで、このテーブルが唯一の定刻起動。",
  "entries": [
   {
    "id": "ig-story@07:31",
@@ -440,7 +440,8 @@
    "jst_time": "01:25",
    "window_min": 60,
    "since": "slot",
-   "enabled": true
+   "enabled": true,
+   "gate": "stepmail"
   },
   {
    "id": "stepmail@03:25",
@@ -449,7 +450,8 @@
    "jst_time": "03:25",
    "window_min": 60,
    "since": "slot",
-   "enabled": true
+   "enabled": true,
+   "gate": "stepmail"
   },
   {
    "id": "stepmail@05:25",
@@ -458,7 +460,8 @@
    "jst_time": "05:25",
    "window_min": 60,
    "since": "slot",
-   "enabled": true
+   "enabled": true,
+   "gate": "stepmail"
   },
   {
    "id": "stepmail@07:25",
@@ -467,7 +470,8 @@
    "jst_time": "07:25",
    "window_min": 60,
    "since": "slot",
-   "enabled": true
+   "enabled": true,
+   "gate": "stepmail"
   },
   {
    "id": "stepmail@09:25",
@@ -476,7 +480,8 @@
    "jst_time": "09:25",
    "window_min": 60,
    "since": "slot",
-   "enabled": true
+   "enabled": true,
+   "gate": "stepmail"
   },
   {
    "id": "stepmail@11:25",
@@ -485,7 +490,8 @@
    "jst_time": "11:25",
    "window_min": 60,
    "since": "slot",
-   "enabled": true
+   "enabled": true,
+   "gate": "stepmail"
   },
   {
    "id": "stepmail@13:25",
@@ -494,7 +500,8 @@
    "jst_time": "13:25",
    "window_min": 60,
    "since": "slot",
-   "enabled": true
+   "enabled": true,
+   "gate": "stepmail"
   },
   {
    "id": "stepmail@15:25",
@@ -503,7 +510,8 @@
    "jst_time": "15:25",
    "window_min": 60,
    "since": "slot",
-   "enabled": true
+   "enabled": true,
+   "gate": "stepmail"
   },
   {
    "id": "stepmail@17:25",
@@ -512,7 +520,8 @@
    "jst_time": "17:25",
    "window_min": 60,
    "since": "slot",
-   "enabled": true
+   "enabled": true,
+   "gate": "stepmail"
   },
   {
    "id": "stepmail@19:25",
@@ -521,7 +530,8 @@
    "jst_time": "19:25",
    "window_min": 60,
    "since": "slot",
-   "enabled": true
+   "enabled": true,
+   "gate": "stepmail"
   },
   {
    "id": "stepmail@21:25",
@@ -530,7 +540,8 @@
    "jst_time": "21:25",
    "window_min": 60,
    "since": "slot",
-   "enabled": true
+   "enabled": true,
+   "gate": "stepmail"
   },
   {
    "id": "stepmail@23:25",
@@ -539,187 +550,8 @@
    "jst_time": "23:25",
    "window_min": 60,
    "since": "slot",
-   "enabled": true
-  },
-  {
-   "id": "line-deadman@02:55",
-   "repo": "truthbodysalon-lab/line-stepmail-cloud",
-   "workflow": "deadman.yml",
-   "jst_time": "02:55",
-   "window_min": 60,
-   "since": "slot",
-   "enabled": true
-  },
-  {
-   "id": "line-deadman@05:55",
-   "repo": "truthbodysalon-lab/line-stepmail-cloud",
-   "workflow": "deadman.yml",
-   "jst_time": "05:55",
-   "window_min": 60,
-   "since": "slot",
-   "enabled": true
-  },
-  {
-   "id": "line-deadman@08:55",
-   "repo": "truthbodysalon-lab/line-stepmail-cloud",
-   "workflow": "deadman.yml",
-   "jst_time": "08:55",
-   "window_min": 60,
-   "since": "slot",
-   "enabled": true
-  },
-  {
-   "id": "line-deadman@11:55",
-   "repo": "truthbodysalon-lab/line-stepmail-cloud",
-   "workflow": "deadman.yml",
-   "jst_time": "11:55",
-   "window_min": 60,
-   "since": "slot",
-   "enabled": true
-  },
-  {
-   "id": "line-deadman@14:55",
-   "repo": "truthbodysalon-lab/line-stepmail-cloud",
-   "workflow": "deadman.yml",
-   "jst_time": "14:55",
-   "window_min": 60,
-   "since": "slot",
-   "enabled": true
-  },
-  {
-   "id": "line-deadman@17:55",
-   "repo": "truthbodysalon-lab/line-stepmail-cloud",
-   "workflow": "deadman.yml",
-   "jst_time": "17:55",
-   "window_min": 60,
-   "since": "slot",
-   "enabled": true
-  },
-  {
-   "id": "line-deadman@20:55",
-   "repo": "truthbodysalon-lab/line-stepmail-cloud",
-   "workflow": "deadman.yml",
-   "jst_time": "20:55",
-   "window_min": 60,
-   "since": "slot",
-   "enabled": true
-  },
-  {
-   "id": "line-deadman@23:55",
-   "repo": "truthbodysalon-lab/line-stepmail-cloud",
-   "workflow": "deadman.yml",
-   "jst_time": "23:55",
-   "window_min": 60,
-   "since": "slot",
-   "enabled": true
-  },
-  {
-   "id": "cloud-deadman@01:15",
-   "repo": "truthbodysalon-lab/cloud-daily-tasks",
-   "workflow": "deadman.yml",
-   "jst_time": "01:15",
-   "window_min": 60,
-   "since": "slot",
-   "enabled": true
-  },
-  {
-   "id": "cloud-deadman@03:15",
-   "repo": "truthbodysalon-lab/cloud-daily-tasks",
-   "workflow": "deadman.yml",
-   "jst_time": "03:15",
-   "window_min": 60,
-   "since": "slot",
-   "enabled": true
-  },
-  {
-   "id": "cloud-deadman@05:15",
-   "repo": "truthbodysalon-lab/cloud-daily-tasks",
-   "workflow": "deadman.yml",
-   "jst_time": "05:15",
-   "window_min": 60,
-   "since": "slot",
-   "enabled": true
-  },
-  {
-   "id": "cloud-deadman@07:15",
-   "repo": "truthbodysalon-lab/cloud-daily-tasks",
-   "workflow": "deadman.yml",
-   "jst_time": "07:15",
-   "window_min": 60,
-   "since": "slot",
-   "enabled": true
-  },
-  {
-   "id": "cloud-deadman@09:15",
-   "repo": "truthbodysalon-lab/cloud-daily-tasks",
-   "workflow": "deadman.yml",
-   "jst_time": "09:15",
-   "window_min": 60,
-   "since": "slot",
-   "enabled": true
-  },
-  {
-   "id": "cloud-deadman@11:15",
-   "repo": "truthbodysalon-lab/cloud-daily-tasks",
-   "workflow": "deadman.yml",
-   "jst_time": "11:15",
-   "window_min": 60,
-   "since": "slot",
-   "enabled": true
-  },
-  {
-   "id": "cloud-deadman@13:15",
-   "repo": "truthbodysalon-lab/cloud-daily-tasks",
-   "workflow": "deadman.yml",
-   "jst_time": "13:15",
-   "window_min": 60,
-   "since": "slot",
-   "enabled": true
-  },
-  {
-   "id": "cloud-deadman@15:15",
-   "repo": "truthbodysalon-lab/cloud-daily-tasks",
-   "workflow": "deadman.yml",
-   "jst_time": "15:15",
-   "window_min": 60,
-   "since": "slot",
-   "enabled": true
-  },
-  {
-   "id": "cloud-deadman@17:15",
-   "repo": "truthbodysalon-lab/cloud-daily-tasks",
-   "workflow": "deadman.yml",
-   "jst_time": "17:15",
-   "window_min": 60,
-   "since": "slot",
-   "enabled": true
-  },
-  {
-   "id": "cloud-deadman@19:15",
-   "repo": "truthbodysalon-lab/cloud-daily-tasks",
-   "workflow": "deadman.yml",
-   "jst_time": "19:15",
-   "window_min": 60,
-   "since": "slot",
-   "enabled": true
-  },
-  {
-   "id": "cloud-deadman@21:15",
-   "repo": "truthbodysalon-lab/cloud-daily-tasks",
-   "workflow": "deadman.yml",
-   "jst_time": "21:15",
-   "window_min": 60,
-   "since": "slot",
-   "enabled": true
-  },
-  {
-   "id": "cloud-deadman@23:15",
-   "repo": "truthbodysalon-lab/cloud-daily-tasks",
-   "workflow": "deadman.yml",
-   "jst_time": "23:15",
-   "window_min": 60,
-   "since": "slot",
-   "enabled": true
+   "enabled": true,
+   "gate": "stepmail"
   },
   {
    "id": "gmail-notify",

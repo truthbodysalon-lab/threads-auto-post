@@ -1,0 +1,31 @@
+name: Stepmail Gate Check (manual)
+
+# 2026-10-18 Actions無料枠対策: ステップ配信の起動前ゲート(dispatcher.py)を、実際のrunner環境で1回だけ手動確認するためのもの(scheduleなし)。
+# 本物の stepmail.mjs を DRY_RUN=1 で動かして『送信対象N件』だけを表示する。公開repoなので Actions 分は無料。
+# 公開ログに出すのは node のバージョン・所要秒・件数だけ。userId・本文・enrollments の内容は出さない(dispatcher.stepmail_pending が出力を捨てる)。
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: gate check
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          echo "node: $(node --version)"
+          python3 - <<'PY'
+          import time, dispatcher as D
+          t = time.time()
+          n = D.stepmail_pending("truthbodysalon-lab/line-stepmail-cloud")
+          print(f"gate(stepmail) pending={n} elapsed={time.time()-t:.1f}s (None=判定不能→従来どおり起動)")
+          PY

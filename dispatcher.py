@@ -133,6 +133,101 @@ def gate_in_sync(repo):
     return ok
 
 
+STEPMAIL_FILES = ["stepmail.mjs", "step_messages.json", "state/enrollments.json", "state/sent.json"]
+STEPMAIL_SKEW_MS = 120000     # 判定〜本番run開始の数十秒の差で取りこぼさないための時刻先読み(DRY_RUN時のみ効く)
+STEPMAIL_STREAK_ALERT = 3     # 『送るものあり』の判定が3枠連続(約6時間)で続いたら本人へDiscordで知らせる
+STEPMAIL_GATE_STATE = HERE / "stepmail_gate_state.json"
+_SENT_RE = None
+
+
+def fetch_raw(repo, path):
+    """repo の default ブランチのファイルをそのままのバイト列で取得(Contents API・raw)。失敗は例外。"""
+    req = urllib.request.Request(f"{API}/repos/{repo}/contents/{path}", headers={
+        "Authorization": f"Bearer {token()}", "Accept": "application/vnd.github.raw",
+        "X-GitHub-Api-Version": "2022-11-28", "User-Agent": "central-dispatcher"})
+    with urllib.request.urlopen(req, timeout=15) as r:
+        return r.read()
+
+
+def stepmail_pending(repo):
+    """ステップ配信の起動前ゲート(2026-10-18 Actions無料枠対策・施策C)。
+    line-stepmail-cloud の stepmail.mjs / step_messages.json / state を一時ディレクトリへ取得し、**本物の stepmail.mjs を
+    DRY_RUN=1 で実行**して『この枠で送るものがあるか』(末尾の 送信=N件) を返す。判定ロジックを複製しないので本番とずれない。
+    取得失敗・node無し・異常終了・書式不一致・例外は全て None(=判定不能。呼び出し側は従来どおり起動する=フェイルオープン)。
+    顧客情報の保護: stepmail.mjs の DRY_RUN 出力には userId と本文が含まれるため、stdout/stderr は取り込んで**ログに一切出さず捨てる**。
+    子プロセスの環境変数は PATH/DRY_RUN/先読みだけ(GH_PAT・Webhook等は渡さない)。一時ファイルは終了時に削除。"""
+    import re, shutil, subprocess, tempfile
+    global _SENT_RE
+    if _SENT_RE is None:
+        _SENT_RE = re.compile(r"stepmail\.mjs 完了: 送信=(\d+)件")
+    node = shutil.which("node")
+    if not node:
+        return None
+    tmp = tempfile.mkdtemp(prefix="stepgate_")
+    try:
+        for rel in STEPMAIL_FILES:
+            dest = Path(tmp) / rel
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            dest.write_bytes(fetch_raw(repo, rel))
+        env = {"PATH": os.environ.get("PATH", ""), "DRY_RUN": "1", "STEPMAIL_NOW_SKEW_MS": str(STEPMAIL_SKEW_MS)}
+        r = subprocess.run([node, "stepmail.mjs"], cwd=tmp, env=env, capture_output=True, timeout=30)
+        if r.returncode != 0:
+            return None
+        m = _SENT_RE.findall(r.stdout.decode("utf-8", "replace"))
+        return int(m[-1]) if m else None
+    except Exception:
+        return None
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _stepmail_streak(update):
+    """update: 'run'(送信対象ありで起動) / 'skip' / None(読むだけ)。連続回数と通知済みフラグを返す。"""
+    try:
+        st = json.loads(STEPMAIL_GATE_STATE.read_text())
+    except Exception:
+        st = {}
+    streak, alerted = int(st.get("streak", 0)), bool(st.get("alerted", False))
+    if update == "run":
+        streak += 1
+    elif update == "skip":
+        streak, alerted = 0, False
+    return streak, alerted
+
+
+def _stepmail_streak_save(streak, alerted):
+    try:
+        STEPMAIL_GATE_STATE.write_text(json.dumps({"streak": streak, "alerted": alerted}))
+    except Exception as ex:
+        log(f"stepmail_gate_state書込失敗 {type(ex).__name__}")
+
+
+def stepmail_gate(e, repo):
+    """True=この枠は送るものが無いので起動しない / False=起動する。判定は枠ごとに1回(main側でSKIPにも当日マーカーを付ける)。
+    ログに出すのは件数だけ(userId・本文・enrollmentsの内容は出さない)。"""
+    n = stepmail_pending(repo)
+    if n is None:
+        log(f"{e['id']}: gate(stepmail) 判定不能 → 従来どおり起動")
+        return False
+    if n == 0:
+        log(f"{e['id']}: gate(stepmail) SKIP 送信対象0件")
+        _stepmail_streak_save(*_stepmail_streak("skip"))
+        return True
+    log(f"{e['id']}: gate(stepmail) RUN 送信対象{n}件")
+    streak, alerted = _stepmail_streak("run")
+    if streak >= STEPMAIL_STREAK_ALERT and not alerted:
+        try:
+            import ops_deadman
+            ops_deadman._load_dotenv()
+            if ops_deadman.discord_send(f"⚠️ LINEステップ配信が滞留している可能性があります（送信対象ありの判定が{streak}枠連続・約{streak * 2}時間）。"
+                                        "LINEトークン失効・LINE障害・line-stepmail-cloud のActions失敗を確認してください（お客様への配信が出ていない恐れ）"):
+                alerted = True
+        except Exception as ex:
+            log(f"滞留通知失敗 {type(ex).__name__}")
+    _stepmail_streak_save(streak, alerted)
+    return False
+
+
 def gate_skip(e, repo, now):
     """起動前ゲート（M10・2026-10-18）。entry の "gate": pool|qa|offer|features が付いたものだけ、
     「確実に何も起きない」時に起動を省略する。判定ロジックは story_gate.py（ig-autopost-cloud 本体の複製）。
@@ -140,6 +235,8 @@ def gate_skip(e, repo, now):
     g = e.get("gate")
     if not g:
         return False
+    if g == "stepmail":
+        return stepmail_gate(e, repo)
     try:
         if not gate_in_sync(repo):
             return False
@@ -211,7 +308,12 @@ def main():
                 state[e["id"]] = today; changed = True
                 continue
             if gate_skip(e, repo, now):
-                continue   # 完了済み等で確実に空振り → 起動しない（マーカーは付けず、次ループで再判定）
+                if e.get("gate") == "stepmail":
+                    # ステップ配信は『枠ごとに1回だけ』判定する(従来も枠の最初のサイクルのrunがその時点の期日分を送った)。
+                    # 10分ごとに再判定すると、枠内で後から期日が来た分が従来より早く出てしまい配信時刻が変わる
+                    log(f"{e['id']}: 今日のこの枠は判定済み → 再判定しない")
+                    state[e["id"]] = today; changed = True
+                continue   # 完了済み等で確実に空振り → 起動しない（story系はマーカーを付けず、次ループで再判定）
             ref = default_branch(repo)
             body = {"ref": ref}
             if e.get("inputs"):  # workflow_dispatch の入力（例: hpb の account）

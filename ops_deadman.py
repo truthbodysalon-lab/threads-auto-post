@@ -285,7 +285,8 @@ def main():
 
 if __name__ == "__main__":
     try:
-        sys.exit(main())
-    except BaseException as e:   # 例外はループへ出さない(型名のみログ)
+        rc = main()
+    except Exception as e:   # 例外はループへ出さない(型名のみログ)
         print(f"::warning::ops_deadman fatal: {type(e).__name__}", flush=True)
-        sys.exit(0)
+        rc = 0
+    sys.exit(rc)

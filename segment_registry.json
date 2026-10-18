@@ -292,7 +292,7 @@
   "産後、体の痛みを我慢するママへ。": {
     "segment": "T3",
     "hook": "low",
-    "created": "2026-10-15",
+    "created": "2026-10-19",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z11_truth"
@@ -332,7 +332,7 @@
   "重い荷物運びで腰を痛めた人へ。": {
     "segment": "T4",
     "hook": "low",
-    "created": "2026-10-15",
+    "created": "2026-10-19",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z14_nagaoka"
@@ -856,42 +856,42 @@
   "座りっぱなしで肩がガチガチな人へ。": {
     "segment": "T1",
     "hook": "low",
-    "created": "2026-10-13",
+    "created": "2026-10-19",
     "acct": "truth",
     "variant": 1
   },
   "週に何度も頭痛薬を飲む人へ。": {
     "segment": "T2",
     "hook": "low",
-    "created": "2026-10-13",
+    "created": "2026-10-19",
     "acct": "truth",
     "variant": 0
   },
   "看護や介護で腰が痛む人へ。": {
     "segment": "T4",
     "hook": "low",
-    "created": "2026-10-13",
+    "created": "2026-10-19",
     "acct": "truth",
     "variant": 1
   },
   "肩の可動域が狭くなった人へ。": {
     "segment": "T1",
     "hook": "low",
-    "created": "2026-10-13",
+    "created": "2026-10-19",
     "acct": "nagaoka",
     "variant": 1
   },
   "頭痛薬をお守りのように持ち歩く人へ。": {
     "segment": "T2",
     "hook": "low",
-    "created": "2026-10-13",
+    "created": "2026-10-19",
     "acct": "nagaoka",
     "variant": 0
   },
   "育児で自分のケアを後回しにするママへ。": {
     "segment": "T3",
     "hook": "low",
-    "created": "2026-10-13",
+    "created": "2026-10-19",
     "acct": "nagaoka",
     "variant": 1
   },
@@ -2544,7 +2544,7 @@
   "コースの途中で来なくなる人が多い院長へ。": {
     "segment": "R02",
     "hook": "low",
-    "created": "2026-10-13",
+    "created": "2026-10-19",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -3039,7 +3039,7 @@
   "コースの話を切り出せない院長へ。": {
     "segment": "R01",
     "hook": "low",
-    "created": "2026-10-07",
+    "created": "2026-10-19",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -3490,7 +3490,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 19,
-    "created": "2026-10-08",
+    "created": "2026-10-19",
     "acct": "truth"
   },
   "【肩こりの人の休日の過ごし方6選】": {
@@ -3511,7 +3511,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 11,
-    "created": "2026-10-08",
+    "created": "2026-10-19",
     "acct": "nagaoka"
   },
   "インスタで、「DMください」だけで動かしている院長へ。": {
@@ -4008,7 +4008,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 14,
-    "created": "2026-10-09",
+    "created": "2026-10-19",
     "acct": "nagaoka"
   },
   "『介護や育児で、自分の体は後回し』という声を、よく聞きます。": {
@@ -4239,7 +4239,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 0,
-    "created": "2026-10-10",
+    "created": "2026-10-19",
     "acct": "truth"
   },
   "『雨が降る前に、必ず頭が痛くなる』という声を、よく聞きます。": {
@@ -4490,7 +4490,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 7,
-    "created": "2026-10-10",
+    "created": "2026-10-19",
     "acct": "truth"
   },
   "【息が浅いと感じる人の習慣6選】": {
@@ -6921,5 +6921,166 @@
     "hook": "gen",
     "variant": null,
     "created": "2026-10-18"
+  },
+  "【産後ママの肩こりを溜めない習慣7選】": {
+    "segment": "LIST_HABIT",
+    "hook": "list",
+    "variant": 9,
+    "created": "2026-10-19",
+    "acct": "nagaoka"
+  },
+  "【文字だけのリールの3ステップ】": {
+    "segment": "I05",
+    "hook": "low",
+    "created": "2026-10-19",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP14"
+  },
+  "【AIで下書きの3ステップ】": {
+    "segment": "I07",
+    "hook": "low",
+    "created": "2026-10-19",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP21"
+  },
+  "ストーリーズは、1枚で全部言わない。": {
+    "segment": "I09",
+    "hook": "high",
+    "created": "2026-10-19",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP71"
+  },
+  "投稿では、売らない。": {
+    "segment": "HAKASE",
+    "hook": "principle",
+    "variant": 16,
+    "created": "2026-10-19"
+  },
+  "投稿は、出して終わりにしない。": {
+    "segment": "HAKASE",
+    "hook": "principle",
+    "variant": 13,
+    "created": "2026-10-19"
+  },
+  "【出した投稿を、AIに直してもらう3本】": {
+    "segment": "PRESENT_CTA",
+    "hook": "present",
+    "present_key": "insta_kit",
+    "variant": 18,
+    "created": "2026-10-19"
+  },
+  "インスタ運用で、反応がなくて落ち込む整体院の院長へ。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-19"
+  },
+  "ぶっちゃけ、お店の入口の写真は、30秒で撮れる。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-19"
+  },
+  "先週の閲覧数は、1分で分かる。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-19"
+  },
+  "他店は、1日1分見れば足ります。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-19"
+  },
+  "効果は、「何で知りましたか」で分かる。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-19"
+  },
+  "ぶっちゃけ、いいねより、保存数を見る。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-19"
+  },
+  "投稿に、年齢はいらない。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-19"
+  },
+  "ぶっちゃけ、DMの1通目は、決めておけば30秒で返せる。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-19"
+  },
+  "投稿までは、3タップで終わる。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-19"
+  },
+  "インスタで、文章を考える時間がない院長へ。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-19"
+  },
+  "インスタで、広告が不安な店主へ。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-19"
+  },
+  "投稿文は、AIに頼めば1分で下書きが出る。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-19"
+  },
+  "インスタで、ハッシュタグが分からない整体院の院長へ。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-19"
+  },
+  "ぶっちゃけ、お客様に聞かれたことが、3日分のネタになる。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-19"
+  },
+  "ぶっちゃけ、投稿までは、3タップで終わる。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-19"
+  },
+  "投稿は、1分で出せる。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-19"
+  },
+  "インスタで、近くの店が気になる院長へ。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-19"
+  },
+  "ぶっちゃけ、リールは、写真3枚でも作れる。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-19"
   }
 }

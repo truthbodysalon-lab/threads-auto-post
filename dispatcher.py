@@ -69,6 +69,45 @@ def fetch_plan(repo, acct):
         return None
 
 
+def fetch_json(repo, path):
+    """ig-autopost-cloud 内のJSONファイルを取得。取得できなければ（404・権限不足・不正JSON含む）None
+    ＝呼び出し側は判定せず従来どおり起動する（フェイルオープン）。"""
+    import base64
+    try:
+        _, d = api("GET", f"/repos/{repo}/contents/{path}")
+        return json.loads(base64.b64decode(d["content"]).decode("utf-8"))
+    except Exception:
+        return None
+
+
+def pause_file_active(e, repo, today):
+    """entry の "pause_file"（例: state/feed_pause.json）の until(JST日付) が今日以降なら True（=起動しない）。
+    ig_daily 側の feed_pause_active() と同じ判定（today <= until）。2026-10-18: 固定の skip_until だと
+    停止を早めに解除しても再開しないため、停止の正本（feed_pause.json）にそのまま従うようにした。
+    ファイル欠落・取得失敗・until無しは False（=起動する。run側が自分で一時停止を判定するので安全）。"""
+    pf = e.get("pause_file")
+    if not pf:
+        return False
+    d = fetch_json(repo, pf)
+    if not isinstance(d, dict):
+        return False
+    until = str(d.get("until", "")).strip()
+    return bool(until) and today <= until
+
+
+def queue_empty_today(e, repo, today):
+    """entry の "queue_file"（例: state/reels_queue.json）に今日(JST)の item が無ければ True（=起動しない）。
+    リール連載が終わった後も毎日『投稿する物なし』の空振りrunが1分課金されるのを防ぐ（2026-10-18）。
+    取得失敗・形式が違う・想定外は全て False（=起動する）。連載を延ばす時は queue に日付を足すだけでよい。"""
+    qf = e.get("queue_file")
+    if not qf:
+        return False
+    d = fetch_json(repo, qf)
+    if not isinstance(d, dict) or not isinstance(d.get("items"), list):
+        return False
+    return not any(isinstance(i, dict) and i.get("date") == today for i in d["items"])
+
+
 _sync_cache = {}
 
 
@@ -162,6 +201,14 @@ def main():
                 continue
             if mode != "live":
                 log(f"{e['id']}: 起動予定 {repo} {wf} (dry_run)")
+                continue
+            if pause_file_active(e, repo, today):
+                log(f"{e['id']}: {e['pause_file']} により一時停止中 → 起動しない（今日は再判定しない）")
+                state[e["id"]] = today; changed = True
+                continue
+            if queue_empty_today(e, repo, today):
+                log(f"{e['id']}: {e['queue_file']} に本日({today})分なし → 起動しない（今日は再判定しない）")
+                state[e["id"]] = today; changed = True
                 continue
             if gate_skip(e, repo, now):
                 continue   # 完了済み等で確実に空振り → 起動しない（マーカーは付けず、次ループで再判定）

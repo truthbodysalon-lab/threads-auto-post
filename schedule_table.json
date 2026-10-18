@@ -1,6 +1,6 @@
 {
  "mode": "live",
- "note": "jst_time=各repoの変更後cron(JST)+2分。since=day:当日0時JST以降のrunが有れば起動しない / slot:枠のjst_time-12分以降。weekdays: 月=0..日=6。enabled:falseで個別OFF、modeをdry_runに戻すと全停止。",
+ "note": "jst_time=各repoの変更後cron(JST)+2分。since=day:当日0時JST以降のrunが有れば起動しない / slot:枠のjst_time-12分以降。weekdays: 月=0..日=6。enabled:falseで個別OFF、modeをdry_runに戻すと全停止。 skip_until:YYYY-MM-DD未満の日は起動しない(一時停止中の空振り防止。2026-10-18追加)。inputs:workflow_dispatchへ渡す入力。",
  "entries": [
   {
    "id": "ig-story@07:31",
@@ -81,7 +81,8 @@
    "jst_time": "11:33",
    "window_min": 90,
    "since": "day",
-   "enabled": true
+   "enabled": true,
+   "skip_until": "2026-11-10"
   },
   {
    "id": "ig-reels",
@@ -184,6 +185,223 @@
    "weekdays": [
     4
    ]
+  },
+  {
+   "id": "ig-story-pool@18:04",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-story-pool.yml",
+   "jst_time": "18:04",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "ig-story-pool@19:04",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-story-pool.yml",
+   "jst_time": "19:04",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "ig-story-pool@20:04",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-story-pool.yml",
+   "jst_time": "20:04",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "ig-story-pool@21:04",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-story-pool.yml",
+   "jst_time": "21:04",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "ig-story-pool@21:49",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-story-pool.yml",
+   "jst_time": "21:49",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true
+  },
+  {
+   "id": "ig-story-qa@15:04",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-story-qa.yml",
+   "jst_time": "15:04",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true,
+   "weekdays": [
+    5,
+    6
+   ]
+  },
+  {
+   "id": "ig-story-qa@17:04",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-story-qa.yml",
+   "jst_time": "17:04",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true,
+   "weekdays": [
+    5,
+    6
+   ]
+  },
+  {
+   "id": "ig-story-qa@19:04",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-story-qa.yml",
+   "jst_time": "19:04",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true,
+   "weekdays": [
+    5,
+    6
+   ]
+  },
+  {
+   "id": "ig-story-qa@20:34",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-story-qa.yml",
+   "jst_time": "20:34",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true,
+   "weekdays": [
+    5,
+    6
+   ]
+  },
+  {
+   "id": "ig-story-qa@21:49",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-story-qa.yml",
+   "jst_time": "21:49",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true,
+   "weekdays": [
+    5,
+    6
+   ]
+  },
+  {
+   "id": "ig-story-offer@15:04",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-story-offer.yml",
+   "jst_time": "15:04",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true,
+   "weekdays": [
+    1,
+    2
+   ]
+  },
+  {
+   "id": "ig-story-offer@17:04",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-story-offer.yml",
+   "jst_time": "17:04",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true,
+   "weekdays": [
+    1,
+    2
+   ]
+  },
+  {
+   "id": "ig-story-offer@19:04",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-story-offer.yml",
+   "jst_time": "19:04",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true,
+   "weekdays": [
+    1,
+    2
+   ]
+  },
+  {
+   "id": "ig-story-offer@20:34",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-story-offer.yml",
+   "jst_time": "20:34",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true,
+   "weekdays": [
+    1,
+    2
+   ]
+  },
+  {
+   "id": "ig-story-offer@21:34",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-story-offer.yml",
+   "jst_time": "21:34",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true,
+   "weekdays": [
+    1,
+    2
+   ]
+  },
+  {
+   "id": "ig-story-friday@21:49",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-story-friday.yml",
+   "jst_time": "21:49",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true,
+   "weekdays": [
+    4
+   ]
+  },
+  {
+   "id": "ig-hpb-availability-tue",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-hpb-availability.yml",
+   "jst_time": "12:09",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true,
+   "weekdays": [
+    1
+   ],
+   "inputs": {
+    "account": "truth"
+   }
+  },
+  {
+   "id": "ig-hpb-availability-fri",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-hpb-availability.yml",
+   "jst_time": "12:09",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true,
+   "weekdays": [
+    4
+   ],
+   "inputs": {
+    "account": "nagaoka"
+   }
   },
   {
    "id": "stepmail@01:25",

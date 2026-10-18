@@ -87,6 +87,8 @@ def main():
                 continue
             if e.get("weekdays") is not None and now.weekday() not in e["weekdays"]:
                 continue
+            if e.get("skip_until") and today < e["skip_until"]:  # 一時停止中は起動しない（YYYY-MM-DD未満の日）
+                continue
             hh, mm = map(int, e["jst_time"].split(":"))
             slot = day0.replace(hour=hh, minute=mm)
             if not (slot <= now <= slot + timedelta(minutes=int(e.get("window_min", 90)))):
@@ -106,7 +108,10 @@ def main():
                 log(f"{e['id']}: 起動予定 {repo} {wf} (dry_run)")
                 continue
             ref = default_branch(repo)
-            st, _ = api("POST", f"/repos/{repo}/actions/workflows/{wf}/dispatches", {"ref": ref})
+            body = {"ref": ref}
+            if e.get("inputs"):  # workflow_dispatch の入力（例: hpb の account）
+                body["inputs"] = e["inputs"]
+            st, _ = api("POST", f"/repos/{repo}/actions/workflows/{wf}/dispatches", body)
             log(f"{e['id']}: dispatch {repo} {wf} ref={ref} -> HTTP {st}")
             state[e["id"]] = today; changed = True
         except Exception as ex:

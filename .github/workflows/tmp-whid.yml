@@ -1,0 +1,24 @@
+name: tmp-whid
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  w:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: whid
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          python3 - <<'PY'
+          import os, json, hashlib, urllib.request
+          h=os.environ.get("DISCORD_WEBHOOK_URL","").strip()
+          try:
+              req=urllib.request.Request(h,headers={"User-Agent":"whid/1.0"})
+              d=json.load(urllib.request.urlopen(req,timeout=15))
+              print("channel_hash", hashlib.sha256(str(d.get("channel_id")).encode()).hexdigest()[:12], "guild_hash", hashlib.sha256(str(d.get("guild_id")).encode()).hexdigest()[:12], "id_hash", hashlib.sha256(str(d.get("id")).encode()).hexdigest()[:12])
+          except Exception as e:
+              print("ERR", type(e).__name__)
+          PY

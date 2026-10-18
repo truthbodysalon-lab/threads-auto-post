@@ -1,7 +1,7 @@
 {
   "acct": "masa",
-  "version": 75,
-  "updated": "2026-10-17",
+  "version": 76,
+  "updated": "2026-10-18",
   "description": "修正ポイント（勝ち構造・死ぬ構造）の正本。毎朝サブエージェントEが実測データで各ルールを検証し、効かなくなったルールはretired、新発見はtestingで追加、実証されたらactiveに昇格する。ヒーロー投稿と新テンプレはこのプレイブックのactiveルールに従って書く。",
   "rules": [
     {
@@ -756,6 +756,7 @@
       "version": 75,
       "date": "2026-10-17",
       "change": "L13(自動投稿/AI投稿の開示は負け)をactiveで追加。AI_JITSUREI・AI_TIME_CTA・variety_templatesの開示表現を店舗作業の例へ書き換え、disclosure_check.pyを検品3箇所に配線。プレゼントは1期1つずつ(present_calendar.json・水曜切替5期)に変更し、AI時短CTAは④の期間のみ。なぜ: 本人指示『個人が発信していることを装って』『プレゼントは1つ1つ別で』。"
-    }
+    },
+    "2026-10-18: 毎朝検証。breakout TOP30と突合せ・ルール変更なし(testing判定はn不足で据置)。ヒーロー10本・テンプレ24本を軌道遅れ指示で更新"
   ]
 }

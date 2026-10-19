@@ -791,6 +791,87 @@ def _mark_line_done(acct: str, today: str):
         pass
 
 
+# ── ヒーロー投稿の優先投稿（2026-10-20 オーナー指示「ヒーロー投稿は全て投稿」）────────
+# 経緯: 毎朝のヒーロー(hero_<acct>.json)は朝6:47の生成バッチの「後」に push → generate_remix を再実行して
+# 追加バッチとして log_<acct>.jsonl に積まれる。get_next_post は全バッチを「先着順」で並べて先頭から
+# 未投稿を選ぶため、ヒーローは最初のバッチ(約100本)の後ろ＝位置100超に回り、1日50本では届かず
+# 直近7日の生成30本/アカに対し実投稿0本だった(10/14〜10/20)。
+# 対策: 未投稿のヒーローを「今日の残り枠に均等に散らして」割り込ませる。誘導アンカー(LINE/アクセス/
+# 診断/HPB/プロフィール/AI)は常にヒーローより先に選ぶ（アンカー固定ルールを壊さない）。
+def _hero_priority_order(acct: str, today: str, all_posts: list, posted_texts: set) -> list:
+    """get_next_post の走査順(インデックス列)を返す。ヒーローが「今出す番」なら、先頭のアンカー群の
+    直後にヒーローを差し込む。失敗時・該当なしは自然順(range)を返す（フェイルオープン）。"""
+    natural = list(range(len(all_posts)))
+    try:
+        from generate_remix import _load_hero_posts, _hero_key
+        pending = _load_hero_posts(acct)                       # 未投稿のヒーロー（NG/重複フィルタ済み）
+        if not pending:
+            return natural
+        all_keys = {_hero_key(h) for h in _load_hero_posts(acct, include_posted=True)}
+        # 今日の投稿数と「最後のヒーロー投稿からの本数」を台帳(時系列)から数える
+        n, since, hero_today = 0, 0, False
+        pfile = ACCOUNTS[acct]["posted"]
+        if pfile.exists():
+            for l in pfile.read_text(encoding="utf-8").splitlines():
+                try:
+                    e = json.loads(l)
+                except Exception:
+                    continue
+                if e.get("date") != today or e.get("kind") == "uplink_repost":
+                    continue
+                n += 1
+                if _hero_key(e.get("text", "")) in all_keys:
+                    since, hero_today = 0, True
+                else:
+                    since += 1
+        s_rem = max(0, DAILY_TARGET - n)
+        h_rem = len(pending)
+        # 残り枠(の8割)にヒーローを等間隔で配置。残り枠がヒーロー数の2倍以上あるうちは最低1本は通常投稿を挟む
+        gap = max(0, (s_rem * 4 // 5) // h_rem - 1)
+        if s_rem >= 2 * h_rem:
+            gap = max(gap, 1)
+        if not hero_today:
+            gap = min(gap, 3)   # 1日の最初のヒーローは早めに（序盤3本以内）
+        # ヒーローを all_posts 上のインデックスに対応づける（どのバッチにも無ければ末尾に追加）
+        idx_exact, idx_by_key = {}, {}
+        for i, t in enumerate(all_posts):
+            idx_exact.setdefault(_normalize_post_key(t)[:80], i)
+            idx_by_key.setdefault(_hero_key(t), i)
+        hero_idx = []
+        for h in pending:
+            j = idx_exact.get(_normalize_post_key(h)[:80])
+            if j is None:
+                j = idx_by_key.get(_hero_key(h))
+            if j is None:
+                all_posts.append(h)
+                j = len(all_posts) - 1
+                idx_exact[_normalize_post_key(h)[:80]] = j
+                idx_by_key[_hero_key(h)] = j
+            if j not in hero_idx:
+                hero_idx.append(j)
+        natural = list(range(len(all_posts)))   # 未投稿ヒーローは(出番前でも)末尾までに必ず含める＝キュー枯渇時の取りこぼし防止
+        if since < gap:
+            return natural
+        hs = set(hero_idx)
+        rest = [i for i in natural if i not in hs]
+        # 先頭の「アンカー系 or 投稿済み」を飛ばした最初の通常投稿の手前にヒーローを差し込む
+        p_ins = 0
+        for pos, i in enumerate(rest):
+            t = all_posts[i]
+            norm = _normalize_post_key(t)
+            is_anchor = (_is_line_listin(t) or _is_store_access(t) or _is_shindan(t) or _is_hpb_cta(t)
+                         or _is_cta_profile(t) or _is_ai_content(t))
+            if is_anchor or norm in posted_texts:
+                p_ins = pos + 1
+                continue
+            break
+        order = rest[:p_ins] + hero_idx + rest[p_ins:]
+        return order
+    except Exception as ex:
+        log_error(f"ヒーロー優先順の計算失敗(自然順で続行): {type(ex).__name__}: {ex}")
+        return list(range(len(all_posts)))
+
+
 def get_next_post(acct: str, today: str, avoid_url: bool = False):
     log_file = ACCOUNTS[acct]["log"]
     if not log_file.exists():
@@ -854,7 +935,9 @@ def get_next_post(acct: str, today: str, avoid_url: bool = False):
     # avoid_url=True の場合、直前投稿URL連発回避のため候補を集めてから選ぶ
     # （既定のavoid_url=Falseでは従来どおり最初の適格候補を即返す＝挙動を変えない）
     eligible: list[tuple[str, int]] = []
-    for i, text in enumerate(all_posts):
+    _scan_order = _hero_priority_order(acct, today, all_posts, posted_texts)   # ヒーロー優先(2026-10-20)
+    for i in _scan_order:
+        text = all_posts[i]
         if _is_line_listin(text):
             continue  # LINEは上で処理（未実施なら採用済み／実施済みならスキップ）
         # mark_posted が保存するテキストと同じ正規化で比較する

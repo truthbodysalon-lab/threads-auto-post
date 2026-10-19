@@ -1466,20 +1466,78 @@ def _is_own_winner_copy(text: str, acct: str, threshold: float = 0.8) -> bool:
     return False
 
 
-def _load_hero_posts(acct: str) -> list[str]:
+HERO_GRACE_DAYS = 3        # 日付が古いヒーローファイルでも、未投稿分はこの日数まで有効（SKILLが止まった日も取りこぼさない）
+HERO_MAX_PER_DAY = 16      # 1日に扱うヒーローの上限（当日分10本＋繰越の安全枠）
+
+
+def _hero_key(text: str) -> str:
+    """ヒーロー照合キー（auto_post / hero_carry.py と共通）。投稿台帳のtextは[COMMENT]以降や
+    後段パラグラフが落ちた形で保存されるため、全文ではなく正規化後の1行目で照合する。"""
+    try:
+        from duplicate_guard import normalize_text as _nz
+        t = _nz(text or "")
+    except Exception:
+        t = (text or "")
+    return re.sub(r"\s+", "", t.split("\n")[0])[:40]
+
+
+def _hero_posted_keys(acct: str) -> set:
+    """全期間に投稿済みのテキストの _hero_key 集合（ヒーローの未投稿判定用）。"""
+    pfile = BASE / f"log_{acct}_posted.jsonl"
+    keys = set()
+    if not pfile.exists():
+        return keys
+    for l in pfile.read_text(encoding="utf-8").splitlines():
+        if not l.strip():
+            continue
+        try:
+            t = json.loads(l).get("text", "")
+        except Exception:
+            continue
+        if t:
+            keys.add(_hero_key(t))
+    return keys
+
+
+def _load_hero_posts(acct: str, include_posted: bool = False) -> list[str]:
     """ヒーロー投稿（毎朝サブエージェントが書く変数無しの完成原稿）を読む。
-    hero_<acct>.json = {"date": "YYYY-MM-DD", "posts": [...]}。当日分のみ有効。
-    テンプレ量産と別枠の「跳ねを狙う原稿」で、キュー前半に散らして配置する。"""
+    hero_<acct>.json = {"date": "YYYY-MM-DD", "posts": [...], "carry": [...任意...]}。
+    テンプレ量産と別枠の「跳ねを狙う原稿」で、キュー前半に散らして配置する。
+    2026-10-20: 「生成したヒーローは全て投稿する」方針。ファイル日付が今日から HERO_GRACE_DAYS 日以内なら
+    有効（SKILL停止日も流用）、前日までの未投稿分(carry。hero_carry.py が付与)も含め、
+    投稿済みのものは除く(include_posted=True なら除かない＝投稿済み判定用の全ヒーローキー取得)。
+    古すぎるファイルは使わない。"""
     import datetime as _dt
     f = BASE / f"hero_{acct}.json"
     if not f.exists():
         return []
     try:
         d = json.loads(f.read_text(encoding="utf-8"))
-        if d.get("date") != _dt.date.today().isoformat():
-            return []   # 古いヒーローは使わない（鮮度が命）
+        _today = _dt.date.today()
+        try:
+            _fdate = _dt.date.fromisoformat(str(d.get("date")))
+        except Exception:
+            return []
+        if (_today - _fdate).days > HERO_GRACE_DAYS or _fdate > _today:
+            return []   # 古すぎるヒーローは使わない（鮮度）
+        # 前日までの未投稿繰越(carry)を先頭に、当日分(posts)を後ろに。繰越は文字列 or {"date","text"}
+        _raw = []
+        for c in d.get("carry", []) or []:
+            _t = c.get("text") if isinstance(c, dict) else c
+            if isinstance(_t, str):
+                _raw.append(_t)
+        _raw += [p for p in d.get("posts", []) if isinstance(p, str)]
+        _seen, _uniq = set(), []
+        for p in _raw:
+            k = _hero_key(p)
+            if k and k not in _seen:
+                _seen.add(k)
+                _uniq.append(p)
+        if not include_posted:
+            _done = _hero_posted_keys(acct)   # 投稿済みは再投入しない（二重投稿防止）
+            _uniq = [p for p in _uniq if _hero_key(p) not in _done]
         # 実測で「短い断定1〜3行(15〜25字)」が最強と判明(playbook W1)。30字下限は勝ち筋を弾くため15字に
-        out = [p for p in d.get("posts", []) if isinstance(p, str) and len(p) >= 15 and not _is_ng(p)]
+        out = [p for p in _uniq if len(p) >= 15 and not _is_ng(p)]
         if acct in ("truth", "nagaoka"):
             # ヒーロー原稿は自由記述のため生成ループの1文目チェックを経由しない。
             # 「長岡市の当院は兄妹で運営しています。」のような1文目NG（実績・自己紹介・
@@ -1834,8 +1892,10 @@ def _insert_customer_voice_post(posts: list[str], acct: str, today: str, anchor:
 
 
 def _insert_hero_posts(posts: list[str], acct: str) -> list[str]:
-    """ヒーロー投稿を実投稿される前半50本に等間隔で差し込む（最大10本）。"""
-    heroes = _load_hero_posts(acct)[:10]
+    """ヒーロー投稿を実投稿される前半50本に等間隔で差し込む（最大 HERO_MAX_PER_DAY 本）。
+    ※実際の投稿順は auto_post.get_next_post が「ヒーロー優先」で保証する（後から再生成された
+    バッチのヒーローがキュー末尾に回って未投稿になる事故の対策。2026-10-20）。"""
+    heroes = _load_hero_posts(acct)[:HERO_MAX_PER_DAY]
     if not heroes:
         return posts
     step = max(4, 46 // max(1, len(heroes)))

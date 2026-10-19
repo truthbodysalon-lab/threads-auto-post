@@ -265,6 +265,50 @@ def check_masa_insta_theme():
         add("masa_insta_theme", "B.ルール反映", "WARN", f"検査失敗: {type(e).__name__}: {e}")
 
 
+def check_hero_posted():
+    """ヒーロー投稿が「全て投稿される」状態か（2026-10-20 オーナー指示）。
+    過去の日付のヒーローに未投稿が残っていればWARN（原因: NGフィルタ除外／重複ガード／DAILY_CAP／優先投稿の不具合）。
+    ヒーローファイルが2日以上更新されていない場合もWARN（SKILL停止の検知）。"""
+    try:
+        import generate_remix as g
+        today = date.today()
+        for acct in ACCTS:
+            f = BASE / f"hero_{acct}.json"
+            if not f.exists():
+                add(f"hero_posted:{acct}", "B.ルール反映", "WARN", "hero ファイルなし")
+                continue
+            d = json.loads(f.read_text(encoding="utf-8"))
+            try:
+                fdate = date.fromisoformat(str(d.get("date")))
+            except Exception:
+                add(f"hero_posted:{acct}", "B.ルール反映", "WARN", f"hero date 不正: {d.get('date')}")
+                continue
+            raw = [p for p in d.get("posts", []) if isinstance(p, str)]
+            raw += [(c.get("text") if isinstance(c, dict) else c) for c in (d.get("carry") or [])]
+            raw = [p for p in raw if isinstance(p, str)]
+            done = g._hero_posted_keys(acct)
+            unposted_raw = [p for p in raw if g._hero_key(p) not in done]
+            valid = g._load_hero_posts(acct)            # 未投稿かつNG等のフィルタ通過
+            dropped = len(unposted_raw) - len(valid)    # フィルタで除外された(=永久に投稿されない)本数
+            age = (today - fdate).days
+            msgs = []
+            status = "PASS"
+            if age >= 2:
+                status = "WARN"
+                msgs.append(f"ヒーロー未更新(最終{fdate}・{age}日前)")
+            if age >= 1 and valid:
+                status = "WARN"
+                msgs.append(f"過去日のヒーロー{len(valid)}本が未投稿")
+            if dropped > 0:
+                status = "WARN"
+                msgs.append(f"フィルタ除外で投稿されないヒーロー{dropped}本(書き直し要)")
+            if not msgs:
+                msgs.append(f"生成{len(raw)}本中 未投稿{len(valid)}本(最終{fdate})")
+            add(f"hero_posted:{acct}", "B.ルール反映", status, " / ".join(msgs))
+    except Exception as e:
+        add("hero_posted", "B.ルール反映", "WARN", f"検査失敗: {type(e).__name__}: {e}")
+
+
 def check_masa_abstract():
     """masaの当日生成キュー前半50本のうち、抽象的な投稿（対象なし問いかけ・手順/具体例＋機能名のないコメント・抽象語）が
     1本でもあればWARN（2026-10-07 masa指示「問いかけの対象が不明・コメントが抽象的」の実行ギャップ検知。
@@ -969,7 +1013,7 @@ CHECK_REGISTRY = {
     "C8": "exec:daily50:", "C10": "exec:pacing:", "C11": "exec:watchdog",
     "C13": "exec:hpb_only", "C14": "exec:imagepost", "C15": "exec:segment_test:",
     "C16": "next_post:", "C17": "dup_reselect:", "C23": "same_day_anchor:", "C24": "dup_sameday:",
-    "C21": "exec:log_sync", "C25": "ledger_gap:", "C18": "exec:chain_gap", "C19": "exec:post_interval:", "C20": "ledger:",
+    "C21": "exec:log_sync", "C26": "hero_posted:", "C25": "ledger_gap:", "C18": "exec:chain_gap", "C19": "exec:post_interval:", "C20": "ledger:",
 }
 
 
@@ -1258,6 +1302,7 @@ def run_all():
     check_test_posts_in_first50()
     check_rules()
     check_masa_insta_theme()
+    check_hero_posted()
     check_masa_abstract()
     check_list_habit_in_first50()
     check_rule_hygiene()

@@ -77,9 +77,9 @@ def _push_once_per_day(acct: str, msg: str, kind: str = ""):
         subprocess.run([PUSH, msg], capture_output=True, timeout=60)
         st[key] = today
         _save_state(st)
-        log(f"LINE通知送信: {msg[:60]}")
+        log(f"Discord通知送信: {msg[:60]}")
     except Exception as e:
-        log(f"LINE通知失敗: {e}")
+        log(f"Discord通知失敗: {e}")
 
 
 # ── クラウド実行の起動キック（2026-10-02）─────────────────────────────
@@ -165,6 +165,19 @@ def check_account(acct: str) -> int:
     return behind
 
 
+def _stall_threshold(acct: str, hour: int = None) -> int:
+    """停止疑いと見なす無投稿の分数。
+    2026-10-20: nagaoka は外部ツールが約20本/日投稿しており、朝の最初の投稿が8:10〜9:10頃になる
+    （10/17〜10/20に毎朝7:15〜9:00台に『最後の投稿から75〜184分』の誤報が出ていた。
+    gap は投稿窓の開始(6:00)から数えるため）。6〜8時台だけ180分(=9:00まで無投稿でも鳴らさない)に延ばす。
+    9時以降と他アカウントは従来どおり sc.STALL_MIN。"""
+    import stall_check as sc
+    h = datetime.now().hour if hour is None else hour
+    if acct == "nagaoka" and 6 <= h < 9:
+        return 180
+    return sc.STALL_MIN
+
+
 def check_stall_and_keeper():
     """2026-10-02 管理体制強化: ペースとは別軸の「停止」検知。
     (i) 常駐runが0本 → 即kick＋通知  (ii) 投稿時間帯に最後の自前投稿から75分以上 → kick＋通知。"""
@@ -180,7 +193,7 @@ def check_stall_and_keeper():
     for acct in ("truth", "nagaoka", "masa"):
         try:
             gap = sc.last_post_gap_minutes(acct)
-            if gap is None or gap < sc.STALL_MIN:
+            if gap is None or gap < _stall_threshold(acct):
                 continue
             log(f"{acct}: 最後の投稿から{gap}分（停止疑い）")
             kick_cloud(f"{acct} 無投稿{int(gap)}分")

@@ -1,6 +1,6 @@
 {
   "acct": "truth",
-  "generated_at": "2026-10-18 10:42",
+  "generated_at": "2026-10-19 10:43",
   "params": {
     "min_n": 5,
     "loser_min_n": 8,
@@ -13,14 +13,14 @@
     ]
   },
   "registry_loaded": 104,
-  "log_entries": 7391,
+  "log_entries": 7441,
   "windows": {
     "7d": {
       "baseline": {
         "n": 198,
-        "median_views": 58.5,
-        "mean_views": 82.5,
-        "p90_views": 165.0
+        "median_views": 68.5,
+        "mean_views": 93.8,
+        "p90_views": 197.2
       },
       "unregistered_n": 198,
       "segment_hook": {
@@ -410,9 +410,9 @@
     "14d": {
       "baseline": {
         "n": 198,
-        "median_views": 58.5,
-        "mean_views": 82.5,
-        "p90_views": 165.0
+        "median_views": 68.5,
+        "mean_views": 93.8,
+        "p90_views": 197.2
       },
       "unregistered_n": 198,
       "segment_hook": {
@@ -802,9 +802,9 @@
     "30d": {
       "baseline": {
         "n": 198,
-        "median_views": 58.5,
-        "mean_views": 82.5,
-        "p90_views": 165.0
+        "median_views": 68.5,
+        "mean_views": 93.8,
+        "p90_views": 197.2
       },
       "unregistered_n": 198,
       "segment_hook": {

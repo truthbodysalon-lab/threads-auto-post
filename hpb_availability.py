@@ -80,9 +80,26 @@ def _parse_week(html):
         if not dates or dates[-1] != d:
             dates.append(d)
     if not dates:  # 通常の表示形式: 月セル(colspan=日数)＋日セル「14<br/>(水)」
+        # 月セルが1列だけの月は「&nbsp;」で年月が書かれない（2026-10-19 実測: 10/19〜11/1 の週で11月が空欄）
+        # → 年月の無いセルは隣の月セルから前後1か月として補う
+        cells = []
+        for m in re.finditer(r'<th[^>]*colspan="(\d+)"[^>]*class="monthCell"[^>]*>(.*?)</th>', head.group(1), re.S):
+            ym = re.search(r"(\d{4})年(\d{1,2})月", m.group(2))
+            cells.append([int(m.group(1)), (int(ym.group(1)), int(ym.group(2))) if ym else None])
+
+        def _shift(ym, k):
+            n = ym[0] * 12 + ym[1] - 1 + k
+            return (n // 12, n % 12 + 1)
+        for i in range(1, len(cells)):
+            if cells[i][1] is None and cells[i - 1][1]:
+                cells[i][1] = _shift(cells[i - 1][1], 1)
+        for i in range(len(cells) - 2, -1, -1):
+            if cells[i][1] is None and cells[i + 1][1]:
+                cells[i][1] = _shift(cells[i + 1][1], -1)
         months = []
-        for m in re.finditer(r'<th[^>]*colspan="(\d+)"[^>]*class="monthCell"[^>]*>\s*(\d{4})年(\d{1,2})月', head.group(1)):
-            months += [(int(m.group(2)), int(m.group(3)))] * int(m.group(1))
+        for span, ym in cells:
+            if ym:
+                months += [ym] * span
         days = [int(x) for x in re.findall(r"<th[^>]*>\s*(\d{1,2})<br\s*/?>\s*\(.\)\s*</th>", head.group(1))]
         if not months or len(months) != len(days):
             raise RuntimeError(f"HPB日時選択ページの日付を読めなかった（月{len(months)}・日{len(days)}）")

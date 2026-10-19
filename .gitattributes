@@ -19,3 +19,5 @@ log_truth_posted.jsonl merge=union
 log_nagaoka_posted.jsonl merge=union
 log_masa_posted.jsonl merge=union
 shared_posted_guard.jsonl merge=union
+# 通知ログも追記専用(verify_ci.py/watchdog_ci.py が open("a") のみ)。health_check.yml と daily_verify.yml が同時に git add するため競合する（2026-10-16 run 38852512204 でCONFLICT）。2026-10-20追加
+notifications.jsonl merge=union

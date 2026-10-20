@@ -128,6 +128,9 @@ def kick_cloud(reason: str) -> bool:
 
 
 def check_account(acct: str) -> int:
+    from account_ownership import is_local
+    if not is_local(acct):
+        return
     hour = datetime.now().hour
 
     # 投稿数は外形API実測を第一とする（ローカル台帳はpull_syncの同期ラグで

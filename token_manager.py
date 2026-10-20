@@ -117,6 +117,9 @@ def update_github_secret(repo: str, secret_name: str, secret_value: str) -> bool
 # ── トークンリフレッシュ ──────────────────────────
 
 def refresh_token(acct: str) -> str | None:
+    from account_ownership import is_local
+    if not is_local(acct):
+        return
     token = os.environ.get(ACCOUNTS[acct]["token_key"], "")
     if not token:
         return None

@@ -222,6 +222,9 @@ def print_report(result: dict):
 
 
 def run(acct: str):
+    from account_ownership import is_local
+    if not is_local(acct):
+        return
     name = ACCOUNTS[acct]["name"]
     print(f"{name} の投稿を取得中...")
     try:

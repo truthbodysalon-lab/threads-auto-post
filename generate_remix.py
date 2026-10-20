@@ -4003,6 +4003,10 @@ def _final_inspection_pass(posts: list[str], account: str) -> list[str]:
 
 def main():
     account = sys.argv[1] if len(sys.argv) > 1 else "truth"
+    from account_ownership import is_local
+    if not is_local("masa" if "masa" in account.lower() else "nagaoka" if "nagaoka" in account.lower() else "truth"):
+        print("Account generation moved to its new cloud repository")
+        return
 
     if "masa" in account.lower():
         posts = _final_inspection_pass(generate_30_masa_posts(), "masa")

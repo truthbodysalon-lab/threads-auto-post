@@ -1273,6 +1273,9 @@ class _DuplicatePost(Exception):
 # ── アカウント実行 ────────────────────────────────────
 
 def run_account(acct: str):
+    from account_ownership import is_local
+    if not is_local(acct):
+        return
     today = date.today().strftime("%Y-%m-%d")
     name = ACCOUNTS[acct]["name"]
 
@@ -1571,6 +1574,9 @@ def _run_account_batch(acct: str):
     - DAILY_CAP に達したら出さない（過剰投稿=スパム防止）
     - 遅れていればまとめて回復、進んでいれば控える（Mac休止後のキャッチアップ対応）
     """
+    from account_ownership import is_local
+    if not is_local(acct):
+        return
     posted = _posted_count_today(acct)
     ledger_posted = posted
     api_n = None
@@ -1633,6 +1639,9 @@ def _run_uplink_repost():
     - 通常50本・DAILY_CAPとは別カウンタ（台帳 kind=uplink_repost）。1サイクル最大1本＝時間帯が自然に分散
     - 本文は無加工（URL移動・[COMMENT]分割・ブリッジコメント・CTAコメントを一切付けない）
     - 重複/検品NG/失敗は status=skipped にして次へ（同じものを選び続けない＝9/29障害の教訓）"""
+    from account_ownership import is_local
+    if not is_local("masa"):
+        return
     import uplink_repost as ur
     acct = "masa"
     hour = datetime.now().hour

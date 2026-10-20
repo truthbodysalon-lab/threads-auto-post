@@ -2,6 +2,7 @@
 """dispatcher.py の pause_file / queue_file ゲートのテスト（2026-10-18）。
 実行: python3 test_dispatcher_gates.py   （ネットワークは使わない。api を差し替える）"""
 import base64, json, os, sys, tempfile, unittest
+from datetime import datetime, timedelta
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -15,15 +16,18 @@ def b64(obj):
 
 
 class Fake:
-    def __init__(self, files, runs=0):
-        self.files, self.runs, self.posts = files, runs, []
+    def __init__(self, files, runs=0, latest=None):
+        self.files, self.runs, self.posts, self.latest = files, runs, [], latest
 
     def __call__(self, method, path, body=None):
         if method == "POST":
             self.posts.append((path, body))
             return 204, {}
         if "/actions/workflows/" in path and "/runs" in path:
-            return 200, {"total_count": self.runs}
+            d = {"total_count": self.runs}
+            if self.latest:
+                d["workflow_runs"] = [self.latest]
+            return 200, d
         if path.startswith(f"/repos/{REPO}/contents/"):
             rel = path.split("/contents/", 1)[1]
             if rel not in self.files:
@@ -34,12 +38,12 @@ class Fake:
         raise RuntimeError("unexpected " + path)
 
 
-def run_main(entry, files, now, runs=0):
-    tmp = Path(tempfile.mkdtemp())
+def run_main(entry, files, now, runs=0, latest=None, tmp=None):
+    tmp = tmp or Path(tempfile.mkdtemp())
     (tmp / "t.json").write_text(json.dumps({"mode": "live", "entries": [entry]}))
     D.TABLE, D.STATE = tmp / "t.json", tmp / "s.json"
     D._branch_cache.clear()
-    fake = Fake(files, runs)
+    fake = Fake(files, runs, latest)
     D.api = fake
     os.environ["DISPATCH_NOW"] = now
     D.main()
@@ -191,16 +195,25 @@ class ScheduleTableInvariants(unittest.TestCase):
                 self.assertTrue(e.get("window_min", 90) >= 30, e["id"])      # ディスパッチャは約10分周期
                 self.assertIn("skip_until", e, e["id"])                      # 無料枠が戻る前は起動しない
 
-    def test_verify_has_no_primary_cloud_slots(self):
-        # verify の定刻4枠はMac常設へ。クラウドは保険(catchup)のみ
-        ids = [i for i in self.by if i.startswith("ig-verify@")]
-        self.assertEqual(ids, [])
-        self.assertEqual(sorted(i for i in self.by if i.startswith("ig-verify-catchup@")),
-                         ["ig-verify-catchup@15:21", "ig-verify-catchup@20:21", "ig-verify-catchup@23:11"])
+    def test_verify_has_no_cloud_slots_in_quota_account(self):
+        # 2026-10-21(577c9145): @masahide_takahashi_ の story/reels/feed/verify/analyze は別アカウント
+        # (minetownmasa-dotcom/instagram-marketing・独自の無料枠)へ移した。truthbodysalon-lab 側の ig-verify は
+        # Mac 単独(clinic-video-check@22:21・ig-verify.yml は disabled_manually)で、クラウドの保険枠(旧 ig-verify-catchup@*)は無い。
+        self.assertEqual([i for i in self.by if i.startswith("ig-verify@") or i.startswith("ig-verify-catchup@")], [])
+        self.assertEqual([i for i in self.by if i.startswith("ig-story@") or i.startswith("ig-reels") or i.startswith("ig-feed@")], [])
+        ids = sorted(i for i, e in self.by.items() if e["repo"].endswith("/instagram-marketing") and e["workflow"] == "ig-verify.yml")
+        self.assertEqual(ids, ["marketing-verify@09:21", "marketing-verify@13:21", "marketing-verify@18:55", "marketing-verify@22:21"])
 
     def test_story_daily_gate(self):
-        for i in ("ig-story@07:31", "ig-story@12:05", "ig-story@17:31", "ig-story@21:05"):
+        for i in ("marketing-story@07:31", "marketing-story@12:05", "marketing-story@17:31", "marketing-story@21:05"):
             self.assertEqual(self.by[i].get("gate"), "daily", i)
+
+    def test_marketing_account_is_not_quota_stopped(self):
+        # 別アカウントは自アカウントの無料枠切れ(skip_until)で止めない。止めると Mac 代行の無い投稿が黙って止まる
+        for i, e in self.by.items():
+            if e["repo"].startswith("minetownmasa-dotcom/"):
+                self.assertNotIn("skip_until", e, i)
+                self.assertTrue(e.get("enabled", True), i)
 
     def test_catchup_window_does_not_cross_midnight(self):
         # local_done は『今日』の記録で判定する。日付をまたぐ窓だと翌日の判定になり二重起動しうる
@@ -208,6 +221,74 @@ class ScheduleTableInvariants(unittest.TestCase):
             if e.get("catchup"):
                 hh, mm = map(int, e["jst_time"].split(":"))
                 self.assertLess(hh * 60 + mm + int(e.get("window_min", 90)), 24 * 60 + 1, e["id"])
+
+
+ER = {"id": "case", "repo": REPO, "workflow": "case.yml", "jst_time": "19:02", "window_min": 90, "since": "day",
+      "enabled": True, "retry_failed": {"after_min": 40, "until_min": 300}}
+
+
+def run_utc(jst_str):
+    """JST 'YYYY-MM-DD HH:MM' を GitHub の updated_at 形式(UTC)にする"""
+    d = datetime.strptime(jst_str, "%Y-%m-%d %H:%M") - timedelta(hours=9)
+    return d.strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+def mk(status, concl, end_jst):
+    return {"status": status, "conclusion": concl, "updated_at": run_utc(end_jst), "html_url": "https://x/runs/1"}
+
+
+class RetryFailed(unittest.TestCase):
+    """retry_failed: 1日1回の投稿が失敗で終わった日だけ、終了の約40分後に1回だけ再起動する（2026-10-21）"""
+
+    def seq(self, steps, entry=ER):
+        """steps=[(now, runs, latest)] を同じ state で順に流し、各回の dispatch 数を返す"""
+        tmp = Path(tempfile.mkdtemp())
+        return [len(run_main(entry, {}, now, runs=r, latest=l, tmp=tmp)) for now, r, l in steps]
+
+    def test_failed_run_is_retried_once_after_40min(self):
+        fail = mk("completed", "failure", "2026-10-21 19:10")
+        out = self.seq([
+            ("2026-10-21 19:05", 0, None),            # 通常起動
+            ("2026-10-21 19:15", 1, mk("in_progress", None, "2026-10-21 19:15")),   # 実行中: 待つ
+            ("2026-10-21 19:25", 1, fail),            # 失敗終了から15分: まだ待つ
+            ("2026-10-21 19:45", 1, fail),            # 35分: まだ
+            ("2026-10-21 19:55", 1, fail),            # 45分: 再起動
+            ("2026-10-21 20:05", 2, fail),            # 再起動済み(run 2本): もう起動しない
+            ("2026-10-21 20:15", 1, fail),            # 一覧の反映が遅れて1本に見えても、retryマーカーで二度目はしない
+        ])
+        self.assertEqual(out, [1, 0, 0, 0, 1, 0, 0])
+
+    def test_success_or_cancelled_or_many_runs_are_not_retried(self):
+        for latest, runs in ((mk("completed", "success", "2026-10-21 19:10"), 1),
+                             (mk("completed", "cancelled", "2026-10-21 19:10"), 1),
+                             (mk("completed", "failure", "2026-10-21 19:10"), 2)):
+            out = self.seq([("2026-10-21 19:05", 0, None), ("2026-10-21 20:05", runs, latest)])
+            self.assertEqual(out, [1, 0], (latest["conclusion"], runs))
+
+    def test_dispatched_but_not_listed_yet_does_not_double_dispatch(self):
+        out = self.seq([("2026-10-21 19:05", 0, None), ("2026-10-21 19:15", 0, None), ("2026-10-21 19:25", 0, None)])
+        self.assertEqual(out, [1, 0, 0])
+
+    def test_without_retry_failed_unchanged(self):
+        e = {k: v for k, v in ER.items() if k != "retry_failed"}
+        fail = mk("completed", "failure", "2026-10-21 19:10")
+        out = self.seq([("2026-10-21 19:05", 0, None), ("2026-10-21 19:55", 1, fail)], entry=e)
+        self.assertEqual(out, [1, 0])
+        # 窓(90分)を過ぎたら何もしない
+        self.assertEqual(self.seq([("2026-10-21 20:40", 0, None)], entry=e), [0])
+
+    def test_retry_only_while_before_until(self):
+        fail = mk("completed", "failure", "2026-10-21 19:10")
+        out = self.seq([("2026-10-21 19:05", 0, None), ("2026-10-22 00:30", 1, fail)])
+        self.assertEqual(out, [1, 0])        # 日をまたいだら対象外（slot+300分=24:02 だが日付が変わる）
+
+    def test_retry_respects_pause_file(self):
+        e = dict(ER, pause_file="state/p.json")
+        tmp = Path(tempfile.mkdtemp())
+        fail = mk("completed", "failure", "2026-10-21 19:10")
+        self.assertEqual(len(run_main(e, {}, "2026-10-21 19:05", tmp=tmp)), 1)
+        f = {"state/p.json": {"until": "2026-10-25"}}
+        self.assertEqual(run_main(e, f, "2026-10-21 19:55", runs=1, latest=fail, tmp=tmp), [])
 
 
 if __name__ == "__main__":

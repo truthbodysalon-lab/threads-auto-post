@@ -70,10 +70,40 @@ def default_branch(repo):
     return _branch_cache[repo]
 
 
-def runs_since(repo, wf, since_utc):
+def runs_since_info(repo, wf, since_utc):
+    """(総数, 最新のrun or None)。最新は created の新しい順の先頭。"""
     q = urllib.parse.quote(">=" + since_utc.strftime("%Y-%m-%dT%H:%M:%SZ"), safe="")
     _, d = api("GET", f"/repos/{repo}/actions/workflows/{wf}/runs?created={q}&per_page=1")
-    return d.get("total_count", 0)
+    runs = d.get("workflow_runs") or []
+    return d.get("total_count", 0), (runs[0] if runs else None)
+
+
+def runs_since(repo, wf, since_utc):
+    return runs_since_info(repo, wf, since_utc)[0]
+
+
+def retry_decision(e, repo, now, since_utc, n, latest):
+    """retry_failed（2026-10-21）: 1日1回しかない投稿が『その日のrunが1本だけで、失敗で終わった』時だけ、
+    終了から after_min（既定40）分後に1回だけ再起動してよいか。画像置き場などの数分〜数十分の障害でその日の投稿を落とさないため。
+    戻り値: "yes"=今すぐ再起動 / "wait"=まだ待つ（次のサイクルで再判定） / "no"=再起動しない（以後この日は判定しない）。
+    失敗以外（成功・取消・実行中）や、すでに2本以上ある日（再起動済み・手動実行あり）は "no"。実行中は "wait"。
+    再起動された run は投稿済みなら各スクリプトの posted_today ガードで何もしない（二重投稿しない）。"""
+    cfg = e.get("retry_failed")
+    if not cfg:
+        return "no"
+    if n != 1 or not latest:
+        return "no" if n != 0 else "wait"
+    st, concl = latest.get("status"), latest.get("conclusion")
+    if st != "completed":
+        return "wait"
+    if concl != "failure":
+        return "no"
+    try:
+        end = datetime.strptime(str(latest.get("updated_at"))[:19], "%Y-%m-%dT%H:%M:%S").replace(tzinfo=timezone.utc)
+    except Exception:
+        return "no"
+    after = int(cfg.get("after_min", 40)) if isinstance(cfg, dict) else 40
+    return "yes" if (now.astimezone(timezone.utc) - end) >= timedelta(minutes=after) else "wait"
 
 
 def fetch_plan(repo, acct):
@@ -350,33 +380,59 @@ def main():
                 continue
             hh, mm = map(int, e["jst_time"].split(":"))
             slot = day0.replace(hour=hh, minute=mm)
-            if not (slot <= now <= slot + timedelta(minutes=int(e.get("window_min", 90)))):
+            win_end = slot + timedelta(minutes=int(e.get("window_min", 90)))
+            rt = e.get("retry_failed")
+            rt_end = slot + timedelta(minutes=int(rt.get("until_min", 300))) if isinstance(rt, dict) else win_end
+            if not (slot <= now <= max(win_end, rt_end)):
                 continue
+            retry_key = e["id"] + "#retry"
+            retrying = False
             if state.get(e["id"]) == today:
+                # 通常の起動は済み。retry_failed のある枠だけ、失敗で終わっていたら1回だけやり直す判定を続ける
+                if not rt or state.get(retry_key) == today:
+                    continue
+            elif now > win_end:
                 continue
             due += 1
             repo, wf = e["repo"], e["workflow"]
             since = day0 if e.get("since", "day") == "day" else slot - timedelta(minutes=12)
-            n = runs_since(repo, wf, since.astimezone(timezone.utc))
+            n, latest = runs_since_info(repo, wf, since.astimezone(timezone.utc))
+            if n == 0 and state.get(e["id"]) == today:
+                continue      # 起動済みだが一覧にまだ出ていない（反映遅れ）。再起動の判定は run が見えてから
             if n > 0:
-                log(f"{e['id']}: 既存run {n}件あり → 起動不要" + ("" if mode == "live" else " (dry_run: マーカー無し)"))
-                if mode == "live":
-                    state[e["id"]] = today; changed = True
-                continue
+                dec = retry_decision(e, repo, now, since.astimezone(timezone.utc), n, latest) if rt else "no"
+                if dec == "yes" and mode == "live":
+                    retrying = True
+                    log(f"{e['id']}: 本日のrunは1本で失敗終了({latest.get('html_url', '')[-40:]}) → {rt.get('after_min', 40) if isinstance(rt, dict) else 40}分以上経過したので1回だけ再起動する")
+                else:
+                    if dec == "wait":
+                        if state.get(e["id"]) != today and mode == "live":
+                            state[e["id"]] = today; changed = True
+                        continue
+                    log(f"{e['id']}: 既存run {n}件あり → 起動不要" + ("" if mode == "live" else " (dry_run: マーカー無し)"))
+                    if mode == "live":
+                        state[e["id"]] = today; state[retry_key] = today; changed = True
+                    continue
             if mode != "live":
                 log(f"{e['id']}: 起動予定 {repo} {wf} (dry_run)")
                 continue
             if local_done_active(e, repo, now):
                 log(f"{e['id']}: Mac常設ジョブ {e['local_done']} が本日{e.get('local_done_since') or '00:00'}以降に成功済み → クラウドは起動しない")
                 state[e["id"]] = today; changed = True
+                if retrying:
+                    state[retry_key] = today
                 continue
             if pause_file_active(e, repo, today):
                 log(f"{e['id']}: {e['pause_file']} により一時停止中 → 起動しない（今日は再判定しない）")
                 state[e["id"]] = today; changed = True
+                if retrying:
+                    state[retry_key] = today
                 continue
             if queue_empty_today(e, repo, today):
                 log(f"{e['id']}: {e['queue_file']} に本日({today})分なし → 起動しない（今日は再判定しない）")
                 state[e["id"]] = today; changed = True
+                if retrying:
+                    state[retry_key] = today
                 continue
             if gate_skip(e, repo, now):
                 if e.get("gate") == "stepmail":
@@ -390,8 +446,10 @@ def main():
             if e.get("inputs"):  # workflow_dispatch の入力（例: hpb の account）
                 body["inputs"] = e["inputs"]
             st, _ = api("POST", f"/repos/{repo}/actions/workflows/{wf}/dispatches", body)
-            log(f"{e['id']}: dispatch {repo} {wf} ref={ref} -> HTTP {st}")
+            log(f"{e['id']}: dispatch {repo} {wf} ref={ref} -> HTTP {st}" + (" (失敗runの再起動)" if retrying else ""))
             state[e["id"]] = today; changed = True
+            if retrying:
+                state[retry_key] = today
         except Exception as ex:
             warn(f"{e.get('id')} 失敗: {type(ex).__name__}: {ex}")
     if due == 0:

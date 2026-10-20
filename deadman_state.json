@@ -1,12 +1,12 @@
 {
  "cloud": {
   "alerted_at": 0,
-  "read_fail": 2,
+  "read_fail": 0,
   "read_warned": false
  },
  "line": {
   "alerted_at": 0,
-  "read_fail": 2,
+  "read_fail": 0,
   "read_warned": false
  }
 }

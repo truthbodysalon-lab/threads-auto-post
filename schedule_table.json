@@ -9,9 +9,10 @@
    "jst_time": "07:31",
    "window_min": 90,
    "since": "slot",
-   "enabled": true,
+   "enabled": false,
    "skip_until": "2026-11-01 09:30",
-   "gate": "daily"
+   "gate": "daily",
+   "migration_note": "2026-10-21: marketing account runs permanently on Mac; avoid duplicate cloud starts"
   },
   {
    "id": "ig-story@12:05",
@@ -20,9 +21,10 @@
    "jst_time": "12:05",
    "window_min": 90,
    "since": "slot",
-   "enabled": true,
+   "enabled": false,
    "skip_until": "2026-11-01 09:30",
-   "gate": "daily"
+   "gate": "daily",
+   "migration_note": "2026-10-21: marketing account runs permanently on Mac; avoid duplicate cloud starts"
   },
   {
    "id": "ig-story@17:31",
@@ -31,9 +33,10 @@
    "jst_time": "17:31",
    "window_min": 90,
    "since": "slot",
-   "enabled": true,
+   "enabled": false,
    "skip_until": "2026-11-01 09:30",
-   "gate": "daily"
+   "gate": "daily",
+   "migration_note": "2026-10-21: marketing account runs permanently on Mac; avoid duplicate cloud starts"
   },
   {
    "id": "ig-story@21:05",
@@ -42,9 +45,10 @@
    "jst_time": "21:05",
    "window_min": 90,
    "since": "slot",
-   "enabled": true,
+   "enabled": false,
    "skip_until": "2026-11-01 09:30",
-   "gate": "daily"
+   "gate": "daily",
+   "migration_note": "2026-10-21: marketing account runs permanently on Mac; avoid duplicate cloud starts"
   },
   {
    "id": "ig-verify-catchup@15:21",
@@ -53,11 +57,12 @@
    "jst_time": "15:21",
    "window_min": 60,
    "since": "slot",
-   "enabled": true,
+   "enabled": false,
    "local_done": "ig-verify",
    "local_done_since": "12:30",
    "catchup": true,
-   "skip_until": "2026-11-01 09:30"
+   "skip_until": "2026-11-01 09:30",
+   "migration_note": "2026-10-21: marketing account runs permanently on Mac; avoid duplicate cloud starts"
   },
   {
    "id": "ig-verify-catchup@20:21",
@@ -66,11 +71,12 @@
    "jst_time": "20:21",
    "window_min": 60,
    "since": "slot",
-   "enabled": true,
+   "enabled": false,
    "local_done": "ig-verify",
    "local_done_since": "18:30",
    "catchup": true,
-   "skip_until": "2026-11-01 09:30"
+   "skip_until": "2026-11-01 09:30",
+   "migration_note": "2026-10-21: marketing account runs permanently on Mac; avoid duplicate cloud starts"
   },
   {
    "id": "ig-verify-catchup@23:11",
@@ -79,11 +85,12 @@
    "jst_time": "23:11",
    "window_min": 45,
    "since": "slot",
-   "enabled": true,
+   "enabled": false,
    "local_done": "ig-verify",
    "local_done_since": "21:30",
    "catchup": true,
-   "skip_until": "2026-11-01 09:30"
+   "skip_until": "2026-11-01 09:30",
+   "migration_note": "2026-10-21: marketing account runs permanently on Mac; avoid duplicate cloud starts"
   },
   {
    "id": "ig-feed",
@@ -92,9 +99,10 @@
    "jst_time": "11:33",
    "window_min": 90,
    "since": "day",
-   "enabled": true,
+   "enabled": false,
    "pause_file": "state/feed_pause.json",
-   "skip_until": "2026-11-01 09:30"
+   "skip_until": "2026-11-01 09:30",
+   "migration_note": "2026-10-21: marketing account runs permanently on Mac; avoid duplicate cloud starts"
   },
   {
    "id": "ig-reels",
@@ -103,9 +111,10 @@
    "jst_time": "08:05",
    "window_min": 90,
    "since": "day",
-   "enabled": true,
+   "enabled": false,
    "queue_file": "state/reels_queue.json",
-   "skip_until": "2026-11-01 09:30"
+   "skip_until": "2026-11-01 09:30",
+   "migration_note": "2026-10-21: marketing account runs permanently on Mac; avoid duplicate cloud starts"
   },
   {
    "id": "ig-analyze-catchup",
@@ -114,10 +123,11 @@
    "jst_time": "11:13",
    "window_min": 240,
    "since": "day",
-   "enabled": true,
+   "enabled": false,
    "local_done": "ig-analyze",
    "catchup": true,
-   "skip_until": "2026-11-01 09:30"
+   "skip_until": "2026-11-01 09:30",
+   "migration_note": "2026-10-21: marketing account runs permanently on Mac; avoid duplicate cloud starts"
   },
   {
    "id": "ig-analyze-pool-catchup",

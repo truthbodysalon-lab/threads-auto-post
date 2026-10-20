@@ -424,10 +424,9 @@
    "jst_time": "01:25",
    "window_min": 60,
    "since": "slot",
-   "enabled": false,
+   "enabled": true,
    "gate": "stepmail",
-   "skip_until": "2026-11-01 09:30",
-   "migration_reason": "minetownmasa-dotcom personal marketing cloud"
+   "skip_until": "2026-11-01 09:30"
   },
   {
    "id": "stepmail@03:25",
@@ -436,10 +435,9 @@
    "jst_time": "03:25",
    "window_min": 60,
    "since": "slot",
-   "enabled": false,
+   "enabled": true,
    "gate": "stepmail",
-   "skip_until": "2026-11-01 09:30",
-   "migration_reason": "minetownmasa-dotcom personal marketing cloud"
+   "skip_until": "2026-11-01 09:30"
   },
   {
    "id": "stepmail@05:25",
@@ -448,10 +446,9 @@
    "jst_time": "05:25",
    "window_min": 60,
    "since": "slot",
-   "enabled": false,
+   "enabled": true,
    "gate": "stepmail",
-   "skip_until": "2026-11-01 09:30",
-   "migration_reason": "minetownmasa-dotcom personal marketing cloud"
+   "skip_until": "2026-11-01 09:30"
   },
   {
    "id": "stepmail@07:25",
@@ -460,10 +457,9 @@
    "jst_time": "07:25",
    "window_min": 60,
    "since": "slot",
-   "enabled": false,
+   "enabled": true,
    "gate": "stepmail",
-   "skip_until": "2026-11-01 09:30",
-   "migration_reason": "minetownmasa-dotcom personal marketing cloud"
+   "skip_until": "2026-11-01 09:30"
   },
   {
    "id": "stepmail@09:25",
@@ -472,10 +468,9 @@
    "jst_time": "09:25",
    "window_min": 60,
    "since": "slot",
-   "enabled": false,
+   "enabled": true,
    "gate": "stepmail",
-   "skip_until": "2026-11-01 09:30",
-   "migration_reason": "minetownmasa-dotcom personal marketing cloud"
+   "skip_until": "2026-11-01 09:30"
   },
   {
    "id": "stepmail@11:25",
@@ -484,10 +479,9 @@
    "jst_time": "11:25",
    "window_min": 60,
    "since": "slot",
-   "enabled": false,
+   "enabled": true,
    "gate": "stepmail",
-   "skip_until": "2026-11-01 09:30",
-   "migration_reason": "minetownmasa-dotcom personal marketing cloud"
+   "skip_until": "2026-11-01 09:30"
   },
   {
    "id": "stepmail@13:25",
@@ -496,10 +490,9 @@
    "jst_time": "13:25",
    "window_min": 60,
    "since": "slot",
-   "enabled": false,
+   "enabled": true,
    "gate": "stepmail",
-   "skip_until": "2026-11-01 09:30",
-   "migration_reason": "minetownmasa-dotcom personal marketing cloud"
+   "skip_until": "2026-11-01 09:30"
   },
   {
    "id": "stepmail@15:25",
@@ -508,10 +501,9 @@
    "jst_time": "15:25",
    "window_min": 60,
    "since": "slot",
-   "enabled": false,
+   "enabled": true,
    "gate": "stepmail",
-   "skip_until": "2026-11-01 09:30",
-   "migration_reason": "minetownmasa-dotcom personal marketing cloud"
+   "skip_until": "2026-11-01 09:30"
   },
   {
    "id": "stepmail@17:25",
@@ -520,10 +512,9 @@
    "jst_time": "17:25",
    "window_min": 60,
    "since": "slot",
-   "enabled": false,
+   "enabled": true,
    "gate": "stepmail",
-   "skip_until": "2026-11-01 09:30",
-   "migration_reason": "minetownmasa-dotcom personal marketing cloud"
+   "skip_until": "2026-11-01 09:30"
   },
   {
    "id": "stepmail@19:25",
@@ -532,10 +523,9 @@
    "jst_time": "19:25",
    "window_min": 60,
    "since": "slot",
-   "enabled": false,
+   "enabled": true,
    "gate": "stepmail",
-   "skip_until": "2026-11-01 09:30",
-   "migration_reason": "minetownmasa-dotcom personal marketing cloud"
+   "skip_until": "2026-11-01 09:30"
   },
   {
    "id": "stepmail@21:25",
@@ -544,10 +534,9 @@
    "jst_time": "21:25",
    "window_min": 60,
    "since": "slot",
-   "enabled": false,
+   "enabled": true,
    "gate": "stepmail",
-   "skip_until": "2026-11-01 09:30",
-   "migration_reason": "minetownmasa-dotcom personal marketing cloud"
+   "skip_until": "2026-11-01 09:30"
   },
   {
    "id": "stepmail@23:25",
@@ -556,10 +545,9 @@
    "jst_time": "23:25",
    "window_min": 60,
    "since": "slot",
-   "enabled": false,
+   "enabled": true,
    "gate": "stepmail",
-   "skip_until": "2026-11-01 09:30",
-   "migration_reason": "minetownmasa-dotcom personal marketing cloud"
+   "skip_until": "2026-11-01 09:30"
   },
   {
    "id": "marketing-learning",
@@ -568,11 +556,10 @@
    "jst_time": "14:43",
    "window_min": 240,
    "since": "day",
-   "enabled": false,
+   "enabled": true,
    "local_done": "marketing-learning",
    "catchup": true,
-   "skip_until": "2026-11-01 09:30",
-   "migration_reason": "minetownmasa-dotcom personal marketing cloud"
+   "skip_until": "2026-11-01 09:30"
   },
   {
    "id": "gmail-notify",

@@ -16,7 +16,7 @@
     全て元の挙動（毎枠起動）に戻る。
 
 使い方（Macの定刻起動スクリプトから）:
-  python3 story_gate.py --mode pool|qa|offer|features [--repo OWNER/REPO]
+  python3 story_gate.py --mode pool|qa|offer|features|daily [--repo OWNER/REPO]
   終了コード: 10=起動を省略してよい（理由を標準出力） / 0=起動する / それ以外=起動する（フェイルオープン）
 
 このファイルの複製が threads-auto-post/story_gate.py にある（クラウド中央ディスパッチャ用）。
@@ -45,10 +45,51 @@ MODES = {
     "qa": {"accounts": ["nagaoka", "truth"], "kind": "qa_video"},
     "offer": {"accounts": ["nagaoka", "truth"], "kind": "offer"},
     "features": {"accounts": ["nagaoka"], "kind": "friday_features"},   # ig-story-friday.yml
+    # 2026-10-21: @masahide_takahashi_ の日次ストーリー（ig-story.yml → ig_daily.py --slot story）。plan は state/story_plan.json
+    #   （アカウント別ディレクトリではない）。"masa" は plan_path() で解決する擬似アカウント名。
+    "daily": {"accounts": ["masa"], "kind": None},
 }
 KNOWN_KINDS = ("friday_features", "offer", "qa_video")
 
 PLAN_PATH = "state/{acct}/story_plan.json"
+PLAN_PATH_OVERRIDE = {"masa": "state/story_plan.json"}
+
+# --- ig_daily.run_story() の時間帯ガードの写し（tests/test_story_gate.py が一致を検査）---
+DAILY_PARTS = 4
+DAILY_BOUNDS_HM = (1200, 1730, 2100)    # 〜11:59=起(0) / 12:00〜17:29=承(1) / 17:30〜20:59=転(2) / 21:00〜=結(3)
+DAILY_LOOKAHEAD_MIN = 10                # run は枠の少し後に始まる。10分後でも何も起きない時だけスキップ
+
+
+def plan_path(acct):
+    return PLAN_PATH_OVERRIDE.get(acct) or PLAN_PATH.format(acct=acct)
+
+
+def daily_target(hm):
+    """ig_daily.run_story の target（その時刻に投稿してよい最後のパート番号）。"""
+    b0, b1, b2 = DAILY_BOUNDS_HM
+    return 0 if hm < b0 else 1 if hm < b1 else 2 if hm < b2 else 3
+
+
+def _daily_nothing_happens(plan, now):
+    """ig_daily.run_story() が「何もせず終了する」条件だけを写す。
+    今日(JST)のplanがあり、posted が 4 以上、または posted > target（この時間帯のパートは投稿済み）。
+    planなし・日付違い・形式不正は run が新規plan生成/投稿に進みうるので必ず起動する。"""
+    if not isinstance(plan, dict) or not plan:
+        return False, "masa: planなし/不明(新規生成の可能性)"
+    if plan.get("date") != now.strftime("%Y-%m-%d"):
+        return False, f"masa: planの日付が今日ではない({plan.get('date')})"
+    posted = plan.get("posted")
+    if not isinstance(posted, int) or isinstance(posted, bool):
+        return False, "masa: posted不正"
+    if posted >= DAILY_PARTS:
+        return True, f"masa: 本日の連作{DAILY_PARTS}枚は投稿済み(posted={posted})"
+    later = now + timedelta(minutes=DAILY_LOOKAHEAD_MIN)
+    if later.strftime("%Y-%m-%d") != now.strftime("%Y-%m-%d"):
+        return False, "masa: 日付またぎ付近(判定しない)"
+    target = daily_target(int(later.strftime("%H%M")))
+    if posted > target:
+        return True, f"masa: この時間帯のパートは投稿済み(posted={posted} > target={target})"
+    return False, f"masa: 未投稿のパートあり(posted={posted} <= target={target})"
 
 
 def _created_at(plan):
@@ -84,6 +125,8 @@ def nothing_happens(mode, acct, plan, now):
     """このアカウント・このモードの実行が「必ず何もせず終了する」なら (True, 理由)、
     投稿・plan生成の可能性が少しでもあれば (False, 理由)。
     plan: story_plan.json の dict / 無ければ {} / 取得失敗は None（呼び出し側で扱う）。"""
+    if mode == "daily":
+        return _daily_nothing_happens(plan, now)
     wd = now.weekday()
     fl = _acct_weekday_flags(acct, wd)
 
@@ -170,7 +213,7 @@ def decide(mode, plans, now=None):
 def fetch_plan_gh(gh, repo, acct):
     """gh api でmainのplanを取得。取得できなければ（404含む）None＝ゲートは判定せず必ず起動する。
     （404を「planなし」と扱うと、権限不足のトークンでも404になり得るため誤ってスキップする恐れがある）"""
-    path = PLAN_PATH.format(acct=acct)
+    path = plan_path(acct)
     try:
         out = subprocess.run([gh, "api", f"repos/{repo}/contents/{path}"],
                              capture_output=True, text=True, timeout=30)

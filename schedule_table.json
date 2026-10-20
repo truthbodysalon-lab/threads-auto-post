@@ -1,6 +1,6 @@
 {
  "mode": "live",
- "note": "jst_time=各repoの変更後cron(JST)+2分。since=day:当日0時JST以降のrunが有れば起動しない / slot:枠のjst_time-12分以降。weekdays: 月=0..日=6。enabled:falseで個別OFF、modeをdry_runに戻すと全停止。 skip_until:YYYY-MM-DD未満の日は起動しない(固定日付)。pause_file:repo内のJSON(until=YYYY-MM-DD)の日付以前は起動しない(ig-feed。feed_pause.jsonの正本に従う)。queue_file:repo内のJSON(items[].date)に本日分が無ければ起動しない(ig-reels。連載終了後の空振り防止)。取得失敗はいずれも起動(フェイルオープン)。inputs:workflow_dispatchへ渡す入力。 gate:pool|qa|offer|features=起動前ゲート(story_gate.py)。確実に何も起きない時だけ起動を省略、取得失敗等は起動(フェイルオープン)。無効化=entryからgateキーを削除。 2026-10-18追記: gate:stepmail=ステップ配信の起動前ゲート(dispatcher.py stepmail_gate)。枠ごとに1回だけ、本物のstepmail.mjsをDRY_RUN=1で動かし『送るものがある枠』だけ起動(判定不能は起動=フェイルオープン・ログは件数のみ)。無効化=entryからgateキーを削除。Mac死活監視(cloud/line deadman)はops_deadman.pyへ移設し本テーブルから削除。gmail/marketing/subscription/stepmailは非公開repo側のcronを撤去済みで、このテーブルが唯一の定刻起動。 2026-10-20: blog-post(10枠)とekiten-postはGitHub Actions停止のためenabled:false（ブログ=Mac launchd com.mt112.blog-auto-post、エキテン=アプリ内タスクekiten-chrome-post）。クラウドへ戻す順序=①Mac側を止める(launchctl bootout)→②gh workflow enable→③ここのenabledをtrueに戻す。 2026-10-20: 非公開3repo(ig-autopost-cloud/cloud-daily-tasks/line-stepmail-cloud)はActions無料枠切れのため全entryに skip_until=\"2026-11-01 09:30\"(JST・時刻つき)を設定し11/1まで停止・Mac代行中。請求期間は月初00:00 UTC=JST 11/1 09:00にリセットされるため+30分の余裕。skip_untilは\"YYYY-MM-DD HH:MM\"(JST)形式も可。11/1 09:10にMac launchd(com.truth.actions-resume-20261101)が停止中workflowをenableし、09:30にこのテーブルが自動で再開する(手作業不要)。公開repo(note-auto等)は対象外。",
+ "note": "jst_time=各repoの変更後cron(JST)+2分。since=day:当日0時JST以降のrunが有れば起動しない / slot:枠のjst_time-12分以降。weekdays: 月=0..日=6。enabled:falseで個別OFF、modeをdry_runに戻すと全停止。 skip_until:YYYY-MM-DD未満の日は起動しない(固定日付)。pause_file:repo内のJSON(until=YYYY-MM-DD)の日付以前は起動しない(ig-feed。feed_pause.jsonの正本に従う)。queue_file:repo内のJSON(items[].date)に本日分が無ければ起動しない(ig-reels。連載終了後の空振り防止)。取得失敗はいずれも起動(フェイルオープン)。inputs:workflow_dispatchへ渡す入力。 gate:pool|qa|offer|features=起動前ゲート(story_gate.py)。確実に何も起きない時だけ起動を省略、取得失敗等は起動(フェイルオープン)。無効化=entryからgateキーを削除。 2026-10-18追記: gate:stepmail=ステップ配信の起動前ゲート(dispatcher.py stepmail_gate)。枠ごとに1回だけ、本物のstepmail.mjsをDRY_RUN=1で動かし『送るものがある枠』だけ起動(判定不能は起動=フェイルオープン・ログは件数のみ)。無効化=entryからgateキーを削除。Mac死活監視(cloud/line deadman)はops_deadman.pyへ移設し本テーブルから削除。gmail/marketing/subscription/stepmailは非公開repo側のcronを撤去済みで、このテーブルが唯一の定刻起動。 2026-10-20: blog-post(10枠)とekiten-postはGitHub Actions停止のためenabled:false（ブログ=Mac launchd com.mt112.blog-auto-post、エキテン=アプリ内タスクekiten-chrome-post）。クラウドへ戻す順序=①Mac側を止める(launchctl bootout)→②gh workflow enable→③ここのenabledをtrueに戻す。 2026-10-20: 非公開3repo(ig-autopost-cloud/cloud-daily-tasks/line-stepmail-cloud)はActions無料枠切れのため全entryに skip_until=\"2026-11-01 09:30\"(JST・時刻つき)を設定し11/1まで停止・Mac代行中。請求期間は月初00:00 UTC=JST 11/1 09:00にリセットされるため+30分の余裕。skip_untilは\"YYYY-MM-DD HH:MM\"(JST)形式も可。11/1 09:10にMac launchd(com.truth.actions-resume-20261101)が停止中workflowをenableし、09:30にこのテーブルが自動で再開する(手作業不要)。公開repo(note-auto等)は対象外。 2026-10-21 Actions無料枠対策（月1,500分以下）: ①急ぎでない処理（ig-verify・ig-analyze・ig-analyze-pool・ig-verify-pool・medical-learning・marketing-learning・gmail-notify・subscription-report）はMac常設（~/.claude/scripts/local_actions の permanent ジョブ・課金0）が主、このテーブルの catchup:true の枠は『Macがその日（指定時刻以降に）成功していない時だけ』クラウドが拾う保険。判定は entry の local_done(job名)・local_done_since(HH:MM JST)・local_done_file(既定 state/local_done.json)。Mac側 local_run.py が成功のたびに {job:{ts}} を書いてpushする。取得失敗・形式不正は起動(フェイルオープン)。catchupの枠はMac代行(local_actions)のスケジュールには取り込まない。窓は日付をまたがない（local_doneは『今日』の記録で判定）。 ②gate:daily=ig-storyの起動前ゲート(story_gate.py daily: 今日のplanで投稿済みのパートの時間帯は起動しない)。",
  "entries": [
   {
    "id": "ig-story@07:31",
@@ -10,7 +10,8 @@
    "window_min": 90,
    "since": "slot",
    "enabled": true,
-   "skip_until": "2026-11-01 09:30"
+   "skip_until": "2026-11-01 09:30",
+   "gate": "daily"
   },
   {
    "id": "ig-story@12:05",
@@ -20,7 +21,8 @@
    "window_min": 90,
    "since": "slot",
    "enabled": true,
-   "skip_until": "2026-11-01 09:30"
+   "skip_until": "2026-11-01 09:30",
+   "gate": "daily"
   },
   {
    "id": "ig-story@17:31",
@@ -30,7 +32,8 @@
    "window_min": 90,
    "since": "slot",
    "enabled": true,
-   "skip_until": "2026-11-01 09:30"
+   "skip_until": "2026-11-01 09:30",
+   "gate": "daily"
   },
   {
    "id": "ig-story@21:05",
@@ -40,46 +43,46 @@
    "window_min": 90,
    "since": "slot",
    "enabled": true,
-   "skip_until": "2026-11-01 09:30"
+   "skip_until": "2026-11-01 09:30",
+   "gate": "daily"
   },
   {
-   "id": "ig-verify@09:21",
+   "id": "ig-verify-catchup@15:21",
    "repo": "truthbodysalon-lab/ig-autopost-cloud",
    "workflow": "ig-verify.yml",
-   "jst_time": "09:21",
+   "jst_time": "15:21",
    "window_min": 60,
    "since": "slot",
    "enabled": true,
+   "local_done": "ig-verify",
+   "local_done_since": "12:30",
+   "catchup": true,
    "skip_until": "2026-11-01 09:30"
   },
   {
-   "id": "ig-verify@13:21",
+   "id": "ig-verify-catchup@20:21",
    "repo": "truthbodysalon-lab/ig-autopost-cloud",
    "workflow": "ig-verify.yml",
-   "jst_time": "13:21",
+   "jst_time": "20:21",
    "window_min": 60,
    "since": "slot",
    "enabled": true,
+   "local_done": "ig-verify",
+   "local_done_since": "18:30",
+   "catchup": true,
    "skip_until": "2026-11-01 09:30"
   },
   {
-   "id": "ig-verify@18:55",
+   "id": "ig-verify-catchup@23:11",
    "repo": "truthbodysalon-lab/ig-autopost-cloud",
    "workflow": "ig-verify.yml",
-   "jst_time": "18:55",
-   "window_min": 60,
+   "jst_time": "23:11",
+   "window_min": 45,
    "since": "slot",
    "enabled": true,
-   "skip_until": "2026-11-01 09:30"
-  },
-  {
-   "id": "ig-verify@22:21",
-   "repo": "truthbodysalon-lab/ig-autopost-cloud",
-   "workflow": "ig-verify.yml",
-   "jst_time": "22:21",
-   "window_min": 90,
-   "since": "slot",
-   "enabled": true,
+   "local_done": "ig-verify",
+   "local_done_since": "21:30",
+   "catchup": true,
    "skip_until": "2026-11-01 09:30"
   },
   {
@@ -105,23 +108,45 @@
    "skip_until": "2026-11-01 09:30"
   },
   {
-   "id": "ig-analyze",
+   "id": "ig-analyze-catchup",
    "repo": "truthbodysalon-lab/ig-autopost-cloud",
    "workflow": "ig-analyze.yml",
-   "jst_time": "05:13",
-   "window_min": 90,
+   "jst_time": "11:13",
+   "window_min": 240,
    "since": "day",
    "enabled": true,
+   "local_done": "ig-analyze",
+   "catchup": true,
    "skip_until": "2026-11-01 09:30"
   },
   {
-   "id": "ig-analyze-retry",
+   "id": "ig-analyze-pool-catchup",
    "repo": "truthbodysalon-lab/ig-autopost-cloud",
-   "workflow": "ig-analyze.yml",
-   "jst_time": "09:43",
-   "window_min": 150,
+   "workflow": "ig-analyze-pool.yml",
+   "jst_time": "13:45",
+   "window_min": 240,
    "since": "day",
    "enabled": true,
+   "weekdays": [
+    0
+   ],
+   "local_done": "ig-analyze-pool",
+   "catchup": true,
+   "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "ig-verify-pool-catchup",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-verify-pool.yml",
+   "jst_time": "18:05",
+   "window_min": 240,
+   "since": "day",
+   "enabled": true,
+   "weekdays": [
+    6
+   ],
+   "local_done": "ig-verify-pool",
+   "catchup": true,
    "skip_until": "2026-11-01 09:30"
   },
   {
@@ -618,46 +643,54 @@
    "skip_until": "2026-11-01 09:30"
   },
   {
-   "id": "gmail-notify",
-   "repo": "truthbodysalon-lab/cloud-daily-tasks",
-   "workflow": "gmail-notify.yml",
-   "jst_time": "09:39",
-   "window_min": 90,
-   "since": "day",
-   "enabled": true,
-   "skip_until": "2026-11-01 09:30"
-  },
-  {
    "id": "marketing-learning",
    "repo": "truthbodysalon-lab/cloud-daily-tasks",
    "workflow": "marketing-learning.yml",
-   "jst_time": "08:43",
-   "window_min": 90,
+   "jst_time": "14:43",
+   "window_min": 240,
    "since": "day",
    "enabled": true,
+   "local_done": "marketing-learning",
+   "catchup": true,
+   "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "gmail-notify",
+   "repo": "truthbodysalon-lab/cloud-daily-tasks",
+   "workflow": "gmail-notify.yml",
+   "jst_time": "15:39",
+   "window_min": 240,
+   "since": "day",
+   "enabled": true,
+   "local_done": "gmail-notify",
+   "catchup": true,
    "skip_until": "2026-11-01 09:30"
   },
   {
    "id": "medical-learning",
    "repo": "truthbodysalon-lab/cloud-daily-tasks",
    "workflow": "medical-learning.yml",
-   "jst_time": "22:39",
-   "window_min": 90,
+   "jst_time": "20:39",
+   "window_min": 120,
    "since": "day",
    "enabled": true,
+   "local_done": "medical-learning",
+   "catchup": true,
    "skip_until": "2026-11-01 09:30"
   },
   {
    "id": "subscription-report",
    "repo": "truthbodysalon-lab/cloud-daily-tasks",
    "workflow": "subscription-report.yml",
-   "jst_time": "10:25",
-   "window_min": 90,
+   "jst_time": "16:25",
+   "window_min": 240,
    "since": "day",
    "enabled": true,
    "weekdays": [
     1
    ],
+   "local_done": "subscription-report",
+   "catchup": true,
    "skip_until": "2026-11-01 09:30"
   },
   {

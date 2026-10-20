@@ -80,8 +80,14 @@ def fetch_plan(repo, acct):
     """ig-autopost-cloud の state/<acct>/story_plan.json を取得。取得できなければ（404・権限不足含む）None
     ＝ゲートは判定せず従来どおり起動する（フェイルオープン）。"""
     import base64
+    path = f"state/{acct}/story_plan.json"
     try:
-        _, d = api("GET", f"/repos/{repo}/contents/state/{acct}/story_plan.json")
+        import story_gate
+        path = story_gate.plan_path(acct)     # 2026-10-21: "masa"(日次ストーリー)は state/story_plan.json
+    except Exception:
+        pass
+    try:
+        _, d = api("GET", f"/repos/{repo}/contents/{path}")
         return json.loads(base64.b64decode(d["content"]).decode("utf-8"))
     except Exception:
         return None
@@ -124,6 +130,32 @@ def queue_empty_today(e, repo, today):
     if not isinstance(d, dict) or not isinstance(d.get("items"), list):
         return False
     return not any(isinstance(i, dict) and i.get("date") == today for i in d["items"])
+
+
+def local_done_active(e, repo, now):
+    """Mac常設ジョブ(local_actions の permanent)が『今日、指定時刻以降に』成功済みなら True（=クラウドは起動しない）。2026-10-21。
+    急ぎでない処理(点検・分析・学習レポート等)は Mac が主で課金0、クラウドは Mac がやっていない時だけ拾う保険にした。
+    entry: "local_done": "<jobの名前>", "local_done_since": "HH:MM"(JST・省略時 00:00), "local_done_file": 既定 state/local_done.json
+    ファイル(Macの local_run.py が成功のたびに更新しpushする): {"<job>": {"ts": "2026-10-21T09:25:11+09:00"}, ...}
+    取得失敗・形式不正・未記録・時刻が読めない は全て False（=クラウドが起動する。フェイルオープン）。"""
+    job = e.get("local_done")
+    if not job:
+        return False
+    d = fetch_json(repo, e.get("local_done_file") or "state/local_done.json")
+    if not isinstance(d, dict):
+        return False
+    rec = d.get(job)
+    if not isinstance(rec, dict):
+        return False
+    try:
+        ts = datetime.fromisoformat(str(rec.get("ts")))
+        if ts.tzinfo is None:
+            ts = ts.replace(tzinfo=JST)
+        hh, mm = map(int, str(e.get("local_done_since") or "00:00").split(":"))
+        lo = now.replace(hour=hh, minute=mm, second=0, microsecond=0)
+        return lo <= ts.astimezone(JST) <= now + timedelta(minutes=5)
+    except Exception:
+        return False
 
 
 _sync_cache = {}
@@ -333,6 +365,10 @@ def main():
                 continue
             if mode != "live":
                 log(f"{e['id']}: 起動予定 {repo} {wf} (dry_run)")
+                continue
+            if local_done_active(e, repo, now):
+                log(f"{e['id']}: Mac常設ジョブ {e['local_done']} が本日{e.get('local_done_since') or '00:00'}以降に成功済み → クラウドは起動しない")
+                state[e["id"]] = today; changed = True
                 continue
             if pause_file_active(e, repo, today):
                 log(f"{e['id']}: {e['pause_file']} により一時停止中 → 起動しない（今日は再判定しない）")

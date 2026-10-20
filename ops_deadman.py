@@ -37,6 +37,9 @@ API = "https://api.github.com"
 OWNER = "truthbodysalon-lab"
 CLOUD_REPO = f"{OWNER}/cloud-daily-tasks"
 LINE_REPO = f"{OWNER}/line-stepmail-cloud"
+TARGET_CONFIG_FILE = HERE / "ops_targets.json"
+TARGET_CONFIG = json.loads(TARGET_CONFIG_FILE.read_text()) if TARGET_CONFIG_FILE.exists() else {}
+LINE_REPO = TARGET_CONFIG.get("line_repo", LINE_REPO)
 
 CLOUD_THRESHOLD = 21600       # 6時間(旧 deadman.yml と同じ)
 CLOUD_SUPPRESS = 43200        # 再通知抑制12時間(旧と同じ)
@@ -274,9 +277,11 @@ def main():
     now = now_epoch()
     st = load_state()
     before = json.dumps(st, sort_keys=True)
-    r1 = check_one("cloud", st, now, read_cloud_heartbeat_epoch, CLOUD_THRESHOLD, CLOUD_SUPPRESS,
+    if TARGET_CONFIG.get("cloud", True):
+        r1 = check_one("cloud", st, now, read_cloud_heartbeat_epoch, CLOUD_THRESHOLD, CLOUD_SUPPRESS,
                    cloud_message, "cloud")
-    r2 = check_one("line", st, now, read_line_heartbeat_ts, LINE_THRESHOLD, LINE_SUPPRESS,
+    if TARGET_CONFIG.get("line", True):
+        r2 = check_one("line", st, now, read_line_heartbeat_ts, LINE_THRESHOLD, LINE_SUPPRESS,
                    line_message, "line")
     if json.dumps(st, sort_keys=True) != before:
         save_state(st)

@@ -149,6 +149,21 @@
    ]
   },
   {
+   "id": "ig-feed-nagaoka-case",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-feed-nagaoka-case.yml",
+   "jst_time": "19:02",
+   "window_min": 90,
+   "since": "day",
+   "enabled": true,
+   "weekdays": [
+    0,
+    2,
+    4
+   ],
+   "skip_until": "2026-10-23"
+  },
+  {
    "id": "ig-story-friday@15:05",
    "repo": "truthbodysalon-lab/ig-autopost-cloud",
    "workflow": "ig-story-friday.yml",

@@ -639,7 +639,7 @@ def sync_to_github():
 def run(acct: str) -> list[str]:
     from account_ownership import is_local
     if not is_local(acct):
-        return
+        return []
     name = ACCOUNTS[acct]["name"]
     if not QUIET:
         print(f"\n{name} 分析中...")

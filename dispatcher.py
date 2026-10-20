@@ -275,6 +275,23 @@ def load_state():
         return {}
 
 
+def skip_until_active(e, now):
+    """skip_until が有効(=まだ停止中)なら True。
+    "YYYY-MM-DD"       : その日付未満の日は起動しない（従来どおり日付単位）。
+    "YYYY-MM-DD HH:MM" : その時刻(JST)未満は起動しない（2026-10-20 Actions無料枠切れ。請求期間のリセットは
+                         UTC月初=日本時間 11/1 09:00 のため、日付だけだと 11/1 の朝の枠が失敗する）。
+    ゼロ埋め固定長の文字列比較（辞書順=時刻順）。値が壊れていても例外は出さず停止扱いにしない（フェイルオープン）。"""
+    su = e.get("skip_until")
+    if not su:
+        return False
+    try:
+        if len(su) > 10:
+            return now.strftime("%Y-%m-%d %H:%M") < su.replace("T", " ")[:16]
+        return now.strftime("%Y-%m-%d") < su
+    except Exception:
+        return False
+
+
 def main():
     try:
         cfg = json.loads(TABLE.read_text())
@@ -297,7 +314,7 @@ def main():
                 continue
             if e.get("weekdays") is not None and now.weekday() not in e["weekdays"]:
                 continue
-            if e.get("skip_until") and today < e["skip_until"]:  # 一時停止中は起動しない（YYYY-MM-DD未満の日）
+            if skip_until_active(e, now):  # 一時停止中は起動しない（YYYY-MM-DD未満の日 / "YYYY-MM-DD HH:MM"(JST)未満の時刻）
                 continue
             hh, mm = map(int, e["jst_time"].split(":"))
             slot = day0.replace(hour=hh, minute=mm)

@@ -82,5 +82,30 @@ class T(unittest.TestCase):
         self.assertEqual(run_main(E2, f, "2026-11-09 08:10", runs=1), [])
 
 
+E3 = {"id": "sk", "repo": REPO, "workflow": "s.yml", "jst_time": "09:39", "window_min": 90, "since": "day",
+      "enabled": True, "skip_until": "2026-11-01 09:30"}
+E4 = dict(E3, skip_until="2026-10-23")
+
+
+class SkipUntil(unittest.TestCase):
+    """skip_until: 日付のみ(従来)と 'YYYY-MM-DD HH:MM'(JST・時刻つき)の両方（2026-10-20 Actions無料枠切れ）"""
+
+    def test_datetime_before_resume(self):
+        self.assertEqual(run_main(E3, {}, "2026-10-31 09:40"), [])   # 停止中
+        self.assertEqual(run_main(dict(E3, jst_time="07:25"), {}, "2026-11-01 07:30"), [])  # 11/1の朝はまだ失敗する時間帯
+        self.assertEqual(run_main(dict(E3, jst_time="08:43"), {}, "2026-11-01 09:29"), [])  # 09:30未満は停止
+
+    def test_datetime_at_resume(self):
+        self.assertEqual(len(run_main(dict(E3, jst_time="08:43"), {}, "2026-11-01 09:30")), 1)  # 09:30ちょうどから再開
+        self.assertEqual(len(run_main(E3, {}, "2026-11-02 09:40")), 1)
+
+    def test_date_only_unchanged(self):
+        self.assertEqual(run_main(E4, {}, "2026-10-22 09:40"), [])
+        self.assertEqual(len(run_main(E4, {}, "2026-10-23 09:40")), 1)
+
+    def test_broken_value_fails_open(self):
+        self.assertEqual(len(run_main(dict(E3, skip_until=12345), {}, "2026-10-20 09:40")), 1)
+
+
 if __name__ == "__main__":
     unittest.main()

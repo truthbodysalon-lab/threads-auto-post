@@ -1485,9 +1485,16 @@ def _hero_key(text: str) -> str:
     return hashlib.sha1(t.encode("utf-8")).hexdigest()[:16] if t else ""
 
 
+def _hero_ledger_key(ledger_text: str) -> str:
+    """旧台帳エントリー（"hk" 無し）のキー。台帳textは投稿された本文(clean_text＝[COMMENT]/【続き】/最初の
+    段落より前。段落区切りを含みうる)そのものなので、正規化せず空白だけ除く。"""
+    return re.sub(r"\s+", "", ledger_text or "")
+
+
 def _hero_para_key(text: str) -> str:
-    """旧台帳エントリー（"hk" 無し）用の照合キー。台帳textは最初の段落(clean_text)だけなので、
-    ヒーロー側も duplicate_guard.normalize_text と同じく最初の段落までを空白除去して比べる。"""
+    """ヒーロー側の「旧台帳エントリーと照合するキー」。auto_post が実際に投稿する本文は
+    duplicate_guard.normalize_text(原稿) と同じ切り方（[COMMENT]→【続き】→最初の段落）なので、
+    それを空白除去して _hero_ledger_key(台帳text) と比べる。"""
     try:
         from duplicate_guard import normalize_text as _nz
         t = _nz(text or "")
@@ -1517,7 +1524,7 @@ class _HeroPosted:
             if e.get("hk"):
                 self.hk.add(e["hk"])
             elif e.get("text"):
-                k = _hero_para_key(e["text"])
+                k = _hero_ledger_key(e["text"])
                 d = str(e.get("date") or "")[:10]
                 if k and d >= self.legacy.get(k, ""):
                     self.legacy[k] = d
@@ -1527,12 +1534,6 @@ class _HeroPosted:
             return True
         d = self.legacy.get(_hero_para_key(text))
         return d is not None and d >= str(since or "")[:10]
-
-    def entry_is_hero(self, entry: dict, hero_hk: set, hero_para: set) -> bool:
-        """台帳エントリーが（与えたヒーロー集合のどれかを投稿したものか）。"""
-        if entry.get("hk"):
-            return entry["hk"] in hero_hk
-        return _hero_para_key(entry.get("text", "")) in hero_para
 
 
 def _hero_posted(acct: str) -> "_HeroPosted":

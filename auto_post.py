@@ -833,7 +833,7 @@ def _hero_priority_order(acct: str, today: str, all_posts: list, posted_texts: s
     直後にヒーローを差し込む。失敗時・該当なしは自然順(range)を返す（フェイルオープン）。"""
     natural = list(range(len(all_posts)))
     try:
-        from generate_remix import _load_hero_posts, _hero_key, _hero_para_key
+        from generate_remix import _load_hero_posts, _hero_key, _hero_para_key, _hero_ledger_key
         pending = _load_hero_posts(acct)                       # 未投稿のヒーロー（NG/重複フィルタ済み）
         if not pending:
             return natural
@@ -854,7 +854,7 @@ def _hero_priority_order(acct: str, today: str, all_posts: list, posted_texts: s
                 if e.get("date") != today or e.get("kind") == "uplink_repost":
                     continue
                 n += 1
-                if (e.get("hk") in hero_hk) if e.get("hk") else (_hero_para_key(e.get("text", "")) in hero_para):
+                if (e.get("hk") in hero_hk) if e.get("hk") else (_hero_ledger_key(e.get("text", "")) in hero_para):
                     since, hero_today = 0, True
                 else:
                     since += 1

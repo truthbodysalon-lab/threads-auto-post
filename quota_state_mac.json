@@ -1,0 +1,9 @@
+{
+ "v": 1,
+ "month": "2026-10",
+ "last_check": "2026-10-21T00:50:07+09:00",
+ "usage": 2000,
+ "warned": true,
+ "switched": true,
+ "until": "2026-11-01 09:30"
+}

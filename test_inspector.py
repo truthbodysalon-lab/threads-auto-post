@@ -45,6 +45,8 @@ def main():
     results.append(_assert_ng("成約率65%を実現しています。", "masa", "許可外の成約率65%"))
     results.append(_assert_ng("施術実績28,000名を突破しました。", "truth", "許可外の施術人数"))
     results.append(_assert_ng("当院は15年以上の施術実績があります。", "truth", "許可外の年数実績"))
+    # 2026-10-20 正本表記「13,000人以上」が誤検知されないこと
+    results.append(_assert_ok("肩こりは姿勢だけの問題ではありません。\n長岡市で13,000人以上を診てきた整体師の実感です。", "truth", "正本表記 13,000人以上"))
 
     print("\n=== ③ dead_openings（知識確認型疑問）が検出されること ===")
     results.append(_assert_ng("知っていましたか？肩こりの原因", "truth", "知っていましたか型"))

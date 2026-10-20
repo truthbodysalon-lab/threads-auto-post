@@ -415,8 +415,19 @@ def run_ops_deadman():
         print(f"::warning::ops_deadman 起動失敗: {type(ex).__name__}", flush=True)
 
 
+def run_quota_watch():
+    """GitHub Actions 無料枠の使用量見張り(quota_watch.py。2026-10-21)。1日1回だけ実処理し、他のサイクルは即終了する。
+    API を数百回呼ぶので切り離して起動する（ディスパッチャ本体を待たせない・失敗しても影響しない）。非公開repoの設定は一切変えない（読み取りのみ）。"""
+    try:
+        import subprocess
+        subprocess.Popen([sys.executable, str(HERE / "quota_watch.py")], stdin=subprocess.DEVNULL, start_new_session=True)
+    except Exception as ex:
+        print(f"::warning::quota_watch 起動失敗: {type(ex).__name__}", flush=True)
+
+
 if __name__ == "__main__":
     run_ops_deadman()   # 見張りは先に実行(数秒)。ゲート判定などで時間を使っても監視は必ず走る
+    run_quota_watch()
     try:
         main()
     except BaseException as e:

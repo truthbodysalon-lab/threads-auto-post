@@ -18,7 +18,7 @@ from pathlib import Path
 
 BASE = Path(__file__).parent
 sys.path.insert(0, str(BASE))
-from generate_remix import _hero_key, _hero_posted_keys, HERO_GRACE_DAYS  # noqa: E402
+from generate_remix import _hero_key, _hero_posted, HERO_GRACE_DAYS  # noqa: E402
 
 CARRY_MAX = 10   # 繰越の上限（溜まり続けて当日分を圧迫しないため）
 
@@ -43,7 +43,7 @@ def process(acct: str) -> str:
     if not prev:
         return f"{acct}: 前回版なし→繰越なし"
     today = date.today()
-    posted = _hero_posted_keys(acct)
+    posted = _hero_posted(acct)   # 全文キー(hk)＋旧エントリーは最初の段落で照合
     cur_keys = {_hero_key(p) for p in cur.get("posts", []) if isinstance(p, str)}
     cutoff = (today - timedelta(days=HERO_GRACE_DAYS)).isoformat()
 
@@ -68,9 +68,11 @@ def process(acct: str) -> str:
     carry, seen = [], set()
     for d, t in cands:
         k = _hero_key(t)
-        if not k or k in seen or k in posted or k in cur_keys:
+        if not k or k in seen or k in cur_keys:
             continue
         if not d or str(d) < cutoff:
+            continue
+        if posted.contains(t, d):
             continue
         seen.add(k)
         carry.append({"date": d, "text": t})

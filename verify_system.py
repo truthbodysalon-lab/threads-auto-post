@@ -283,11 +283,13 @@ def check_hero_posted():
             except Exception:
                 add(f"hero_posted:{acct}", "B.ルール反映", "WARN", f"hero date 不正: {d.get('date')}")
                 continue
-            raw = [p for p in d.get("posts", []) if isinstance(p, str)]
-            raw += [(c.get("text") if isinstance(c, dict) else c) for c in (d.get("carry") or [])]
-            raw = [p for p in raw if isinstance(p, str)]
-            done = g._hero_posted_keys(acct)
-            unposted_raw = [p for p in raw if g._hero_key(p) not in done]
+            raw = [(str(d.get("date")), p) for p in d.get("posts", []) if isinstance(p, str)]   # (生成日, 本文)
+            for c in (d.get("carry") or []):
+                _t = c.get("text") if isinstance(c, dict) else c
+                if isinstance(_t, str):
+                    raw.append((str(c.get("date") or d.get("date")) if isinstance(c, dict) else str(d.get("date")), _t))
+            done = g._hero_posted(acct)   # 全文キー(hk)＋旧エントリーは最初の段落で照合（auto_post/hero_carry と同じ定義）
+            unposted_raw = list({g._hero_key(p): p for od, p in raw if not done.contains(p, od)}.values())   # 全文キーで重複除去
             valid = g._load_hero_posts(acct)            # 未投稿かつNG等のフィルタ通過
             dropped = len(unposted_raw) - len(valid)    # フィルタで除外された(=永久に投稿されない)本数
             age = (today - fdate).days

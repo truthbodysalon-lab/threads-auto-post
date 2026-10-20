@@ -1471,42 +1471,111 @@ HERO_MAX_PER_DAY = 16      # 1日に扱うヒーローの上限（当日分10本
 
 
 def _hero_key(text: str) -> str:
-    """ヒーロー照合キー（auto_post / hero_carry.py と共通）。投稿台帳のtextは[COMMENT]以降や
-    後段パラグラフが落ちた形で保存されるため、全文ではなく正規化後の1行目で照合する。"""
+    """ヒーロー照合キー（auto_post / hero_carry.py / verify C26 / hero_check.py で共通）。
+    本文「全体」の正規化ハッシュ（URL除去・[COMMENT]/【続き】マーカーは境界として扱い・空白全除去）。
+    2026-10-20改訂: 旧キー=正規化後の1行目(40字)だと、通常テンプレの1行目がヒーローと同じとき
+    テンプレがヒーロー扱いで優先投稿され、そのヒーローが投稿済み扱いで捨てられた
+    （模擬でmasaに2件混入）。全文で照合すれば1行目だけ同じ別原稿は別物になる。
+    投稿台帳(log_*_posted.jsonl)の text は最初の段落だけで全文が残らないため、auto_post.mark_posted が
+    投稿した原文のこのキーを台帳の "hk" に書く。hk が無い旧エントリーは _hero_para_key で照合する。"""
+    import hashlib
+    t = re.sub(r"\n*https?://\S+", "", text or "")
+    t = re.sub(r"\s*(?:\[COMMENT\]|【続き】)\s*", "\n", t)
+    t = re.sub(r"\s+", "", t)
+    return hashlib.sha1(t.encode("utf-8")).hexdigest()[:16] if t else ""
+
+
+def _hero_para_key(text: str) -> str:
+    """旧台帳エントリー（"hk" 無し）用の照合キー。台帳textは最初の段落(clean_text)だけなので、
+    ヒーロー側も duplicate_guard.normalize_text と同じく最初の段落までを空白除去して比べる。"""
     try:
         from duplicate_guard import normalize_text as _nz
         t = _nz(text or "")
     except Exception:
         t = (text or "")
-    return re.sub(r"\s+", "", t.split("\n")[0])[:40]
+    return re.sub(r"\s+", "", t)
 
 
-def _hero_posted_keys(acct: str) -> set:
-    """全期間に投稿済みのテキストの _hero_key 集合（ヒーローの未投稿判定用）。"""
-    pfile = BASE / f"log_{acct}_posted.jsonl"
-    keys = set()
-    if not pfile.exists():
-        return keys
-    for l in pfile.read_text(encoding="utf-8").splitlines():
-        if not l.strip():
-            continue
-        try:
-            t = json.loads(l).get("text", "")
-        except Exception:
-            continue
-        if t:
-            keys.add(_hero_key(t))
-    return keys
+class _HeroPosted:
+    """全期間の投稿済み判定（ヒーローの未投稿判定用）。台帳を1回だけ読む。
+    - "hk" 付きエントリー: ヒーロー全文キー(_hero_key)で厳密に照合
+    - "hk" 無しの旧エントリー: 最初の段落キー(_hero_para_key)で照合。ただしヒーローの生成日より
+      前の投稿は別物なので対象外（since 以降のエントリーだけ）"""
+    def __init__(self, acct: str):
+        self.hk: set = set()
+        self.legacy: dict = {}      # para_key -> 最新の投稿日
+        pfile = BASE / f"log_{acct}_posted.jsonl"
+        if not pfile.exists():
+            return
+        for l in pfile.read_text(encoding="utf-8").splitlines():
+            if not l.strip():
+                continue
+            try:
+                e = json.loads(l)
+            except Exception:
+                continue
+            if e.get("hk"):
+                self.hk.add(e["hk"])
+            elif e.get("text"):
+                k = _hero_para_key(e["text"])
+                d = str(e.get("date") or "")[:10]
+                if k and d >= self.legacy.get(k, ""):
+                    self.legacy[k] = d
+
+    def contains(self, text: str, since: str = "") -> bool:
+        if _hero_key(text) in self.hk:
+            return True
+        d = self.legacy.get(_hero_para_key(text))
+        return d is not None and d >= str(since or "")[:10]
+
+    def entry_is_hero(self, entry: dict, hero_hk: set, hero_para: set) -> bool:
+        """台帳エントリーが（与えたヒーロー集合のどれかを投稿したものか）。"""
+        if entry.get("hk"):
+            return entry["hk"] in hero_hk
+        return _hero_para_key(entry.get("text", "")) in hero_para
 
 
-def _load_hero_posts(acct: str, include_posted: bool = False) -> list[str]:
+def _hero_posted(acct: str) -> "_HeroPosted":
+    return _HeroPosted(acct)
+
+
+def _hero_reject_reason(p: str, acct: str) -> str:
+    """ヒーロー1本が除外フィルタに引っかかる理由（通る場合は空文字）。_load_hero_posts と
+    hero_check.py の共通実装（フィルタのロジックをここ1か所に置く）。"""
+    # 実測で「短い断定1〜3行(15〜25字)」が最強と判明(playbook W1)。30字下限は勝ち筋を弾くため15字に
+    if len(p) < 15:
+        return "15字未満"
+    if _is_ng(p):
+        return "NGワード/NGパターン"
+    if acct in ("truth", "nagaoka"):
+        # ヒーロー原稿は自由記述のため生成ループの1文目チェックを経由しない。
+        # 「長岡市の当院は兄妹で運営しています。」のような1文目NG（実績・自己紹介・
+        # 地域名始まり）がノーチェックで混入する実障害があった（2026-08-14検証で発覚）。
+        if not _is_valid_first_line(p, acct):
+            return "1文目NG(実績・自己紹介・地域名始まり等)"
+        if _is_seitai_reserve_violation(p):
+            return "整体予約系の表現違反"
+        if _is_own_winner_copy(p, acct):   # 自分の伸びた投稿の原文コピーは弾く（翻案のみ可）
+            return "自分の伸びた投稿の原文コピー(翻案のみ可)"
+    if acct == "masa":
+        # 面談/金額/決済の機械ガード＋250字上限（masa10原則）
+        if _is_masa_sales_ng(p):
+            return "売り込み/金額/決済NG"
+        if not _masa_len_ok(p):
+            return "字数超過(250字上限)"
+        if _is_abstract_masa(p):
+            return "抽象度NG"
+    return ""
+
+
+def _load_hero_posts(acct: str, include_posted: bool = False, with_dates: bool = False) -> list:
     """ヒーロー投稿（毎朝サブエージェントが書く変数無しの完成原稿）を読む。
     hero_<acct>.json = {"date": "YYYY-MM-DD", "posts": [...], "carry": [...任意...]}。
     テンプレ量産と別枠の「跳ねを狙う原稿」で、キュー前半に散らして配置する。
     2026-10-20: 「生成したヒーローは全て投稿する」方針。ファイル日付が今日から HERO_GRACE_DAYS 日以内なら
     有効（SKILL停止日も流用）、前日までの未投稿分(carry。hero_carry.py が付与)も含め、
     投稿済みのものは除く(include_posted=True なら除かない＝投稿済み判定用の全ヒーローキー取得)。
-    古すぎるファイルは使わない。"""
+    古すぎるファイルは使わない。with_dates=True なら (生成日, 本文) のタプル列を返す。"""
     import datetime as _dt
     f = BASE / f"hero_{acct}.json"
     if not f.exists():
@@ -1521,36 +1590,24 @@ def _load_hero_posts(acct: str, include_posted: bool = False) -> list[str]:
         if (_today - _fdate).days > HERO_GRACE_DAYS or _fdate > _today:
             return []   # 古すぎるヒーローは使わない（鮮度）
         # 前日までの未投稿繰越(carry)を先頭に、当日分(posts)を後ろに。繰越は文字列 or {"date","text"}
-        _raw = []
+        _raw = []   # (生成日, 本文)
         for c in d.get("carry", []) or []:
             _t = c.get("text") if isinstance(c, dict) else c
+            _cd = str(c.get("date") or d.get("date")) if isinstance(c, dict) else str(d.get("date"))
             if isinstance(_t, str):
-                _raw.append(_t)
-        _raw += [p for p in d.get("posts", []) if isinstance(p, str)]
+                _raw.append((_cd, _t))
+        _raw += [(str(d.get("date")), p) for p in d.get("posts", []) if isinstance(p, str)]
         _seen, _uniq = set(), []
-        for p in _raw:
+        for _od, p in _raw:
             k = _hero_key(p)
             if k and k not in _seen:
                 _seen.add(k)
-                _uniq.append(p)
+                _uniq.append((_od, p))
         if not include_posted:
-            _done = _hero_posted_keys(acct)   # 投稿済みは再投入しない（二重投稿防止）
-            _uniq = [p for p in _uniq if _hero_key(p) not in _done]
-        # 実測で「短い断定1〜3行(15〜25字)」が最強と判明(playbook W1)。30字下限は勝ち筋を弾くため15字に
-        out = [p for p in _uniq if len(p) >= 15 and not _is_ng(p)]
-        if acct in ("truth", "nagaoka"):
-            # ヒーロー原稿は自由記述のため生成ループの1文目チェックを経由しない。
-            # 「長岡市の当院は兄妹で運営しています。」のような1文目NG（実績・自己紹介・
-            # 地域名始まり）がノーチェックで混入する実障害があった（2026-08-14検証で発覚）。
-            out = [p for p in out if _is_valid_first_line(p, acct)]
-        if acct in ("truth", "nagaoka"):
-            out = [p for p in out if not _is_seitai_reserve_violation(p)]
-        if acct in ("truth", "nagaoka"):
-            out = [p for p in out if not _is_own_winner_copy(p, acct)]   # 自分の伸びた投稿の原文コピーは弾く（翻案のみ可）
-        if acct == "masa":
-            # 面談/金額/決済の機械ガード＋250字上限（masa10原則）
-            out = [p for p in out if not _is_masa_sales_ng(p) and _masa_len_ok(p) and not _is_abstract_masa(p)]
-        return out
+            _done = _hero_posted(acct)   # 投稿済みは再投入しない（二重投稿防止）
+            _uniq = [(od, p) for od, p in _uniq if not _done.contains(p, od)]
+        out = [(od, p) for od, p in _uniq if not _hero_reject_reason(p, acct)]
+        return out if with_dates else [p for _od, p in out]
     except Exception:
         return []
 

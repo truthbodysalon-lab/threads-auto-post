@@ -328,8 +328,33 @@ def get_posted_indices(acct: str, today: str) -> set:
         if l.strip() and json.loads(l).get("date") == today
     }
 
-def mark_posted(acct: str, today: str, index: int, post_id: str, text: str = "", is_line: bool = False, is_shindan: bool = False):
+def _legacy_posted_indices(acct: str, today: str) -> set:
+    """text フィールドの無い旧形式エントリー（indexだけ記録していた時代）の index 集合。"""
+    pfile = ACCOUNTS[acct]["posted"]
+    out = set()
+    if not pfile.exists():
+        return out
+    for l in pfile.read_text().splitlines():
+        if not l.strip():
+            continue
+        try:
+            e = json.loads(l)
+        except Exception:
+            continue
+        if e.get("date") == today and not e.get("text") and isinstance(e.get("index"), int):
+            out.add(e["index"])
+    return out
+
+def mark_posted(acct: str, today: str, index: int, post_id: str, text: str = "", is_line: bool = False, is_shindan: bool = False, orig_text: str = ""):
     entry = {"date": today, "index": index, "post_id": post_id, "text": text}
+    # 2026-10-20: 台帳の text は最初の段落(clean_text)だけで全文が残らないため、ヒーロー照合用に
+    # 「キューから選んだ原文全体」のキー(hk)を併記する（_hero_key。ヒーローの投稿済み判定・優先順位で使う）。
+    if orig_text:
+        try:
+            from generate_remix import _hero_key as _hk
+            entry["hk"] = _hk(orig_text)
+        except Exception:
+            pass
     if is_line:
         # 2026-09-12修正: text は extract_url_and_cta 後の本文（URL除去済み）を保存するため、
         # _is_line_listin(text) では二度とLINEリストイン投稿だと判定できない
@@ -664,13 +689,18 @@ def pick_avoiding_consecutive_url(candidates, last_had_url: bool):
 
 _LINE_MENTION_RE = re.compile(r"LINE|ライン", re.IGNORECASE)
 
+def _masa_line_subject(text: str) -> bool:
+    """LINE言及率キャップの対象か（コンテンツ投稿の付随的なLINE言及。導線投稿は対象外）。
+    _masa_line_overrate と hero_check.py の共通実装。"""
+    if not _LINE_MENTION_RE.search(text or ""):
+        return False
+    return not (_is_line_listin(text) or _is_shindan(text) or "『AI』" in text or _is_present_cta(text))
+
 def _masa_line_overrate(text: str) -> bool:
     """masaのLINE言及率キャップ（verify rule:line_rate=5本/日10%対策・2026-08-27）。
     導線投稿（リストイン/診断/時短CTA=『AI』誘導）は削らない方針のため常時許可し、
     コンテンツ投稿の付随的なLINE言及だけを本日2本でブロックする（3導線+2=最大5本）。"""
-    if not _LINE_MENTION_RE.search(text):
-        return False
-    if _is_line_listin(text) or _is_shindan(text) or "『AI』" in text or _is_present_cta(text):
+    if not _masa_line_subject(text):
         return False
     today = date.today().strftime("%Y-%m-%d")
     n = 0
@@ -803,11 +833,15 @@ def _hero_priority_order(acct: str, today: str, all_posts: list, posted_texts: s
     直後にヒーローを差し込む。失敗時・該当なしは自然順(range)を返す（フェイルオープン）。"""
     natural = list(range(len(all_posts)))
     try:
-        from generate_remix import _load_hero_posts, _hero_key
+        from generate_remix import _load_hero_posts, _hero_key, _hero_para_key
         pending = _load_hero_posts(acct)                       # 未投稿のヒーロー（NG/重複フィルタ済み）
         if not pending:
             return natural
-        all_keys = {_hero_key(h) for h in _load_hero_posts(acct, include_posted=True)}
+        # 台帳エントリーが「ヒーローの投稿」か: hk(原文全文キー)があれば全文で厳密照合、無い旧エントリーだけ
+        # 最初の段落で照合（通常テンプレの1文目がヒーローと同じでもヒーロー扱いしない。2026-10-20）
+        _all_h = _load_hero_posts(acct, include_posted=True)
+        hero_hk = {_hero_key(h) for h in _all_h}
+        hero_para = {_hero_para_key(h) for h in _all_h}
         # 今日の投稿数と「最後のヒーロー投稿からの本数」を台帳(時系列)から数える
         n, since, hero_today = 0, 0, False
         pfile = ACCOUNTS[acct]["posted"]
@@ -820,7 +854,7 @@ def _hero_priority_order(acct: str, today: str, all_posts: list, posted_texts: s
                 if e.get("date") != today or e.get("kind") == "uplink_repost":
                     continue
                 n += 1
-                if _hero_key(e.get("text", "")) in all_keys:
+                if (e.get("hk") in hero_hk) if e.get("hk") else (_hero_para_key(e.get("text", "")) in hero_para):
                     since, hero_today = 0, True
                 else:
                     since += 1
@@ -832,20 +866,17 @@ def _hero_priority_order(acct: str, today: str, all_posts: list, posted_texts: s
             gap = max(gap, 1)
         if not hero_today:
             gap = min(gap, 3)   # 1日の最初のヒーローは早めに（序盤3本以内）
-        # ヒーローを all_posts 上のインデックスに対応づける（どのバッチにも無ければ末尾に追加）
-        idx_exact, idx_by_key = {}, {}
+        # ヒーローを all_posts 上のインデックスに対応づける。照合は「全文キー」のみ（最初の段落が同じだけの
+        # 通常テンプレをヒーローと取り違えない。無ければ末尾に追加＝本物のヒーローを必ず出す）
+        idx_by_key = {}
         for i, t in enumerate(all_posts):
-            idx_exact.setdefault(_normalize_post_key(t)[:80], i)
             idx_by_key.setdefault(_hero_key(t), i)
         hero_idx = []
         for h in pending:
-            j = idx_exact.get(_normalize_post_key(h)[:80])
-            if j is None:
-                j = idx_by_key.get(_hero_key(h))
+            j = idx_by_key.get(_hero_key(h))
             if j is None:
                 all_posts.append(h)
                 j = len(all_posts) - 1
-                idx_exact[_normalize_post_key(h)[:80]] = j
                 idx_by_key[_hero_key(h)] = j
             if j not in hero_idx:
                 hero_idx.append(j)
@@ -895,9 +926,13 @@ def get_next_post(acct: str, today: str, avoid_url: bool = False):
     posted_texts = get_posted_texts(acct)
 
     # 旧フォーマット対応: インデックス→テキスト変換（最終バッチ基準・正規化済み）
+    # 2026-10-20: 対象は text フィールドの無い本物の旧エントリーだけ。text 付きエントリーの index は
+    # 「全バッチ統合キュー(all_posts)」上の位置であり、最終バッチの位置とは別物。これを最終バッチへ
+    # 当てはめると無関係な最終バッチ原稿（前半に差し込まれたヒーロー等）が「投稿済み」扱いで永久に
+    # 飛ばされた（模擬で truth のヒーロー4本・nagaoka 1本が出ず）。text 付きは posted_texts で判定済み。
     last_batch = today_entries[-1].get("posts", [])
     old_posted_keys = set()
-    for idx in get_posted_indices(acct, today):
+    for idx in _legacy_posted_indices(acct, today):
         if idx < len(last_batch):
             old_posted_keys.add(_normalize_post_key(last_batch[idx])[:80])
 
@@ -1389,7 +1424,7 @@ def run_account(acct: str):
     try:
         # post_to_threads 内部で重複チェック・pending・posted を一括処理
         post_id = post_to_threads(acct, clean_text, skip_dup=(is_line or is_shindan or is_hpb or is_access or is_ctaprofile or is_aicontent))
-        mark_posted(acct, today, index, post_id, clean_text, is_line=is_line, is_shindan=is_shindan)
+        mark_posted(acct, today, index, post_id, clean_text, is_line=is_line, is_shindan=is_shindan, orig_text=text)
         if is_line:
             _mark_line_done(acct, today)
         log_info(acct, f"{name} ✓ 完了 (ID: {post_id})")
@@ -1423,7 +1458,7 @@ def run_account(acct: str):
             if refresh_token(acct):
                 try:
                     post_id = post_to_threads(acct, clean_text, skip_dup=(is_line or is_shindan or is_hpb or is_access or is_ctaprofile or is_aicontent))
-                    mark_posted(acct, today, index, post_id, clean_text, is_line=is_line, is_shindan=is_shindan)
+                    mark_posted(acct, today, index, post_id, clean_text, is_line=is_line, is_shindan=is_shindan, orig_text=text)
                     if is_line:
                         _mark_line_done(acct, today)
                     log_info(acct, f"{name} ✓ 完了（リフレッシュ後） (ID: {post_id})")

@@ -50,7 +50,7 @@
   "寝ても疲労感が抜けない人へ。": {
     "segment": "T5",
     "hook": "high",
-    "created": "2026-10-18",
+    "created": "2026-10-20",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z17_truth"
@@ -66,7 +66,7 @@
   "産後の腰痛が続くママへ。": {
     "segment": "T3",
     "hook": "high",
-    "created": "2026-10-18",
+    "created": "2026-10-20",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z11_truth"
@@ -74,7 +74,7 @@
   "何をしても一時的にしか変わらない人へ。": {
     "segment": "T6",
     "hook": "high",
-    "created": "2026-10-18",
+    "created": "2026-10-20",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z20_nagaoka"
@@ -202,7 +202,7 @@
   "不規則な勤務で通院を諦めた人へ。": {
     "segment": "T4",
     "hook": "high",
-    "created": "2026-10-16",
+    "created": "2026-10-20",
     "acct": "nagaoka",
     "variant": 0
   },
@@ -623,7 +623,7 @@
   "立ち仕事で脚がパンパンな人へ。": {
     "segment": "T4",
     "hook": "high",
-    "created": "2026-10-16",
+    "created": "2026-10-20",
     "acct": "truth",
     "variant": 0
   },
@@ -637,14 +637,14 @@
   "マッサージでは変わらないと感じる人へ。": {
     "segment": "T6",
     "hook": "high",
-    "created": "2026-10-16",
+    "created": "2026-10-20",
     "acct": "truth",
     "variant": 0
   },
   "骨盤の歪みが気になるママへ。": {
     "segment": "T3",
     "hook": "high",
-    "created": "2026-10-16",
+    "created": "2026-10-20",
     "acct": "nagaoka",
     "variant": 0
   },
@@ -2408,7 +2408,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 30,
-    "created": "2026-10-07",
+    "created": "2026-10-20",
     "acct": "truth"
   },
   "【水をほとんど飲まない人が始める習慣7選】": {
@@ -2681,7 +2681,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 5,
-    "created": "2026-10-07",
+    "created": "2026-10-20",
     "acct": "truth"
   },
   "『どうせ変わらないと思っていた』という声を、よく聞きます。": {
@@ -3224,7 +3224,7 @@
   "『夜中に目が覚めて、そのまま眠れない』という声を、よく聞きます。": {
     "segment": "T5",
     "hook": "high",
-    "created": "2026-10-16",
+    "created": "2026-10-20",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "ZC05_nagaoka"
@@ -4525,7 +4525,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 3,
-    "created": "2026-10-10",
+    "created": "2026-10-20",
     "acct": "nagaoka"
   },
   "インスタ運用で、外注すると自分らしさが消えると思っている院長へ質問です。": {
@@ -4756,7 +4756,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 22,
-    "created": "2026-10-10",
+    "created": "2026-10-20",
     "acct": "truth"
   },
   "【水を飲む時間がない仕事の人の習慣6選】": {
@@ -5387,14 +5387,14 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 19,
-    "created": "2026-10-12",
+    "created": "2026-10-20",
     "acct": "nagaoka"
   },
   "【肩こりの人のお風呂上がりの習慣5選】": {
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 33,
-    "created": "2026-10-12",
+    "created": "2026-10-20",
     "acct": "nagaoka"
   },
   "『立ち仕事の後半になると、腰が重くなる』という声を、よく聞きます。": {
@@ -5974,7 +5974,7 @@
   "次回の予約が取れない院長へ。": {
     "segment": "R03",
     "hook": "high",
-    "created": "2026-10-14",
+    "created": "2026-10-20",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -7432,6 +7432,76 @@
     "created": "2026-10-20"
   },
   "インスタ運用で、機械が苦手な店主へ。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-20"
+  },
+  "提案のたびに「やりますか？」と聞く院長へ。": {
+    "segment": "R04",
+    "hook": "low",
+    "created": "2026-10-20",
+    "acct": "masa",
+    "axis": "repeat_close",
+    "variant": null,
+    "hypothesis_id": "RP10"
+  },
+  "投稿づくりは、AIに任せていい。": {
+    "segment": "HAKASE",
+    "hook": "principle",
+    "variant": 6,
+    "created": "2026-10-20"
+  },
+  "感覚より、数字の方が正直です。": {
+    "segment": "HAKASE",
+    "hook": "principle",
+    "variant": 17,
+    "created": "2026-10-20"
+  },
+  "【ハイライトを、今日1つ作る】": {
+    "segment": "PRESENT_CTA",
+    "hook": "present",
+    "present_key": "insta_kit",
+    "variant": 10,
+    "created": "2026-10-20"
+  },
+  "ぶっちゃけ、キャプションは、20文字で足ります。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-20"
+  },
+  "インスタで、フォロワーが100人未満の店主へ。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-20"
+  },
+  "ぶっちゃけ、加工しない写真の方が、お店は伝わる。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-20"
+  },
+  "インスタで、DMの返信が不安な院長へ。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-20"
+  },
+  "インスタで、AIは難しそうと感じている院長へ。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-20"
+  },
+  "インスタに意味があるのか不安な店主へ。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-20"
+  },
+  "ぶっちゃけ、先週の閲覧数は、1分で分かる。": {
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,

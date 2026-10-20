@@ -29,6 +29,8 @@ STATE = BASE / "watchdog_ci_state.json"
 NOTIFICATIONS = BASE / "notifications.jsonl"
 JST = timezone(timedelta(hours=9))
 ACCTS = {"truth": "TRUTH", "nagaoka": "NAGAOKA", "masa": "MASA"}
+from account_ownership import is_local
+ACCTS = {k:v for k,v in ACCTS.items() if is_local(k)}
 POST_HOUR_START, POST_HOUR_END, DAILY_TARGET = 6, 23, 50
 PACE_FULL_HOUR = int(os.environ.get("PACE_FULL_HOUR", "22"))  # auto_post.pyと同じ前倒し按分
 LOOKAHEAD_HOURS = int(os.environ.get("LOOKAHEAD_HOURS", "0"))  # auto_post.pyと同じ先読み（先行判定のみに使用）

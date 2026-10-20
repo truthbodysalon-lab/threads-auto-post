@@ -29,11 +29,14 @@ from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 BASE = Path(__file__).parent
-ACCTS = ["truth", "nagaoka", "masa"]
+from account_ownership import is_local
+ACCTS = [a for a in ["truth", "nagaoka", "masa"] if is_local(a)]
 results = []  # {"id","category","status","detail"}  status: PASS/WARN/FAIL
 
 
 def add(cid, category, status, detail):
+    if not is_local("masa") and ("masa" in cid or "uplink" in cid):
+        status, detail = "SKIP", "Managed by minetownmasa-dotcom/threads-marketing"
     results.append({"id": cid, "category": category, "status": status, "detail": detail})
 
 
@@ -251,6 +254,8 @@ def check_list_habit_in_first50():
 
 def check_masa_insta_theme():
     """masaの当日生成キュー前半50本のInstagramテーマ比率が50%未満ならWARN（2026-10-04 主テーマ変更の実行ギャップ検知）。"""
+    if not is_local("masa"):
+        return
     try:
         import generate_remix as g
         posts = g.generate_30_masa_posts()[:50]
@@ -315,6 +320,8 @@ def check_masa_abstract():
     """masaの当日生成キュー前半50本のうち、抽象的な投稿（対象なし問いかけ・手順/具体例＋機能名のないコメント・抽象語）が
     1本でもあればWARN（2026-10-07 masa指示「問いかけの対象が不明・コメントが抽象的」の実行ギャップ検知。
     判定=generate_remix._is_abstract_masa。生成ループ・最終掃除・auto_post検品ゲートと同じ基準）。"""
+    if not is_local("masa"):
+        return
     try:
         import generate_remix as g
         posts = g.generate_30_masa_posts()[:50]

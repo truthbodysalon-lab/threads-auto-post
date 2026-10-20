@@ -1,828 +1,828 @@
 {
-  "mode": "live",
-  "note": "jst_time=各repoの変更後cron(JST)+2分。since=day:当日0時JST以降のrunが有れば起動しない / slot:枠のjst_time-12分以降。weekdays: 月=0..日=6。enabled:falseで個別OFF、modeをdry_runに戻すと全停止。 skip_until:YYYY-MM-DD未満の日は起動しない(固定日付)。pause_file:repo内のJSON(until=YYYY-MM-DD)の日付以前は起動しない(ig-feed。feed_pause.jsonの正本に従う)。queue_file:repo内のJSON(items[].date)に本日分が無ければ起動しない(ig-reels。連載終了後の空振り防止)。取得失敗はいずれも起動(フェイルオープン)。inputs:workflow_dispatchへ渡す入力。 gate:pool|qa|offer|features=起動前ゲート(story_gate.py)。確実に何も起きない時だけ起動を省略、取得失敗等は起動(フェイルオープン)。無効化=entryからgateキーを削除。 2026-10-18追記: gate:stepmail=ステップ配信の起動前ゲート(dispatcher.py stepmail_gate)。枠ごとに1回だけ、本物のstepmail.mjsをDRY_RUN=1で動かし『送るものがある枠』だけ起動(判定不能は起動=フェイルオープン・ログは件数のみ)。無効化=entryからgateキーを削除。Mac死活監視(cloud/line deadman)はops_deadman.pyへ移設し本テーブルから削除。gmail/marketing/subscription/stepmailは非公開repo側のcronを撤去済みで、このテーブルが唯一の定刻起動。 2026-10-20: blog-post(10枠)とekiten-postはGitHub Actions停止のためenabled:false（ブログ=Mac launchd com.mt112.blog-auto-post、エキテン=アプリ内タスクekiten-chrome-post）。クラウドへ戻す順序=①Mac側を止める(launchctl bootout)→②gh workflow enable→③ここのenabledをtrueに戻す。 2026-10-20: 非公開3repo(ig-autopost-cloud/cloud-daily-tasks/line-stepmail-cloud)はActions無料枠切れのため全entryに skip_until=\"2026-11-01 09:30\"(JST・時刻つき)を設定し11/1まで停止・Mac代行中。請求期間は月初00:00 UTC=JST 11/1 09:00にリセットされるため+30分の余裕。skip_untilは\"YYYY-MM-DD HH:MM\"(JST)形式も可。11/1 09:10にMac launchd(com.truth.actions-resume-20261101)が停止中workflowをenableし、09:30にこのテーブルが自動で再開する(手作業不要)。公開repo(note-auto等)は対象外。 2026-10-21 Actions無料枠対策（月1,500分以下）: ①急ぎでない処理（ig-verify・ig-analyze・ig-analyze-pool・ig-verify-pool・medical-learning・marketing-learning・gmail-notify・subscription-report）はMac常設（~/.claude/scripts/local_actions の permanent ジョブ・課金0）が主、このテーブルの catchup:true の枠は『Macがその日（指定時刻以降に）成功していない時だけ』クラウドが拾う保険。判定は entry の local_done(job名)・local_done_since(HH:MM JST)・local_done_file(既定 state/local_done.json)。Mac側 local_run.py が成功のたびに {job:{ts}} を書いてpushする。取得失敗・形式不正は起動(フェイルオープン)。catchupの枠はMac代行(local_actions)のスケジュールには取り込まない。窓は日付をまたがない（local_doneは『今日』の記録で判定）。 ②gate:daily=ig-storyの起動前ゲート(story_gate.py daily: 今日のplanで投稿済みのパートの時間帯は起動しない)。 2026-10-21: @masahide_takahashi_ marketing workflows execute only in minetownmasa-dotcom/instagram-marketing (11 cloud slots). No Mac completion gate or free-quota pause applies to that repository. since=slot avoids treating earlier migration dry runs as production completion. 2026-10-21 retry_failed: 1日1回しかない投稿(ig-feed-*/ig-hpb-availability-*)は、その日のrunが1本だけで失敗終了していたら、終了の40分後(window外でもslot+300分まで)に1回だけ再起動する(dispatcher.py retry_decision)。画像置き場などの数分〜数十分の障害でその日の投稿を落とさないため。再起動runは各スクリプトの posted_today ガードで二重投稿しない。無効化=entryからretry_failedを削除。",
-  "entries": [
-    {
-      "id": "ig-analyze-pool-catchup",
-      "repo": "truthbodysalon-lab/ig-autopost-cloud",
-      "workflow": "ig-analyze-pool.yml",
-      "jst_time": "13:45",
-      "window_min": 240,
-      "since": "day",
-      "enabled": true,
-      "weekdays": [
-        0
-      ],
-      "local_done": "ig-analyze-pool",
-      "catchup": true,
-      "skip_until": "2026-11-01 09:30"
-    },
-    {
-      "id": "ig-verify-pool-catchup",
-      "repo": "truthbodysalon-lab/ig-autopost-cloud",
-      "workflow": "ig-verify-pool.yml",
-      "jst_time": "18:05",
-      "window_min": 240,
-      "since": "day",
-      "enabled": true,
-      "weekdays": [
-        6
-      ],
-      "local_done": "ig-verify-pool",
-      "catchup": true,
-      "skip_until": "2026-11-01 09:30"
-    },
-    {
-      "id": "ig-feed-nagaoka-sun",
-      "repo": "truthbodysalon-lab/ig-autopost-cloud",
-      "workflow": "ig-feed-nagaoka.yml",
-      "jst_time": "10:05",
-      "window_min": 90,
-      "since": "day",
-      "enabled": true,
-      "weekdays": [
-        6
-      ],
-      "skip_until": "2026-11-01 09:30",
-      "retry_failed": {
-        "after_min": 40,
-        "until_min": 300
-      }
-    },
-    {
-      "id": "ig-feed-truth-sun",
-      "repo": "truthbodysalon-lab/ig-autopost-cloud",
-      "workflow": "ig-feed-truth.yml",
-      "jst_time": "10:09",
-      "window_min": 90,
-      "since": "day",
-      "enabled": true,
-      "weekdays": [
-        6
-      ],
-      "skip_until": "2026-11-01 09:30",
-      "retry_failed": {
-        "after_min": 40,
-        "until_min": 300
-      }
-    },
-    {
-      "id": "ig-feed-nagaoka-thu",
-      "repo": "truthbodysalon-lab/ig-autopost-cloud",
-      "workflow": "ig-feed-nagaoka-thursday.yml",
-      "jst_time": "10:05",
-      "window_min": 90,
-      "since": "day",
-      "enabled": true,
-      "weekdays": [
-        3
-      ],
-      "skip_until": "2026-11-01 09:30",
-      "retry_failed": {
-        "after_min": 40,
-        "until_min": 300
-      }
-    },
-    {
-      "id": "ig-feed-nagaoka-case",
-      "repo": "truthbodysalon-lab/ig-autopost-cloud",
-      "workflow": "ig-feed-nagaoka-case.yml",
-      "jst_time": "19:02",
-      "window_min": 90,
-      "since": "day",
-      "enabled": true,
-      "weekdays": [
-        0,
-        2,
-        4
-      ],
-      "skip_until": "2026-11-01 09:30",
-      "retry_failed": {
-        "after_min": 40,
-        "until_min": 300
-      }
-    },
-    {
-      "id": "ig-story-friday@15:05",
-      "repo": "truthbodysalon-lab/ig-autopost-cloud",
-      "workflow": "ig-story-friday.yml",
-      "jst_time": "15:05",
-      "window_min": 90,
-      "since": "slot",
-      "enabled": true,
-      "weekdays": [
-        4
-      ],
-      "gate": "features",
-      "skip_until": "2026-11-01 09:30"
-    },
-    {
-      "id": "ig-story-friday@17:05",
-      "repo": "truthbodysalon-lab/ig-autopost-cloud",
-      "workflow": "ig-story-friday.yml",
-      "jst_time": "17:05",
-      "window_min": 90,
-      "since": "slot",
-      "enabled": true,
-      "weekdays": [
-        4
-      ],
-      "gate": "features",
-      "skip_until": "2026-11-01 09:30"
-    },
-    {
-      "id": "ig-story-friday@19:05",
-      "repo": "truthbodysalon-lab/ig-autopost-cloud",
-      "workflow": "ig-story-friday.yml",
-      "jst_time": "19:05",
-      "window_min": 90,
-      "since": "slot",
-      "enabled": true,
-      "weekdays": [
-        4
-      ],
-      "gate": "features",
-      "skip_until": "2026-11-01 09:30"
-    },
-    {
-      "id": "ig-story-friday@20:31",
-      "repo": "truthbodysalon-lab/ig-autopost-cloud",
-      "workflow": "ig-story-friday.yml",
-      "jst_time": "20:31",
-      "window_min": 90,
-      "since": "slot",
-      "enabled": true,
-      "weekdays": [
-        4
-      ],
-      "gate": "features",
-      "skip_until": "2026-11-01 09:30"
-    },
-    {
-      "id": "ig-story-pool@18:04",
-      "repo": "truthbodysalon-lab/ig-autopost-cloud",
-      "workflow": "ig-story-pool.yml",
-      "jst_time": "18:04",
-      "window_min": 60,
-      "since": "slot",
-      "enabled": true,
-      "gate": "pool",
-      "skip_until": "2026-11-01 09:30"
-    },
-    {
-      "id": "ig-story-pool@19:04",
-      "repo": "truthbodysalon-lab/ig-autopost-cloud",
-      "workflow": "ig-story-pool.yml",
-      "jst_time": "19:04",
-      "window_min": 60,
-      "since": "slot",
-      "enabled": true,
-      "gate": "pool",
-      "skip_until": "2026-11-01 09:30"
-    },
-    {
-      "id": "ig-story-pool@20:04",
-      "repo": "truthbodysalon-lab/ig-autopost-cloud",
-      "workflow": "ig-story-pool.yml",
-      "jst_time": "20:04",
-      "window_min": 60,
-      "since": "slot",
-      "enabled": true,
-      "gate": "pool",
-      "skip_until": "2026-11-01 09:30"
-    },
-    {
-      "id": "ig-story-pool@21:04",
-      "repo": "truthbodysalon-lab/ig-autopost-cloud",
-      "workflow": "ig-story-pool.yml",
-      "jst_time": "21:04",
-      "window_min": 60,
-      "since": "slot",
-      "enabled": true,
-      "gate": "pool",
-      "skip_until": "2026-11-01 09:30"
-    },
-    {
-      "id": "ig-story-pool@21:49",
-      "repo": "truthbodysalon-lab/ig-autopost-cloud",
-      "workflow": "ig-story-pool.yml",
-      "jst_time": "21:49",
-      "window_min": 60,
-      "since": "slot",
-      "enabled": true,
-      "gate": "pool",
-      "skip_until": "2026-11-01 09:30"
-    },
-    {
-      "id": "ig-story-qa@15:04",
-      "repo": "truthbodysalon-lab/ig-autopost-cloud",
-      "workflow": "ig-story-qa.yml",
-      "jst_time": "15:04",
-      "window_min": 60,
-      "since": "slot",
-      "enabled": true,
-      "weekdays": [
-        5,
-        6
-      ],
-      "gate": "qa",
-      "skip_until": "2026-11-01 09:30"
-    },
-    {
-      "id": "ig-story-qa@17:04",
-      "repo": "truthbodysalon-lab/ig-autopost-cloud",
-      "workflow": "ig-story-qa.yml",
-      "jst_time": "17:04",
-      "window_min": 60,
-      "since": "slot",
-      "enabled": true,
-      "weekdays": [
-        5,
-        6
-      ],
-      "gate": "qa",
-      "skip_until": "2026-11-01 09:30"
-    },
-    {
-      "id": "ig-story-qa@19:04",
-      "repo": "truthbodysalon-lab/ig-autopost-cloud",
-      "workflow": "ig-story-qa.yml",
-      "jst_time": "19:04",
-      "window_min": 60,
-      "since": "slot",
-      "enabled": true,
-      "weekdays": [
-        5,
-        6
-      ],
-      "gate": "qa",
-      "skip_until": "2026-11-01 09:30"
-    },
-    {
-      "id": "ig-story-qa@20:34",
-      "repo": "truthbodysalon-lab/ig-autopost-cloud",
-      "workflow": "ig-story-qa.yml",
-      "jst_time": "20:34",
-      "window_min": 60,
-      "since": "slot",
-      "enabled": true,
-      "weekdays": [
-        5,
-        6
-      ],
-      "gate": "qa",
-      "skip_until": "2026-11-01 09:30"
-    },
-    {
-      "id": "ig-story-qa@21:49",
-      "repo": "truthbodysalon-lab/ig-autopost-cloud",
-      "workflow": "ig-story-qa.yml",
-      "jst_time": "21:49",
-      "window_min": 60,
-      "since": "slot",
-      "enabled": true,
-      "weekdays": [
-        5,
-        6
-      ],
-      "gate": "qa",
-      "skip_until": "2026-11-01 09:30"
-    },
-    {
-      "id": "ig-story-offer@15:04",
-      "repo": "truthbodysalon-lab/ig-autopost-cloud",
-      "workflow": "ig-story-offer.yml",
-      "jst_time": "15:04",
-      "window_min": 60,
-      "since": "slot",
-      "enabled": true,
-      "weekdays": [
-        1,
-        2
-      ],
-      "gate": "offer",
-      "skip_until": "2026-11-01 09:30"
-    },
-    {
-      "id": "ig-story-offer@17:04",
-      "repo": "truthbodysalon-lab/ig-autopost-cloud",
-      "workflow": "ig-story-offer.yml",
-      "jst_time": "17:04",
-      "window_min": 60,
-      "since": "slot",
-      "enabled": true,
-      "weekdays": [
-        1,
-        2
-      ],
-      "gate": "offer",
-      "skip_until": "2026-11-01 09:30"
-    },
-    {
-      "id": "ig-story-offer@19:04",
-      "repo": "truthbodysalon-lab/ig-autopost-cloud",
-      "workflow": "ig-story-offer.yml",
-      "jst_time": "19:04",
-      "window_min": 60,
-      "since": "slot",
-      "enabled": true,
-      "weekdays": [
-        1,
-        2
-      ],
-      "gate": "offer",
-      "skip_until": "2026-11-01 09:30"
-    },
-    {
-      "id": "ig-story-offer@20:34",
-      "repo": "truthbodysalon-lab/ig-autopost-cloud",
-      "workflow": "ig-story-offer.yml",
-      "jst_time": "20:34",
-      "window_min": 60,
-      "since": "slot",
-      "enabled": true,
-      "weekdays": [
-        1,
-        2
-      ],
-      "gate": "offer",
-      "skip_until": "2026-11-01 09:30"
-    },
-    {
-      "id": "ig-story-offer@21:34",
-      "repo": "truthbodysalon-lab/ig-autopost-cloud",
-      "workflow": "ig-story-offer.yml",
-      "jst_time": "21:34",
-      "window_min": 60,
-      "since": "slot",
-      "enabled": true,
-      "weekdays": [
-        1,
-        2
-      ],
-      "gate": "offer",
-      "skip_until": "2026-11-01 09:30"
-    },
-    {
-      "id": "ig-story-friday@21:49",
-      "repo": "truthbodysalon-lab/ig-autopost-cloud",
-      "workflow": "ig-story-friday.yml",
-      "jst_time": "21:49",
-      "window_min": 60,
-      "since": "slot",
-      "enabled": true,
-      "weekdays": [
-        4
-      ],
-      "gate": "features",
-      "skip_until": "2026-11-01 09:30"
-    },
-    {
-      "id": "ig-hpb-availability-tue",
-      "repo": "truthbodysalon-lab/ig-autopost-cloud",
-      "workflow": "ig-hpb-availability.yml",
-      "jst_time": "17:57",
-      "window_min": 90,
-      "since": "day",
-      "enabled": true,
-      "weekdays": [
-        1
-      ],
-      "inputs": {
-        "account": "truth"
-      },
-      "skip_until": "2026-11-01 09:30",
-      "retry_failed": {
-        "after_min": 40,
-        "until_min": 300
-      }
-    },
-    {
-      "id": "ig-hpb-availability-fri",
-      "repo": "truthbodysalon-lab/ig-autopost-cloud",
-      "workflow": "ig-hpb-availability.yml",
-      "jst_time": "17:57",
-      "window_min": 90,
-      "since": "day",
-      "enabled": true,
-      "weekdays": [
-        4
-      ],
-      "inputs": {
-        "account": "nagaoka"
-      },
-      "skip_until": "2026-11-01 09:30",
-      "retry_failed": {
-        "after_min": 40,
-        "until_min": 300
-      }
-    },
-    {
-      "id": "stepmail@01:25",
-      "repo": "truthbodysalon-lab/line-stepmail-cloud",
-      "workflow": "stepmail.yml",
-      "jst_time": "01:25",
-      "window_min": 60,
-      "since": "slot",
-      "enabled": true,
-      "gate": "stepmail",
-      "skip_until": "2026-11-01 09:30"
-    },
-    {
-      "id": "stepmail@03:25",
-      "repo": "truthbodysalon-lab/line-stepmail-cloud",
-      "workflow": "stepmail.yml",
-      "jst_time": "03:25",
-      "window_min": 60,
-      "since": "slot",
-      "enabled": true,
-      "gate": "stepmail",
-      "skip_until": "2026-11-01 09:30"
-    },
-    {
-      "id": "stepmail@05:25",
-      "repo": "truthbodysalon-lab/line-stepmail-cloud",
-      "workflow": "stepmail.yml",
-      "jst_time": "05:25",
-      "window_min": 60,
-      "since": "slot",
-      "enabled": true,
-      "gate": "stepmail",
-      "skip_until": "2026-11-01 09:30"
-    },
-    {
-      "id": "stepmail@07:25",
-      "repo": "truthbodysalon-lab/line-stepmail-cloud",
-      "workflow": "stepmail.yml",
-      "jst_time": "07:25",
-      "window_min": 60,
-      "since": "slot",
-      "enabled": true,
-      "gate": "stepmail",
-      "skip_until": "2026-11-01 09:30"
-    },
-    {
-      "id": "stepmail@09:25",
-      "repo": "truthbodysalon-lab/line-stepmail-cloud",
-      "workflow": "stepmail.yml",
-      "jst_time": "09:25",
-      "window_min": 60,
-      "since": "slot",
-      "enabled": true,
-      "gate": "stepmail",
-      "skip_until": "2026-11-01 09:30"
-    },
-    {
-      "id": "stepmail@11:25",
-      "repo": "truthbodysalon-lab/line-stepmail-cloud",
-      "workflow": "stepmail.yml",
-      "jst_time": "11:25",
-      "window_min": 60,
-      "since": "slot",
-      "enabled": true,
-      "gate": "stepmail",
-      "skip_until": "2026-11-01 09:30"
-    },
-    {
-      "id": "stepmail@13:25",
-      "repo": "truthbodysalon-lab/line-stepmail-cloud",
-      "workflow": "stepmail.yml",
-      "jst_time": "13:25",
-      "window_min": 60,
-      "since": "slot",
-      "enabled": true,
-      "gate": "stepmail",
-      "skip_until": "2026-11-01 09:30"
-    },
-    {
-      "id": "stepmail@15:25",
-      "repo": "truthbodysalon-lab/line-stepmail-cloud",
-      "workflow": "stepmail.yml",
-      "jst_time": "15:25",
-      "window_min": 60,
-      "since": "slot",
-      "enabled": true,
-      "gate": "stepmail",
-      "skip_until": "2026-11-01 09:30"
-    },
-    {
-      "id": "stepmail@17:25",
-      "repo": "truthbodysalon-lab/line-stepmail-cloud",
-      "workflow": "stepmail.yml",
-      "jst_time": "17:25",
-      "window_min": 60,
-      "since": "slot",
-      "enabled": true,
-      "gate": "stepmail",
-      "skip_until": "2026-11-01 09:30"
-    },
-    {
-      "id": "stepmail@19:25",
-      "repo": "truthbodysalon-lab/line-stepmail-cloud",
-      "workflow": "stepmail.yml",
-      "jst_time": "19:25",
-      "window_min": 60,
-      "since": "slot",
-      "enabled": true,
-      "gate": "stepmail",
-      "skip_until": "2026-11-01 09:30"
-    },
-    {
-      "id": "stepmail@21:25",
-      "repo": "truthbodysalon-lab/line-stepmail-cloud",
-      "workflow": "stepmail.yml",
-      "jst_time": "21:25",
-      "window_min": 60,
-      "since": "slot",
-      "enabled": true,
-      "gate": "stepmail",
-      "skip_until": "2026-11-01 09:30"
-    },
-    {
-      "id": "stepmail@23:25",
-      "repo": "truthbodysalon-lab/line-stepmail-cloud",
-      "workflow": "stepmail.yml",
-      "jst_time": "23:25",
-      "window_min": 60,
-      "since": "slot",
-      "enabled": true,
-      "gate": "stepmail",
-      "skip_until": "2026-11-01 09:30"
-    },
-    {
-      "id": "marketing-learning",
-      "repo": "truthbodysalon-lab/cloud-daily-tasks",
-      "workflow": "marketing-learning.yml",
-      "jst_time": "14:43",
-      "window_min": 240,
-      "since": "day",
-      "enabled": true,
-      "local_done": "marketing-learning",
-      "catchup": true,
-      "skip_until": "2026-11-01 09:30"
-    },
-    {
-      "id": "gmail-notify",
-      "repo": "truthbodysalon-lab/cloud-daily-tasks",
-      "workflow": "gmail-notify.yml",
-      "jst_time": "15:39",
-      "window_min": 240,
-      "since": "day",
-      "enabled": true,
-      "local_done": "gmail-notify",
-      "catchup": true,
-      "skip_until": "2026-11-01 09:30"
-    },
-    {
-      "id": "medical-learning",
-      "repo": "truthbodysalon-lab/cloud-daily-tasks",
-      "workflow": "medical-learning.yml",
-      "jst_time": "20:39",
-      "window_min": 120,
-      "since": "day",
-      "enabled": true,
-      "local_done": "medical-learning",
-      "catchup": true,
-      "skip_until": "2026-11-01 09:30"
-    },
-    {
-      "id": "subscription-report",
-      "repo": "truthbodysalon-lab/cloud-daily-tasks",
-      "workflow": "subscription-report.yml",
-      "jst_time": "16:25",
-      "window_min": 240,
-      "since": "day",
-      "enabled": true,
-      "weekdays": [
-        1
-      ],
-      "local_done": "subscription-report",
-      "catchup": true,
-      "skip_until": "2026-11-01 09:30"
-    },
-    {
-      "id": "note-daily",
-      "repo": "truthbodysalon-lab/note-auto",
-      "workflow": "daily.yml",
-      "jst_time": "03:19",
-      "window_min": 90,
-      "since": "day",
-      "enabled": true
-    },
-    {
-      "id": "blog-post@07:49",
-      "repo": "truthbodysalon-lab/blog-auto-post",
-      "workflow": "blog-post.yml",
-      "jst_time": "07:49",
-      "window_min": 60,
-      "since": "slot",
-      "enabled": false
-    },
-    {
-      "id": "blog-post@08:49",
-      "repo": "truthbodysalon-lab/blog-auto-post",
-      "workflow": "blog-post.yml",
-      "jst_time": "08:49",
-      "window_min": 60,
-      "since": "slot",
-      "enabled": false
-    },
-    {
-      "id": "blog-post@09:49",
-      "repo": "truthbodysalon-lab/blog-auto-post",
-      "workflow": "blog-post.yml",
-      "jst_time": "09:49",
-      "window_min": 60,
-      "since": "slot",
-      "enabled": false
-    },
-    {
-      "id": "blog-post@10:49",
-      "repo": "truthbodysalon-lab/blog-auto-post",
-      "workflow": "blog-post.yml",
-      "jst_time": "10:49",
-      "window_min": 60,
-      "since": "slot",
-      "enabled": false
-    },
-    {
-      "id": "blog-post@11:49",
-      "repo": "truthbodysalon-lab/blog-auto-post",
-      "workflow": "blog-post.yml",
-      "jst_time": "11:49",
-      "window_min": 60,
-      "since": "slot",
-      "enabled": false
-    },
-    {
-      "id": "blog-post@12:49",
-      "repo": "truthbodysalon-lab/blog-auto-post",
-      "workflow": "blog-post.yml",
-      "jst_time": "12:49",
-      "window_min": 60,
-      "since": "slot",
-      "enabled": false
-    },
-    {
-      "id": "blog-post@13:49",
-      "repo": "truthbodysalon-lab/blog-auto-post",
-      "workflow": "blog-post.yml",
-      "jst_time": "13:49",
-      "window_min": 60,
-      "since": "slot",
-      "enabled": false
-    },
-    {
-      "id": "blog-post@14:49",
-      "repo": "truthbodysalon-lab/blog-auto-post",
-      "workflow": "blog-post.yml",
-      "jst_time": "14:49",
-      "window_min": 60,
-      "since": "slot",
-      "enabled": false
-    },
-    {
-      "id": "blog-post@15:49",
-      "repo": "truthbodysalon-lab/blog-auto-post",
-      "workflow": "blog-post.yml",
-      "jst_time": "15:49",
-      "window_min": 60,
-      "since": "slot",
-      "enabled": false
-    },
-    {
-      "id": "blog-post@16:49",
-      "repo": "truthbodysalon-lab/blog-auto-post",
-      "workflow": "blog-post.yml",
-      "jst_time": "16:49",
-      "window_min": 60,
-      "since": "slot",
-      "enabled": false
-    },
-    {
-      "id": "ekiten-post",
-      "repo": "truthbodysalon-lab/blog-auto-post",
-      "workflow": "ekiten-post.yml",
-      "jst_time": "18:45",
-      "window_min": 90,
-      "since": "day",
-      "enabled": false
-    },
-    {
-      "id": "marketing-story@07:31",
-      "repo": "minetownmasa-dotcom/instagram-marketing",
-      "workflow": "ig-story.yml",
-      "jst_time": "07:31",
-      "window_min": 90,
-      "since": "slot",
-      "enabled": false,
-      "gate": "daily",
-      "note": "Scheduler moved to minetownmasa-dotcom/threads-marketing"
-    },
-    {
-      "id": "marketing-story@12:05",
-      "repo": "minetownmasa-dotcom/instagram-marketing",
-      "workflow": "ig-story.yml",
-      "jst_time": "12:05",
-      "window_min": 90,
-      "since": "slot",
-      "enabled": false,
-      "gate": "daily",
-      "note": "Scheduler moved to minetownmasa-dotcom/threads-marketing"
-    },
-    {
-      "id": "marketing-story@17:31",
-      "repo": "minetownmasa-dotcom/instagram-marketing",
-      "workflow": "ig-story.yml",
-      "jst_time": "17:31",
-      "window_min": 90,
-      "since": "slot",
-      "enabled": false,
-      "gate": "daily",
-      "note": "Scheduler moved to minetownmasa-dotcom/threads-marketing"
-    },
-    {
-      "id": "marketing-story@21:05",
-      "repo": "minetownmasa-dotcom/instagram-marketing",
-      "workflow": "ig-story.yml",
-      "jst_time": "21:05",
-      "window_min": 90,
-      "since": "slot",
-      "enabled": false,
-      "gate": "daily",
-      "note": "Scheduler moved to minetownmasa-dotcom/threads-marketing"
-    },
-    {
-      "id": "marketing-verify@09:21",
-      "repo": "minetownmasa-dotcom/instagram-marketing",
-      "workflow": "ig-verify.yml",
-      "jst_time": "09:21",
-      "window_min": 60,
-      "since": "slot",
-      "enabled": false,
-      "note": "Scheduler moved to minetownmasa-dotcom/threads-marketing"
-    },
-    {
-      "id": "marketing-verify@13:21",
-      "repo": "minetownmasa-dotcom/instagram-marketing",
-      "workflow": "ig-verify.yml",
-      "jst_time": "13:21",
-      "window_min": 60,
-      "since": "slot",
-      "enabled": false,
-      "note": "Scheduler moved to minetownmasa-dotcom/threads-marketing"
-    },
-    {
-      "id": "marketing-verify@18:55",
-      "repo": "minetownmasa-dotcom/instagram-marketing",
-      "workflow": "ig-verify.yml",
-      "jst_time": "18:55",
-      "window_min": 60,
-      "since": "slot",
-      "enabled": false,
-      "note": "Scheduler moved to minetownmasa-dotcom/threads-marketing"
-    },
-    {
-      "id": "marketing-verify@22:21",
-      "repo": "minetownmasa-dotcom/instagram-marketing",
-      "workflow": "ig-verify.yml",
-      "jst_time": "22:21",
-      "window_min": 90,
-      "since": "slot",
-      "enabled": false,
-      "note": "Scheduler moved to minetownmasa-dotcom/threads-marketing"
-    },
-    {
-      "id": "marketing-analyze@05:13",
-      "repo": "minetownmasa-dotcom/instagram-marketing",
-      "workflow": "ig-analyze.yml",
-      "jst_time": "05:13",
-      "window_min": 90,
-      "since": "slot",
-      "enabled": false,
-      "note": "Scheduler moved to minetownmasa-dotcom/threads-marketing"
-    },
-    {
-      "id": "marketing-reels@08:05",
-      "repo": "minetownmasa-dotcom/instagram-marketing",
-      "workflow": "ig-reels.yml",
-      "jst_time": "08:05",
-      "window_min": 90,
-      "since": "slot",
-      "enabled": false,
-      "queue_file": "state/reels_queue.json",
-      "note": "Scheduler moved to minetownmasa-dotcom/threads-marketing"
-    },
-    {
-      "id": "marketing-feed@11:33",
-      "repo": "minetownmasa-dotcom/instagram-marketing",
-      "workflow": "ig-feed.yml",
-      "jst_time": "11:33",
-      "window_min": 90,
-      "since": "slot",
-      "enabled": false,
-      "pause_file": "state/feed_pause.json",
-      "note": "Scheduler moved to minetownmasa-dotcom/threads-marketing"
-    }
-  ]
+ "mode": "live",
+ "note": "jst_time=各repoの変更後cron(JST)+2分。since=day:当日0時JST以降のrunが有れば起動しない / slot:枠のjst_time-12分以降。weekdays: 月=0..日=6。enabled:falseで個別OFF、modeをdry_runに戻すと全停止。 skip_until:YYYY-MM-DD未満の日は起動しない(固定日付)。pause_file:repo内のJSON(until=YYYY-MM-DD)の日付以前は起動しない(ig-feed。feed_pause.jsonの正本に従う)。queue_file:repo内のJSON(items[].date)に本日分が無ければ起動しない(ig-reels。連載終了後の空振り防止)。取得失敗はいずれも起動(フェイルオープン)。inputs:workflow_dispatchへ渡す入力。 gate:pool|qa|offer|features=起動前ゲート(story_gate.py)。確実に何も起きない時だけ起動を省略、取得失敗等は起動(フェイルオープン)。無効化=entryからgateキーを削除。 2026-10-18追記: gate:stepmail=ステップ配信の起動前ゲート(dispatcher.py stepmail_gate)。枠ごとに1回だけ、本物のstepmail.mjsをDRY_RUN=1で動かし『送るものがある枠』だけ起動(判定不能は起動=フェイルオープン・ログは件数のみ)。無効化=entryからgateキーを削除。Mac死活監視(cloud/line deadman)はops_deadman.pyへ移設し本テーブルから削除。gmail/marketing/subscription/stepmailは非公開repo側のcronを撤去済みで、このテーブルが唯一の定刻起動。 2026-10-20: blog-post(10枠)とekiten-postはGitHub Actions停止のためenabled:false（ブログ=Mac launchd com.mt112.blog-auto-post、エキテン=アプリ内タスクekiten-chrome-post）。クラウドへ戻す順序=①Mac側を止める(launchctl bootout)→②gh workflow enable→③ここのenabledをtrueに戻す。 2026-10-20: 非公開3repo(ig-autopost-cloud/cloud-daily-tasks/line-stepmail-cloud)はActions無料枠切れのため全entryに skip_until=\"2026-11-01 09:30\"(JST・時刻つき)を設定し11/1まで停止・Mac代行中。請求期間は月初00:00 UTC=JST 11/1 09:00にリセットされるため+30分の余裕。skip_untilは\"YYYY-MM-DD HH:MM\"(JST)形式も可。11/1 09:10にMac launchd(com.truth.actions-resume-20261101)が停止中workflowをenableし、09:30にこのテーブルが自動で再開する(手作業不要)。公開repo(note-auto等)は対象外。 2026-10-21 Actions無料枠対策（月1,500分以下）: ①急ぎでない処理（ig-verify・ig-analyze・ig-analyze-pool・ig-verify-pool・medical-learning・marketing-learning・gmail-notify・subscription-report）はMac常設（~/.claude/scripts/local_actions の permanent ジョブ・課金0）が主、このテーブルの catchup:true の枠は『Macがその日（指定時刻以降に）成功していない時だけ』クラウドが拾う保険。判定は entry の local_done(job名)・local_done_since(HH:MM JST)・local_done_file(既定 state/local_done.json)。Mac側 local_run.py が成功のたびに {job:{ts}} を書いてpushする。取得失敗・形式不正は起動(フェイルオープン)。catchupの枠はMac代行(local_actions)のスケジュールには取り込まない。窓は日付をまたがない（local_doneは『今日』の記録で判定）。 ②gate:daily=ig-storyの起動前ゲート(story_gate.py daily: 今日のplanで投稿済みのパートの時間帯は起動しない)。 2026-10-21: @masahide_takahashi_ marketing workflows execute only in minetownmasa-dotcom/instagram-marketing (11 cloud slots). No Mac completion gate or free-quota pause applies to that repository. since=slot avoids treating earlier migration dry runs as production completion. 2026-10-21 retry_failed: 1日1回しかない投稿(ig-feed-*/ig-hpb-availability-*)は、その日のrunが1本だけで失敗終了していたら、終了の40分後(window外でもslot+300分まで)に1回だけ再起動する(dispatcher.py retry_decision)。画像置き場などの数分〜数十分の障害でその日の投稿を落とさないため。再起動runは各スクリプトの posted_today ガードで二重投稿しない。無効化=entryからretry_failedを削除。",
+ "entries": [
+  {
+   "id": "ig-analyze-pool-catchup",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-analyze-pool.yml",
+   "jst_time": "13:45",
+   "window_min": 240,
+   "since": "day",
+   "enabled": true,
+   "weekdays": [
+    0
+   ],
+   "local_done": "ig-analyze-pool",
+   "catchup": true,
+   "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "ig-verify-pool-catchup",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-verify-pool.yml",
+   "jst_time": "18:05",
+   "window_min": 240,
+   "since": "day",
+   "enabled": true,
+   "weekdays": [
+    6
+   ],
+   "local_done": "ig-verify-pool",
+   "catchup": true,
+   "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "ig-feed-nagaoka-sun",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-feed-nagaoka.yml",
+   "jst_time": "10:05",
+   "window_min": 90,
+   "since": "day",
+   "enabled": true,
+   "weekdays": [
+    6
+   ],
+   "skip_until": "2026-11-01 09:30",
+   "retry_failed": {
+    "after_min": 40,
+    "until_min": 300
+   }
+  },
+  {
+   "id": "ig-feed-truth-sun",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-feed-truth.yml",
+   "jst_time": "10:09",
+   "window_min": 90,
+   "since": "day",
+   "enabled": true,
+   "weekdays": [
+    6
+   ],
+   "skip_until": "2026-11-01 09:30",
+   "retry_failed": {
+    "after_min": 40,
+    "until_min": 300
+   }
+  },
+  {
+   "id": "ig-feed-nagaoka-thu",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-feed-nagaoka-thursday.yml",
+   "jst_time": "10:05",
+   "window_min": 90,
+   "since": "day",
+   "enabled": true,
+   "weekdays": [
+    3
+   ],
+   "skip_until": "2026-11-01 09:30",
+   "retry_failed": {
+    "after_min": 40,
+    "until_min": 300
+   }
+  },
+  {
+   "id": "ig-feed-nagaoka-case",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-feed-nagaoka-case.yml",
+   "jst_time": "19:02",
+   "window_min": 90,
+   "since": "day",
+   "enabled": true,
+   "weekdays": [
+    0,
+    2,
+    4
+   ],
+   "skip_until": "2026-11-01 09:30",
+   "retry_failed": {
+    "after_min": 40,
+    "until_min": 300
+   }
+  },
+  {
+   "id": "ig-story-friday@15:05",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-story-friday.yml",
+   "jst_time": "15:05",
+   "window_min": 90,
+   "since": "slot",
+   "enabled": true,
+   "weekdays": [
+    4
+   ],
+   "gate": "features",
+   "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "ig-story-friday@17:05",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-story-friday.yml",
+   "jst_time": "17:05",
+   "window_min": 90,
+   "since": "slot",
+   "enabled": true,
+   "weekdays": [
+    4
+   ],
+   "gate": "features",
+   "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "ig-story-friday@19:05",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-story-friday.yml",
+   "jst_time": "19:05",
+   "window_min": 90,
+   "since": "slot",
+   "enabled": true,
+   "weekdays": [
+    4
+   ],
+   "gate": "features",
+   "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "ig-story-friday@20:31",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-story-friday.yml",
+   "jst_time": "20:31",
+   "window_min": 90,
+   "since": "slot",
+   "enabled": true,
+   "weekdays": [
+    4
+   ],
+   "gate": "features",
+   "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "ig-story-pool@18:04",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-story-pool.yml",
+   "jst_time": "18:04",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true,
+   "gate": "pool",
+   "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "ig-story-pool@19:04",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-story-pool.yml",
+   "jst_time": "19:04",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true,
+   "gate": "pool",
+   "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "ig-story-pool@20:04",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-story-pool.yml",
+   "jst_time": "20:04",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true,
+   "gate": "pool",
+   "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "ig-story-pool@21:04",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-story-pool.yml",
+   "jst_time": "21:04",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true,
+   "gate": "pool",
+   "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "ig-story-pool@21:49",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-story-pool.yml",
+   "jst_time": "21:49",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true,
+   "gate": "pool",
+   "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "ig-story-qa@15:04",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-story-qa.yml",
+   "jst_time": "15:04",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true,
+   "weekdays": [
+    5,
+    6
+   ],
+   "gate": "qa",
+   "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "ig-story-qa@17:04",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-story-qa.yml",
+   "jst_time": "17:04",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true,
+   "weekdays": [
+    5,
+    6
+   ],
+   "gate": "qa",
+   "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "ig-story-qa@19:04",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-story-qa.yml",
+   "jst_time": "19:04",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true,
+   "weekdays": [
+    5,
+    6
+   ],
+   "gate": "qa",
+   "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "ig-story-qa@20:34",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-story-qa.yml",
+   "jst_time": "20:34",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true,
+   "weekdays": [
+    5,
+    6
+   ],
+   "gate": "qa",
+   "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "ig-story-qa@21:49",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-story-qa.yml",
+   "jst_time": "21:49",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true,
+   "weekdays": [
+    5,
+    6
+   ],
+   "gate": "qa",
+   "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "ig-story-offer@15:04",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-story-offer.yml",
+   "jst_time": "15:04",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true,
+   "weekdays": [
+    1,
+    2
+   ],
+   "gate": "offer",
+   "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "ig-story-offer@17:04",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-story-offer.yml",
+   "jst_time": "17:04",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true,
+   "weekdays": [
+    1,
+    2
+   ],
+   "gate": "offer",
+   "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "ig-story-offer@19:04",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-story-offer.yml",
+   "jst_time": "19:04",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true,
+   "weekdays": [
+    1,
+    2
+   ],
+   "gate": "offer",
+   "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "ig-story-offer@20:34",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-story-offer.yml",
+   "jst_time": "20:34",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true,
+   "weekdays": [
+    1,
+    2
+   ],
+   "gate": "offer",
+   "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "ig-story-offer@21:34",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-story-offer.yml",
+   "jst_time": "21:34",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true,
+   "weekdays": [
+    1,
+    2
+   ],
+   "gate": "offer",
+   "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "ig-story-friday@21:49",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-story-friday.yml",
+   "jst_time": "21:49",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true,
+   "weekdays": [
+    4
+   ],
+   "gate": "features",
+   "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "ig-hpb-availability-tue",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-hpb-availability.yml",
+   "jst_time": "17:57",
+   "window_min": 90,
+   "since": "day",
+   "enabled": true,
+   "weekdays": [
+    1
+   ],
+   "inputs": {
+    "account": "truth"
+   },
+   "skip_until": "2026-11-01 09:30",
+   "retry_failed": {
+    "after_min": 40,
+    "until_min": 300
+   }
+  },
+  {
+   "id": "ig-hpb-availability-fri",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-hpb-availability.yml",
+   "jst_time": "17:57",
+   "window_min": 90,
+   "since": "day",
+   "enabled": true,
+   "weekdays": [
+    4
+   ],
+   "inputs": {
+    "account": "nagaoka"
+   },
+   "skip_until": "2026-11-01 09:30",
+   "retry_failed": {
+    "after_min": 40,
+    "until_min": 300
+   }
+  },
+  {
+   "id": "stepmail@01:25",
+   "repo": "truthbodysalon-lab/line-stepmail-cloud",
+   "workflow": "stepmail.yml",
+   "jst_time": "01:25",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true,
+   "gate": "stepmail",
+   "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "stepmail@03:25",
+   "repo": "truthbodysalon-lab/line-stepmail-cloud",
+   "workflow": "stepmail.yml",
+   "jst_time": "03:25",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true,
+   "gate": "stepmail",
+   "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "stepmail@05:25",
+   "repo": "truthbodysalon-lab/line-stepmail-cloud",
+   "workflow": "stepmail.yml",
+   "jst_time": "05:25",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true,
+   "gate": "stepmail",
+   "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "stepmail@07:25",
+   "repo": "truthbodysalon-lab/line-stepmail-cloud",
+   "workflow": "stepmail.yml",
+   "jst_time": "07:25",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true,
+   "gate": "stepmail",
+   "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "stepmail@09:25",
+   "repo": "truthbodysalon-lab/line-stepmail-cloud",
+   "workflow": "stepmail.yml",
+   "jst_time": "09:25",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true,
+   "gate": "stepmail",
+   "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "stepmail@11:25",
+   "repo": "truthbodysalon-lab/line-stepmail-cloud",
+   "workflow": "stepmail.yml",
+   "jst_time": "11:25",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true,
+   "gate": "stepmail",
+   "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "stepmail@13:25",
+   "repo": "truthbodysalon-lab/line-stepmail-cloud",
+   "workflow": "stepmail.yml",
+   "jst_time": "13:25",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true,
+   "gate": "stepmail",
+   "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "stepmail@15:25",
+   "repo": "truthbodysalon-lab/line-stepmail-cloud",
+   "workflow": "stepmail.yml",
+   "jst_time": "15:25",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true,
+   "gate": "stepmail",
+   "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "stepmail@17:25",
+   "repo": "truthbodysalon-lab/line-stepmail-cloud",
+   "workflow": "stepmail.yml",
+   "jst_time": "17:25",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true,
+   "gate": "stepmail",
+   "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "stepmail@19:25",
+   "repo": "truthbodysalon-lab/line-stepmail-cloud",
+   "workflow": "stepmail.yml",
+   "jst_time": "19:25",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true,
+   "gate": "stepmail",
+   "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "stepmail@21:25",
+   "repo": "truthbodysalon-lab/line-stepmail-cloud",
+   "workflow": "stepmail.yml",
+   "jst_time": "21:25",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true,
+   "gate": "stepmail",
+   "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "stepmail@23:25",
+   "repo": "truthbodysalon-lab/line-stepmail-cloud",
+   "workflow": "stepmail.yml",
+   "jst_time": "23:25",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true,
+   "gate": "stepmail",
+   "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "marketing-learning",
+   "repo": "truthbodysalon-lab/cloud-daily-tasks",
+   "workflow": "marketing-learning.yml",
+   "jst_time": "14:43",
+   "window_min": 240,
+   "since": "day",
+   "enabled": true,
+   "local_done": "marketing-learning",
+   "catchup": true,
+   "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "gmail-notify",
+   "repo": "truthbodysalon-lab/cloud-daily-tasks",
+   "workflow": "gmail-notify.yml",
+   "jst_time": "15:39",
+   "window_min": 240,
+   "since": "day",
+   "enabled": true,
+   "local_done": "gmail-notify",
+   "catchup": true,
+   "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "medical-learning",
+   "repo": "truthbodysalon-lab/cloud-daily-tasks",
+   "workflow": "medical-learning.yml",
+   "jst_time": "20:39",
+   "window_min": 120,
+   "since": "day",
+   "enabled": true,
+   "local_done": "medical-learning",
+   "catchup": true,
+   "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "subscription-report",
+   "repo": "truthbodysalon-lab/cloud-daily-tasks",
+   "workflow": "subscription-report.yml",
+   "jst_time": "16:25",
+   "window_min": 240,
+   "since": "day",
+   "enabled": true,
+   "weekdays": [
+    1
+   ],
+   "local_done": "subscription-report",
+   "catchup": true,
+   "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "note-daily",
+   "repo": "truthbodysalon-lab/note-auto",
+   "workflow": "daily.yml",
+   "jst_time": "03:19",
+   "window_min": 90,
+   "since": "day",
+   "enabled": true
+  },
+  {
+   "id": "blog-post@07:49",
+   "repo": "truthbodysalon-lab/blog-auto-post",
+   "workflow": "blog-post.yml",
+   "jst_time": "07:49",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": false
+  },
+  {
+   "id": "blog-post@08:49",
+   "repo": "truthbodysalon-lab/blog-auto-post",
+   "workflow": "blog-post.yml",
+   "jst_time": "08:49",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": false
+  },
+  {
+   "id": "blog-post@09:49",
+   "repo": "truthbodysalon-lab/blog-auto-post",
+   "workflow": "blog-post.yml",
+   "jst_time": "09:49",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": false
+  },
+  {
+   "id": "blog-post@10:49",
+   "repo": "truthbodysalon-lab/blog-auto-post",
+   "workflow": "blog-post.yml",
+   "jst_time": "10:49",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": false
+  },
+  {
+   "id": "blog-post@11:49",
+   "repo": "truthbodysalon-lab/blog-auto-post",
+   "workflow": "blog-post.yml",
+   "jst_time": "11:49",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": false
+  },
+  {
+   "id": "blog-post@12:49",
+   "repo": "truthbodysalon-lab/blog-auto-post",
+   "workflow": "blog-post.yml",
+   "jst_time": "12:49",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": false
+  },
+  {
+   "id": "blog-post@13:49",
+   "repo": "truthbodysalon-lab/blog-auto-post",
+   "workflow": "blog-post.yml",
+   "jst_time": "13:49",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": false
+  },
+  {
+   "id": "blog-post@14:49",
+   "repo": "truthbodysalon-lab/blog-auto-post",
+   "workflow": "blog-post.yml",
+   "jst_time": "14:49",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": false
+  },
+  {
+   "id": "blog-post@15:49",
+   "repo": "truthbodysalon-lab/blog-auto-post",
+   "workflow": "blog-post.yml",
+   "jst_time": "15:49",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": false
+  },
+  {
+   "id": "blog-post@16:49",
+   "repo": "truthbodysalon-lab/blog-auto-post",
+   "workflow": "blog-post.yml",
+   "jst_time": "16:49",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": false
+  },
+  {
+   "id": "ekiten-post",
+   "repo": "truthbodysalon-lab/blog-auto-post",
+   "workflow": "ekiten-post.yml",
+   "jst_time": "18:45",
+   "window_min": 90,
+   "since": "day",
+   "enabled": false
+  },
+  {
+   "id": "marketing-story@07:31",
+   "repo": "minetownmasa-dotcom/instagram-marketing",
+   "workflow": "ig-story.yml",
+   "jst_time": "07:31",
+   "window_min": 90,
+   "since": "slot",
+   "enabled": false,
+   "gate": "daily",
+   "note": "Scheduler moved to minetownmasa-dotcom/threads-marketing"
+  },
+  {
+   "id": "marketing-story@12:05",
+   "repo": "minetownmasa-dotcom/instagram-marketing",
+   "workflow": "ig-story.yml",
+   "jst_time": "12:05",
+   "window_min": 90,
+   "since": "slot",
+   "enabled": false,
+   "gate": "daily",
+   "note": "Scheduler moved to minetownmasa-dotcom/threads-marketing"
+  },
+  {
+   "id": "marketing-story@17:31",
+   "repo": "minetownmasa-dotcom/instagram-marketing",
+   "workflow": "ig-story.yml",
+   "jst_time": "17:31",
+   "window_min": 90,
+   "since": "slot",
+   "enabled": false,
+   "gate": "daily",
+   "note": "Scheduler moved to minetownmasa-dotcom/threads-marketing"
+  },
+  {
+   "id": "marketing-story@21:05",
+   "repo": "minetownmasa-dotcom/instagram-marketing",
+   "workflow": "ig-story.yml",
+   "jst_time": "21:05",
+   "window_min": 90,
+   "since": "slot",
+   "enabled": false,
+   "gate": "daily",
+   "note": "Scheduler moved to minetownmasa-dotcom/threads-marketing"
+  },
+  {
+   "id": "marketing-verify@09:21",
+   "repo": "minetownmasa-dotcom/instagram-marketing",
+   "workflow": "ig-verify.yml",
+   "jst_time": "09:21",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": false,
+   "note": "Scheduler moved to minetownmasa-dotcom/threads-marketing"
+  },
+  {
+   "id": "marketing-verify@13:21",
+   "repo": "minetownmasa-dotcom/instagram-marketing",
+   "workflow": "ig-verify.yml",
+   "jst_time": "13:21",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": false,
+   "note": "Scheduler moved to minetownmasa-dotcom/threads-marketing"
+  },
+  {
+   "id": "marketing-verify@18:55",
+   "repo": "minetownmasa-dotcom/instagram-marketing",
+   "workflow": "ig-verify.yml",
+   "jst_time": "18:55",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": false,
+   "note": "Scheduler moved to minetownmasa-dotcom/threads-marketing"
+  },
+  {
+   "id": "marketing-verify@22:21",
+   "repo": "minetownmasa-dotcom/instagram-marketing",
+   "workflow": "ig-verify.yml",
+   "jst_time": "22:21",
+   "window_min": 90,
+   "since": "slot",
+   "enabled": false,
+   "note": "Scheduler moved to minetownmasa-dotcom/threads-marketing"
+  },
+  {
+   "id": "marketing-analyze@05:13",
+   "repo": "minetownmasa-dotcom/instagram-marketing",
+   "workflow": "ig-analyze.yml",
+   "jst_time": "05:13",
+   "window_min": 90,
+   "since": "slot",
+   "enabled": false,
+   "note": "Scheduler moved to minetownmasa-dotcom/threads-marketing"
+  },
+  {
+   "id": "marketing-reels@08:05",
+   "repo": "minetownmasa-dotcom/instagram-marketing",
+   "workflow": "ig-reels.yml",
+   "jst_time": "08:05",
+   "window_min": 90,
+   "since": "slot",
+   "enabled": false,
+   "queue_file": "state/reels_queue.json",
+   "note": "Scheduler moved to minetownmasa-dotcom/threads-marketing"
+  },
+  {
+   "id": "marketing-feed@11:33",
+   "repo": "minetownmasa-dotcom/instagram-marketing",
+   "workflow": "ig-feed.yml",
+   "jst_time": "11:33",
+   "window_min": 90,
+   "since": "slot",
+   "enabled": false,
+   "pause_file": "state/feed_pause.json",
+   "note": "Scheduler moved to minetownmasa-dotcom/threads-marketing"
+  }
+ ]
 }

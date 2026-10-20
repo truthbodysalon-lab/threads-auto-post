@@ -880,10 +880,17 @@ def _hero_priority_order(acct: str, today: str, all_posts: list, posted_texts: s
                 idx_by_key[_hero_key(h)] = j
             if j not in hero_idx:
                 hero_idx.append(j)
-        natural = list(range(len(all_posts)))   # 未投稿ヒーローは(出番前でも)末尾までに必ず含める＝キュー枯渇時の取りこぼし防止
+        hs = set(hero_idx)
+        # 最初の段落がヒーローと同じ通常テンプレ(全文は別物)は、先に投稿されるとヒーローが全期間dedup/7日ガードで
+        # 永久に出なくなる（後から出た方が弾かれる）。ヒーローが未投稿の間は走査対象から外す（2026-10-20）。
+        # ヒーローが投稿された後は、どのみち同じ理由でテンプレ側が弾かれる。
+        hero_norms = {_normalize_post_key(all_posts[j])[:80] for j in hero_idx}
+        shadow = {i for i, t in enumerate(all_posts)
+                  if i not in hs and _normalize_post_key(t)[:80] in hero_norms and not _is_line_listin(t)
+                  and not (_is_store_access(t) or _is_shindan(t) or _is_hpb_cta(t) or _is_cta_profile(t) or _is_ai_content(t))}
+        natural = [i for i in range(len(all_posts)) if i not in shadow]   # 未投稿ヒーローは(出番前でも)末尾までに必ず含める＝キュー枯渇時の取りこぼし防止
         if since < gap:
             return natural
-        hs = set(hero_idx)
         rest = [i for i in natural if i not in hs]
         # 先頭の「アンカー系 or 投稿済み」を飛ばした最初の通常投稿の手前にヒーローを差し込む
         p_ins = 0

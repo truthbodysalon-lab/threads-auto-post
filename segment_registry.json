@@ -171,7 +171,7 @@
   "立ち仕事続きで腰が重い人へ。": {
     "segment": "T4",
     "hook": "high",
-    "created": "2026-10-18",
+    "created": "2026-10-22",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z15_truth"
@@ -186,7 +186,7 @@
   "他院で結果が出なかった人へ。": {
     "segment": "T6",
     "hook": "high",
-    "created": "2026-10-18",
+    "created": "2026-10-22",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z21_truth"
@@ -194,7 +194,7 @@
   "抱っこの負担で肩まで重いママへ。": {
     "segment": "T3",
     "hook": "high",
-    "created": "2026-10-18",
+    "created": "2026-10-22",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z12_nagaoka"
@@ -616,7 +616,7 @@
   "抱っこや授乳で腰が痛むママへ。": {
     "segment": "T3",
     "hook": "high",
-    "created": "2026-10-18",
+    "created": "2026-10-22",
     "acct": "truth",
     "variant": 1
   },
@@ -630,7 +630,7 @@
   "夜中に何度も目が覚める人へ。": {
     "segment": "T5",
     "hook": "high",
-    "created": "2026-10-18",
+    "created": "2026-10-22",
     "acct": "truth",
     "variant": 1
   },
@@ -665,7 +665,7 @@
   "揉んでもすぐ戻ると感じる人へ。": {
     "segment": "T6",
     "hook": "high",
-    "created": "2026-10-18",
+    "created": "2026-10-22",
     "acct": "nagaoka",
     "variant": 1
   },
@@ -745,7 +745,7 @@
   "やる気が出ない日が続く人へ。": {
     "segment": "T5",
     "hook": "high",
-    "created": "2026-10-16",
+    "created": "2026-10-22",
     "acct": "nagaoka",
     "variant": 1
   },
@@ -3216,7 +3216,7 @@
   "『仕事の後半になると、足腰がきつい』という声を、よく聞きます。": {
     "segment": "T4",
     "hook": "high",
-    "created": "2026-10-18",
+    "created": "2026-10-22",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "ZC04_nagaoka"
@@ -4511,7 +4511,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 13,
-    "created": "2026-10-10",
+    "created": "2026-10-22",
     "acct": "nagaoka"
   },
   "【運動が続かない人の5分習慣6選】": {
@@ -4585,7 +4585,7 @@
   "新規を増やすことに必死な院長へ。": {
     "segment": "R07",
     "hook": "high",
-    "created": "2026-10-10",
+    "created": "2026-10-22",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -4594,7 +4594,7 @@
   "売上がガタンと落ちる月がある院長へ。": {
     "segment": "R08",
     "hook": "high",
-    "created": "2026-10-10",
+    "created": "2026-10-22",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -4770,7 +4770,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 6,
-    "created": "2026-10-10",
+    "created": "2026-10-22",
     "acct": "nagaoka"
   },
   "『楽になるのに、1週間でまた戻る』という声を、よく聞きます。": {
@@ -4966,7 +4966,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 0,
-    "created": "2026-10-11",
+    "created": "2026-10-22",
     "acct": "truth"
   },
   "【夜まで肩がガチガチな人の習慣6選】": {
@@ -4987,7 +4987,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 6,
-    "created": "2026-10-11",
+    "created": "2026-10-22",
     "acct": "nagaoka"
   },
   "インスタで、プロフィールが合っているか不安な院長へ質問です。": {
@@ -5532,7 +5532,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 28,
-    "created": "2026-10-13",
+    "created": "2026-10-22",
     "acct": "truth"
   },
   "『目の奥がズーンと重い』という声を、よく聞きます。": {
@@ -5737,7 +5737,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 17,
-    "created": "2026-10-13",
+    "created": "2026-10-22",
     "acct": "truth"
   },
   "【冷たい飲み物ばかり選ぶ人が見直すこと5選】": {
@@ -6787,7 +6787,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 10,
-    "created": "2026-10-18"
+    "created": "2026-10-22"
   },
   "ハイライトを、後回しにしない。": {
     "segment": "PRESENT_CTA",
@@ -7272,7 +7272,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 12,
-    "created": "2026-10-20"
+    "created": "2026-10-22"
   },
   "ぶっちゃけ、プロフィールは自分で悩むほど遠回りです。": {
     "segment": "PRESENT_CTA",
@@ -7553,5 +7553,159 @@
     "present_key": "insta_kit",
     "variant": 16,
     "created": "2026-10-21"
+  },
+  "写真3枚を並べるだけで、リールになります。": {
+    "segment": "I05",
+    "hook": "high",
+    "created": "2026-10-22",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP13"
+  },
+  "一番保存された投稿は、インサイトで1分で見つかる。": {
+    "segment": "PRESENT_CTA",
+    "hook": "present",
+    "present_key": "insta_kit",
+    "variant": 12,
+    "created": "2026-10-22"
+  },
+  "写真が撮れない日も、投稿は休まない。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 9,
+    "created": "2026-10-22"
+  },
+  "プロフィール写真に、プロはいりません。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 2,
+    "created": "2026-10-22"
+  },
+  "忙しい日は、投稿しない日にする。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 35,
+    "created": "2026-10-22"
+  },
+  "プロフィールに30分かけるのは、やめる。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 4,
+    "created": "2026-10-22"
+  },
+  "顔を出さなくても、リールは出せる。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 13,
+    "created": "2026-10-22"
+  },
+  "自己紹介は、長いほど読まれない。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 3,
+    "created": "2026-10-22"
+  },
+  "反応が良かった投稿は、何度でも出す。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 40,
+    "created": "2026-10-22"
+  },
+  "AIへの頼み方は、話し言葉で通じます。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 55,
+    "created": "2026-10-22"
+  },
+  "インスタは、気分で出さない。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 70,
+    "created": "2026-10-22"
+  },
+  "ストーリーズで、売り込まなくていい。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 22,
+    "created": "2026-10-22"
+  },
+  "ぶっちゃけ、プロフィールで見られるのは3秒です。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 1,
+    "created": "2026-10-22"
+  },
+  "ハッシュタグは、AIに10秒で頼める。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 56,
+    "created": "2026-10-22"
+  },
+  "【ネタ探しを30分やめる3ステップ】": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 8,
+    "created": "2026-10-22"
+  },
+  "プロフィールは、完璧にしなくていい。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 0,
+    "created": "2026-10-22"
+  },
+  "分析ツールは、使いこなさなくていい。": {
+    "segment": "INSTA_EASY",
+    "hook": "fixed",
+    "variant": 37,
+    "created": "2026-10-22"
+  },
+  "【3つだけ】効果は、「何で知りましたか」で分かる。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-22"
+  },
+  "考える時間を、1分に。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-22"
+  },
+  "結論、キャプションは、20文字で足ります。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-22"
+  },
+  "結論、最初の1か月は、広告を使わなくていい。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-22"
+  },
+  "判断は、3日後。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-22"
+  },
+  "【3つだけ】一番明るい場所は、窓のそば。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-22"
+  },
+  "難しそうは、1行で終わる。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-22"
+  },
+  "迷ったら、消える方から始めればいい。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-22"
   }
 }

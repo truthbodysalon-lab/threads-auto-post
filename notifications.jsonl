@@ -45,3 +45,4 @@
 {"ts": "2026-10-18T08:19:26+09:00", "msg": "🚨Threads nagaoka: 最後の投稿から139分。原因候補: 選択ループ/例外（常駐は稼働中なのに投稿が出ていない）。直近run: https://github.com/truthbodysalon-lab/threads-auto-post/actions/runs/39078374890（CI watchdog）"}
 {"ts": "2026-10-19T07:31:54+09:00", "msg": "🚨Threads nagaoka: 最後の投稿から91分。原因候補: 選択ループ/例外（常駐は稼働中なのに投稿が出ていない）。直近run: https://github.com/truthbodysalon-lab/threads-auto-post/actions/runs/39171073966（CI watchdog）"}
 {"ts": "2026-10-21T07:59:44+09:00", "msg": "🚨Threads nagaoka: 最後の投稿から119分。原因候補: 選択ループ/例外（常駐は稼働中なのに投稿が出ていない）。直近run: https://github.com/truthbodysalon-lab/threads-auto-post/actions/runs/39511251493（CI watchdog）"}
+{"ts": "2026-10-21T14:07:59+09:00", "msg": "🚨Threads Daily Verify: FAIL 1件検出\n・[exec:daily50:truth] 昨日(2026-10-20)の投稿 40本 / 必須50本（外形API実測）\nhttps://github.com/truthbodysalon-lab/threads-auto-post/actions/runs/39547764931"}

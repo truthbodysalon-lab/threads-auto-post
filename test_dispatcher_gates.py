@@ -195,11 +195,21 @@ class ScheduleTableInvariants(unittest.TestCase):
                 self.assertTrue(e.get("window_min", 90) >= 30, e["id"])      # ディスパッチャは約10分周期
                 self.assertIn("skip_until", e, e["id"])                      # 無料枠が戻る前は起動しない
 
-    def test_masa_instagram_has_no_cloud_slots(self):
-        # 2026-10-21: @masahide_takahashi_ の story/reels/feed/verify/analyze は Mac 常設(local_actions の permanent)が担当。
-        # 移行先の別アカウント(minetownmasa-dotcom)は同日GitHubに停止され、枠は削除済み。クラウドの起動枠を戻すと Mac と二重投稿になる。
-        self.assertEqual([i for i in self.by if i.startswith("ig-verify@") or i.startswith("ig-verify-catchup@")], [])
-        self.assertEqual([i for i in self.by if i.startswith("ig-story@") or i.startswith("ig-reels") or i.startswith("ig-feed@")], [])
+    def test_masa_instagram_cloud_is_insurance_only(self):
+        # 2026-10-21: @masahide_takahashi_ の story/reels/feed/verify/analyze は Mac 常設(local_actions の permanent)が主。
+        # クラウドは「Macが当日成功していない時だけ」起動する保険枠のみ。定刻の主枠を戻すと Mac と二重に動く。
+        self.assertEqual([i for i in self.by if i.startswith(("ig-verify@", "ig-story@", "ig-feed@")) or i == "ig-reels"], [])
+        masa = {i: e for i, e in self.by.items() if e["repo"].endswith("/ig-autopost-cloud")
+                and e["workflow"] in ("ig-story.yml", "ig-feed.yml", "ig-reels.yml", "ig-verify.yml", "ig-analyze.yml")}
+        self.assertEqual(sorted(masa), ["ig-analyze-catchup", "ig-reels-catchup", "ig-verify-catchup@10:41",
+                                        "ig-verify-catchup@15:21", "ig-verify-catchup@20:21", "ig-verify-catchup@23:11"])
+        for i, e in masa.items():
+            self.assertTrue(e.get("catchup") and e.get("local_done"), i)
+        # 保険の照合は、その前の Mac の照合(9:21/13:21/18:55/22:21)が終わった後の成功だけを『済み』と数える
+        for i, since in (("ig-verify-catchup@10:41", "09:10"), ("ig-verify-catchup@15:21", "12:30"),
+                         ("ig-verify-catchup@20:21", "18:30"), ("ig-verify-catchup@23:11", "21:30")):
+            self.assertEqual(masa[i]["local_done_since"], since, i)
+        self.assertEqual(masa["ig-reels-catchup"].get("queue_file"), "state/reels_queue.json")
 
     def test_no_slots_for_suspended_account(self):
         # 停止されたアカウントの枠は起動できない。残すと「止まっているのに枠がある」状態になり、監視・監査を誤らせる

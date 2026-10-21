@@ -392,7 +392,7 @@
   "会議続きで首が痛い人へ。": {
     "segment": "T1",
     "hook": "low",
-    "created": "2026-10-17",
+    "created": "2026-10-21",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z03_truth"
@@ -415,7 +415,7 @@
   "介護や看護で腰と脚がつらい人へ。": {
     "segment": "T4",
     "hook": "low",
-    "created": "2026-10-17",
+    "created": "2026-10-21",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z15_truth"
@@ -423,7 +423,7 @@
   "1日中パソコンに向かう人へ。": {
     "segment": "T1",
     "hook": "low",
-    "created": "2026-10-17",
+    "created": "2026-10-21",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z22_nagaoka"
@@ -439,7 +439,7 @@
   "子育てで腰を痛めたママへ。": {
     "segment": "T3",
     "hook": "low",
-    "created": "2026-10-17",
+    "created": "2026-10-21",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z12_nagaoka"
@@ -521,7 +521,7 @@
   "抱っこ疲れで腰が痛いママへ。": {
     "segment": "T3",
     "hook": "low",
-    "created": "2026-10-17",
+    "created": "2026-10-21",
     "acct": "truth",
     "variant": 1
   },
@@ -557,7 +557,7 @@
   "介護をひとりで抱え込む人へ。": {
     "segment": "T4",
     "hook": "low",
-    "created": "2026-10-17",
+    "created": "2026-10-21",
     "acct": "nagaoka",
     "variant": 1
   },
@@ -2383,7 +2383,7 @@
   "頭が重い日が続く人へ。": {
     "segment": "T2",
     "hook": "low",
-    "created": "2026-10-15",
+    "created": "2026-10-21",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "ZC02_truth"
@@ -2436,7 +2436,7 @@
   "頭が重い日がときどきある人へ。": {
     "segment": "T2",
     "hook": "low",
-    "created": "2026-10-15",
+    "created": "2026-10-21",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "ZC02_nagaoka"
@@ -3483,7 +3483,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 31,
-    "created": "2026-10-08",
+    "created": "2026-10-21",
     "acct": "truth"
   },
   "『息が浅くて、深く吸えていない気がする』という声を、よく聞きます。": {
@@ -3735,7 +3735,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 41,
-    "created": "2026-10-09",
+    "created": "2026-10-21",
     "acct": "truth"
   },
   "『いつ頭が痛くなるのか、自分でもわからない』という声を、よく聞きます。": {
@@ -3823,7 +3823,7 @@
   "都度払いのお客様が、そのまま離れる院長へ。": {
     "segment": "R05",
     "hook": "low",
-    "created": "2026-10-09",
+    "created": "2026-10-21",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -4246,7 +4246,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 2,
-    "created": "2026-10-10",
+    "created": "2026-10-21",
     "acct": "truth"
   },
   "【立ち仕事の後半に腰が持たない人の習慣6選】": {
@@ -4267,7 +4267,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 0,
-    "created": "2026-10-10",
+    "created": "2026-10-21",
     "acct": "nagaoka"
   },
   "インスタで、外注を怖がっている院長へ。": {
@@ -5546,7 +5546,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 17,
-    "created": "2026-10-13",
+    "created": "2026-10-21",
     "acct": "nagaoka"
   },
   "『体を鍛えたあとに、コリが強くなる気がする』という声を、よく聞きます。": {
@@ -5870,7 +5870,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 37,
-    "created": "2026-10-13",
+    "created": "2026-10-21",
     "acct": "nagaoka"
   },
   "『足を組むとラクで、ついやってしまう』という声を、よく聞きます。": {
@@ -6158,7 +6158,7 @@
   "毎回の予約が面倒と言われる院長へ。": {
     "segment": "R06",
     "hook": "low",
-    "created": "2026-10-15",
+    "created": "2026-10-21",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -7533,6 +7533,25 @@
     "hook": "present",
     "present_key": "insta_kit",
     "variant": 3,
+    "created": "2026-10-21"
+  },
+  "新しいやり方は、1つだけ試す。": {
+    "segment": "HAKASE",
+    "hook": "principle",
+    "variant": 4,
+    "created": "2026-10-21"
+  },
+  "良い投稿の前に、プロフィールを直す。": {
+    "segment": "HAKASE",
+    "hook": "principle",
+    "variant": 7,
+    "created": "2026-10-21"
+  },
+  "ぶっちゃけ、続かない人は、次に何をやるかが決まっていません。": {
+    "segment": "PRESENT_CTA",
+    "hook": "present",
+    "present_key": "insta_kit",
+    "variant": 16,
     "created": "2026-10-21"
   }
 }

@@ -121,6 +121,51 @@
    "local_done_since": "10:13"
   },
   {
+   "id": "ig-feed-diet-thu",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-feed-diet-thursday.yml",
+   "jst_time": "12:17",
+   "window_min": 90,
+   "since": "day",
+   "enabled": true,
+   "weekdays": [
+    3
+   ],
+   "skip_until": "2026-11-01 09:30",
+   "retry_failed": {
+    "after_min": 40,
+    "until_min": 300
+   },
+   "pause_file": "state/diet/inactive.json",
+   "note": "2026-10-21: Mac主・クラウド保険。Macが今日10:17以降にig-feed-diet-thursdayを成功していなければ起動（元の時刻10:17）",
+   "catchup": true,
+   "local_done": "ig-feed-diet-thursday",
+   "local_done_since": "10:17"
+  },
+  {
+   "id": "ig-feed-diet-case",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-feed-diet-case.yml",
+   "jst_time": "21:17",
+   "window_min": 90,
+   "since": "day",
+   "enabled": true,
+   "weekdays": [
+    2,
+    5
+   ],
+   "skip_until": "2026-11-01 09:30",
+   "retry_failed": {
+    "after_min": 40,
+    "until_min": 300
+   },
+   "pause_file": "state/diet/inactive.json",
+   "note": "2026-10-21: Mac主・クラウド保険。Macが今日19:17以降にig-feed-diet-caseを成功していなければ起動（元の時刻19:17）",
+   "catchup": true,
+   "local_done": "ig-feed-diet-case",
+   "local_done_since": "19:17"
+  },
+  {
    "id": "ig-feed-nagaoka-thu",
    "repo": "truthbodysalon-lab/ig-autopost-cloud",
    "workflow": "ig-feed-nagaoka-thursday.yml",

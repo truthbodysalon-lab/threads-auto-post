@@ -34,22 +34,30 @@ JST = timezone(timedelta(hours=9))
 
 # --- ig_story_pool.py / story_offer.py の定数の写し（tests/test_story_gate.py が一致を検査） ---
 STORY_GATE_DAYS = 2
-FRIDAY_WEEKDAY = 4
+FRIDAY_WEEKDAY = 4                      # nagaoka の特徴シリーズ曜日（後方互換。正は FEATURES_WEEKDAY）
+FEATURES_WEEKDAY = {"nagaoka": 4, "headache": 2, "diet": 5}   # 2026-10-21: アカウント別（nagaoka=金 / headache=水 / diet=土）
 STORY_PLAN_MAX_AGE_HOURS = 36
-QA_WEEKDAY = {"nagaoka": 5, "truth": 6}
-OFFER_WEEKDAY = {"nagaoka": 2, "truth": 1}
+# 2026-10-21: diet（ダイエット特化）・headache（頭痛特化）を追加。曜日は既存と同じ種類が重ならないようにずらした
+QA_WEEKDAY = {"nagaoka": 5, "truth": 6, "headache": 4, "diet": 1}
+OFFER_WEEKDAY = {"nagaoka": 2, "truth": 1, "headache": 0, "diet": 3}
 
 # モードごとの対象アカウントと plan.kind（ig-story-*.yml のステップ構成と同じ）
 MODES = {
-    "pool": {"accounts": ["nagaoka", "truth"], "kind": None},
-    "qa": {"accounts": ["nagaoka", "truth"], "kind": "qa_video"},
-    "offer": {"accounts": ["nagaoka", "truth"], "kind": "offer"},
-    "features": {"accounts": ["nagaoka"], "kind": "friday_features"},   # ig-story-friday.yml
+    "pool": {"accounts": ["nagaoka", "truth", "headache", "diet"], "kind": None},
+    "qa": {"accounts": ["nagaoka", "truth", "headache", "diet"], "kind": "qa_video"},
+    "offer": {"accounts": ["nagaoka", "truth", "headache", "diet"], "kind": "offer"},
+    "features": {"accounts": ["nagaoka", "headache", "diet"], "kind": "friday_features"},   # ig-story-friday.yml
     # 2026-10-21: @masahide_takahashi_ の日次ストーリー（ig-story.yml → ig_daily.py --slot story）。plan は state/story_plan.json
     #   （アカウント別ディレクトリではない）。"masa" は plan_path() で解決する擬似アカウント名。
     "daily": {"accounts": ["masa"], "kind": None},
 }
 KNOWN_KINDS = ("friday_features", "offer", "qa_video")
+
+# 2026-10-21 追加アカウント（頭痛特化=headache / ダイエット特化=diet）。トークン登録前（＝一度も動いていない）は story_plan.json が
+# リポジトリに無い（取得は None）。その状態で毎回「plan不明→起動」と判定すると、起動前ゲートが効かなくなり無料枠を無駄にするため、
+# planが無い間は判定に含めない（専用日でも起動しない）。初回は nagaoka/truth の通常ストーリーのrun（同じworkflow内に新アカウントの
+# ステップがある）で plan ができ、一度でもplanができれば、以後は nagaoka / truth と同じ扱い（専用日の起動もここから）。
+NEW_ACCOUNTS = ("headache", "diet")
 
 PLAN_PATH = "state/{acct}/story_plan.json"
 PLAN_PATH_OVERRIDE = {"masa": "state/story_plan.json"}
@@ -117,7 +125,7 @@ def _acct_weekday_flags(acct, wd):
     return {
         "qa_day": wd == QA_WEEKDAY.get(acct),
         "offer_day": wd == OFFER_WEEKDAY.get(acct),
-        "friday": wd == FRIDAY_WEEKDAY,
+        "friday": wd == FEATURES_WEEKDAY.get(acct),
     }
 
 
@@ -136,8 +144,8 @@ def nothing_happens(mode, acct, plan, now):
             return True, f"{acct}: オファー専用日(通常ストーリー休止)"
         if fl["qa_day"]:
             return True, f"{acct}: Q&A専用日(通常ストーリー休止)"
-        if acct == "nagaoka" and fl["friday"]:
-            return True, f"{acct}: 金曜は特徴シリーズ専用(通常ストーリー休止)"
+        if acct in FEATURES_WEEKDAY and fl["friday"]:
+            return True, f"{acct}: 特徴シリーズ専用日(通常ストーリー休止)"
 
     if not isinstance(plan, dict):
         return False, f"{acct}: plan不明"
@@ -202,6 +210,11 @@ def decide(mode, plans, now=None):
         return False, "STORY_GATE=off"
     reasons = []
     for acct in MODES[mode]["accounts"]:
+        if acct in NEW_ACCOUNTS and plans.get(acct) is None:
+            # 専用日でも起動しない（トークン登録前に専用日ごとに空振りrunが出て無料枠を食うため）。トークン登録後は、
+            # nagaoka/truth の通常ストーリーのrunで同じworkflow内の新アカウントのステップが動いて story_plan.json ができ、以後は通常判定になる
+            reasons.append(f"{acct}: 未稼働(planなし)=判定に含めない")
+            continue
         ok, why = nothing_happens(mode, acct, plans.get(acct), now)
         reasons.append(why)
         if not ok:

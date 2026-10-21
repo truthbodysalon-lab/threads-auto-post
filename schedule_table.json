@@ -26,7 +26,9 @@
    "since": "day",
    "enabled": true,
    "weekdays": [
-    6
+    5,
+    6,
+    0
    ],
    "local_done": "ig-verify-pool",
    "catchup": true,
@@ -65,6 +67,44 @@
     "after_min": 40,
     "until_min": 300
    }
+  },
+  {
+   "id": "ig-feed-headache-sat",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-feed-headache.yml",
+   "jst_time": "10:13",
+   "window_min": 90,
+   "since": "day",
+   "enabled": true,
+   "weekdays": [
+    5
+   ],
+   "skip_until": "2026-11-01 09:30",
+   "retry_failed": {
+    "after_min": 40,
+    "until_min": 300
+   },
+   "pause_file": "state/headache/inactive.json",
+   "note": "トークン登録まで state/<acct>/inactive.json（until=2099-12-31）で止めておく。登録したらこのファイルを消す（2026-10-21）"
+  },
+  {
+   "id": "ig-feed-diet-mon",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-feed-diet.yml",
+   "jst_time": "10:13",
+   "window_min": 90,
+   "since": "day",
+   "enabled": true,
+   "weekdays": [
+    0
+   ],
+   "skip_until": "2026-11-01 09:30",
+   "retry_failed": {
+    "after_min": 40,
+    "until_min": 300
+   },
+   "pause_file": "state/diet/inactive.json",
+   "note": "トークン登録まで state/<acct>/inactive.json（until=2099-12-31）で止めておく。登録したらこのファイルを消す（2026-10-21）"
   },
   {
    "id": "ig-feed-nagaoka-thu",
@@ -111,7 +151,9 @@
    "since": "slot",
    "enabled": true,
    "weekdays": [
-    4
+    2,
+    4,
+    5
    ],
    "gate": "features",
    "skip_until": "2026-11-01 09:30"
@@ -125,7 +167,9 @@
    "since": "slot",
    "enabled": true,
    "weekdays": [
-    4
+    2,
+    4,
+    5
    ],
    "gate": "features",
    "skip_until": "2026-11-01 09:30"
@@ -139,7 +183,9 @@
    "since": "slot",
    "enabled": true,
    "weekdays": [
-    4
+    2,
+    4,
+    5
    ],
    "gate": "features",
    "skip_until": "2026-11-01 09:30"
@@ -153,7 +199,9 @@
    "since": "slot",
    "enabled": true,
    "weekdays": [
-    4
+    2,
+    4,
+    5
    ],
    "gate": "features",
    "skip_until": "2026-11-01 09:30"
@@ -222,6 +270,8 @@
    "since": "slot",
    "enabled": true,
    "weekdays": [
+    1,
+    4,
     5,
     6
    ],
@@ -237,6 +287,8 @@
    "since": "slot",
    "enabled": true,
    "weekdays": [
+    1,
+    4,
     5,
     6
    ],
@@ -252,6 +304,8 @@
    "since": "slot",
    "enabled": true,
    "weekdays": [
+    1,
+    4,
     5,
     6
    ],
@@ -267,6 +321,8 @@
    "since": "slot",
    "enabled": true,
    "weekdays": [
+    1,
+    4,
     5,
     6
    ],
@@ -282,6 +338,8 @@
    "since": "slot",
    "enabled": true,
    "weekdays": [
+    1,
+    4,
     5,
     6
    ],
@@ -297,8 +355,10 @@
    "since": "slot",
    "enabled": true,
    "weekdays": [
+    0,
     1,
-    2
+    2,
+    3
    ],
    "gate": "offer",
    "skip_until": "2026-11-01 09:30"
@@ -312,8 +372,10 @@
    "since": "slot",
    "enabled": true,
    "weekdays": [
+    0,
     1,
-    2
+    2,
+    3
    ],
    "gate": "offer",
    "skip_until": "2026-11-01 09:30"
@@ -327,8 +389,10 @@
    "since": "slot",
    "enabled": true,
    "weekdays": [
+    0,
     1,
-    2
+    2,
+    3
    ],
    "gate": "offer",
    "skip_until": "2026-11-01 09:30"
@@ -342,8 +406,10 @@
    "since": "slot",
    "enabled": true,
    "weekdays": [
+    0,
     1,
-    2
+    2,
+    3
    ],
    "gate": "offer",
    "skip_until": "2026-11-01 09:30"
@@ -357,8 +423,10 @@
    "since": "slot",
    "enabled": true,
    "weekdays": [
+    0,
     1,
-    2
+    2,
+    3
    ],
    "gate": "offer",
    "skip_until": "2026-11-01 09:30"
@@ -372,7 +440,9 @@
    "since": "slot",
    "enabled": true,
    "weekdays": [
-    4
+    2,
+    4,
+    5
    ],
    "gate": "features",
    "skip_until": "2026-11-01 09:30"

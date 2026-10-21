@@ -195,25 +195,15 @@ class ScheduleTableInvariants(unittest.TestCase):
                 self.assertTrue(e.get("window_min", 90) >= 30, e["id"])      # ディスパッチャは約10分周期
                 self.assertIn("skip_until", e, e["id"])                      # 無料枠が戻る前は起動しない
 
-    def test_verify_has_no_cloud_slots_in_quota_account(self):
-        # 2026-10-21(577c9145): @masahide_takahashi_ の story/reels/feed/verify/analyze は別アカウント
-        # (minetownmasa-dotcom/instagram-marketing・独自の無料枠)へ移した。truthbodysalon-lab 側の ig-verify は
-        # Mac 単独(clinic-video-check@22:21・ig-verify.yml は disabled_manually)で、クラウドの保険枠(旧 ig-verify-catchup@*)は無い。
+    def test_masa_instagram_has_no_cloud_slots(self):
+        # 2026-10-21: @masahide_takahashi_ の story/reels/feed/verify/analyze は Mac 常設(local_actions の permanent)が担当。
+        # 移行先の別アカウント(minetownmasa-dotcom)は同日GitHubに停止され、枠は削除済み。クラウドの起動枠を戻すと Mac と二重投稿になる。
         self.assertEqual([i for i in self.by if i.startswith("ig-verify@") or i.startswith("ig-verify-catchup@")], [])
         self.assertEqual([i for i in self.by if i.startswith("ig-story@") or i.startswith("ig-reels") or i.startswith("ig-feed@")], [])
-        ids = sorted(i for i, e in self.by.items() if e["repo"].endswith("/instagram-marketing") and e["workflow"] == "ig-verify.yml")
-        self.assertEqual(ids, ["marketing-verify@09:21", "marketing-verify@13:21", "marketing-verify@18:55", "marketing-verify@22:21"])
 
-    def test_story_daily_gate(self):
-        for i in ("marketing-story@07:31", "marketing-story@12:05", "marketing-story@17:31", "marketing-story@21:05"):
-            self.assertEqual(self.by[i].get("gate"), "daily", i)
-
-    def test_marketing_account_is_not_quota_stopped(self):
-        # 別アカウントは自アカウントの無料枠切れ(skip_until)で止めない。止めると Mac 代行の無い投稿が黙って止まる
-        for i, e in self.by.items():
-            if e["repo"].startswith("minetownmasa-dotcom/"):
-                self.assertNotIn("skip_until", e, i)
-                self.assertTrue(e.get("enabled", True), i)
+    def test_no_slots_for_suspended_account(self):
+        # 停止されたアカウントの枠は起動できない。残すと「止まっているのに枠がある」状態になり、監視・監査を誤らせる
+        self.assertEqual([i for i, e in self.by.items() if e["repo"].startswith("minetownmasa-dotcom/")], [])
 
     def test_catchup_window_does_not_cross_midnight(self):
         # local_done は『今日』の記録で判定する。日付をまたぐ窓だと翌日の判定になり二重起動しうる

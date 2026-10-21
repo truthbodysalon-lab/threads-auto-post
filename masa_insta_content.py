@@ -170,12 +170,16 @@ INSTA_HURDLES = [
 
 # 本文の型（{t}=対象 {hook}=1行目の断言 {items}=リスト {nitems}=①②③ {why}=理由1行 {maxim}=締めの格言）。
 # 1行目は宛名だけにしない（uplink型）。対象は2行目に置く。
+# 型ごとに1行目を必ず変える。なぜ: 台帳(segment_registry)の重複キーは1行目なので、1行目が同じ型は
+# 7日再投入禁止で1本分にしか数えられず、前半50本のInstagram枠(32本)の補充候補が枯渇した（2026-10-21）。
 INSTA_GEN_STRUCTURES = [
-    "{hook}\n{t}へ。\n\n{items}\n\n{why}\n{maxim}",
-    "ぶっちゃけ、{hook}\n{t}は、まずこれだけ。\n\n{items}\n\n{why}\n{maxim}",
-    "{hook}\n{t}は、この3つだけ。\n\n{nitems}\n\n{why}\n{maxim}",
-    "{t}へ。\n{hook}\n\n{items}\n\n{why}\n{maxim}",
-    "{hook}\n{t}なら、今日できる。\n\n{items}\n\n{why}\n{maxim}",
+    "{hook}\n{t}へ。\n\n{items}\n\n{why}\n{maxim}",                       # 断言
+    "ぶっちゃけ、{hook}\n{t}は、まずこれだけ。\n\n{items}\n\n{why}\n{maxim}",  # ぶっちゃけ断言
+    "【3つだけ】{hook}\n{t}へ。\n\n{nitems}\n\n{why}\n{maxim}",  # 数字見出し
+    "{maxim}\n{t}へ。\n\n{items}\n\n{why}\n{hook}",                       # 対比の格言で始め、断言で締める
+    "{why}\n{t}なら、今日できる。\n\n{items}\n\n{hook}\n{maxim}",           # 理由の断言で始める
+    "結論、{hook}\n{t}へ。\n\n{nitems}\n\n{why}\n{maxim}",                  # 結論の断言
+    "【3ステップ】{maxim}\n{t}は、この順で。\n\n{nitems}\n\n{why}\n{hook}",   # 数字見出し＋格言
 ]
 
 

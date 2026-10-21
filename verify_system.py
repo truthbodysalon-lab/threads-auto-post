@@ -253,7 +253,8 @@ def check_list_habit_in_first50():
 
 
 def check_masa_insta_theme():
-    """masaの当日生成キュー前半50本のInstagramテーマ比率が50%未満ならWARN（2026-10-04 主テーマ変更の実行ギャップ検知）。"""
+    """masaの当日生成キュー前半50本のInstagramテーマがINSTA_THEME_TARGET(32本)未満ならWARN（2026-10-04 主テーマ変更の実行ギャップ検知）。
+    2026-10-21: 閾値を50%→生成側の保証値(32本)に揃えた。補充候補の枯渇で9〜12本まで落ちても25本を割るまで気づけなかったため。"""
     if not is_local("masa"):
         return
     try:
@@ -261,9 +262,9 @@ def check_masa_insta_theme():
         posts = g.generate_30_masa_posts()[:50]
         n = sum(1 for p in posts if g._is_insta_theme(p))
         ratio = n / max(1, len(posts))
-        if ratio < 0.5:
+        if n < g.INSTA_THEME_TARGET:
             add("masa_insta_theme", "B.ルール反映", "WARN",
-                f"masa前半{len(posts)}本中Instagramテーマ{n}本({ratio:.0%})。目標は過半数(32本)")
+                f"masa前半{len(posts)}本中Instagramテーマ{n}本({ratio:.0%})。目標は{g.INSTA_THEME_TARGET}本以上（補充候補の枯渇を疑う）")
         else:
             add("masa_insta_theme", "B.ルール反映", "PASS", f"masa前半{len(posts)}本中Instagramテーマ{n}本({ratio:.0%})")
     except Exception as e:
@@ -1023,6 +1024,7 @@ CHECK_REGISTRY = {
     "C13": "exec:hpb_only", "C14": "exec:imagepost", "C15": "exec:segment_test:",
     "C16": "next_post:", "C17": "dup_reselect:", "C23": "same_day_anchor:", "C24": "dup_sameday:",
     "C21": "exec:log_sync", "C26": "hero_posted:", "C25": "ledger_gap:", "C18": "exec:chain_gap", "C19": "exec:post_interval:", "C20": "ledger:",
+    "C27": "masa_insta_theme",
 }
 
 

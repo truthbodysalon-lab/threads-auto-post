@@ -111,13 +111,18 @@ class TestFixedContent(unittest.TestCase):
             self.assertNotRegex(t, r"円|申し?込|決済|割引|面談")
 
     def test_hypotheses_ip(self):
+        # IP01-70は10/07の書き直し原稿(IP_REWRITES)と一致すること。IP71以降は日曜の仮説生成
+        # (daily-marketing-automation 手順7)が連番で追記する仕様なので、本数は増えてよい（品質検査は同じ）。
         hyp = g._load_segment_hypotheses()["hypotheses"]
         ips = [h for h in hyp if h["id"].startswith("IP") and h.get("status") != "archived"]
-        self.assertEqual(len(ips), 70)
+        self.assertGreaterEqual(len(ips), len(m.IP_REWRITES))
+        self.assertTrue(set(m.IP_REWRITES) <= {h["id"] for h in ips})
+        self.assertEqual(len(ips), len({h["id"] for h in ips}), "IP仮説のID重複")
         for h in ips:
             for p in h["posts"]:
                 self._all_ok(p["text"])
-                self.assertEqual(p["text"], m.IP_REWRITES[h["id"]][p["hook"]])
+                if h["id"] in m.IP_REWRITES:
+                    self.assertEqual(p["text"], m.IP_REWRITES[h["id"]][p["hook"]])
 
     def test_bridge_fallbacks(self):
         for _rx, t in m.MASA_BRIDGE_FALLBACKS:

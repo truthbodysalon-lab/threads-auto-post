@@ -3177,7 +3177,7 @@ def _insta_combo_ok(text: str) -> bool:
 
 
 def generate_insta_easy_gen_post() -> str:
-    """悩み(対象)×問い×答え×手順3つの組合せ（4構造×32悩み）から1本作る。"""
+    """悩み(対象)×1行目の断言×リスト×手順3つの組合せ（7構造×32悩み・構造ごとに1行目が別）から1本作る。"""
     for _ in range(60):
         h = random.choice(INSTA_HURDLES)
         text = build_gen_post(random.randrange(len(INSTA_GEN_STRUCTURES)), h)
@@ -3555,7 +3555,7 @@ def _insert_hakase_posts(posts: list[str], acct: str, today: str) -> list[str]:
 
 def _fill_insta_theme_posts(posts: list[str], acct: str, today: str, base_normal: set) -> list[str]:
     """masa専用: 前半50本のInstagramテーマ本数がINSTA_THEME_TARGET未満なら、通常枠(base_normal)の
-    非Instagram投稿をINSTA_EASY(固定60本・7日以内の再投入なし)＋組合せ生成の投稿へ置換する。
+    非Instagram投稿をINSTA_EASY(固定80本・7日以内の再投入なし)＋組合せ生成の投稿へ置換する。
     導線・AI・セグメント・ハカセ・ヒーローなど挿入済みアンカーは位置・本数とも触らない。
     segment_registry.jsonへsegment="INSTA_EASY"で登録（SEGMENT_REGISTRY_DRY=1では保存しない既存ガード）。"""
     if acct != "masa":
@@ -3576,7 +3576,10 @@ def _fill_insta_theme_posts(posts: list[str], acct: str, today: str, base_normal
         if not isinstance(entry, dict) or entry.get("segment") != "INSTA_EASY":
             continue
         try:
-            if (today_date - date.fromisoformat(entry.get("created", ""))).days < 7:
+            # 当日分は除外: 生成は1日2回以上(CI 6:47＋朝の改善工程)あり、後の生成がキューを作り直すため、
+            # 先の生成の登録を7日ロックすると未投稿のまま候補だけ枯れる（2026-10-21）。
+            # 当日すでに投稿した1行目は recent_first（投稿ログ4日）で弾かれる。
+            if 0 < (today_date - date.fromisoformat(entry.get("created", ""))).days < 7:
                 recent_keys.add(key)
         except Exception:
             continue
@@ -3592,24 +3595,26 @@ def _fill_insta_theme_posts(posts: list[str], acct: str, today: str, base_normal
                 and _inspect_ok(t, "masa", pattern_name="insta_easy", log=False))
 
     slots = [i for i in range(front) if posts[i] in base_normal and not _is_insta_theme(posts[i])]
-    fixed = list(range(len(INSTA_EASY_TEMPLATES)))
+    # 候補順: 当日すでに登録した分 → 未使用分（それぞれ固定80本 → 組合せ全件）。
+    # なぜ: 同日の再生成が別の候補を選ぶと1日の消費が2〜3倍になり、ランダム試行では残り少ない未使用候補を取りこぼす（2026-10-21）。
+    today_keys = {k for k, e in registry.items()
+                  if isinstance(e, dict) and e.get("segment") == "INSTA_EASY" and e.get("created") == today}
+    fixed = [(t, idx, "fixed") for idx, t in enumerate(INSTA_EASY_TEMPLATES)]
+    gen = [(t, None, "gen") for t in (build_gen_post(si, h) for h in INSTA_HURDLES
+                                     for si in range(len(INSTA_GEN_STRUCTURES))) if _insta_combo_ok(t)]
     random.shuffle(fixed)
-    fixed_iter = iter(fixed)
+    random.shuffle(gen)
+    _today = lambda c: _segment_registry_key(c[0]) in today_keys  # noqa: E731
+    cand_iter = iter([c for c in fixed if _today(c)] + [c for c in gen if _today(c)]
+                     + [c for c in fixed if not _today(c)] + [c for c in gen if not _today(c)])
     for i in slots[:need]:
         chosen, variant, hook = None, None, "gen"
-        for idx in fixed_iter:   # まず固定60本（7日以内未使用）から
-            t = INSTA_EASY_TEMPLATES[idx]
+        for t, idx, kind in cand_iter:
             if _valid(t):
-                chosen, variant, hook = t, idx, "fixed"
+                chosen, variant, hook = t, idx, kind
                 break
         if chosen is None:
-            for _ in range(60):
-                t = generate_insta_easy_gen_post()
-                if _valid(t):
-                    chosen = t
-                    break
-        if chosen is None:
-            continue
+            break
         posts[i] = chosen
         k = _segment_registry_key(chosen)
         used_keys.add(k)

@@ -1,0 +1,13 @@
+{
+  "_comment": "masa(@masahide_takahashi_)専用。Buffer(別アシスタント)の投稿枠。枠±window_minutes内だけ、Buffer直近テーマ・型と重なる候補を後回しにする（本数は減らさない）。enabled=falseで完全停止。2026-10-23 masa承認。",
+  "enabled": true,
+  "account": "masa",
+  "slots": ["07:10", "08:10", "10:10", "12:10", "14:10", "16:10", "17:10", "19:10", "21:10", "22:10"],
+  "window_minutes": 30,
+  "lookback_hours": 4,
+  "max_recent": 3,
+  "similarity_threshold": 0.3,
+  "max_scan": 60,
+  "use_api": true,
+  "log_paths": ["buffer_threads2_post_log.md"]
+}

@@ -45,6 +45,13 @@ try:
 except Exception:
     _inspector = None
 
+# 2026-10-23 masa承認: Buffer（別系統・@masahide_takahashi_ に1日10枠）の枠±30分は、
+# Buffer直近のテーマ・型と重なる候補を後回しにする（masaのみ・本数は減らさない・失敗時は従来挙動）
+try:
+    import buffer_overlap as _buffer_overlap
+except Exception:
+    _buffer_overlap = None
+
 
 def inspect_before_post(text: str, acct: str):
     """投稿直前の検品ゲート（2026-07-21）。inspector未読込・例外時はフェイルオープン
@@ -910,6 +917,34 @@ def _hero_priority_order(acct: str, today: str, all_posts: list, posted_texts: s
         return list(range(len(all_posts)))
 
 
+def _buffer_ctx(acct: str):
+    """masa専用（2026-10-23）: Buffer枠±window内なら {"cfg","items","slot"} を返す。
+    枠外・他アカウント・設定なし・Buffer直近テーマ取得ゼロ・例外は None（＝従来どおりの選択）。"""
+    if acct != "masa" or _buffer_overlap is None:
+        return None
+    try:
+        cfg = _buffer_overlap.load_config()
+        if not cfg.get("enabled") or cfg.get("account", "masa") != acct:
+            return None
+        now = datetime.now(_buffer_overlap.JST)
+        slot = _buffer_overlap.active_slot(now, cfg)
+        if slot is None:
+            return None
+        items = _buffer_overlap.buffer_items(
+            acct, now, cfg,
+            token=os.environ.get(ACCOUNTS[acct]["token_key"], ""),
+            uid=os.environ.get(ACCOUNTS[acct]["uid_key"], ""),
+            posted_file=ACCOUNTS[acct]["posted"],
+            guard_file=BASE / "shared_posted_guard.jsonl",
+            keyfn=_firstline_key, log=log_error)
+        if not items:
+            return None
+        return {"cfg": cfg, "items": items, "slot": slot}
+    except Exception as e:
+        log_error(f"[{acct}] Buffer回避の判定失敗（従来どおり選択）: {type(e).__name__}: {e}")
+        return None
+
+
 def get_next_post(acct: str, today: str, avoid_url: bool = False):
     log_file = ACCOUNTS[acct]["log"]
     if not log_file.exists():
@@ -977,6 +1012,8 @@ def get_next_post(acct: str, today: str, avoid_url: bool = False):
     # avoid_url=True の場合、直前投稿URL連発回避のため候補を集めてから選ぶ
     # （既定のavoid_url=Falseでは従来どおり最初の適格候補を即返す＝挙動を変えない）
     eligible: list[tuple[str, int]] = []
+    # Buffer枠±30分（masaのみ）は候補を集めてから重なりの少ないものを選ぶ。枠外は None＝従来どおり即返す
+    _bw = _buffer_ctx(acct)
     _scan_order = _hero_priority_order(acct, today, all_posts, posted_texts)   # ヒーロー優先(2026-10-20)
     for i in _scan_order:
         text = all_posts[i]
@@ -1022,11 +1059,29 @@ def get_next_post(acct: str, today: str, avoid_url: bool = False):
         # API実投稿の直近に同じ1文目があれば飛ばす（系統間ラグ対策）
         if dg_normalize(_fix_question_endings(text)).split("\n")[0].strip()[:40] in api_recent:
             continue
-        if not avoid_url:
+        if not avoid_url and _bw is None:
             return text, i  # 従来どおり即返す（挙動不変）
         eligible.append((text, i))
-        if len(eligible) >= 20:
+        if len(eligible) >= (int(_bw["cfg"].get("max_scan", 60)) if _bw is not None else 20):
             break  # 取りすぎない（性能・挙動は従来と同等の範囲で十分）
+
+    if _bw is not None and eligible:
+        # 重なり点数: 2=テーマ重複 / 1=型一致 / 0=なし。最小点の候補群から（URL連続回避も保って）選ぶ。
+        # 全候補が重なる時も先頭を出す（本数を削らない）。後回しにした候補は消費済みにしない＝枠外で出る
+        _thr = float(_bw["cfg"].get("similarity_threshold", 0.3))
+        _best = _buffer_overlap.best_group(eligible, _bw["items"], _thr)
+        _pick = pick_avoiding_consecutive_url(_best, last_had_url=avoid_url) or eligible[0]
+        _sc0, _why0 = _buffer_overlap.overlap_score(eligible[0][0], _bw["items"], _thr)
+        _scp, _whyp = _buffer_overlap.overlap_score(_pick[0], _bw["items"], _thr)
+        if _pick != eligible[0] or _scp > 0:
+            try:
+                log_info(acct, f"{ACCOUNTS[acct]['name']} [Buffer回避 {_bw['slot']}枠] "
+                               f"先頭候補={_why0 or '重なりなし'} → 採用={_whyp or '重なりなし'}"
+                               f"{'（全候補が重なるため従来どおり）' if _scp >= 2 else ''} / "
+                               f"Buffer直近: {_buffer_overlap.describe(_bw['items'])[:160]}")
+            except Exception:
+                pass
+        return _pick
 
     if avoid_url:
         picked = pick_avoiding_consecutive_url(eligible, last_had_url=True)
@@ -1665,6 +1720,13 @@ def _run_uplink_repost():
         ur.save_pool(pool)
         log_info(acct, f"[uplink追加] 検品NGでskip: {item['id']} {why}")
         return
+    # 2026-10-23: Buffer枠±30分にBuffer直近のテーマ・型と重なるなら、今回は見送る（状態は変えない＝次サイクル以降に出る）
+    _bw = _buffer_ctx(acct)
+    if _bw is not None:
+        _sc, _why = _buffer_overlap.overlap_score(text, _bw["items"], float(_bw["cfg"].get("similarity_threshold", 0.3)))
+        if _sc > 0:
+            log_info(acct, f"[uplink追加][Buffer回避 {_bw['slot']}枠] {_why} → 今回は見送り（次サイクル以降）: {item['id']}")
+            return
     try:
         post_id = post_to_threads(acct, text)   # 重複ガード＋API直近重複チェックを通る。本文は無加工
     except _DuplicatePost as e:

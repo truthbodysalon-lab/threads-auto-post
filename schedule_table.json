@@ -210,6 +210,22 @@
    "note": "2026-10-21: Mac主・クラウド保険。Macが今日19:02以降にig-feed-nagaoka-caseを成功していなければ起動（元の時刻19:02）"
   },
   {
+   "id": "ig-feed-truth-wed",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-feed-truth-wed.yml",
+   "jst_time": "08:02",
+   "window_min": 90,
+   "since": "day",
+   "enabled": true,
+   "weekdays": [2],
+   "skip_until": "2026-11-01 09:30",
+   "retry_failed": {
+    "after_min": 40,
+    "until_min": 300
+   },
+   "note": "2026-10-23: @truth_body_salon 水曜8:00フィード（肩こり頭痛・お悩み起点・イラストか写真）。主=Mac(ig-story-dispatch.sh 水曜0800)、保険=この枠(since=dayで当日runがあれば起動しない)。11/1 09:30までは非公開repoの無料枠切れでskip_until停止・Mac代行(local_actions)が実行"
+  },
+  {
    "id": "ig-story-friday@15:05",
    "repo": "truthbodysalon-lab/ig-autopost-cloud",
    "workflow": "ig-story-friday.yml",

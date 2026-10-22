@@ -284,7 +284,7 @@
   "月に何度も頭痛薬を飲む人へ。": {
     "segment": "T2",
     "hook": "low",
-    "created": "2026-10-17",
+    "created": "2026-10-23",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z05_truth"
@@ -292,7 +292,7 @@
   "産後、体の痛みを我慢するママへ。": {
     "segment": "T3",
     "hook": "low",
-    "created": "2026-10-19",
+    "created": "2026-10-23",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z11_truth"
@@ -316,7 +316,7 @@
   "光や音がつらい頭痛がある人へ。": {
     "segment": "T2",
     "hook": "low",
-    "created": "2026-10-17",
+    "created": "2026-10-23",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z04_nagaoka"
@@ -332,7 +332,7 @@
   "重い荷物運びで腰を痛めた人へ。": {
     "segment": "T4",
     "hook": "low",
-    "created": "2026-10-19",
+    "created": "2026-10-23",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z14_nagaoka"
@@ -506,7 +506,7 @@
   "デスクワークで肩や首が重い人へ。": {
     "segment": "T1",
     "hook": "low",
-    "created": "2026-10-17",
+    "created": "2026-10-23",
     "acct": "truth",
     "variant": 0
   },
@@ -528,14 +528,14 @@
   "立ち仕事や介護で腰と脚がつらい人へ。": {
     "segment": "T4",
     "hook": "low",
-    "created": "2026-10-17",
+    "created": "2026-10-23",
     "acct": "truth",
     "variant": 0
   },
   "スマホ首で悩む人へ。": {
     "segment": "T1",
     "hook": "low",
-    "created": "2026-10-17",
+    "created": "2026-10-23",
     "acct": "nagaoka",
     "variant": 0
   },
@@ -550,7 +550,7 @@
   "抱っこ・授乳で背中が丸くなるママへ。": {
     "segment": "T3",
     "hook": "low",
-    "created": "2026-10-17",
+    "created": "2026-10-23",
     "acct": "nagaoka",
     "variant": 0
   },
@@ -1583,7 +1583,7 @@
   "3か月来ていない人に、連絡できない院長へ。": {
     "segment": "R09",
     "hook": "low",
-    "created": "2026-10-17",
+    "created": "2026-10-23",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -1592,7 +1592,7 @@
   "紹介が自然に生まれない院長へ。": {
     "segment": "R10",
     "hook": "low",
-    "created": "2026-10-17",
+    "created": "2026-10-23",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -2944,7 +2944,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 38,
-    "created": "2026-10-14",
+    "created": "2026-10-23",
     "acct": "truth"
   },
   "【季節の変わり目に頭痛を遠ざける習慣7選】": {
@@ -5223,7 +5223,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 9,
-    "created": "2026-10-12",
+    "created": "2026-10-23",
     "acct": "truth"
   },
   "『夕方になると頭がズキズキする』という声を、よく聞きます。": {
@@ -5251,7 +5251,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 1,
-    "created": "2026-10-12",
+    "created": "2026-10-23",
     "acct": "nagaoka"
   },
   "インスタ運用で、迷って出せない院長へ。": {
@@ -5380,7 +5380,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 12,
-    "created": "2026-10-12",
+    "created": "2026-10-23",
     "acct": "truth"
   },
   "【首が前に出る人が見直すこと6選】": {
@@ -5758,7 +5758,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 36,
-    "created": "2026-10-13",
+    "created": "2026-10-23",
     "acct": "nagaoka"
   },
   "【座った後に腰が伸びない人の習慣6選】": {
@@ -6189,7 +6189,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 7,
-    "created": "2026-10-15",
+    "created": "2026-10-23",
     "acct": "nagaoka"
   },
   "『毎週の通院は、時間が合わない』という声を、よく聞きます。": {
@@ -6950,7 +6950,7 @@
   "ストーリーズは、1枚で全部言わない。": {
     "segment": "I09",
     "hook": "high",
-    "created": "2026-10-19",
+    "created": "2026-10-23",
     "acct": "masa",
     "axis": "insta_pain",
     "variant": null,
@@ -7111,7 +7111,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 9,
-    "created": "2026-10-19"
+    "created": "2026-10-23"
   },
   "【今日のストーリーズ、4枚の空欄埋め】": {
     "segment": "PRESENT_CTA",
@@ -7539,7 +7539,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 4,
-    "created": "2026-10-21"
+    "created": "2026-10-23"
   },
   "良い投稿の前に、プロフィールを直す。": {
     "segment": "HAKASE",
@@ -7749,5 +7749,132 @@
     "hook": "gen",
     "variant": null,
     "created": "2026-10-22"
+  },
+  "ぶっちゃけ、ネタはもう手元にあります。": {
+    "segment": "PRESENT_CTA",
+    "hook": "present",
+    "present_key": "insta_kit",
+    "variant": 5,
+    "created": "2026-10-23"
+  },
+  "結論、加工しない写真の方が、お店は伝わる。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-23"
+  },
+  "年齢より、検索される言葉。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-23"
+  },
+  "【3ステップ】顔より、手元と道具。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-23"
+  },
+  "【3ステップ】難しそうは、押せば消える。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-23"
+  },
+  "【3ステップ】ネタは、お客様が持っている。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-23"
+  },
+  "結論、見る数字は、2つだけ。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-23"
+  },
+  "増やす前に、3つ。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-23"
+  },
+  "結論、ハッシュタグは、3個から始めて足ります。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-23"
+  },
+  "覚えるのは、これだけ。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-23"
+  },
+  "【3つだけ】キャプションは、20文字で足ります。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-23"
+  },
+  "結論、お店の入口の写真は、30秒で撮れる。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-23"
+  },
+  "結論、投稿に、年齢はいらない。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-23"
+  },
+  "盛るより、ありのまま。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-23"
+  },
+  "【3つだけ】最初の投稿は、ほとんど誰も見ていない。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-23"
+  },
+  "【3つだけ】投稿文は、AIに頼めば1分で下書きが出る。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-23"
+  },
+  "長く書くより、1行で出す。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-23"
+  },
+  "【3つだけ】加工しない写真の方が、お店は伝わる。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-23"
+  },
+  "【3ステップ】お金の前に、投稿。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-23"
+  },
+  "【3ステップ】動画より、写真から。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-23"
+  },
+  "放置するより、1枚出す。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-23"
   }
 }

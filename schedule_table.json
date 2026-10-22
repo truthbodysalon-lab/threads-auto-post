@@ -602,9 +602,7 @@
    "window_min": 90,
    "since": "day",
    "enabled": true,
-   "weekdays": [
-    1
-   ],
+   "weekdays": [0, 3],
    "inputs": {
     "account": "truth"
    },
@@ -616,7 +614,7 @@
    "catchup": true,
    "local_done": "ig-hpb-availability",
    "local_done_since": "12:00",
-   "note": "2026-10-21: Mac主・クラウド保険。Macが今日12:00以降にig-hpb-availabilityを成功していなければ起動（元の時刻17:57）"
+   "note": "【2026-10-23 Threadsと同じ曜日（truth=月・木）にストーリーも出す院長指示で曜日変更】2026-10-21: Mac主・クラウド保険。Macが今日12:00以降にig-hpb-availabilityを成功していなければ起動（元の時刻17:57）"
   },
   {
    "id": "ig-hpb-availability-fri",
@@ -626,9 +624,7 @@
    "window_min": 90,
    "since": "day",
    "enabled": true,
-   "weekdays": [
-    4
-   ],
+   "weekdays": [2, 5],
    "inputs": {
     "account": "nagaoka"
    },
@@ -640,7 +636,7 @@
    "catchup": true,
    "local_done": "ig-hpb-availability",
    "local_done_since": "12:00",
-   "note": "2026-10-21: Mac主・クラウド保険。Macが今日12:00以降にig-hpb-availabilityを成功していなければ起動（元の時刻17:57）"
+   "note": "【2026-10-23 Threadsと同じ曜日（nagaoka=水・土）にストーリーも出す院長指示で曜日変更】2026-10-21: Mac主・クラウド保険。Macが今日12:00以降にig-hpb-availabilityを成功していなければ起動（元の時刻17:57）"
   },
   {
    "id": "stepmail@01:25",

@@ -113,7 +113,7 @@ def exchange_code_for_token(code: str, app_id: str, app_secret: str, callback_ur
     ).encode()
 
     req = urllib.request.Request(TOKEN_URL, data=data, method="POST")
-    with urllib.request.urlopen(req) as resp:
+    with urllib.request.urlopen(req, timeout=30) as resp:
         return json.loads(resp.read())
 
 
@@ -126,13 +126,13 @@ def get_long_lived_token(short_token: str, app_secret: str) -> dict:
         }
     )
     url = f"{LONG_LIVED_TOKEN_URL}?{params}"
-    with urllib.request.urlopen(url) as resp:
+    with urllib.request.urlopen(url, timeout=30) as resp:
         return json.loads(resp.read())
 
 
 def get_user_id(access_token: str) -> str:
     url = f"https://graph.threads.net/v1.0/me?fields=id,username&access_token={access_token}"
-    with urllib.request.urlopen(url) as resp:
+    with urllib.request.urlopen(url, timeout=30) as resp:
         data = json.loads(resp.read())
         return data["id"], data.get("username", "")
 

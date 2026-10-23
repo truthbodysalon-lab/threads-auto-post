@@ -64,7 +64,7 @@ def fetch_followers_count(acct: str) -> int | None:
         f"?metric=followers_count&access_token={a['token']}"
     )
     try:
-        with urllib.request.urlopen(url) as r:
+        with urllib.request.urlopen(url, timeout=30) as r:
             data = json.loads(r.read())
     except urllib.error.HTTPError as e:
         print(f"  [{acct}] ERROR: {e.read().decode()[:200]}")

@@ -56,7 +56,7 @@ def fetch_posts_with_metrics(acct: str, limit: int = 100) -> list:
     )
     all_posts = []
     while url and len(all_posts) < limit:
-        with urllib.request.urlopen(url) as r:
+        with urllib.request.urlopen(url, timeout=30) as r:
             data = json.loads(r.read())
         all_posts.extend(data.get("data", []))
         url = data.get("paging", {}).get("next")

@@ -42,12 +42,12 @@ LOG_MASA = Path(__file__).parent / "log_masa.jsonl"
 def api_post(url: str, data: dict) -> dict:
     encoded = urllib.parse.urlencode(data).encode()
     req = urllib.request.Request(url, data=encoded, method="POST")
-    with urllib.request.urlopen(req) as resp:
+    with urllib.request.urlopen(req, timeout=30) as resp:
         return json.loads(resp.read())
 
 
 def api_get(url: str) -> dict:
-    with urllib.request.urlopen(url) as resp:
+    with urllib.request.urlopen(url, timeout=30) as resp:
         return json.loads(resp.read())
 
 

@@ -80,7 +80,7 @@ def _gh_api(path: str, method: str = "GET", body: dict = None) -> dict | None:
         }
     )
     try:
-        with urllib.request.urlopen(req) as r:
+        with urllib.request.urlopen(req, timeout=30) as r:
             return json.loads(r.read()) if r.status != 204 else {}
     except Exception as e:
         print(f"  GitHub API エラー ({path}): {e}")
@@ -125,7 +125,7 @@ def refresh_token(acct: str) -> str | None:
         return None
     url = f"{BASE_URL}/refresh_access_token?grant_type=th_refresh_token&access_token={token}"
     try:
-        with urllib.request.urlopen(url) as r:
+        with urllib.request.urlopen(url, timeout=30) as r:
             data = json.loads(r.read())
         new_token = data.get("access_token", "")
         if new_token:
@@ -144,7 +144,7 @@ def check_token(acct: str) -> dict:
         return {"valid": False, "days_left": 0}
     url = f"{BASE_URL}/{uid}?fields=id&access_token={token}"
     try:
-        with urllib.request.urlopen(url) as r:
+        with urllib.request.urlopen(url, timeout=30) as r:
             json.loads(r.read())
         return {"valid": True}
     except Exception:

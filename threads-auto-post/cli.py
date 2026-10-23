@@ -94,7 +94,7 @@ def post_to_threads(acct: str, text: str) -> str:
 
     data = urllib.parse.urlencode({"media_type": "TEXT", "text": text, "access_token": token}).encode()
     with urllib.request.urlopen(
-        urllib.request.Request(f"{BASE_URL}/{user_id}/threads", data=data, method="POST")
+        urllib.request.Request(f"{BASE_URL}/{user_id}/threads", data=data, method="POST"), timeout=30,
     ) as r:
         container_id = json.loads(r.read())["id"]
 
@@ -102,7 +102,7 @@ def post_to_threads(acct: str, text: str) -> str:
 
     data2 = urllib.parse.urlencode({"creation_id": container_id, "access_token": token}).encode()
     with urllib.request.urlopen(
-        urllib.request.Request(f"{BASE_URL}/{user_id}/threads_publish", data=data2, method="POST")
+        urllib.request.Request(f"{BASE_URL}/{user_id}/threads_publish", data=data2, method="POST"), timeout=30,
     ) as r:
         return json.loads(r.read())["id"]
 

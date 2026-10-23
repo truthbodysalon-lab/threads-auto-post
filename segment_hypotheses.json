@@ -3449,9 +3449,9 @@
         }
       ],
       "last_result": {
-        "n": 1,
-        "index": 7.795,
-        "updated": "2026-10-09"
+        "n": 2,
+        "index": 3.0,
+        "updated": "2026-10-23"
       },
       "evidence": "悩みマップ2026-10-04 I05『リールが怖い・難しい』の根拠『リール全然やってないんですよ』（マーケティング学習/インスタハカセ講義/01_プレセミナー_文字起こし.md）"
     },
@@ -4450,8 +4450,8 @@
       ],
       "last_result": {
         "n": 1,
-        "index": 3.143,
-        "updated": "2026-10-19"
+        "index": 1.286,
+        "updated": "2026-10-23"
       },
       "evidence": "masa講義 2026-07-03 リール切り抜き『作りたい動画は広告用と日々のリール』（出典: 講義ノート/自分の講義/00_masa講義_要点まとめ.md・資料ID M01）"
     },
@@ -5122,7 +5122,7 @@
       "theme": "リピート・クロージング悩み",
       "hypothesis": "提案を「やる/やらない」で聞いて止まっている→「どちらが近いか」の二択にすれば反応する",
       "pain_ids": [],
-      "status": "untested",
+      "status": "testing",
       "posts": [
         {
           "hook": "low",
@@ -5134,9 +5134,9 @@
         }
       ],
       "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
+        "n": 1,
+        "index": 2.286,
+        "updated": "2026-10-23"
       },
       "evidence": "提案すると「考えます」で終わる・クロージングが苦手(根拠5件・中)。出典: CL1 / CNS/CL1 / G0319 / G0403 / L0307T（出典IDは repeat_pain_categories.json の source_ids 参照）"
     },
@@ -5200,7 +5200,7 @@
       "theme": "リピート・クロージング悩み",
       "hypothesis": "最初から大きなコースを出して止まっている→まず3回から段階で見せれば反応する",
       "pain_ids": [],
-      "status": "untested",
+      "status": "testing",
       "posts": [
         {
           "hook": "low",
@@ -5212,9 +5212,9 @@
         }
       ],
       "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
+        "n": 1,
+        "index": 0.714,
+        "updated": "2026-10-23"
       },
       "evidence": "回数券・コースの伝え方が分からない(根拠5件・中)。出典: CNS / G0501 / HYP P044(G0501) / HYP P049(G0403/G0501) / L0307T（出典IDは repeat_pain_categories.json の source_ids 参照）"
     },
@@ -5304,7 +5304,7 @@
       "theme": "リピート・クロージング悩み",
       "hypothesis": "新規を増やせば売上が安定すると思い込んでいる→継続の穴を先に塞げと言えば反応する",
       "pain_ids": [],
-      "status": "untested",
+      "status": "testing",
       "posts": [
         {
           "hook": "low",
@@ -5316,9 +5316,9 @@
         }
       ],
       "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
+        "n": 1,
+        "index": 21.571,
+        "updated": "2026-10-23"
       },
       "evidence": "2回目以降で来なくなる・途中で離脱する(根拠5件・中)。出典: B2212(受講生の悩み) / G0403 / G0501 / L0910T（出典IDは repeat_pain_categories.json の source_ids 参照）"
     },
@@ -5382,7 +5382,7 @@
       "theme": "リピート・クロージング悩み",
       "hypothesis": "コースが決まった月に安心している→翌月の落ち込みは前の月に決まると言えば反応する",
       "pain_ids": [],
-      "status": "untested",
+      "status": "testing",
       "posts": [
         {
           "hook": "low",
@@ -5394,9 +5394,9 @@
         }
       ],
       "last_result": {
-        "n": 0,
-        "index": null,
-        "updated": null
+        "n": 1,
+        "index": 74.857,
+        "updated": "2026-10-23"
       },
       "evidence": "コース終了後の次の出口がない(再契約・継続)(根拠5件・強)。出典: L0428 / L0910N / L0910T（出典IDは repeat_pain_categories.json の source_ids 参照）"
     },

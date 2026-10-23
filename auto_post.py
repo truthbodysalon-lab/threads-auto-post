@@ -311,7 +311,7 @@ def refresh_token(acct: str) -> bool:
     token = os.environ.get(ACCOUNTS[acct]["token_key"], "")
     url = f"{BASE_URL}/refresh_access_token?grant_type=th_refresh_token&access_token={token}"
     try:
-        with urllib.request.urlopen(url) as r:
+        with urllib.request.urlopen(url, timeout=30) as r:
             data = json.loads(r.read())
         new_token = data.get("access_token", "")
         if new_token:
@@ -1122,7 +1122,7 @@ def ensure_generated(acct: str, today: str):
 def api_request(url: str, data: bytes = None, retry: int = 0) -> dict:
     try:
         req = urllib.request.Request(url, data=data, method="POST" if data else "GET")
-        with urllib.request.urlopen(req) as r:
+        with urllib.request.urlopen(req, timeout=30) as r:
             return json.loads(r.read())
     except urllib.error.HTTPError as e:
         body = e.read().decode()

@@ -42,7 +42,7 @@
   "マッサージ通いに疲れた人へ。": {
     "segment": "T6",
     "hook": "high",
-    "created": "2026-10-20",
+    "created": "2026-10-24",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z19_truth"
@@ -58,7 +58,7 @@
   "看護や介護の仕事で脚がだるい人へ。": {
     "segment": "T4",
     "hook": "high",
-    "created": "2026-10-20",
+    "created": "2026-10-24",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z13_truth"
@@ -90,7 +90,7 @@
   "夜勤続きで腰が重い人へ。": {
     "segment": "T4",
     "hook": "high",
-    "created": "2026-10-20",
+    "created": "2026-10-24",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z14_nagaoka"
@@ -98,7 +98,7 @@
   "産後の姿勢崩れが気になるママへ。": {
     "segment": "T3",
     "hook": "high",
-    "created": "2026-10-20",
+    "created": "2026-10-24",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z10_nagaoka"
@@ -164,7 +164,7 @@
   "産後の骨盤の歪みが気になるママへ。": {
     "segment": "T3",
     "hook": "high",
-    "created": "2026-10-20",
+    "created": "2026-10-24",
     "acct": "truth",
     "variant": 0
   },
@@ -179,7 +179,7 @@
   "朝から体が重いと感じる人へ。": {
     "segment": "T5",
     "hook": "high",
-    "created": "2026-10-20",
+    "created": "2026-10-24",
     "acct": "truth",
     "variant": 0
   },
@@ -217,7 +217,7 @@
   "施術で悪化した経験がある人へ。": {
     "segment": "T6",
     "hook": "high",
-    "created": "2026-10-20",
+    "created": "2026-10-24",
     "acct": "nagaoka",
     "variant": 0
   },
@@ -658,7 +658,7 @@
   "疲れているのに運動が続かない人へ。": {
     "segment": "T5",
     "hook": "high",
-    "created": "2026-10-18",
+    "created": "2026-10-24",
     "acct": "nagaoka",
     "variant": 0
   },
@@ -1985,7 +1985,7 @@
   "売上だけ見ている院長へ。": {
     "segment": "R11",
     "hook": "high",
-    "created": "2026-10-18",
+    "created": "2026-10-24",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -1994,7 +1994,7 @@
   "全員に合わせて、疲れている院長へ。": {
     "segment": "R12",
     "hook": "high",
-    "created": "2026-10-18",
+    "created": "2026-10-24",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -2695,7 +2695,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 38,
-    "created": "2026-10-14",
+    "created": "2026-10-24",
     "acct": "nagaoka"
   },
   "【肩が上がりやすい人の習慣6選】": {
@@ -5539,7 +5539,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 5,
-    "created": "2026-10-13",
+    "created": "2026-10-24",
     "acct": "truth"
   },
   "【肩甲骨まわりを動かす朝の習慣5選】": {
@@ -5667,7 +5667,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 16,
-    "created": "2026-10-13",
+    "created": "2026-10-24",
     "acct": "nagaoka"
   },
   "インスタ運用で、反応がなくて止めようとしている院長へ。": {
@@ -5849,7 +5849,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 25,
-    "created": "2026-10-13",
+    "created": "2026-10-24",
     "acct": "truth"
   },
   "頭痛で予定を諦めることが増えた人へ。": {
@@ -6084,7 +6084,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 45,
-    "created": "2026-10-15",
+    "created": "2026-10-24",
     "acct": "truth"
   },
   "『休み明けの月曜に、必ず頭が重くなる』という声を、よく聞きます。": {
@@ -6273,7 +6273,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 23,
-    "created": "2026-10-16",
+    "created": "2026-10-24",
     "acct": "nagaoka"
   },
   "『背中がカチカチで、息が吸いにくい』という声を、よく聞きます。": {
@@ -6427,13 +6427,13 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 1,
-    "created": "2026-10-17"
+    "created": "2026-10-24"
   },
   "同じ発信をする人が増えても、困らない。": {
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 15,
-    "created": "2026-10-17"
+    "created": "2026-10-24"
   },
   "ぶっちゃけ、次に何を出すかの答えは、過去の投稿にあります。": {
     "segment": "PRESENT_CTA",
@@ -6446,19 +6446,19 @@
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 45,
-    "created": "2026-10-17"
+    "created": "2026-10-24"
   },
   "広告は、ランチ1回分以下で始められる。": {
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 48,
-    "created": "2026-10-17"
+    "created": "2026-10-24"
   },
   "続かないのは、意志が弱いからじゃない。": {
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 30,
-    "created": "2026-10-17"
+    "created": "2026-10-24"
   },
   "100点を待つより、60点で出す。": {
     "segment": "INSTA_EASY",
@@ -6470,121 +6470,121 @@
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 23,
-    "created": "2026-10-17"
+    "created": "2026-10-24"
   },
   "先月の投稿は、数字を変えれば別の投稿。": {
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 65,
-    "created": "2026-10-17"
+    "created": "2026-10-24"
   },
   "DMの最初の返事は、20文字で足ります。": {
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 42,
-    "created": "2026-10-17"
+    "created": "2026-10-24"
   },
   "いいねが少ない日に、落ち込まない。": {
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 27,
-    "created": "2026-10-17"
+    "created": "2026-10-24"
   },
   "ネタ探しは、今日で終わりです。": {
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 6,
-    "created": "2026-10-17"
+    "created": "2026-10-24"
   },
   "DMの返事は、毎回ゼロから考えない。": {
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 44,
-    "created": "2026-10-17"
+    "created": "2026-10-24"
   },
   "数えるのは、フォロワーじゃない。": {
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 25,
-    "created": "2026-10-17"
+    "created": "2026-10-24"
   },
   "ストーリーズに、きれいな写真はいらない。": {
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 18,
-    "created": "2026-10-17"
+    "created": "2026-10-24"
   },
   "ネタ帳アプリは、いりません。": {
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 10,
-    "created": "2026-10-17"
+    "created": "2026-10-24"
   },
   "予約前の不安は、ストーリーズで先に消せる。": {
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 79,
-    "created": "2026-10-17"
+    "created": "2026-10-24"
   },
   "リールは、写真3枚で作れます。": {
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 12,
-    "created": "2026-10-17"
+    "created": "2026-10-24"
   },
   "AIが変な文を出しても、消せば終わり。": {
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 59,
-    "created": "2026-10-17"
+    "created": "2026-10-24"
   },
   "広告の結果は、1日で見ない。": {
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 52,
-    "created": "2026-10-17"
+    "created": "2026-10-24"
   },
   "来週の投稿は、今週作れる。": {
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 71,
-    "created": "2026-10-17"
+    "created": "2026-10-24"
   },
   "リールは新しい人に、ストーリーズは知っている人に。": {
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 77,
-    "created": "2026-10-17"
+    "created": "2026-10-24"
   },
   "投稿文は、AIに1行頼めば出ます。": {
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 54,
-    "created": "2026-10-17"
+    "created": "2026-10-24"
   },
   "ぶっちゃけ、毎日投稿より週3回が続きます。": {
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 31,
-    "created": "2026-10-17"
+    "created": "2026-10-24"
   },
   "ストーリーズは、写真だけで出せる。": {
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 21,
-    "created": "2026-10-17"
+    "created": "2026-10-24"
   },
   "プロフィールを書き換える前に、数字を見る。": {
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 5,
-    "created": "2026-10-17"
+    "created": "2026-10-24"
   },
   "三脚とマイクを買う前に、棚。": {
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 15,
-    "created": "2026-10-17"
+    "created": "2026-10-24"
   },
   "【頭が重い日の夕食の習慣5選】": {
     "segment": "LIST_HABIT",
@@ -7944,5 +7944,12 @@
     "hook": "gen",
     "variant": null,
     "created": "2026-10-23"
+  },
+  "最初の1週間は、毎日5分も使わなくていい。": {
+    "segment": "PRESENT_CTA",
+    "hook": "present",
+    "present_key": "insta_kit",
+    "variant": 15,
+    "created": "2026-10-24"
   }
 }

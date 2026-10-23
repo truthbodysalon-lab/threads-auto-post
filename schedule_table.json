@@ -213,7 +213,7 @@
    "id": "ig-feed-truth-wed",
    "repo": "truthbodysalon-lab/ig-autopost-cloud",
    "workflow": "ig-feed-truth-wed.yml",
-   "jst_time": "08:02",
+   "jst_time": "08:42",
    "window_min": 90,
    "since": "day",
    "enabled": true,
@@ -223,7 +223,10 @@
     "after_min": 40,
     "until_min": 300
    },
-   "note": "2026-10-23: @truth_body_salon 水曜8:00フィード（肩こり頭痛・お悩み起点・イラストか写真）。主=Mac(ig-story-dispatch.sh 水曜0800)、保険=この枠(since=dayで当日runがあれば起動しない)。11/1 09:30までは非公開repoの無料枠切れでskip_until停止・Mac代行(local_actions)が実行"
+   "catchup": true,
+   "local_done": "ig-feed-truth-wed",
+   "local_done_since": "08:02",
+   "note": "2026-10-23: @truth_body_salon 水曜8:00フィード（肩こり頭痛・お悩み起点・イラストか写真）。Mac主・クラウド保険。Macが今日08:02以降にig-feed-truth-wedを成功していなければ起動（元の時刻08:02の40分後）。保険の時刻をMacと同じにすると二重投稿になるため catchup/local_done に統一（2026-10-23 独立検査）。11/1 09:30までは非公開repoの無料枠切れでskip_until停止・Mac代行(local_actions)が実行"
   },
   {
    "id": "ig-story-friday@15:05",

@@ -57,7 +57,9 @@ KNOWN_KINDS = ("friday_features", "offer", "qa_video")
 # リポジトリに無い（取得は None）。その状態で毎回「plan不明→起動」と判定すると、起動前ゲートが効かなくなり無料枠を無駄にするため、
 # planが無い間は判定に含めない（専用日でも起動しない）。初回は nagaoka/truth の通常ストーリーのrun（同じworkflow内に新アカウントの
 # ステップがある）で plan ができ、一度でもplanができれば、以後は nagaoka / truth と同じ扱い（専用日の起動もここから）。
-NEW_ACCOUNTS = ("headache", "diet")
+# 2026-10-23: diet はトークン登録済み（@truth_nagaoka_daietto・稼働中）なので外した。残していると plan が無い間ずっと
+#   「判定に含めない」になり、ストーリーの起動自体がスキップされて一度も始まらなかった。headache はトークン未登録のため残す。
+NEW_ACCOUNTS = ("headache",)
 
 PLAN_PATH = "state/{acct}/story_plan.json"
 PLAN_PATH_OVERRIDE = {"masa": "state/story_plan.json"}

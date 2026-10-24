@@ -158,3 +158,30 @@ class VerifyC41(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main(verbosity=1)
+
+
+def test_c41_trailing_gap_detected():
+    """10/23型: 19:07が最終投稿で、以降23時まで常駐稼働中なのに0本 → 検出されること。"""
+    from datetime import datetime, timedelta, timezone
+    import verify_system as vs
+    JST = timezone(timedelta(hours=9))
+    lo = datetime(2026, 10, 23, 6, tzinfo=JST); hi = lo.replace(hour=23)
+    posts = [lo.replace(hour=h, minute=m) for h in range(6, 19) for m in (5, 25, 45)] + [lo.replace(hour=19, minute=7)]
+    spans = [(lo, hi)]
+    inc = vs.alive_stall_incidents(posts, spans, lo, hi)
+    assert inc and max(i[0] for i in inc) >= 230, inc
+
+
+
+def test_c41_gap_after_target_ignored():
+    """50本出し終えた後の空白は検出しない。"""
+    from datetime import datetime, timedelta, timezone
+    import verify_system as vs
+    JST = timezone(timedelta(hours=9))
+    lo = datetime(2026, 10, 23, 6, tzinfo=JST); hi = lo.replace(hour=23)
+    posts = [lo + timedelta(minutes=18 * i) for i in range(50)]  # 50本目は約20:42
+    assert not vs.alive_stall_incidents(posts, [(lo, hi)], lo, hi)
+
+
+if __name__ == "__main__":
+    test_c41_trailing_gap_detected(); test_c41_gap_after_target_ignored(); print("C41 extra tests OK")

@@ -1264,17 +1264,20 @@ def check_post_interval():
             add(cid, "C.実行ギャップ", "WARN", f"検査不可: {e}")
 
 
-def alive_stall_incidents(posts, spans, lo, hi, min_gap_min=90):
+def alive_stall_incidents(posts, spans, lo, hi, min_gap_min=90, daily_target=50):
     """C41の判定本体（テスト用に分離）。posts=投稿時刻(JST)、spans=常駐run稼働区間[(開始,終了)]、
     lo/hi=対象時間帯。lo起点の各投稿間隔のうち min_gap_min 以上で、その間に常駐runが稼働していた
     時間（区間の和集合との重なり）が min_gap_min 以上のものを [(間隔分, 稼働分, 開始)] で返す。"""
     pts = sorted(t for t in posts if lo <= t <= hi)
-    seq = [lo] + pts
+    # 2026-10-24: 最後の投稿から hi(23時)までの空白も対象にする（10/23 truth 19:07以降0本を見逃していた）
+    seq = [lo] + pts + [hi]
     spans = sorted(spans)
     out = []
-    for a, b in zip(seq, seq[1:]):
+    for idx, (a, b) in enumerate(zip(seq, seq[1:])):
         gap = (b - a).total_seconds() / 60
         if gap < min_gap_min:
+            continue
+        if idx >= daily_target:  # その日の目標本数を出し終えた後の空白は正常（例: 21時台に50本完了）
             continue
         covered, cur = 0.0, a
         for st, en in spans:

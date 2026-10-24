@@ -1,6 +1,6 @@
 {
   "acct": "masa",
-  "generated_at": "2026-10-23 10:44",
+  "generated_at": "2026-10-24 10:38",
   "params": {
     "min_n": 5,
     "loser_min_n": 8,
@@ -12,17 +12,17 @@
       30
     ]
   },
-  "registry_loaded": 863,
-  "log_entries": 7716,
+  "registry_loaded": 871,
+  "log_entries": 7766,
   "windows": {
     "7d": {
       "baseline": {
-        "n": 183,
+        "n": 173,
         "median_views": 7,
-        "mean_views": 18.9,
-        "p90_views": 36.6
+        "mean_views": 21.1,
+        "p90_views": 41.4
       },
-      "unregistered_n": 129,
+      "unregistered_n": 124,
       "segment_hook": {
         "I01__low": {
           "n": 0,
@@ -538,14 +538,90 @@
         }
       },
       "hakase": {
-        "n": 8,
-        "median_views": 5.5,
-        "mean_views": 7.6,
-        "p90_views": 17.3,
+        "n": 9,
+        "median_views": 7,
+        "mean_views": 7.7,
+        "p90_views": 17.2,
         "like_rate": 0.0,
-        "reply_rate": 0.1311,
-        "index": 0.786,
+        "reply_rate": 0.1304,
+        "index": 1.0,
         "verdict": "testing"
+      },
+      "win_hook": {
+        "A逆説": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "Bたった3つ": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "C否定断言": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "D【N選】": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "E要りません": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "勝ち型 全体": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        }
+      },
+      "uplink": {
+        "勝ち型": {
+          "n": 2,
+          "median_views": 76.0,
+          "mean_views": 76,
+          "p90_views": 129.6,
+          "index": 10.857,
+          "verdict": "判定保留"
+        },
+        "それ以外": {
+          "n": 23,
+          "median_views": 5,
+          "mean_views": 14.2,
+          "p90_views": 35.4,
+          "index": 0.714,
+          "verdict": "testing"
+        },
+        "転載 全体": {
+          "n": 25,
+          "median_views": 5,
+          "mean_views": 19.1,
+          "p90_views": 72.6,
+          "index": 0.714,
+          "verdict": "testing"
+        }
       },
       "hypothesis": {
         "IP01": {
@@ -1377,12 +1453,12 @@
     },
     "14d": {
       "baseline": {
-        "n": 183,
+        "n": 173,
         "median_views": 7,
-        "mean_views": 18.9,
-        "p90_views": 36.6
+        "mean_views": 21.1,
+        "p90_views": 41.4
       },
-      "unregistered_n": 129,
+      "unregistered_n": 124,
       "segment_hook": {
         "I01__low": {
           "n": 0,
@@ -1898,14 +1974,90 @@
         }
       },
       "hakase": {
-        "n": 8,
-        "median_views": 5.5,
-        "mean_views": 7.6,
-        "p90_views": 17.3,
+        "n": 9,
+        "median_views": 7,
+        "mean_views": 7.7,
+        "p90_views": 17.2,
         "like_rate": 0.0,
-        "reply_rate": 0.1311,
-        "index": 0.786,
+        "reply_rate": 0.1304,
+        "index": 1.0,
         "verdict": "testing"
+      },
+      "win_hook": {
+        "A逆説": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "Bたった3つ": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "C否定断言": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "D【N選】": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "E要りません": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "勝ち型 全体": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        }
+      },
+      "uplink": {
+        "勝ち型": {
+          "n": 2,
+          "median_views": 76.0,
+          "mean_views": 76,
+          "p90_views": 129.6,
+          "index": 10.857,
+          "verdict": "判定保留"
+        },
+        "それ以外": {
+          "n": 23,
+          "median_views": 5,
+          "mean_views": 14.2,
+          "p90_views": 35.4,
+          "index": 0.714,
+          "verdict": "testing"
+        },
+        "転載 全体": {
+          "n": 25,
+          "median_views": 5,
+          "mean_views": 19.1,
+          "p90_views": 72.6,
+          "index": 0.714,
+          "verdict": "testing"
+        }
       },
       "hypothesis": {
         "IP01": {
@@ -2737,12 +2889,12 @@
     },
     "30d": {
       "baseline": {
-        "n": 183,
+        "n": 173,
         "median_views": 7,
-        "mean_views": 18.9,
-        "p90_views": 36.6
+        "mean_views": 21.1,
+        "p90_views": 41.4
       },
-      "unregistered_n": 129,
+      "unregistered_n": 124,
       "segment_hook": {
         "I01__low": {
           "n": 0,
@@ -3258,14 +3410,90 @@
         }
       },
       "hakase": {
-        "n": 8,
-        "median_views": 5.5,
-        "mean_views": 7.6,
-        "p90_views": 17.3,
+        "n": 9,
+        "median_views": 7,
+        "mean_views": 7.7,
+        "p90_views": 17.2,
         "like_rate": 0.0,
-        "reply_rate": 0.1311,
-        "index": 0.786,
+        "reply_rate": 0.1304,
+        "index": 1.0,
         "verdict": "testing"
+      },
+      "win_hook": {
+        "A逆説": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "Bたった3つ": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "C否定断言": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "D【N選】": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "E要りません": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "勝ち型 全体": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        }
+      },
+      "uplink": {
+        "勝ち型": {
+          "n": 2,
+          "median_views": 76.0,
+          "mean_views": 76,
+          "p90_views": 129.6,
+          "index": 10.857,
+          "verdict": "判定保留"
+        },
+        "それ以外": {
+          "n": 23,
+          "median_views": 5,
+          "mean_views": 14.2,
+          "p90_views": 35.4,
+          "index": 0.714,
+          "verdict": "testing"
+        },
+        "転載 全体": {
+          "n": 25,
+          "median_views": 5,
+          "mean_views": 19.1,
+          "p90_views": 72.6,
+          "index": 0.714,
+          "verdict": "testing"
+        }
       },
       "hypothesis": {
         "IP01": {
@@ -4269,13 +4497,13 @@
     }
   },
   "hakase_summary": {
-    "n": 8,
-    "median_views": 5.5,
-    "mean_views": 7.6,
-    "p90_views": 17.3,
+    "n": 9,
+    "median_views": 7,
+    "mean_views": 7.7,
+    "p90_views": 17.2,
     "like_rate": 0.0,
-    "reply_rate": 0.1311,
-    "index": 0.786,
+    "reply_rate": 0.1304,
+    "index": 1.0,
     "verdict": "testing"
   },
   "hypothesis_summary": {

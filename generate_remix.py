@@ -1829,7 +1829,19 @@ def _insert_list_habit_posts(posts: list[str], acct: str, today: str, anchors: l
     _insert_segment_tests の後・_insert_hero_posts の前で呼ぶ（ヒーローは後段で+最大10本ずらす）。"""
     if acct not in ("truth", "nagaoka"):
         return posts
-    anchors = anchors or ([13, 27] if acct == "truth" else [13, 22])
+    # 2026-10-24 本人指示: 実測で効いていない(truth x1.08 / nagaoka x0.54)ため減らし、空いた枠を「前に、まず」型へ。
+    # truth=毎日1本(アンカー13)／nagaoka=隔日(偶数日のみ1本＝1日0〜1本)。
+    if anchors is None:
+        if acct == "truth":
+            anchors = [13]
+        else:
+            try:
+                _odd = date.fromisoformat(today).toordinal() % 2
+            except Exception:
+                _odd = date.today().toordinal() % 2
+            anchors = [13] if _odd == 0 else []
+        if not anchors:
+            return posts
     fixed = LIST_HABIT_RENDERED_TRUTH if acct == "truth" else LIST_HABIT_RENDERED_NAGAOKA
     try:
         today_date = date.fromisoformat(today)
@@ -1883,6 +1895,195 @@ def _insert_list_habit_posts(posts: list[str], acct: str, today: str, anchors: l
     return posts
 
 
+# ══════════════════════════════════════════════
+# 1行目の型の配分（2026-10-24 本人指示「分析の提案をそのまま反映」）
+# 根拠: myfiles/SNS・Threads/truth_nagaoka_1行目の型と施策の効果_2026-10-24.md
+#  - 効く型（truth: 薬・鎮痛剤／前に、まず／nagaoka: 天気・気圧／前に、まず／声／問いかけ）を増やし、
+#    効かない型（習慣N選・デスク／スマホ・マッサージ・4行以上の長文・nagaokaの否定断言／薬／産後／水分）を減らす。
+#  - 導線アンカー（HPB・LINEリストイン・診断・アクセス）は触らない。型投稿は「汎用ベース投稿の置換」で入れる
+#    ＝リスト長が増えず、導線の位置・本数が動かない。
+# ══════════════════════════════════════════════
+try:
+    from type_templates import TYPE_POOLS as _TYPE_POOLS
+except Exception:   # 読めなくても既存生成は止めない
+    _TYPE_POOLS = {}
+
+# 1日あたりの型の本数（置換で入れる分）。voice_extra=お客様の声の追加分（既存アンカー1本に上乗せ）
+TYPE_DAILY_PLAN = {
+    "truth":   [("ZUTSUYAKU", 5), ("MAE_MAZU", 4)],
+    "nagaoka": [("MAE_MAZU", 4), ("WEATHER", 3), ("QUESTION", 2), ("CUSTOMER_VOICE", 2)],
+}
+# 上限を数える／型を置換する先頭範囲（ベースリスト）。導線・テスト・ヒーロー等のアンカーが約26〜28本ベースの間に入るため、
+# 実投稿される前半50本に載るベースは先頭約22〜24本。ここを広げると前半50本に効かなくなる（2026-10-24実測）。
+_TYPE_WINDOW = 23
+_TYPE_WINDOW_BY_ACCT = {"truth": 23, "nagaoka": 18}   # nagaokaは長岡市相談型など固定アンカーが多く前半50本に載るベースが少ない
+_RE_DESK = re.compile(r"デスク|スマホ|パソコン|PC|画面")
+_RE_MASSAGE = re.compile(r"マッサージ|揉")
+_RE_YAKU = re.compile(r"薬|鎮痛|痛み止め")
+_RE_SANGO = re.compile(r"産後|ママ|育児")
+_RE_WATER = re.compile(r"水分|水不足")
+_RE_HABIT_HEAD = re.compile(r"^【[^【】]*選】")
+_RE_NEG_NAGAOKA = re.compile(r"しても|ではありません|ません。?$|だけでは|より先に")
+# 1日あたりの上限（先頭 _TYPE_WINDOW 本のベース内）。完全禁止ではなく上限。
+TYPE_CAPS = {
+    "truth":   {"desk": 2, "massage": 1, "yaku": 1, "sango": 1, "long": 12},
+    "nagaoka": {"desk": 2, "massage": 1, "yaku": 1, "sango": 1, "water": 2, "habit": 0, "neg": 2, "long": 12},
+}
+
+
+def _nonempty_lines(p: str) -> int:
+    return len([l for l in (p or "").split("\n") if l.strip()])
+
+
+def _type_flags(p: str, acct: str) -> set:
+    first = (p or "").split("\n")[0]
+    f = set()
+    if _RE_DESK.search(first):
+        f.add("desk")
+    if _RE_MASSAGE.search(first):
+        f.add("massage")
+    if _RE_YAKU.search(first):
+        f.add("yaku")
+    if _RE_SANGO.search(first):
+        f.add("sango")
+    if _RE_WATER.search(first):
+        f.add("water")
+    if _RE_HABIT_HEAD.search(first):
+        f.add("habit")
+    if acct == "nagaoka" and _RE_NEG_NAGAOKA.search(first):
+        f.add("neg")
+    if _nonempty_lines(p) >= 4:
+        f.add("long")
+    return f
+
+
+def _is_funnel_post(p: str) -> bool:
+    """導線投稿（URL・LINE・HPB）は上限・置換の対象外。"""
+    return bool(re.search(r"https?://|lin\.ee|ホットペッパー|beauty\.hotpepper", p or ""))
+
+
+def _apply_topic_caps(posts: list[str], acct: str) -> list[str]:
+    """先頭 _TYPE_WINDOW 本のベース投稿について、効かない話題・形の1日上限を超えた分を末尾へ送る（導線投稿は対象外）。
+    超過分は末尾へ送るだけ（リスト長は不変）。"""
+    caps = TYPE_CAPS.get(acct)
+    if not caps:
+        return posts
+    win = _TYPE_WINDOW_BY_ACCT.get(acct, _TYPE_WINDOW)
+    counts = {k: 0 for k in caps}
+    out: list[str] = []
+    demoted: list[str] = []
+    for p in posts:
+        if len(out) < win and not _is_funnel_post(p):
+            fl = _type_flags(p, acct) & set(caps)
+            if any(counts[k] >= caps[k] for k in fl):
+                demoted.append(p)          # 削除せず末尾へ送る（リスト長を保つ。ベースが足りない日は結局先頭範囲に戻る）
+                continue
+            for k in fl:
+                counts[k] += 1
+        out.append(p)
+    return out + demoted
+
+
+def _type_post_valid(text: str, acct: str) -> bool:
+    """型テンプレの機械チェック: 短文(非空行3行以内・250字以内・1行目60字以内)＋既存の全ガード＋医療断定/創作統計/導線語なし。"""
+    t = text or ""
+    first = t.split("\n")[0].strip()
+    if not first or len(first) > 60 or len(t) > 250 or _nonempty_lines(t) > 3:
+        return False
+    if re.search(r"治る|治ります|完治|治せ|薬をやめ|薬を飲まな|飲まなくて|予約|LINE|ライン|ホットペッパー|http|#|＃|%|％|割|人中|診断", t):
+        return False
+    if t.count("長岡") > 1 or t.count("兄妹") > 1:
+        return False
+    return (not _is_ng(t) and _is_valid_first_line(t, acct) and not _is_seitai_reserve_violation(t)
+            and _inspect_ok(t, acct, log=False))
+
+
+def _voice_pool_for(acct: str, pool: list) -> list:
+    """お客様の声プールの絞り込み。truthは分析で伸びた声（気圧・首の締め付け・夕方の頭の重さ等）を残し、
+    伸びない声（目の奥・肩こり系・マッサージ・初回不安）は外す（2026-10-24）。"""
+    if acct != "truth":
+        return pool
+    drop = re.compile(r"目の奥|肩こり|マッサージ|整体は初めて|スマホ|画面")
+    return [t for t in pool if not drop.search(t.split("\n")[0])]
+
+
+def _type_candidates(acct: str, seg: str, today: str, used_keys: set, recent_first: set, registry: dict) -> list:
+    """seg の候補を最終使用が古い順（未使用優先）に返す。[(variant_idx, text)]"""
+    if seg == "CUSTOMER_VOICE":
+        pool = _voice_pool_for(acct, CUSTOMER_VOICE_TEMPLATES_TRUTH if acct == "truth" else CUSTOMER_VOICE_TEMPLATES_NAGAOKA)
+        valid = _customer_voice_valid
+    else:
+        pool = _TYPE_POOLS.get((acct, seg), [])
+        valid = lambda t: _type_post_valid(t, acct)   # noqa: E731
+    try:
+        today_date = date.fromisoformat(today)
+    except Exception:
+        today_date = date.today()
+    cands = []
+    for i, t in enumerate(pool):
+        k = _segment_registry_key(t)
+        if k in used_keys or t.split("\n")[0].strip() in recent_first or not valid(t):
+            continue
+        ent = registry.get(k)
+        lu = date.min
+        if isinstance(ent, dict) and ent.get("segment") == seg:
+            try:
+                lu = date.fromisoformat(ent.get("created", ""))
+            except Exception:
+                pass
+        if lu == today_date:
+            continue                      # 同日に再生成されても同じ原稿は2度入れない（日をまたいでの重複は最終使用順で回避）
+        cands.append((lu, random.random(), i, t))
+    cands.sort()
+    return [(i, t) for _, _, i, t in cands]
+
+
+def _replace_with_type_posts(posts: list[str], acct: str, today: str) -> list[str]:
+    """効く型の投稿を、先頭 _TYPE_WINDOW 本の「効きにくい汎用ベース投稿」と置き換える（リスト長は不変）。
+    置き換えた投稿は segment_registry.json に型名(MAE_MAZU/ZUTSUYAKU/WEATHER/QUESTION/CUSTOMER_VOICE)で登録する
+    ＝segment_report.py が型別の閲覧倍率を出せる。SEGMENT_REGISTRY_DRY=1では台帳を保存しない。"""
+    plan = TYPE_DAILY_PLAN.get(acct)
+    if not plan:
+        return posts
+    registry = _load_segment_registry()
+    try:
+        recent_first = _get_recent_first_lines(acct, days=4)
+    except Exception:
+        recent_first = set()
+    used_keys = {_segment_registry_key(p) for p in posts}
+    chosen: list[tuple[str, int, str]] = []
+    for seg, n in plan:
+        got = 0
+        for idx, t in _type_candidates(acct, seg, today, used_keys, recent_first, registry):
+            if got >= n:
+                break
+            k = _segment_registry_key(t)
+            if k in used_keys:
+                continue
+            used_keys.add(k)
+            chosen.append((seg, idx, t))
+            got += 1
+    if not chosen:
+        return posts
+    window = min(_TYPE_WINDOW_BY_ACCT.get(acct, _TYPE_WINDOW), len(posts))
+    scored = []
+    for i in range(window):
+        if _is_funnel_post(posts[i]):
+            continue
+        fl = _type_flags(posts[i], acct)
+        score = 3 * len(fl - {"long"}) + (2 if "long" in fl else 0) + random.random()
+        scored.append((score, i))
+    scored.sort(reverse=True)
+    targets = sorted(i for _, i in scored[:len(chosen)])
+    random.shuffle(chosen)
+    for i, (seg, idx, t) in zip(targets, chosen):
+        posts[i] = t
+        hook = "voice" if seg == "CUSTOMER_VOICE" else "type"
+        registry[_segment_registry_key(t)] = {"segment": seg, "hook": hook, "variant": idx, "created": today, "acct": acct}
+    _save_segment_registry(registry)
+    return posts
+
+
 # 個人特定につながる語（お客様の声の一般化が崩れていないかの最終ガード）
 _CV_PRIVACY = re.compile(r"[一-龥ぁ-んァ-ヶー]{1,6}(様|さん)|\d+\s*(歳|才)|\d+代|円|(?<!長岡)[一-龥]{1,4}(市|町|村|県|区)")
 _CV_FORBID = re.compile(r"予約|LINE|ライン|ホットペッパー|フォロー|診断|治る|完治|http|#|＃|%|％")
@@ -1909,6 +2110,7 @@ def _insert_customer_voice_post(posts: list[str], acct: str, today: str, anchor:
     anchor = anchor if anchor is not None else (20 if acct == "truth" else 17)
     pool = CUSTOMER_VOICE_TEMPLATES_TRUTH if acct == "truth" else CUSTOMER_VOICE_TEMPLATES_NAGAOKA
     other = CUSTOMER_VOICE_TEMPLATES_NAGAOKA if acct == "truth" else CUSTOMER_VOICE_TEMPLATES_TRUTH
+    pool = _voice_pool_for(acct, pool)
     if not pool:
         return posts
     try:
@@ -1959,6 +2161,22 @@ def _insert_hero_posts(posts: list[str], acct: str) -> list[str]:
     step = max(4, 46 // max(1, len(heroes)))
     for i, h in enumerate(heroes):
         posts.insert(min(2 + i * step, len(posts)), h)
+    # 効果測定用の印（2026-10-24 本人指示）: ヒーロー＝自分の伸びた投稿(own_winners)の型を借りた翻案投稿。
+    # segment="own_adapt" で registry に登録＝segment_report.py が型別の閲覧倍率を出せる。既に別の型で登録済みの1行目は上書きしない。
+    if acct in ("truth", "nagaoka"):
+        try:
+            _reg = _load_segment_registry()
+            _today = date.today().strftime("%Y-%m-%d")
+            _changed = False
+            for h in heroes:
+                _k = _segment_registry_key(h)
+                if _k and _k not in _reg:
+                    _reg[_k] = {"segment": "own_adapt", "hook": "adapt", "variant": "hero", "created": _today, "acct": acct}
+                    _changed = True
+            if _changed:
+                _save_segment_registry(_reg)
+        except Exception:
+            pass   # 印の付与に失敗してもヒーロー投入は止めない
     # 最終ガード: ヒーロー挿入で誘導投稿(ホットペッパー/駐車場/LINE)が位置50超へ
     # 押し出されたら前半へ戻す（1日約50本消費のため位置50超=未投稿）
     markers = ("beauty.hotpepper.jp", "専用駐車場", "長岡駅から車で5分", "lin.ee/")
@@ -2086,6 +2304,10 @@ def generate_30_posts() -> list[str]:
             posts.insert(0, _enforce_short_body(_ensure_nagaoka(fill(tmpl))))
         except Exception:
             pass
+
+    # 1行目の型の配分（2026-10-24 本人指示）: 効かない話題・長文に上限→効く型(薬・前に、まず)へ置換。導線アンカーより前に行う
+    posts = _apply_topic_caps(posts, "truth")
+    posts = _replace_with_type_posts(posts, "truth", TODAY)
 
     # 肩こりCTA 2本・頭痛CTA 2本（ホットペッパー予約導線）を前半に固定配置する。
     # 実行ギャップ対策: 1日の消費は約50本なので、ランダム高位置だと到達せず未投稿になる。
@@ -2253,6 +2475,10 @@ def generate_40_nagaoka_posts() -> list[str]:
                 posts.insert(0, filled)
         except Exception:
             pass
+
+    # 1行目の型の配分（2026-10-24 本人指示）: 効かない話題・形に上限→効く型(声・天気・問いかけ・前に、まず)へ置換
+    posts = _apply_topic_caps(posts, "nagaoka")
+    posts = _replace_with_type_posts(posts, "nagaoka", TODAY)
 
     # CTA: 肩こり2本・頭痛1本（_ensure_nagaoka不使用）
     cta_katakori = [generate_cta_post("katakori") for _ in range(2)]

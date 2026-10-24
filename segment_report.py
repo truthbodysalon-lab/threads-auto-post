@@ -613,6 +613,78 @@ def _win_uplink_table_md(w: dict) -> list[str]:
     return out
 
 
+# ── 1行目の型別の閲覧倍率（2026-10-24 本人指示。truth/nagaoka・自動投稿の「型」を借りた投稿の効果測定）──
+# registryのsegment値（generate_remix の型挿入・ヒーロー翻案が登録）＋台帳 kind=image から型を引き、
+# 窓内の全投稿の閲覧中央値に対する倍率を出す。T1-T6/Z系のセグメント集計とは別枠（そちらの判定・配分には影響しない）。
+TYPE_LABELS = {
+    "MAE_MAZU": "「前に、まず」型",
+    "ZUTSUYAKU": "頭痛薬・鎮痛剤の話",
+    "WEATHER": "天気・気圧の話",
+    "QUESTION": "問いかけ",
+    "CUSTOMER_VOICE": "お客様の声",
+    "LIST_HABIT": "習慣N選",
+    "own_adapt": "伸びた投稿の翻案",
+    "image": "画像つき",
+}
+TYPE_ACCTS = ("truth", "nagaoka")
+TYPE_MIN_N = 3        # 型の倍率を「伸びた型」として出す最低本数（判定保留の下限）
+
+
+def build_type_report(acct: str) -> dict:
+    """{窓: {"baseline_median":x, "n":N, "types":{型: {n, median_views, index}}}}。truth/nagaoka以外は空。"""
+    if acct not in TYPE_ACCTS:
+        return {}
+    today = date.today()
+    registry = _load_registry()
+    past_by_id = _load_past_posts_by_id(acct)
+    rows = []
+    for e in _load_log_entries(acct):
+        past = past_by_id.get(str(e.get("post_id", "")))
+        if past is None:
+            continue
+        reg = registry.get(e["key"])
+        if reg is not None and _entry_acct(reg) != acct:
+            reg = None
+        typ = None
+        if e.get("kind") == "image":
+            typ = "image"
+        elif reg and reg.get("segment") in TYPE_LABELS:
+            typ = reg["segment"]
+        rows.append({"date": e.get("date", ""), "type": typ, "views": past.get("views", 0) or 0})
+    out = {}
+    for win in WINDOWS:
+        wr = [r for r in rows if _within_days(r["date"], win, today)]
+        base = _stats([r["views"] for r in wr])["median_views"] or 0
+        types = {}
+        for t in TYPE_LABELS:
+            v = [r["views"] for r in wr if r["type"] == t]
+            st = _stats(v)
+            types[t] = {"n": st["n"], "median_views": st["median_views"],
+                        "index": round(st["median_views"] / base, 2) if base and st["n"] else 0.0}
+        out[f"{win}d"] = {"baseline_median": base, "n": len(wr), "types": types}
+    return out
+
+
+def _type_line(acct: str, report: dict) -> str | None:
+    """秘書日報用の1行「伸びた型：…」。truth/nagaoka以外は None。14日窓（足りなければ30日）で n>=TYPE_MIN_N の型の上位2つ。"""
+    if acct not in TYPE_ACCTS:
+        return None
+    tr = report.get("type_report") or {}
+    for wk in ("14d", "30d"):
+        types = (tr.get(wk) or {}).get("types", {})
+        ranked = sorted(((t, c) for t, c in types.items() if c.get("n", 0) >= TYPE_MIN_N),
+                        key=lambda x: x[1].get("index", 0), reverse=True)
+        if ranked:
+            strong = [(t, c) for t, c in ranked if c.get("index", 0) >= 1.1][:2]
+            weak = [t for t, c in ranked if c.get("index", 0) < 0.8]
+            head = (" / ".join(f"{TYPE_LABELS[t]}（全体の{c['index']}倍・{c['n']}本）" for t, c in strong)
+                    if strong else "まだ平均を超えた型なし")
+            tail = ("／弱い：" + "、".join(TYPE_LABELS[t] for t in weak)) if weak else ""
+            return f"・伸びた型：{head}{tail}"
+    n_all = sum(c.get("n", 0) for c in ((tr.get("30d") or {}).get("types", {})).values())
+    return f"・伸びた型：まだ判定できる型なし（型別の計測は10/25から。計測済み{n_all}本）"
+
+
 def write_markdown(report, acct: str):
     SEGMENTS = _segments(acct)
     today = date.today().strftime("%Y-%m-%d")
@@ -889,6 +961,11 @@ def apply_hypotheses(report, acct: str):
 
 def run_for_acct(acct: str, do_apply: bool, do_json: bool):
     report = build_report(acct)
+    if acct in TYPE_ACCTS:
+        try:
+            report["type_report"] = build_type_report(acct)
+        except Exception as _e:   # 型別集計の失敗でセグメントレポート全体を止めない
+            print(f"[warn] build_type_report[{acct}] 失敗: {_e}", file=sys.stderr)
 
     report_json_path = BASE / f"segment_report_{acct}.json"
     report_json_path.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -1115,6 +1192,10 @@ def _acct_section(acct: str, report: dict, apply_detail: dict, baseline: dict | 
     if _wl:
         lines.append(_wl)
 
+    _tl = _type_line(acct, report)
+    if _tl:
+        lines.append(_tl)
+
     if include_focus:
         hyp_summary = report.get("hypothesis_summary", {})
         hyp_by_id = _hyp_lookup(acct)
@@ -1211,6 +1292,9 @@ def _acct_section_weekly(acct: str, report: dict) -> list[str]:
     w_names = "、".join(_seg_jp_name(acct, s) for s in winners) if winners else "なし"
     l_names = "、".join(_seg_jp_name(acct, s) for s in losers) if losers else "なし"
     lines.append(f"・勝ち累計：{w_names} / 負け累計：{l_names}")
+    _tl = _type_line(acct, report)
+    if _tl:
+        lines.append(_tl)
     return lines
 
 

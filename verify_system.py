@@ -279,11 +279,47 @@ def check_list_habit_in_first50():
             import generate_remix as _g
             posts = getattr(_g, fn)()[:50]
             hits = [i for i, t in enumerate(posts) if _g._list_habit_valid(t)]
-            add(f"list_habit_in_first50:{acct}", "B.ルール反映", "PASS" if hits else "WARN",
-                f"{acct}前半50本中LIST_HABIT型{len(hits)}本（位置{hits}）" if hits else
-                f"{acct}前半50本にLIST_HABIT型(【◯◯習慣N選】)が0本。毎日2本入れる指示の実行ギャップ")
+            # 2026-10-24: 効いていないため truth=毎日1本 / nagaoka=1日0〜1本（隔日）に減らした。0本はnagaokaのみ正常。
+            if acct == "nagaoka":
+                ok = len(hits) <= 1
+                add(f"list_habit_in_first50:{acct}", "B.ルール反映", "PASS" if ok else "WARN",
+                    f"{acct}前半50本中LIST_HABIT型{len(hits)}本（位置{hits}）。上限1本" if ok else
+                    f"{acct}前半50本にLIST_HABIT型が{len(hits)}本。1日0〜1本の指示（2026-10-24）を超過")
+            else:
+                add(f"list_habit_in_first50:{acct}", "B.ルール反映", "PASS" if hits else "WARN",
+                    f"{acct}前半50本中LIST_HABIT型{len(hits)}本（位置{hits}）" if hits else
+                    f"{acct}前半50本にLIST_HABIT型(【◯◯習慣N選】)が0本。毎日1本入れる指示の実行ギャップ")
         except Exception as e:
             add(f"list_habit_in_first50:{acct}", "B.ルール反映", "WARN", f"検査失敗: {type(e).__name__}: {e}")
+
+
+def check_type_mix_in_first50():
+    """truth/nagaokaの当日生成キュー前半50本に、効く型（2026-10-24 本人指示）が最低本数入っているか（不足はWARN）。
+    truth: 頭痛薬・鎮痛剤の話(ZUTSUYAKU)3本以上＋「前に、まず」型(MAE_MAZU)2本以上
+    nagaoka: 「前に、まず」型2本以上＋天気・気圧(WEATHER)1本以上＋問いかけ(QUESTION)1本以上＋お客様の声2本以上"""
+    import os as _os
+    _os.environ["SEGMENT_REGISTRY_DRY"] = "1"
+    try:
+        import generate_remix as _g
+        from type_templates import TYPE_POOLS as _tp
+    except Exception as e:
+        add("type_mix_in_first50", "B.ルール反映", "WARN", f"検査失敗: {type(e).__name__}: {e}")
+        return
+    need = {"truth": {"ZUTSUYAKU": 3, "MAE_MAZU": 2},
+            "nagaoka": {"MAE_MAZU": 2, "WEATHER": 1, "QUESTION": 1, "CUSTOMER_VOICE": 2}}
+    for acct, fn in (("truth", "generate_30_posts"), ("nagaoka", "generate_40_nagaoka_posts")):
+        try:
+            posts = getattr(_g, fn)()[:50]
+            cnt = {}
+            for seg in need[acct]:
+                pool = (_g.CUSTOMER_VOICE_TEMPLATES_TRUTH if acct == "truth" else _g.CUSTOMER_VOICE_TEMPLATES_NAGAOKA) \
+                    if seg == "CUSTOMER_VOICE" else _tp.get((acct, seg), [])
+                cnt[seg] = sum(1 for t in posts if t in pool)
+            short = {k: f"{cnt[k]}<{v}" for k, v in need[acct].items() if cnt[k] < v}
+            add(f"type_mix_in_first50:{acct}", "B.ルール反映", "WARN" if short else "PASS",
+                f"{acct}前半50本の型 {cnt}" + (f" 不足={short}" if short else ""))
+        except Exception as e:
+            add(f"type_mix_in_first50:{acct}", "B.ルール反映", "WARN", f"検査失敗: {type(e).__name__}: {e}")
 
 
 def check_masa_insta_theme():
@@ -1351,6 +1387,7 @@ def run_all():
     check_hero_posted()
     check_masa_abstract()
     check_list_habit_in_first50()
+    check_type_mix_in_first50()
     check_rule_hygiene()
     check_execution_gaps()
     check_logs()

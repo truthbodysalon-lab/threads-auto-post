@@ -7,13 +7,14 @@
   → 元画像を 使用済み/ へ移動・投稿台帳に記録（同一コミットでpush）
 
 制約・ルール:
-- 1アカウント1日2枚まで（画像は挑戦枠。playbook testingとして実測評価）
+- 1日の上限: truth=0枚(据え置き・再開はmasa判断。元は2枚)／nagaoka=4枚（画像は挑戦枠。playbook testingとして実測評価）。
+  2026-10-24 本人指示で nagaoka を2→4枚へ（分析: 画像つき投稿 x1.6、兄妹・地域の写真つきは x8。自動の画像つきは3本しかなかった）
 - 投稿時間帯6-23時のみ。R1: 全HTTP通信にtimeout必須
 - 本文はプレイブック準拠の短文。URL無し（HPB一本化ルールに抵触しない）
 - HEICはjpgへ自動変換。幅1440px超は縮小（Threads上限8MB対策）
 
 使い方: python3 image_post.py [--dry-run]
-launchd: com.threads.imagepost が4時間毎に実行
+launchd: com.threads.imagepost が4時間毎に実行（1回につき各アカ1枚＝投稿時間帯6-23時で約4回→nagaoka 4枚/日）
 """
 from __future__ import annotations
 
@@ -36,7 +37,7 @@ SRC = Path("/Users/mt112/Threads投稿画像")
 REPO_IMG = BASE / "images"
 STATE = BASE / "image_post_state.json"     # 日次カウント・使用ログ・通知フラグ（.gitignore）
 RAW = "https://raw.githubusercontent.com/truthbodysalon-lab/threads-auto-post/main/images"
-DAILY_IMG_CAP = 2
+DAILY_IMG_CAP = {"truth": 0, "nagaoka": 4}   # アカウント別の1日上限（2026-10-24 nagaokaを4枚へ。truthは9/2以降フォルダ欠落で実質停止中だったため0のまま据え置き＝再開はmasa判断）
 TIMEOUT = 30
 RECYCLE_DAYS = 7            # 使用済み画像の再利用しきい値（日）。適格0なら最終手段でLRU再利用
                             # するため実質の間隔は 画像枚数÷日次上限（例: 8枚÷2本=4日）に収束する
@@ -84,6 +85,42 @@ CAPTIONS = {
     ],
 }
 NAGAOKA_EXTRA = "\n兄妹で営んでいる小さな院です。"   # nagaokaの汎用系に時々付与
+
+# nagaoka専用キャプション（2026-10-24 本人指示: 兄妹・地域・天気の話に寄せる）。
+# 地域は「相談をいただくことがある」止まりで断定しない（見附・三条は variety_templates / 本人の既存投稿で確認済みの範囲）。
+# 1行目は 長岡/当院/来院/施術/改善 で始めない・含めない（_is_valid_first_line と同じ方針）。URL・予約誘導なし。
+CAPTIONS_NAGAOKA = {
+    "外観": [
+        "兄妹でやっている、小さな院の外観です。\n見附や三条など、長岡の外からも相談をいただくことがあります。",
+        "はじめての方が迷わないように、外観を載せておきます。\n院の前に駐車場があります。兄妹でお待ちしています。",
+        "兄妹で営んでいる院の、入口の写真です。\n遠くからお越しになる方も、車で停めやすいようにしています。",
+    ],
+    "内装": [
+        "兄妹でやっているので、院の中は小さくて静かです。\n「整体が初めてで緊張する」という方も、ゆっくり話せます。",
+        "院の中の様子です。\n静かな空間で、まずはお話から聞いていきます。",
+        "兄妹で整えた、小さな院の中です。\n見附や三条からお越しの方にも、くつろいでもらえるようにしています。",
+    ],
+    "汎用": [
+        "兄妹で営んでいる小さな院の、今日の一枚です。\n肩の重さや頭の重さの相談を、ひとつずつ聞いています。",
+        "長岡の小さな院の様子を、ときどき写真でも載せていきます。\n兄妹でやっているので、気軽に話しかけてください。",
+    ],
+    "天気": [
+        "雨の日は、頭が重くなるという声をよく聞きます。\n気圧が下がる日は、首の後ろを温めてから動いてみてください。",
+        "天気が崩れる前日、肩が重くなる人はいませんか？\n前の晩に首元を温めておくと、楽な人もいます。",
+        "寒くなってきました。\n首元を一枚足すだけで、夕方の肩の重さが違う人がいます。",
+        "曇りの日は、なんとなく体が重い。\nそんな日は、首の後ろを温めて、深呼吸を3回。",
+        "雪の朝は、肩に力が入りやすいです。\n布団から出る前に、首をゆっくり倒してみてください。",
+        "雨の音がする朝は、頭が重くて起きにくい人もいます。\n起き上がる前に、首の後ろを温めてみてください。",
+    ],
+    "図解": [
+        "保存して、思い出した時にやってみてください。",
+        "文章より図の方が伝わると思ったので、まとめました。\n保存しておくと便利です。",
+        "今日の1枚。当てはまる方は試してみてください。",
+        "スクショ保存推奨です。",
+    ],
+}
+# truth側に「天気」画像が置かれた場合の汎用キャプション
+CAPTIONS["天気"] = CAPTIONS_NAGAOKA["天気"]
 
 
 def log(msg):
@@ -156,6 +193,9 @@ def recycle_candidates(st, acct: str, min_days: float = RECYCLE_DAYS) -> list[tu
 def pick_recycle_category(default_cat: str, last_cat: str | None) -> str:
     """再利用時は前回と別のキャプションを選ぶ。写真内容と無関係なカテゴリ
     （内装写真に図解用など）を当てると不自然なため、振替先は「汎用」に限定する。"""
+    # 図解・天気は絵の内容と文が対応するため汎用に振り替えない（4〜6本のキャプションを順に使う）
+    if default_cat in ("図解", "天気"):
+        return default_cat
     if last_cat and default_cat == last_cat and default_cat != "汎用":
         return "汎用"
     return default_cat
@@ -182,7 +222,7 @@ def notify_stock_empty(st) -> bool:
 
 
 def category_of(name: str) -> str:
-    for k in ("外観", "内装", "施術", "駐車場", "カウンセリング", "図解"):
+    for k in ("外観", "内装", "施術", "駐車場", "カウンセリング", "図解", "天気"):
         if name.startswith(k):
             return k
     return "汎用"
@@ -202,9 +242,12 @@ def used_captions(acct: str) -> set:
 
 def pick_caption(acct: str, cat: str) -> str:
     used = used_captions(acct)
-    pool = [c for c in CAPTIONS[cat] if c.split("\n")[0] not in used] or CAPTIONS[cat]
+    src = CAPTIONS_NAGAOKA.get(cat) if acct == "nagaoka" and CAPTIONS_NAGAOKA.get(cat) else CAPTIONS.get(cat) or CAPTIONS["汎用"]
+    pool = [c for c in src if c.split("\n")[0] not in used] or src
     cap = random.choice(pool)
-    if acct == "nagaoka" and cat in ("汎用", "内装") and random.random() < 0.5:
+    # NAGAOKA_EXTRA(兄妹)は兄妹がまだ入っていない汎用／内装だけに付ける（兄妹は1本1回まで）
+    if acct == "nagaoka" and cat in ("汎用", "内装") and "兄妹" not in cap and random.random() < 0.5 \
+            and not CAPTIONS_NAGAOKA.get(cat):
         cap += NAGAOKA_EXTRA
     return cap
 
@@ -288,8 +331,11 @@ def main():
     for acct in ("truth", "nagaoka"):
         folder = SRC / acct
         if not folder.exists():
-            continue
-        if _count_today(st, acct) >= DAILY_IMG_CAP:
+            # 2026-10-24: フォルダが無いと黙ってスキップし、9/2以降の約7週間1枚も投稿されていなかった。
+            # 作って先へ進む（在庫0なら使用済みのリサイクルで回る）。
+            folder.mkdir(parents=True, exist_ok=True)
+            log(f"{acct}: 画像フォルダが無かったので作成 {folder}")
+        if _count_today(st, acct) >= DAILY_IMG_CAP.get(acct, 2):
             continue
         imgs = sorted([p for p in folder.iterdir()
                        if p.suffix.lower() in IMG_EXTS and not p.name.startswith(".")])

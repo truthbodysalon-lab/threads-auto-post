@@ -49,3 +49,4 @@
 {"ts": "2026-10-21T14:13:59+09:00", "msg": "🚨Threads Daily Verify: FAIL 1件検出\n・[exec:daily50:truth] 昨日(2026-10-20)の投稿 40本 / 必須50本（外形API実測）\nhttps://github.com/truthbodysalon-lab/threads-auto-post/actions/runs/39547764931"}
 {"ts": "2026-10-23T14:11:35+09:00", "msg": "🚨Threads Daily Verify: verify_system.py クラッシュ/出力異常\nexit=0\nhttps://github.com/truthbodysalon-lab/threads-auto-post/actions/runs/39904265569"}
 {"ts": "2026-10-24T07:56:57+09:00", "msg": "🚨Threads nagaoka: 最後の投稿から116分。原因候補: 選択ループ/例外（常駐は稼働中なのに投稿が出ていない）。直近run: https://github.com/truthbodysalon-lab/threads-auto-post/actions/runs/40034810814（CI watchdog）"}
+{"ts": "2026-10-24T13:54:15+09:00", "msg": "🚨Threads Daily Verify: verify_system.py クラッシュ/出力異常\nexit=1\nhttps://github.com/truthbodysalon-lab/threads-auto-post/actions/runs/40064094895"}

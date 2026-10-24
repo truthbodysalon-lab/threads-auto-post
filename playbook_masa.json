@@ -1,6 +1,6 @@
 {
   "acct": "masa",
-  "version": 82,
+  "version": 83,
   "updated": "2026-10-24",
   "description": "修正ポイント（勝ち構造・死ぬ構造）の正本。毎朝サブエージェントEが実測データで各ルールを検証し、効かなくなったルールはretired、新発見はtestingで追加、実証されたらactiveに昇格する。ヒーロー投稿と新テンプレはこのプレイブックのactiveルールに従って書く。",
   "rules": [
@@ -785,6 +785,11 @@
       "version": 82,
       "date": "2026-10-24",
       "change": "W_WINNING_HOOKS(testing)追加・W_UPLINK_REPOSTを1日3本・勝ち型優先に更新。固定原稿WINNING_HOOK_TEMPLATES20本を1日4本投入。なぜ: 転載121本の閲覧中央値8で通常投稿(9)と差がなく、伸びたのは1行目が5型に当たる投稿だったため（本人決定）。active/retired変更なし"
+    },
+    {
+      "version": 83,
+      "date": "2026-10-24",
+      "change": "Grok追記(v82まで)を保持。全ルール据え置き。W_WINNING_HOOKS5型を今朝のヒーロー8本に適用(A2/B2/C1/D2/E1)"
     }
   ]
 }

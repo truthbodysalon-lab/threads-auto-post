@@ -50,7 +50,7 @@
   "寝ても疲労感が抜けない人へ。": {
     "segment": "T5",
     "hook": "high",
-    "created": "2026-10-22",
+    "created": "2026-10-24",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z17_truth"
@@ -66,7 +66,7 @@
   "産後の腰痛が続くママへ。": {
     "segment": "T3",
     "hook": "high",
-    "created": "2026-10-22",
+    "created": "2026-10-24",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z11_truth"
@@ -74,7 +74,7 @@
   "何をしても一時的にしか変わらない人へ。": {
     "segment": "T6",
     "hook": "high",
-    "created": "2026-10-22",
+    "created": "2026-10-24",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z20_nagaoka"
@@ -202,14 +202,14 @@
   "不規則な勤務で通院を諦めた人へ。": {
     "segment": "T4",
     "hook": "high",
-    "created": "2026-10-20",
+    "created": "2026-10-24",
     "acct": "nagaoka",
     "variant": 0
   },
   "疲れが取れず気分も沈む人へ。": {
     "segment": "T5",
     "hook": "high",
-    "created": "2026-10-20",
+    "created": "2026-10-24",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z18_nagaoka"
@@ -623,7 +623,7 @@
   "立ち仕事で脚がパンパンな人へ。": {
     "segment": "T4",
     "hook": "high",
-    "created": "2026-10-20",
+    "created": "2026-10-24",
     "acct": "truth",
     "variant": 0
   },
@@ -637,14 +637,14 @@
   "マッサージでは変わらないと感じる人へ。": {
     "segment": "T6",
     "hook": "high",
-    "created": "2026-10-20",
+    "created": "2026-10-24",
     "acct": "truth",
     "variant": 0
   },
   "骨盤の歪みが気になるママへ。": {
     "segment": "T3",
     "hook": "high",
-    "created": "2026-10-20",
+    "created": "2026-10-24",
     "acct": "nagaoka",
     "variant": 0
   },
@@ -2468,7 +2468,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 5,
-    "created": "2026-10-17",
+    "created": "2026-10-24",
     "acct": "nagaoka"
   },
   "朝、首や肩が一番つらい人へ。": {
@@ -4260,7 +4260,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 32,
-    "created": "2026-10-10",
+    "created": "2026-10-24",
     "acct": "nagaoka"
   },
   "『座った後、立つ時に腰が伸びない』という声を、よく聞きます。": {
@@ -5311,7 +5311,7 @@
   "「リピートできている」と感じている院長へ。": {
     "segment": "R11",
     "hook": "high",
-    "created": "2026-10-18",
+    "created": "2026-10-24",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -5320,7 +5320,7 @@
   "提案を、怖がっている院長へ。": {
     "segment": "R12",
     "hook": "high",
-    "created": "2026-10-18",
+    "created": "2026-10-24",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -5373,7 +5373,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 35,
-    "created": "2026-10-12",
+    "created": "2026-10-24",
     "acct": "truth"
   },
   "『検査では問題ないと言われたのに、つらさが続く』という声を、よく聞きます。": {
@@ -5751,7 +5751,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 17,
-    "created": "2026-10-13",
+    "created": "2026-10-24",
     "acct": "truth"
   },
   "【猫背が気になる人の習慣6選】": {
@@ -5877,7 +5877,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 4,
-    "created": "2026-10-13",
+    "created": "2026-10-24",
     "acct": "nagaoka"
   },
   "インスタ運用で、気分に左右されて続かない院長へ。": {
@@ -5993,7 +5993,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 19,
-    "created": "2026-10-14",
+    "created": "2026-10-24",
     "acct": "truth"
   },
   "『整体は初めてで、不安』という声を、よく聞きます。": {
@@ -6464,7 +6464,7 @@
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 63,
-    "created": "2026-10-17"
+    "created": "2026-10-24"
   },
   "質問スタンプの答えがなくても、失敗じゃない。": {
     "segment": "INSTA_EASY",
@@ -7105,7 +7105,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 0,
-    "created": "2026-10-22"
+    "created": "2026-10-24"
   },
   "売り先は、1つに絞らない。": {
     "segment": "HAKASE",
@@ -7539,7 +7539,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 4,
-    "created": "2026-10-23"
+    "created": "2026-10-24"
   },
   "良い投稿の前に、プロフィールを直す。": {
     "segment": "HAKASE",
@@ -7950,6 +7950,49 @@
     "hook": "present",
     "present_key": "insta_kit",
     "variant": 15,
+    "created": "2026-10-24"
+  },
+  "インスタのプロフィールは、ゼロから書かなくていい。": {
+    "segment": "PRESENT_CTA",
+    "hook": "present",
+    "present_key": "insta_kit",
+    "variant": 0,
+    "created": "2026-10-24"
+  },
+  "【3ステップ】いいねの数は、気にしない。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-24"
+  },
+  "【3つだけ】最初の1か月は、広告を使わなくていい。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-24"
+  },
+  "【3ステップ】覚えるのは、これだけ。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-24"
+  },
+  "入口は毎日そこにあるから、ネタに困らない。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-24"
+  },
+  "【3ステップ】長く書くより、1行で出す。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-24"
+  },
+  "【3つだけ】顔なしでも、お店の雰囲気は伝わる。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
     "created": "2026-10-24"
   }
 }

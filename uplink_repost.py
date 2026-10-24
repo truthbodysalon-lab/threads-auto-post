@@ -20,7 +20,7 @@ POOL = BASE / "uplink_repost_pool.json"
 LEDGER = BASE / "log_masa_posted.jsonl"
 KIND = "uplink_repost"
 
-DAILY_N = int(os.environ.get("UPLINK_REPOST_DAILY", "8"))   # 1日の追加本数（通常50本とは別枠。2026-10-17 過去300+取り込みでqueued60本超→6から8へ）
+DAILY_N = int(os.environ.get("UPLINK_REPOST_DAILY", "3"))   # 1日の追加本数（通常50本とは別枠）。2026-10-24 転載121本の閲覧中央値8で他のmasa投稿と差なし→8から3へ減らし勝ち型優先
 START_HOUR = int(os.environ.get("UPLINK_REPOST_START", "7"))
 FULL_HOUR = int(os.environ.get("UPLINK_REPOST_FULL", "21"))  # この時刻までに当日分を出し切るペース
 MIN_VIEWS = 200
@@ -191,6 +191,22 @@ def queued_count(items: list | None = None) -> int:
     return sum(1 for i in (items if items is not None else load_pool()) if i.get("status") == "queued")
 
 
+# 2026-10-24 実測で伸びた1行目の型（売上が伸びない店ほど…458／たった3つ203／値引きしても…増えません196／【…9選】153／新しいノウハウは要りません143）
+_WINNING_HOOKS = [
+    re.compile(r"ほど[、,]?.{0,20}(これ|こう|それ|あれ)?を?(やって|して|でき|してい)"),   # 逆説「〜ほど、これをやっています」
+    re.compile(r"たった[0-9０-９一二三四五六七八九十]+つ|[0-9０-９一二三四五六七八九十]+つだけ"),   # 「たった3つ」「〇つだけ」
+    re.compile(r"(して|ても|やっても).{0,20}(は|も)?増えません"),   # 否定断言「〜しても〜は増えません」
+    re.compile(r"^【.{0,30}[0-9０-９]+選】"),   # 【〜N選】見出しリスト
+    re.compile(r"に.{0,6}(新しい|新たな).{0,12}(は|も)?要りません|(新しい|新たな).{0,12}(は|も)?要りません"),   # 「新しい〜は要りません」
+]
+
+
+def is_winning_hook(text: str) -> bool:
+    """1行目が勝ち型（逆説/たった3つ/否定断言/【N選】/新しい〜は要りません）に当たるか"""
+    first = (text or "").strip().split("\n")[0].strip()
+    return any(r.search(first) for r in _WINNING_HOOKS)
+
+
 def next_item(items: list):
     """views上位のqueued。失敗回数が少ないものを優先（同じものを選び続けない）。
     面談導線の書き直し(SRC_MENDAN)は1日1本まで・LINE言及率が上限の日は出さない（翌日に回る）。"""
@@ -199,7 +215,8 @@ def next_item(items: list):
         q = [i for i in q if i.get("source") != SRC_MENDAN]
     if not q:
         return None
-    return sorted(q, key=lambda i: (i.get("fail", 0), -i.get("views", 0)))[0]
+    # 勝ち型の1行目を先に（当たらないものは後回し・削除はしない）
+    return sorted(q, key=lambda i: (i.get("fail", 0), 0 if is_winning_hook(i.get("text", "")) else 1, -i.get("views", 0)))[0]
 
 
 # ── カウント・ペース ─────────────────────────────────

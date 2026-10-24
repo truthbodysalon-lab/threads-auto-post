@@ -3123,7 +3123,7 @@ def _insert_present_cta(posts: list[str], acct: str, today: str):
 # ハードルを下げる言い換え: 1日1分・スマホだけ・撮らない編集しない・AIに任せて確認だけ。
 # 面談/相談/診断/決済/申込/割引/円/LINE/フォロー・URL・創作統計・店舗情報は入れない（導線はアンカー側が担う）。
 # 各本は否定型フックか数字を含み、最後は「今日できる小さな行動1つ」で締める。投入ロジックは次工程。
-from masa_insta_content import INSTA_EASY_TEMPLATES  # noqa: E402
+from masa_insta_content import INSTA_EASY_TEMPLATES, WINNING_HOOK_TEMPLATES  # noqa: E402
 
 
 # ── masa: Instagram集客×ハードルを下げる（2026-10-04 本人指示・主テーマ化）──
@@ -3553,6 +3553,55 @@ def _insert_hakase_posts(posts: list[str], acct: str, today: str) -> list[str]:
     return posts
 
 
+WINNING_HOOK_DAILY = 4   # 勝ち型の固定原稿を前半50本へ入れる本数/日（20本を約5日で一巡）
+
+
+def _insert_winning_hook_posts(posts: list[str], acct: str, today: str, base_normal: set) -> list[str]:
+    """masa専用（2026-10-24）: 勝ち型20本（WINNING_HOOK_TEMPLATES）を1日WINNING_HOOK_DAILY本、
+    前半50本の通常枠（base_normal）へ等間隔に置換で入れる。個数は変えない・アンカー/挿入済み枠は触らない。
+    なぜ: 10/24実測で伸びたmasa投稿の1行目が5型に集中していたため。7日以内に使った原稿は避け、
+    足りなければ全体から（全滅回避）。segment_registryへsegment="WIN_HOOK"で登録（DRY時は保存されない）。"""
+    if acct != "masa" or not WINNING_HOOK_TEMPLATES:
+        return posts
+    front = min(INSTA_FRONT_LEN, len(posts))
+    slots = [i for i in range(front) if posts[i] in base_normal and not _is_anchor_post(posts[i])]
+    if not slots:
+        return posts
+    try:
+        today_date = date.fromisoformat(today)
+    except Exception:
+        today_date = date.today()
+    registry = _load_segment_registry()
+    recent_keys = set()
+    for key, entry in registry.items():
+        if isinstance(entry, dict) and entry.get("segment") == "WIN_HOOK":
+            try:
+                if 0 < (today_date - date.fromisoformat(entry.get("created", ""))).days < 7:
+                    recent_keys.add(key)
+            except Exception:
+                continue
+    used_keys = {_segment_registry_key(p) for p in posts}
+    recent_first = _get_recent_first_lines("masa", days=4)
+    valid = [t for t in WINNING_HOOK_TEMPLATES
+             if _masa_len_ok(t) and not _is_abstract_masa(t) and not _is_ng(t) and not _is_masa_sales_ng(t)
+             and not _is_masa_yokokoku_ng(t) and _segment_registry_key(t) not in used_keys]
+    pool = [t for t in valid if _segment_registry_key(t) not in recent_keys and t.split("\n")[0].strip() not in recent_first]
+    if len(pool) < WINNING_HOOK_DAILY:
+        pool = [t for t in valid if t.split("\n")[0].strip() not in recent_first] or valid
+    random.shuffle(pool)
+    n = min(WINNING_HOOK_DAILY, len(pool), len(slots))
+    step = max(1, len(slots) // max(1, n))
+    for j in range(n):
+        slot = slots[min(len(slots) - 1, j * step + step // 2)]
+        text = pool[j]
+        posts[slot] = text
+        base_normal.discard(text)
+        registry[_segment_registry_key(text)] = {"segment": "WIN_HOOK", "hook": "winning",
+                                                 "variant": WINNING_HOOK_TEMPLATES.index(text), "created": today}
+    _save_segment_registry(registry)
+    return posts
+
+
 def _fill_insta_theme_posts(posts: list[str], acct: str, today: str, base_normal: set) -> list[str]:
     """masa専用: 前半50本のInstagramテーマ本数がINSTA_THEME_TARGET未満なら、通常枠(base_normal)の
     非Instagram投稿をINSTA_EASY(固定80本・7日以内の再投入なし)＋組合せ生成の投稿へ置換する。
@@ -3893,6 +3942,9 @@ def generate_30_masa_posts() -> list[str]:
     posts, present_cta_text = _insert_present_cta(posts, "masa", TODAY)   # プレゼント誘導（present_campaign.json enabled時のみ）
 
     posts = _insert_hero_posts(posts, "masa")   # 全挿入の最後（LINE最終チェックより前に置く）
+
+    # 勝ち型の固定原稿を前半50本へ（2026-10-24・実測で伸びた1行目の5型）。Instagram充足より前に置く
+    posts = _insert_winning_hook_posts(posts, "masa", TODAY, _base_normal_texts)
 
     # 主テーマ=Instagram集客（ハードルを下げる）: 前半50本のうち32本以上をInstagramテーマにする（2026-10-04）
     posts = _fill_insta_theme_posts(posts, "masa", TODAY, _base_normal_texts)

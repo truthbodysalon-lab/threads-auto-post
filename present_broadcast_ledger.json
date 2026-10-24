@@ -1,0 +1,6 @@
+{
+ "_doc": "present_broadcast_cloud.py の送信台帳。キー=プレゼント@期の開始日。個人情報は入れない。insta_kit@2026-10-21 はMac版で送信済み(10/24 16:04)",
+ "periods": {
+  "insta_kit@2026-10-21": {"status": "sent", "at": "2026-10-24 16:04:18"}
+ }
+}

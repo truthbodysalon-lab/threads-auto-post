@@ -1,0 +1,85 @@
+name: masa公式LINE 今週のプレゼント配布（友だち全員）
+
+# 2026-10-24 本人指示「Macがスリープしていても動くように」: Mac launchd com.mt112.present-broadcast(12:05) から移管。
+# 公開repoなのでActions無料枠の上限がない。1つの期(水曜切替・7日)につき1回だけ broadcast する。
+# 台帳 present_broadcast_ledger.json を「送る前に pending で push → 送った後に sent/failed で push」して二重送信を防ぐ。
+on:
+  schedule:
+    - cron: '5 3 * * *'    # JST 12:05
+    - cron: '35 5 * * *'   # 予備 JST 14:35（送信済みなら何もしない）
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'DRY_RUN（送らず文面だけ確認）'
+        type: boolean
+        default: false
+      retry_failed:
+        description: '失敗/送信中のまま止まった期を再送する（届いていないのを確認してから）'
+        type: boolean
+        default: false
+
+concurrency:
+  group: present-broadcast
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  broadcast:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      TZ: Asia/Tokyo
+      DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+      SEND_FLAG: ${{ github.event.inputs.dry_run == 'true' && '' || '--send' }}
+      RETRY_FLAG: ${{ github.event.inputs.retry_failed == 'true' && '--retry-failed' || '' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Plan (送る必要があれば pending を記録)
+        id: plan
+        run: |
+          set +e
+          python present_broadcast_cloud.py --stage plan $SEND_FLAG $RETRY_FLAG
+          rc=$?
+          echo "rc=$rc" >> "$GITHUB_OUTPUT"
+          [ "$rc" = "0" ] || [ "$rc" = "3" ]
+
+      - name: Push ledger (pending)
+        if: steps.plan.outputs.rc == '0'
+        run: |
+          git config user.name "present-broadcast-bot"
+          git config user.email "present-broadcast-bot@users.noreply.github.com"
+          git add present_broadcast_ledger.json
+          git diff --cached --quiet && exit 0
+          git commit -m "chore: プレゼント配布の台帳(pending) [skip ci]"
+          for i in 1 2 3 4 5; do
+            git pull --rebase origin main && git push origin HEAD:main && exit 0
+            git rebase --abort 2>/dev/null || true; sleep $((i * 5))
+          done
+          echo "::error::台帳のpushに失敗したため送信しません（二重送信防止）"; exit 1
+
+      - name: Send
+        if: steps.plan.outputs.rc == '0'
+        env:
+          LINE_MASA_CHANNEL_ACCESS_TOKEN: ${{ secrets.LINE_MASA_CHANNEL_ACCESS_TOKEN }}
+        run: python present_broadcast_cloud.py --stage send
+
+      - name: Push ledger (result)
+        if: always() && steps.plan.outputs.rc == '0'
+        run: |
+          git add present_broadcast_ledger.json
+          git diff --cached --quiet && exit 0
+          git commit -m "chore: プレゼント配布の台帳(結果) [skip ci]"
+          for i in 1 2 3 4 5; do
+            git pull --rebase origin main && git push origin HEAD:main && exit 0
+            git rebase --abort 2>/dev/null || true; sleep $((i * 5))
+          done
+          exit 1

@@ -385,6 +385,45 @@ def _verdict(n, index, min_n):
     return "testing"
 
 
+# 勝ち型（WIN_HOOK）の5型。masa_insta_content.WINNING_HOOK_TEMPLATES は4本ずつA〜Eの並び（variant=その添字）。
+WIN_TYPES = ["A逆説", "Bたった3つ", "C否定断言", "D【N選】", "E要りません"]
+
+
+def _win_type_of(variant):
+    try:
+        v = int(variant)
+    except (TypeError, ValueError):
+        return None
+    return WIN_TYPES[v // 4] if 0 <= v < 20 else None
+
+
+def _uplink_rows(past_by_id: dict) -> list[dict]:
+    """uplink転載（uplink_repost_pool.json の posted・masa_post_id）を実測（past_posts）と突き合わせる。"""
+    pool = _load_json(BASE / "uplink_repost_pool.json", [])
+    try:
+        from uplink_repost import is_winning_hook
+    except Exception:
+        is_winning_hook = lambda t: False  # noqa: E731
+    out = []
+    for it in pool if isinstance(pool, list) else []:
+        if it.get("status") != "posted" or not it.get("masa_post_id"):
+            continue
+        past = past_by_id.get(str(it["masa_post_id"]))
+        out.append({
+            "date": (it.get("posted_at") or "")[:10],
+            "views": (past or {}).get("views", 0) or 0,
+            "has_metrics": past is not None,
+            "winning": bool(is_winning_hook(it.get("text", ""))),
+        })
+    return out
+
+
+def _cell_summary(cell_views: list, baseline_median, min_n):
+    st = _stats(cell_views)
+    idx = round(st["median_views"] / baseline_median, 3) if baseline_median else 0.0
+    return {**st, "index": idx, "verdict": _verdict(st["n"], idx, min_n)}
+
+
 def build_report(acct: str):
     today = date.today()
     log_entries = _load_log_entries(acct)
@@ -412,7 +451,7 @@ def build_report(acct: str):
         # HAKASE（インスタ運用の原則投稿・masa専用・2026-09-23）はS1-S5と別枠の集計対象なので
         # SEGMENTSの正規化を通さずそのまま保持する（_norm_segmentはSEGMENTS以外はNoneを返し
         # 「未登録」扱いになってしまうため）。
-        seg_val = raw_seg if raw_seg in ("HAKASE", "INSTA_EASY") else (_norm_segment(acct, raw_seg) if reg else None)
+        seg_val = raw_seg if raw_seg in ("HAKASE", "INSTA_EASY", "WIN_HOOK") else (_norm_segment(acct, raw_seg) if reg else None)
         joined.append({
             "date": e.get("date", ""),
             "post_id": pid,
@@ -420,6 +459,7 @@ def build_report(acct: str):
             "segment": seg_val,
             "hook": _norm_hook(reg.get("hook")) if reg else None,
             "hypothesis_id": (reg.get("hypothesis_id") if reg else None) or None,
+            "variant": (reg.get("variant") if reg else None),
             "views": (past or {}).get("views", 0) or 0,
             "like_count": (past or {}).get("like_count", 0) or 0,
             "replies_count": (past or {}).get("replies_count", 0) or 0,
@@ -495,6 +535,21 @@ def build_report(acct: str):
             "verdict": _verdict(hakase_st["n"], hakase_index, min_n),
         }
 
+        # 勝ち型（WIN_HOOK）5型別 と uplink転載（勝ち型/それ以外）。masaの軸1のみ（2026-10-24）。
+        win_hook = {}
+        uplink = {}
+        if acct == "masa":
+            for t in WIN_TYPES:
+                win_hook[t] = _cell_summary(
+                    [j["views"] for j in rows if j["segment"] == "WIN_HOOK" and _win_type_of(j.get("variant")) == t],
+                    baseline_median, min_n)
+            win_hook["勝ち型 全体"] = _cell_summary(
+                [j["views"] for j in rows if j["segment"] == "WIN_HOOK"], baseline_median, min_n)
+            urows = [u for u in _uplink_rows(past_by_id) if _within_days(u["date"], win, today) and u["has_metrics"]]
+            uplink["勝ち型"] = _cell_summary([u["views"] for u in urows if u["winning"]], baseline_median, min_n)
+            uplink["それ以外"] = _cell_summary([u["views"] for u in urows if not u["winning"]], baseline_median, min_n)
+            uplink["転載 全体"] = _cell_summary([u["views"] for u in urows], baseline_median, min_n)
+
         # 仮説別（Obsidian由来の店舗経営の悩み・質問から作った仮説の勝ち負け判定。
         # 2026-09-23追加。acctでフィルタする。segment_hypotheses.json が無い/空でもクラッシュしない）。
         hyp_data = _load_hypotheses()
@@ -528,6 +583,8 @@ def build_report(acct: str):
             "segment_hook": seg_hook,
             "segment": seg_only,
             "hakase": hakase_summary,
+            "win_hook": win_hook,
+            "uplink": uplink,
             "hypothesis": hyp_summary,
         }
 
@@ -540,6 +597,20 @@ def build_report(acct: str):
     # 併記する。ファイル不在ならキー自体を省略する（write_markdown側もNoneチェックで対応）。
     report["past_baseline"] = _load_baseline(acct)
     return report
+
+
+def _win_uplink_table_md(w: dict) -> list[str]:
+    """勝ち型（5型）とuplink転載の表（markdown行）。w=その窓のdict（2026-10-24）。"""
+    out = ["### 勝ち型の固定原稿（WIN_HOOK・型別）"]
+    out += ["| 型 | n | 中央値 | 平均 | 全体比 | 判定 |", "|---|---|---|---|---|---|"]
+    for k, c in (w.get("win_hook") or {}).items():
+        out.append(f"| {k} | {c['n']} | {c['median_views']} | {c.get('mean_views', '-')} | {c['index']} | {c['verdict']} |")
+    out += ["", "### uplink転載（勝ち型の1行目かどうか別）",
+            "| 区分 | n | 中央値 | 平均 | 全体比 | 判定 |", "|---|---|---|---|---|---|"]
+    for k, c in (w.get("uplink") or {}).items():
+        out.append(f"| {k} | {c['n']} | {c['median_views']} | {c.get('mean_views', '-')} | {c['index']} | {c['verdict']} |")
+    out.append("")
+    return out
 
 
 def write_markdown(report, acct: str):
@@ -583,6 +654,8 @@ def write_markdown(report, acct: str):
             lines.append(f"| {hk.get('n', 0)} | {hk.get('median_views', 0)} | {hk.get('index', 0)} | "
                           f"{hk.get('like_rate', 0)} | {hk.get('reply_rate', 0)} | {hk.get('verdict', '判定保留')} |")
             lines.append("")
+        if acct == "masa":
+            lines.extend(_win_uplink_table_md(w))
         lines.append("### 仮説別（Obsidian由来の店舗経営の悩み・質問）")
         hyp = w.get("hypothesis", {})
         if not hyp:
@@ -850,6 +923,13 @@ def run_for_acct(acct: str, do_apply: bool, do_json: bool):
             print(f"segment_report[masa](HAKASE原則投稿): n={hakase_summary.get('n', 0)} "
                   f"index={hakase_summary.get('index', 0)} verdict={hakase_summary.get('verdict', '判定保留')}")
 
+    if acct == "masa":
+        for _wk in ("7d", "14d"):
+            _w = report["windows"].get(_wk, {})
+            for _name, _grp in (("勝ち型", _w.get("win_hook") or {}), ("uplink転載", _w.get("uplink") or {})):
+                bits = " ".join(f"{k}:n{c['n']}/中央{c['median_views']}/{c['index']}倍" for k, c in _grp.items())
+                print(f"segment_report[masa]({_wk} {_name}): {bits}")
+
     hyp_summary = report.get("hypothesis_summary", {})
     if hyp_summary:
         hwin = [h for h, c in hyp_summary.items() if c.get("verdict") == "winner"]
@@ -967,6 +1047,9 @@ def _pain_section(acct: str, report: dict, apply_detail: dict, daily: bool = Tru
         _pd = _cfg_get(_load_json(CONFIG_FILE, {}), acct).get("per_day", "")
         nxt = f"{len(SEG_CODES.get(acct, []))}個の悩みを毎日{_pd}つずつ回し、各悩み{min_n}本そろうまで均等に配信"
     lines.append(f"・次の打ち手：{nxt}")
+    _wl = _win_uplink_line(acct, report)
+    if _wl:
+        lines.append(_wl)
     share_detail = apply_detail.get("share") if apply_detail else None
     if share_detail:
         diffs = []
@@ -996,6 +1079,24 @@ def _pain_map_lines(acct: str, report: dict, width: int = 10) -> list[str]:
     return out
 
 
+def _win_uplink_line(acct: str, report: dict) -> str | None:
+    """秘書向け1行: 勝ち型の投稿／uplink転載が全体の何倍か（直近14日・平易な日本語）。masaの軸1のみ。"""
+    if acct != "masa":
+        return None
+    w = report.get("windows", {}).get("14d", {})
+    wh = (w.get("win_hook") or {}).get("勝ち型 全体", {})
+    up = (w.get("uplink") or {}).get("転載 全体", {})
+
+    def _bit(label, c):
+        if not c or not c.get("n"):
+            return f"{label}：まだ投稿なし"
+        mult = f"全体の{round(c.get('index', 0), 1)}倍"
+        if c["n"] < 5:
+            mult += "（まだ少なく参考値）"
+        return f"{label}：{mult}（投稿{c['n']}本）"
+    return "・" + "／".join([_bit("勝ち型の投稿", wh), _bit("uplink転載", up)])
+
+
 def _acct_section(acct: str, report: dict, apply_detail: dict, baseline: dict | None,
                    include_focus: bool = True) -> list[str]:
     if _is_pain_axis(acct):
@@ -1009,6 +1110,10 @@ def _acct_section(acct: str, report: dict, apply_detail: dict, baseline: dict | 
         lines.append("・勝ち：" + "、".join(_seg_jp_name(acct, s) for s in winners))
     else:
         lines.append("・勝ち：まだ判定できる層なし")
+
+    _wl = _win_uplink_line(acct, report)
+    if _wl:
+        lines.append(_wl)
 
     if include_focus:
         hyp_summary = report.get("hypothesis_summary", {})
@@ -1293,6 +1398,10 @@ def _write_obsidian_journal(results: dict, secretary_body: str | None, sent_stat
         parts.append("")
         parts.append(_hypothesis_table_md(acct, report))
         parts.append("")
+        if acct == "masa":
+            for _wk in ("7d", "14d"):
+                parts.append(f"##### 勝ち型・uplink転載（直近{_wk[:-1]}日）")
+                parts.extend(_win_uplink_table_md(report.get("windows", {}).get(_wk, {})))
 
     for _pa, _lab in (("masa", "(b2) masa Instagram集客の悩みランキング"),
                       ("masa_repeat", "(b3) masa 来店後のリピート・クロージング悩みランキング")):

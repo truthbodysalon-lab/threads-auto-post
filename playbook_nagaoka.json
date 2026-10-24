@@ -1,6 +1,6 @@
 {
   "acct": "nagaoka",
-  "version": 70,
+  "version": 71,
   "updated": "2026-10-24",
   "description": "修正ポイント（勝ち構造・死ぬ構造）の正本。毎朝サブエージェントEが実測データで各ルールを検証し、効かなくなったルールはretired、新発見はtestingで追加、実証されたらactiveに昇格する。ヒーロー投稿と新テンプレはこのプレイブックのactiveルールに従って書く。",
   "rules": [
@@ -226,8 +226,8 @@
       "status": "testing",
       "added": "2026-10-06",
       "last_validated": "2026-10-06",
-      "rule": "【◯◯に絶対必要な習慣N選】型: 1行目=隅付き括弧の見出し（N=5〜9。「習慣」「やめること」「チェック項目」「NG行動」「朝の習慣」等の変種可）／「・」で始まる1行10〜18字程度の動詞終わりの具体行動をN行／最後に短い格言調の1行。URL・CTA・ハッシュタグ・予約誘導なし・250字以内。固定側=generate_remixのLIST_HABIT_TEMPLATES_NAGAOKA（34本）＋組合せ生成(LIST_HABIT_POOLS)が毎日2本を前半アンカー13・22に投入（7日以内の再投入なし・segment_registryにsegment=LIST_HABIT）。ヒーロー10本のうち1〜2本もこの型で書く。nagaokaは肩こり・首こり・生活習慣寄り（仕事中・スマホ首・巻き肩・家事・産後など）でtruthと文面を重複させない。",
-      "evidence": "本人指示2026-10-06（サロン経営の習慣9選の型を肩こり・頭痛の内容で）＋既存の【】リスト型・own_winnersの「・」リスト型が勝ち構造の実測（W_OWN: 自分の投稿は「・」リスト254対17〔nagaoka〕）。 判定は本文一致。testing→前日実閲覧が中央値の3倍超でactive昇格／中央値未満が2回でretired。"
+      "rule": "【◯◯に絶対必要な習慣N選】型: 1行目=隅付き括弧の見出し（N=5〜9。「習慣」「やめること」「チェック項目」「NG行動」「朝の習慣」等の変種可）／「・」で始まる1行10〜18字程度の動詞終わりの具体行動をN行／最後に短い格言調の1行。URL・CTA・ハッシュタグ・予約誘導なし・250字以内。固定側=generate_remixのLIST_HABIT_TEMPLATES_NAGAOKA（34本）＋組合せ生成(LIST_HABIT_POOLS)が1日0〜1本（2026-10-24に毎日2本→隔日1本へ減＝偶数日のみアンカー13）を投入（7日以内の再投入なし・segment_registryにsegment=LIST_HABIT）。ヒーロー10本のうち1〜2本もこの型で書く。nagaokaは肩こり・首こり・生活習慣寄り（仕事中・スマホ首・巻き肩・家事・産後など）でtruthと文面を重複させない。",
+      "evidence": "本人指示2026-10-06（サロン経営の習慣9選の型を肩こり・頭痛の内容で）＋既存の【】リスト型・own_winnersの「・」リスト型が勝ち構造の実測（W_OWN: 自分の投稿は「・」リスト254対17〔nagaoka〕）。 判定は本文一致。testing→前日実閲覧が中央値の3倍超でactive昇格／中央値未満が2回でretired。 ｜2026-10-24 14日実測: nagaoka n23 x0.54（7日 n11 x0.52）効いていない→隔日1本へ"
     },
     {
       "id": "W_CUSTOMER_VOICE",
@@ -237,6 +237,42 @@
       "last_validated": "2026-10-06",
       "rule": "お客様の声型: 1行目=『（悩みの言い方を一般化）』という声を、よく聞きます。 または ◯◯な人へ。／原因の説明（水分・姿勢・睡眠・力み・動きの悪さ等を『〜ことがあります』の言い方で。断定・効果の保証はしない）／最後に今日できる1つ（安全なセルフケアのみ）。250字以内。URL・CTA・予約誘導・ハッシュタグなし。固定側=generate_remixのCUSTOMER_VOICE_TEMPLATES_NAGAOKA（24本・customer_voice_templates.py）が毎日1本を前半アンカー(17)に投入（7日以内の再投入なし・segment_registryにsegment=CUSTOMER_VOICE）。ヒーロー10本のうち2本は、~/.claude/logs/customer_voices/voices_latest.json（匿名化済み・ローカルのみ）を開いて、お客様の言い方を1行目に一般化して使う。習慣N選型の題材にも声由来を追加済み。プライバシー厳守: 氏名・職場・地名・日付・年齢・料金・特定の病名/薬名・個別エピソードの細部は書かない。逐語引用しない。声の元データはリポジトリに入れない。",
       "evidence": "本人指示2026-10-06（Plaudの会話と実際のお客様の声も参考にする）。Plaudカウンセリング録音の匿名化抽出（悩み116・説明60・来院の流れ41）で、頭痛・ストレス・首こり・肩こりが上位。読み手の言葉で書く方が反応しやすいという仮説。判定は本文一致。testing→前日実閲覧が中央値の3倍超でactive昇格／中央値未満が2回でretired。"
+    },
+    {
+      "id": "W_MAE_MAZU",
+      "type": "win",
+      "status": "testing",
+      "rule": "「〜する前に、まず〜」型（短文・3行以内）: 1行目=「◯◯する前に、まず△△してみて。」／2行目=理由を「〜ことがあります」で1文。nagaokaでは唯一伸びる型。固定側=type_templates.pyのMAE_MAZU_TEMPLATES_NAGAOKA（30本・長岡/兄妹は1本1回まで）が毎日4本、汎用ベース投稿と置換（segment=MAE_MAZU）。ヒーロー10本のうち2本以上もこの型。",
+      "evidence": "分析 myfiles/SNS・Threads/truth_nagaoka_1行目の型と施策の効果_2026-10-24.md（Threads外形API 14日・truth652本/nagaoka729本）＋本人指示2026-10-24。判定は本文一致（segment_registryのsegment値＋台帳）。型別の閲覧倍率は segment_report.py の build_type_report（秘書日報「伸びた型」）。testing→前日実閲覧が中央値の3倍超でactive昇格／中央値未満が2回でretired。 「前に、まず」「要りません」型 n12 x2.25（nagaoka唯一の勝ち型）。",
+      "added": "2026-10-24",
+      "last_validated": "2026-10-24"
+    },
+    {
+      "id": "W_WEATHER",
+      "type": "win",
+      "status": "testing",
+      "rule": "天気・気圧・寒暖差の話と問いかけ（短文・3行以内）: 「雨の日に頭が重くなる人、いますか？」「低気圧の日は、まず首の後ろを温めてみて。」。固定側=type_templates.pyのWEATHER_TEMPLATES_NAGAOKA（20本）が毎日3本・QUESTION_TEMPLATES_NAGAOKA（12本）が毎日2本、汎用ベースと置換（segment=WEATHER／QUESTION）。お客様の声(CUSTOMER_VOICE)は1→3本/日に増やす（既存24本・7日回し）。",
+      "evidence": "分析 myfiles/SNS・Threads/truth_nagaoka_1行目の型と施策の効果_2026-10-24.md（Threads外形API 14日・truth652本/nagaoka729本）＋本人指示2026-10-24。判定は本文一致（segment_registryのsegment値＋台帳）。型別の閲覧倍率は segment_report.py の build_type_report（秘書日報「伸びた型」）。testing→前日実閲覧が中央値の3倍超でactive昇格／中央値未満が2回でretired。 天気・気圧 n27 x1.91／自動の問いかけ n33 x1.83／お客様の声（自動）n20 x2.28。",
+      "added": "2026-10-24",
+      "last_validated": "2026-10-24"
+    },
+    {
+      "id": "W_IMAGE_AUTO",
+      "type": "win",
+      "status": "testing",
+      "rule": "画像つき自動投稿を1日4本から試す（image_post.py・nagaokaのみ）: ~/Threads投稿画像/nagaoka の写真・図解・天気イラスト（Codex生成・人物と文字なし）を巡回。キャプションは兄妹・地域（見附・三条から相談をいただくことがある、と断定しない書き方）・天気の話に寄せる。URL・予約誘導なし。",
+      "evidence": "分析 myfiles/SNS・Threads/truth_nagaoka_1行目の型と施策の効果_2026-10-24.md（Threads外形API 14日・truth652本/nagaoka729本）＋本人指示2026-10-24。判定は本文一致（segment_registryのsegment値＋台帳）。型別の閲覧倍率は segment_report.py の build_type_report（秘書日報「伸びた型」）。testing→前日実閲覧が中央値の3倍超でactive昇格／中央値未満が2回でretired。 画像つき投稿 n63 x1.60（兄妹・地域の写真つきは中央565・x8）。自動の画像つきは3本のみ。image_post.pyは9/2以降フォルダ欠落で停止していたため2026-10-24に復旧。segment型別レポートは台帳kind=imageで集計。",
+      "added": "2026-10-24",
+      "last_validated": "2026-10-24"
+    },
+    {
+      "id": "L_TYPE_CAPS",
+      "type": "lose",
+      "status": "testing",
+      "rule": "効かない型には1日あたりの上限を設ける（完全禁止ではない。generate_remixのTYPE_CAPS）: LIST_HABITは1日0〜1本（隔日）・【N選】の汎用は0本／言い切りの否定（1行目「〜しても」「〜ではありません」「〜ません。」「だけでは」「より先に」）2本／デスク・スマホ2本・マッサージ1本・薬1本・産後1本・水分2本・4行以上12本。",
+      "evidence": "分析 myfiles/SNS・Threads/truth_nagaoka_1行目の型と施策の効果_2026-10-24.md（Threads外形API 14日・truth652本/nagaoka729本）＋本人指示2026-10-24。判定は本文一致（segment_registryのsegment値＋台帳）。型別の閲覧倍率は segment_report.py の build_type_report（秘書日報「伸びた型」）。testing→前日実閲覧が中央値の3倍超でactive昇格／中央値未満が2回でretired。 LIST_HABIT n23 x0.54／否定断言 n72 x0.67／薬 n34 x0.51／産後 n19 x0.56／水分 n35 x0.37／デスク・スマホ n42 x0.69／4行以上 n183 x0.73。",
+      "added": "2026-10-24",
+      "last_validated": "2026-10-24"
     }
   ],
   "changelog": [
@@ -563,6 +599,11 @@
       "version": 70,
       "date": "2026-10-24",
       "change": "全ルール据え置き。TOP30は兄妹W7・広域来院W8・呼びかけW10が引き続き上位"
+    },
+    {
+      "version": 71,
+      "date": "2026-10-24",
+      "change": "2026-10-24 本人指示で分析（14日実測）を反映: ①LIST_HABITを隔日1本へ・否定断言に上限 ②前に、まず4・天気3・問いかけ2・声+2本/日を汎用ベースと置換（type_templates.py 新規62本）③画像つき自動投稿を2→4本/日（image_post.py復旧・天気イラスト・兄妹/地域キャプション）④ヒーローにown_adapt印と型別倍率。ルール追加: W_MAE_MAZU/W_WEATHER/W_IMAGE_AUTO(testing)・L_TYPE_CAPS(testing)"
     }
   ]
 }

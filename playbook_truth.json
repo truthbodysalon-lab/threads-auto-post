@@ -1,6 +1,6 @@
 {
   "acct": "truth",
-  "version": 74,
+  "version": 75,
   "updated": "2026-10-24",
   "description": "修正ポイント（勝ち構造・死ぬ構造）の正本。毎朝サブエージェントEが実測データで各ルールを検証し、効かなくなったルールはretired、新発見はtestingで追加、実証されたらactiveに昇格する。ヒーロー投稿と新テンプレはこのプレイブックのactiveルールに従って書く。",
   "rules": [
@@ -255,8 +255,8 @@
       "status": "testing",
       "added": "2026-10-06",
       "last_validated": "2026-10-06",
-      "rule": "【◯◯に絶対必要な習慣N選】型: 1行目=隅付き括弧の見出し（N=5〜9。「習慣」「やめること」「チェック項目」「NG行動」「朝の習慣」等の変種可）／「・」で始まる1行10〜18字程度の動詞終わりの具体行動をN行／最後に短い格言調の1行。URL・CTA・ハッシュタグ・予約誘導なし・250字以内。固定側=generate_remixのLIST_HABIT_TEMPLATES_TRUTH（34本）＋組合せ生成(LIST_HABIT_POOLS)が毎日2本を前半アンカー13・27に投入（7日以内の再投入なし・segment_registryにsegment=LIST_HABIT）。ヒーロー10本のうち1〜2本もこの型で書く。truthは頭痛特化寄り（朝・夜・気圧・食いしばり・目の疲れ・産後など）。",
-      "evidence": "本人指示2026-10-06（サロン経営の習慣9選の型を肩こり・頭痛の内容で）＋既存の【】リスト型・own_winnersの「・」リスト型が勝ち構造の実測（W_OWN: 自分の投稿は「・」リスト254対17〔nagaoka〕）。 判定は本文一致。testing→前日実閲覧が中央値の3倍超でactive昇格／中央値未満が2回でretired。"
+      "rule": "【◯◯に絶対必要な習慣N選】型: 1行目=隅付き括弧の見出し（N=5〜9。「習慣」「やめること」「チェック項目」「NG行動」「朝の習慣」等の変種可）／「・」で始まる1行10〜18字程度の動詞終わりの具体行動をN行／最後に短い格言調の1行。URL・CTA・ハッシュタグ・予約誘導なし・250字以内。固定側=generate_remixのLIST_HABIT_TEMPLATES_TRUTH（34本）＋組合せ生成(LIST_HABIT_POOLS)が毎日1本（2026-10-24に2本→1本へ減）を前半アンカー13に投入（7日以内の再投入なし・segment_registryにsegment=LIST_HABIT）。ヒーロー10本のうち1〜2本もこの型で書く。truthは頭痛特化寄り（朝・夜・気圧・食いしばり・目の疲れ・産後など）。",
+      "evidence": "本人指示2026-10-06（サロン経営の習慣9選の型を肩こり・頭痛の内容で）＋既存の【】リスト型・own_winnersの「・」リスト型が勝ち構造の実測（W_OWN: 自分の投稿は「・」リスト254対17〔nagaoka〕）。 判定は本文一致。testing→前日実閲覧が中央値の3倍超でactive昇格／中央値未満が2回でretired。 ｜2026-10-24 14日実測: truth n25 x1.08（横ばい）→1日1本へ"
     },
     {
       "id": "W_CUSTOMER_VOICE",
@@ -266,6 +266,33 @@
       "last_validated": "2026-10-06",
       "rule": "お客様の声型: 1行目=『（悩みの言い方を一般化）』という声を、よく聞きます。 または ◯◯な人へ。／原因の説明（水分・姿勢・睡眠・力み・動きの悪さ等を『〜ことがあります』の言い方で。断定・効果の保証はしない）／最後に今日できる1つ（安全なセルフケアのみ）。250字以内。URL・CTA・予約誘導・ハッシュタグなし。固定側=generate_remixのCUSTOMER_VOICE_TEMPLATES_TRUTH（24本・customer_voice_templates.py）が毎日1本を前半アンカー(20)に投入（7日以内の再投入なし・segment_registryにsegment=CUSTOMER_VOICE）。ヒーロー10本のうち2本は、~/.claude/logs/customer_voices/voices_latest.json（匿名化済み・ローカルのみ）を開いて、お客様の言い方を1行目に一般化して使う。習慣N選型の題材にも声由来を追加済み。プライバシー厳守: 氏名・職場・地名・日付・年齢・料金・特定の病名/薬名・個別エピソードの細部は書かない。逐語引用しない。声の元データはリポジトリに入れない。",
       "evidence": "本人指示2026-10-06（Plaudの会話と実際のお客様の声も参考にする）。Plaudカウンセリング録音の匿名化抽出（悩み116・説明60・来院の流れ41）で、頭痛・ストレス・首こり・肩こりが上位。読み手の言葉で書く方が反応しやすいという仮説。判定は本文一致。testing→前日実閲覧が中央値の3倍超でactive昇格／中央値未満が2回でretired。"
+    },
+    {
+      "id": "W_ZUTSUYAKU",
+      "type": "win",
+      "status": "testing",
+      "rule": "頭痛薬・鎮痛剤を1行目に置く短文（3行以内）: 「頭痛薬を飲む前に、まず首の後ろを触ってみて。」「鎮痛剤の回数が増えてきたら、体からのサインです。」の型。薬を否定・指示しない（「薬の前に」「薬のほかに」「薬と一緒に」で首・睡眠・合図の見直しを足す）。医療断定・服薬中止の示唆・創作統計なし。固定側=type_templates.pyのZUTSUYAKU_TEMPLATES_TRUTH（30本）が毎日5本、効きにくい汎用ベース投稿と置換して前半50本に入る（segment_registryにsegment=ZUTSUYAKU）。ヒーロー10本のうち3本以上もこの型。",
+      "evidence": "分析 myfiles/SNS・Threads/truth_nagaoka_1行目の型と施策の効果_2026-10-24.md（Threads外形API 14日・truth652本/nagaoka729本）＋本人指示2026-10-24。判定は本文一致（segment_registryのsegment値＋台帳）。型別の閲覧倍率は segment_report.py の build_type_report（秘書日報「伸びた型」）。testing→前日実閲覧が中央値の3倍超でactive昇格／中央値未満が2回でretired。 薬・鎮痛剤を1行目に置く話 n52 x2.06（最大2501v『頭痛薬を飲む前に、まず首の後ろを触ってみて。』）。",
+      "added": "2026-10-24",
+      "last_validated": "2026-10-24"
+    },
+    {
+      "id": "W_MAE_MAZU",
+      "type": "win",
+      "status": "testing",
+      "rule": "「〜する前に、まず〜」型（短文・3行以内）: 1行目=「◯◯する前に、まず△△してみて。」／2行目=理由を「〜ことがあります」で1文。truthは頭痛・首・睡眠・気圧の話題で（デスク・スマホ・マッサージを1行目にしない）。固定側=type_templates.pyのMAE_MAZU_TEMPLATES_TRUTH（30本）が毎日4本、汎用ベース投稿と置換（segment=MAE_MAZU）。LIST_HABITを2→1本に減らした枠をここへ。",
+      "evidence": "分析 myfiles/SNS・Threads/truth_nagaoka_1行目の型と施策の効果_2026-10-24.md（Threads外形API 14日・truth652本/nagaoka729本）＋本人指示2026-10-24。判定は本文一致（segment_registryのsegment値＋台帳）。型別の閲覧倍率は segment_report.py の build_type_report（秘書日報「伸びた型」）。testing→前日実閲覧が中央値の3倍超でactive昇格／中央値未満が2回でretired。 「前に、まず」「要りません」型 n24 x1.69。",
+      "added": "2026-10-24",
+      "last_validated": "2026-10-24"
+    },
+    {
+      "id": "L_TYPE_CAPS",
+      "type": "lose",
+      "status": "testing",
+      "rule": "効かない話題・形には1日あたりの上限を設ける（完全禁止ではない。generate_remixのTYPE_CAPS・先頭のベース投稿に対して超過分は末尾へ送る）: 1行目のデスク／スマホ2本・マッサージ／揉む1本・薬話(汎用側)1本・産後1本・4行以上の長文12本。『〜したいのに、』の未完文と汎用『肩こりの人へ。』は新規に作らない。",
+      "evidence": "分析 myfiles/SNS・Threads/truth_nagaoka_1行目の型と施策の効果_2026-10-24.md（Threads外形API 14日・truth652本/nagaoka729本）＋本人指示2026-10-24。判定は本文一致（segment_registryのsegment値＋台帳）。型別の閲覧倍率は segment_report.py の build_type_report（秘書日報「伸びた型」）。testing→前日実閲覧が中央値の3倍超でactive昇格／中央値未満が2回でretired。 デスク・スマホ n24 x0.65／マッサージ・揉む n23 x0.53／4行以上 n140 x0.66（1〜3行 x1.11）。",
+      "added": "2026-10-24",
+      "last_validated": "2026-10-24"
     }
   ],
   "changelog": [
@@ -607,6 +634,11 @@
       "version": 74,
       "date": "2026-10-24",
       "change": "10/23ヒーローは判定対象データ未確定のため全ルール据え置き。TOP30の勝ち構造(医療否定W6・断定W1・問い止めW2)は最新breakoutでも機能"
+    },
+    {
+      "version": 75,
+      "date": "2026-10-24",
+      "change": "2026-10-24 本人指示で分析（14日実測）を反映: ①LIST_HABIT 2→1本/日 ②薬話ZUTSUYAKU 5本・前に、まず4本/日を汎用ベースと置換（type_templates.py 新規60本）③デスク・スマホ・マッサージ・4行以上に1日上限（TYPE_CAPS）④ヒーローにown_adapt印と型別倍率レポートを追加。ルール追加: W_ZUTSUYAKU/W_MAE_MAZU(testing)・L_TYPE_CAPS(testing)"
     }
   ]
 }

@@ -399,6 +399,16 @@
       "date": "2026-10-17",
       "text": "【masa・投稿はAI/自動と明かさない／プレゼントは1つずつ（本人指示2026-10-17）】(1)@masahide_takahashi_の投稿は個人が自分で発信している体で出す。『この投稿はAI』『僕のSNSは毎日AIが出している』『1日150本自動』『YouTube/Kindleは自動生成』『誰も書いていない』は書かない。お店の作業にAIをどう使うか(返事・お礼・口コミ返信・マニュアル・求人・数字の見直し)だけ書く。8/23の『自動化の事実を見せる』方針(AI活用実例型)は廃止。検品=disclosure_check.py(inspector masa・生成・投稿直前)。(2)プレゼントは一気に出さず1期1つ(水曜切替・7日)。順番=インスタ→時短ガイド→MEO→AI→診断。正本=present_calendar.json。投稿の誘導はその日の1つだけ、『AI』誘導は④の期間のみ。(3)既存友だちにも同じ順番で1通ずつ案内(harness present_broadcast.py・送信済み台帳・既定dry_run・実送信は本人承認後)。",
       "account": "masa"
+    },
+    {
+      "date": "2026-10-24",
+      "text": "【1行目の型の配分（本人指示2026-10-24「分析の提案をそのまま反映」）】根拠=myfiles/SNS・Threads/truth_nagaoka_1行目の型と施策の効果_2026-10-24.md（14日実測）。truth: 習慣N選を2→1本/日、頭痛薬・鎮痛剤を1行目に置く話5本＋『前に、まず』型4本を毎日入れる。薬は否定・指示せず『薬の前に／薬のほかに』。デスク・スマホ・マッサージ・4行以上の長文は1日上限。実装=generate_remix.py の TYPE_DAILY_PLAN／TYPE_CAPS／_replace_with_type_posts（導線アンカーの位置と本数は不変＝汎用ベース投稿と置換）、固定プール=type_templates.py。型別の閲覧倍率は segment_report.py（秘書日報『伸びた型』）。ヒーローは segment=own_adapt を自動登録。",
+      "account": "truth"
+    },
+    {
+      "date": "2026-10-24",
+      "text": "【1行目の型の配分（本人指示2026-10-24「分析の提案をそのまま反映」）】根拠=myfiles/SNS・Threads/truth_nagaoka_1行目の型と施策の効果_2026-10-24.md（14日実測）。nagaoka: 習慣N選は隔日1本・言い切りの否定は1日2本まで。『前に、まず』4・天気／気圧3・問いかけ2・お客様の声3本を毎日。画像つき自動投稿を1日4本（兄妹・地域・天気。image_post.pyはフォルダ欠落で9/2から停止していたため復旧）。外部ツールの画像なし投稿は自システム外（触らない）。実装=generate_remix.py の TYPE_DAILY_PLAN／TYPE_CAPS／_replace_with_type_posts（導線アンカーの位置と本数は不変＝汎用ベース投稿と置換）、固定プール=type_templates.py。型別の閲覧倍率は segment_report.py（秘書日報『伸びた型』）。ヒーローは segment=own_adapt を自動登録。",
+      "account": "nagaoka"
     }
   ],
   "updated_at": "2026-10-17",

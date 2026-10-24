@@ -117,6 +117,40 @@ def check_dup_reselect_guard():
         add("dup_reselect:all", "A.コード", "FAIL", f"{type(e).__name__}: {e}")
 
 
+def check_stuck_anchor_reselect():
+    """C25: 2026-10-23 truth 40/50本の回帰テスト。朝に投稿済みの診断アンカー（台帳は「？」・URL除去後、
+    キュー原文は「。」・URL付き＝正規化が一致しない）が、API12h窓の失効後に選択され続け、
+    投稿直前の同日チェックで毎回見送り→連続3回失敗で諦める、を約4時間繰り返した。
+    本日投稿済みの同一1文目のアンカーを get_next_post が返さないこと、通常投稿が選ばれることを確認する。"""
+    import os as _os, tempfile as _tf, json as _json
+    from pathlib import Path as _P
+    _os.environ["SEGMENT_REGISTRY_DRY"] = "1"
+    try:
+        import auto_post as _ap
+        day = "2099-01-01"
+        anchor = "自分の頭痛のタイプ、答えられますか。\n緊張型か、片頭痛か、薬の使いすぎか。\n10問・60秒でわかる無料診断を作りました👇\n" + _ap._SHINDAN_URL
+        normal = "C25回帰テスト専用の通常投稿です。\n肩の力を抜く姿勢を一つだけ試してみてください。"
+        with _tf.TemporaryDirectory() as d:
+            lg, pf = _P(d) / "log.jsonl", _P(d) / "posted.jsonl"
+            lg.write_text(_json.dumps({"account": "truth", "theme": "t", "date": day, "posts": [anchor, normal]}, ensure_ascii=False) + "\n")
+            pf.write_text(_json.dumps({"date": day, "index": 0, "post_id": "x",
+                                       "text": "自分の頭痛のタイプ、答えられますか？\n緊張型か、片頭痛か、薬の使いすぎか。",
+                                       "is_shindan": True}, ensure_ascii=False) + "\n")
+            o_lg, o_pf, o_api = _ap.ACCOUNTS["truth"]["log"], _ap.ACCOUNTS["truth"]["posted"], _ap._recent_api_firstlines
+            _ap.ACCOUNTS["truth"]["log"], _ap.ACCOUNTS["truth"]["posted"] = lg, pf
+            _ap._recent_api_firstlines = lambda acct, hours=12: set()   # 12h窓が切れた状況
+            try:
+                t, _ = _ap.get_next_post("truth", day)
+            finally:
+                _ap.ACCOUNTS["truth"]["log"], _ap.ACCOUNTS["truth"]["posted"], _ap._recent_api_firstlines = o_lg, o_pf, o_api
+        if t and _ap._is_shindan(t):
+            add("stuck_anchor:truth", "A.コード", "FAIL", "本日投稿済みの診断アンカーを再選択（10/23と同型の詰まり）")
+        else:
+            add("stuck_anchor:truth", "A.コード", "PASS", "本日投稿済みアンカーを再選択せず通常投稿へ進む")
+    except Exception as e:
+        add("stuck_anchor:truth", "A.コード", "FAIL", f"{type(e).__name__}: {e}")
+
+
 def check_same_day_anchor_and_git_conflict():
     """C23: 2026-10-06障害の回帰テスト。
     (1) 頭痛診断アンカーの当日重複判定が、URL抽出後の台帳本文でも効くか（_is_shindan(台帳text)が常にFalseで
@@ -1022,7 +1056,7 @@ JST = timezone(timedelta(hours=9))
 CHECK_REGISTRY = {
     "C8": "exec:daily50:", "C10": "exec:pacing:", "C11": "exec:watchdog",
     "C13": "exec:hpb_only", "C14": "exec:imagepost", "C15": "exec:segment_test:",
-    "C16": "next_post:", "C17": "dup_reselect:", "C23": "same_day_anchor:", "C24": "dup_sameday:",
+    "C16": "next_post:", "C17": "dup_reselect:", "C23": "same_day_anchor:", "C25": "stuck_anchor:", "C24": "dup_sameday:",
     "C21": "exec:log_sync", "C26": "hero_posted:", "C25": "ledger_gap:", "C18": "exec:chain_gap", "C19": "exec:post_interval:", "C20": "ledger:",
     "C27": "masa_insta_theme",
 }
@@ -1310,6 +1344,7 @@ def run_all():
     check_dup_reselect_guard()
     check_same_day_duplicates()
     check_same_day_anchor_and_git_conflict()
+    check_stuck_anchor_reselect()
     check_test_posts_in_first50()
     check_rules()
     check_masa_insta_theme()

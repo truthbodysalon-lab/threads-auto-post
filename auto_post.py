@@ -982,6 +982,11 @@ def get_next_post(acct: str, today: str, avoid_url: bool = False):
 
     # API実投稿の直近1文目（CIが先に投稿した分をローカルが再選択しないよう除外）
     api_recent = _recent_api_firstlines(acct) | _RUN_BLOCKED_FIRSTLINES.get(acct, set())
+    # 2026-10-24: 本日すでに投稿した1文目（台帳）。アンカー系は台帳textがURL除去・「。→？」補正後で
+    # キュー原文と一致せず already_posted_ever が False になり、API12h窓が切れる(朝投稿→19時台)と
+    # 同じ診断アンカーを選び続けて投稿直前の同日チェックで毎回見送り→連続3回失敗で諦める、を繰り返した
+    # （10/23 truth 19:08〜22:57の約4時間0本・40/50本）。選択段階で同日同一1文目のアンカーを除外する。
+    today_first_keys = _today_ledger_firstline_keys(acct, today)
 
     # LINEリストインは1日1回、確実に織り込む（重複ガード免除）。
     # フィードバック: truth/nagaoka は5〜7%の頻度で投稿されるべき。
@@ -1036,6 +1041,8 @@ def get_next_post(acct: str, today: str, avoid_url: bool = False):
         )
         if already_posted_ever and not is_anchor_pool_type:
             continue
+        if is_anchor_pool_type and _firstline_key(text) in today_first_keys:
+            continue   # 本日すでに同一1文目を投稿済みのアンカーは再選択しない（上記2026-10-24）
         if already_posted_ever or dg_is_duplicate(norm, acct):
             # 7日以内の重複（または全期間で使用済みの固定アンカーテンプレ）は
             # 投稿せずスキップ（ループで次の候補へ）。ただし店舗アクセスアンカー
@@ -1260,6 +1267,28 @@ def _firstline_key(text: str) -> str:
     return dg_normalize(_fix_question_endings(text or "")).split("\n")[0].strip()[:40]
 
 
+def _today_ledger_firstline_keys(acct: str, today: str) -> set:
+    """本日の投稿台帳に載っている1文目キー（_firstline_key）の集合。読めなければ空集合。"""
+    out = set()
+    try:
+        pf = ACCOUNTS[acct]["posted"]
+        if not pf.exists():
+            return out
+        for l in pf.read_text(encoding="utf-8").splitlines():
+            try:
+                e = json.loads(l)
+            except Exception:
+                continue
+            if (e.get("date") or "")[:10] != today or e.get("kind") == "uplink_repost":
+                continue
+            k = _firstline_key(e.get("text", ""))
+            if k:
+                out.add(k)
+    except Exception:
+        pass
+    return out
+
+
 def _recent_api_firstlines(acct: str, hours: int = 12) -> set:
     """直近 hours 時間に Threads へ実投稿された1文目の集合（選択段階での除外用）。
     get_next_post がこれを使い、CIが先に投稿した記事をローカルが再選択して
@@ -1460,6 +1489,7 @@ def run_account(acct: str):
                     continue
                 if (_e.get("date") or "")[:10] == today and (_e.get("text", "").split("\n")[0].strip() == _first):
                     log_info(acct, f"{name} [同日同文の診断アンカー済みにつき見送り] {_first[:30]}")
+                    _RUN_BLOCKED_FIRSTLINES.setdefault(acct, set()).add(_firstline_key(clean_text))   # 同一run内の再選択防止
                     return
 
     # URLがある場合のみ補足説明コメントをAIで事前生成（投稿前に準備）

@@ -1328,10 +1328,24 @@ def run_all():
 
 
 def main():
+    # --json 時は検査中の標準出力（auto_post.log_info 等の print・子プロセス出力）を stderr へ逃がし、
+    # stdout には最後の JSON だけを出す（2026-10-24: 814c61e2 の [Buffer回避] ログが JSON の前に混入し
+    # verify_ci.py が JSON解析失敗→Daily Verify 2日連続失敗）。fd レベルで差し替えるので子プロセスも対象。
+    json_mode = "--json" in sys.argv
+    saved_fd = None
+    if json_mode:
+        sys.stdout.flush()
+        saved_fd = os.dup(1)
+        os.dup2(2, 1)
     try:
         run_all()
     except Exception:
         add("verify:crash", "A.コード", "FAIL", traceback.format_exc()[-300:])
+    finally:
+        if saved_fd is not None:
+            sys.stdout.flush()
+            os.dup2(saved_fd, 1)
+            os.close(saved_fd)
 
     fails = [r for r in results if r["status"] == "FAIL"]
     warns = [r for r in results if r["status"] == "WARN"]

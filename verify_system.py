@@ -151,6 +151,67 @@ def check_stuck_anchor_reselect():
         add("stuck_anchor:truth", "A.コード", "FAIL", f"{type(e).__name__}: {e}")
 
 
+def check_dedup_key_window():
+    """C42: 2026-10-14/15/20/23 truth 診断アンカーの同日再選択（047538d6以前は19時台の二重投稿・以後は見送りループ）の回帰テスト。
+    (1) 台帳に照合キー pk（キュー原文の _normalize_post_key）が記録され、同日1文目ガードが無くても同日同一原稿を再選択しない
+    (2) API重複窓が max(本日0:00 JST, 12h)（19:08 に 07:08 の投稿を含む）
+    (3) まとめて回復の同一バッチ内で投稿に至らなかった候補を連続で選ばない（_batch_note_attempt）"""
+    import os as _os, tempfile as _tf, json as _json
+    from pathlib import Path as _P
+    from datetime import datetime as _dt, timedelta as _td, timezone as _tz
+    _os.environ["SEGMENT_REGISTRY_DRY"] = "1"
+    try:
+        import auto_post as _ap
+        day = "2099-01-01"
+        anchor = "自分の頭痛のタイプ、答えられますか。\n緊張型か、片頭痛か、薬の使いすぎか。\n10問・60秒でわかる無料診断を作りました👇\n" + _ap._SHINDAN_URL
+        normal = "C42回帰テスト専用の通常投稿です。\n肩の力を抜く姿勢を一つだけ試してみてください。"
+        bad = []
+        with _tf.TemporaryDirectory() as d:
+            lg, pf = _P(d) / "log.jsonl", _P(d) / "posted.jsonl"
+            lg.write_text(_json.dumps({"account": "truth", "theme": "t", "date": day, "posts": [anchor, normal]}, ensure_ascii=False) + "\n")
+            pf.write_text("")
+            o = (_ap.ACCOUNTS["truth"]["log"], _ap.ACCOUNTS["truth"]["posted"], _ap._recent_api_firstlines,
+                 _ap._today_ledger_firstline_keys, _ap._hero_priority_order, _ap.dg_marked_today, _ap.dg_is_duplicate)
+            _ap.ACCOUNTS["truth"]["log"], _ap.ACCOUNTS["truth"]["posted"] = lg, pf
+            _ap._recent_api_firstlines = lambda acct, hours=12: set()
+            _ap._today_ledger_firstline_keys = lambda a, t: set()       # 047538d6/7b6e7639 以前の状態を模擬
+            _ap._hero_priority_order = lambda a, t, posts, pt: list(range(len(posts)))
+            _ap.dg_marked_today = lambda n, a: False
+            _ap.dg_is_duplicate = lambda n, a: False
+            try:
+                _ap.mark_posted("truth", day, 0, "x", "自分の頭痛のタイプ、答えられますか？\n緊張型か、片頭痛か、薬の使いすぎか。",
+                                is_shindan=True, orig_text=anchor)
+                e = _json.loads(pf.read_text().splitlines()[-1])
+                if e.get("pk") != _ap._normalize_post_key(anchor):
+                    bad.append("台帳にpkが記録されない")
+                t, _ = _ap.get_next_post("truth", day)
+                if t and _ap._is_shindan(t):
+                    bad.append("同日投稿済みの診断アンカーを再選択（二重投稿/見送りループ）")
+            finally:
+                (_ap.ACCOUNTS["truth"]["log"], _ap.ACCOUNTS["truth"]["posted"], _ap._recent_api_firstlines,
+                 _ap._today_ledger_firstline_keys, _ap._hero_priority_order, _ap.dg_marked_today, _ap.dg_is_duplicate) = o
+        jst = _tz(_td(hours=9))
+        now = _dt(2026, 10, 23, 19, 8, tzinfo=jst).astimezone(_tz.utc)
+        if _ap._api_dedup_cutoff(now) > _dt(2026, 10, 23, 7, 8, tzinfo=jst).astimezone(_tz.utc):
+            bad.append("API重複窓が本日0:00 JSTまで届かない")
+        saved = _ap._BATCH_SKIP_FIRSTLINES.get("truth")
+        _ap._BATCH_SKIP_FIRSTLINES["truth"] = set()
+        try:
+            if not (_ap._batch_note_attempt("truth", "k", False) and "k" in _ap._BATCH_SKIP_FIRSTLINES["truth"]):
+                bad.append("まとめて回復で不成立候補を次候補へ進めない")
+        finally:
+            if saved is None:
+                _ap._BATCH_SKIP_FIRSTLINES.pop("truth", None)
+            else:
+                _ap._BATCH_SKIP_FIRSTLINES["truth"] = saved
+        if bad:
+            add("dedup_key:truth", "A.コード", "FAIL", " / ".join(bad))
+        else:
+            add("dedup_key:truth", "A.コード", "PASS", "台帳pk照合・API窓(0:00 JST〜)・まとめて回復の前進がすべて有効")
+    except Exception as e:
+        add("dedup_key:truth", "A.コード", "FAIL", f"{type(e).__name__}: {e}")
+
+
 def check_same_day_anchor_and_git_conflict():
     """C23: 2026-10-06障害の回帰テスト。
     (1) 頭痛診断アンカーの当日重複判定が、URL抽出後の台帳本文でも効くか（_is_shindan(台帳text)が常にFalseで
@@ -1094,7 +1155,7 @@ CHECK_REGISTRY = {
     "C13": "exec:hpb_only", "C14": "exec:imagepost", "C15": "exec:segment_test:",
     "C16": "next_post:", "C17": "dup_reselect:", "C23": "same_day_anchor:", "C24": "dup_sameday:",
     "C21": "exec:log_sync", "C26": "hero_posted:", "C40": "stuck_anchor:", "C25": "ledger_gap:", "C18": "exec:chain_gap", "C19": "exec:post_interval:", "C20": "ledger:",
-    "C27": "masa_insta_theme", "C41": "alive_stall:",
+    "C27": "masa_insta_theme", "C41": "alive_stall:", "C42": "dedup_key:",
 }
 
 
@@ -1487,6 +1548,7 @@ def run_all():
     check_same_day_duplicates()
     check_same_day_anchor_and_git_conflict()
     check_stuck_anchor_reselect()
+    check_dedup_key_window()
     check_test_posts_in_first50()
     check_rules()
     check_masa_insta_theme()

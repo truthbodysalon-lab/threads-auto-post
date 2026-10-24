@@ -362,6 +362,17 @@ def mark_posted(acct: str, today: str, index: int, post_id: str, text: str = "",
             entry["hk"] = _hk(orig_text)
         except Exception:
             pass
+        # 2026-10-24 fix1: 台帳 text は clean_text（URL・CTAラベル行除去＋「ですか。→？」補正後）で、
+        # キュー原文の照合キー _normalize_post_key(原文) と一致しない。診断アンカー等が already_posted_ever に
+        # 掛からず、10/14・10/15・10/20・10/23 に同じ診断投稿の同日再選択（047538d6以前は19時台の二重投稿、
+        # 以後は投稿直前チェックでの見送りループ）を起こした。選択側と「同じ関数・同じ入力（キュー原文）」で
+        # 計算した照合キー pk を併記する（10/20 ヒーロー照合キーの教訓: 書く側と比べる側のキーを必ず揃える）。
+        try:
+            pk = _normalize_post_key(orig_text)
+            if pk:
+                entry["pk"] = pk
+        except Exception:
+            pass
     if is_line:
         # 2026-09-12修正: text は extract_url_and_cta 後の本文（URL除去済み）を保存するため、
         # _is_line_listin(text) では二度とLINEリストイン投稿だと判定できない
@@ -388,6 +399,9 @@ def get_posted_texts(acct: str) -> set:
                 entry = json.loads(l)
                 if entry.get("text"):
                     texts.add(entry["text"])
+                # 2026-10-24 fix1: キュー原文由来の照合キー（pk 無しの旧エントリーは text のみ＝従来どおり）
+                if entry.get("pk"):
+                    texts.add(entry["pk"])
             except json.JSONDecodeError:
                 pass  # 書き込み競合で生じた不完全行はスキップ
     return texts
@@ -981,12 +995,14 @@ def get_next_post(acct: str, today: str, avoid_url: bool = False):
     line_done = _line_done_today(acct, today)
 
     # API実投稿の直近1文目（CIが先に投稿した分をローカルが再選択しないよう除外）
-    api_recent = _recent_api_firstlines(acct) | _RUN_BLOCKED_FIRSTLINES.get(acct, set()) | _selfwatch_excluded(acct)
+    api_recent = (_recent_api_firstlines(acct) | _RUN_BLOCKED_FIRSTLINES.get(acct, set()) | _selfwatch_excluded(acct)
+                  | _BATCH_SKIP_FIRSTLINES.get(acct, set()))   # fix2: 同一バッチで不成立だった候補（2026-10-24）
     # 2026-10-24: 本日すでに投稿した1文目（台帳）。アンカー系は台帳textがURL除去・「。→？」補正後で
     # キュー原文と一致せず already_posted_ever が False になり、API12h窓が切れる(朝投稿→19時台)と
     # 同じ診断アンカーを選び続けて投稿直前の同日チェックで毎回見送り→連続3回失敗で諦める、を繰り返した
     # （10/23 truth 19:08〜22:57の約4時間0本・40/50本）。選択段階で同日同一1文目のアンカーを除外する。
     today_first_keys = _today_ledger_firstline_keys(acct, today)
+    today_pkeys = _today_ledger_pkeys(acct, today)   # fix1: 本日投稿済み原稿の照合キー（pk付きエントリーのみ）
 
     # LINEリストインは1日1回、確実に織り込む（重複ガード免除）。
     # フィードバック: truth/nagaoka は5〜7%の頻度で投稿されるべき。
@@ -1043,6 +1059,8 @@ def get_next_post(acct: str, today: str, avoid_url: bool = False):
             continue
         if is_anchor_pool_type and _firstline_key(text) in today_first_keys:
             continue   # 本日すでに同一1文目を投稿済みのアンカーは再選択しない（上記2026-10-24）
+        if is_anchor_pool_type and norm in today_pkeys:
+            continue   # fix1: 本日すでに同じ原稿を投稿済み（pk一致）のアンカーは再選択しない
         if already_posted_ever or dg_is_duplicate(norm, acct):
             # 7日以内の重複（または全期間で使用済みの固定アンカーテンプレ）は
             # 投稿せずスキップ（ループで次の候補へ）。ただし店舗アクセスアンカー
@@ -1227,21 +1245,10 @@ def _recently_posted_on_threads(acct: str, text: str, hours: int = 12) -> bool:
         target_fl = dg_normalize(_fix_question_endings(text)).split("\n")[0].strip()[:40]
         if not target_fl:
             return False
-        token = os.environ[ACCOUNTS[acct]["token_key"]]
-        uid = os.environ[ACCOUNTS[acct]["uid_key"]]
-        url = f"{BASE_URL}/{uid}/threads?fields=id,text,timestamp&limit=100&access_token={token}"
-        with urllib.request.urlopen(url, timeout=15) as r:
-            data = json.loads(r.read())
-        cutoff = datetime.now(timezone.utc) - timedelta(hours=hours)
-        for p in data.get("data", []):
-            ptext = p.get("text", "")
+        # 2026-10-24 fix3: 選択側(_recent_api_firstlines)と同じ窓・同じページ送り
+        cutoff = _api_dedup_cutoff(hours=hours)
+        for _pts, ptext in _api_posts_since(acct, cutoff):
             if not ptext:
-                continue
-            try:
-                pts = datetime.fromisoformat(p.get("timestamp", "").replace("Z", "+00:00"))
-            except Exception:
-                pts = datetime.now(timezone.utc)
-            if pts < cutoff:
                 continue
             if dg_normalize(_fix_question_endings(ptext)).split("\n")[0].strip()[:40] == target_fl:
                 return True
@@ -1261,6 +1268,26 @@ def _parse_ts(ts: str):
 # CIで空振り(API失敗は空集合で握りつぶす)すると、LINE等 skip_dup 投稿は消費済みにならないため
 # 同じ候補を選び続け「連続3回失敗→諦める」を毎ラン繰り返し、truthが4時間以上0本になった。
 _RUN_BLOCKED_FIRSTLINES: dict = {}
+
+
+# 2026-10-24 fix2: 1回の _run_account_batch（特に「遅れ検知→まとめて回復」）の中で、投稿が増えなかった
+# 試行で選ばれた候補の1文目。同じバッチ内で同じ候補が連続で選ばれたら2回目以降は飛ばして次の候補へ進む
+# （10/23: まとめて回復が同じ診断アンカーを選んでは見送り、連続3回失敗で毎サイクル打ち切られた）。
+# バッチ開始ごとにクリアするので、次サイクルでは再び候補になる（恒久的には落とさない）。
+_BATCH_SKIP_FIRSTLINES: dict = {}
+_LAST_PICK_KEY: dict = {}
+
+
+def _batch_note_attempt(acct: str, picked_key, grew: bool) -> bool:
+    """バッチ内の1試行の結果を記録する純粋に近い関数。投稿が増えず候補が選ばれていたら、その1文目を
+    バッチ内スキップに登録して True を返す（次の試行で同じ候補を選ばない＝次候補へ進む）。"""
+    if grew or not picked_key:
+        return False
+    s = _BATCH_SKIP_FIRSTLINES.setdefault(acct, set())
+    if picked_key in s:
+        return False
+    s.add(picked_key)
+    return True
 
 
 def _firstline_key(text: str) -> str:
@@ -1406,24 +1433,86 @@ def _today_ledger_firstline_keys(acct: str, today: str) -> set:
     return out
 
 
+def _today_ledger_pkeys(acct: str, today: str) -> set:
+    """本日の台帳エントリーの照合キー pk（キュー原文の _normalize_post_key）の集合（2026-10-24 fix1）。
+    アンカー系は全期間dedupを緩和ルート(anchor_ok)で通すが、anchor_ok の同日判定は1文目の生文字列比較で
+    「ですか。」(原文)と「ですか？」(台帳)を取り違える。pk で同日同一原稿を確実に除外する。"""
+    out = set()
+    try:
+        pf = ACCOUNTS[acct]["posted"]
+        if not pf.exists():
+            return out
+        for l in pf.read_text(encoding="utf-8").splitlines():
+            try:
+                e = json.loads(l)
+            except Exception:
+                continue
+            if (e.get("date") or "")[:10] == today and e.get("pk"):
+                out.add(e["pk"])
+    except Exception:
+        pass
+    return out
+
+
+# ── API重複窓（2026-10-24 fix3）─────────────────────────────────────
+# 旧: 直近12時間固定。朝7:08の診断アンカーは19:08に窓から外れ、台帳照合の不一致と重なって
+# 同日再選択（047538d6以前は二重投稿・以後は見送りループ）になった。窓を「本日0:00 JST以降」と
+# 「直近12時間」の長い方にする。API取得は limit=100（実測で約2日分）に加え、窓の始点より古い投稿に
+# 届くまで paging.next を最大 API_DEDUP_MAX_PAGES ページ辿る（GETのみ）。
+_JST = timezone(timedelta(hours=9))
+API_DEDUP_MIN_HOURS = 12
+API_DEDUP_MAX_PAGES = 4
+
+
+def _api_dedup_cutoff(now_utc=None, hours: int = API_DEDUP_MIN_HOURS):
+    """API重複窓の始点(UTC aware)。min(本日0:00 JST, now-hours)。純粋関数（テスト用に now_utc を渡せる）。"""
+    now_utc = now_utc or datetime.now(timezone.utc)
+    midnight_jst = now_utc.astimezone(_JST).replace(hour=0, minute=0, second=0, microsecond=0)
+    return min(midnight_jst.astimezone(timezone.utc), now_utc - timedelta(hours=hours))
+
+
+def _api_posts_since(acct: str, cutoff, fetch=None, max_pages: int = API_DEDUP_MAX_PAGES) -> list:
+    """cutoff 以降の Threads 実投稿 [(timestamp, text)] を返す（読み取り専用GET・ページ送りあり）。
+    取得失敗は例外を上げる（呼び出し側で従来どおり握る）。fetch はテスト用の差し替え（url->dict）。"""
+    if fetch is None:
+        def fetch(u):
+            with urllib.request.urlopen(u, timeout=15) as r:
+                return json.loads(r.read())
+    token = os.environ[ACCOUNTS[acct]["token_key"]]
+    uid = os.environ[ACCOUNTS[acct]["uid_key"]]
+    url = f"{BASE_URL}/{uid}/threads?fields=id,text,timestamp&limit=100&access_token={token}"
+    out = []
+    for page in range(max(1, max_pages)):
+        try:
+            data = fetch(url)
+        except Exception:
+            if page == 0:
+                raise          # 1ページ目の失敗は従来どおり呼び出し側へ（空集合扱い）
+            break              # 2ページ目以降の失敗は取得済み分で判定（窓を狭めるだけで止めない）
+        reached_old = False
+        for p in data.get("data", []):
+            pts = _parse_ts(p.get("timestamp", ""))
+            if pts is not None and pts < cutoff:
+                reached_old = True
+                continue
+            out.append((pts, p.get("text", "") or ""))
+        nxt = (data.get("paging") or {}).get("next")
+        if reached_old or not nxt:
+            break
+        url = nxt
+    return out
+
+
 def _recent_api_firstlines(acct: str, hours: int = 12) -> set:
     """直近 hours 時間に Threads へ実投稿された1文目の集合（選択段階での除外用）。
     get_next_post がこれを使い、CIが先に投稿した記事をローカルが再選択して
     投稿が止まる事故を防ぐ。API失敗時は空集合（通常フローに委ねる）。"""
     try:
-        token = os.environ[ACCOUNTS[acct]["token_key"]]
-        uid = os.environ[ACCOUNTS[acct]["uid_key"]]
-        url = f"{BASE_URL}/{uid}/threads?fields=id,text,timestamp&limit=100&access_token={token}"
-        with urllib.request.urlopen(url, timeout=15) as r:
-            data = json.loads(r.read())
-        cutoff = datetime.now(timezone.utc) - timedelta(hours=hours)
+        # 2026-10-24 fix3: 窓 = max(本日0:00 JST以降, 直近 hours 時間)・ページ送りあり
+        cutoff = _api_dedup_cutoff(hours=hours)
         out = set()
-        for p in data.get("data", []):
-            ptext = p.get("text", "")
+        for _pts, ptext in _api_posts_since(acct, cutoff):
             if not ptext:
-                continue
-            pts = _parse_ts(p.get("timestamp", ""))
-            if pts and pts < cutoff:
                 continue
             fl = dg_normalize(_fix_question_endings(ptext)).split("\n")[0].strip()[:40]
             if fl:
@@ -1531,6 +1620,7 @@ def run_account(acct: str):
     if text is None:
         log_info(acct, f"{name} 今日の投稿完了")
         return
+    _LAST_PICK_KEY[acct] = _firstline_key(text)   # fix2: バッチ側の「同じ候補の連続選択」判定用
 
     comment_parts: list[str] = []
 
@@ -1823,6 +1913,7 @@ def _run_account_batch(acct: str):
     # 「実際に増えた本数」が n に達するまで回し、試行回数の上限だけ n+6 で抑える。
     _sw_before = _posted_count_today(acct)
     _sw_need = need
+    _BATCH_SKIP_FIRSTLINES[acct] = set()   # fix2: バッチごとにリセット
     fails = 0
     done = 0
     attempts = 0
@@ -1831,9 +1922,13 @@ def _run_account_batch(acct: str):
         if _posted_count_today(acct) >= DAILY_CAP:
             break
         before = _posted_count_today(acct)
+        _LAST_PICK_KEY.pop(acct, None)
         run_account(acct)
         after = _posted_count_today(acct)
         attempts += 1
+        if _batch_note_attempt(acct, _LAST_PICK_KEY.get(acct), after > before):
+            log_info(acct, f"{ACCOUNTS[acct]['name']} [{'まとめて回復' if n > MAX_PER_RUN else 'バッチ'}] "
+                           f"投稿に至らなかった候補は本バッチで再選択せず次候補へ: {str(_LAST_PICK_KEY.get(acct))[:30]}")
         if after <= before:
             # 1本の失敗（重複スキップ等）で全体を打ち切らない。連続3回失敗で今回は諦める
             fails += 1

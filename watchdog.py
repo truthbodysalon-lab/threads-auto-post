@@ -181,6 +181,27 @@ def _stall_threshold(acct: str, hour: int = None) -> int:
     return sc.STALL_MIN
 
 
+def _notify_raw(msg: str) -> bool:
+    """間隔制御は呼び出し側(stall_check.handle_alive_stall)が持つ。Discord(notify.sh)へ送るだけ。"""
+    try:
+        subprocess.run([PUSH, msg], capture_output=True, timeout=60)
+        log(f"Discord通知送信: {msg[:60]}")
+        return True
+    except Exception as e:
+        log(f"Discord通知失敗: {e}")
+        return False
+
+
+def _pace_behind(acct: str) -> int:
+    """今あるべき累計 - 実投稿（外形API優先・失敗時は台帳）。取得不可は0（誤報回避）。"""
+    try:
+        api_n = api_count_today(acct)
+        posted = max(ap._posted_count_today(acct), api_n if api_n >= 0 else 0)
+        return max(0, ap._target_cumulative_by_now(datetime.now().hour) - posted)
+    except Exception:
+        return 0
+
+
 def check_stall_and_keeper():
     """2026-10-02 管理体制強化: ペースとは別軸の「停止」検知。
     (i) 常駐runが0本 → 即kick＋通知  (ii) 投稿時間帯に最後の自前投稿から75分以上 → kick＋通知。"""
@@ -196,6 +217,16 @@ def check_stall_and_keeper():
     for acct in ("truth", "nagaoka", "masa"):
         try:
             gap = sc.last_post_gap_minutes(acct)
+            # 常駐runが動いている場合（2026-10-24）: kick見送りで黙らず、無投稿60分＋ペース5本遅れで通知、
+            # 90分で常駐runを止めて起動し直す。_push_once_per_dayとは別キー・別間隔。
+            if gap is not None and ks["ok"] and (ks["in_progress"] > 0 or ks["queued"] > 0):
+                if gap >= sc.alive_thresholds(acct)[0]:
+                    st = _state()
+                    act = sc.handle_alive_stall(acct, gap, _pace_behind(acct), st, _notify_raw)
+                    _save_state(st)
+                    if act:
+                        log(f"{acct}: 常駐稼働中の停滞 → {act}（無投稿{int(gap)}分）")
+                        continue
             if gap is None or gap < _stall_threshold(acct):
                 continue
             log(f"{acct}: 最後の投稿から{gap}分（停止疑い）")

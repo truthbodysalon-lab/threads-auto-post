@@ -1094,7 +1094,7 @@ CHECK_REGISTRY = {
     "C13": "exec:hpb_only", "C14": "exec:imagepost", "C15": "exec:segment_test:",
     "C16": "next_post:", "C17": "dup_reselect:", "C23": "same_day_anchor:", "C24": "dup_sameday:",
     "C21": "exec:log_sync", "C26": "hero_posted:", "C40": "stuck_anchor:", "C25": "ledger_gap:", "C18": "exec:chain_gap", "C19": "exec:post_interval:", "C20": "ledger:",
-    "C27": "masa_insta_theme",
+    "C27": "masa_insta_theme", "C41": "alive_stall:",
 }
 
 
@@ -1264,6 +1264,109 @@ def check_post_interval():
             add(cid, "C.実行ギャップ", "WARN", f"検査不可: {e}")
 
 
+def alive_stall_incidents(posts, spans, lo, hi, min_gap_min=90):
+    """C41の判定本体（テスト用に分離）。posts=投稿時刻(JST)、spans=常駐run稼働区間[(開始,終了)]、
+    lo/hi=対象時間帯。lo起点の各投稿間隔のうち min_gap_min 以上で、その間に常駐runが稼働していた
+    時間（区間の和集合との重なり）が min_gap_min 以上のものを [(間隔分, 稼働分, 開始)] で返す。"""
+    pts = sorted(t for t in posts if lo <= t <= hi)
+    seq = [lo] + pts
+    spans = sorted(spans)
+    out = []
+    for a, b in zip(seq, seq[1:]):
+        gap = (b - a).total_seconds() / 60
+        if gap < min_gap_min:
+            continue
+        covered, cur = 0.0, a
+        for st, en in spans:
+            st, en = max(st, cur), min(en, b)
+            if en > st:
+                covered += (en - st).total_seconds() / 60
+                cur = en
+        if covered >= min_gap_min:
+            out.append((int(gap), int(covered), a))
+    return out
+
+
+def _keeper_spans_between(lo, hi):
+    """auto_post.yml の常駐run稼働区間(JST)。5分未満で終わるrun(single-keeper即終了)は除外。取得不可はNone。"""
+    import urllib.request as _ur
+    tok = _gh_token()
+    if not tok:
+        return None
+    repo = os.environ.get("GH_REPO", GH_REPO_DEFAULT)
+    now = datetime.now(timezone.utc)
+    runs, page = [], 1
+    try:
+        while page <= 6:
+            url = (f"https://api.github.com/repos/{repo}/actions/workflows/auto_post.yml/runs"
+                   f"?per_page=100&page={page}&created=%3E%3D{(lo - timedelta(days=1)).astimezone(timezone.utc).strftime('%Y-%m-%d')}")
+            req = _ur.Request(url, headers={"Authorization": f"Bearer {tok}", "Accept": "application/vnd.github+json"})
+            with _ur.urlopen(req, timeout=20) as r:
+                batch = json.loads(r.read()).get("workflow_runs", [])
+            runs += batch
+            if len(batch) < 100:
+                break
+            page += 1
+    except Exception:
+        return None
+    spans = []
+    for r in runs:
+        try:
+            st = _parse_iso(r["run_started_at"])
+            en = now if r.get("status") == "in_progress" else _parse_iso(r["updated_at"])
+            if (en - st).total_seconds() < 300:
+                continue
+            spans.append((st.astimezone(JST), en.astimezone(JST)))
+        except Exception:
+            continue
+    return spans
+
+
+def check_alive_stall():
+    """C41: 昨日、投稿時間帯(6-23時)に「常駐runが稼働中なのに90分以上投稿が止まった」時間帯があったか。
+    2026-10-23 truth: 常駐は正常稼働のまま19:08〜22:57の約230分0本→見張りは『kick見送り』のみで通知3時間超。
+    外形API(投稿時刻)と auto_post.yml の run 区間で判定。90分超WARN・180分超FAIL（C19と同基準）。"""
+    day = (datetime.now(JST) - timedelta(days=1)).strftime("%Y-%m-%d")
+    lo = datetime.strptime(day, "%Y-%m-%d").replace(tzinfo=JST, hour=6)
+    hi = lo.replace(hour=23)
+    spans = None
+    for acct in ACCTS:
+        cid = f"alive_stall:{acct}"
+        try:
+            api = _yesterday_api_posts(acct)
+            if api is None:
+                add(cid, "C.実行ギャップ", "SKIP", "Threads API取得不可/トークンなし（未検査）")
+                continue
+            if spans is None:
+                spans = _keeper_spans_between(lo, hi)
+            if spans is None:
+                add(cid, "C.実行ギャップ", "SKIP", "GitHub API取得不可（常駐run区間が不明で未検査）")
+                continue
+            posts = [ts for _, ts in api]
+            if acct != "nagaoka":
+                ids = set()
+                lf = BASE / f"log_{acct}_posted.jsonl"
+                if lf.exists():
+                    for line in lf.read_text(encoding="utf-8").splitlines():
+                        try:
+                            d = json.loads(line)
+                            if d.get("post_id"):
+                                ids.add(str(d["post_id"]))
+                        except Exception:
+                            pass
+                posts = [ts for pid, ts in api if pid in ids]
+            inc = alive_stall_incidents(posts, spans, lo, hi)
+            if not inc:
+                add(cid, "C.実行ギャップ", "PASS", f"{day} 常駐稼働中に90分以上止まった時間帯なし")
+                continue
+            mx = max(inc, key=lambda x: x[0])
+            st = "FAIL" if mx[0] > 180 else "WARN"
+            add(cid, "C.実行ギャップ", st,
+                f"{day} 常駐run稼働中なのに{mx[0]}分無投稿（{mx[2].strftime('%H:%M')}〜・稼働{mx[1]}分）・該当{len(inc)}件")
+        except Exception as e:
+            add(cid, "C.実行ギャップ", "WARN", f"検査不可: {e}")
+
+
 def check_ledger_gap():
     """C25: 昨日の実投稿(外形API)に対し台帳(log_<acct>_posted.jsonl)が欠けていないか。
     2026-10-07監査: 10/03が3アカウントとも台帳0行・10/04,10/06も欠落→重複ガードが効かず同文が数時間後に再投稿された。
@@ -1394,6 +1497,7 @@ def run_all():
     check_sync()
     check_chain_gap()
     check_post_interval()
+    check_alive_stall()
     check_log_sync()
     check_ledger_gap()
     check_incident_ledger()

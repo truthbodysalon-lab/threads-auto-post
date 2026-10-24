@@ -219,6 +219,20 @@ def main():
         ks = None
         for acct in ACCTS:
             gap = sc.last_post_gap_minutes(acct)
+            # 2026-10-24: 常駐run稼働中でも、無投稿60分＋ペース5本遅れで通知・90分で常駐を再起動
+            # （従来は keeper_running() なら並走せず黙っていた＝10/23 truth 4時間0本が見えなかった）。
+            if gap is not None and gap >= sc.alive_thresholds(acct)[0] and keeper_running():
+                n_api = api_count_today(acct)
+                behind = max(0, want - n_api) if n_api >= 0 else 0
+
+                def _send(m, _a=acct):
+                    ok = sc.discord_send(m)
+                    line_push(m + "（CI watchdog）")
+                    return ok
+                act = sc.handle_alive_stall(acct, gap, behind, st, _send, today=today)
+                if act:
+                    print(f"{acct}: 常駐稼働中の停滞 → {act}")
+                    continue
             if gap is None or gap < sc.STALL_MIN:
                 continue
             print(f"{acct}: 最後の投稿から{gap}分（{sc.STALL_MIN}分超・停止疑い）")

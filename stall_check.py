@@ -241,6 +241,131 @@ def stall_message(acct: str, gap: float, keeper: dict) -> str:
             f"直近run: {url or '取得不可'}")
 
 
+# ── 常駐runが動いているのに投稿が出ない（2026-10-24）─────────────────────────
+# 10/23 truth が 19:08〜22:57 に0本だったのに、見張りは「kick見送り（auto_post実行中）」しか
+# 出せず通知まで3時間以上かかった。常駐が動いていても、無投稿が長く＆ペースも遅れていれば鳴らす。
+ALIVE_NOTIFY_MIN = 60     # 常駐稼働中でもこの分数以上無投稿＋ペース遅れなら通知（2時間に1回）
+ALIVE_RESTART_MIN = 90    # この分数以上なら常駐runを止めて起動し直す（1日2回まで）
+ALIVE_BEHIND = 5          # 「ペースより遅れ」の本数
+ALIVE_NOTIFY_INTERVAL_S = 2 * 3600
+ALIVE_RESTART_PER_DAY = 2
+ALIVE_YOUNG_RUN_S = 15 * 60   # 起動して15分以内のrunは再起動直後とみなし、止めない（Mac/CIの二重実行ガード）
+
+
+def alive_thresholds(acct: str, hour: int = None):
+    """(通知分, 再起動分)。nagaoka は朝(6〜8時台)に外部ツールの初回投稿が遅いため従来の停止判定と同じく延ばす。"""
+    h = _now().hour if hour is None else hour
+    if acct == "nagaoka" and 6 <= h < 9:
+        return 180, 210
+    return ALIVE_NOTIFY_MIN, ALIVE_RESTART_MIN
+
+
+def _gh_env() -> dict:
+    env = dict(os.environ)
+    if not env.get("GH_TOKEN") and env.get("GH_PAT"):
+        env["GH_TOKEN"] = env["GH_PAT"]
+    return env
+
+
+def _gh_run(args, timeout=30):
+    gh = shutil.which("gh") or "/opt/homebrew/bin/gh"
+    return subprocess.run([gh] + args, capture_output=True, text=True, timeout=timeout, env=_gh_env())
+
+
+def _list_keeper_runs(status: str):
+    repo = os.environ.get("GH_REPO", GH_REPO_DEFAULT)
+    r = _gh_run(["run", "list", "--repo", repo, "--workflow", "auto_post.yml", "--status", status,
+                 "--limit", "10", "--json", "databaseId,startedAt,createdAt"])
+    if r.returncode != 0:
+        raise RuntimeError(r.stderr.strip()[:120])
+    return json.loads(r.stdout or "[]")
+
+
+def restart_keeper(sleep=None):
+    """稼働中の常駐runを gh run cancel で止め、auto_post.yml を workflow_dispatch で起動し直す。
+    single-keeper（最古のrunだけ残す）と Chain 手順があるので、止めたrunが次を連鎖起動していれば
+    こちらからは起動しない（二重にしない）。戻り値 (実施したか, 説明)。"""
+    import time as _time
+    sleep = sleep or _time.sleep
+    repo = os.environ.get("GH_REPO", GH_REPO_DEFAULT)
+    try:
+        runs = _list_keeper_runs("in_progress")
+    except Exception as e:
+        return False, f"run一覧の取得失敗: {e}"
+    if not runs:
+        return False, "稼働中の常駐runなし"
+    now = datetime.now(timezone.utc)
+    for r in runs:
+        st = r.get("startedAt") or r.get("createdAt")
+        try:
+            started = datetime.strptime(st, "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)
+            if (now - started).total_seconds() < ALIVE_YOUNG_RUN_S:
+                return False, "常駐runは起動から15分以内（再起動直後）のため見送り"
+        except Exception:
+            pass
+    cancelled = []
+    for r in runs:
+        c = _gh_run(["run", "cancel", str(r["databaseId"]), "--repo", repo])
+        if c.returncode == 0:
+            cancelled.append(r["databaseId"])
+    if not cancelled:
+        return False, "gh run cancel に失敗"
+    # 旧runの終了待ち（single-keeperは旧runがin_progressの間は新runを待たせる）
+    for _ in range(18):
+        sleep(5)
+        try:
+            if not _list_keeper_runs("in_progress"):
+                break
+        except Exception:
+            pass
+    # 止めたrunのChainが次を起動していればそれを使う
+    sleep(10)
+    try:
+        if _list_keeper_runs("in_progress") or _list_keeper_runs("queued"):
+            return True, f"run {','.join(map(str, cancelled))} をcancel（連鎖で新runが起動済み）"
+    except Exception:
+        pass
+    d = _gh_run(["workflow", "run", "auto_post.yml", "--repo", repo])
+    if d.returncode != 0:
+        return False, f"cancel後のworkflow_dispatch失敗: {d.stderr.strip()[:100]}"
+    return True, f"run {','.join(map(str, cancelled))} をcancel→auto_post.yml をworkflow_dispatchで起動"
+
+
+def handle_alive_stall(acct: str, gap: float, behind: int, state: dict, send, today: str = None, now_ts: float = None):
+    """常駐run稼働中なのに投稿が出ていない場合の通知・再起動。state は呼び出し側が保存する辞書。
+    send(msg)->bool は通知関数（Mac=notify.sh / CI=discord）。_push_once_per_day の「1日1回」とは
+    別キー・別間隔（通知=アカウントごと2時間、再起動=1日2回）。戻り値: 'restart' / 'notify' / None。"""
+    import time as _time
+    now_ts = _time.time() if now_ts is None else now_ts
+    today = today or _now().date().isoformat()
+    n_min, r_min = alive_thresholds(acct)
+    if gap is None or gap < n_min or behind < ALIVE_BEHIND:
+        return None
+    action = None
+    url = latest_run_url() or "取得不可"
+    base = (f"🚨Threads {acct}: 常駐runは動いていますが最後の投稿から{int(gap)}分・ペースより{behind}本遅れ。"
+            f"原因候補: 常駐は動いているが候補の選び直しで止まっている可能性。直近run: {url}")
+    key = f"alive_notify_{acct}"
+    if now_ts - float(state.get(key, 0)) >= ALIVE_NOTIFY_INTERVAL_S:
+        if send(base):
+            state[key] = now_ts
+        action = "notify"
+    if gap >= r_min:
+        if state.get("alive_restart_date") != today:
+            state["alive_restart_date"], state["alive_restart_count"] = today, 0
+        if int(state.get("alive_restart_count", 0)) < ALIVE_RESTART_PER_DAY:
+            ok, why = restart_keeper()
+            if ok:
+                state["alive_restart_count"] = int(state.get("alive_restart_count", 0)) + 1
+                send(f"🔄Threads {acct}: 無投稿{int(gap)}分のため常駐runを再起動しました"
+                     f"（本日{state['alive_restart_count']}/{ALIVE_RESTART_PER_DAY}回目）。{why}。新プロセスで選択状態がリセットされます。")
+                action = "restart"
+            else:
+                log_msg = f"常駐再起動できず: {why}"
+                print(log_msg)
+    return action
+
+
 def discord_send(text: str) -> bool:
     """Discord Webhook送信。env DISCORD_WEBHOOK_URL 未設定ならFalse（呼び出し側で別途記録）。"""
     hook = os.environ.get("DISCORD_WEBHOOK_URL", "")

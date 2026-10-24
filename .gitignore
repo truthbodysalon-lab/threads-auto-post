@@ -23,3 +23,4 @@ image_post_err.log
 inspection_log.jsonl
 watchdog_state.json
 uplink_history300.json
+selfwatch_state.json

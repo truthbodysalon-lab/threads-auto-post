@@ -981,7 +981,7 @@ def get_next_post(acct: str, today: str, avoid_url: bool = False):
     line_done = _line_done_today(acct, today)
 
     # API実投稿の直近1文目（CIが先に投稿した分をローカルが再選択しないよう除外）
-    api_recent = _recent_api_firstlines(acct) | _RUN_BLOCKED_FIRSTLINES.get(acct, set())
+    api_recent = _recent_api_firstlines(acct) | _RUN_BLOCKED_FIRSTLINES.get(acct, set()) | _selfwatch_excluded(acct)
     # 2026-10-24: 本日すでに投稿した1文目（台帳）。アンカー系は台帳textがURL除去・「。→？」補正後で
     # キュー原文と一致せず already_posted_ever が False になり、API12h窓が切れる(朝投稿→19時台)と
     # 同じ診断アンカーを選び続けて投稿直前の同日チェックで毎回見送り→連続3回失敗で諦める、を繰り返した
@@ -1267,6 +1267,123 @@ def _firstline_key(text: str) -> str:
     return dg_normalize(_fix_question_endings(text or "")).split("\n")[0].strip()[:40]
 
 
+# ── 自己検知（2026-10-24）─────────────────────────────────────────────
+# 10/23 truth が 19:08〜22:57 に投稿ゼロ（同じ候補を選んでは見送るのを約90回）だったのに、
+# 常駐runは正常稼働のため外の見張りは「kick見送り」しか出せず、通知まで3時間以上かかった。
+# 投稿側自身が「不足なのに増えないサイクルの連続」と「同じ1文目の繰り返し見送り」を検知する。
+#  (1) 不足(need>0)なのに1本も増えなかったサイクルが3回連続（約30分）→ Discord通知（同アカウント2時間に1回まで）
+#  (2) 同じ1文目が1時間以内に3回以上見送られたら、その日は選択から外す（アンカーでも外す。翌日に回るだけ）
+# 状態は git 追跡外の小さなファイル（サイクルごとにプロセスが変わるため）。全て失敗しても投稿は止めない。
+SELFWATCH_STATE = BASE / "selfwatch_state.json"
+SELFWATCH_STREAK_N = 3            # 連続サイクル数（約10分×3＝約30分）
+SELFWATCH_ALERT_COOLDOWN_S = 2 * 3600
+SELFWATCH_REPEAT_N = 3            # 同じ1文目の見送り回数
+SELFWATCH_REPEAT_WINDOW_S = 3600  # 上記の窓（1時間）
+SELFWATCH_KEEP_S = 3 * 3600       # 見送り記録の保持
+
+
+def _sw_load() -> dict:
+    try:
+        return json.loads(SELFWATCH_STATE.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+
+
+def _sw_save(st: dict):
+    try:
+        tmp = SELFWATCH_STATE.with_suffix(".tmp")
+        tmp.write_text(json.dumps(st, ensure_ascii=False), encoding="utf-8")
+        os.replace(tmp, SELFWATCH_STATE)
+    except Exception:
+        pass
+
+
+def _notify_discord(text: str) -> bool:
+    """Discord通知（LINE送信なし）。CIは env DISCORD_WEBHOOK_URL、Macは notify.sh。失敗してもFalseで返す。"""
+    try:
+        from stall_check import discord_send
+        if discord_send(text):
+            return True
+    except Exception:
+        pass
+    try:
+        ns = Path.home() / ".claude" / "scripts" / "notify.sh"
+        if ns.exists():
+            subprocess.run([str(ns), text], capture_output=True, timeout=60)
+            return True
+    except Exception:
+        pass
+    return False
+
+
+def _note_skip(acct: str, text: str, reason: str):
+    """見送り（重複スキップ・検品NG・同日同文・本文空・例外）を記録。同じ1文目が窓内に
+    SELFWATCH_REPEAT_N 回以上なら、その日の選択から除外する。"""
+    try:
+        key = _firstline_key(text)
+        if not key:
+            return
+        now = time.time()
+        st = _sw_load()
+        a = st.setdefault(acct, {})
+        ev = [e for e in a.get("skips", []) if now - e[0] < SELFWATCH_KEEP_S]
+        ev.append([now, key, reason])
+        a["skips"] = ev
+        n = sum(1 for e in ev if e[1] == key and now - e[0] < SELFWATCH_REPEAT_WINDOW_S)
+        if n >= SELFWATCH_REPEAT_N:
+            today = date.today().strftime("%Y-%m-%d")
+            ex = a.get("excluded", {})
+            ex = {d: v for d, v in ex.items() if d == today}
+            if key not in ex.setdefault(today, []):
+                ex[today].append(key)
+                log_info(acct, f"{ACCOUNTS[acct]['name']} [自己検知] 同じ1文目が1時間に{n}回見送られたため本日の選択から除外: {key[:30]}")
+            a["excluded"] = ex
+        st[acct] = a
+        _sw_save(st)
+    except Exception:
+        pass
+
+
+def _selfwatch_excluded(acct: str) -> set:
+    """本日の選択から除外する1文目キー（_firstline_key）。get_next_post が api_recent に合流する。"""
+    try:
+        today = date.today().strftime("%Y-%m-%d")
+        return set(_sw_load().get(acct, {}).get("excluded", {}).get(today, []))
+    except Exception:
+        return set()
+
+
+def _selfwatch_cycle(acct: str, need: int, before: int, after: int):
+    """1サイクル(=_run_account_batch 1回)の結果を記録。不足があるのに増えなかった連続が閾値に達したら通知。"""
+    try:
+        st = _sw_load()
+        a = st.setdefault(acct, {})
+        if need > 0 and after <= before:
+            a["streak"] = int(a.get("streak", 0)) + 1
+        else:
+            a["streak"] = 0
+        now = time.time()
+        if a["streak"] >= SELFWATCH_STREAK_N and now - float(a.get("last_alert", 0)) >= SELFWATCH_ALERT_COOLDOWN_S:
+            ev = [e for e in a.get("skips", []) if now - e[0] < 5400]
+            reasons: dict = {}
+            keys: dict = {}
+            for e in ev:
+                reasons[e[2]] = reasons.get(e[2], 0) + 1
+                keys[e[1]] = keys.get(e[1], 0) + 1
+            top_r = " / ".join(f"{r}×{c}" for r, c in sorted(reasons.items(), key=lambda x: -x[1])[:3]) or "見送り記録なし（候補枯渇・選択ゼロの可能性）"
+            top_k = max(keys.items(), key=lambda x: x[1]) if keys else None
+            msg = (f"🚨Threads {acct}: 不足{need}本なのに{a['streak']}サイクル連続（約{a['streak'] * 10}分）で1本も増えていません。"
+                   f"直近の見送り理由: {top_r}。"
+                   + (f"同じ候補（{top_k[1]}回）の1文目: 「{top_k[0]}」" if top_k else ""))
+            if _notify_discord(msg):
+                a["last_alert"] = now
+            log_info(acct, f"{ACCOUNTS[acct]['name']} [自己検知] {msg[:160]}")
+        st[acct] = a
+        _sw_save(st)
+    except Exception:
+        pass
+
+
 def _today_ledger_firstline_keys(acct: str, today: str) -> set:
     """本日の投稿台帳に載っている1文目キー（_firstline_key）の集合。読めなければ空集合。"""
     out = set()
@@ -1386,6 +1503,7 @@ def run_account(acct: str):
         if _ok:
             break
         log_info(acct, f"{name} [検品NG] {'; '.join(_reasons)[:100]} → {text[:30].replace(chr(10), ' ')}...")
+        _note_skip(acct, text, "検品NG")
         try:
             dg_mark_pending(dg_normalize(text), acct)  # 消費済みにして次回同一候補を再選択しない
         except Exception:
@@ -1468,6 +1586,7 @@ def run_account(acct: str):
         # （2026-09-21 masa 44/50本・run=35563956767で確認、[115本目]表記で毎回本文空）。
         # 検品NGと同様に消費済みにして見送る（投稿数を増やす変更ではない）。
         log_info(acct, f"{name} [本文空につき見送り] {text[:40].replace(chr(10), ' ')}...")
+        _note_skip(acct, text, "本文空")
         try:
             dg_mark_pending(dg_normalize(text), acct)
         except Exception:
@@ -1490,6 +1609,7 @@ def run_account(acct: str):
                 if (_e.get("date") or "")[:10] == today and (_e.get("text", "").split("\n")[0].strip() == _first):
                     log_info(acct, f"{name} [同日同文の診断アンカー済みにつき見送り] {_first[:30]}")
                     _RUN_BLOCKED_FIRSTLINES.setdefault(acct, set()).add(_firstline_key(clean_text))   # 同一run内の再選択防止
+                    _note_skip(acct, clean_text, "同日同文")
                     return
 
     # URLがある場合のみ補足説明コメントをAIで事前生成（投稿前に準備）
@@ -1528,6 +1648,7 @@ def run_account(acct: str):
     except _DuplicatePost as dp:
         log_info(acct, f"{name} [重複スキップ] {str(dp)[:60]}")
         _RUN_BLOCKED_FIRSTLINES.setdefault(acct, set()).add(_firstline_key(clean_text))
+        _note_skip(acct, clean_text, "重複スキップ")
         if is_line:
             # 2026-08-21改訂: 枠(_mark_line_done)は燃やさない。選択側がAPI直近重複を
             # 事前回避するため同一候補の無限再選択は起きない（全滅時はLINE見送りで前進）。
@@ -1561,14 +1682,18 @@ def run_account(acct: str):
                 except _DuplicatePost as dp:
                     log_info(acct, f"{name} [重複スキップ] {str(dp)[:60]}")
                     _RUN_BLOCKED_FIRSTLINES.setdefault(acct, set()).add(_firstline_key(clean_text))
+                    _note_skip(acct, clean_text, "重複スキップ")
                 except Exception as e2:
+                    _note_skip(acct, clean_text, "例外")
                     log_error(f"{name} リフレッシュ後も失敗 → 手動で auth.py を実行してください: {e2}")
             else:
                 log_error(f"{name} トークン再取得が必要です（手動: python3 auth.py）")
         else:
+            _note_skip(acct, clean_text, "例外")
             log_error(f"{name} 投稿失敗 (code={code}): {body[:200]}")
 
     except Exception as e:
+        _note_skip(acct, clean_text, "例外")
         log_error(f"{name} 予期しないエラー: {e}")
 
 
@@ -1696,6 +1821,8 @@ def _run_account_batch(acct: str):
     # 2026-09-15: 固定回数ループだと「重複スキップ」で消費した回が投稿ゼロのまま数えられ、
     # 最終バーストで不足が残る（9/11: 不足14本→重複スキップ2回→12本投稿→48本で終了しDaily Verify FAIL）。
     # 「実際に増えた本数」が n に達するまで回し、試行回数の上限だけ n+6 で抑える。
+    _sw_before = _posted_count_today(acct)
+    _sw_need = need
     fails = 0
     done = 0
     attempts = 0
@@ -1717,6 +1844,7 @@ def _run_account_batch(acct: str):
             done += after - before
         if done < n:
             time.sleep(4)
+    _selfwatch_cycle(acct, _sw_need, _sw_before, _posted_count_today(acct))
 
 
 def _run_uplink_repost():

@@ -118,7 +118,7 @@ def check_dup_reselect_guard():
 
 
 def check_stuck_anchor_reselect():
-    """C25: 2026-10-23 truth 40/50本の回帰テスト。朝に投稿済みの診断アンカー（台帳は「？」・URL除去後、
+    """C40: 2026-10-23 truth 40/50本の回帰テスト。朝に投稿済みの診断アンカー（台帳は「？」・URL除去後、
     キュー原文は「。」・URL付き＝正規化が一致しない）が、API12h窓の失効後に選択され続け、
     投稿直前の同日チェックで毎回見送り→連続3回失敗で諦める、を約4時間繰り返した。
     本日投稿済みの同一1文目のアンカーを get_next_post が返さないこと、通常投稿が選ばれることを確認する。"""
@@ -1056,8 +1056,8 @@ JST = timezone(timedelta(hours=9))
 CHECK_REGISTRY = {
     "C8": "exec:daily50:", "C10": "exec:pacing:", "C11": "exec:watchdog",
     "C13": "exec:hpb_only", "C14": "exec:imagepost", "C15": "exec:segment_test:",
-    "C16": "next_post:", "C17": "dup_reselect:", "C23": "same_day_anchor:", "C25": "stuck_anchor:", "C24": "dup_sameday:",
-    "C21": "exec:log_sync", "C26": "hero_posted:", "C25": "ledger_gap:", "C18": "exec:chain_gap", "C19": "exec:post_interval:", "C20": "ledger:",
+    "C16": "next_post:", "C17": "dup_reselect:", "C23": "same_day_anchor:", "C24": "dup_sameday:",
+    "C21": "exec:log_sync", "C26": "hero_posted:", "C40": "stuck_anchor:", "C25": "ledger_gap:", "C18": "exec:chain_gap", "C19": "exec:post_interval:", "C20": "ledger:",
     "C27": "masa_insta_theme",
 }
 

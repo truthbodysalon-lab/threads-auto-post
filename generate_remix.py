@@ -1916,7 +1916,9 @@ TYPE_DAILY_PLAN = {
 # 上限を数える／型を置換する先頭範囲（ベースリスト）。導線・テスト・ヒーロー等のアンカーが約26〜28本ベースの間に入るため、
 # 実投稿される前半50本に載るベースは先頭約22〜24本。ここを広げると前半50本に効かなくなる（2026-10-24実測）。
 _TYPE_WINDOW = 23
-_TYPE_WINDOW_BY_ACCT = {"truth": 23, "nagaoka": 18}   # nagaokaは長岡市相談型など固定アンカーが多く前半50本に載るベースが少ない
+# nagaokaは長岡市相談型など固定アンカーが多く前半50本に載るベースが少ない。さらに外部ツール併用で自動投稿は約30本/日に
+# 抑制される(project_nagaoka_external_poster)ため、型は前寄せ（先頭約13本のベース＝実投稿の先頭約40位まで）に置く
+_TYPE_WINDOW_BY_ACCT = {"truth": 23, "nagaoka": 13}
 _RE_DESK = re.compile(r"デスク|スマホ|パソコン|PC|画面")
 _RE_MASSAGE = re.compile(r"マッサージ|揉")
 _RE_YAKU = re.compile(r"薬|鎮痛|痛み止め")

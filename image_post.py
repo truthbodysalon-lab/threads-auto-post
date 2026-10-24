@@ -104,7 +104,7 @@ CAPTIONS_NAGAOKA = {
         "兄妹で営んでいる小さな院の、今日の一枚です。\n肩の重さや頭の重さの相談を、ひとつずつ聞いています。",
         "長岡の小さな院の様子を、ときどき写真でも載せていきます。\n兄妹でやっているので、気軽に話しかけてください。",
     ],
-    "天気": [
+    "天気": [   # ファイル名の語（天気_雨_01 など）で選別する。WEATHER_CAPTION_IDX_BY_TAG 参照
         "雨の日は、頭が重くなるという声をよく聞きます。\n気圧が下がる日は、首の後ろを温めてから動いてみてください。",
         "天気が崩れる前日、肩が重くなる人はいませんか？\n前の晩に首元を温めておくと、楽な人もいます。",
         "寒くなってきました。\n首元を一枚足すだけで、夕方の肩の重さが違う人がいます。",
@@ -121,6 +121,8 @@ CAPTIONS_NAGAOKA = {
 }
 # truth側に「天気」画像が置かれた場合の汎用キャプション
 CAPTIONS["天気"] = CAPTIONS_NAGAOKA["天気"]
+# 天気画像は絵に合う文だけを使う（雨の絵に雪の文を付けない）。ファイル名: 天気_<雨|曇り|雪|寒い>_NN.png
+WEATHER_CAPTION_IDX_BY_TAG = {"雨": [0, 1, 5], "曇り": [3], "雪": [4], "寒い": [2]}
 
 
 def log(msg):
@@ -240,9 +242,14 @@ def used_captions(acct: str) -> set:
     return out
 
 
-def pick_caption(acct: str, cat: str) -> str:
+def pick_caption(acct: str, cat: str, name: str = "") -> str:
     used = used_captions(acct)
     src = CAPTIONS_NAGAOKA.get(cat) if acct == "nagaoka" and CAPTIONS_NAGAOKA.get(cat) else CAPTIONS.get(cat) or CAPTIONS["汎用"]
+    if cat == "天気":
+        for tag, idxs in WEATHER_CAPTION_IDX_BY_TAG.items():
+            if tag in name:
+                src = [src[i] for i in idxs if i < len(src)] or src
+                break
     pool = [c for c in src if c.split("\n")[0] not in used] or src
     cap = random.choice(pool)
     # NAGAOKA_EXTRA(兄妹)は兄妹がまだ入っていない汎用／内装だけに付ける（兄妹は1本1回まで）
@@ -359,7 +366,7 @@ def main():
 
         cat = category_of(src.name)
         cap_cat = pick_recycle_category(cat, last_cat) if recycled else cat
-        cap = pick_caption(acct, cap_cat)
+        cap = pick_caption(acct, cap_cat, src.name)
         tag = "リサイクル" if recycled else "新規"
         log(f"{acct}: {src.name} (カテゴリ={cap_cat}・{tag}) を処理")
         if dry:

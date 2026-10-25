@@ -50,7 +50,7 @@
   "寝ても疲労感が抜けない人へ。": {
     "segment": "T5",
     "hook": "high",
-    "created": "2026-10-24",
+    "created": "2026-10-26",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z17_truth"
@@ -66,7 +66,7 @@
   "産後の腰痛が続くママへ。": {
     "segment": "T3",
     "hook": "high",
-    "created": "2026-10-24",
+    "created": "2026-10-26",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z11_truth"
@@ -74,7 +74,7 @@
   "何をしても一時的にしか変わらない人へ。": {
     "segment": "T6",
     "hook": "high",
-    "created": "2026-10-24",
+    "created": "2026-10-26",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z20_nagaoka"
@@ -82,7 +82,7 @@
   "朝起きた瞬間からだるい人へ。": {
     "segment": "T5",
     "hook": "high",
-    "created": "2026-10-22",
+    "created": "2026-10-26",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z16_nagaoka"
@@ -651,7 +651,7 @@
   "立ちっぱなしで脚がパンパンな人へ。": {
     "segment": "T4",
     "hook": "high",
-    "created": "2026-10-22",
+    "created": "2026-10-26",
     "acct": "nagaoka",
     "variant": 1
   },
@@ -724,21 +724,21 @@
   "介護の抱え上げで腰を痛めた人へ。": {
     "segment": "T4",
     "hook": "high",
-    "created": "2026-10-22",
+    "created": "2026-10-26",
     "acct": "truth",
     "variant": 1
   },
   "他院に通っても改善しない人へ。": {
     "segment": "T6",
     "hook": "high",
-    "created": "2026-10-22",
+    "created": "2026-10-26",
     "acct": "truth",
     "variant": 1
   },
   "抱っこで腕がだるいママへ。": {
     "segment": "T3",
     "hook": "high",
-    "created": "2026-10-22",
+    "created": "2026-10-26",
     "acct": "nagaoka",
     "variant": 1
   },
@@ -2709,7 +2709,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 19,
-    "created": "2026-10-17",
+    "created": "2026-10-26",
     "acct": "nagaoka"
   },
   "インスタで、ハッシュタグと投稿時間で伸ばそうとしている院長へ。": {
@@ -2979,7 +2979,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 21,
-    "created": "2026-10-18",
+    "created": "2026-10-26",
     "acct": "nagaoka"
   },
   "インスタで、見られないのはアルゴリズムのせいだと思っている院長へ質問です。": {
@@ -3247,7 +3247,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 15,
-    "created": "2026-10-18",
+    "created": "2026-10-26",
     "acct": "nagaoka"
   },
   "インスタ運用で、登録ページに誘導しているのに、登録がない院長へ。": {
@@ -5842,7 +5842,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 37,
-    "created": "2026-10-13",
+    "created": "2026-10-26",
     "acct": "truth"
   },
   "【頭痛の人の仕事中の習慣9選】": {
@@ -5974,7 +5974,7 @@
   "次回の予約が取れない院長へ。": {
     "segment": "R03",
     "hook": "high",
-    "created": "2026-10-20",
+    "created": "2026-10-26",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -5983,7 +5983,7 @@
   "提案が苦手で、話しすぎてしまう院長へ。": {
     "segment": "R04",
     "hook": "high",
-    "created": "2026-10-14",
+    "created": "2026-10-26",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -6181,8 +6181,8 @@
   "『朝起きると、顎がこわばっている』という声を、よく聞きます。": {
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
-    "variant": 8,
-    "created": "2026-10-15",
+    "variant": 7,
+    "created": "2026-10-26",
     "acct": "truth"
   },
   "【巻き肩の人が見直すこと6選】": {
@@ -6628,7 +6628,7 @@
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 76,
-    "created": "2026-10-18"
+    "created": "2026-10-26"
   },
   "Threadsで当たった投稿は、インスタでも使える。": {
     "segment": "INSTA_EASY",
@@ -6652,7 +6652,7 @@
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 69,
-    "created": "2026-10-18"
+    "created": "2026-10-26"
   },
   "インスタは、同じ時間に出した人が勝つ。": {
     "segment": "INSTA_EASY",
@@ -6787,7 +6787,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 10,
-    "created": "2026-10-23"
+    "created": "2026-10-26"
   },
   "ハイライトを、後回しにしない。": {
     "segment": "PRESENT_CTA",
@@ -7105,7 +7105,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 0,
-    "created": "2026-10-24"
+    "created": "2026-10-26"
   },
   "売り先は、1つに絞らない。": {
     "segment": "HAKASE",
@@ -7118,7 +7118,7 @@
     "hook": "present",
     "present_key": "insta_kit",
     "variant": 7,
-    "created": "2026-10-19"
+    "created": "2026-10-26"
   },
   "ハッシュタグは、3個から始めて足ります。": {
     "segment": "INSTA_EASY",
@@ -8518,6 +8518,159 @@
     "segment": "WIN_HOOK",
     "hook": "winning",
     "variant": 0,
+    "created": "2026-10-26"
+  },
+  "頭痛薬を飲む前に、まず今日の睡眠時間を思い出してみて。": {
+    "segment": "ZUTSUYAKU",
+    "hook": "type",
+    "variant": 7,
+    "created": "2026-10-26",
+    "acct": "truth"
+  },
+  "相談する前に、まず頭の重さが出た時間をメモしてみて。": {
+    "segment": "MAE_MAZU",
+    "hook": "type",
+    "variant": 15,
+    "created": "2026-10-26",
+    "acct": "truth"
+  },
+  "頭が痛くなる前に、まず自分の「いつもの合図」を探してみて。": {
+    "segment": "MAE_MAZU",
+    "hook": "type",
+    "variant": 13,
+    "created": "2026-10-26",
+    "acct": "truth"
+  },
+  "頭痛薬を飲む前に、まず目を閉じて首をゆっくり回してみて。": {
+    "segment": "ZUTSUYAKU",
+    "hook": "type",
+    "variant": 25,
+    "created": "2026-10-26",
+    "acct": "truth"
+  },
+  "頭痛薬だけに頼る前に、まず首の後ろの硬さを確かめてみて。": {
+    "segment": "ZUTSUYAKU",
+    "hook": "type",
+    "variant": 10,
+    "created": "2026-10-26",
+    "acct": "truth"
+  },
+  "動き出す前に、まず首の後ろを温めてみて。": {
+    "segment": "MAE_MAZU",
+    "hook": "type",
+    "variant": 25,
+    "created": "2026-10-26",
+    "acct": "truth"
+  },
+  "頭痛薬を飲むタイミングを迷う人へ。": {
+    "segment": "ZUTSUYAKU",
+    "hook": "type",
+    "variant": 15,
+    "created": "2026-10-26",
+    "acct": "truth"
+  },
+  "頭痛薬を飲む前に、まず背中を壁につけて立ってみて。": {
+    "segment": "ZUTSUYAKU",
+    "hook": "type",
+    "variant": 19,
+    "created": "2026-10-26",
+    "acct": "truth"
+  },
+  "夕方に頭が重くなる前に、まず昼に一度だけ立ち上がってみて。": {
+    "segment": "MAE_MAZU",
+    "hook": "type",
+    "variant": 6,
+    "created": "2026-10-26",
+    "acct": "truth"
+  },
+  "台風が近づくと、頭が重くなる人へ。": {
+    "segment": "WEATHER",
+    "hook": "type",
+    "variant": 5,
+    "created": "2026-10-26",
+    "acct": "nagaoka"
+  },
+  "最近、深呼吸をしたのはいつですか？": {
+    "segment": "QUESTION",
+    "hook": "type",
+    "variant": 4,
+    "created": "2026-10-26",
+    "acct": "nagaoka"
+  },
+  "運転する前に、まず首を左右に1回ずつ回してみて。": {
+    "segment": "MAE_MAZU",
+    "hook": "type",
+    "variant": 10,
+    "created": "2026-10-26",
+    "acct": "nagaoka"
+  },
+  "冷える前に、まず首元を一枚足してみて。": {
+    "segment": "MAE_MAZU",
+    "hook": "type",
+    "variant": 22,
+    "created": "2026-10-26",
+    "acct": "nagaoka"
+  },
+  "夕方に重くなる前に、まず昼に一度、肩の力を抜いてみて。": {
+    "segment": "MAE_MAZU",
+    "hook": "type",
+    "variant": 15,
+    "created": "2026-10-26",
+    "acct": "nagaoka"
+  },
+  "雨の朝は、頭が重くて起きにくい人いますか？": {
+    "segment": "WEATHER",
+    "hook": "type",
+    "variant": 18,
+    "created": "2026-10-26",
+    "acct": "nagaoka"
+  },
+  "気圧のせいにする前に、まず首の冷えを確かめてみて。": {
+    "segment": "MAE_MAZU",
+    "hook": "type",
+    "variant": 3,
+    "created": "2026-10-26",
+    "acct": "nagaoka"
+  },
+  "雪が降る日の朝、肩がガチガチな人いませんか？": {
+    "segment": "WEATHER",
+    "hook": "type",
+    "variant": 9,
+    "created": "2026-10-26",
+    "acct": "nagaoka"
+  },
+  "朝、首が固まったまま起きる人はいますか？": {
+    "segment": "QUESTION",
+    "hook": "type",
+    "variant": 1,
+    "created": "2026-10-26",
+    "acct": "nagaoka"
+  },
+  "ストーリーズは、作り込むほど、見られなくなります。": {
+    "segment": "I09",
+    "hook": "high",
+    "created": "2026-10-26",
+    "acct": "masa",
+    "axis": "insta_pain",
+    "variant": null,
+    "hypothesis_id": "IP77"
+  },
+  "【インスタ集客で、毎日やる習慣5選】": {
+    "segment": "WIN_HOOK",
+    "hook": "winning",
+    "variant": 12,
+    "created": "2026-10-26"
+  },
+  "リールを始めるのに、新しい機材は要りません。": {
+    "segment": "WIN_HOOK",
+    "hook": "winning",
+    "variant": 17,
+    "created": "2026-10-26"
+  },
+  "ハイライトに入れるのは、たった3つだけ。": {
+    "segment": "WIN_HOOK",
+    "hook": "winning",
+    "variant": 7,
     "created": "2026-10-26"
   }
 }

@@ -7,7 +7,7 @@
   → 元画像を 使用済み/ へ移動・投稿台帳に記録（同一コミットでpush）
 
 制約・ルール:
-- 1日の上限: truth=0枚(据え置き・再開はmasa判断。元は2枚)／nagaoka=4枚（画像は挑戦枠。playbook testingとして実測評価）。
+- 1日の上限: truth=4枚(2026-10-26 masa指示で再開)／nagaoka=4枚（画像は挑戦枠。playbook testingとして実測評価）。
   2026-10-24 本人指示で nagaoka を2→4枚へ（分析: 画像つき投稿 x1.6、兄妹・地域の写真つきは x8。自動の画像つきは3本しかなかった）
 - 投稿時間帯6-23時のみ。R1: 全HTTP通信にtimeout必須
 - 本文はプレイブック準拠の短文。URL無し（HPB一本化ルールに抵触しない）
@@ -37,7 +37,7 @@ SRC = Path("/Users/mt112/Threads投稿画像")
 REPO_IMG = BASE / "images"
 STATE = BASE / "image_post_state.json"     # 日次カウント・使用ログ・通知フラグ（.gitignore）
 RAW = "https://raw.githubusercontent.com/truthbodysalon-lab/threads-auto-post/main/images"
-DAILY_IMG_CAP = {"truth": 0, "nagaoka": 4}   # アカウント別の1日上限（2026-10-24 nagaokaを4枚へ。truthは9/2以降フォルダ欠落で実質停止中だったため0のまま据え置き＝再開はmasa判断）
+DAILY_IMG_CAP = {"truth": 4, "nagaoka": 4}   # アカウント別の1日上限（2026-10-24 nagaokaを4枚へ。2026-10-26 masa指示でtruthも再開・nagaokaと同じ4枚）
 TIMEOUT = 30
 RECYCLE_DAYS = 7            # 使用済み画像の再利用しきい値（日）。適格0なら最終手段でLRU再利用
                             # するため実質の間隔は 画像枚数÷日次上限（例: 8枚÷2本=4日）に収束する

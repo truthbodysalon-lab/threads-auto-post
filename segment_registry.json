@@ -292,7 +292,7 @@
   "産後、体の痛みを我慢するママへ。": {
     "segment": "T3",
     "hook": "low",
-    "created": "2026-10-23",
+    "created": "2026-10-27",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z11_truth"
@@ -332,7 +332,7 @@
   "重い荷物運びで腰を痛めた人へ。": {
     "segment": "T4",
     "hook": "low",
-    "created": "2026-10-23",
+    "created": "2026-10-27",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z14_nagaoka"
@@ -513,7 +513,7 @@
   "頭痛薬なしで一日が始まらない人へ。": {
     "segment": "T2",
     "hook": "low",
-    "created": "2026-10-21",
+    "created": "2026-10-27",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z09_truth"
@@ -542,7 +542,7 @@
   "頭痛で仕事に集中できない人へ。": {
     "segment": "T2",
     "hook": "low",
-    "created": "2026-10-21",
+    "created": "2026-10-27",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z08_nagaoka"
@@ -2375,7 +2375,7 @@
   "座り仕事で首が詰まる感じがする人へ。": {
     "segment": "T1",
     "hook": "low",
-    "created": "2026-10-21",
+    "created": "2026-10-27",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "ZC01_truth"
@@ -2399,7 +2399,7 @@
   "水を飲む時間がない仕事の人へ。": {
     "segment": "T4",
     "hook": "low",
-    "created": "2026-10-21",
+    "created": "2026-10-27",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "ZC04_truth"
@@ -2428,7 +2428,7 @@
   "座り仕事で肩が重い人へ。": {
     "segment": "T1",
     "hook": "low",
-    "created": "2026-10-21",
+    "created": "2026-10-27",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "ZC01_nagaoka"
@@ -2444,7 +2444,7 @@
   "子育て中で肩や腰がつらいママへ。": {
     "segment": "T3",
     "hook": "low",
-    "created": "2026-10-21",
+    "created": "2026-10-27",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "ZC03_nagaoka"
@@ -3511,7 +3511,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 11,
-    "created": "2026-10-19",
+    "created": "2026-10-27",
     "acct": "nagaoka"
   },
   "インスタで、「DMください」だけで動かしている院長へ。": {
@@ -3749,7 +3749,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 3,
-    "created": "2026-10-17",
+    "created": "2026-10-27",
     "acct": "nagaoka"
   },
   "【運転が多い人の肩首の習慣6選】": {
@@ -3832,7 +3832,7 @@
   "縛られるのが嫌と言われる院長へ。": {
     "segment": "R06",
     "hook": "low",
-    "created": "2026-10-21",
+    "created": "2026-10-27",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -4015,7 +4015,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 13,
-    "created": "2026-10-19",
+    "created": "2026-10-27",
     "acct": "nagaoka"
   },
   "インスタ運用で、100点にならないと出せない院長へ質問です。": {
@@ -4525,7 +4525,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 3,
-    "created": "2026-10-20",
+    "created": "2026-10-27",
     "acct": "nagaoka"
   },
   "インスタ運用で、外注すると自分らしさが消えると思っている院長へ質問です。": {
@@ -4749,7 +4749,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 34,
-    "created": "2026-10-19",
+    "created": "2026-10-27",
     "acct": "truth"
   },
   "朝起きるのがつらい人へ。": {
@@ -6091,7 +6091,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 4,
-    "created": "2026-10-15",
+    "created": "2026-10-27",
     "acct": "truth"
   },
   "『運動を始めたいのに、体がだるい日が続く』という声を、よく聞きます。": {
@@ -6149,7 +6149,7 @@
   "回数券を売り込みだと感じる院長へ。": {
     "segment": "R05",
     "hook": "low",
-    "created": "2026-10-15",
+    "created": "2026-10-27",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -6646,7 +6646,7 @@
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 17,
-    "created": "2026-10-18"
+    "created": "2026-10-27"
   },
   "投稿を出す前に、狙いを一言決める。": {
     "segment": "INSTA_EASY",
@@ -6670,7 +6670,7 @@
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 29,
-    "created": "2026-10-18"
+    "created": "2026-10-27"
   },
   "伸びている投稿は、丸ごとまねていい。": {
     "segment": "INSTA_EASY",
@@ -6718,7 +6718,7 @@
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 67,
-    "created": "2026-10-18"
+    "created": "2026-10-27"
   },
   "グラフは、読まなくていい。": {
     "segment": "INSTA_EASY",
@@ -7063,7 +7063,7 @@
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-10-19"
+    "created": "2026-10-27"
   },
   "投稿は、1分で出せる。": {
     "segment": "INSTA_EASY",
@@ -7184,7 +7184,7 @@
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-10-19"
+    "created": "2026-10-27"
   },
   "最初の1か月は、広告を使わなくていい。": {
     "segment": "INSTA_EASY",
@@ -7238,7 +7238,7 @@
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-10-19"
+    "created": "2026-10-27"
   },
   "ぶっちゃけ、投稿は、閉店後に作って朝に出せる。": {
     "segment": "INSTA_EASY",
@@ -7266,7 +7266,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 3,
-    "created": "2026-10-20"
+    "created": "2026-10-27"
   },
   "1週間で結果が出ないのは、普通です。": {
     "segment": "HAKASE",
@@ -7285,7 +7285,7 @@
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-10-20"
+    "created": "2026-10-27"
   },
   "最初の1枚は、3タップで終わる。": {
     "segment": "INSTA_EASY",
@@ -7456,7 +7456,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 17,
-    "created": "2026-10-20"
+    "created": "2026-10-27"
   },
   "【ハイライトを、今日1つ作る】": {
     "segment": "PRESENT_CTA",
@@ -8672,5 +8672,250 @@
     "hook": "winning",
     "variant": 7,
     "created": "2026-10-26"
+  },
+  "寝る前に頭痛薬を飲む日が増えたら、夕方の姿勢を振り返ってみて。": {
+    "segment": "ZUTSUYAKU",
+    "hook": "type",
+    "variant": 26,
+    "created": "2026-10-27",
+    "acct": "truth"
+  },
+  "頭痛薬の箱が空になるのが早くなったら、薬のほかの原因も探すタイミングです。": {
+    "segment": "ZUTSUYAKU",
+    "hook": "type",
+    "variant": 20,
+    "created": "2026-10-27",
+    "acct": "truth"
+  },
+  "頭痛薬を持ち歩いている人は、首の後ろを一度触ってみてください。": {
+    "segment": "ZUTSUYAKU",
+    "hook": "type",
+    "variant": 16,
+    "created": "2026-10-27",
+    "acct": "truth"
+  },
+  "痛み止めが手放せない人へ。": {
+    "segment": "ZUTSUYAKU",
+    "hook": "type",
+    "variant": 18,
+    "created": "2026-10-27",
+    "acct": "truth"
+  },
+  "筋トレを増やす前に、まず首の後ろが固まっていないか確かめてみて。": {
+    "segment": "MAE_MAZU",
+    "hook": "type",
+    "variant": 14,
+    "created": "2026-10-27",
+    "acct": "truth"
+  },
+  "予定を詰め込む前に、まず1日の中で力を抜く時間を決めてみて。": {
+    "segment": "MAE_MAZU",
+    "hook": "type",
+    "variant": 10,
+    "created": "2026-10-27",
+    "acct": "truth"
+  },
+  "気圧のせいにする前に、まず前日の睡眠を思い出してみて。": {
+    "segment": "MAE_MAZU",
+    "hook": "type",
+    "variant": 3,
+    "created": "2026-10-27",
+    "acct": "truth"
+  },
+  "食いしばる前に、まず奥歯の力を抜いてみて。": {
+    "segment": "MAE_MAZU",
+    "hook": "type",
+    "variant": 17,
+    "created": "2026-10-27",
+    "acct": "truth"
+  },
+  "頭痛薬の効きが前より弱いと感じたら、薬以外の手がかりも探してみて。": {
+    "segment": "ZUTSUYAKU",
+    "hook": "type",
+    "variant": 3,
+    "created": "2026-10-27",
+    "acct": "truth"
+  },
+  "気圧が下がる日の朝、起きた瞬間に頭が重い人いますか？": {
+    "segment": "WEATHER",
+    "hook": "type",
+    "variant": 4,
+    "created": "2026-10-27",
+    "acct": "nagaoka"
+  },
+  "荷物を持つ前に、まず肩を一度すくめて、ストンと落としてみて。": {
+    "segment": "MAE_MAZU",
+    "hook": "type",
+    "variant": 21,
+    "created": "2026-10-27",
+    "acct": "nagaoka"
+  },
+  "頭が重い日が週に何日あるか、数えたことはありますか？": {
+    "segment": "QUESTION",
+    "hook": "type",
+    "variant": 2,
+    "created": "2026-10-27",
+    "acct": "nagaoka"
+  },
+  "立ち上がる前に、まず首の後ろを温めてみて。": {
+    "segment": "MAE_MAZU",
+    "hook": "type",
+    "variant": 12,
+    "created": "2026-10-27",
+    "acct": "nagaoka"
+  },
+  "我慢が続いたら、まず「いつから重いか」を思い出してみて。": {
+    "segment": "MAE_MAZU",
+    "hook": "type",
+    "variant": 29,
+    "created": "2026-10-27",
+    "acct": "nagaoka"
+  },
+  "雨の日は、動き出す前に、まず首の後ろを温めてみて。": {
+    "segment": "WEATHER",
+    "hook": "type",
+    "variant": 11,
+    "created": "2026-10-27",
+    "acct": "nagaoka"
+  },
+  "今日は一度でも、肩を落としましたか？": {
+    "segment": "QUESTION",
+    "hook": "type",
+    "variant": 9,
+    "created": "2026-10-27",
+    "acct": "nagaoka"
+  },
+  "頑張って動く前に、まず息を吐ききってみて。": {
+    "segment": "MAE_MAZU",
+    "hook": "type",
+    "variant": 18,
+    "created": "2026-10-27",
+    "acct": "nagaoka"
+  },
+  "雨の日に頭が重くなる人、いますか？": {
+    "segment": "WEATHER",
+    "hook": "type",
+    "variant": 0,
+    "created": "2026-10-27",
+    "acct": "nagaoka"
+  },
+  "『寝起きの首と肩が、いちばんつらい』という声を、よく聞きます。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-10-27",
+    "acct": "nagaoka"
+  },
+  "『頭が重い週は、夕方になると口数が減る』という声を、よく聞きます。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-10-27",
+    "acct": "nagaoka"
+  },
+  "ストレッチしても、肩が戻る日があります。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-10-27",
+    "acct": "nagaoka"
+  },
+  "【肩を軽くする夜の習慣5選】": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-10-27",
+    "acct": "nagaoka"
+  },
+  "【保存数が一番多い投稿を、1つ探す】": {
+    "segment": "PRESENT_CTA",
+    "hook": "present",
+    "present_key": "insta_kit",
+    "variant": 14,
+    "created": "2026-10-27"
+  },
+  "インスタで見られ方を変えるのに、新しいメニューは要りません。": {
+    "segment": "WIN_HOOK",
+    "hook": "winning",
+    "variant": 18,
+    "created": "2026-10-27"
+  },
+  "【3ステップ】年齢より、悩みへの答え。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-27"
+  },
+  "【3つだけ】投稿は、閉店後に作って朝に出せる。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-27"
+  },
+  "【3つだけ】いいねより、保存数を見る。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-27"
+  },
+  "【3つだけ】1人なら、投稿の曜日を固定する。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-27"
+  },
+  "見すぎず、1分で閉じる。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-27"
+  },
+  "結論、いいねより、保存数を見る。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-27"
+  },
+  "難しそうは、押せば消える。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-27"
+  },
+  "光が良ければ、スマホでも十分きれいに撮れる。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-27"
+  },
+  "結論、投稿文は、AIに頼めば1分で下書きが出る。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-27"
+  },
+  "曜日が決まると、考える手間が消える。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-27"
+  },
+  "使うのは、1行。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-27"
+  },
+  "聞いて数えれば、効果は分かる。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-27"
+  },
+  "【3ステップ】決めた曜日が、続く曜日。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-10-27"
   }
 }

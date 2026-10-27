@@ -1,6 +1,6 @@
 {
   "acct": "truth",
-  "generated_at": "2026-10-24 10:38",
+  "generated_at": "2026-10-27 10:43",
   "params": {
     "min_n": 5,
     "loser_min_n": 8,
@@ -12,17 +12,17 @@
       30
     ]
   },
-  "registry_loaded": 105,
-  "log_entries": 7670,
+  "registry_loaded": 159,
+  "log_entries": 7815,
   "windows": {
     "7d": {
       "baseline": {
-        "n": 199,
-        "median_views": 84,
-        "mean_views": 167.1,
-        "p90_views": 363.2
+        "n": 197,
+        "median_views": 98,
+        "mean_views": 165.2,
+        "p90_views": 376.8
       },
-      "unregistered_n": 199,
+      "unregistered_n": 197,
       "segment_hook": {
         "T1_desk__low": {
           "n": 0,
@@ -411,12 +411,12 @@
     },
     "14d": {
       "baseline": {
-        "n": 199,
-        "median_views": 84,
-        "mean_views": 167.1,
-        "p90_views": 363.2
+        "n": 197,
+        "median_views": 98,
+        "mean_views": 165.2,
+        "p90_views": 376.8
       },
-      "unregistered_n": 199,
+      "unregistered_n": 197,
       "segment_hook": {
         "T1_desk__low": {
           "n": 0,
@@ -805,12 +805,12 @@
     },
     "30d": {
       "baseline": {
-        "n": 199,
-        "median_views": 84,
-        "mean_views": 167.1,
-        "p90_views": 363.2
+        "n": 197,
+        "median_views": 98,
+        "mean_views": 165.2,
+        "p90_views": 376.8
       },
-      "unregistered_n": 199,
+      "unregistered_n": 197,
       "segment_hook": {
         "T1_desk__low": {
           "n": 0,
@@ -1691,5 +1691,145 @@
       "否定型(WORST20中6件)"
     ],
     "generated": "2026-09-23"
+  },
+  "type_report": {
+    "7d": {
+      "baseline_median": 98,
+      "n": 197,
+      "types": {
+        "MAE_MAZU": {
+          "n": 8,
+          "median_views": 94.0,
+          "index": 0.96
+        },
+        "ZUTSUYAKU": {
+          "n": 15,
+          "median_views": 287,
+          "index": 2.93
+        },
+        "WEATHER": {
+          "n": 0,
+          "median_views": 0,
+          "index": 0.0
+        },
+        "QUESTION": {
+          "n": 0,
+          "median_views": 0,
+          "index": 0.0
+        },
+        "CUSTOMER_VOICE": {
+          "n": 3,
+          "median_views": 71,
+          "index": 0.72
+        },
+        "LIST_HABIT": {
+          "n": 3,
+          "median_views": 43,
+          "index": 0.44
+        },
+        "own_adapt": {
+          "n": 0,
+          "median_views": 0,
+          "index": 0.0
+        },
+        "image": {
+          "n": 4,
+          "median_views": 18.5,
+          "index": 0.19
+        }
+      }
+    },
+    "14d": {
+      "baseline_median": 98,
+      "n": 197,
+      "types": {
+        "MAE_MAZU": {
+          "n": 8,
+          "median_views": 94.0,
+          "index": 0.96
+        },
+        "ZUTSUYAKU": {
+          "n": 15,
+          "median_views": 287,
+          "index": 2.93
+        },
+        "WEATHER": {
+          "n": 0,
+          "median_views": 0,
+          "index": 0.0
+        },
+        "QUESTION": {
+          "n": 0,
+          "median_views": 0,
+          "index": 0.0
+        },
+        "CUSTOMER_VOICE": {
+          "n": 3,
+          "median_views": 71,
+          "index": 0.72
+        },
+        "LIST_HABIT": {
+          "n": 3,
+          "median_views": 43,
+          "index": 0.44
+        },
+        "own_adapt": {
+          "n": 0,
+          "median_views": 0,
+          "index": 0.0
+        },
+        "image": {
+          "n": 4,
+          "median_views": 18.5,
+          "index": 0.19
+        }
+      }
+    },
+    "30d": {
+      "baseline_median": 98,
+      "n": 197,
+      "types": {
+        "MAE_MAZU": {
+          "n": 8,
+          "median_views": 94.0,
+          "index": 0.96
+        },
+        "ZUTSUYAKU": {
+          "n": 15,
+          "median_views": 287,
+          "index": 2.93
+        },
+        "WEATHER": {
+          "n": 0,
+          "median_views": 0,
+          "index": 0.0
+        },
+        "QUESTION": {
+          "n": 0,
+          "median_views": 0,
+          "index": 0.0
+        },
+        "CUSTOMER_VOICE": {
+          "n": 3,
+          "median_views": 71,
+          "index": 0.72
+        },
+        "LIST_HABIT": {
+          "n": 3,
+          "median_views": 43,
+          "index": 0.44
+        },
+        "own_adapt": {
+          "n": 0,
+          "median_views": 0,
+          "index": 0.0
+        },
+        "image": {
+          "n": 4,
+          "median_views": 18.5,
+          "index": 0.19
+        }
+      }
+    }
   }
 }

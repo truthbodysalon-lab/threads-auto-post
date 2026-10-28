@@ -4451,7 +4451,7 @@
       "last_result": {
         "n": 1,
         "index": 4.4,
-        "updated": "2026-10-27"
+        "updated": "2026-10-28"
       },
       "evidence": "masa講義 2026-07-03 リール切り抜き『作りたい動画は広告用と日々のリール』（出典: 講義ノート/自分の講義/00_masa講義_要点まとめ.md・資料ID M01）"
     },
@@ -5213,8 +5213,8 @@
       ],
       "last_result": {
         "n": 1,
-        "index": 0.714,
-        "updated": "2026-10-23"
+        "index": 5.0,
+        "updated": "2026-10-28"
       },
       "evidence": "回数券・コースの伝え方が分からない(根拠5件・中)。出典: CNS / G0501 / HYP P044(G0501) / HYP P049(G0403/G0501) / L0307T（出典IDは repeat_pain_categories.json の source_ids 参照）"
     },
@@ -6053,7 +6053,7 @@
       "last_result": {
         "n": 1,
         "index": 4.8,
-        "updated": "2026-10-27"
+        "updated": "2026-10-28"
       }
     },
     {
@@ -6078,7 +6078,7 @@
       "last_result": {
         "n": 1,
         "index": 1.0,
-        "updated": "2026-10-27"
+        "updated": "2026-10-28"
       }
     }
   ]

@@ -1,6 +1,6 @@
 {
   "acct": "masa",
-  "generated_at": "2026-10-27 10:43",
+  "generated_at": "2026-10-28 10:53",
   "params": {
     "min_n": 5,
     "loser_min_n": 8,
@@ -12,17 +12,17 @@
       30
     ]
   },
-  "registry_loaded": 911,
-  "log_entries": 7899,
+  "registry_loaded": 928,
+  "log_entries": 7955,
   "windows": {
     "7d": {
       "baseline": {
-        "n": 165,
+        "n": 175,
         "median_views": 5,
-        "mean_views": 14.0,
+        "mean_views": 13.3,
         "p90_views": 26.2
       },
-      "unregistered_n": 108,
+      "unregistered_n": 113,
       "segment_hook": {
         "I01__low": {
           "n": 0,
@@ -538,30 +538,30 @@
         }
       },
       "hakase": {
-        "n": 3,
-        "median_views": 5,
-        "mean_views": 6,
-        "p90_views": 9.8,
+        "n": 2,
+        "median_views": 1.0,
+        "mean_views": 1,
+        "p90_views": 1.8,
         "like_rate": 0.0,
-        "reply_rate": 0.1667,
-        "index": 1.0,
+        "reply_rate": 1.0,
+        "index": 0.2,
         "verdict": "判定保留"
       },
       "win_hook": {
         "A逆説": {
-          "n": 3,
-          "median_views": 14,
-          "mean_views": 15,
-          "p90_views": 19.6,
-          "index": 2.8,
+          "n": 4,
+          "median_views": 17.5,
+          "mean_views": 82.5,
+          "p90_views": 205.8,
+          "index": 3.5,
           "verdict": "判定保留"
         },
         "Bたった3つ": {
           "n": 4,
-          "median_views": 4.5,
-          "mean_views": 24,
-          "p90_views": 60.3,
-          "index": 0.9,
+          "median_views": 6.0,
+          "mean_views": 25.2,
+          "p90_views": 62.3,
+          "index": 1.2,
           "verdict": "判定保留"
         },
         "C否定断言": {
@@ -581,18 +581,18 @@
           "verdict": "判定保留"
         },
         "E要りません": {
-          "n": 3,
-          "median_views": 35,
-          "mean_views": 37,
-          "p90_views": 61.4,
-          "index": 7.0,
+          "n": 4,
+          "median_views": 21.5,
+          "mean_views": 28.5,
+          "p90_views": 58.1,
+          "index": 4.3,
           "verdict": "判定保留"
         },
         "勝ち型 全体": {
-          "n": 14,
+          "n": 16,
           "median_views": 16.0,
-          "mean_views": 28.4,
-          "p90_views": 79.2,
+          "mean_views": 43.2,
+          "p90_views": 90.0,
           "index": 3.2,
           "verdict": "winner"
         }
@@ -607,20 +607,20 @@
           "verdict": "判定保留"
         },
         "それ以外": {
-          "n": 11,
-          "median_views": 5,
-          "mean_views": 26.2,
-          "p90_views": 102.0,
-          "index": 1.0,
-          "verdict": "testing"
+          "n": 9,
+          "median_views": 3,
+          "mean_views": 3.2,
+          "p90_views": 5.2,
+          "index": 0.6,
+          "verdict": "loser"
         },
         "転載 全体": {
-          "n": 13,
-          "median_views": 5,
-          "mean_views": 22.6,
-          "p90_views": 82.6,
-          "index": 1.0,
-          "verdict": "testing"
+          "n": 11,
+          "median_views": 3,
+          "mean_views": 3.2,
+          "p90_views": 5.0,
+          "index": 0.6,
+          "verdict": "loser"
         }
       },
       "hypothesis": {
@@ -1475,12 +1475,12 @@
     },
     "14d": {
       "baseline": {
-        "n": 165,
+        "n": 175,
         "median_views": 5,
-        "mean_views": 14.0,
+        "mean_views": 13.3,
         "p90_views": 26.2
       },
-      "unregistered_n": 108,
+      "unregistered_n": 113,
       "segment_hook": {
         "I01__low": {
           "n": 0,
@@ -1996,30 +1996,30 @@
         }
       },
       "hakase": {
-        "n": 3,
-        "median_views": 5,
-        "mean_views": 6,
-        "p90_views": 9.8,
+        "n": 2,
+        "median_views": 1.0,
+        "mean_views": 1,
+        "p90_views": 1.8,
         "like_rate": 0.0,
-        "reply_rate": 0.1667,
-        "index": 1.0,
+        "reply_rate": 1.0,
+        "index": 0.2,
         "verdict": "判定保留"
       },
       "win_hook": {
         "A逆説": {
-          "n": 3,
-          "median_views": 14,
-          "mean_views": 15,
-          "p90_views": 19.6,
-          "index": 2.8,
+          "n": 4,
+          "median_views": 17.5,
+          "mean_views": 82.5,
+          "p90_views": 205.8,
+          "index": 3.5,
           "verdict": "判定保留"
         },
         "Bたった3つ": {
           "n": 4,
-          "median_views": 4.5,
-          "mean_views": 24,
-          "p90_views": 60.3,
-          "index": 0.9,
+          "median_views": 6.0,
+          "mean_views": 25.2,
+          "p90_views": 62.3,
+          "index": 1.2,
           "verdict": "判定保留"
         },
         "C否定断言": {
@@ -2039,18 +2039,18 @@
           "verdict": "判定保留"
         },
         "E要りません": {
-          "n": 3,
-          "median_views": 35,
-          "mean_views": 37,
-          "p90_views": 61.4,
-          "index": 7.0,
+          "n": 4,
+          "median_views": 21.5,
+          "mean_views": 28.5,
+          "p90_views": 58.1,
+          "index": 4.3,
           "verdict": "判定保留"
         },
         "勝ち型 全体": {
-          "n": 14,
+          "n": 16,
           "median_views": 16.0,
-          "mean_views": 28.4,
-          "p90_views": 79.2,
+          "mean_views": 43.2,
+          "p90_views": 90.0,
           "index": 3.2,
           "verdict": "winner"
         }
@@ -2065,20 +2065,20 @@
           "verdict": "判定保留"
         },
         "それ以外": {
-          "n": 11,
-          "median_views": 5,
-          "mean_views": 26.2,
-          "p90_views": 102.0,
-          "index": 1.0,
-          "verdict": "testing"
+          "n": 9,
+          "median_views": 3,
+          "mean_views": 3.2,
+          "p90_views": 5.2,
+          "index": 0.6,
+          "verdict": "loser"
         },
         "転載 全体": {
-          "n": 13,
-          "median_views": 5,
-          "mean_views": 22.6,
-          "p90_views": 82.6,
-          "index": 1.0,
-          "verdict": "testing"
+          "n": 11,
+          "median_views": 3,
+          "mean_views": 3.2,
+          "p90_views": 5.0,
+          "index": 0.6,
+          "verdict": "loser"
         }
       },
       "hypothesis": {
@@ -2933,12 +2933,12 @@
     },
     "30d": {
       "baseline": {
-        "n": 165,
+        "n": 175,
         "median_views": 5,
-        "mean_views": 14.0,
+        "mean_views": 13.3,
         "p90_views": 26.2
       },
-      "unregistered_n": 108,
+      "unregistered_n": 113,
       "segment_hook": {
         "I01__low": {
           "n": 0,
@@ -3454,30 +3454,30 @@
         }
       },
       "hakase": {
-        "n": 3,
-        "median_views": 5,
-        "mean_views": 6,
-        "p90_views": 9.8,
+        "n": 2,
+        "median_views": 1.0,
+        "mean_views": 1,
+        "p90_views": 1.8,
         "like_rate": 0.0,
-        "reply_rate": 0.1667,
-        "index": 1.0,
+        "reply_rate": 1.0,
+        "index": 0.2,
         "verdict": "判定保留"
       },
       "win_hook": {
         "A逆説": {
-          "n": 3,
-          "median_views": 14,
-          "mean_views": 15,
-          "p90_views": 19.6,
-          "index": 2.8,
+          "n": 4,
+          "median_views": 17.5,
+          "mean_views": 82.5,
+          "p90_views": 205.8,
+          "index": 3.5,
           "verdict": "判定保留"
         },
         "Bたった3つ": {
           "n": 4,
-          "median_views": 4.5,
-          "mean_views": 24,
-          "p90_views": 60.3,
-          "index": 0.9,
+          "median_views": 6.0,
+          "mean_views": 25.2,
+          "p90_views": 62.3,
+          "index": 1.2,
           "verdict": "判定保留"
         },
         "C否定断言": {
@@ -3497,18 +3497,18 @@
           "verdict": "判定保留"
         },
         "E要りません": {
-          "n": 3,
-          "median_views": 35,
-          "mean_views": 37,
-          "p90_views": 61.4,
-          "index": 7.0,
+          "n": 4,
+          "median_views": 21.5,
+          "mean_views": 28.5,
+          "p90_views": 58.1,
+          "index": 4.3,
           "verdict": "判定保留"
         },
         "勝ち型 全体": {
-          "n": 14,
+          "n": 16,
           "median_views": 16.0,
-          "mean_views": 28.4,
-          "p90_views": 79.2,
+          "mean_views": 43.2,
+          "p90_views": 90.0,
           "index": 3.2,
           "verdict": "winner"
         }
@@ -3523,20 +3523,20 @@
           "verdict": "判定保留"
         },
         "それ以外": {
-          "n": 11,
-          "median_views": 5,
-          "mean_views": 26.2,
-          "p90_views": 102.0,
-          "index": 1.0,
-          "verdict": "testing"
+          "n": 9,
+          "median_views": 3,
+          "mean_views": 3.2,
+          "p90_views": 5.2,
+          "index": 0.6,
+          "verdict": "loser"
         },
         "転載 全体": {
-          "n": 13,
-          "median_views": 5,
-          "mean_views": 22.6,
-          "p90_views": 82.6,
-          "index": 1.0,
-          "verdict": "testing"
+          "n": 11,
+          "median_views": 3,
+          "mean_views": 3.2,
+          "p90_views": 5.0,
+          "index": 0.6,
+          "verdict": "loser"
         }
       },
       "hypothesis": {
@@ -4563,13 +4563,13 @@
     }
   },
   "hakase_summary": {
-    "n": 3,
-    "median_views": 5,
-    "mean_views": 6,
-    "p90_views": 9.8,
+    "n": 2,
+    "median_views": 1.0,
+    "mean_views": 1,
+    "p90_views": 1.8,
     "like_rate": 0.0,
-    "reply_rate": 0.1667,
-    "index": 1.0,
+    "reply_rate": 1.0,
+    "index": 0.2,
     "verdict": "判定保留"
   },
   "hypothesis_summary": {

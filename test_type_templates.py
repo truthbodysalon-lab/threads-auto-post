@@ -8,8 +8,8 @@ from type_templates import TYPE_POOLS
 
 fails = []
 firsts = {}
-exp = {("truth", "ZUTSUYAKU"): 30, ("truth", "MAE_MAZU"): 30, ("nagaoka", "MAE_MAZU"): 30,
-       ("nagaoka", "WEATHER"): 20, ("nagaoka", "QUESTION"): 12}
+exp = {("truth", "ZUTSUYAKU"): 45, ("truth", "MAE_MAZU"): 38, ("nagaoka", "MAE_MAZU"): 38,
+       ("nagaoka", "WEATHER"): 30, ("nagaoka", "QUESTION"): 22}
 for key, n in exp.items():
     if len(TYPE_POOLS.get(key, [])) < n:
         fails.append(f"{key}: {len(TYPE_POOLS.get(key, []))}本 < {n}本")

@@ -1,7 +1,7 @@
 {
   "acct": "masa",
-  "version": 91,
-  "updated": "2026-10-29",
+  "version": 92,
+  "updated": "2026-10-30",
   "description": "修正ポイント（勝ち構造・死ぬ構造）の正本。毎朝サブエージェントEが実測データで各ルールを検証し、効かなくなったルールはretired、新発見はtestingで追加、実証されたらactiveに昇格する。ヒーロー投稿と新テンプレはこのプレイブックのactiveルールに従って書く。",
   "rules": [
     {
@@ -837,6 +837,11 @@
       "version": 91,
       "date": "2026-10-29",
       "change": "W_WINNING_HOOKS継続active（10-28のA〜E型ヒーローが59v/50v/50v＝中央値6の約8〜10倍）。Grok Bot追記(W_GROK_BUFFER等)はpull後版のまま巻き戻さず。10-29ヒーローはA2・B1・C1・D1・E1（計6）・AI1・運用原則1・時短ガイド導線1・次回提案1"
+    },
+    {
+      "version": 92,
+      "date": "2026-10-30",
+      "change": "W_WINNING_HOOKS継続active。Grok Bot追記(W_GROK_BUFFER等)はpull後版のまま巻き戻さず。10-30ヒーローはA2・B1・C1・D1・E1（計6）・やめた3つ型1・AI1・時短ガイド導線1・回数券の伝え方1"
     }
   ]
 }

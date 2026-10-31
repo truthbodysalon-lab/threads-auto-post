@@ -5727,7 +5727,7 @@
   "説明が長くて、次回の話ができない院長へ。": {
     "segment": "R01",
     "hook": "low",
-    "created": "2026-10-25",
+    "created": "2026-10-31",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -7456,7 +7456,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 17,
-    "created": "2026-10-30"
+    "created": "2026-10-31"
   },
   "【ハイライトを、今日1つ作る】": {
     "segment": "PRESENT_CTA",
@@ -7545,7 +7545,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 7,
-    "created": "2026-10-30"
+    "created": "2026-10-31"
   },
   "ぶっちゃけ、続かない人は、次に何をやるかが決まっていません。": {
     "segment": "PRESENT_CTA",
@@ -9806,7 +9806,7 @@
     "hook": "present",
     "present_key": "jitan_guide",
     "variant": 0,
-    "created": "2026-10-30"
+    "created": "2026-10-31"
   },
   "【インスタの投稿ネタに困らない、記録5選】": {
     "segment": "WIN_HOOK",

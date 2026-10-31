@@ -38,7 +38,7 @@
    "id": "ig-feed-nagaoka-sun",
    "repo": "truthbodysalon-lab/ig-autopost-cloud",
    "workflow": "ig-feed-nagaoka.yml",
-   "jst_time": "12:05",
+   "jst_time": "10:05",
    "window_min": 90,
    "since": "day",
    "enabled": true,
@@ -52,14 +52,14 @@
    },
    "catchup": true,
    "local_done": "ig-feed-nagaoka",
-   "local_done_since": "10:05",
-   "note": "2026-10-21: Mac主・クラウド保険。Macが今日10:05以降にig-feed-nagaokaを成功していなければ起動（元の時刻10:05）"
+   "local_done_since": "08:00",
+   "note": "2026-10-21: Mac主・クラウド保険。Macが今日10:05以降にig-feed-nagaokaを成功していなければ起動（元の時刻10:05）。2026-10-31 院長指示「投稿は全てAM8時」でMac本番を08:00に変更→保険は10:05（Macが今日08:00以降に成功していなければ起動）"
   },
   {
    "id": "ig-feed-truth-sun",
    "repo": "truthbodysalon-lab/ig-autopost-cloud",
    "workflow": "ig-feed-truth.yml",
-   "jst_time": "12:09",
+   "jst_time": "10:09",
    "window_min": 90,
    "since": "day",
    "enabled": true,
@@ -73,14 +73,14 @@
    },
    "catchup": true,
    "local_done": "ig-feed-truth",
-   "local_done_since": "10:09",
-   "note": "2026-10-21: Mac主・クラウド保険。Macが今日10:09以降にig-feed-truthを成功していなければ起動（元の時刻10:09）"
+   "local_done_since": "08:00",
+   "note": "2026-10-21: Mac主・クラウド保険。Macが今日10:09以降にig-feed-truthを成功していなければ起動（元の時刻10:09）。2026-10-31 院長指示「投稿は全てAM8時」でMac本番を08:00に変更→保険は10:09（Macが今日08:00以降に成功していなければ起動）"
   },
   {
    "id": "ig-feed-headache-sat",
    "repo": "truthbodysalon-lab/ig-autopost-cloud",
    "workflow": "ig-feed-headache.yml",
-   "jst_time": "12:13",
+   "jst_time": "10:13",
    "window_min": 90,
    "since": "day",
    "enabled": true,
@@ -93,16 +93,16 @@
     "until_min": 300
    },
    "pause_file": "state/headache/inactive.json",
-   "note": "2026-10-21: Mac主・クラウド保険。Macが今日10:13以降にig-feed-headacheを成功していなければ起動（元の時刻10:13）",
+   "note": "2026-10-21: Mac主・クラウド保険。Macが今日10:13以降にig-feed-headacheを成功していなければ起動（元の時刻10:13）。2026-10-31 院長指示「投稿は全てAM8時」でMac本番を08:00に変更→保険は10:13（Macが今日08:00以降に成功していなければ起動）",
    "catchup": true,
    "local_done": "ig-feed-headache",
-   "local_done_since": "10:13"
+   "local_done_since": "08:00"
   },
   {
    "id": "ig-feed-diet-mon",
    "repo": "truthbodysalon-lab/ig-autopost-cloud",
    "workflow": "ig-feed-diet.yml",
-   "jst_time": "12:13",
+   "jst_time": "10:13",
    "window_min": 90,
    "since": "day",
    "enabled": true,
@@ -115,16 +115,16 @@
     "until_min": 300
    },
    "pause_file": "state/diet/inactive.json",
-   "note": "2026-10-21: Mac主・クラウド保険。Macが今日10:13以降にig-feed-dietを成功していなければ起動（元の時刻10:13）",
+   "note": "2026-10-21: Mac主・クラウド保険。Macが今日10:13以降にig-feed-dietを成功していなければ起動（元の時刻10:13）。2026-10-31 院長指示「投稿は全てAM8時」でMac本番を08:00に変更→保険は10:13（Macが今日08:00以降に成功していなければ起動）",
    "catchup": true,
    "local_done": "ig-feed-diet",
-   "local_done_since": "10:13"
+   "local_done_since": "08:00"
   },
   {
    "id": "ig-feed-diet-thu",
    "repo": "truthbodysalon-lab/ig-autopost-cloud",
    "workflow": "ig-feed-diet-thursday.yml",
-   "jst_time": "12:17",
+   "jst_time": "10:17",
    "window_min": 90,
    "since": "day",
    "enabled": true,
@@ -137,10 +137,10 @@
     "until_min": 300
    },
    "pause_file": "state/diet/inactive.json",
-   "note": "2026-10-21: Mac主・クラウド保険。Macが今日10:17以降にig-feed-diet-thursdayを成功していなければ起動（元の時刻10:17）",
+   "note": "2026-10-21: Mac主・クラウド保険。Macが今日10:17以降にig-feed-diet-thursdayを成功していなければ起動（元の時刻10:17）。2026-10-31 院長指示「投稿は全てAM8時」でMac本番を08:00に変更→保険は10:17（Macが今日08:00以降に成功していなければ起動）",
    "catchup": true,
    "local_done": "ig-feed-diet-thursday",
-   "local_done_since": "10:17"
+   "local_done_since": "08:00"
   },
   {
    "id": "ig-feed-diet-case",
@@ -169,7 +169,7 @@
    "id": "ig-feed-nagaoka-thu",
    "repo": "truthbodysalon-lab/ig-autopost-cloud",
    "workflow": "ig-feed-nagaoka-thursday.yml",
-   "jst_time": "12:05",
+   "jst_time": "10:05",
    "window_min": 90,
    "since": "day",
    "enabled": true,
@@ -183,8 +183,8 @@
    },
    "catchup": true,
    "local_done": "ig-feed-nagaoka-thursday",
-   "local_done_since": "10:05",
-   "note": "2026-10-21: Mac主・クラウド保険。Macが今日10:05以降にig-feed-nagaoka-thursdayを成功していなければ起動（元の時刻10:05）"
+   "local_done_since": "08:00",
+   "note": "2026-10-21: Mac主・クラウド保険。Macが今日10:05以降にig-feed-nagaoka-thursdayを成功していなければ起動（元の時刻10:05）。2026-10-31 院長指示「投稿は全てAM8時」でMac本番を08:00に変更→保険は10:05（Macが今日08:00以降に成功していなければ起動）"
   },
   {
    "id": "ig-feed-nagaoka-case",

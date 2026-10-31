@@ -276,7 +276,7 @@
   "在宅勤務で肩こりが悪化した人へ。": {
     "segment": "T1",
     "hook": "low",
-    "created": "2026-10-27",
+    "created": "2026-10-31",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z01_truth"
@@ -300,7 +300,7 @@
   "立ちっぱなしで腰がつらい人へ。": {
     "segment": "T4",
     "hook": "low",
-    "created": "2026-10-27",
+    "created": "2026-10-31",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z13_truth"
@@ -308,7 +308,7 @@
   "座り仕事で首がつらい人へ。": {
     "segment": "T1",
     "hook": "low",
-    "created": "2026-10-27",
+    "created": "2026-10-31",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z02_nagaoka"
@@ -324,7 +324,7 @@
   "育児中に自分の体を後回しにするママへ。": {
     "segment": "T3",
     "hook": "low",
-    "created": "2026-10-27",
+    "created": "2026-10-31",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z10_nagaoka"
@@ -944,14 +944,14 @@
   "頭痛薬が手放せない人へ。": {
     "segment": "T2",
     "hook": "low",
-    "created": "2026-10-25",
+    "created": "2026-10-31",
     "acct": "truth",
     "variant": 1
   },
   "気圧が変わると頭が重くなる人へ。": {
     "segment": "T2",
     "hook": "low",
-    "created": "2026-10-25",
+    "created": "2026-10-31",
     "acct": "nagaoka",
     "variant": 1
   },
@@ -2369,7 +2369,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 17,
-    "created": "2026-10-26",
+    "created": "2026-10-31",
     "acct": "nagaoka"
   },
   "座り仕事で首が詰まる感じがする人へ。": {
@@ -2391,7 +2391,7 @@
   "抱っこで肩がつらいママへ。": {
     "segment": "T3",
     "hook": "low",
-    "created": "2026-10-27",
+    "created": "2026-10-31",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "ZC03_truth"
@@ -2452,7 +2452,7 @@
   "立ち仕事で腰が重い人へ。": {
     "segment": "T4",
     "hook": "low",
-    "created": "2026-10-27",
+    "created": "2026-10-31",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "ZC04_nagaoka"
@@ -2535,7 +2535,7 @@
   "初回の説明で、次回の話ができない院長へ。": {
     "segment": "R01",
     "hook": "low",
-    "created": "2026-10-25",
+    "created": "2026-10-31",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -3048,7 +3048,7 @@
   "痛みが取れたら来なくなる院長へ。": {
     "segment": "R02",
     "hook": "low",
-    "created": "2026-10-25",
+    "created": "2026-10-31",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -3247,7 +3247,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 15,
-    "created": "2026-10-26",
+    "created": "2026-10-31",
     "acct": "nagaoka"
   },
   "インスタ運用で、登録ページに誘導しているのに、登録がない院長へ。": {
@@ -4246,7 +4246,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 2,
-    "created": "2026-10-21",
+    "created": "2026-10-31",
     "acct": "truth"
   },
   "【立ち仕事の後半に腰が持たない人の習慣6選】": {
@@ -5223,7 +5223,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 9,
-    "created": "2026-10-23",
+    "created": "2026-10-31",
     "acct": "truth"
   },
   "『夕方になると頭がズキズキする』という声を、よく聞きます。": {
@@ -6767,7 +6767,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 41,
-    "created": "2026-10-18",
+    "created": "2026-10-31",
     "acct": "nagaoka"
   },
   "【湯船から遠ざかっている人が始める習慣6選】": {
@@ -7086,7 +7086,7 @@
   "日々の10秒とAIの台本で足ります。": {
     "segment": "I05",
     "hook": "high",
-    "created": "2026-10-28",
+    "created": "2026-10-31",
     "acct": "masa",
     "axis": "insta_pain",
     "variant": null,
@@ -7105,7 +7105,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 0,
-    "created": "2026-10-26"
+    "created": "2026-10-31"
   },
   "売り先は、1つに絞らない。": {
     "segment": "HAKASE",
@@ -7266,7 +7266,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 3,
-    "created": "2026-10-27"
+    "created": "2026-10-31"
   },
   "1週間で結果が出ないのは、普通です。": {
     "segment": "HAKASE",
@@ -8013,7 +8013,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 17,
-    "created": "2026-10-25",
+    "created": "2026-10-31",
     "acct": "truth"
   },
   "週末に予定を詰める前に、まず平日の疲れを抜く日を作ってみて。": {
@@ -8027,7 +8027,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 29,
-    "created": "2026-10-25",
+    "created": "2026-10-31",
     "acct": "truth"
   },
   "寝だめする前に、まず朝起きる時間をそろえてみて。": {
@@ -8041,7 +8041,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 5,
-    "created": "2026-10-25",
+    "created": "2026-10-31",
     "acct": "truth"
   },
   "眠気覚ましを飲む前に、まず外の空気を吸ってみて。": {
@@ -8055,7 +8055,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 28,
-    "created": "2026-10-25",
+    "created": "2026-10-31",
     "acct": "truth"
   },
   "朝が冷える日は、布団から出る前に、まず首元を温めてみて。": {
@@ -8097,7 +8097,7 @@
     "segment": "WEATHER",
     "hook": "type",
     "variant": 1,
-    "created": "2026-10-25",
+    "created": "2026-10-31",
     "acct": "nagaoka"
   },
   "歩き出す前に、まず首の後ろを温めてみて。": {
@@ -8193,7 +8193,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 2,
-    "created": "2026-10-25",
+    "created": "2026-10-31",
     "acct": "truth"
   },
   "頭痛が出る前の合図を、薬を飲む前に探してみて。": {
@@ -8365,14 +8365,14 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 27,
-    "created": "2026-10-26",
+    "created": "2026-10-31",
     "acct": "truth"
   },
   "気圧が下がる前に、まず首の後ろを温めておいてみて。": {
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 11,
-    "created": "2026-10-26",
+    "created": "2026-10-31",
     "acct": "truth"
   },
   "頭痛薬をかばんに入れておかないと不安な人へ。": {
@@ -8393,28 +8393,28 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 16,
-    "created": "2026-10-26",
+    "created": "2026-10-31",
     "acct": "truth"
   },
   "眠れない夜に焦る前に、まず息を長く吐いてみて。": {
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 12,
-    "created": "2026-10-26",
+    "created": "2026-10-31",
     "acct": "truth"
   },
   "肩を回す前に、まず息をゆっくり吐いてみて。": {
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 4,
-    "created": "2026-10-26",
+    "created": "2026-10-31",
     "acct": "nagaoka"
   },
   "頑張りすぎる前に、まず首の後ろに手をあててみて。": {
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 25,
-    "created": "2026-10-26",
+    "created": "2026-10-31",
     "acct": "nagaoka"
   },
   "寒暖差が大きい日は、首の後ろが固まりやすい。": {
@@ -8442,7 +8442,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 1,
-    "created": "2026-10-26",
+    "created": "2026-10-31",
     "acct": "nagaoka"
   },
   "湿気の多い日に、体がだるい人へ。": {
@@ -8456,7 +8456,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 8,
-    "created": "2026-10-26",
+    "created": "2026-10-31",
     "acct": "nagaoka"
   },
   "肩が重い日の前日、何をしていたか覚えていますか？": {
@@ -9953,6 +9953,47 @@
     "hook": "present",
     "present_key": "jitan_guide",
     "variant": 7,
+    "created": "2026-10-31"
+  },
+  "曇りの日に、朝から頭が重い人いますか？": {
+    "segment": "WEATHER",
+    "hook": "type",
+    "variant": 25,
+    "created": "2026-10-31",
+    "acct": "nagaoka"
+  },
+  "肩が上がっているのに気づくのは、朝・昼・夕方のどれですか？": {
+    "segment": "QUESTION",
+    "hook": "type",
+    "variant": 12,
+    "created": "2026-10-31",
+    "acct": "nagaoka"
+  },
+  "気温が急に下がった日の朝、肩が上がる人いますか？": {
+    "segment": "WEATHER",
+    "hook": "type",
+    "variant": 27,
+    "created": "2026-10-31",
+    "acct": "nagaoka"
+  },
+  "最近、空を見上げたのはいつですか？": {
+    "segment": "QUESTION",
+    "hook": "type",
+    "variant": 21,
+    "created": "2026-10-31",
+    "acct": "nagaoka"
+  },
+  "AIが本当に時短になるか、ストップウォッチで測って確かめられます。": {
+    "segment": "PRESENT_CTA",
+    "hook": "present",
+    "present_key": "jitan_guide",
+    "variant": 9,
+    "created": "2026-10-31"
+  },
+  "【初めての人が予約前に見る、インスタのプロフィール4選】": {
+    "segment": "WIN_HOOK",
+    "hook": "winning",
+    "variant": 14,
     "created": "2026-10-31"
   }
 }

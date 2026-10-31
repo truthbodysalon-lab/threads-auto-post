@@ -2027,7 +2027,9 @@ def _run_main():
             _run_account_batch(acct)
         except Exception as e:
             import traceback
-            log_error(acct, f"_run_account_batch 例外: {type(e).__name__}: {e}")
+            # 2026-10-31: log_error は引数1つ。旧 log_error(acct, ...) は TypeError で例外ハンドラ自体が落ち、
+            # 後続アカウントへ進めなかった（この防御が機能していなかった）
+            log_error(f"[{acct}] _run_account_batch 例外: {type(e).__name__}: {e}")
             traceback.print_exc()
 
     if target in ("truth", "nagaoka", "masa"):

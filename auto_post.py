@@ -1150,8 +1150,13 @@ def api_request(url: str, data: bytes = None, retry: int = 0) -> dict:
         with urllib.request.urlopen(req, timeout=30) as r:
             return json.loads(r.read())
     except urllib.error.HTTPError as e:
-        body = e.read().decode()
-        err_data = json.loads(body) if body.startswith("{") else {}
+        body = e.read().decode(errors="replace")
+        # 2026-10-31: 本文は1回しか読めない。呼び出し側(run_account)が code=190 等を判定できるよう保持する
+        e.body_text = body
+        try:
+            err_data = json.loads(body) if body.startswith("{") else {}
+        except ValueError:
+            err_data = {}
         code = err_data.get("error", {}).get("code", 0)
         # レート制限 → 60秒待機リトライ
         if code in (4, 17, 32) and retry < MAX_RETRY:
@@ -1754,8 +1759,14 @@ def run_account(acct: str):
                 pass
 
     except urllib.error.HTTPError as e:
-        body = e.read().decode()
-        err_data = json.loads(body) if body.startswith("{") else {}
+        # api_request が本文を読み済みのため e.read() は空になる（code=0扱いで190のリフレッシュが効かなかった）
+        body = getattr(e, "body_text", None)
+        if body is None:
+            body = e.read().decode(errors="replace")
+        try:
+            err_data = json.loads(body) if body.startswith("{") else {}
+        except ValueError:
+            err_data = {}
         code = err_data.get("error", {}).get("code", 0)
 
         # トークン期限切れ → 自動リフレッシュして再投稿
@@ -2027,7 +2038,9 @@ def _run_main():
             _run_account_batch(acct)
         except Exception as e:
             import traceback
-            log_error(acct, f"_run_account_batch 例外: {type(e).__name__}: {e}")
+            # 2026-10-31: log_error は引数1つ。旧 log_error(acct, ...) は TypeError で例外ハンドラ自体が落ち、
+            # 後続アカウントへ進めなかった（この防御が機能していなかった）
+            log_error(f"[{acct}] _run_account_batch 例外: {type(e).__name__}: {e}")
             traceback.print_exc()
 
     if target in ("truth", "nagaoka", "masa"):

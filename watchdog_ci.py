@@ -129,9 +129,11 @@ def _notified_today(st: dict, key: str) -> bool:
 
 
 
-def keeper_running() -> bool:
+def keeper_running() -> bool | None:
     """auto_post.yml の常駐ループが動いているか（2026-10-02 常駐化）。動いていれば修復は
-    常駐側に任せ、ここから auto_post.py を並走させない（同時投稿・台帳競合の防止）。"""
+    常駐側に任せ、ここから auto_post.py を並走させない（同時投稿・台帳競合の防止）。
+    照会失敗は None（=不明）。2026-10-31: 旧実装は失敗を False（=停止中）扱いにし、常駐稼働中でも
+    修復バッチを並走させていた（10/7 二重投稿と同型）。"""
     try:
         import urllib.request as _u
         tok = os.environ.get("GH_PAT", "")
@@ -142,7 +144,7 @@ def keeper_running() -> bool:
             return json.loads(r.read()).get("total_count", 0) > 0
     except Exception as e:
         print(f"keeper_running 判定失敗: {e}")
-        return False
+        return None
 
 
 def dispatch_keeper() -> None:
@@ -186,8 +188,12 @@ def main():
         # 通常は8本超の遅れで修復。21時以降は残り時間が無いため1本の不足でも埋めに行く
         elif gap > 8 or (h >= 21 and gap > 0):
             print(f"{acct}: 遅れ{gap}本 → LINE消化フラグ＋修復バッチ")
-            if keeper_running():
+            kr = keeper_running()
+            if kr:
                 print(f"{acct}: 常駐ループ稼働中 → 修復は常駐側に任せる")
+                continue
+            if kr is None:
+                print(f"{acct}: 常駐ループの稼働を確認できない → 並走(二重投稿)を避けて修復しない（次回30分後に再判定）")
                 continue
             dispatch_keeper()
             # LINE無限ループの可能性を先に潰す（消化済み扱い）

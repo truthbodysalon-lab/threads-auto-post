@@ -80,6 +80,7 @@ def _parse_week(html):
         if not dates or dates[-1] != d:
             dates.append(d)
     if not dates:  # 通常の表示形式: 月セル(colspan=日数)＋日セル「14<br/>(水)」
+        months = []
         # 月セルが1列だけの月は「&nbsp;」で年月が書かれない（2026-10-19 実測: 10/19〜11/1 の週で11月が空欄）
         # → 年月の無いセルは隣の月セルから前後1か月として補う
         cells = []
@@ -153,10 +154,11 @@ def _m(t):
 
 
 def ranges(times):
-    """['11:00','11:10',...] → ['11:00〜11:40', '15:00', ...]（10分刻みの連続をまとめる）"""
+    """['11:00','11:10',...] → ['11:00〜11:40', '15:00', ...]（10分刻みの連続をまとめる）
+    2026-10-20: 並びが昇順でない入力でも「15:00〜10:00」のように終わりが始めより前にならないよう、昇順・重複なしに整えてからまとめる。"""
     out = []
-    for t in times:
-        if out and _m(t) - _m(out[-1][1]) <= 10:
+    for t in sorted(set(times), key=_m):
+        if out and 0 <= _m(t) - _m(out[-1][1]) <= 10:
             out[-1][1] = t
         else:
             out.append([t, t])
@@ -244,6 +246,127 @@ def render(rows, out_path, account="truth", coupon_name="", fetched_at=None, cha
     when = (fetched_at or dt.datetime.now(JST)).strftime("%-m/%-d %H:%M")
     dr.text((W // 2, 1318), f"※{when}時点のネット予約の空きです。最新の空きは予約ページでご確認ください",
             font=_font("reg", 22), fill=C["mut"], anchor="mm")
+    im.save(out_path, "JPEG" if out_path.lower().endswith((".jpg", ".jpeg")) else "PNG", quality=92)
+    return out_path
+
+
+# ストーリー告知に添える実績写真の置き場所（2026-10-20 院長指示: 実績のBA・お客様と一緒の写真を小さめに1つ）。
+# ヘッダの茶色い帯を広げ、左に院名・見出し・期間、右に写真＋一言＋注記を置く（写真と文字は重ならない）。
+# 上約250pxはInstagramのUI（名前）に重なるため、写真は262px以降に置く。
+W_STORY = 1080
+PROOF_BAND_H = 676                        # 写真ありのときのヘッダ帯の高さ（写真なしは520）
+PROOF_BOX = (590, 262, 1034, 584)         # 写真の箱 (x0,y0,x1,y1)
+PROOF_CAP_Y = 610                         # 一言の中心y（箱の下）
+PROOF_NOTE_Y = 650                        # 注記（1行・帯の下寄せ）
+PROOF_LEFT_CX = 300                       # 左の文字列の中心x
+PROOF_CARDS_TOP = 700                     # 写真ありのときの日別カードの上端（写真なしは555）
+
+
+def _load_proof(proof):
+    """実績写真の指定（story_photos.pick_story_photo の戻り値）を読めるか確認して返す。読めなければ None（写真なしの従来レイアウト）。
+    写真のルール（BAは目元モザイク版・料金表ぼかし版・イラスト不可・顔ブロック等）は pick 側で守っている。ここは描画できるかだけ見る。"""
+    if not proof:
+        return None
+    try:
+        from PIL import Image
+        paths = [proof["before"], proof["after"]] if proof.get("kind") == "ba" else [proof["path"]]
+        for p in paths:
+            Image.open(p).verify()
+        return proof
+    except Exception:  # noqa: BLE001
+        return None
+
+
+def _draw_story_proof(im, proof):
+    """ヘッダ帯の右に実績写真を置く（切らずに収める・ぼかしなし）。一言と注記も描く。置いた矩形のリストを返す"""
+    from PIL import ImageDraw
+    from story_photos import place_photo, place_ba
+    dr = ImageDraw.Draw(im)
+    x0, y0, x1, y1 = PROOF_BOX
+    if proof.get("kind") == "ba":
+        r = place_ba(im, proof["before"], proof["after"], PROOF_BOX, gap=14, label_h=40, label_size=24, radius=10)
+        rects = [r["before"], r["after"]]
+        cap = str(proof.get("caption") or "")
+    else:
+        rects = [place_photo(im, proof["path"], PROOF_BOX, radius=16, border=4, valign="center")]
+        cap = "実績｜" + str(proof.get("caption") or "") if proof.get("caption") else ""
+    dr = ImageDraw.Draw(im)
+    cx = (x0 + x1) // 2
+    if cap:
+        dr.text((cx, PROOF_CAP_Y), cap, font=_font("bold", 26), fill="#FFFFFF", anchor="mm")
+    note = str(proof.get("note") or "")
+    if note:
+        dr.text((W_STORY // 2, PROOF_NOTE_Y), note, font=_font("reg", 24), fill="#F3E6D3", anchor="mm")
+    return rects
+
+
+def render_story(rows, out_path, account="truth", coupon_name="", fetched_at=None, proof=None):
+    """ストーリー用 1080x1920 の告知画像（2026-10-17 院長指示「空き時間の投稿はストーリーだけ」）。
+    上約250px・下約340pxはInstagramのUI（名前・返信欄）に重なるため重要な文字は置かない。
+    上下の帯はヘッダー色で埋めて、何もない余白にしない。
+    proof（2026-10-20追加）: 実績写真（BAかお客様と一緒）を小さめに1つ添える。story_photos.pick_story_photo の戻り値。
+    None・読めない時は従来どおり（空き状況だけ）。空き状況の表示が主役のまま、日別カードを少し低くして収める。"""
+    from PIL import Image, ImageDraw
+    W, H = 1080, 1920
+    im = Image.new("RGB", (W, H), C["bg"])
+    dr = ImageDraw.Draw(im)
+    acc = ACCOUNTS.get(account, ACCOUNTS["truth"])
+    proof = _load_proof(proof)
+    span = f"{rows[0]['label']} 〜 {rows[-1]['label']}" if rows else ""
+    if proof:
+        # 上の帯（広げる）: 左=院名・見出し・期間 / 右=実績写真
+        dr.rectangle([0, 0, W, PROOF_BAND_H], fill=C["brown"])
+        lx = PROOF_LEFT_CX
+        dr.text((lx, 340), acc["name"], font=_font("reg", 32), fill="#F3E6D3", anchor="mm")
+        dr.text((lx, 420), "今週の空き状況", font=_font("bold", 68), fill="#FFFFFF", anchor="mm")
+        dr.text((lx, 492), span, font=_font("bold", 31), fill=C["acc"], anchor="mm")
+        top = PROOF_CARDS_TOP
+        _draw_story_proof(im, proof)
+        dr = ImageDraw.Draw(im)
+    else:
+        # 上の帯（UIに重なる範囲は院名だけ）＋見出し
+        dr.rectangle([0, 0, W, 520], fill=C["brown"])
+        dr.text((W // 2, 300), acc["name"], font=_font("reg", 36), fill="#F3E6D3", anchor="mm")
+        dr.text((W // 2, 385), "今週の空き状況", font=_font("bold", 92), fill="#FFFFFF", anchor="mm")
+        dr.text((W // 2, 470), span, font=_font("bold", 38), fill=C["acc"], anchor="mm")
+        top = 555
+    # 日別カード
+    bottom, gap = 1395, 12
+    ch = int((bottom - top - gap * (len(rows) - 1)) / max(len(rows), 1))
+    for i, r in enumerate(rows):
+        y = top + i * (ch + gap)
+        dr.rounded_rectangle([44, y, W - 44, y + ch], radius=20, fill=C["card"], outline=C["line"], width=2)
+        col = C["sat"] if r["date"].weekday() == 5 else C["sun"] if r["date"].weekday() == 6 else C["ink"]
+        dr.text((80, y + ch // 2), r["label"], font=_font("bold", 44), fill=col, anchor="lm")
+        mc = {"◎": C["ok"], "△": C["few"], "×": C["ng"]}[r["mark"]]
+        dr.text((375, y + ch // 2), r["mark"], font=_font("bold", 62), fill=mc, anchor="mm")
+        if r["n"] == 0:
+            dr.text((440, y + ch // 2), "空きなし", font=_font("bold", 38), fill=C["ng"], anchor="lm")
+        else:
+            maxw = W - 44 - 440 - 24          # カード右端の内側まで
+            txt, f = None, None
+            for k in (3, 2, 1):               # 入らなければ時間帯を減らして「ほか」を付ける
+                cand = "　".join(r["ranges"][:k]) + ("　ほか" if len(r["ranges"]) > k else "")
+                for size in range(36, 25, -2):
+                    ff = _font("bold", size)
+                    if dr.textlength(cand, font=ff) <= maxw:
+                        txt, f = cand, ff
+                        break
+                if txt:
+                    break
+            if not txt:
+                txt, f = r["ranges"][0], _font("bold", 26)
+            dr.text((440, y + ch // 2 - 23), r["status"], font=_font("bold", 28), fill=mc, anchor="lm")
+            dr.text((440, y + ch // 2 + 23), txt, font=f, fill=C["ink"], anchor="lm")
+    dr.text((W // 2, 1430), "◎ 空きあり　△ 残りわずか　× 空きなし（時刻はご来店の開始時間）",
+            font=_font("reg", 27), fill=C["mut"], anchor="mm")
+    # 予約導線（返信欄より上に置く）
+    dr.rounded_rectangle([90, 1468, W - 90, 1556], radius=44, fill=C["acc"])
+    dr.text((W // 2, 1512), "ご予約はプロフィールのリンクから", font=_font("bold", 40), fill="#FFFFFF", anchor="mm")
+    when = (fetched_at or dt.datetime.now(JST)).strftime("%-m/%-d %H:%M")
+    # 下の帯（返信欄に重なる範囲）: 注記は帯の上端に小さく
+    dr.rectangle([0, 1585, W, H], fill=C["brown"])
+    dr.text((W // 2, 1622), f"※{when}時点のネット予約の空きです", font=_font("reg", 26), fill="#F3E6D3", anchor="mm")
     im.save(out_path, "JPEG" if out_path.lower().endswith((".jpg", ".jpeg")) else "PNG", quality=92)
     return out_path
 

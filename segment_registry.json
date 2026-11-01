@@ -5983,7 +5983,7 @@
   "提案が苦手で、話しすぎてしまう院長へ。": {
     "segment": "R04",
     "hook": "high",
-    "created": "2026-10-26",
+    "created": "2026-11-01",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -7297,7 +7297,7 @@
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-10-20"
+    "created": "2026-11-01"
   },
   "いいねより、保存数を見る。": {
     "segment": "INSTA_EASY",
@@ -7539,7 +7539,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 4,
-    "created": "2026-10-24"
+    "created": "2026-11-01"
   },
   "良い投稿の前に、プロフィールを直す。": {
     "segment": "HAKASE",
@@ -7863,7 +7863,7 @@
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-10-23"
+    "created": "2026-11-01"
   },
   "【3ステップ】動画より、写真から。": {
     "segment": "INSTA_EASY",
@@ -8649,7 +8649,7 @@
   "ストーリーズは、作り込むほど、見られなくなります。": {
     "segment": "I09",
     "hook": "high",
-    "created": "2026-10-26",
+    "created": "2026-11-01",
     "acct": "masa",
     "axis": "insta_pain",
     "variant": null,
@@ -9346,7 +9346,7 @@
     "hook": "present",
     "present_key": "jitan_guide",
     "variant": 5,
-    "created": "2026-10-29"
+    "created": "2026-11-01"
   },
   "毎日投稿しても、予約は増えません。": {
     "segment": "WIN_HOOK",
@@ -10037,5 +10037,11 @@
     "variant": "hero",
     "created": "2026-11-01",
     "acct": "nagaoka"
+  },
+  "ネタは、お客様が持っている。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-11-01"
   }
 }

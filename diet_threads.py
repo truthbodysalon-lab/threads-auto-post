@@ -36,12 +36,13 @@ PAUSE_FILE = BASE / "diet_threads_pause.json"           # 警告・制限を検�
 BASE_URL = "https://graph.threads.net/v1.0"
 JST = timezone(timedelta(hours=9))
 
-SLOTS = ["09:00", "11:00", "13:00", "15:00", "20:00"]
-DAILY_CAP = 5            # API投稿の1日上限
+# 2026-11-02 院長指示「1日合計30投稿以上」→ Grok 10本＋API 21本。間隔30分・6時〜24時（深夜は出さない）。Grokの毎時ちょうど(7,8,10,12,14,16,17,19,21,22時)の間に置く
+SLOTS = ["06:30", "07:30", "08:30", "09:30", "10:30", "11:30", "12:30", "13:30", "14:30", "15:30", "16:30", "17:30", "18:00", "18:30", "19:30", "20:00", "20:30", "21:30", "22:30", "23:00", "23:30"]
+DAILY_CAP = 21           # API投稿の1日上限（Grokの10本と合わせて31本）
 CTA_DAILY_MAX = 2        # Grok分を含む1日の公式LINE案内の上限
-CTA_SLOTS = {"15:00", "20:00"}   # 案内を付けてよい枠(反応が取れる夕方〜夜。Grokの案内枠を食わないよう控えめ)
-MIN_GAP_MIN = 45         # 直前の投稿(誰のものでも)からの最低間隔
-MAX_WAIT_MIN = 5         # 間隔が足りない時に待つ上限(超えるならこの枠は見送り)
+CTA_SLOTS = {"15:30", "20:00"}   # 案内を付けてよい枠(反応が取れる夕方〜夜。Grokの案内枠を食わないよう控えめ)
+MIN_GAP_MIN = 30         # 直前の投稿(誰のものでも)からの最低間隔（2026-11-02 院長指示で45→30分）
+MAX_WAIT_MIN = 10        # 間隔が足りない時に待つ上限(超えるならこの枠は見送り)
 SIM_THRESHOLD = 0.5      # 文字バイグラムJaccardの重複しきい値
 MAX_LEN = 500
 MAX_ATTEMPTS = 3
@@ -548,7 +549,7 @@ def run(slot: str | None = None, now: datetime | None = None, dry_run: bool = Fa
             notify(f"{slot}枠を見送り: 直近投稿を取得できませんでした({str(e)[:120]})。トークン失効の可能性があります。")
             return 0
 
-    # 45分間隔(誰の投稿でも)
+    # 30分間隔(誰の投稿でも)
     gap = gap_minutes(recent, now)
     if gap is not None and gap < MIN_GAP_MIN:
         need = MIN_GAP_MIN - gap
@@ -557,7 +558,7 @@ def run(slot: str | None = None, now: datetime | None = None, dry_run: bool = Fa
             sleeper(need * 60 + 5)
             now = now + timedelta(minutes=need, seconds=5)
         else:
-            log(f"見送り: 直前の投稿から{gap:.0f}分(45分未満)")
+            log(f"見送り: 直前の投稿から{gap:.0f}分(30分未満)")
             return 0
 
     cta_ok, cta_reason = cta_status(recent, now)

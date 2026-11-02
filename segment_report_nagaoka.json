@@ -1,6 +1,6 @@
 {
   "acct": "nagaoka",
-  "generated_at": "2026-10-28 10:53",
+  "generated_at": "2026-11-02 10:43",
   "params": {
     "min_n": 5,
     "loser_min_n": 8,
@@ -12,15 +12,15 @@
       30
     ]
   },
-  "registry_loaded": 184,
-  "log_entries": 5088,
+  "registry_loaded": 233,
+  "log_entries": 5240,
   "windows": {
     "7d": {
       "baseline": {
         "n": 112,
-        "median_views": 118.0,
-        "mean_views": 142.1,
-        "p90_views": 298.8
+        "median_views": 169.5,
+        "mean_views": 200.1,
+        "p90_views": 428.8
       },
       "unregistered_n": 112,
       "segment_hook": {
@@ -397,6 +397,17 @@
           "verdict": "判定保留"
         },
         "ZC06_nagaoka": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "ZC08_nagaoka": {
           "n": 0,
           "median_views": 0,
           "mean_views": 0,
@@ -412,9 +423,9 @@
     "14d": {
       "baseline": {
         "n": 112,
-        "median_views": 118.0,
-        "mean_views": 142.1,
-        "p90_views": 298.8
+        "median_views": 169.5,
+        "mean_views": 200.1,
+        "p90_views": 428.8
       },
       "unregistered_n": 112,
       "segment_hook": {
@@ -791,6 +802,17 @@
           "verdict": "判定保留"
         },
         "ZC06_nagaoka": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "ZC08_nagaoka": {
           "n": 0,
           "median_views": 0,
           "mean_views": 0,
@@ -806,9 +828,9 @@
     "30d": {
       "baseline": {
         "n": 112,
-        "median_views": 118.0,
-        "mean_views": 142.1,
-        "p90_views": 298.8
+        "median_views": 169.5,
+        "mean_views": 200.1,
+        "p90_views": 428.8
       },
       "unregistered_n": 112,
       "segment_hook": {
@@ -1185,6 +1207,17 @@
           "verdict": "判定保留"
         },
         "ZC06_nagaoka": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "ZC08_nagaoka": {
           "n": 0,
           "median_views": 0,
           "mean_views": 0,
@@ -1457,6 +1490,17 @@
       "reply_rate": 0.0,
       "index": 0.0,
       "verdict": "判定保留"
+    },
+    "ZC08_nagaoka": {
+      "n": 0,
+      "median_views": 0,
+      "mean_views": 0,
+      "p90_views": 0,
+      "segment": null,
+      "like_rate": 0.0,
+      "reply_rate": 0.0,
+      "index": 0.0,
+      "verdict": "判定保留"
     }
   },
   "past_baseline": {
@@ -1707,13 +1751,13 @@
   },
   "type_report": {
     "7d": {
-      "baseline_median": 118.0,
+      "baseline_median": 169.5,
       "n": 112,
       "types": {
         "MAE_MAZU": {
-          "n": 12,
-          "median_views": 156.0,
-          "index": 1.32
+          "n": 9,
+          "median_views": 190,
+          "index": 1.12
         },
         "ZUTSUYAKU": {
           "n": 0,
@@ -1721,45 +1765,45 @@
           "index": 0.0
         },
         "WEATHER": {
-          "n": 9,
-          "median_views": 193,
-          "index": 1.64
+          "n": 7,
+          "median_views": 252,
+          "index": 1.49
         },
         "QUESTION": {
-          "n": 6,
-          "median_views": 40.0,
-          "index": 0.34
+          "n": 7,
+          "median_views": 169,
+          "index": 1.0
         },
         "CUSTOMER_VOICE": {
-          "n": 5,
-          "median_views": 154,
-          "index": 1.31
+          "n": 1,
+          "median_views": 187,
+          "index": 1.1
         },
         "LIST_HABIT": {
           "n": 1,
-          "median_views": 31,
-          "index": 0.26
+          "median_views": 242,
+          "index": 1.43
         },
         "own_adapt": {
-          "n": 11,
-          "median_views": 66,
-          "index": 0.56
+          "n": 13,
+          "median_views": 157,
+          "index": 0.93
         },
         "image": {
-          "n": 12,
-          "median_views": 41.5,
-          "index": 0.35
+          "n": 10,
+          "median_views": 40.5,
+          "index": 0.24
         }
       }
     },
     "14d": {
-      "baseline_median": 118.0,
+      "baseline_median": 169.5,
       "n": 112,
       "types": {
         "MAE_MAZU": {
-          "n": 12,
-          "median_views": 156.0,
-          "index": 1.32
+          "n": 9,
+          "median_views": 190,
+          "index": 1.12
         },
         "ZUTSUYAKU": {
           "n": 0,
@@ -1767,45 +1811,45 @@
           "index": 0.0
         },
         "WEATHER": {
-          "n": 9,
-          "median_views": 193,
-          "index": 1.64
+          "n": 7,
+          "median_views": 252,
+          "index": 1.49
         },
         "QUESTION": {
-          "n": 6,
-          "median_views": 40.0,
-          "index": 0.34
+          "n": 7,
+          "median_views": 169,
+          "index": 1.0
         },
         "CUSTOMER_VOICE": {
-          "n": 5,
-          "median_views": 154,
-          "index": 1.31
+          "n": 1,
+          "median_views": 187,
+          "index": 1.1
         },
         "LIST_HABIT": {
           "n": 1,
-          "median_views": 31,
-          "index": 0.26
+          "median_views": 242,
+          "index": 1.43
         },
         "own_adapt": {
-          "n": 11,
-          "median_views": 66,
-          "index": 0.56
+          "n": 13,
+          "median_views": 157,
+          "index": 0.93
         },
         "image": {
-          "n": 12,
-          "median_views": 41.5,
-          "index": 0.35
+          "n": 10,
+          "median_views": 40.5,
+          "index": 0.24
         }
       }
     },
     "30d": {
-      "baseline_median": 118.0,
+      "baseline_median": 169.5,
       "n": 112,
       "types": {
         "MAE_MAZU": {
-          "n": 12,
-          "median_views": 156.0,
-          "index": 1.32
+          "n": 9,
+          "median_views": 190,
+          "index": 1.12
         },
         "ZUTSUYAKU": {
           "n": 0,
@@ -1813,34 +1857,34 @@
           "index": 0.0
         },
         "WEATHER": {
-          "n": 9,
-          "median_views": 193,
-          "index": 1.64
+          "n": 7,
+          "median_views": 252,
+          "index": 1.49
         },
         "QUESTION": {
-          "n": 6,
-          "median_views": 40.0,
-          "index": 0.34
+          "n": 7,
+          "median_views": 169,
+          "index": 1.0
         },
         "CUSTOMER_VOICE": {
-          "n": 5,
-          "median_views": 154,
-          "index": 1.31
+          "n": 1,
+          "median_views": 187,
+          "index": 1.1
         },
         "LIST_HABIT": {
           "n": 1,
-          "median_views": 31,
-          "index": 0.26
+          "median_views": 242,
+          "index": 1.43
         },
         "own_adapt": {
-          "n": 11,
-          "median_views": 66,
-          "index": 0.56
+          "n": 13,
+          "median_views": 157,
+          "index": 0.93
         },
         "image": {
-          "n": 12,
-          "median_views": 41.5,
-          "index": 0.35
+          "n": 10,
+          "median_views": 40.5,
+          "index": 0.24
         }
       }
     }

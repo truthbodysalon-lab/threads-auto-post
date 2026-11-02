@@ -1,6 +1,6 @@
 {
   "acct": "truth",
-  "generated_at": "2026-10-28 10:53",
+  "generated_at": "2026-11-02 10:43",
   "params": {
     "min_n": 5,
     "loser_min_n": 8,
@@ -12,17 +12,17 @@
       30
     ]
   },
-  "registry_loaded": 165,
-  "log_entries": 7868,
+  "registry_loaded": 188,
+  "log_entries": 8115,
   "windows": {
     "7d": {
       "baseline": {
-        "n": 197,
-        "median_views": 91,
-        "mean_views": 152.1,
-        "p90_views": 325.6
+        "n": 195,
+        "median_views": 69,
+        "mean_views": 131.2,
+        "p90_views": 297.0
       },
-      "unregistered_n": 197,
+      "unregistered_n": 195,
       "segment_hook": {
         "T1_desk__low": {
           "n": 0,
@@ -397,6 +397,17 @@
           "verdict": "判定保留"
         },
         "ZC06_truth": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "ZC07_truth": {
           "n": 0,
           "median_views": 0,
           "mean_views": 0,
@@ -411,12 +422,12 @@
     },
     "14d": {
       "baseline": {
-        "n": 197,
-        "median_views": 91,
-        "mean_views": 152.1,
-        "p90_views": 325.6
+        "n": 195,
+        "median_views": 69,
+        "mean_views": 131.2,
+        "p90_views": 297.0
       },
-      "unregistered_n": 197,
+      "unregistered_n": 195,
       "segment_hook": {
         "T1_desk__low": {
           "n": 0,
@@ -791,6 +802,17 @@
           "verdict": "判定保留"
         },
         "ZC06_truth": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "ZC07_truth": {
           "n": 0,
           "median_views": 0,
           "mean_views": 0,
@@ -805,12 +827,12 @@
     },
     "30d": {
       "baseline": {
-        "n": 197,
-        "median_views": 91,
-        "mean_views": 152.1,
-        "p90_views": 325.6
+        "n": 195,
+        "median_views": 69,
+        "mean_views": 131.2,
+        "p90_views": 297.0
       },
-      "unregistered_n": 197,
+      "unregistered_n": 195,
       "segment_hook": {
         "T1_desk__low": {
           "n": 0,
@@ -1185,6 +1207,17 @@
           "verdict": "判定保留"
         },
         "ZC06_truth": {
+          "n": 0,
+          "median_views": 0,
+          "mean_views": 0,
+          "p90_views": 0,
+          "segment": null,
+          "like_rate": 0.0,
+          "reply_rate": 0.0,
+          "index": 0.0,
+          "verdict": "判定保留"
+        },
+        "ZC07_truth": {
           "n": 0,
           "median_views": 0,
           "mean_views": 0,
@@ -1457,6 +1490,17 @@
       "reply_rate": 0.0,
       "index": 0.0,
       "verdict": "判定保留"
+    },
+    "ZC07_truth": {
+      "n": 0,
+      "median_views": 0,
+      "mean_views": 0,
+      "p90_views": 0,
+      "segment": null,
+      "like_rate": 0.0,
+      "reply_rate": 0.0,
+      "index": 0.0,
+      "verdict": "判定保留"
     }
   },
   "past_baseline": {
@@ -1694,18 +1738,18 @@
   },
   "type_report": {
     "7d": {
-      "baseline_median": 91,
-      "n": 197,
+      "baseline_median": 69,
+      "n": 195,
       "types": {
         "MAE_MAZU": {
-          "n": 13,
-          "median_views": 91,
-          "index": 1.0
+          "n": 8,
+          "median_views": 46.5,
+          "index": 0.67
         },
         "ZUTSUYAKU": {
-          "n": 18,
-          "median_views": 305.5,
-          "index": 3.36
+          "n": 13,
+          "median_views": 121,
+          "index": 1.75
         },
         "WEATHER": {
           "n": 0,
@@ -1718,14 +1762,14 @@
           "index": 0.0
         },
         "CUSTOMER_VOICE": {
-          "n": 2,
-          "median_views": 138.5,
-          "index": 1.52
+          "n": 0,
+          "median_views": 0,
+          "index": 0.0
         },
         "LIST_HABIT": {
-          "n": 2,
-          "median_views": 76.5,
-          "index": 0.84
+          "n": 0,
+          "median_views": 0,
+          "index": 0.0
         },
         "own_adapt": {
           "n": 0,
@@ -1733,25 +1777,25 @@
           "index": 0.0
         },
         "image": {
-          "n": 8,
-          "median_views": 21.0,
-          "index": 0.23
+          "n": 12,
+          "median_views": 15.5,
+          "index": 0.22
         }
       }
     },
     "14d": {
-      "baseline_median": 91,
-      "n": 197,
+      "baseline_median": 69,
+      "n": 195,
       "types": {
         "MAE_MAZU": {
-          "n": 13,
-          "median_views": 91,
-          "index": 1.0
+          "n": 8,
+          "median_views": 46.5,
+          "index": 0.67
         },
         "ZUTSUYAKU": {
-          "n": 18,
-          "median_views": 305.5,
-          "index": 3.36
+          "n": 13,
+          "median_views": 121,
+          "index": 1.75
         },
         "WEATHER": {
           "n": 0,
@@ -1764,14 +1808,14 @@
           "index": 0.0
         },
         "CUSTOMER_VOICE": {
-          "n": 2,
-          "median_views": 138.5,
-          "index": 1.52
+          "n": 0,
+          "median_views": 0,
+          "index": 0.0
         },
         "LIST_HABIT": {
-          "n": 2,
-          "median_views": 76.5,
-          "index": 0.84
+          "n": 0,
+          "median_views": 0,
+          "index": 0.0
         },
         "own_adapt": {
           "n": 0,
@@ -1779,25 +1823,25 @@
           "index": 0.0
         },
         "image": {
-          "n": 8,
-          "median_views": 21.0,
-          "index": 0.23
+          "n": 12,
+          "median_views": 15.5,
+          "index": 0.22
         }
       }
     },
     "30d": {
-      "baseline_median": 91,
-      "n": 197,
+      "baseline_median": 69,
+      "n": 195,
       "types": {
         "MAE_MAZU": {
-          "n": 13,
-          "median_views": 91,
-          "index": 1.0
+          "n": 8,
+          "median_views": 46.5,
+          "index": 0.67
         },
         "ZUTSUYAKU": {
-          "n": 18,
-          "median_views": 305.5,
-          "index": 3.36
+          "n": 13,
+          "median_views": 121,
+          "index": 1.75
         },
         "WEATHER": {
           "n": 0,
@@ -1810,14 +1854,14 @@
           "index": 0.0
         },
         "CUSTOMER_VOICE": {
-          "n": 2,
-          "median_views": 138.5,
-          "index": 1.52
+          "n": 0,
+          "median_views": 0,
+          "index": 0.0
         },
         "LIST_HABIT": {
-          "n": 2,
-          "median_views": 76.5,
-          "index": 0.84
+          "n": 0,
+          "median_views": 0,
+          "index": 0.0
         },
         "own_adapt": {
           "n": 0,
@@ -1825,9 +1869,9 @@
           "index": 0.0
         },
         "image": {
-          "n": 8,
-          "median_views": 21.0,
-          "index": 0.23
+          "n": 12,
+          "median_views": 15.5,
+          "index": 0.22
         }
       }
     }

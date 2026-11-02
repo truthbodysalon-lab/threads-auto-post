@@ -233,9 +233,13 @@ def main():
                 if act:
                     print(f"{acct}: 常駐稼働中の停滞 → {act}")
                     continue
-            if gap is None or gap < sc.STALL_MIN:
+            # 2026-11-02: nagaoka は朝(6〜8時台)の初回自前投稿が9時前後になるため、Mac側 watchdog.py の
+            # _stall_threshold / alive_thresholds と同じく180分に延ばす（CI側だけ75分のままで、
+            # gap=6時起点の経過分になり毎朝7:15〜8:59に誤報＝11/2 08:47 167分）。9時以降・他アカウントは従来どおり。
+            stall_min = max(sc.STALL_MIN, sc.alive_thresholds(acct)[0]) if acct == "nagaoka" else sc.STALL_MIN
+            if gap is None or gap < stall_min:
                 continue
-            print(f"{acct}: 最後の投稿から{gap}分（{sc.STALL_MIN}分超・停止疑い）")
+            print(f"{acct}: 最後の投稿から{gap}分（{stall_min}分超・停止疑い）")
             if not keeper_running():
                 dispatch_keeper()
             if _notified_today(st, f"gap_{acct}"):

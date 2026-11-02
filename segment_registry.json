@@ -6149,7 +6149,7 @@
   "回数券を売り込みだと感じる院長へ。": {
     "segment": "R05",
     "hook": "low",
-    "created": "2026-10-27",
+    "created": "2026-11-02",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -6158,7 +6158,7 @@
   "毎回の予約が面倒と言われる院長へ。": {
     "segment": "R06",
     "hook": "low",
-    "created": "2026-10-27",
+    "created": "2026-11-02",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -6781,7 +6781,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 8,
-    "created": "2026-11-01"
+    "created": "2026-11-02"
   },
   "フォロワーを増やすだけが、集客じゃない。": {
     "segment": "HAKASE",
@@ -7105,7 +7105,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 0,
-    "created": "2026-10-31"
+    "created": "2026-11-02"
   },
   "売り先は、1つに絞らない。": {
     "segment": "HAKASE",
@@ -7214,7 +7214,7 @@
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-10-19"
+    "created": "2026-11-02"
   },
   "ぶっちゃけ、1人なら、投稿の曜日を固定する。": {
     "segment": "INSTA_EASY",
@@ -7761,7 +7761,7 @@
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-10-23"
+    "created": "2026-11-02"
   },
   "年齢より、検索される言葉。": {
     "segment": "INSTA_EASY",
@@ -7851,7 +7851,7 @@
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-10-23"
+    "created": "2026-11-02"
   },
   "【3つだけ】加工しない写真の方が、お店は伝わる。": {
     "segment": "INSTA_EASY",
@@ -8506,7 +8506,7 @@
     "segment": "WIN_HOOK",
     "hook": "winning",
     "variant": 6,
-    "created": "2026-10-26"
+    "created": "2026-11-02"
   },
   "インスタで予約が入る店が見ているのは、たった3つ。": {
     "segment": "WIN_HOOK",
@@ -9346,7 +9346,7 @@
     "hook": "present",
     "present_key": "jitan_guide",
     "variant": 5,
-    "created": "2026-11-01"
+    "created": "2026-11-02"
   },
   "毎日投稿しても、予約は増えません。": {
     "segment": "WIN_HOOK",
@@ -10073,6 +10073,12 @@
     "acct": "nagaoka"
   },
   "結論、投稿とストーリーズは、残るか消えるか。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-11-02"
+  },
+  "結論、顔なしでも、お店の雰囲気は伝わる。": {
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,

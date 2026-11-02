@@ -31,6 +31,8 @@ ENV_FILE = BASE / ".env"
 LOG_FILE = BASE / "log_diet_posted.jsonl"
 RULES_FILE = BASE / "diet_threads_rules.md"
 FACTS_FILE = BASE / "diet_threads_facts.md"
+GROK_RULES_FILE = BASE / "diet_threads_rules_grok.md"   # Grokのrules.md原文の抜き書き(~/.claude/scripts/diet_threads_rules_sync.py が自動更新)
+PAUSE_FILE = BASE / "diet_threads_pause.json"           # 警告・制限を検知したら作る。削除するまで全枠スキップ
 BASE_URL = "https://graph.threads.net/v1.0"
 JST = timezone(timedelta(hours=9))
 
@@ -132,6 +134,54 @@ def slot_guard(entries: list[dict], slot: str, now: datetime) -> str | None:
     if len(todays) >= DAILY_CAP:
         return f"本日のAPI投稿が上限({DAILY_CAP})に達している"
     return None
+
+
+# ── 警告・制限での即停止(Grok規定「警告・制限が出たら即停止して本人に報告」) ──
+
+PAUSE_CODES = {4, 10, 17, 32, 190, 200, 368, 613}
+PAUSE_SUBCODES = {2207051}
+# 「limit」単独は入れない（文字数の上限エラーで止まってしまうため）。利用制限を表す言い方だけ
+PAUSE_WORDS = ("rate limit", "limit reached", "request limit", "posting limit", "spam", "restricted",
+               "temporarily blocked", "policy",
+               "oauthexception", "制限", "一時的")
+
+
+def is_pause_error(msg: str) -> bool:
+    """APIエラー文が警告・制限・規約・認証系なら True。5xx・通信エラーは False(一時的な失敗として従来どおり見送り)"""
+    m = str(msg or "")
+    low = m.lower()
+    mt = re.match(r"HTTP (\d{3})", m)
+    if mt and mt.group(1) == "429":
+        return True
+    for c in re.findall(r"\"(?:error_)?(?:sub)?code\"\s*:\s*(\d+)", m):
+        if int(c) in PAUSE_CODES or int(c) in PAUSE_SUBCODES:
+            return True
+    if any(w in low for w in PAUSE_WORDS):
+        return True
+    return False
+
+
+def _summarize_error(msg: str) -> str:
+    """停止理由用の要約。トークン・URLを含めない"""
+    t = re.sub(r"https?://\S+", "[URL]", str(msg or ""))
+    t = re.sub(r"(access_token|token)[=:]\s*\S+", r"\1=[省略]", t, flags=re.I)
+    t = re.sub(r"\bTHAA\w{10,}|\bEAA\w{10,}", "[省略]", t)
+    return t.replace("\n", " ")[:200]
+
+
+def write_pause(reason: str, slot: str, now: datetime, path: Path | None = None) -> None:
+    path = path or PAUSE_FILE
+    path.write_text(json.dumps({"since": now.isoformat(timespec="seconds"), "reason": _summarize_error(reason),
+                                "slot": slot}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
+def pause_and_notify(reason: str, slot: str, now: datetime, path: Path | None = None) -> None:
+    """停止ファイルを作り、Discordへ1回だけ知らせる(停止中は次回以降run()冒頭でスキップするので通知は繰り返されない)"""
+    write_pause(reason, slot, now, path)
+    log(f"警告・制限を検知したため停止: {_summarize_error(reason)}")
+    notify("🛑 ダイエットThreads API投稿を停止しました\n"
+           f"枠: {slot} / 理由: {_summarize_error(reason)[:150]}\n"
+           "再開するには diet_threads_pause.json を削除してpushするか、Claude Codeに「ダイエットThreadsを再開して」と伝えてください。")
 
 
 # ── Threads API ───────────────────────────────────
@@ -310,11 +360,16 @@ def inspect_text(text: str, has_cta: bool) -> list[str]:
 def build_prompts(fmt: str, typ: str, slot: str, allow_cta: bool, recent_texts: list[str], feedback: str = "") -> tuple[str, str]:
     rules = RULES_FILE.read_text(encoding="utf-8") if RULES_FILE.exists() else ""
     facts = FACTS_FILE.read_text(encoding="utf-8") if FACTS_FILE.exists() else ""
+    grok = GROK_RULES_FILE.read_text(encoding="utf-8") if GROK_RULES_FILE.exists() else ""
+    grok_block = (
+        "\n\n【Grokのrules.md 原文抜き書き】(上の【運用ルール】の要約と食い違う場合は、こちらの新しい日付の記述が優先。"
+        "ただし【運用ルール】のAPI投稿向け追加規則(ツリー禁止・案内の数え方など)は有効)\n" + grok
+    ) if grok.strip() else ""
     system = (
         "あなたは長岡市の整体院トゥルースの院長として、Threadsのダイエットアカウントの投稿を1本書く。"
         "以下の【運用ルール】と【栄養の事実ファイル】だけに従う。"
         "栄養・ダイエットの主張は【栄養の事実ファイル】にあることだけを使い、ここにない事実・数字・具体的な食品名や手順・体験談(「見てきた」「経験上」など)は書かない。"
-        "出力はJSONオブジェクト1つだけ。\n\n【運用ルール】\n" + rules + "\n\n【栄養の事実ファイル】\n" + facts
+        "出力はJSONオブジェクト1つだけ。\n\n【運用ルール】\n" + rules + grok_block + "\n\n【栄養の事実ファイル】\n" + facts
     )
     avoid = "\n".join(f"- {t.strip()[:80].replace(chr(10), ' ')}" for t in recent_texts[:20]) or "(なし)"
     cta_line = (
@@ -432,7 +487,7 @@ def pick_slot(arg: str | None, now: datetime) -> str:
 
 def run(slot: str | None = None, now: datetime | None = None, dry_run: bool = False, generator=None,
         fetch=None, publisher=None, sleeper=time.sleep, rng: random.Random | None = None,
-        log_path: Path | None = None) -> int:
+        log_path: Path | None = None, pause_path: Path | None = None) -> int:
     """戻り値は常に0(見送りも正常終了)。失敗はDiscord通知で知らせる"""
     load_env()
     now = now or datetime.now(JST)
@@ -442,6 +497,11 @@ def run(slot: str | None = None, now: datetime | None = None, dry_run: bool = Fa
     rng = rng or random.Random()
     fetch = fetch or fetch_recent
     publisher = publisher or publish_text
+    pause_path = pause_path or PAUSE_FILE
+
+    if pause_path.exists():
+        log("停止中のためスキップ（diet_threads_pause.json）")
+        return 0
 
     if not dry_run and not token:
         log("トークン未設定のためスキップ")
@@ -460,6 +520,9 @@ def run(slot: str | None = None, now: datetime | None = None, dry_run: bool = Fa
         try:
             recent = fetch(token, 50)
         except Exception as e:
+            if is_pause_error(e):
+                pause_and_notify(str(e), slot, now, pause_path)
+                return 0
             log(f"見送り: 直近投稿の取得に失敗({e})")
             notify(f"{slot}枠を見送り: 直近投稿を取得できませんでした({str(e)[:120]})。トークン失効の可能性があります。")
             return 0
@@ -501,6 +564,9 @@ def run(slot: str | None = None, now: datetime | None = None, dry_run: bool = Fa
         pid = publisher(token, uid, post["text"])
     except Exception as e:
         log(f"投稿失敗: {e}")
+        if is_pause_error(e):   # 再試行しない。停止して本人に報告
+            pause_and_notify(str(e), slot, now, pause_path)
+            return 0
         notify(f"{slot}枠の投稿に失敗: {str(e)[:150]}")
         return 0
     append_log({

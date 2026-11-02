@@ -39,6 +39,7 @@ class Base(unittest.TestCase):
 
     def run_(self, **kw):
         kw.setdefault("log_path", self.log)
+        kw.setdefault("pause_path", Path(self.tmp.name) / "pause.json")
         kw.setdefault("now", NOW)
         kw.setdefault("rng", random.Random(1))
         return D.run(**kw)
@@ -278,6 +279,103 @@ class TestDryRun(Base):
         self.assertEqual(r, 0)
         self.assertIn(GOOD, buf.getvalue())
         self.assertFalse(self.log.exists())
+
+
+class TestPause(Base):
+    def setUp(self):
+        super().setUp()
+        os.environ["THREADS_ACCESS_TOKEN_DIET"] = "dummy"
+        os.environ["THREADS_USER_ID_DIET"] = "123"
+        self.pause = Path(self.tmp.name) / "pause.json"
+        self.notes = []
+        D.notify = lambda m: self.notes.append(m)
+        self.calls = []
+
+    def gen(self, system, user):
+        self.calls.append("gen")
+        return json.dumps({"text": GOOD, "type": "悩みの言い当て", "has_cta": False}, ensure_ascii=False)
+
+    def fetch_ok(self, t, n):
+        self.calls.append("fetch"); return []
+
+    def pub_ok(self, t, u, text):
+        self.calls.append("pub"); return "p1"
+
+    def test_is_pause_error(self):
+        for m in ['HTTP 429: {"error":{"message":"x"}}',
+                  'HTTP 400: {"error":{"message":"Invalid OAuth access token","type":"OAuthException","code":190}}',
+                  'HTTP 400: {"error":{"code":4,"message":"app"}}',
+                  'HTTP 400: {"error":{"code":368}}',
+                  'HTTP 400: {"error":{"error_subcode":2207051}}',
+                  'HTTP 400: {"error":{"message":"Application request limit reached"}}',
+                  'HTTP 403: you are temporarily blocked', 'HTTP 400: spam detected', 'HTTP 400: policy violation',
+                  'HTTP 400: 一時的に制限されています']:
+            self.assertTrue(D.is_pause_error(m), m)
+        for m in ['HTTP 500: Internal Server Error', 'HTTP 503: unavailable', '通信エラー: timed out', 'HTTP 400: bad param']:
+            self.assertFalse(D.is_pause_error(m), m)
+
+    def test_publish_429_creates_pause_and_notifies_once(self):
+        def pub(t, u, text): raise RuntimeError('HTTP 429: {"error":{"message":"rate limit"}}')
+        r = self.run_(slot="15:00", fetch=self.fetch_ok, publisher=pub, generator=self.gen)
+        self.assertEqual(r, 0)
+        self.assertTrue(self.pause.exists())
+        d = json.loads(self.pause.read_text(encoding="utf-8"))
+        self.assertEqual(d["slot"], "15:00"); self.assertIn("429", d["reason"]); self.assertIn("since", d)
+        self.assertNotIn("dummy", self.pause.read_text(encoding="utf-8"))
+        self.assertEqual(len(self.notes), 1)
+        self.assertIn("🛑 ダイエットThreads API投稿を停止しました", self.notes[0])
+        self.assertIn("diet_threads_pause.json", self.notes[0])
+        self.assertFalse(self.log.exists())          # 投稿ログは書かない
+
+    def test_fetch_limit_message_pauses(self):
+        def f(t, n): raise RuntimeError('HTTP 400: {"error":{"message":"Application request limit reached","code":4}}')
+        self.run_(slot="15:00", fetch=f, publisher=self.pub_ok, generator=self.gen)
+        self.assertTrue(self.pause.exists()); self.assertEqual(len(self.notes), 1)
+        self.assertNotIn("pub", self.calls)
+
+    def test_token_190_pauses(self):
+        def pub(t, u, text): raise RuntimeError('HTTP 400: {"error":{"type":"OAuthException","code":190}}')
+        self.run_(slot="15:00", fetch=self.fetch_ok, publisher=pub, generator=self.gen)
+        self.assertTrue(self.pause.exists())
+
+    def test_no_api_calls_while_paused_and_no_repeat_notice(self):
+        self.pause.write_text("{}", encoding="utf-8")
+        def boom(*a, **k): raise AssertionError("停止中にAPIを呼んではいけない")
+        for _ in range(3):
+            self.assertEqual(self.run_(slot="15:00", fetch=boom, publisher=boom, generator=boom), 0)
+        self.assertEqual(self.notes, [])
+
+    def test_transient_500_does_not_pause(self):
+        def pub(t, u, text): raise RuntimeError("HTTP 500: Internal Server Error")
+        self.run_(slot="15:00", fetch=self.fetch_ok, publisher=pub, generator=self.gen)
+        self.assertFalse(self.pause.exists())
+        self.assertEqual(len(self.notes), 1)
+        self.assertIn("投稿に失敗", self.notes[0])
+
+    def test_transient_network_fetch_does_not_pause(self):
+        def f(t, n): raise RuntimeError("通信エラー: timed out")
+        self.run_(slot="15:00", fetch=f, publisher=self.pub_ok, generator=self.gen)
+        self.assertFalse(self.pause.exists())
+
+    def test_publish_never_retried(self):
+        n = []
+        def pub(t, u, text): n.append(1); raise RuntimeError("HTTP 429: x")
+        self.run_(slot="15:00", fetch=self.fetch_ok, publisher=pub, generator=self.gen)
+        self.assertEqual(len(n), 1)
+
+    def test_workflow_commits_pause_file(self):
+        wf = (Path(__file__).parent / ".github/workflows/diet_threads.yml").read_text(encoding="utf-8")
+        self.assertIn("diet_threads_pause.json", wf)
+
+    def test_grok_excerpt_injected_into_prompt(self):
+        orig = D.GROK_RULES_FILE
+        g = Path(self.tmp.name) / "g.md"; g.write_text("ZZZ_GROK_MARK 原文", encoding="utf-8")
+        D.GROK_RULES_FILE = g
+        try:
+            sy, _ = D.build_prompts("short", "相談の入口", "15:00", False, [])
+        finally:
+            D.GROK_RULES_FILE = orig
+        self.assertIn("ZZZ_GROK_MARK", sy); self.assertIn("新しい日付の記述が優先", sy)
 
 
 class TestMisc(unittest.TestCase):

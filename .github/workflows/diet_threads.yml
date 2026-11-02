@@ -51,13 +51,14 @@ jobs:
           DRY_RUN: ${{ github.event.inputs.dry_run }}
         run: python3 diet_threads.py
 
-      # 投稿ログを必ず保存する(失敗しても、投稿済みなら二重投稿を防ぐため)。log_diet_posted.jsonl は merge=union
-      - name: Commit post log
+      # 投稿ログと(警告・制限による)停止ファイルを必ず保存する(失敗しても、投稿済みなら二重投稿を防ぐため)。log_diet_posted.jsonl は merge=union
+      - name: Commit post log and pause file
         if: always()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           [ -e log_diet_posted.jsonl ] && git add log_diet_posted.jsonl
+          [ -e diet_threads_pause.json ] && git add diet_threads_pause.json
           git diff --cached --quiet && { echo "ログ変更なし"; exit 0; }
           git commit -q -m "chore: update diet threads log [skip ci]"
           for i in 1 2 3; do

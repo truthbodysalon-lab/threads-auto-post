@@ -148,7 +148,8 @@ class TestSimilarity(unittest.TestCase):
             calls.append(1)
             return json.dumps({"text": dup, "type": "小さなコツ", "has_cta": False}, ensure_ascii=False)
 
-        post_, reason = D.generate_post("09:00", "short", "小さなコツ", False, [dup], [dup], gen)
+        # recent_texts（決まり文句の比較）は空にして、類似チェック（sim_pool）だけを試す
+        post_, reason = D.generate_post("09:00", "short", "小さなコツ", False, [], [dup], gen)
         self.assertIsNone(post_)
         self.assertIn("類似", reason)
         self.assertEqual(len(calls), 2)     # 作り直しは1回だけ
@@ -413,6 +414,20 @@ class TestMisc(unittest.TestCase):
         wf = (Path(__file__).parent / ".github/workflows/diet_threads.yml").read_text()
         self.assertNotIn("cron:", wf)
 
+
+
+class TestQuality20261102(unittest.TestCase):
+    """院長確認「3点直して」(2026-11-02): 根拠のない体の話・決まり文句の繰り返し・専門用語"""
+    def test_body_mechanism_ng(self):
+        self.assertTrue(any("体の仕組み" in e for e in D.inspect_text("姿勢が崩れると内臓の位置も変わることがあるんです。", False)))
+        self.assertTrue(any("体の仕組み" in e for e in D.inspect_text("骨盤が開くと太りやすくなります。", False)))
+    def test_jargon_ng(self):
+        self.assertTrue(any("専門用語" in e for e in D.inspect_text("エネルギー密度の低い野菜を足してみてください。", False)))
+        self.assertFalse(any("専門用語" in e for e in D.inspect_text("量のわりに軽い野菜を足してみてください。", False)))
+    def test_stock_phrase_repeat(self):
+        recent = ["「食べてないのにやせない」という方、本当に多いです。", "別の話です。"]
+        self.assertTrue(D.stock_phrase_errors("「続かない」方、本当に多いです。", recent))
+        self.assertEqual(D.stock_phrase_errors("「続かない」と感じる日、ありますよね。", ["まったく別の投稿です。"]), [])
 
 if __name__ == "__main__":
     unittest.main()

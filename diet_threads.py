@@ -321,7 +321,25 @@ _NG_REGEX = [
     (r"(?:私|わたし|あたし|俺)(?!たち)", "一人称が「僕」でない"),
     (r"1日\s*\d*\s*[LlＬℓ]", "水分量の指導"),
     (r"(?:こまめに|たくさん|多め(?:に)?)(?:水|お水)|水分を(?:とっ|摂|こまめ|多め|控え|意識)|水を(?:飲|こまめ)", "水分のとり方の指導"),
+    # 2026-11-02 院長確認「3点直して」①: 根拠ファイルにない体の仕組みの話（内臓・骨のずれ等）は書かない
+    (r"内臓|骨盤が(?:開|ずれ|歪|ゆが|閉)|骨(?:の|が)(?:ずれ|ゆがみ|歪み)|ゆがみ(?:が|の)原因|歪み(?:が|の)原因|リンパ|老廃物|むくみが(?:取れ|消え|なくな)|血流が(?:良くな|よくな|改善)|体質が変わ", "根拠のない体の仕組みの話"),
+    # ③: 専門用語は読者に伝わらないので使わない（言い換える）
+    (r"エネルギー密度|カロリー密度|インスリン|PFC|微量栄養素|黄体期|卵胞期|糖新生|熱産生|DIT|ミトコンドリア|ホルモンバランス|ホメオスタシス|飢餓適応|セレン|有酸素運動", "専門用語"),
 ]
+
+# ②: 決まり文句の繰り返しを避ける（Grokの投稿も含めた直近の投稿と比べる）
+STOCK_PHRASES = ["本当に多いです", "意外と多いです", "多いんです", "多いです", "という方", "そんな方", "思っていませんか",
+                 "ありませんか", "大丈夫です", "一緒に整理", "一緒に見て", "いろんな角度"]
+
+
+def stock_phrase_errors(text: str, recent_texts: list[str]) -> list[str]:
+    """直近3本のどれかに出ている決まり文句、または直近10本で2回以上出ている決まり文句を使っていたらNG"""
+    errs = []
+    last3, last10 = recent_texts[:3], recent_texts[:10]
+    for p in STOCK_PHRASES:
+        if p in text and (any(p in t for t in last3) or sum(p in t for t in last10) >= 2):
+            errs.append(f"決まり文句「{p}」が直近の投稿と重なる")
+    return errs
 _NG_NFKC = [(re.compile(p), name) for p, name in _NG_REGEX]
 
 
@@ -380,6 +398,9 @@ def build_prompts(fmt: str, typ: str, slot: str, allow_cta: bool, recent_texts: 
         f"投稿枠: {slot} (JST)\n型: {typ}\n長さ: {FORMATS[fmt]}\n{cta_line}\n\n"
         "直近の投稿(Grok Botの投稿を含む)。次のテーマ・書き出しと被らないこと:\n" + avoid + "\n\n"
         "1文目は「読者のセリフ(「〇〇なのにやせない」など)」か「身近な食べ物名」で始める。ハッシュタグ・URL・絵文字の乱用はしない。\n"
+        "体の仕組み(内臓の位置・骨のずれ・ゆがみ・リンパ・血流など)を原因や効果として書かない。姿勢・骨盤の話は「姿勢や体の使い方のクセが関わることもある」程度にとどめる。\n"
+        "専門用語(エネルギー密度・インスリン・PFC・黄体期など)は使わず、中学生にも伝わる言葉に言い換える(例: エネルギー密度の低い野菜→量のわりに軽い野菜、黄体期→生理前)。\n"
+        "直近の投稿で使われた決まり文句(「本当に多いです」「という方」「ありませんか」など)は使い回さず、言い方を変える。\n"
         + (f"\n前回の出力は次の理由で不合格だった。直すこと: {feedback}\n" if feedback else "")
         + '\n出力形式(JSONのみ): {"text": "本文", "type": "型", "has_cta": true または false}'
     )
@@ -440,7 +461,7 @@ def generate_post(slot: str, fmt: str, typ: str, allow_cta: bool, recent_texts: 
             last_reason = "案内不可なのに案内つき"
             feedback = "公式LINE案内は入れない"
             continue
-        errs = inspect_text(post["text"], post["has_cta"])
+        errs = inspect_text(post["text"], post["has_cta"]) + stock_phrase_errors(post["text"], recent_texts)
         n_body = len(post["text"].replace(CTA_TEXT, "").strip())
         if fmt == "short" and n_body > 90:
             errs.append(f"短文の指定なのに{n_body}字(60字目安・90字以内)")

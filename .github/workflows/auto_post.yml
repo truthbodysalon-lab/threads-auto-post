@@ -78,6 +78,8 @@ jobs:
           THREADS_USER_ID_NAGAOKA=${{ secrets.THREADS_USER_ID_NAGAOKA }}
           THREADS_ACCESS_TOKEN_MASA=${{ secrets.THREADS_ACCESS_TOKEN_MASA }}
           THREADS_USER_ID_MASA=${{ secrets.THREADS_USER_ID_MASA }}
+          THREADS_ACCESS_TOKEN_DIET=${{ secrets.THREADS_ACCESS_TOKEN_DIET }}
+          THREADS_USER_ID_DIET=${{ secrets.THREADS_USER_ID_DIET }}
           GH_PAT=${{ secrets.GH_PAT }}
           GH_REPO=${{ github.repository }}
           ANTHROPIC_API_KEY=${{ secrets.ANTHROPIC_API_KEY }}

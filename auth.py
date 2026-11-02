@@ -6,6 +6,7 @@ Threads API OAuth認証スクリプト
 使い方:
   python auth.py                     # truth_body_salonアカウントで認証
   python auth.py masahide            # masahide_takahashi_アカウントで認証
+  python auth.py diet                # truth_nagaoka_daietto(ダイエット)アカウントで認証
 """
 
 import os
@@ -151,6 +152,7 @@ ACCOUNT_CONFIG = {
     "truth":   {"token_key": "THREADS_ACCESS_TOKEN_TRUTH",   "uid_key": "THREADS_USER_ID_TRUTH",   "name": "@truth_body_salon"},
     "masa":    {"token_key": "THREADS_ACCESS_TOKEN_MASA",    "uid_key": "THREADS_USER_ID_MASA",    "name": "@masahide_takahashi_"},
     "nagaoka": {"token_key": "THREADS_ACCESS_TOKEN_NAGAOKA", "uid_key": "THREADS_USER_ID_NAGAOKA", "name": "@truth_nagaoka"},
+    "diet":    {"token_key": "THREADS_ACCESS_TOKEN_DIET",    "uid_key": "THREADS_USER_ID_DIET",    "name": "@truth_nagaoka_daietto"},
 }
 
 
@@ -206,7 +208,11 @@ def push_to_github_secrets(env: dict, token_key: str, uid_key: str):
 
 def main():
     account = sys.argv[1] if len(sys.argv) > 1 else "truth"
-    acct_key = "masa" if "masa" in account.lower() else "nagaoka" if "nagaoka" in account.lower() else "truth"
+    # "diet"/"daietto" は @truth_nagaoka_daietto。"nagaoka" を含むので先に判定する(2026-11-02)
+    _a = account.lower()
+    acct_key = ("diet" if ("diet" in _a or "daietto" in _a)
+                else "masa" if "masa" in _a
+                else "nagaoka" if "nagaoka" in _a else "truth")
     cfg = ACCOUNT_CONFIG[acct_key]
 
     env = load_env()

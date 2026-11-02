@@ -31,6 +31,11 @@ ACCOUNTS = {
         "token_key": "THREADS_ACCESS_TOKEN_MASA",
         "uid_key":   "THREADS_USER_ID_MASA",
     },
+    # 2026-11-02: ダイエット(@truth_nagaoka_daietto)。トークン未発行の間は空なので各処理でスキップされる
+    "diet": {
+        "token_key": "THREADS_ACCESS_TOKEN_DIET",
+        "uid_key":   "THREADS_USER_ID_DIET",
+    },
 }
 
 
@@ -182,6 +187,9 @@ def show_status():
     load_env()
     print("=== トークン状態 ===")
     for acct in ACCOUNTS:
+        # diet はトークン発行前は未設定が正常。表示せず飛ばす(2026-11-02)
+        if acct == "diet" and not os.environ.get(ACCOUNTS[acct]["token_key"], ""):
+            continue
         status = check_token(acct)
         mark = "✓ 有効" if status["valid"] else "✗ 無効"
         print(f"  [{acct}] {mark}")

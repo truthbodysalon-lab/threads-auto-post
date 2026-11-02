@@ -1030,6 +1030,71 @@
    "catchup": true,
    "skip_until": "2026-11-01 09:30",
    "note": "@masahide_takahashi_ の保険（2026-10-21）: Mac常設が当日成功していない時だけ起動"
+  },
+  {
+   "id": "diet-threads-0900",
+   "repo": "truthbodysalon-lab/threads-auto-post",
+   "workflow": "diet_threads.yml",
+   "jst_time": "09:00",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true,
+   "inputs": {
+    "slot": "09:00"
+   },
+   "note": "2026-11-02: ダイエットThreads(@truth_nagaoka_daietto)のAPI追加投稿。Grok Botのブラウザ投稿(7,8,10,12,14,16,17,19,21,22時)とは別。トークン未設定の間はdiet_threads.py側が何もせず終了(安全)。枠ごとの二重投稿防止はlog_diet_posted.jsonl。止める時はenabled:false"
+  },
+  {
+   "id": "diet-threads-1100",
+   "repo": "truthbodysalon-lab/threads-auto-post",
+   "workflow": "diet_threads.yml",
+   "jst_time": "11:00",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true,
+   "inputs": {
+    "slot": "11:00"
+   },
+   "note": "2026-11-02: ダイエットThreads(@truth_nagaoka_daietto)のAPI追加投稿。Grok Botのブラウザ投稿(7,8,10,12,14,16,17,19,21,22時)とは別。トークン未設定の間はdiet_threads.py側が何もせず終了(安全)。枠ごとの二重投稿防止はlog_diet_posted.jsonl。止める時はenabled:false"
+  },
+  {
+   "id": "diet-threads-1300",
+   "repo": "truthbodysalon-lab/threads-auto-post",
+   "workflow": "diet_threads.yml",
+   "jst_time": "13:00",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true,
+   "inputs": {
+    "slot": "13:00"
+   },
+   "note": "2026-11-02: ダイエットThreads(@truth_nagaoka_daietto)のAPI追加投稿。Grok Botのブラウザ投稿(7,8,10,12,14,16,17,19,21,22時)とは別。トークン未設定の間はdiet_threads.py側が何もせず終了(安全)。枠ごとの二重投稿防止はlog_diet_posted.jsonl。止める時はenabled:false"
+  },
+  {
+   "id": "diet-threads-1500",
+   "repo": "truthbodysalon-lab/threads-auto-post",
+   "workflow": "diet_threads.yml",
+   "jst_time": "15:00",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true,
+   "inputs": {
+    "slot": "15:00"
+   },
+   "note": "2026-11-02: ダイエットThreads(@truth_nagaoka_daietto)のAPI追加投稿。Grok Botのブラウザ投稿(7,8,10,12,14,16,17,19,21,22時)とは別。トークン未設定の間はdiet_threads.py側が何もせず終了(安全)。枠ごとの二重投稿防止はlog_diet_posted.jsonl。止める時はenabled:false"
+  },
+  {
+   "id": "diet-threads-2000",
+   "repo": "truthbodysalon-lab/threads-auto-post",
+   "workflow": "diet_threads.yml",
+   "jst_time": "20:00",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true,
+   "inputs": {
+    "slot": "20:00"
+   },
+   "note": "2026-11-02: ダイエットThreads(@truth_nagaoka_daietto)のAPI追加投稿。Grok Botのブラウザ投稿(7,8,10,12,14,16,17,19,21,22時)とは別。トークン未設定の間はdiet_threads.py側が何もせず終了(安全)。枠ごとの二重投稿防止はlog_diet_posted.jsonl。止める時はenabled:false"
   }
  ]
 }

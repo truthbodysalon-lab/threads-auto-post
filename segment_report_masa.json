@@ -1,6 +1,6 @@
 {
   "acct": "masa",
-  "generated_at": "2026-11-02 10:43",
+  "generated_at": "2026-11-03 10:43",
   "params": {
     "min_n": 5,
     "loser_min_n": 8,
@@ -12,8 +12,8 @@
       30
     ]
   },
-  "registry_loaded": 972,
-  "log_entries": 8200,
+  "registry_loaded": 976,
+  "log_entries": 8247,
   "windows": {
     "7d": {
       "baseline": {

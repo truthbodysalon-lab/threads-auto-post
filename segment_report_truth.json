@@ -1,6 +1,6 @@
 {
   "acct": "truth",
-  "generated_at": "2026-11-02 10:43",
+  "generated_at": "2026-11-03 10:43",
   "params": {
     "min_n": 5,
     "loser_min_n": 8,
@@ -12,8 +12,8 @@
       30
     ]
   },
-  "registry_loaded": 188,
-  "log_entries": 8115,
+  "registry_loaded": 190,
+  "log_entries": 8165,
   "windows": {
     "7d": {
       "baseline": {
@@ -1747,9 +1747,9 @@
           "index": 0.67
         },
         "ZUTSUYAKU": {
-          "n": 13,
-          "median_views": 121,
-          "index": 1.75
+          "n": 14,
+          "median_views": 147.0,
+          "index": 2.13
         },
         "WEATHER": {
           "n": 0,
@@ -1793,9 +1793,9 @@
           "index": 0.67
         },
         "ZUTSUYAKU": {
-          "n": 13,
-          "median_views": 121,
-          "index": 1.75
+          "n": 14,
+          "median_views": 147.0,
+          "index": 2.13
         },
         "WEATHER": {
           "n": 0,
@@ -1839,9 +1839,9 @@
           "index": 0.67
         },
         "ZUTSUYAKU": {
-          "n": 13,
-          "median_views": 121,
-          "index": 1.75
+          "n": 14,
+          "median_views": 147.0,
+          "index": 2.13
         },
         "WEATHER": {
           "n": 0,

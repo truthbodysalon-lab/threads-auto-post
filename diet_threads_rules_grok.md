@@ -1,8 +1,8 @@
 # Grokのrules.md 原文の抜き書き（ダイエットThreads @truth_nagaoka_daietto 用）
 
-- 生成日時: 2026-11-03 06:40 JST（~/.claude/scripts/diet_threads_rules_sync.py による自動抜き書き。手で編集しない）
+- 生成日時: 2026-11-04 06:40 JST（~/.claude/scripts/diet_threads_rules_sync.py による自動抜き書き。手で編集しない）
 - 元ファイル（Obsidian vault相対）: SNS・Threads/X・Threads自動運用（Grok）/rules.md
-- 元ファイルのsha256: 29e83b46a17fd1985042222f87e749ac4c87fe385e358bf8550ee5acbb1eb7b7
+- 元ファイルのsha256: c359551203299a6367f5de70c6ced1ea3576ab4ca203399ed9a2748a52ba244a
 - 原文の抜き書き。diet_threads_rules.md（要約）と食い違う場合は、こちらの新しい日付の記述が優先
 - 除外: X運用・@masahide系・Buffer・DM・Obsidian保存ルール（公開リポジトリのため）
 

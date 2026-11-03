@@ -7208,7 +7208,7 @@
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-10-19"
+    "created": "2026-11-03"
   },
   "AIへの頼み方は、1行で足りる。": {
     "segment": "INSTA_EASY",
@@ -7456,7 +7456,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 17,
-    "created": "2026-11-01"
+    "created": "2026-11-03"
   },
   "【ハイライトを、今日1つ作る】": {
     "segment": "PRESENT_CTA",
@@ -7785,7 +7785,7 @@
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-10-23"
+    "created": "2026-11-03"
   },
   "結論、見る数字は、2つだけ。": {
     "segment": "INSTA_EASY",
@@ -9595,7 +9595,7 @@
     "hook": "present",
     "present_key": "jitan_guide",
     "variant": 2,
-    "created": "2026-11-02"
+    "created": "2026-11-03"
   },
   "【3つだけ】1日の数字で、判断しない。": {
     "segment": "INSTA_EASY",

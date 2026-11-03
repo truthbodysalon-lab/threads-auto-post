@@ -1511,7 +1511,7 @@
   "2回目さえ来れば安心と思っている院長へ。": {
     "segment": "R07",
     "hook": "high",
-    "created": "2026-10-28",
+    "created": "2026-11-03",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -1520,7 +1520,7 @@
   "最後の日に、次の話をしている院長へ。": {
     "segment": "R08",
     "hook": "high",
-    "created": "2026-10-28",
+    "created": "2026-11-03",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -6787,7 +6787,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 10,
-    "created": "2026-11-02"
+    "created": "2026-11-03"
   },
   "ハイライトを、後回しにしない。": {
     "segment": "PRESENT_CTA",
@@ -7411,7 +7411,7 @@
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-10-20"
+    "created": "2026-11-03"
   },
   "1日の数字で、判断しない。": {
     "segment": "INSTA_EASY",
@@ -7450,7 +7450,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 6,
-    "created": "2026-11-01"
+    "created": "2026-11-03"
   },
   "感覚より、数字の方が正直です。": {
     "segment": "HAKASE",
@@ -7694,7 +7694,7 @@
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-10-22"
+    "created": "2026-11-03"
   },
   "難しそうは、1行で終わる。": {
     "segment": "INSTA_EASY",
@@ -7815,13 +7815,13 @@
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-10-23"
+    "created": "2026-11-03"
   },
   "結論、お店の入口の写真は、30秒で撮れる。": {
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-10-23"
+    "created": "2026-11-03"
   },
   "結論、投稿に、年齢はいらない。": {
     "segment": "INSTA_EASY",
@@ -7901,7 +7901,7 @@
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-10-23"
+    "created": "2026-11-03"
   },
   "年齢より、悩みへの答え。": {
     "segment": "INSTA_EASY",
@@ -7969,7 +7969,7 @@
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-10-24"
+    "created": "2026-11-03"
   },
   "【3ステップ】覚えるのは、これだけ。": {
     "segment": "INSTA_EASY",
@@ -7993,7 +7993,7 @@
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-10-24"
+    "created": "2026-11-03"
   },
   "冷房を強くする前に、まず首元が冷えていないか確かめてみて。": {
     "segment": "MAE_MAZU",
@@ -8838,7 +8838,7 @@
     "segment": "WIN_HOOK",
     "hook": "winning",
     "variant": 18,
-    "created": "2026-10-27"
+    "created": "2026-11-03"
   },
   "【3ステップ】年齢より、悩みへの答え。": {
     "segment": "INSTA_EASY",
@@ -9346,7 +9346,7 @@
     "hook": "present",
     "present_key": "jitan_guide",
     "variant": 5,
-    "created": "2026-11-02"
+    "created": "2026-11-03"
   },
   "毎日投稿しても、予約は増えません。": {
     "segment": "WIN_HOOK",

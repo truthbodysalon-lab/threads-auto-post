@@ -6781,7 +6781,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 8,
-    "created": "2026-11-02"
+    "created": "2026-11-04"
   },
   "フォロワーを増やすだけが、集客じゃない。": {
     "segment": "HAKASE",
@@ -7272,7 +7272,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 12,
-    "created": "2026-10-29"
+    "created": "2026-11-04"
   },
   "ぶっちゃけ、プロフィールは自分で悩むほど遠回りです。": {
     "segment": "PRESENT_CTA",
@@ -8868,7 +8868,7 @@
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-10-27"
+    "created": "2026-11-04"
   },
   "結論、いいねより、保存数を見る。": {
     "segment": "INSTA_EASY",
@@ -10336,6 +10336,19 @@
     "hook": "present",
     "present_key": "meo_50",
     "variant": 8,
+    "created": "2026-11-04"
+  },
+  "登録するサイトを増やす前に、決めておく絶対ルールがあります。": {
+    "segment": "PRESENT_CTA",
+    "hook": "present",
+    "present_key": "meo_50",
+    "variant": 5,
+    "created": "2026-11-04"
+  },
+  "いいねの数は、気にしない。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
     "created": "2026-11-04"
   }
 }

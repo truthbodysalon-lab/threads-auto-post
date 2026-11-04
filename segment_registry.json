@@ -7105,13 +7105,13 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 0,
-    "created": "2026-11-02"
+    "created": "2026-11-04"
   },
   "売り先は、1つに絞らない。": {
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 9,
-    "created": "2026-10-29"
+    "created": "2026-11-04"
   },
   "【今日のストーリーズ、4枚の空欄埋め】": {
     "segment": "PRESENT_CTA",
@@ -10329,6 +10329,13 @@
     "hook": "present",
     "present_key": "meo_50",
     "variant": 2,
+    "created": "2026-11-04"
+  },
+  "サイトの登録画面は、どれも似た流れで進みます。": {
+    "segment": "PRESENT_CTA",
+    "hook": "present",
+    "present_key": "meo_50",
+    "variant": 8,
     "created": "2026-11-04"
   }
 }

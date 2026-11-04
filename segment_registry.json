@@ -5047,7 +5047,7 @@
   "離れた人の理由を聞けない院長へ。": {
     "segment": "R09",
     "hook": "low",
-    "created": "2026-10-29",
+    "created": "2026-11-04",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -5056,7 +5056,7 @@
   "紹介のお願いに、気が引ける院長へ。": {
     "segment": "R10",
     "hook": "low",
-    "created": "2026-10-29",
+    "created": "2026-11-04",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -7021,7 +7021,7 @@
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-10-28"
+    "created": "2026-11-04"
   },
   "投稿までは、3タップで終わる。": {
     "segment": "INSTA_EASY",
@@ -7086,7 +7086,7 @@
   "日々の10秒とAIの台本で足ります。": {
     "segment": "I05",
     "hook": "high",
-    "created": "2026-10-31",
+    "created": "2026-11-04",
     "acct": "masa",
     "axis": "insta_pain",
     "variant": null,
@@ -7136,7 +7136,7 @@
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-10-28"
+    "created": "2026-11-04"
   },
   "インスタで、プロフィールが決まらないサロンオーナーへ。": {
     "segment": "INSTA_EASY",
@@ -7450,7 +7450,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 6,
-    "created": "2026-11-03"
+    "created": "2026-11-04"
   },
   "感覚より、数字の方が正直です。": {
     "segment": "HAKASE",
@@ -7539,7 +7539,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 4,
-    "created": "2026-11-01"
+    "created": "2026-11-04"
   },
   "良い投稿の前に、プロフィールを直す。": {
     "segment": "HAKASE",
@@ -7913,7 +7913,7 @@
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-10-23"
+    "created": "2026-11-04"
   },
   "結論、お店を探す人は、地名と悩みで調べる。": {
     "segment": "INSTA_EASY",
@@ -8490,7 +8490,7 @@
   "ストーリーズは、毎日出すより、予告したほうが見られます。": {
     "segment": "I09",
     "hook": "high",
-    "created": "2026-11-01",
+    "created": "2026-11-04",
     "acct": "masa",
     "axis": "insta_pain",
     "variant": null,
@@ -8659,7 +8659,7 @@
     "segment": "WIN_HOOK",
     "hook": "winning",
     "variant": 12,
-    "created": "2026-10-28"
+    "created": "2026-11-04"
   },
   "リールを始めるのに、新しい機材は要りません。": {
     "segment": "WIN_HOOK",
@@ -10306,6 +10306,19 @@
     "created": "2026-11-04"
   },
   "完璧より、今日の1枚。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-11-04"
+  },
+  "Googleマップ対策で、どこから登録するか迷う店主さんへ。": {
+    "segment": "PRESENT_CTA",
+    "hook": "present",
+    "present_key": "meo_50",
+    "variant": 0,
+    "created": "2026-11-04"
+  },
+  "腕より、場所。": {
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,

@@ -7456,7 +7456,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 17,
-    "created": "2026-11-03"
+    "created": "2026-11-04"
   },
   "【ハイライトを、今日1つ作る】": {
     "segment": "PRESENT_CTA",
@@ -10356,6 +10356,13 @@
     "hook": "present",
     "present_key": "meo_50",
     "variant": 6,
+    "created": "2026-11-04"
+  },
+  "飲食店、美容室、治療院、士業、不動産。": {
+    "segment": "PRESENT_CTA",
+    "hook": "present",
+    "present_key": "meo_50",
+    "variant": 4,
     "created": "2026-11-04"
   }
 }

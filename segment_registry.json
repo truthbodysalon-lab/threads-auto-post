@@ -6427,7 +6427,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 1,
-    "created": "2026-11-03"
+    "created": "2026-11-04"
   },
   "同じ発信をする人が増えても、困らない。": {
     "segment": "HAKASE",
@@ -6787,7 +6787,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 10,
-    "created": "2026-11-03"
+    "created": "2026-11-04"
   },
   "ハイライトを、後回しにしない。": {
     "segment": "PRESENT_CTA",
@@ -10363,6 +10363,20 @@
     "hook": "present",
     "present_key": "meo_50",
     "variant": 4,
+    "created": "2026-11-04"
+  },
+  "Googleマップ対策を、今日から始めたい方へ。": {
+    "segment": "PRESENT_CTA",
+    "hook": "present",
+    "present_key": "meo_50",
+    "variant": 9,
+    "created": "2026-11-04"
+  },
+  "MEOの登録は、1日1サイトで足ります。": {
+    "segment": "PRESENT_CTA",
+    "hook": "present",
+    "present_key": "meo_50",
+    "variant": 3,
     "created": "2026-11-04"
   }
 }

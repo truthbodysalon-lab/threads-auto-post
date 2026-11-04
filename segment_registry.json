@@ -6960,7 +6960,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 16,
-    "created": "2026-11-01"
+    "created": "2026-11-04"
   },
   "投稿は、出して終わりにしない。": {
     "segment": "HAKASE",
@@ -10349,6 +10349,13 @@
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
+    "created": "2026-11-04"
+  },
+  "地元のお店が見落としがちな、地域のメディアと役所系のサイトがあります。": {
+    "segment": "PRESENT_CTA",
+    "hook": "present",
+    "present_key": "meo_50",
+    "variant": 6,
     "created": "2026-11-04"
   }
 }

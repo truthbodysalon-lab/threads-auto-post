@@ -9195,7 +9195,7 @@
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-10-28"
+    "created": "2026-11-05"
   },
   "【3ステップ】難しそうは、1行で終わる。": {
     "segment": "INSTA_EASY",
@@ -10356,7 +10356,7 @@
     "hook": "present",
     "present_key": "meo_50",
     "variant": 6,
-    "created": "2026-11-04"
+    "created": "2026-11-05"
   },
   "飲食店、美容室、治療院、士業、不動産。": {
     "segment": "PRESENT_CTA",

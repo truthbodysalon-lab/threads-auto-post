@@ -1,0 +1,69 @@
+name: Zutsu Threads Post
+
+# 頭痛Threads(@truth_nagaoka_zutsuu) API自動投稿。2026-11-05 diet_threads.yml を元に作成。
+# cronは持たない: 中央ディスパッチャ(dispatcher.py + schedule_table.json の zutsu-threads-*)が
+# 7:30 / 12:15 / 17:30 / 20:30 / 22:00 (JST) に workflow_dispatch で起動する(inputs.slot が枠)。
+# トークン(THREADS_ACCESS_TOKEN_ZUTSU)が未登録の間は何もせず正常終了する。
+on:
+  workflow_dispatch:
+    inputs:
+      slot:
+        description: '枠 (07:30 / 12:15 / 17:30 / 20:30 / 22:00)'
+        required: true
+        default: '07:30'
+      dry_run:
+        description: '1なら生成だけ(Threadsへ投稿しない)'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+concurrency:
+  group: zutsu-threads
+  cancel-in-progress: false
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      TZ: Asia/Tokyo
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          token: ${{ secrets.GH_PAT }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run zutsu_threads
+        env:
+          THREADS_ACCESS_TOKEN_ZUTSU: ${{ secrets.THREADS_ACCESS_TOKEN_ZUTSU }}
+          THREADS_USER_ID_ZUTSU: ${{ secrets.THREADS_USER_ID_ZUTSU }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          ZUTSU_SLOT: ${{ github.event.inputs.slot }}
+          DRY_RUN: ${{ github.event.inputs.dry_run }}
+        run: python3 zutsu_threads.py
+
+      # 投稿ログと(警告・制限による)停止ファイルを必ず保存する(失敗しても、投稿済みなら二重投稿を防ぐため)。log_zutsu_posted.jsonl は merge=union
+      - name: Commit post log and pause file
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          [ -e log_zutsu_posted.jsonl ] && git add log_zutsu_posted.jsonl
+          [ -e zutsu_threads_pause.json ] && git add zutsu_threads_pause.json
+          git diff --cached --quiet && { echo "ログ変更なし"; exit 0; }
+          git commit -q -m "chore: update zutsu threads log [skip ci]"
+          for i in 1 2 3; do
+            git push -q && exit 0
+            git pull -q --rebase --autostash -X theirs origin main || { git rebase --abort 2>/dev/null || true; }
+          done
+          echo "::error::頭痛Threadsの投稿ログのpushに失敗(二重投稿防止のため要確認)"
+          exit 1

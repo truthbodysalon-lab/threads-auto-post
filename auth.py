@@ -7,6 +7,7 @@ Threads API OAuth認証スクリプト
   python auth.py                     # truth_body_salonアカウントで認証
   python auth.py masahide            # masahide_takahashi_アカウントで認証
   python auth.py diet                # truth_nagaoka_daietto(ダイエット)アカウントで認証
+  python auth.py zutsu               # truth_nagaoka_zutsuu(頭痛)アカウントで認証
 """
 
 import os
@@ -153,6 +154,7 @@ ACCOUNT_CONFIG = {
     "masa":    {"token_key": "THREADS_ACCESS_TOKEN_MASA",    "uid_key": "THREADS_USER_ID_MASA",    "name": "@masahide_takahashi_"},
     "nagaoka": {"token_key": "THREADS_ACCESS_TOKEN_NAGAOKA", "uid_key": "THREADS_USER_ID_NAGAOKA", "name": "@truth_nagaoka"},
     "diet":    {"token_key": "THREADS_ACCESS_TOKEN_DIET",    "uid_key": "THREADS_USER_ID_DIET",    "name": "@truth_nagaoka_daietto"},
+    "zutsu":   {"token_key": "THREADS_ACCESS_TOKEN_ZUTSU",   "uid_key": "THREADS_USER_ID_ZUTSU",   "name": "@truth_nagaoka_zutsuu"},
 }
 
 
@@ -208,9 +210,10 @@ def push_to_github_secrets(env: dict, token_key: str, uid_key: str):
 
 def main():
     account = sys.argv[1] if len(sys.argv) > 1 else "truth"
-    # "diet"/"daietto" は @truth_nagaoka_daietto。"nagaoka" を含むので先に判定する(2026-11-02)
+    # "diet"/"daietto" は @truth_nagaoka_daietto、"zutsu" は @truth_nagaoka_zutsuu。"nagaoka" を含むので先に判定する(2026-11-02 / 11-05)
     _a = account.lower()
-    acct_key = ("diet" if ("diet" in _a or "daietto" in _a)
+    acct_key = ("zutsu" if "zutsu" in _a
+                else "diet" if ("diet" in _a or "daietto" in _a)
                 else "masa" if "masa" in _a
                 else "nagaoka" if "nagaoka" in _a else "truth")
     cfg = ACCOUNT_CONFIG[acct_key]

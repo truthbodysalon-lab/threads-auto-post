@@ -7105,7 +7105,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 0,
-    "created": "2026-11-04"
+    "created": "2026-11-05"
   },
   "売り先は、1つに絞らない。": {
     "segment": "HAKASE",
@@ -10316,7 +10316,7 @@
     "hook": "present",
     "present_key": "meo_50",
     "variant": 0,
-    "created": "2026-11-04"
+    "created": "2026-11-05"
   },
   "腕より、場所。": {
     "segment": "INSTA_EASY",
@@ -10336,7 +10336,7 @@
     "hook": "present",
     "present_key": "meo_50",
     "variant": 8,
-    "created": "2026-11-04"
+    "created": "2026-11-05"
   },
   "登録するサイトを増やす前に、決めておく絶対ルールがあります。": {
     "segment": "PRESENT_CTA",

@@ -50,7 +50,7 @@
   "寝ても疲労感が抜けない人へ。": {
     "segment": "T5",
     "hook": "high",
-    "created": "2026-11-03",
+    "created": "2026-11-05",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z17_truth"
@@ -164,7 +164,7 @@
   "産後の骨盤の歪みが気になるママへ。": {
     "segment": "T3",
     "hook": "high",
-    "created": "2026-11-01",
+    "created": "2026-11-05",
     "acct": "truth",
     "variant": 0
   },
@@ -202,14 +202,14 @@
   "不規則な勤務で通院を諦めた人へ。": {
     "segment": "T4",
     "hook": "high",
-    "created": "2026-11-01",
+    "created": "2026-11-05",
     "acct": "nagaoka",
     "variant": 0
   },
   "疲れが取れず気分も沈む人へ。": {
     "segment": "T5",
     "hook": "high",
-    "created": "2026-11-01",
+    "created": "2026-11-05",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z18_nagaoka"
@@ -217,7 +217,7 @@
   "施術で悪化した経験がある人へ。": {
     "segment": "T6",
     "hook": "high",
-    "created": "2026-11-01",
+    "created": "2026-11-05",
     "acct": "nagaoka",
     "variant": 0
   },
@@ -623,7 +623,7 @@
   "立ち仕事で脚がパンパンな人へ。": {
     "segment": "T4",
     "hook": "high",
-    "created": "2026-11-01",
+    "created": "2026-11-05",
     "acct": "truth",
     "variant": 0
   },
@@ -637,14 +637,14 @@
   "マッサージでは変わらないと感じる人へ。": {
     "segment": "T6",
     "hook": "high",
-    "created": "2026-11-01",
+    "created": "2026-11-05",
     "acct": "truth",
     "variant": 0
   },
   "骨盤の歪みが気になるママへ。": {
     "segment": "T3",
     "hook": "high",
-    "created": "2026-11-01",
+    "created": "2026-11-05",
     "acct": "nagaoka",
     "variant": 0
   },
@@ -2334,7 +2334,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 24,
-    "created": "2026-10-28",
+    "created": "2026-11-05",
     "acct": "truth"
   },
   "【食いしばり頭痛を遠ざける習慣6選】": {
@@ -5772,7 +5772,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 7,
-    "created": "2026-10-30",
+    "created": "2026-11-05",
     "acct": "nagaoka"
   },
   "インスタで、気分で投稿している院長へ質問です。": {
@@ -5909,7 +5909,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 14,
-    "created": "2026-10-26",
+    "created": "2026-11-05",
     "acct": "truth"
   },
   "【肩こりを溜めない仕事中の習慣7選】": {
@@ -6196,7 +6196,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 20,
-    "created": "2026-10-30",
+    "created": "2026-11-05",
     "acct": "nagaoka"
   },
   "インスタで、AIをどこから使えばいいか分からない院長へ質問です。": {
@@ -6787,7 +6787,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 10,
-    "created": "2026-11-04"
+    "created": "2026-11-05"
   },
   "ハイライトを、後回しにしない。": {
     "segment": "PRESENT_CTA",
@@ -6966,7 +6966,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 13,
-    "created": "2026-11-04"
+    "created": "2026-11-05"
   },
   "【出した投稿を、AIに直してもらう3本】": {
     "segment": "PRESENT_CTA",
@@ -8097,7 +8097,7 @@
     "segment": "WEATHER",
     "hook": "type",
     "variant": 1,
-    "created": "2026-10-31",
+    "created": "2026-11-05",
     "acct": "nagaoka"
   },
   "歩き出す前に、まず首の後ろを温めてみて。": {
@@ -8111,7 +8111,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 14,
-    "created": "2026-10-31",
+    "created": "2026-11-05",
     "acct": "nagaoka"
   },
   "湯船に入る前に、まず首の後ろにシャワーをあててみて。": {
@@ -8344,7 +8344,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 21,
-    "created": "2026-11-01",
+    "created": "2026-11-05",
     "acct": "truth"
   },
   "頭痛薬を飲んだあとは、まず首の後ろを温めてみて。": {
@@ -8379,28 +8379,28 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 4,
-    "created": "2026-11-01",
+    "created": "2026-11-05",
     "acct": "truth"
   },
   "頭痛薬を飲む前の1分で、首の後ろに蒸しタオルを。": {
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 27,
-    "created": "2026-11-01",
+    "created": "2026-11-05",
     "acct": "truth"
   },
   "運動を始める前に、まず首をゆっくり回して引っかかりを確かめてみて。": {
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 16,
-    "created": "2026-10-31",
+    "created": "2026-11-05",
     "acct": "truth"
   },
   "眠れない夜に焦る前に、まず息を長く吐いてみて。": {
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 12,
-    "created": "2026-10-31",
+    "created": "2026-11-05",
     "acct": "truth"
   },
   "肩を回す前に、まず息をゆっくり吐いてみて。": {
@@ -8442,7 +8442,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 1,
-    "created": "2026-10-31",
+    "created": "2026-11-05",
     "acct": "nagaoka"
   },
   "湿気の多い日に、体がだるい人へ。": {
@@ -8684,7 +8684,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 20,
-    "created": "2026-11-01",
+    "created": "2026-11-05",
     "acct": "truth"
   },
   "頭痛薬を持ち歩いている人は、首の後ろを一度触ってみてください。": {
@@ -8719,7 +8719,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 3,
-    "created": "2026-11-01",
+    "created": "2026-11-05",
     "acct": "truth"
   },
   "食いしばる前に、まず奥歯の力を抜いてみて。": {
@@ -8747,7 +8747,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 21,
-    "created": "2026-11-01",
+    "created": "2026-11-05",
     "acct": "nagaoka"
   },
   "頭が重い日が週に何日あるか、数えたことはありますか？": {
@@ -8999,7 +8999,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 26,
-    "created": "2026-11-01",
+    "created": "2026-11-05",
     "acct": "nagaoka"
   },
   "1日の中で、肩に力が入っている時間はいつですか？": {
@@ -9256,7 +9256,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 29,
-    "created": "2026-11-01",
+    "created": "2026-11-05",
     "acct": "truth"
   },
   "眠る前に、まず今日いちばん肩が重かった場面を思い出してみて。": {
@@ -9861,7 +9861,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 42,
-    "created": "2026-10-31",
+    "created": "2026-11-05",
     "acct": "truth"
   },
   "頭痛薬を飲むかどうか迷う日は、まず首の後ろの固さを確かめてみて。": {
@@ -9959,28 +9959,28 @@
     "segment": "WEATHER",
     "hook": "type",
     "variant": 25,
-    "created": "2026-10-31",
+    "created": "2026-11-05",
     "acct": "nagaoka"
   },
   "肩が上がっているのに気づくのは、朝・昼・夕方のどれですか？": {
     "segment": "QUESTION",
     "hook": "type",
     "variant": 12,
-    "created": "2026-10-31",
+    "created": "2026-11-05",
     "acct": "nagaoka"
   },
   "気温が急に下がった日の朝、肩が上がる人いますか？": {
     "segment": "WEATHER",
     "hook": "type",
     "variant": 27,
-    "created": "2026-10-31",
+    "created": "2026-11-05",
     "acct": "nagaoka"
   },
   "最近、空を見上げたのはいつですか？": {
     "segment": "QUESTION",
     "hook": "type",
     "variant": 21,
-    "created": "2026-10-31",
+    "created": "2026-11-05",
     "acct": "nagaoka"
   },
   "AIが本当に時短になるか、ストップウォッチで測って確かめられます。": {
@@ -10329,7 +10329,7 @@
     "hook": "present",
     "present_key": "meo_50",
     "variant": 2,
-    "created": "2026-11-04"
+    "created": "2026-11-05"
   },
   "サイトの登録画面は、どれも似た流れで進みます。": {
     "segment": "PRESENT_CTA",

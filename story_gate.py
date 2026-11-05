@@ -59,7 +59,8 @@ KNOWN_KINDS = ("friday_features", "offer", "qa_video")
 # ステップがある）で plan ができ、一度でもplanができれば、以後は nagaoka / truth と同じ扱い（専用日の起動もここから）。
 # 2026-10-23: diet はトークン登録済み（@truth_nagaoka_daietto・稼働中）なので外した。残していると plan が無い間ずっと
 #   「判定に含めない」になり、ストーリーの起動自体がスキップされて一度も始まらなかった。headache はトークン未登録のため残す。
-NEW_ACCOUNTS = ("headache",)
+# 2026-11-06: headache もトークン登録済み（@truth_nagaoka_zutsuu）なので外した。いまトークン登録待ちのアカウントは無い。
+NEW_ACCOUNTS = ()
 
 PLAN_PATH = "state/{acct}/story_plan.json"
 PLAN_PATH_OVERRIDE = {"masa": "state/story_plan.json"}

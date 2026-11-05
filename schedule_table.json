@@ -238,11 +238,7 @@
    "window_min": 30,
    "since": "slot",
    "enabled": true,
-   "weekdays": [
-    2,
-    4,
-    5
-   ],
+   "weekdays": [2, 5],
    "gate": "features",
    "skip_until": "2026-11-01 09:30",
    "catchup": true,
@@ -258,11 +254,7 @@
    "window_min": 30,
    "since": "slot",
    "enabled": true,
-   "weekdays": [
-    2,
-    4,
-    5
-   ],
+   "weekdays": [2, 5],
    "gate": "features",
    "skip_until": "2026-11-01 09:30",
    "catchup": true,
@@ -278,11 +270,7 @@
    "window_min": 30,
    "since": "slot",
    "enabled": true,
-   "weekdays": [
-    2,
-    4,
-    5
-   ],
+   "weekdays": [2, 5],
    "gate": "features",
    "skip_until": "2026-11-01 09:30",
    "catchup": true,
@@ -298,11 +286,7 @@
    "window_min": 30,
    "since": "slot",
    "enabled": true,
-   "weekdays": [
-    2,
-    4,
-    5
-   ],
+   "weekdays": [2, 5],
    "gate": "features",
    "skip_until": "2026-11-01 09:30",
    "catchup": true,
@@ -498,12 +482,7 @@
    "window_min": 30,
    "since": "slot",
    "enabled": true,
-   "weekdays": [
-    0,
-    1,
-    2,
-    3
-   ],
+   "weekdays": [0, 3, 4, 5],
    "gate": "offer",
    "skip_until": "2026-11-01 09:30",
    "catchup": true,
@@ -519,12 +498,7 @@
    "window_min": 30,
    "since": "slot",
    "enabled": true,
-   "weekdays": [
-    0,
-    1,
-    2,
-    3
-   ],
+   "weekdays": [0, 3, 4, 5],
    "gate": "offer",
    "skip_until": "2026-11-01 09:30",
    "catchup": true,
@@ -540,12 +514,7 @@
    "window_min": 30,
    "since": "slot",
    "enabled": true,
-   "weekdays": [
-    0,
-    1,
-    2,
-    3
-   ],
+   "weekdays": [0, 3, 4, 5],
    "gate": "offer",
    "skip_until": "2026-11-01 09:30",
    "catchup": true,
@@ -561,12 +530,7 @@
    "window_min": 30,
    "since": "slot",
    "enabled": true,
-   "weekdays": [
-    0,
-    1,
-    2,
-    3
-   ],
+   "weekdays": [0, 3, 4, 5],
    "gate": "offer",
    "skip_until": "2026-11-01 09:30",
    "catchup": true,
@@ -582,12 +546,7 @@
    "window_min": 30,
    "since": "slot",
    "enabled": true,
-   "weekdays": [
-    0,
-    1,
-    2,
-    3
-   ],
+   "weekdays": [0, 3, 4, 5],
    "gate": "offer",
    "skip_until": "2026-11-01 09:30",
    "catchup": true,
@@ -603,11 +562,7 @@
    "window_min": 30,
    "since": "slot",
    "enabled": true,
-   "weekdays": [
-    2,
-    4,
-    5
-   ],
+   "weekdays": [2, 5],
    "gate": "features",
    "skip_until": "2026-11-01 09:30",
    "catchup": true,

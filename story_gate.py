@@ -34,12 +34,12 @@ JST = timezone(timedelta(hours=9))
 
 # --- ig_story_pool.py / story_offer.py の定数の写し（tests/test_story_gate.py が一致を検査） ---
 STORY_GATE_DAYS = 2
-FRIDAY_WEEKDAY = 4                      # nagaoka の特徴シリーズ曜日（後方互換。正は FEATURES_WEEKDAY）
-FEATURES_WEEKDAY = {"nagaoka": 4, "headache": 2, "diet": 5}   # 2026-10-21: アカウント別（nagaoka=金 / headache=水 / diet=土）
+FRIDAY_WEEKDAY = 2                      # nagaoka の特徴シリーズ曜日（後方互換。正は FEATURES_WEEKDAY。名前は旧「金曜」のまま・値は水=2）
+FEATURES_WEEKDAY = {"nagaoka": 2, "headache": 2, "diet": 5}   # 2026-11-05: nagaoka を金→水へ（オファーと入替）。アカウント別（nagaoka=水 / headache=水 / diet=土）
 STORY_PLAN_MAX_AGE_HOURS = 36
 # 2026-10-21: diet（ダイエット特化）・headache（頭痛特化）を追加。曜日は既存と同じ種類が重ならないようにずらした
 QA_WEEKDAY = {"nagaoka": 5, "truth": 6, "headache": 4, "diet": 1}
-OFFER_WEEKDAY = {"nagaoka": 2, "truth": 1, "headache": 0, "diet": 3}
+OFFER_WEEKDAY = {"nagaoka": 4, "truth": 5, "headache": 0, "diet": 3}   # 2026-11-05: nagaoka 水→金 / truth 火→土
 
 # モードごとの対象アカウントと plan.kind（ig-story-*.yml のステップ構成と同じ）
 MODES = {

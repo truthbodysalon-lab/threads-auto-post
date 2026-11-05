@@ -6427,7 +6427,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 1,
-    "created": "2026-11-04"
+    "created": "2026-11-05"
   },
   "同じ発信をする人が増えても、困らない。": {
     "segment": "HAKASE",
@@ -10370,7 +10370,7 @@
     "hook": "present",
     "present_key": "meo_50",
     "variant": 9,
-    "created": "2026-11-04"
+    "created": "2026-11-05"
   },
   "MEOの登録は、1日1サイトで足ります。": {
     "segment": "PRESENT_CTA",

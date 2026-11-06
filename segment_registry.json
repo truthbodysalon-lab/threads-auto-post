@@ -10457,5 +10457,11 @@
     "hook": "gen",
     "variant": null,
     "created": "2026-11-06"
+  },
+  "【3ステップ】営業中は、お客様だけ見る。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-11-06"
   }
 }

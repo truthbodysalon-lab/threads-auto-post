@@ -10463,5 +10463,11 @@
     "hook": "gen",
     "variant": null,
     "created": "2026-11-06"
+  },
+  "結論、最初の投稿は、ほとんど誰も見ていない。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-11-06"
   }
 }

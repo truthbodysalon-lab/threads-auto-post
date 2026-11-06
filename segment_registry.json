@@ -6427,7 +6427,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 1,
-    "created": "2026-11-06"
+    "created": "2026-11-07"
   },
   "同じ発信をする人が増えても、困らない。": {
     "segment": "HAKASE",
@@ -6458,7 +6458,7 @@
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 30,
-    "created": "2026-10-31"
+    "created": "2026-11-07"
   },
   "100点を待つより、60点で出す。": {
     "segment": "INSTA_EASY",
@@ -6476,7 +6476,7 @@
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 65,
-    "created": "2026-10-31"
+    "created": "2026-11-07"
   },
   "DMの最初の返事は、20文字で足ります。": {
     "segment": "INSTA_EASY",
@@ -6603,7 +6603,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 11,
-    "created": "2026-11-06"
+    "created": "2026-11-07"
   },
   "ストーリーズは、空欄を埋めれば4枚できる。": {
     "segment": "PRESENT_CTA",
@@ -6966,7 +6966,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 13,
-    "created": "2026-11-06"
+    "created": "2026-11-07"
   },
   "【出した投稿を、AIに直してもらう3本】": {
     "segment": "PRESENT_CTA",
@@ -7256,7 +7256,7 @@
   "「どうしますか」と聞いている院長へ。": {
     "segment": "R04",
     "hook": "high",
-    "created": "2026-11-01",
+    "created": "2026-11-07",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -7539,7 +7539,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 4,
-    "created": "2026-11-06"
+    "created": "2026-11-07"
   },
   "良い投稿の前に、プロフィールを直す。": {
     "segment": "HAKASE",
@@ -8649,7 +8649,7 @@
   "ストーリーズは、作り込むほど、見られなくなります。": {
     "segment": "I09",
     "hook": "high",
-    "created": "2026-11-04",
+    "created": "2026-11-07",
     "acct": "masa",
     "axis": "insta_pain",
     "variant": null,
@@ -9625,7 +9625,7 @@
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-10-30"
+    "created": "2026-11-07"
   },
   "結論、投稿までは、3タップで終わる。": {
     "segment": "INSTA_EASY",
@@ -10316,7 +10316,7 @@
     "hook": "present",
     "present_key": "meo_50",
     "variant": 0,
-    "created": "2026-11-06"
+    "created": "2026-11-07"
   },
   "腕より、場所。": {
     "segment": "INSTA_EASY",
@@ -10363,7 +10363,7 @@
     "hook": "present",
     "present_key": "meo_50",
     "variant": 4,
-    "created": "2026-11-06"
+    "created": "2026-11-07"
   },
   "Googleマップ対策を、今日から始めたい方へ。": {
     "segment": "PRESENT_CTA",

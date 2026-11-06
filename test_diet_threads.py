@@ -429,5 +429,30 @@ class TestQuality20261102(unittest.TestCase):
         self.assertTrue(D.stock_phrase_errors("「続かない」方、本当に多いです。", recent))
         self.assertEqual(D.stock_phrase_errors("「続かない」と感じる日、ありますよね。", ["まったく別の投稿です。"]), [])
 
+
+class TestBa20261106(unittest.TestCase):
+    """院長指示（2026-11-06）: BA事例を固定文で every_days 日に1本"""
+    CFG = {"enabled": True, "slot": "12:30", "every_days": 3,
+           "posts": [{"key": "a", "text": "A"}, {"key": "b", "text": "B"}]}
+    NOW = datetime(2026, 11, 10, 12, 30, tzinfo=D.JST)
+
+    def test_disabled_or_other_slot(self):
+        self.assertIsNone(D.pick_ba([], "12:30", self.NOW, dict(self.CFG, enabled=False)))
+        self.assertIsNone(D.pick_ba([], "13:30", self.NOW, self.CFG))
+
+    def test_rotation_and_gap(self):
+        self.assertEqual(D.pick_ba([], "12:30", self.NOW, self.CFG)["key"], "a")
+        e = [{"type": "ba", "ba_key": "a", "ts": (self.NOW - timedelta(days=1)).isoformat()}]
+        self.assertIsNone(D.pick_ba(e, "12:30", self.NOW, self.CFG))
+        e = [{"type": "ba", "ba_key": "a", "ts": (self.NOW - timedelta(days=3)).isoformat()}]
+        self.assertEqual(D.pick_ba(e, "12:30", self.NOW, self.CFG)["key"], "b")
+
+    def test_real_file_passes_inspection(self):
+        cfg = D.load_ba()
+        self.assertTrue(cfg.get("posts"))
+        for p in cfg["posts"]:
+            self.assertEqual([x for x in D.inspect_text(p["text"], False) if x not in D.BA_ALLOWED_NG], [], p["key"])
+
+
 if __name__ == "__main__":
     unittest.main()

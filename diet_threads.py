@@ -507,6 +507,69 @@ def pick_slot(arg: str | None, now: datetime) -> str:
     return prev[-1] if prev else SLOTS[0]
 
 
+# ── BA事例（2026-11-06 院長指示）──────────────────────
+# 数字は diet_threads_ba.json の固定文だけ（AIに書かせない）。決まった枠で every_days 日に1本。
+# 固定文にも検品をかけ、数字・期間の2項目だけは許す（それ以外のNGがあれば出さない）。
+
+BA_FILE = BASE / "diet_threads_ba.json"
+BA_ALLOWED_NG = {"NG表現: 体重・サイズ・割合の数値", "NG表現: 期間の約束"}
+
+
+def load_ba(path: Path | None = None) -> dict:
+    try:
+        return json.loads((path or BA_FILE).read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+
+
+def pick_ba(entries: list[dict], slot: str, now: datetime, cfg: dict | None = None) -> dict | None:
+    """今日のこの枠をBA事例にするなら投稿(dict: key,text)、しないなら None"""
+    cfg = load_ba() if cfg is None else cfg
+    posts = [p for p in cfg.get("posts", []) if p.get("key") and p.get("text")]
+    if not cfg.get("enabled") or not posts or slot != cfg.get("slot"):
+        return None
+    last = {}
+    for e in entries:
+        if e.get("type") == "ba":
+            t = parse_ts(e.get("ts", ""))
+            if t:
+                last[e.get("ba_key", "")] = max(last.get(e.get("ba_key", ""), t), t)
+    if last and now - max(last.values()) < timedelta(days=float(cfg.get("every_days", 3))):
+        return None
+    old = datetime(2000, 1, 1, tzinfo=JST)
+    return min(posts, key=lambda p: (last.get(p["key"], old), posts.index(p)))
+
+
+def post_ba(ba: dict, slot: str, now: datetime, dry_run: bool, token: str, uid: str, publisher,
+            log_path: Path | None, pause_path: Path) -> int:
+    errs = [e for e in inspect_text(ba["text"], False) if e not in BA_ALLOWED_NG]
+    if errs:
+        log(f"BA事例 {ba['key']} を見送り: {errs}")
+        notify(f"{slot}枠のBA事例({ba['key']})を見送り: 固定文の検品NG {errs[:3]}。diet_threads_ba.json を直してください")
+        return 0
+    if dry_run:
+        print("----- DRY_RUN BA事例 -----")
+        print(f"[枠 {slot} / {ba['key']}]")
+        print(ba["text"])
+        print("--------------------------")
+        return 0
+    try:
+        pid = publisher(token, uid, ba["text"])
+    except Exception as e:
+        log(f"投稿失敗(BA事例): {e}")
+        if is_pause_error(e):
+            pause_and_notify(str(e), slot, now, pause_path)
+            return 0
+        notify(f"{slot}枠のBA事例の投稿に失敗: {str(e)[:150]}")
+        return 0
+    append_log({
+        "ts": now.isoformat(timespec="seconds"), "slot": slot, "id": pid, "type": "ba", "ba_key": ba["key"],
+        "has_cta": False, "text_hash": hashlib.sha256(ba["text"].encode("utf-8")).hexdigest()[:16], "text": ba["text"],
+    }, log_path)
+    log(f"投稿完了 id={pid} BA事例={ba['key']}")
+    return 0
+
+
 def run(slot: str | None = None, now: datetime | None = None, dry_run: bool = False, generator=None,
         fetch=None, publisher=None, sleeper=time.sleep, rng: random.Random | None = None,
         log_path: Path | None = None, pause_path: Path | None = None) -> int:
@@ -560,6 +623,10 @@ def run(slot: str | None = None, now: datetime | None = None, dry_run: bool = Fa
         else:
             log(f"見送り: 直前の投稿から{gap:.0f}分(30分未満)")
             return 0
+
+    ba = pick_ba(entries, slot, now)
+    if ba:
+        return post_ba(ba, slot, now, dry_run, token, uid, publisher, log_path, pause_path)
 
     cta_ok, cta_reason = cta_status(recent, now)
     allow_cta = cta_ok and slot in CTA_SLOTS

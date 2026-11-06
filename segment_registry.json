@@ -6433,7 +6433,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 15,
-    "created": "2026-11-05"
+    "created": "2026-11-06"
   },
   "ぶっちゃけ、次に何を出すかの答えは、過去の投稿にあります。": {
     "segment": "PRESENT_CTA",
@@ -7545,7 +7545,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 7,
-    "created": "2026-11-05"
+    "created": "2026-11-06"
   },
   "ぶっちゃけ、続かない人は、次に何をやるかが決まっていません。": {
     "segment": "PRESENT_CTA",
@@ -10297,7 +10297,7 @@
     "hook": "present",
     "present_key": "meo_50",
     "variant": 7,
-    "created": "2026-11-05"
+    "created": "2026-11-06"
   },
   "結論、リールは、写真3枚でも作れる。": {
     "segment": "INSTA_EASY",

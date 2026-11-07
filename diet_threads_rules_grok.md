@@ -1,8 +1,8 @@
 # Grokのrules.md 原文の抜き書き（ダイエットThreads @truth_nagaoka_daietto 用）
 
-- 生成日時: 2026-11-07 10:57 JST（~/.claude/scripts/diet_threads_rules_sync.py による自動抜き書き。手で編集しない）
+- 生成日時: 2026-11-08 06:40 JST（~/.claude/scripts/diet_threads_rules_sync.py による自動抜き書き。手で編集しない）
 - 元ファイル（Obsidian vault相対）: SNS・Threads/X・Threads自動運用（Grok）/rules.md
-- 元ファイルのsha256: b2952cd97122719078c0f1a35b2cf4c5e4b3ffc531b8f2a4370a8a60184ca867
+- 元ファイルのsha256: 9c03eaa5913fd1a90d00f424b552b4044082b6341c26871fc9c922ccc26aed85
 - 原文の抜き書き。diet_threads_rules.md（要約）と食い違う場合は、こちらの新しい日付の記述が優先
 - 除外: X運用・@masahide系・Buffer・DM・Obsidian保存ルール（公開リポジトリのため）
 
@@ -71,7 +71,7 @@
 - 【2026-11-07 ユーザー指示・最優先（「Threadsの投稿に関しては文章がながい。太りやすい食材や食べ方、痩せやすい方法を端的にまとめて投稿とかツリー投稿を活用して」「Grokも短くして」）】@truth_nagaoka_daietto の自分の投稿（通常・栄養ネタ枠・追加投稿の10件。引用・コメント・返信は対象外）は、すべて短文にする。1〜2行・30〜50字（上限60字）で要点を1つだけ。前置き・言い訳・まわりくどい言い方をしない。上の「投稿の長さミックス」の長文・中くらいの長さは使わない（この記述が優先）。テーマは「太りやすい食材」「太りやすい食べ方」「やせやすい方法・続けやすい食べ方」「よくある勘違い」「お悩み別の食材（生理前に食べたくなる・むくみやすい・夜にお腹が空く など）」を回す。中身は今までどおり threads-sources/ の講座ノートにあることだけ。ツリーはブラウザ投稿で2つ目が消える件が未解決なので Grok では使わず、API投稿（threads-auto-post の diet_threads.py・1日21本）が短文とツリーを半々で担当する。公式LINE案内（1日2本まで・Grokの分と合算）の固定文は字数に数えない。
 
 <!-- autolink:keywords:start -->
-🔑 キーワード: [[myfiles/🔑 キーワード/投稿|投稿]] ・ [[myfiles/🔑 キーワード/Threads|Threads]] ・ [[myfiles/🔑 キーワード/ダイエット|ダイエット]] ・ [[myfiles/🔑 キーワード/ニュース|ニュース]] ・ [[myfiles/🔑 キーワード/実体験|実体験]] ・ [[myfiles/🔑 キーワード/Instagram|Instagram]] ・ [[myfiles/🔑 キーワード/採用|採用]] ・ [[myfiles/🔑 キーワード/ブラウザ|ブラウザ]]
+🔑 キーワード: [[myfiles/🔑 キーワード/投稿|投稿]] ・ [[myfiles/🔑 キーワード/Threads|Threads]] ・ [[myfiles/🔑 キーワード/ダイエット|ダイエット]] ・ [[myfiles/🔑 キーワード/ニュース|ニュース]] ・ [[myfiles/🔑 キーワード/実体験|実体験]] ・ [[myfiles/🔑 キーワード/Instagram|Instagram]] ・ [[myfiles/🔑 キーワード/ブラウザ|ブラウザ]] ・ [[myfiles/🔑 キーワード/採用|採用]]
 <!-- autolink:keywords:end -->
 
 <!-- autolink:related:start -->

@@ -50,7 +50,7 @@
   "寝ても疲労感が抜けない人へ。": {
     "segment": "T5",
     "hook": "high",
-    "created": "2026-11-05",
+    "created": "2026-11-07",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z17_truth"
@@ -82,7 +82,7 @@
   "朝起きた瞬間からだるい人へ。": {
     "segment": "T5",
     "hook": "high",
-    "created": "2026-11-03",
+    "created": "2026-11-07",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z16_nagaoka"
@@ -616,7 +616,7 @@
   "抱っこや授乳で腰が痛むママへ。": {
     "segment": "T3",
     "hook": "high",
-    "created": "2026-11-03",
+    "created": "2026-11-07",
     "acct": "truth",
     "variant": 1
   },
@@ -651,7 +651,7 @@
   "立ちっぱなしで脚がパンパンな人へ。": {
     "segment": "T4",
     "hook": "high",
-    "created": "2026-11-03",
+    "created": "2026-11-07",
     "acct": "nagaoka",
     "variant": 1
   },
@@ -665,7 +665,7 @@
   "揉んでもすぐ戻ると感じる人へ。": {
     "segment": "T6",
     "hook": "high",
-    "created": "2026-11-03",
+    "created": "2026-11-07",
     "acct": "nagaoka",
     "variant": 1
   },
@@ -724,21 +724,21 @@
   "介護の抱え上げで腰を痛めた人へ。": {
     "segment": "T4",
     "hook": "high",
-    "created": "2026-11-03",
+    "created": "2026-11-07",
     "acct": "truth",
     "variant": 1
   },
   "他院に通っても改善しない人へ。": {
     "segment": "T6",
     "hook": "high",
-    "created": "2026-11-03",
+    "created": "2026-11-07",
     "acct": "truth",
     "variant": 1
   },
   "抱っこで腕がだるいママへ。": {
     "segment": "T3",
     "hook": "high",
-    "created": "2026-11-03",
+    "created": "2026-11-07",
     "acct": "nagaoka",
     "variant": 1
   },
@@ -2475,7 +2475,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 23,
-    "created": "2026-11-01",
+    "created": "2026-11-07",
     "acct": "nagaoka"
   },
   "インスタで、ハッシュタグに悩む人へ。": {
@@ -2688,7 +2688,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 8,
-    "created": "2026-10-28",
+    "created": "2026-11-07",
     "acct": "truth"
   },
   "【抱っこで肩がつらいママの習慣6選】": {
@@ -5366,7 +5366,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 3,
-    "created": "2026-10-20",
+    "created": "2026-11-07",
     "acct": "truth"
   },
   "【マッサージで3日しか持たない人がやめること6選】": {
@@ -6280,7 +6280,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 12,
-    "created": "2026-11-01",
+    "created": "2026-11-07",
     "acct": "nagaoka"
   },
   "リールは広告のように作るものだと思っている院長へ質問です。": {
@@ -8214,7 +8214,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 6,
-    "created": "2026-11-02",
+    "created": "2026-11-07",
     "acct": "truth"
   },
   "横になる前に、まず首の後ろの冷えを確かめてみて。": {
@@ -8277,7 +8277,7 @@
     "segment": "WEATHER",
     "hook": "type",
     "variant": 13,
-    "created": "2026-11-02",
+    "created": "2026-11-07",
     "acct": "nagaoka"
   },
   "「まだ我慢できる」と思いながら、何日過ごしていますか？": {
@@ -8305,7 +8305,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 17,
-    "created": "2026-11-03",
+    "created": "2026-11-07",
     "acct": "nagaoka"
   },
   "買い物に出かける前に、まず首を冷やさない服を選んでみて。": {
@@ -8435,7 +8435,7 @@
     "segment": "QUESTION",
     "hook": "type",
     "variant": 8,
-    "created": "2026-11-02",
+    "created": "2026-11-07",
     "acct": "nagaoka"
   },
   "湿布を貼る前に、まず痛い場所を指で確かめてみて。": {
@@ -8463,7 +8463,7 @@
     "segment": "QUESTION",
     "hook": "type",
     "variant": 3,
-    "created": "2026-11-02",
+    "created": "2026-11-07",
     "acct": "nagaoka"
   },
   "「ご夫婦ですか？」と、たまに聞かれます。": {
@@ -8531,7 +8531,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 15,
-    "created": "2026-11-03",
+    "created": "2026-11-07",
     "acct": "truth"
   },
   "頭が痛くなる前に、まず自分の「いつもの合図」を探してみて。": {
@@ -8601,7 +8601,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 10,
-    "created": "2026-11-03",
+    "created": "2026-11-07",
     "acct": "nagaoka"
   },
   "冷える前に、まず首元を一枚足してみて。": {
@@ -8615,7 +8615,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 15,
-    "created": "2026-11-02",
+    "created": "2026-11-07",
     "acct": "nagaoka"
   },
   "雨の朝は、頭が重くて起きにくい人いますか？": {
@@ -8775,7 +8775,7 @@
     "segment": "WEATHER",
     "hook": "type",
     "variant": 11,
-    "created": "2026-11-02",
+    "created": "2026-11-07",
     "acct": "nagaoka"
   },
   "今日は一度でも、肩を落としましたか？": {
@@ -8950,14 +8950,14 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 22,
-    "created": "2026-11-03",
+    "created": "2026-11-07",
     "acct": "truth"
   },
   "頭痛薬を飲む前に、まず肩の力を抜いて息を長く吐いてみて。": {
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 23,
-    "created": "2026-11-03",
+    "created": "2026-11-07",
     "acct": "truth"
   },
   "鎮痛剤を飲むたびに、頭が重くなった時間をメモしてみて。": {
@@ -9106,7 +9106,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 7,
-    "created": "2026-11-02",
+    "created": "2026-11-07",
     "acct": "truth"
   },
   "相談する前に、まず「いつ重くなるか」を思い出してみて。": {
@@ -9120,7 +9120,7 @@
     "segment": "WEATHER",
     "hook": "type",
     "variant": 15,
-    "created": "2026-11-02",
+    "created": "2026-11-07",
     "acct": "nagaoka"
   },
   "我慢する前に、まず首の後ろを触ってみて。": {
@@ -9134,7 +9134,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 19,
-    "created": "2026-11-02",
+    "created": "2026-11-07",
     "acct": "nagaoka"
   },
   "冬が来る前に、まず首元を冷やさない準備をしておいてみて。": {
@@ -9249,7 +9249,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 9,
-    "created": "2026-11-02",
+    "created": "2026-11-07",
     "acct": "truth"
   },
   "テレビをつける前に、まず寝る前の10分、首をゆっくり動かしてみて。": {
@@ -9714,7 +9714,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 31,
-    "created": "2026-11-03",
+    "created": "2026-11-07",
     "acct": "truth"
   },
   "頭痛薬を飲んだ翌朝に、首を左右に倒してみて。": {
@@ -9735,7 +9735,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 30,
-    "created": "2026-11-03",
+    "created": "2026-11-07",
     "acct": "truth"
   },
   "雨が続く週に、肩が抜けない人いますか？": {
@@ -10088,7 +10088,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 31,
-    "created": "2026-11-03",
+    "created": "2026-11-07",
     "acct": "truth"
   },
   "『月に1回の頭痛で、予定が崩れる』という声を、よく聞きます。": {
@@ -10356,7 +10356,7 @@
     "hook": "present",
     "present_key": "meo_50",
     "variant": 6,
-    "created": "2026-11-06"
+    "created": "2026-11-07"
   },
   "飲食店、美容室、治療院、士業、不動産。": {
     "segment": "PRESENT_CTA",

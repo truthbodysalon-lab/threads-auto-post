@@ -3823,7 +3823,7 @@
   "都度払いのお客様が、そのまま離れる院長へ。": {
     "segment": "R05",
     "hook": "low",
-    "created": "2026-11-02",
+    "created": "2026-11-08",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -6158,7 +6158,7 @@
   "毎回の予約が面倒と言われる院長へ。": {
     "segment": "R06",
     "hook": "low",
-    "created": "2026-11-02",
+    "created": "2026-11-08",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -6966,7 +6966,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 13,
-    "created": "2026-11-07"
+    "created": "2026-11-08"
   },
   "【出した投稿を、AIに直してもらう3本】": {
     "segment": "PRESENT_CTA",
@@ -6985,7 +6985,7 @@
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-10-29"
+    "created": "2026-11-08"
   },
   "先週の閲覧数は、1分で分かる。": {
     "segment": "INSTA_EASY",
@@ -7450,7 +7450,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 6,
-    "created": "2026-11-07"
+    "created": "2026-11-08"
   },
   "感覚より、数字の方が正直です。": {
     "segment": "HAKASE",
@@ -7767,7 +7767,7 @@
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-10-23"
+    "created": "2026-11-08"
   },
   "【3ステップ】顔より、手元と道具。": {
     "segment": "INSTA_EASY",
@@ -8500,7 +8500,7 @@
     "segment": "WIN_HOOK",
     "hook": "winning",
     "variant": 5,
-    "created": "2026-11-01"
+    "created": "2026-11-08"
   },
   "インスタのプロフィールに書くのは、たった3つ。": {
     "segment": "WIN_HOOK",
@@ -9073,7 +9073,7 @@
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-10-27"
+    "created": "2026-11-08"
   },
   "いいねは押さなくても、見られていることがある。": {
     "segment": "INSTA_EASY",
@@ -10316,7 +10316,7 @@
     "hook": "present",
     "present_key": "meo_50",
     "variant": 0,
-    "created": "2026-11-07"
+    "created": "2026-11-08"
   },
   "腕より、場所。": {
     "segment": "INSTA_EASY",
@@ -10532,5 +10532,11 @@
     "variant": "hero",
     "created": "2026-11-08",
     "acct": "nagaoka"
+  },
+  "【3ステップ】数えれば、次の手が見える。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-11-08"
   }
 }

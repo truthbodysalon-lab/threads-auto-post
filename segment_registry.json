@@ -7272,7 +7272,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 12,
-    "created": "2026-11-06"
+    "created": "2026-11-07"
   },
   "ぶっちゃけ、プロフィールは自分で悩むほど遠回りです。": {
     "segment": "PRESENT_CTA",
@@ -10377,7 +10377,7 @@
     "hook": "present",
     "present_key": "meo_50",
     "variant": 3,
-    "created": "2026-11-06"
+    "created": "2026-11-07"
   },
   "閉店後に作れば、営業中はお客様に集中できる。": {
     "segment": "INSTA_EASY",

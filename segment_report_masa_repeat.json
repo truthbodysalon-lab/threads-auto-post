@@ -1,6 +1,6 @@
 {
   "acct": "masa_repeat",
-  "generated_at": "2026-11-03 10:43",
+  "generated_at": "2026-11-07 10:45",
   "params": {
     "min_n": 5,
     "loser_min_n": 8,
@@ -13,16 +13,16 @@
     ]
   },
   "registry_loaded": 58,
-  "log_entries": 8247,
+  "log_entries": 8445,
   "windows": {
     "7d": {
       "baseline": {
-        "n": 181,
+        "n": 197,
         "median_views": 5,
-        "mean_views": 22.9,
-        "p90_views": 67.0
+        "mean_views": 24.2,
+        "p90_views": 55.4
       },
-      "unregistered_n": 181,
+      "unregistered_n": 197,
       "segment_hook": {
         "R01__low": {
           "n": 0,
@@ -723,12 +723,12 @@
     },
     "14d": {
       "baseline": {
-        "n": 181,
+        "n": 197,
         "median_views": 5,
-        "mean_views": 22.9,
-        "p90_views": 67.0
+        "mean_views": 24.2,
+        "p90_views": 55.4
       },
-      "unregistered_n": 181,
+      "unregistered_n": 197,
       "segment_hook": {
         "R01__low": {
           "n": 0,
@@ -1429,12 +1429,12 @@
     },
     "30d": {
       "baseline": {
-        "n": 181,
+        "n": 197,
         "median_views": 5,
-        "mean_views": 22.9,
-        "p90_views": 67.0
+        "mean_views": 24.2,
+        "p90_views": 55.4
       },
-      "unregistered_n": 181,
+      "unregistered_n": 197,
       "segment_hook": {
         "R01__low": {
           "n": 0,

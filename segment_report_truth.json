@@ -1,6 +1,6 @@
 {
   "acct": "truth",
-  "generated_at": "2026-11-03 10:43",
+  "generated_at": "2026-11-07 10:45",
   "params": {
     "min_n": 5,
     "loser_min_n": 8,
@@ -12,17 +12,17 @@
       30
     ]
   },
-  "registry_loaded": 190,
-  "log_entries": 8165,
+  "registry_loaded": 201,
+  "log_entries": 8362,
   "windows": {
     "7d": {
       "baseline": {
-        "n": 195,
-        "median_views": 69,
-        "mean_views": 131.2,
-        "p90_views": 297.0
+        "n": 197,
+        "median_views": 58,
+        "mean_views": 103.7,
+        "p90_views": 262.4
       },
-      "unregistered_n": 195,
+      "unregistered_n": 197,
       "segment_hook": {
         "T1_desk__low": {
           "n": 0,
@@ -422,12 +422,12 @@
     },
     "14d": {
       "baseline": {
-        "n": 195,
-        "median_views": 69,
-        "mean_views": 131.2,
-        "p90_views": 297.0
+        "n": 197,
+        "median_views": 58,
+        "mean_views": 103.7,
+        "p90_views": 262.4
       },
-      "unregistered_n": 195,
+      "unregistered_n": 197,
       "segment_hook": {
         "T1_desk__low": {
           "n": 0,
@@ -827,12 +827,12 @@
     },
     "30d": {
       "baseline": {
-        "n": 195,
-        "median_views": 69,
-        "mean_views": 131.2,
-        "p90_views": 297.0
+        "n": 197,
+        "median_views": 58,
+        "mean_views": 103.7,
+        "p90_views": 262.4
       },
-      "unregistered_n": 195,
+      "unregistered_n": 197,
       "segment_hook": {
         "T1_desk__low": {
           "n": 0,
@@ -1738,18 +1738,18 @@
   },
   "type_report": {
     "7d": {
-      "baseline_median": 69,
-      "n": 195,
+      "baseline_median": 58,
+      "n": 197,
       "types": {
         "MAE_MAZU": {
-          "n": 8,
-          "median_views": 46.5,
-          "index": 0.67
+          "n": 6,
+          "median_views": 30.5,
+          "index": 0.53
         },
         "ZUTSUYAKU": {
-          "n": 14,
-          "median_views": 147.0,
-          "index": 2.13
+          "n": 3,
+          "median_views": 308,
+          "index": 5.31
         },
         "WEATHER": {
           "n": 0,
@@ -1762,9 +1762,9 @@
           "index": 0.0
         },
         "CUSTOMER_VOICE": {
-          "n": 0,
-          "median_views": 0,
-          "index": 0.0
+          "n": 1,
+          "median_views": 109,
+          "index": 1.88
         },
         "LIST_HABIT": {
           "n": 0,
@@ -1772,30 +1772,30 @@
           "index": 0.0
         },
         "own_adapt": {
-          "n": 0,
-          "median_views": 0,
-          "index": 0.0
+          "n": 11,
+          "median_views": 151,
+          "index": 2.6
         },
         "image": {
-          "n": 12,
-          "median_views": 15.5,
-          "index": 0.22
+          "n": 10,
+          "median_views": 25.5,
+          "index": 0.44
         }
       }
     },
     "14d": {
-      "baseline_median": 69,
-      "n": 195,
+      "baseline_median": 58,
+      "n": 197,
       "types": {
         "MAE_MAZU": {
-          "n": 8,
-          "median_views": 46.5,
-          "index": 0.67
+          "n": 6,
+          "median_views": 30.5,
+          "index": 0.53
         },
         "ZUTSUYAKU": {
-          "n": 14,
-          "median_views": 147.0,
-          "index": 2.13
+          "n": 3,
+          "median_views": 308,
+          "index": 5.31
         },
         "WEATHER": {
           "n": 0,
@@ -1808,9 +1808,9 @@
           "index": 0.0
         },
         "CUSTOMER_VOICE": {
-          "n": 0,
-          "median_views": 0,
-          "index": 0.0
+          "n": 1,
+          "median_views": 109,
+          "index": 1.88
         },
         "LIST_HABIT": {
           "n": 0,
@@ -1818,30 +1818,30 @@
           "index": 0.0
         },
         "own_adapt": {
-          "n": 0,
-          "median_views": 0,
-          "index": 0.0
+          "n": 11,
+          "median_views": 151,
+          "index": 2.6
         },
         "image": {
-          "n": 12,
-          "median_views": 15.5,
-          "index": 0.22
+          "n": 10,
+          "median_views": 25.5,
+          "index": 0.44
         }
       }
     },
     "30d": {
-      "baseline_median": 69,
-      "n": 195,
+      "baseline_median": 58,
+      "n": 197,
       "types": {
         "MAE_MAZU": {
-          "n": 8,
-          "median_views": 46.5,
-          "index": 0.67
+          "n": 6,
+          "median_views": 30.5,
+          "index": 0.53
         },
         "ZUTSUYAKU": {
-          "n": 14,
-          "median_views": 147.0,
-          "index": 2.13
+          "n": 3,
+          "median_views": 308,
+          "index": 5.31
         },
         "WEATHER": {
           "n": 0,
@@ -1854,9 +1854,9 @@
           "index": 0.0
         },
         "CUSTOMER_VOICE": {
-          "n": 0,
-          "median_views": 0,
-          "index": 0.0
+          "n": 1,
+          "median_views": 109,
+          "index": 1.88
         },
         "LIST_HABIT": {
           "n": 0,
@@ -1864,14 +1864,14 @@
           "index": 0.0
         },
         "own_adapt": {
-          "n": 0,
-          "median_views": 0,
-          "index": 0.0
+          "n": 11,
+          "median_views": 151,
+          "index": 2.6
         },
         "image": {
-          "n": 12,
-          "median_views": 15.5,
-          "index": 0.22
+          "n": 10,
+          "median_views": 25.5,
+          "index": 0.44
         }
       }
     }

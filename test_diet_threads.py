@@ -183,7 +183,7 @@ class TestGuards(Base):
         self.published = []
         self.gen_calls = []
 
-    def pub(self, token, uid, text):
+    def pub(self, token, uid, text, reply_to=""):
         self.published.append(text); return "pid1"
 
     def gen(self, system, user):
@@ -387,11 +387,11 @@ class TestMisc(unittest.TestCase):
             self.assertNotEqual(fmt, "short")
 
     def test_format_distribution_roughly(self):
-        c = {"short": 0, "medium": 0, "long": 0}
+        c = {"short": 0, "tree": 0}
         rng = random.Random(0)
         for _ in range(2000):
             f, _ = D.choose_format_and_type([], "13:00", rng); c[f] += 1
-        self.assertGreater(c["short"] / 2000, 0.35); self.assertGreater(c["long"] / 2000, 0.28)
+        self.assertGreater(c["short"] / 2000, 0.4); self.assertGreater(c["tree"] / 2000, 0.4)
 
     def test_parse_ts(self):
         self.assertEqual(D.parse_ts("2026-11-02T03:00:00+0000").hour, 12)
@@ -452,6 +452,33 @@ class TestBa20261106(unittest.TestCase):
         self.assertTrue(cfg.get("posts"))
         for p in cfg["posts"]:
             self.assertEqual([x for x in D.inspect_text(p["text"], False) if x not in D.BA_ALLOWED_NG], [], p["key"])
+
+
+class TestTree20261107(Base):
+    """院長指示（2026-11-07）: 短く端的に・ツリーを活用"""
+    def test_tree_lengths(self):
+        ok = {"text": "ナッツは太る？", "replies": ["量を決めれば味方です。", "まずは小皿1つから。"], "type": "t", "has_cta": False}
+        self.assertEqual(D.length_errors(ok, "tree"), [])
+        self.assertTrue(D.length_errors(dict(ok, replies=["1つだけ"]), "tree"))
+        self.assertTrue(D.length_errors(dict(ok, text="あ" * 60), "tree"))
+        self.assertTrue(D.length_errors({"text": "あ" * 80, "replies": [], "type": "t", "has_cta": False}, "short"))
+
+    def test_tree_is_published_as_chain(self):
+        os.environ["THREADS_ACCESS_TOKEN_DIET"] = "dummy"; os.environ["THREADS_USER_ID_DIET"] = "123"
+        calls = []
+        def pub(token, uid, text, reply_to=""):
+            calls.append((text, reply_to)); return f"id{len(calls)}"
+        tree = {"text": "夜にお腹が空く日は？", "replies": ["豆腐やヨーグルトを少し。", "我慢しすぎない方が続きます。"], "type": "t", "has_cta": False}
+        gen = lambda s, u: json.dumps(tree, ensure_ascii=False)
+        self.run_(slot="13:30", now=NOW.replace(hour=13, minute=30), fetch=lambda t, n: [], publisher=pub, generator=gen,
+                  rng=random.Random(1), sleeper=lambda s: None)
+        if len(calls) == 3:   # 乱数でツリーが選ばれた場合
+            self.assertEqual([c[1] for c in calls], ["", "id1", "id2"])
+
+    def test_pick_topic_avoids_recent(self):
+        topics = [{"id": "a"}, {"id": "b"}]
+        self.assertEqual(D.pick_topic([{"topic_id": "a"}], random.Random(0), topics)["id"], "b")
+        self.assertTrue(D.load_topics())
 
 
 if __name__ == "__main__":

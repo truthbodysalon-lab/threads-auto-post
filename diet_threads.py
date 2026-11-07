@@ -51,12 +51,18 @@ MODELS = ["claude-haiku-4-5-20251001", "claude-sonnet-4-5"]  # 先頭から試�
 CTA_TEXT = "気になる方は公式LINE（@886oidmv）で『相談』と送ってください。院長が直接お返事します"
 CTA_MARK = "@886oidmv"
 
-TYPES = ["悩みの言い当て", "よくある勘違いをほどく", "今日からできる小さなコツ", "相談の入口", "人柄が出るつぶやき"]
+# 2026-11-07 院長指示「Threadsの投稿に関しては文章がながい。太りやすい食材や食べ方、痩せやすい方法を端的にまとめて投稿とかツリー投稿を活用して」
+TYPES = ["太りやすい食材", "太りやすい食べ方", "やせやすい方法・続けやすい食べ方", "よくある勘違い", "お悩み別の食材"]
 FORMATS = {
-    "short": "短文(1〜3行・60字以内)",
-    "medium": "中くらい(100〜200字前後)",
-    "long": "長文(250〜450字。悩み→勘違い→小さなコツ→持病・膝腰への配慮の一言)",
+    "short": "短文(1〜2行・50字以内。要点を1つだけ端的に)",
+    "tree": "ツリー(1つ目は40字以内のフック1〜2行。続きのツリーを2〜3個、各60字以内で1つずつ端的に。最後のツリーはまとめか答えやすい問いかけ)",
 }
+SHORT_MAX = 60          # 短文の本文の上限（案内の固定文は除く）
+TREE_HEAD_MAX = 40      # ツリー1つ目の上限
+TREE_REPLY_MAX = 60     # ツリーの続き1つの上限（案内の固定文は除く）
+TREE_REPLIES = (2, 4)   # ツリーの続きの個数（長い続きを文の切れ目で分けた結果、4つまでは可）
+TOPICS_FILE = BASE / "diet_threads_topics.json"   # Instagramと同じ31件の題材（根拠は講座ノート）
+TOPIC_COOLDOWN = 12     # 直近この本数で使った題材は選ばない
 
 
 # ── ログ・時刻ユーティリティ ─────────────────────────
@@ -211,14 +217,28 @@ def fetch_recent(token: str, limit: int = 50) -> list[dict]:
     return d.get("data") or []
 
 
-def publish_text(token: str, user_id: str, text: str) -> str:
-    """2段階投稿(コンテナ作成→公開)。公開後の投稿IDを返す。再試行しない(二重投稿防止)"""
+def publish_text(token: str, user_id: str, text: str, reply_to: str = "") -> str:
+    """2段階投稿(コンテナ作成→公開)。公開後の投稿IDを返す。再試行しない(二重投稿防止)。reply_to があればその投稿へのツリー"""
     uid = user_id or "me"
-    c = _http(f"{BASE_URL}/{uid}/threads", {"media_type": "TEXT", "text": text, "access_token": token}, "POST")
+    data = {"media_type": "TEXT", "text": text, "access_token": token}
+    if reply_to:
+        data["reply_to_id"] = reply_to
+    c = _http(f"{BASE_URL}/{uid}/threads", data, "POST")
     cid = c["id"]
     time.sleep(2)
     p = _http(f"{BASE_URL}/{uid}/threads_publish", {"creation_id": cid, "access_token": token}, "POST")
     return p["id"]
+
+
+def reply_exists(token: str, post_id: str) -> bool:
+    """投稿後の確認: ツリーの続きが実際に見えるか（2026-11 Grokのブラウザ投稿でツリーの2つ目が消えた件の見張り）"""
+    time.sleep(5)
+    q = urllib.parse.urlencode({"fields": "id,text", "access_token": token})
+    try:
+        with urllib.request.urlopen(f"{BASE_URL}/{post_id}?{q}", timeout=30) as r:
+            return bool(json.loads(r.read()).get("id"))
+    except Exception:
+        return False
 
 
 # ── 重複・CTA判定 ──────────────────────────────────
@@ -278,17 +298,12 @@ def gap_minutes(recent: list[dict], now: datetime) -> float | None:
 
 
 def classify_format(text: str) -> str:
-    n = len(text or "")
-    return "short" if n <= 60 else ("long" if n >= 250 else "medium")
+    return "short" if len(text or "") <= 60 else "tree"
 
 
 def choose_format_and_type(recent: list[dict], slot: str, rng: random.Random) -> tuple[str, str]:
-    """短文約4割・長文3割以上・同形式3連続禁止。朝は長文寄り、夕夜は短文寄り(Grokの振り返りより)"""
-    w = {"short": 0.40, "medium": 0.25, "long": 0.35}
-    if slot in ("09:00", "11:00"):
-        w["long"] += 0.10; w["short"] -= 0.10
-    elif slot in ("15:00", "20:00"):
-        w["short"] += 0.10; w["long"] -= 0.10
+    """短文とツリーを半々・同形式3連続禁止（2026-11-07 院長指示で長文・中くらいはやめた）"""
+    w = {"short": 0.5, "tree": 0.5}
     last = [classify_format(p.get("text") or "") for p in sorted_recent(recent)[:2]]
     if len(last) == 2 and last[0] == last[1]:
         w[last[0]] = 0.0
@@ -374,36 +389,73 @@ def inspect_text(text: str, has_cta: bool) -> list[str]:
     return errs
 
 
+# ── 題材 ──────────────────────────────────────────
+
+def load_topics(path: Path | None = None) -> list[dict]:
+    try:
+        return [t for t in json.loads((path or TOPICS_FILE).read_text(encoding="utf-8")).get("topics", []) if t.get("id")]
+    except Exception:
+        return []
+
+
+def pick_topic(entries: list[dict], rng: random.Random, topics: list[dict] | None = None) -> dict | None:
+    """直近 TOPIC_COOLDOWN 本で使っていない題材を1つ（無ければ None＝題材なしで書く）"""
+    topics = load_topics() if topics is None else topics
+    used = {e.get("topic_id") for e in entries[-TOPIC_COOLDOWN:] if e.get("topic_id")}
+    cand = [t for t in topics if t["id"] not in used] or topics
+    return rng.choice(cand) if cand else None
+
+
+def topic_block(topic: dict | None) -> str:
+    if not topic:
+        return ""
+    pts = topic.get("pts") or {}
+    lines = [f"今回の題材: {topic.get('theme')}（{topic.get('axis')}）", f"よくある思い込み・悩み: {topic.get('hook')}",
+             f"根拠の説明: {topic.get('cause')}", f"できること: {topic.get('solution')}"]
+    if topic.get("foods"):
+        lines.append("関係する食材: " + "、".join(topic["foods"]))
+    for k, lab in (("pain", "悩みの要点"), ("cause", "理由の要点"), ("solution", "できることの要点")):
+        if pts.get(k):
+            lines.append(f"{lab}: " + " / ".join(pts[k]))
+    return ("\n【今回の題材（この中身だけを使う。ここにない事実・数字・食材は足さない）】\n" + "\n".join(lines) + "\n")
+
+
 # ── 生成 ──────────────────────────────────────────
 
-def build_prompts(fmt: str, typ: str, slot: str, allow_cta: bool, recent_texts: list[str], feedback: str = "") -> tuple[str, str]:
+def build_prompts(fmt: str, typ: str, slot: str, allow_cta: bool, recent_texts: list[str], feedback: str = "",
+                  topic: dict | None = None) -> tuple[str, str]:
     rules = RULES_FILE.read_text(encoding="utf-8") if RULES_FILE.exists() else ""
     facts = FACTS_FILE.read_text(encoding="utf-8") if FACTS_FILE.exists() else ""
     grok = GROK_RULES_FILE.read_text(encoding="utf-8") if GROK_RULES_FILE.exists() else ""
     grok_block = (
         "\n\n【Grokのrules.md 原文抜き書き】(上の【運用ルール】の要約と食い違う場合は、こちらの新しい日付の記述が優先。"
-        "ただし【運用ルール】のAPI投稿向け追加規則(ツリー禁止・案内の数え方など)は有効)\n" + grok
+        "ただし【運用ルール】のAPI投稿向け追加規則(短文とツリー・案内の数え方など)は有効)\n" + grok
     ) if grok.strip() else ""
     system = (
         "あなたは長岡市の整体院トゥルースの院長として、Threadsのダイエットアカウントの投稿を1本書く。"
         "以下の【運用ルール】と【栄養の事実ファイル】だけに従う。"
         "栄養・ダイエットの主張は【栄養の事実ファイル】にあることだけを使い、ここにない事実・数字・具体的な食品名や手順・体験談(「見てきた」「経験上」など)は書かない。"
+        "長さは依頼文の【形式】の指定が最優先（運用ルールやGrokの原文に長文・中くらいの記述があっても使わない。2026-11-07 院長指示「文章がながい」）。"
         "出力はJSONオブジェクト1つだけ。\n\n【運用ルール】\n" + rules + grok_block + "\n\n【栄養の事実ファイル】\n" + facts
     )
     avoid = "\n".join(f"- {t.strip()[:80].replace(chr(10), ' ')}" for t in recent_texts[:20]) or "(なし)"
     cta_line = (
-        f"公式LINE案内は付けても付けなくてもよい。付ける場合は本文の最後の一文を次の固定文にし、has_ctaをtrueにする: {CTA_TEXT}"
+        f"公式LINE案内は付けても付けなくてもよい。付ける場合は最後の一文(ツリーなら最後のツリーの最後)を次の固定文にし、has_ctaをtrueにする: {CTA_TEXT}"
         if allow_cta else "公式LINE案内は今回は入れない(has_ctaはfalse。@886oidmv や「公式LINE」の語を本文に書かない)。"
     )
     user = (
-        f"投稿枠: {slot} (JST)\n型: {typ}\n長さ: {FORMATS[fmt]}\n{cta_line}\n\n"
+        f"投稿枠: {slot} (JST)\nテーマ: {typ}\n形式: {FORMATS[fmt]}\n{cta_line}\n" + topic_block(topic) + "\n"
         "直近の投稿(Grok Botの投稿を含む)。次のテーマ・書き出しと被らないこと:\n" + avoid + "\n\n"
         "1文目は「読者のセリフ(「〇〇なのにやせない」など)」か「身近な食べ物名」で始める。ハッシュタグ・URL・絵文字の乱用はしない。\n"
-        "体の仕組み(内臓の位置・骨のずれ・ゆがみ・リンパ・血流など)を原因や効果として書かない。姿勢・骨盤の話は「姿勢や体の使い方のクセが関わることもある」程度にとどめる。\n"
+        "文章は短く端的に。前置き・言い訳・まわりくどい言い方をしない。1つのツリーには要点を1つだけ書く。"
+        + ("短文は2文まで・全体で30〜50字。書いたら字数を数え、超えていたら削ってから出す。\n" if fmt == "short" else
+           "1つ目は15〜35字、続きは各25〜50字（1文か2文）。書いたら字数を数え、超えていたら削ってから出す。\n")
+        + "体の仕組み(内臓の位置・骨のずれ・ゆがみ・リンパ・血流など)を原因や効果として書かない。姿勢・骨盤の話は「姿勢や体の使い方のクセが関わることもある」程度にとどめる。\n"
         "専門用語(エネルギー密度・インスリン・PFC・黄体期など)は使わず、中学生にも伝わる言葉に言い換える(例: エネルギー密度の低い野菜→量のわりに軽い野菜、黄体期→生理前)。\n"
         "直近の投稿で使われた決まり文句(「本当に多いです」「という方」「ありませんか」など)は使い回さず、言い方を変える。\n"
         + (f"\n前回の出力は次の理由で不合格だった。直すこと: {feedback}\n" if feedback else "")
-        + '\n出力形式(JSONのみ): {"text": "本文", "type": "型", "has_cta": true または false}'
+        + ('\n出力形式(JSONのみ): {"text": "1つ目(フック)", "replies": ["続き1", "続き2", "続き3は任意"], "type": "テーマ", "has_cta": true または false}'
+           if fmt == "tree" else '\n出力形式(JSONのみ): {"text": "本文", "replies": [], "type": "テーマ", "has_cta": true または false}')
     )
     return system, user
 
@@ -441,18 +493,68 @@ def parse_generated(raw: str | None) -> dict | None:
     text = (d.get("text") or "").strip()
     if not text:
         return None
-    return {"text": text, "type": str(d.get("type") or ""), "has_cta": bool(d.get("has_cta"))}
+    replies = [str(r).strip() for r in (d.get("replies") or []) if str(r).strip()]
+    return {"text": text, "replies": replies, "type": str(d.get("type") or ""), "has_cta": bool(d.get("has_cta"))}
+
+
+def full_text(post: dict) -> str:
+    """類似判定・決まり文句・ログ用に、ツリー全体を1本の文にする"""
+    return "\n".join([post["text"]] + list(post.get("replies") or []))
+
+
+def _sentences(t: str) -> list[str]:
+    return [x for x in re.findall(r"[^。！？!?]+[。！？!?]?", t) if x.strip()]
+
+
+def fit_tree(post: dict) -> dict:
+    """ツリーの長すぎる部分を、文の切れ目で次のツリーに分ける（言葉は変えない）。案内の固定文がある最後の部分は分けない"""
+    parts = [post["text"]] + list(post["replies"])
+    out = []
+    for i, part in enumerate(parts):
+        lim = TREE_HEAD_MAX if i == 0 else TREE_REPLY_MAX
+        has_cta = CTA_TEXT in part
+        if has_cta or len(part) <= lim:
+            out.append(part); continue
+        cur = ""
+        for sen in _sentences(part):
+            if cur and len(cur) + len(sen) > (TREE_HEAD_MAX if not out and not cur.startswith("\0") and i == 0 else TREE_REPLY_MAX):
+                out.append(cur); cur = sen
+            else:
+                cur += sen
+        if cur:
+            out.append(cur)
+    return dict(post, text=out[0], replies=out[1:])
+
+
+def length_errors(post: dict, fmt: str) -> list[str]:
+    """形式ごとの長さ・個数の検品（案内の固定文は字数に数えない）"""
+    body = lambda t: len(t.replace(CTA_TEXT, "").strip())  # noqa: E731
+    errs = []
+    if fmt == "short":
+        if post["replies"]:
+            errs.append("短文の指定なのにツリーがある")
+        if body(post["text"]) > SHORT_MAX:
+            errs.append(f"短文の指定なのに{body(post['text'])}字(30〜50字目安・{SHORT_MAX}字以内)")
+    else:
+        if not (TREE_REPLIES[0] <= len(post["replies"]) <= TREE_REPLIES[1]):
+            errs.append(f"ツリーの続きが{len(post['replies'])}個({TREE_REPLIES[0]}〜{TREE_REPLIES[1]}個)")
+        if body(post["text"]) > TREE_HEAD_MAX:
+            errs.append(f"ツリー1つ目が{body(post['text'])}字(15〜35字目安・{TREE_HEAD_MAX}字以内)")
+        for i, r in enumerate(post["replies"], 2):
+            if body(r) > TREE_REPLY_MAX:
+                errs.append(f"ツリー{i}つ目が{body(r)}字(25〜50字目安・{TREE_REPLY_MAX}字以内)")
+    return errs
 
 
 def generate_post(slot: str, fmt: str, typ: str, allow_cta: bool, recent_texts: list[str], sim_pool: list[str],
-                  generator=None) -> tuple[dict | None, str]:
+                  generator=None, topic: dict | None = None) -> tuple[dict | None, str]:
     """検品と類似チェックを通った {text,type,has_cta} と、失敗時の理由。generator(system,user)->raw は差し替え可"""
     generator = generator or call_llm
     feedback = ""
     sim_fail = 0
     last_reason = "生成失敗"
     for attempt in range(1, MAX_ATTEMPTS + 1):
-        system, user = build_prompts(fmt, typ, slot, allow_cta, recent_texts, feedback)
+        system, user = build_prompts(fmt, typ, slot, allow_cta, recent_texts, feedback, topic)
         post = parse_generated(generator(system, user))
         if not post:
             last_reason = "LLM出力を読めない/空"
@@ -462,18 +564,24 @@ def generate_post(slot: str, fmt: str, typ: str, allow_cta: bool, recent_texts: 
             last_reason = "案内不可なのに案内つき"
             feedback = "公式LINE案内は入れない"
             continue
-        errs = inspect_text(post["text"], post["has_cta"]) + stock_phrase_errors(post["text"], recent_texts)
-        n_body = len(post["text"].replace(CTA_TEXT, "").strip())
-        if fmt == "short" and n_body > 90:
-            errs.append(f"短文の指定なのに{n_body}字(60字目安・90字以内)")
-        elif fmt == "long" and n_body < 200:
-            errs.append(f"長文の指定なのに{n_body}字(250〜450字)")
+        if fmt == "tree":
+            post = fit_tree(post)
+        errs = length_errors(post, fmt)
+        parts = [post["text"]] + post["replies"]
+        for i, part in enumerate(parts):
+            last = i == len(parts) - 1
+            errs += [f"{i + 1}つ目: {e}" if len(parts) > 1 else e for e in inspect_text(part, post["has_cta"] and last)]
+        errs += stock_phrase_errors(full_text(post), recent_texts)
         if errs:
             last_reason = "検品NG: " + " / ".join(errs)
             feedback = "; ".join(errs)
             log(f"試行{attempt}: {last_reason}")
+            if fmt == "short" and attempt >= 2 and all("短文の指定なのに" in e for e in errs):
+                fmt = "tree"   # 短文に収まらない中身はツリーに分ける（2026-11-07）
+                feedback = "短文に収まらなかったので、ツリー（1つ目は短いフック・続きを2〜3個）に分けて書くこと"
+                log("短文に収まらないため、次はツリーで書く")
             continue
-        sim, other = max_similarity(post["text"], sim_pool)
+        sim, other = max_similarity(full_text(post), sim_pool)
         if sim >= SIM_THRESHOLD:
             sim_fail += 1
             last_reason = f"直近投稿と類似(Jaccard {sim:.2f})"
@@ -482,6 +590,7 @@ def generate_post(slot: str, fmt: str, typ: str, allow_cta: bool, recent_texts: 
                 return None, last_reason
             feedback = f"直近の投稿「{other[:40]}」と似すぎ。テーマと書き出しを変えること"
             continue
+        post["fmt"] = fmt
         return post, ""
     return None, last_reason
 
@@ -572,7 +681,7 @@ def post_ba(ba: dict, slot: str, now: datetime, dry_run: bool, token: str, uid: 
 
 def run(slot: str | None = None, now: datetime | None = None, dry_run: bool = False, generator=None,
         fetch=None, publisher=None, sleeper=time.sleep, rng: random.Random | None = None,
-        log_path: Path | None = None, pause_path: Path | None = None) -> int:
+        log_path: Path | None = None, pause_path: Path | None = None, verify=None) -> int:
     """戻り値は常に0(見送りも正常終了)。失敗はDiscord通知で知らせる"""
     load_env()
     now = now or datetime.now(JST)
@@ -581,7 +690,9 @@ def run(slot: str | None = None, now: datetime | None = None, dry_run: bool = Fa
     slot = pick_slot(slot, now)
     rng = rng or random.Random()
     fetch = fetch or fetch_recent
-    publisher = publisher or publish_text
+    if publisher is None:
+        publisher = publish_text
+        verify = verify or reply_exists
     pause_path = pause_path or PAUSE_FILE
 
     if pause_path.exists():
@@ -633,9 +744,11 @@ def run(slot: str | None = None, now: datetime | None = None, dry_run: bool = Fa
     log(f"枠{slot} / 案内: {'可' if allow_cta else '不可'}({cta_reason}{'' if slot in CTA_SLOTS else '・この枠は案内なし'})")
 
     fmt, typ = choose_format_and_type(recent, slot, rng)
+    topic = pick_topic(entries, rng)
     rs = sorted_recent(recent)
     recent_texts = [p.get("text") or "" for p in rs if p.get("text")]
-    post, reason = generate_post(slot, fmt, typ, allow_cta, recent_texts[:20], recent_texts[:50], generator)
+    recent_texts += [e.get("text", "") for e in reversed(entries[-20:]) if e.get("text")]   # 自分のツリーの続きも重複判定に入れる
+    post, reason = generate_post(slot, fmt, typ, allow_cta, recent_texts[:40], recent_texts[:70], generator, topic)
     if not post:
         log(f"見送り: {reason}")
         if "類似" not in reason:
@@ -644,8 +757,11 @@ def run(slot: str | None = None, now: datetime | None = None, dry_run: bool = Fa
 
     if dry_run:
         print("----- DRY_RUN 生成結果 -----")
-        print(f"[枠 {slot} / 型 {post['type'] or typ} / 形式 {fmt} / 案内 {post['has_cta']}]")
+        fmt = post.get("fmt", fmt)
+        print(f"[枠 {slot} / テーマ {post['type'] or typ} / 形式 {fmt} / 題材 {(topic or {}).get('id')} / 案内 {post['has_cta']}]")
         print(post["text"])
+        for r in post["replies"]:
+            print("  └ " + r)
         print("----------------------------")
         return 0
 
@@ -658,13 +774,37 @@ def run(slot: str | None = None, now: datetime | None = None, dry_run: bool = Fa
             return 0
         notify(f"{slot}枠の投稿に失敗: {str(e)[:150]}")
         return 0
+    fmt = post.get("fmt", fmt)
+    reply_ids, reply_err = [], ""
+    prev = pid
+    for r in post["replies"]:   # ツリー: 直前の投稿への返信として順につなぐ。再試行しない（二重投稿防止）
+        try:
+            sleeper(3)
+            prev = publisher(token, uid, r, prev)
+            reply_ids.append(prev)
+        except Exception as e:
+            reply_err = str(e)
+            log(f"ツリーの続きの投稿に失敗({len(reply_ids) + 2}つ目): {e}")
+            if is_pause_error(e):
+                pause_and_notify(str(e), slot, now, pause_path)
+            else:
+                notify(f"{slot}枠のツリー {len(reply_ids) + 2}つ目の投稿に失敗（1つ目は投稿済み・再投稿しない）: {str(e)[:120]}")
+            break
+    whole = full_text(post)
     append_log({
-        "ts": now.isoformat(timespec="seconds"), "slot": slot, "id": pid,
-        "type": post["type"] or typ, "has_cta": post["has_cta"],
-        "text_hash": hashlib.sha256(post["text"].encode("utf-8")).hexdigest()[:16],
-        "text": post["text"],
+        "ts": now.isoformat(timespec="seconds"), "slot": slot, "id": pid, "fmt": fmt, "reply_ids": reply_ids,
+        "topic_id": (topic or {}).get("id"), "type": post["type"] or typ, "has_cta": post["has_cta"],
+        "text_hash": hashlib.sha256(whole.encode("utf-8")).hexdigest()[:16],
+        "text": whole, **({"reply_error": reply_err[:200]} if reply_err else {}),
     }, log_path)
-    log(f"投稿完了 id={pid} 型={post['type'] or typ} 案内={post['has_cta']}")
+    log(f"投稿完了 id={pid} 形式={fmt} ツリー={len(reply_ids)}/{len(post['replies'])} 題材={(topic or {}).get('id')} 案内={post['has_cta']}")
+    if reply_ids and not dry_run and verify:
+        try:
+            missing = [rid for rid in reply_ids if not verify(token, rid)]
+            if missing:
+                notify(f"{slot}枠のツリーの続き {len(missing)}個 が投稿後に見つかりません（{missing}）。Threadsのアプリで表示を確認してください")
+        except Exception as e:
+            log(f"ツリーの確認に失敗（投稿は済み）: {e}")
     return 0
 
 

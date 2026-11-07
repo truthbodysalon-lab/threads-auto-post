@@ -6781,7 +6781,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 8,
-    "created": "2026-11-06"
+    "created": "2026-11-07"
   },
   "フォロワーを増やすだけが、集客じゃない。": {
     "segment": "HAKASE",
@@ -7105,7 +7105,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 0,
-    "created": "2026-11-06"
+    "created": "2026-11-07"
   },
   "売り先は、1つに絞らない。": {
     "segment": "HAKASE",
@@ -7456,7 +7456,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 17,
-    "created": "2026-11-06"
+    "created": "2026-11-07"
   },
   "【ハイライトを、今日1つ作る】": {
     "segment": "PRESENT_CTA",
@@ -10343,7 +10343,7 @@
     "hook": "present",
     "present_key": "meo_50",
     "variant": 5,
-    "created": "2026-11-06"
+    "created": "2026-11-07"
   },
   "いいねの数は、気にしない。": {
     "segment": "INSTA_EASY",
@@ -10370,7 +10370,7 @@
     "hook": "present",
     "present_key": "meo_50",
     "variant": 9,
-    "created": "2026-11-06"
+    "created": "2026-11-07"
   },
   "MEOの登録は、1日1サイトで足ります。": {
     "segment": "PRESENT_CTA",

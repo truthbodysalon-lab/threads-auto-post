@@ -60,9 +60,18 @@ FORMATS = {
 SHORT_MAX = 60          # 短文の本文の上限（案内の固定文は除く）
 TREE_HEAD_MAX = 40      # ツリー1つ目の上限
 TREE_REPLY_MAX = 60     # ツリーの続き1つの上限（案内の固定文は除く）
-TREE_REPLIES = (2, 4)   # ツリーの続きの個数（長い続きを文の切れ目で分けた結果、4つまでは可）
+TREE_REPLIES = (2, 5)   # ツリーの続きの個数（長い続きを文の切れ目で分けた結果、5つまでは可）
 TOPICS_FILE = BASE / "diet_threads_topics.json"   # Instagramと同じ31件の題材（根拠は講座ノート）
 TOPIC_COOLDOWN = 12     # 直近この本数で使った題材は選ばない
+WEIGHTS_FILE = BASE / "diet_threads_weights.json"   # diet_threads_learn.py が毎朝書く（閲覧データから学んだ形式・テーマの重みと、よく読まれた投稿）
+TOPIC_TAG = "ダイエット"   # フォロワー以外にも見つけてもらうためのトピックタグ（2026-11-07）
+
+
+def load_weights() -> dict:
+    try:
+        return json.loads(WEIGHTS_FILE.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
 
 
 # ── ログ・時刻ユーティリティ ─────────────────────────
@@ -217,13 +226,22 @@ def fetch_recent(token: str, limit: int = 50) -> list[dict]:
     return d.get("data") or []
 
 
-def publish_text(token: str, user_id: str, text: str, reply_to: str = "") -> str:
+def publish_text(token: str, user_id: str, text: str, reply_to: str = "", topic_tag: str = "") -> str:
     """2段階投稿(コンテナ作成→公開)。公開後の投稿IDを返す。再試行しない(二重投稿防止)。reply_to があればその投稿へのツリー"""
     uid = user_id or "me"
     data = {"media_type": "TEXT", "text": text, "access_token": token}
     if reply_to:
         data["reply_to_id"] = reply_to
-    c = _http(f"{BASE_URL}/{uid}/threads", data, "POST")
+    elif topic_tag:
+        data["topic_tag"] = topic_tag
+    try:
+        c = _http(f"{BASE_URL}/{uid}/threads", data, "POST")
+    except Exception as e:
+        # トピックタグが原因でコンテナ作成だけ失敗した時は、タグなしでもう一度だけ作る（公開前なので二重投稿にはならない）
+        if "topic_tag" not in data or is_pause_error(e):
+            raise
+        data.pop("topic_tag")
+        c = _http(f"{BASE_URL}/{uid}/threads", data, "POST")
     cid = c["id"]
     time.sleep(2)
     p = _http(f"{BASE_URL}/{uid}/threads_publish", {"creation_id": cid, "access_token": token}, "POST")
@@ -303,13 +321,15 @@ def classify_format(text: str) -> str:
 
 def choose_format_and_type(recent: list[dict], slot: str, rng: random.Random) -> tuple[str, str]:
     """短文とツリーを半々・同形式3連続禁止（2026-11-07 院長指示で長文・中くらいはやめた）"""
-    w = {"short": 0.5, "tree": 0.5}
+    w = dict(load_weights().get("fmt") or {"short": 0.5, "tree": 0.5})   # 閲覧データで毎朝更新（無ければ半々）
+    w = {k: float(w.get(k, 0.5)) for k in FORMATS}
     last = [classify_format(p.get("text") or "") for p in sorted_recent(recent)[:2]]
     if len(last) == 2 and last[0] == last[1]:
         w[last[0]] = 0.0
     fmts, ws = zip(*w.items())
-    fmt = rng.choices(fmts, weights=ws)[0]
-    typ = rng.choice(TYPES)
+    fmt = rng.choices(fmts, weights=ws)[0] if sum(ws) > 0 else rng.choice(fmts)
+    tw = load_weights().get("type") or {}
+    typ = rng.choices(TYPES, weights=[float(tw.get(t, 1.0)) for t in TYPES])[0]
     return fmt, typ
 
 
@@ -406,6 +426,15 @@ def pick_topic(entries: list[dict], rng: random.Random, topics: list[dict] | Non
     return rng.choice(cand) if cand else None
 
 
+def examples_block() -> str:
+    """閲覧データでよく読まれた自分の投稿（書き方の参考。内容・言い回しはコピーしない）"""
+    ex = [e for e in (load_weights().get("examples") or []) if e.get("text")][:3]
+    if not ex:
+        return ""
+    return ("【最近よく読まれた投稿（書き出し・テンポ・具体性の参考。内容や言い回しはコピーしない。古いルールで書かれた語は使わない）】\n"
+            + "\n".join(f"- {e['views']}回: {e['text'][:120].replace(chr(10), ' ')}" for e in ex) + "\n")
+
+
 def topic_block(topic: dict | None) -> str:
     if not topic:
         return ""
@@ -446,7 +475,9 @@ def build_prompts(fmt: str, typ: str, slot: str, allow_cta: bool, recent_texts: 
     user = (
         f"投稿枠: {slot} (JST)\nテーマ: {typ}\n形式: {FORMATS[fmt]}\n{cta_line}\n" + topic_block(topic) + "\n"
         "直近の投稿(Grok Botの投稿を含む)。次のテーマ・書き出しと被らないこと:\n" + avoid + "\n\n"
-        "1文目は「読者のセリフ(「〇〇なのにやせない」など)」か「身近な食べ物名」で始める。ハッシュタグ・URL・絵文字の乱用はしない。\n"
+        "1文目は「問いかけ(〇〇、1日に何個食べていますか？ など)」か「身近な食べ物の意外な事実」で始める。「」で始めない(閲覧データで「」始まりは平均の半分以下)。"
+        "具体的な食べ物の名前を必ず1つ以上出す。最後は答えやすい問いかけで終えると反応が増えやすい。ハッシュタグ・URL・絵文字の乱用はしない。\n"
+        + examples_block() +
         "文章は短く端的に。前置き・言い訳・まわりくどい言い方をしない。1つのツリーには要点を1つだけ書く。"
         + ("短文は2文まで・全体で30〜50字。書いたら字数を数え、超えていたら削ってから出す。\n" if fmt == "short" else
            "1つ目は15〜35字、続きは各25〜50字（1文か2文）。書いたら字数を数え、超えていたら削ってから出す。\n")
@@ -766,7 +797,7 @@ def run(slot: str | None = None, now: datetime | None = None, dry_run: bool = Fa
         return 0
 
     try:
-        pid = publisher(token, uid, post["text"])
+        pid = publisher(token, uid, post["text"], "", TOPIC_TAG) if publisher is publish_text else publisher(token, uid, post["text"])
     except Exception as e:
         log(f"投稿失敗: {e}")
         if is_pause_error(e):   # 再試行しない。停止して本人に報告

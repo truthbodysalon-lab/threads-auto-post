@@ -1,0 +1,48 @@
+name: Diet Threads Learn
+
+# ダイエットThreads(@truth_nagaoka_daietto) の閲覧データを毎朝集めて、投稿の形式・テーマの重みとお手本を更新し、
+# 100万閲覧（30日）の進み具合を Discord に報告する（2026-11-07 院長指示）。
+# cronは持たない: 中央ディスパッチャ(schedule_table.json の diet-threads-learn)が毎朝 06:10 (JST) に起動する。
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: diet-threads
+  cancel-in-progress: false
+
+jobs:
+  learn:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      TZ: Asia/Tokyo
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          token: ${{ secrets.GH_PAT }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Learn from views
+        env:
+          THREADS_ACCESS_TOKEN_DIET: ${{ secrets.THREADS_ACCESS_TOKEN_DIET }}
+          THREADS_USER_ID_DIET: ${{ secrets.THREADS_USER_ID_DIET }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: python3 diet_threads_learn.py
+      - name: Commit weights and metrics
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add diet_threads_weights.json diet_threads_metrics.jsonl 2>/dev/null || true
+          git diff --cached --quiet && { echo "変更なし"; exit 0; }
+          git commit -q -m "chore: diet threads weights [skip ci]"
+          for i in 1 2 3; do
+            git push -q && exit 0
+            git pull -q --rebase --autostash -X theirs origin main || { git rebase --abort 2>/dev/null || true; }
+          done
+          exit 1

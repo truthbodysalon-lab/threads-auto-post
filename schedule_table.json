@@ -1331,6 +1331,16 @@
     "slot": "22:00"
    },
    "note": "2026-11-05: 頭痛Threads(@truth_nagaoka_zutsuu)のAPI自動投稿（1日5枠・新規アカウントのため控えめ）。トークン未登録の間は起動しても何もしない。止める時はenabled:false"
+  },
+  {
+   "id": "diet-threads-learn",
+   "repo": "truthbodysalon-lab/threads-auto-post",
+   "workflow": "diet_threads_learn.yml",
+   "jst_time": "06:10",
+   "window_min": 60,
+   "since": "day",
+   "enabled": true,
+   "note": "2026-11-07 院長指示: 閲覧データで投稿を自動改善＋100万閲覧の進み具合を毎朝報告"
   }
  ]
 }

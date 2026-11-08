@@ -6603,7 +6603,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 11,
-    "created": "2026-11-07"
+    "created": "2026-11-08"
   },
   "ストーリーズは、空欄を埋めれば4枚できる。": {
     "segment": "PRESENT_CTA",
@@ -7545,7 +7545,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 7,
-    "created": "2026-11-07"
+    "created": "2026-11-08"
   },
   "ぶっちゃけ、続かない人は、次に何をやるかが決まっていません。": {
     "segment": "PRESENT_CTA",
@@ -7863,7 +7863,7 @@
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-11-01"
+    "created": "2026-11-08"
   },
   "【3ステップ】動画より、写真から。": {
     "segment": "INSTA_EASY",

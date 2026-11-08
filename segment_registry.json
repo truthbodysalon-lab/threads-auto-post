@@ -6960,7 +6960,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 16,
-    "created": "2026-11-07"
+    "created": "2026-11-08"
   },
   "投稿は、出して終わりにしない。": {
     "segment": "HAKASE",
@@ -7105,7 +7105,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 0,
-    "created": "2026-11-07"
+    "created": "2026-11-08"
   },
   "売り先は、1つに絞らない。": {
     "segment": "HAKASE",
@@ -10363,7 +10363,7 @@
     "hook": "present",
     "present_key": "meo_50",
     "variant": 4,
-    "created": "2026-11-07"
+    "created": "2026-11-08"
   },
   "Googleマップ対策を、今日から始めたい方へ。": {
     "segment": "PRESENT_CTA",

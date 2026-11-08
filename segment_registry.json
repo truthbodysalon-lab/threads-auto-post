@@ -6313,7 +6313,7 @@
   "体感が出たら終わりにされてしまう院長へ。": {
     "segment": "R07",
     "hook": "high",
-    "created": "2026-11-03",
+    "created": "2026-11-09",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -6322,7 +6322,7 @@
   "次の出口を見せずに、卒業させる院長へ。": {
     "segment": "R08",
     "hook": "high",
-    "created": "2026-11-03",
+    "created": "2026-11-09",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -6960,7 +6960,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 16,
-    "created": "2026-11-08"
+    "created": "2026-11-09"
   },
   "投稿は、出して終わりにしない。": {
     "segment": "HAKASE",
@@ -7450,7 +7450,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 6,
-    "created": "2026-11-08"
+    "created": "2026-11-09"
   },
   "感覚より、数字の方が正直です。": {
     "segment": "HAKASE",
@@ -10316,7 +10316,7 @@
     "hook": "present",
     "present_key": "meo_50",
     "variant": 0,
-    "created": "2026-11-08"
+    "created": "2026-11-09"
   },
   "腕より、場所。": {
     "segment": "INSTA_EASY",

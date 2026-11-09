@@ -50,7 +50,7 @@
   "寝ても疲労感が抜けない人へ。": {
     "segment": "T5",
     "hook": "high",
-    "created": "2026-11-07",
+    "created": "2026-11-09",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z17_truth"
@@ -164,7 +164,7 @@
   "産後の骨盤の歪みが気になるママへ。": {
     "segment": "T3",
     "hook": "high",
-    "created": "2026-11-05",
+    "created": "2026-11-09",
     "acct": "truth",
     "variant": 0
   },
@@ -202,14 +202,14 @@
   "不規則な勤務で通院を諦めた人へ。": {
     "segment": "T4",
     "hook": "high",
-    "created": "2026-11-05",
+    "created": "2026-11-09",
     "acct": "nagaoka",
     "variant": 0
   },
   "疲れが取れず気分も沈む人へ。": {
     "segment": "T5",
     "hook": "high",
-    "created": "2026-11-05",
+    "created": "2026-11-09",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z18_nagaoka"
@@ -217,7 +217,7 @@
   "施術で悪化した経験がある人へ。": {
     "segment": "T6",
     "hook": "high",
-    "created": "2026-11-05",
+    "created": "2026-11-09",
     "acct": "nagaoka",
     "variant": 0
   },
@@ -623,7 +623,7 @@
   "立ち仕事で脚がパンパンな人へ。": {
     "segment": "T4",
     "hook": "high",
-    "created": "2026-11-05",
+    "created": "2026-11-09",
     "acct": "truth",
     "variant": 0
   },
@@ -637,14 +637,14 @@
   "マッサージでは変わらないと感じる人へ。": {
     "segment": "T6",
     "hook": "high",
-    "created": "2026-11-05",
+    "created": "2026-11-09",
     "acct": "truth",
     "variant": 0
   },
   "骨盤の歪みが気になるママへ。": {
     "segment": "T3",
     "hook": "high",
-    "created": "2026-11-05",
+    "created": "2026-11-09",
     "acct": "nagaoka",
     "variant": 0
   },
@@ -3490,7 +3490,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 15,
-    "created": "2026-10-30",
+    "created": "2026-11-09",
     "acct": "truth"
   },
   "【肩こりの人の休日の過ごし方6選】": {
@@ -4267,7 +4267,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 0,
-    "created": "2026-11-03",
+    "created": "2026-11-09",
     "acct": "nagaoka"
   },
   "インスタで、外注を怖がっている院長へ。": {
@@ -4987,7 +4987,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 6,
-    "created": "2026-11-03",
+    "created": "2026-11-09",
     "acct": "nagaoka"
   },
   "インスタで、プロフィールが合っているか不安な院長へ質問です。": {
@@ -5842,7 +5842,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 37,
-    "created": "2026-11-02",
+    "created": "2026-11-09",
     "acct": "truth"
   },
   "【頭痛の人の仕事中の習慣9選】": {
@@ -6433,7 +6433,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 15,
-    "created": "2026-11-08"
+    "created": "2026-11-09"
   },
   "ぶっちゃけ、次に何を出すかの答えは、過去の投稿にあります。": {
     "segment": "PRESENT_CTA",
@@ -8055,14 +8055,14 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 28,
-    "created": "2026-11-05",
+    "created": "2026-11-09",
     "acct": "truth"
   },
   "朝が冷える日は、布団から出る前に、まず首元を温めてみて。": {
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 13,
-    "created": "2026-11-05",
+    "created": "2026-11-09",
     "acct": "nagaoka"
   },
   "気圧アプリを見て、頭が重い日と重なっている人へ。": {
@@ -8104,7 +8104,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 20,
-    "created": "2026-11-05",
+    "created": "2026-11-09",
     "acct": "nagaoka"
   },
   "肩こりを我慢する前に、まず「どの動きがつらいか」を探してみて。": {
@@ -8379,7 +8379,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 4,
-    "created": "2026-11-05",
+    "created": "2026-11-09",
     "acct": "truth"
   },
   "頭痛薬を飲む前の1分で、首の後ろに蒸しタオルを。": {
@@ -8393,7 +8393,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 16,
-    "created": "2026-11-05",
+    "created": "2026-11-09",
     "acct": "truth"
   },
   "眠れない夜に焦る前に、まず息を長く吐いてみて。": {
@@ -9256,7 +9256,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 29,
-    "created": "2026-11-05",
+    "created": "2026-11-09",
     "acct": "truth"
   },
   "眠る前に、まず今日いちばん肩が重かった場面を思い出してみて。": {
@@ -9447,7 +9447,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 35,
-    "created": "2026-11-04",
+    "created": "2026-11-09",
     "acct": "truth"
   },
   "頭痛薬を飲んだ時間を、スマホにメモしてみて。": {
@@ -9489,14 +9489,14 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 32,
-    "created": "2026-11-04",
+    "created": "2026-11-09",
     "acct": "truth"
   },
   "外に出る前に、まず首にタオルを巻いてみて。": {
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 33,
-    "created": "2026-11-04",
+    "created": "2026-11-09",
     "acct": "truth"
   },
   "掃除機をかける前に、まず首の付け根に手を当ててみて。": {
@@ -9531,14 +9531,14 @@
     "segment": "QUESTION",
     "hook": "type",
     "variant": 16,
-    "created": "2026-11-04",
+    "created": "2026-11-09",
     "acct": "nagaoka"
   },
   "夕方に肩が耳に近づいている人、他にもいますか？": {
     "segment": "QUESTION",
     "hook": "type",
     "variant": 17,
-    "created": "2026-11-04",
+    "created": "2026-11-09",
     "acct": "nagaoka"
   },
   "ストレッチを始める前に、まず足首を5回まわしてみて。": {
@@ -9559,7 +9559,7 @@
     "segment": "WEATHER",
     "hook": "type",
     "variant": 24,
-    "created": "2026-11-04",
+    "created": "2026-11-09",
     "acct": "nagaoka"
   },
   "『料理をしていると、肩が上がってくる』という声を、よく聞きます。": {
@@ -9763,21 +9763,21 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 32,
-    "created": "2026-11-04",
+    "created": "2026-11-09",
     "acct": "nagaoka"
   },
   "お皿を洗う前に、まず肩をストンと落としてみて。": {
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 35,
-    "created": "2026-11-04",
+    "created": "2026-11-09",
     "acct": "nagaoka"
   },
   "雨の日の夕方に、肩が上がってくる人いますか？": {
     "segment": "WEATHER",
     "hook": "type",
     "variant": 23,
-    "created": "2026-11-04",
+    "created": "2026-11-09",
     "acct": "nagaoka"
   },
   "夜のテレビの前に、まず首をゆっくり左右に倒してみて。": {
@@ -9798,7 +9798,7 @@
     "segment": "WEATHER",
     "hook": "type",
     "variant": 3,
-    "created": "2026-11-04",
+    "created": "2026-11-09",
     "acct": "nagaoka"
   },
   "キャンセルや遅刻の連絡への返事で、手が止まる店主さんへ。": {
@@ -9854,7 +9854,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 38,
-    "created": "2026-11-05",
+    "created": "2026-11-09",
     "acct": "truth"
   },
   "頭痛薬を飲む前に、まず今日どれだけ水を飲んだか思い出してみて。": {
@@ -9882,7 +9882,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 37,
-    "created": "2026-11-05",
+    "created": "2026-11-09",
     "acct": "truth"
   },
   "肩の重さが出る側は、いつも同じですか？": {

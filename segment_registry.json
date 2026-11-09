@@ -6597,13 +6597,13 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 14,
-    "created": "2026-11-08"
+    "created": "2026-11-09"
   },
   "困っていることは、黙っていない。": {
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 11,
-    "created": "2026-11-08"
+    "created": "2026-11-09"
   },
   "ストーリーズは、空欄を埋めれば4枚できる。": {
     "segment": "PRESENT_CTA",
@@ -10356,7 +10356,7 @@
     "hook": "present",
     "present_key": "meo_50",
     "variant": 6,
-    "created": "2026-11-08"
+    "created": "2026-11-09"
   },
   "飲食店、美容室、治療院、士業、不動産。": {
     "segment": "PRESENT_CTA",

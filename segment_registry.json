@@ -7315,7 +7315,7 @@
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-11-02"
+    "created": "2026-11-09"
   },
   "ぶっちゃけ、一番明るい場所は、窓のそば。": {
     "segment": "INSTA_EASY",
@@ -7417,7 +7417,7 @@
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-10-29"
+    "created": "2026-11-09"
   },
   "ぶっちゃけ、見る数字は、2つだけ。": {
     "segment": "INSTA_EASY",
@@ -10297,7 +10297,7 @@
     "hook": "present",
     "present_key": "meo_50",
     "variant": 7,
-    "created": "2026-11-08"
+    "created": "2026-11-09"
   },
   "結論、リールは、写真3枚でも作れる。": {
     "segment": "INSTA_EASY",
@@ -10370,7 +10370,7 @@
     "hook": "present",
     "present_key": "meo_50",
     "variant": 9,
-    "created": "2026-11-08"
+    "created": "2026-11-09"
   },
   "MEOの登録は、1日1サイトで足ります。": {
     "segment": "PRESENT_CTA",

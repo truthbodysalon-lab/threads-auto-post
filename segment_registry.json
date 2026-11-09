@@ -5047,7 +5047,7 @@
   "離れた人の理由を聞けない院長へ。": {
     "segment": "R09",
     "hook": "low",
-    "created": "2026-11-04",
+    "created": "2026-11-10",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -5056,7 +5056,7 @@
   "紹介のお願いに、気が引ける院長へ。": {
     "segment": "R10",
     "hook": "low",
-    "created": "2026-11-04",
+    "created": "2026-11-10",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -6966,7 +6966,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 13,
-    "created": "2026-11-09"
+    "created": "2026-11-10"
   },
   "【出した投稿を、AIに直してもらう3本】": {
     "segment": "PRESENT_CTA",
@@ -7086,7 +7086,7 @@
   "日々の10秒とAIの台本で足ります。": {
     "segment": "I05",
     "hook": "high",
-    "created": "2026-11-07",
+    "created": "2026-11-10",
     "acct": "masa",
     "axis": "insta_pain",
     "variant": null,
@@ -7456,7 +7456,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 17,
-    "created": "2026-11-09"
+    "created": "2026-11-10"
   },
   "【ハイライトを、今日1つ作る】": {
     "segment": "PRESENT_CTA",
@@ -7761,7 +7761,7 @@
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-11-02"
+    "created": "2026-11-10"
   },
   "年齢より、検索される言葉。": {
     "segment": "INSTA_EASY",
@@ -8326,13 +8326,13 @@
     "segment": "WIN_HOOK",
     "hook": "winning",
     "variant": 3,
-    "created": "2026-11-03"
+    "created": "2026-11-10"
   },
   "おしゃれな写真にしても、予約は増えません。": {
     "segment": "WIN_HOOK",
     "hook": "winning",
     "variant": 11,
-    "created": "2026-11-03"
+    "created": "2026-11-10"
   },
   "インスタで予約を増やすのに、新しい機能は要りません。": {
     "segment": "WIN_HOOK",
@@ -10356,7 +10356,7 @@
     "hook": "present",
     "present_key": "meo_50",
     "variant": 6,
-    "created": "2026-11-09"
+    "created": "2026-11-10"
   },
   "飲食店、美容室、治療院、士業、不動産。": {
     "segment": "PRESENT_CTA",
@@ -10618,6 +10618,12 @@
     "acct": "nagaoka"
   },
   "お客様の質問は、そのまま読者の質問。": {
+    "segment": "INSTA_EASY",
+    "hook": "gen",
+    "variant": null,
+    "created": "2026-11-10"
+  },
+  "怖いうちは、見られない場所で練習。": {
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,

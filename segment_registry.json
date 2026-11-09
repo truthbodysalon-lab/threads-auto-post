@@ -6787,7 +6787,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 10,
-    "created": "2026-11-08"
+    "created": "2026-11-09"
   },
   "ハイライトを、後回しにしない。": {
     "segment": "PRESENT_CTA",
@@ -10343,7 +10343,7 @@
     "hook": "present",
     "present_key": "meo_50",
     "variant": 5,
-    "created": "2026-11-08"
+    "created": "2026-11-09"
   },
   "いいねの数は、気にしない。": {
     "segment": "INSTA_EASY",

@@ -7111,7 +7111,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 9,
-    "created": "2026-11-08"
+    "created": "2026-11-09"
   },
   "【今日のストーリーズ、4枚の空欄埋め】": {
     "segment": "PRESENT_CTA",
@@ -10363,7 +10363,7 @@
     "hook": "present",
     "present_key": "meo_50",
     "variant": 4,
-    "created": "2026-11-08"
+    "created": "2026-11-09"
   },
   "Googleマップ対策を、今日から始めたい方へ。": {
     "segment": "PRESENT_CTA",

@@ -1,6 +1,6 @@
 {
   "acct": "masa_repeat",
-  "generated_at": "2026-11-07 10:45",
+  "generated_at": "2026-11-10 10:43",
   "params": {
     "min_n": 5,
     "loser_min_n": 8,
@@ -13,16 +13,16 @@
     ]
   },
   "registry_loaded": 58,
-  "log_entries": 8445,
+  "log_entries": 8572,
   "windows": {
     "7d": {
       "baseline": {
-        "n": 197,
+        "n": 181,
         "median_views": 5,
         "mean_views": 24.2,
-        "p90_views": 55.4
+        "p90_views": 45.0
       },
-      "unregistered_n": 197,
+      "unregistered_n": 181,
       "segment_hook": {
         "R01__low": {
           "n": 0,
@@ -723,12 +723,12 @@
     },
     "14d": {
       "baseline": {
-        "n": 197,
+        "n": 181,
         "median_views": 5,
         "mean_views": 24.2,
-        "p90_views": 55.4
+        "p90_views": 45.0
       },
-      "unregistered_n": 197,
+      "unregistered_n": 181,
       "segment_hook": {
         "R01__low": {
           "n": 0,
@@ -1429,12 +1429,12 @@
     },
     "30d": {
       "baseline": {
-        "n": 197,
+        "n": 181,
         "median_views": 5,
         "mean_views": 24.2,
-        "p90_views": 55.4
+        "p90_views": 45.0
       },
-      "unregistered_n": 197,
+      "unregistered_n": 181,
       "segment_hook": {
         "R01__low": {
           "n": 0,

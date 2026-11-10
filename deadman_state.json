@@ -1,11 +1,11 @@
 {
  "cloud": {
-  "alerted_at": 1794229610,
+  "alerted_at": 0,
   "read_fail": 0,
   "read_warned": false
  },
  "line": {
-  "alerted_at": 1794264394,
+  "alerted_at": 0,
   "read_fail": 0,
   "read_warned": false
  }

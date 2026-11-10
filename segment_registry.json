@@ -7303,7 +7303,7 @@
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-10-30"
+    "created": "2026-11-10"
   },
   "インスタ運用で、写真の編集ができない店主へ。": {
     "segment": "INSTA_EASY",
@@ -10157,7 +10157,7 @@
     "segment": "INSTA_EASY",
     "hook": "gen",
     "variant": null,
-    "created": "2026-11-03"
+    "created": "2026-11-10"
   },
   "鎮痛剤を飲む回数が増えた週は、まず寝る前の首の力みを見てみて。": {
     "segment": "own_adapt",

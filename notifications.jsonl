@@ -69,3 +69,4 @@
 {"ts": "2026-11-08T15:53:39+09:00", "msg": "🚨Threads Daily Verify: FAIL 1件検出\n・[rule:line_rate:masa] 直近3日で最大 2026-11-07 10本/47本（21%）LINE言及・上限5本(10%)\nhttps://github.com/truthbodysalon-lab/threads-auto-post/actions/runs/42454870071"}
 {"ts": "2026-11-09T16:00:22+09:00", "msg": "🚨Threads Daily Verify: FAIL 1件検出\n・[rule:line_rate:masa] 直近3日で最大 2026-11-09 6本/24本（25%）LINE言及・上限5本(10%)\nhttps://github.com/truthbodysalon-lab/threads-auto-post/actions/runs/42576430102"}
 {"ts": "2026-11-09T16:30:30+09:00", "msg": "🚨Threads Daily Verify: FAIL 1件検出\n・[rule:line_rate:masa] 直近3日で最大 2026-11-09 6本/24本（25%）LINE言及・上限5本(10%)\nhttps://github.com/truthbodysalon-lab/threads-auto-post/actions/runs/42576430102"}
+{"ts": "2026-11-10T16:37:23+09:00", "msg": "🚨Threads Daily Verify: FAIL 1件検出\n・[rule:line_rate:masa] 直近3日で最大 2026-11-09 10本/41本（24%）LINE言及・上限5本(10%)\nhttps://github.com/truthbodysalon-lab/threads-auto-post/actions/runs/42776477358"}

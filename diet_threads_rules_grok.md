@@ -1,8 +1,8 @@
 # Grokのrules.md 原文の抜き書き（ダイエットThreads @truth_nagaoka_daietto 用）
 
-- 生成日時: 2026-11-09 06:40 JST（~/.claude/scripts/diet_threads_rules_sync.py による自動抜き書き。手で編集しない）
+- 生成日時: 2026-11-10 16:31 JST（~/.claude/scripts/diet_threads_rules_sync.py による自動抜き書き。手で編集しない）
 - 元ファイル（Obsidian vault相対）: SNS・Threads/X・Threads自動運用（Grok）/rules.md
-- 元ファイルのsha256: 5c6be5f703d61d9b150a806da6ea6dcca82359fc35bfa3eb67fdf546a9fad1d6
+- 元ファイルのsha256: d90b6d106036aeba792deb780df141eb4eba0a47a49d860cbe70f435b700b0f4
 - 原文の抜き書き。diet_threads_rules.md（要約）と食い違う場合は、こちらの新しい日付の記述が優先
 - 除外: X運用・@masahide系・Buffer・DM・Obsidian保存ルール（公開リポジトリのため）
 
@@ -66,3 +66,9 @@
 - 公式LINE確認結果（2026-10-31 15:50「公式LINE操作」より）：案内先は「ワガママを叶えるボディメイク|トゥルース」ID @886oidmv（URL https://line.me/R/ti/p/@886oidmv は未検証）。追加後はウェルカム→7日間「我慢しないボディメイク講座」→8日目に初回案内。LINEで「相談」と送ると院長が直接返信、「予約」でホットペッパー。初回「姿勢・骨格矯正×ボディメイク 初回90分」9,480円（通常22,000円）※料金は投稿に書かない（返信でも「本人から改めて連絡します」）。トーンは「我慢しない」「意志ではなく条件」「骨格・姿勢から整える」。効果保証・◯kg減・医療表現は禁止。LINEは月200通プラン（友だち1人約10通＝月20人前後で上限）。
 - 案内文の案：「気になる方は公式LINE（@886oidmv）で『相談』と送ってください。院長が直接お返事します」。ユーザーOKが出るまでLINE案内は入れない。
 - 【確定・最優先】公式LINE案内の開始（2026-10-31 15:51 ユーザーOK「200通の上限が心配なので、案内は1日1〜2本に抑えて始めて」）：上の「3〜5本に1回」と「ユーザーOKが出るまで入れない」は無効。@truth_nagaoka_daietto の投稿（通常・栄養ネタ枠・追加投稿。引用・コメント・返信は対象外）に、1日（JST 0:00〜23:59）合計で最大2本まで、最後の一文に「気になる方は公式LINE（@886oidmv）で『相談』と送ってください。院長が直接お返事します」を入れる。入れる前に threads-post-log.md でその日の「LINE案内あり」の本数を数え、2本に達していたら入れない。2本続けない。URL・料金・効果保証・煽りは書かない。入れた投稿は「LINE案内あり」と記録。
+
+<!-- autolink:keywords:start -->
+🔑 キーワード: [[myfiles/🔑 キーワード/投稿|投稿]] ・ [[myfiles/🔑 キーワード/Threads|Threads]] ・ [[myfiles/🔑 キーワード/ダイエット|ダイエット]] ・ [[myfiles/🔑 キーワード/ニュース|ニュース]] ・ [[myfiles/🔑 キーワード/実体験|実体験]] ・ [[myfiles/🔑 キーワード/Instagram|Instagram]] ・ [[myfiles/🔑 キーワード/採用|採用]] ・ [[myfiles/🔑 キーワード/ブラウザ|ブラウザ]]
+<!-- autolink:keywords:end -->
+
+<!-- autolink:related:start -->

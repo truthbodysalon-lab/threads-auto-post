@@ -105,6 +105,17 @@ class TestInspector(unittest.TestCase):
         self.ng(D.CTA_TEXT + "\nそれでは、また。ありがとうございます。", cta=True, key="最後")
         self.ng("相談したい方、多いです。\n" + D.CTA_TEXT, cta=False, key="案内フラグなし")
 
+    def test_cta_reserve_passes_and_exact(self):
+        self.ok("気になることは気軽にどうぞ。\n" + D.CTA_TEXT_RESERVE, cta=True)
+        self.ng("気になることは気軽にどうぞ。\nご予約は公式LINE（@886oidmv）で『予約』と送ってください。", cta=True, key="一字一句")
+        self.ng(D.CTA_TEXT_RESERVE + "\nそれでは、また。ありがとうございます。", cta=True, key="最後")
+
+    def test_cta_reserve_without_flag_fails(self):
+        self.ng("気になることは気軽にどうぞ。\n" + D.CTA_TEXT_RESERVE, cta=False, key="案内フラグなし")
+
+    def test_coupon_word_outside_cta_still_ng(self):
+        self.ng("初回クーポンがお得です。\n" + D.CTA_TEXT_RESERVE, cta=True)
+
     def test_empty(self):
         self.ng("")
 
@@ -167,6 +178,15 @@ class TestSimilarity(unittest.TestCase):
         gen = lambda s, u: (calls.append(1), json.dumps({"text": "#タグ付きの投稿です、よろしくお願いします。", "type": "t", "has_cta": False}, ensure_ascii=False))[1]
         p, reason = D.generate_post("09:00", "short", "t", False, [], [], gen)
         self.assertIsNone(p); self.assertEqual(len(calls), 3); self.assertIn("検品NG", reason)
+
+    def test_reserve_cta_rejected_when_not_allowed(self):
+        t = "相談の入口です。迷っている方へ。\n" + D.CTA_TEXT_RESERVE
+        gen = lambda s, u: json.dumps({"text": t, "type": "t", "has_cta": True}, ensure_ascii=False)
+        p, _ = D.generate_post("09:00", "short", "t", False, [], [], gen)
+        self.assertIsNone(p)
+        gen2 = lambda s, u: json.dumps({"text": t, "type": "t", "has_cta": False}, ensure_ascii=False)
+        p, _ = D.generate_post("09:00", "short", "t", False, [], [], gen2)
+        self.assertIsNone(p)
 
     def test_cta_flag_rejected_when_not_allowed(self):
         t = "相談の入口です。迷っている方へ。\n" + D.CTA_TEXT
@@ -404,6 +424,19 @@ class TestMisc(unittest.TestCase):
 
     def test_rules_file_cta_matches_constant(self):
         self.assertIn(D.CTA_TEXT, D.RULES_FILE.read_text(encoding="utf-8"))
+        self.assertIn(D.CTA_TEXT_RESERVE, D.RULES_FILE.read_text(encoding="utf-8"))
+
+    def test_cta_alternates(self):
+        e = lambda t: {"text": t}
+        self.assertEqual(D.next_cta_text([]), D.CTA_TEXT)
+        self.assertEqual(D.next_cta_text([e("ふつう")]), D.CTA_TEXT)
+        self.assertEqual(D.next_cta_text([e("x\n" + D.CTA_TEXT)]), D.CTA_TEXT_RESERVE)
+        self.assertEqual(D.next_cta_text([e("x\n" + D.CTA_TEXT_RESERVE)]), D.CTA_TEXT)
+        self.assertEqual(D.next_cta_text([e("x\n" + D.CTA_TEXT_RESERVE), e("y\n" + D.CTA_TEXT), e("案内なし")]), D.CTA_TEXT_RESERVE)
+
+    def test_prompt_uses_given_cta(self):
+        _, u = D.build_prompts("short", "t", "15:30", True, [], cta_text=D.CTA_TEXT_RESERVE)
+        self.assertIn(D.CTA_TEXT_RESERVE, u); self.assertNotIn(D.CTA_TEXT, u)
 
     def test_schedule_entries_wired(self):
         t = json.loads((Path(__file__).parent / "schedule_table.json").read_text())

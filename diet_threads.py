@@ -49,7 +49,34 @@ MAX_ATTEMPTS = 3
 MODELS = ["claude-haiku-4-5-20251001", "claude-sonnet-4-5"]  # 先頭から試し、失敗したら次へ
 
 CTA_TEXT = "気になる方は公式LINE（@886oidmv）で『相談』と送ってください。院長が直接お返事します"
+CTA_TEXT_RESERVE = "ご予約は公式LINE（@886oidmv）で『予約』と送ってください。ホットペッパーの初回クーポンの予約ページが届きます"   # 2026-11-10 院長指示(HPBクーポン誘導)
+CTA_TEXTS = [CTA_TEXT, CTA_TEXT_RESERVE]   # 案内を付ける回は交互に使う
 CTA_MARK = "@886oidmv"
+
+
+def strip_cta(text: str) -> str:
+    """案内の固定文(どちらでも)を取り除く"""
+    for c in CTA_TEXTS:
+        text = text.replace(c, "")
+    return text
+
+
+def cta_in(text: str) -> str | None:
+    """本文に含まれる案内の固定文(なければNone)"""
+    for c in CTA_TEXTS:
+        if c in text:
+            return c
+    return None
+
+
+def next_cta_text(entries: list[dict], recent: list[dict] | None = None) -> str:
+    """直近の自分のログで前回使った案内と逆の方。ログに案内がなければ相談版(自分のログに無ければ取得した直近投稿も見る)"""
+    for src in (list(reversed(entries)), sorted_recent(recent or [])):
+        for e in src:
+            c = cta_in(e.get("text") or "")
+            if c:
+                return CTA_TEXT_RESERVE if c == CTA_TEXT else CTA_TEXT
+    return CTA_TEXT
 
 # 2026-11-07 院長指示「Threadsの投稿に関しては文章がながい。太りやすい食材や食べ方、痩せやすい方法を端的にまとめて投稿とかツリー投稿を活用して」
 TYPES = ["太りやすい食材", "太りやすい食べ方", "やせやすい方法・続けやすい食べ方", "よくある勘違い", "お悩み別の食材"]
@@ -390,7 +417,7 @@ def inspect_text(text: str, has_cta: bool) -> list[str]:
     if len(text.strip()) < 10:
         errs.append("短すぎる")
     # 公式LINE案内は固定文のみ許可(NFKCでは全角@が崩れるので原文で判定)
-    body = text.replace(CTA_TEXT, "") if has_cta else text
+    body = strip_cta(text) if has_cta else text
     nb = unicodedata.normalize("NFKC", body)
     for w in _NG_WORDS:
         if w in nb:
@@ -399,9 +426,9 @@ def inspect_text(text: str, has_cta: bool) -> list[str]:
         if rx.search(nb):
             errs.append(f"NG表現: {name}")
     if has_cta:
-        if CTA_TEXT not in text:
+        if cta_in(text) is None:
             errs.append("案内ありなのに固定文が一字一句一致していない")
-        elif not text.rstrip().endswith(CTA_TEXT):
+        elif not any(text.rstrip().endswith(c) for c in CTA_TEXTS):
             errs.append("案内文が最後の一文になっていない")
     else:
         if "886oidmv" in t or "公式LINE" in t:
@@ -452,7 +479,7 @@ def topic_block(topic: dict | None) -> str:
 # ── 生成 ──────────────────────────────────────────
 
 def build_prompts(fmt: str, typ: str, slot: str, allow_cta: bool, recent_texts: list[str], feedback: str = "",
-                  topic: dict | None = None) -> tuple[str, str]:
+                  topic: dict | None = None, cta_text: str | None = None) -> tuple[str, str]:
     rules = RULES_FILE.read_text(encoding="utf-8") if RULES_FILE.exists() else ""
     facts = FACTS_FILE.read_text(encoding="utf-8") if FACTS_FILE.exists() else ""
     grok = GROK_RULES_FILE.read_text(encoding="utf-8") if GROK_RULES_FILE.exists() else ""
@@ -469,7 +496,7 @@ def build_prompts(fmt: str, typ: str, slot: str, allow_cta: bool, recent_texts: 
     )
     avoid = "\n".join(f"- {t.strip()[:80].replace(chr(10), ' ')}" for t in recent_texts[:20]) or "(なし)"
     cta_line = (
-        f"公式LINE案内は付けても付けなくてもよい。付ける場合は最後の一文(ツリーなら最後のツリーの最後)を次の固定文にし、has_ctaをtrueにする: {CTA_TEXT}"
+        f"公式LINE案内は付けても付けなくてもよい。付ける場合は最後の一文(ツリーなら最後のツリーの最後)を次の固定文にし、has_ctaをtrueにする(固定文は一字一句変えない。他の案内文は使わない): {cta_text or CTA_TEXT}"
         if allow_cta else "公式LINE案内は今回は入れない(has_ctaはfalse。@886oidmv や「公式LINE」の語を本文に書かない)。"
     )
     user = (
@@ -543,7 +570,7 @@ def fit_tree(post: dict) -> dict:
     out = []
     for i, part in enumerate(parts):
         lim = TREE_HEAD_MAX if i == 0 else TREE_REPLY_MAX
-        has_cta = CTA_TEXT in part
+        has_cta = cta_in(part) is not None
         if has_cta or len(part) <= lim:
             out.append(part); continue
         cur = ""
@@ -559,7 +586,7 @@ def fit_tree(post: dict) -> dict:
 
 def length_errors(post: dict, fmt: str) -> list[str]:
     """形式ごとの長さ・個数の検品（案内の固定文は字数に数えない）"""
-    body = lambda t: len(t.replace(CTA_TEXT, "").strip())  # noqa: E731
+    body = lambda t: len(strip_cta(t).strip())  # noqa: E731
     errs = []
     if fmt == "short":
         if post["replies"]:
@@ -577,15 +604,26 @@ def length_errors(post: dict, fmt: str) -> list[str]:
     return errs
 
 
+def cta_on_own_line(post: dict) -> dict:
+    """案内の固定文が前の文と同じ行に続いていたら、改行を1つ入れて読みやすくする（文言は変えない）"""
+    parts = [post["text"]] + list(post.get("replies") or [])
+    last = parts[-1]
+    for c in CTA_TEXTS:
+        if last.endswith(c) and len(last) > len(c) and not last[: -len(c)].endswith("\n"):
+            parts[-1] = last[: -len(c)].rstrip() + "\n" + c
+            break
+    return dict(post, text=parts[0], replies=parts[1:])
+
+
 def generate_post(slot: str, fmt: str, typ: str, allow_cta: bool, recent_texts: list[str], sim_pool: list[str],
-                  generator=None, topic: dict | None = None) -> tuple[dict | None, str]:
+                  generator=None, topic: dict | None = None, cta_text: str | None = None) -> tuple[dict | None, str]:
     """検品と類似チェックを通った {text,type,has_cta} と、失敗時の理由。generator(system,user)->raw は差し替え可"""
     generator = generator or call_llm
     feedback = ""
     sim_fail = 0
     last_reason = "生成失敗"
     for attempt in range(1, MAX_ATTEMPTS + 1):
-        system, user = build_prompts(fmt, typ, slot, allow_cta, recent_texts, feedback, topic)
+        system, user = build_prompts(fmt, typ, slot, allow_cta, recent_texts, feedback, topic, cta_text)
         post = parse_generated(generator(system, user))
         if not post:
             last_reason = "LLM出力を読めない/空"
@@ -622,6 +660,7 @@ def generate_post(slot: str, fmt: str, typ: str, allow_cta: bool, recent_texts: 
             feedback = f"直近の投稿「{other[:40]}」と似すぎ。テーマと書き出しを変えること"
             continue
         post["fmt"] = fmt
+        post = cta_on_own_line(post)
         return post, ""
     return None, last_reason
 
@@ -779,7 +818,8 @@ def run(slot: str | None = None, now: datetime | None = None, dry_run: bool = Fa
     rs = sorted_recent(recent)
     recent_texts = [p.get("text") or "" for p in rs if p.get("text")]
     recent_texts += [e.get("text", "") for e in reversed(entries[-20:]) if e.get("text")]   # 自分のツリーの続きも重複判定に入れる
-    post, reason = generate_post(slot, fmt, typ, allow_cta, recent_texts[:40], recent_texts[:70], generator, topic)
+    cta_text = next_cta_text(entries, recent)
+    post, reason = generate_post(slot, fmt, typ, allow_cta, recent_texts[:40], recent_texts[:70], generator, topic, cta_text)
     if not post:
         log(f"見送り: {reason}")
         if "類似" not in reason:

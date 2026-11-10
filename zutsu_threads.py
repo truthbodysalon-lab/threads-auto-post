@@ -43,7 +43,7 @@ CTA_SLOTS = {"12:15", "20:30"}   # 案内を付けてよい枠
 MIN_GAP_MIN = 30         # 直前の投稿(手動投稿も含む)からの最低間隔
 MAX_WAIT_MIN = 10        # 間隔が足りない時に待つ上限(超えるならこの枠は見送り)
 SIM_THRESHOLD = 0.5      # 文字バイグラムJaccardの重複しきい値
-MAX_LEN = 500
+MAX_LEN = 260   # 2026-11-10「文章長すぎ」で500→260（案内の固定文を付けても収まる長さ）
 MAX_ATTEMPTS = 3
 MODELS = ["claude-haiku-4-5-20251001", "claude-sonnet-4-5"]  # 先頭から試し、失敗したら次へ
 
@@ -68,11 +68,25 @@ THEMES = [
     "自分の頭痛のタイプの手がかり（痛み方・場所・きっかけ・薬の回数。事実17）",
     "整体院トゥルースでの見方（姿勢・動きの検査・痛い場所の手前まで見る。事実3〜8）",
 ]
+# 2026-11-10 masa指示「長岡市で頭痛に悩んでいる人のためになる情報も発信するようにして」。
+# 1日1本（LOCAL_SLOT）は長岡の暮らし・地域の情報のテーマにする。急な頭痛の相談先は週1回まで
+EMERGENCY_THEME = "長岡で夜や休日に急な頭痛が出て受診を迷ったとき（#7119・急患診療所。事実21〜22）"
+LOCAL_THEMES = [
+    "長岡の冬の雪かきと首肩・頭の重さ（事実18）",
+    "雪道の運転で肩に力が入るときの頭の重さ（事実18）",
+    "長岡の冬の寒暖差（暖房の部屋と外）と頭痛（事実19）",
+    "冬に水分をとる量が減りやすいことと頭の重さ（事実20）",
+    EMERGENCY_THEME,
+]
+THEMES = THEMES + LOCAL_THEMES
+LOCAL_SLOT = "12:15"
+EMERGENCY_EVERY_DAYS = 7
+# 2026-11-10 masa指示「文章長すぎ」: 長文(250〜450字)をやめ、短文と中くらい(本文140字以内)だけにする
 FORMATS = {
     "short": "短文(1〜3行・60字以内)",
-    "medium": "中くらい(100〜200字前後)",
-    "long": "長文(250〜450字。悩み→よくある勘違い→今日からできる小さなコツ→受診の目安の一行)",
+    "medium": "中くらい(本文60〜110字・3行まで。受診の目安の1行は別に足す。言いたいことを1つにして言い切る)",
 }
+MEDIUM_BODY_MAX = 120
 
 
 # ── ログ・時刻ユーティリティ ─────────────────────────
@@ -295,19 +309,21 @@ def gap_minutes(recent: list[dict], now: datetime) -> float | None:
 
 def classify_format(text: str) -> str:
     n = len(text or "")
-    return "short" if n <= 60 else ("long" if n >= 250 else "medium")
+    return "short" if n <= 60 else "medium"
 
 
 def choose_format_and_type(recent: list[dict], slot: str, rng: random.Random) -> tuple[str, str]:
-    """短文約4割・長文3割以上・同形式3連続禁止。朝は長文寄り、夕夜は短文寄り(ダイエットThreadsの振り返りを流用)"""
-    w = {"short": 0.40, "medium": 0.25, "long": 0.35}
-    if slot in ("07:30", "12:15"):
-        w["long"] += 0.10; w["short"] -= 0.10
+    """短文と中くらいを半々・同形式3連続禁止。地域の情報の枠は中身を入れるため中くらい寄り、夜は短文寄り"""
+    w = {"short": 0.50, "medium": 0.50}
+    if slot == LOCAL_SLOT:
+        w = {"short": 0.20, "medium": 0.80}
     elif slot in ("20:30", "22:00"):
-        w["short"] += 0.10; w["long"] -= 0.10
+        w = {"short": 0.65, "medium": 0.35}
     last = [classify_format(p.get("text") or "") for p in sorted_recent(recent)[:2]]
     if len(last) == 2 and last[0] == last[1]:
         w[last[0]] = 0.0
+        if not any(w.values()):
+            w = {"short": 0.5, "medium": 0.5}
     fmts, ws = zip(*w.items())
     fmt = rng.choices(fmts, weights=ws)[0]
     typ = rng.choice(TYPES)
@@ -327,7 +343,7 @@ _NG_WORDS = [
 ]
 _NG_REGEX = [
     (r"第\s*\d+\s*回", "第◯回"),
-    (r"[#＃]", "ハッシュタグ"),
+    (r"[#＃](?!7119|8000)", "ハッシュタグ"),   # 新潟県の電話相談 #7119・#8000 は番号なので可
     (r"https?://|www\.|\.com|\.jp|lin\.ee|line\.me", "URL"),
     (r"\d+(?:\.\d+)?\s*(?:%|％|パーセント)", "割合の数値"),
     (r"\d+\s*(?:か月|ヶ月|カ月|ケ月|週間|日|回)\s*で", "期間・回数の約束"),
@@ -342,7 +358,7 @@ _NG_REGEX = [
     (r"(?:薬|くすり|痛み止め|鎮痛)(?:剤)?を(?:やめ|止め|減ら|飲まな|控え|手放)", "薬の減量・中止の指示"),
     (r"ロキソニン|(?<![ァ-ヶー])イブ(?:クイック|プロフェン)?(?![ァ-ヶー])|バファリン|カロナール|ナロン|セデス|トリプタン", "薬の銘柄"),
     # 2026-11-05 試し生成ですり抜けた言い回し
-    (r"(?:人|方)(?:も|が)(?:多い|たくさん|少なくない)|だけで(?:違|変わ|ラク|楽)|楽になる人|ラクになる人|違ってく|違うかも|変わってく|変わるかも", "効果・割合の示唆"),
+    (r"(?:人|方)(?:も|が)(?:多い|たくさん|少なくない)|だけ(?:でも|で)[、,]?\s*(?:\S{0,8}(?:が|も))?(?:違|変わ|ラク|楽)|楽になる人|ラクになる人|違ってく|違うかも|変わってく|変わるかも|変わることも|違ってくることも|重さを変え|頭の重さが変わ", "効果・割合の示唆"),
     (r"僕(?:も|自身)", "院長自身の体験・体質の話"),
     (r"何か(?:が|を)?(?:起き|隠れ|潜)|ただの頭痛(?:では|じゃ)|いつもの頭痛と違|放っておく|放置すると|見逃", "不安をあおる言い方"),
     (r"(?<![師医]に)(?:相談してみ|相談(?:を|して)(?:ください|みて))|ご相談|気軽に相談", "自由文の相談への誘導"),   # 医師・薬剤師・かかりつけ医への相談は可
@@ -402,11 +418,18 @@ def inspect_text(text: str, has_cta: bool) -> list[str]:
 
 # ── 生成 ──────────────────────────────────────────
 
-def choose_theme(entries: list[dict], now: datetime, rng: random.Random) -> str:
-    """今日まだ使っていないテーマを選ぶ(自分のログの theme で判定)。全部使っていたら全体から選ぶ"""
+def choose_theme(entries: list[dict], now: datetime, rng: random.Random, slot: str | None = None) -> str:
+    """今日まだ使っていないテーマを選ぶ(自分のログの theme で判定)。全部使っていたら全体から選ぶ。
+    地域の情報の枠(LOCAL_SLOT)は長岡のテーマから選ぶ。急な頭痛の相談先は直近7日に出していれば選ばない"""
     used = {e.get("theme") for e in today_entries(entries, now)}
-    rest = [t for t in THEMES if t not in used]
-    return rng.choice(rest or THEMES)
+    since = now - timedelta(days=EMERGENCY_EVERY_DAYS)
+    recent_emerg = any(e.get("theme") == EMERGENCY_THEME and (parse_ts(e.get("ts") or "") or now) >= since
+                       for e in entries)
+    pool = LOCAL_THEMES if slot == LOCAL_SLOT else THEMES
+    if recent_emerg:
+        pool = [t for t in pool if t != EMERGENCY_THEME]
+    rest = [t for t in pool if t not in used]
+    return rng.choice(rest or pool)
 
 
 def build_prompts(fmt: str, typ: str, slot: str, allow_cta: bool, recent_texts: list[str], feedback: str = "",
@@ -430,6 +453,10 @@ def build_prompts(fmt: str, typ: str, slot: str, allow_cta: bool, recent_texts: 
         + f"長さ: {FORMATS[fmt]}\n{cta_line}\n\n"
         "直近の投稿(手動投稿を含む)。次のテーマ・書き出しと被らないこと:\n" + avoid + "\n\n"
         "1文目は「読者のセリフ(「夕方になると頭が重い」など)」か「身近な場面(デスクワーク・スマホ・雨の前の日など)」で始める。ハッシュタグ・URL・絵文字の乱用はしない。\n"
+        "短く書く。言いたいことは1つだけ。前置き・言い換え・まとめの繰り返しはしない。1文は40字以内。\n"
+        "最後は「やり方」か「目安」で終える。「〜が変わります」「〜だけで違います」「頭の重さが変わることも」のような効果の言い方で締めない。\n"
+        + ("このテーマは長岡で暮らす人向けの地域の情報。「長岡」「雪」「冬」など読者の暮らしの言葉を1つ入れ、地域の事実(事実18〜22)は書かれているとおりに使う。電話番号・時間を書くときは事実の文字どおりにし、変わることがあるので確かめてから、と添える。\n"
+           if theme in LOCAL_THEMES else "")
         + (f"短文以外は、本文の最後(公式LINE案内を付けるならその直前)に次の1行をそのまま入れる: {SAFETY_LINE}\n" if fmt != "short" else "")
         + "頭痛のタイプの話は「〜と言われています」「〜のことがあります」の言い方にし、読者の頭痛を決めつけない。\n"
         "薬の話は「飲む日が増えてきたら医師・薬剤師に相談」までにとどめ、やめる・減らす・銘柄・量の話はしない。\n"
@@ -504,8 +531,8 @@ def generate_post(slot: str, fmt: str, typ: str, allow_cta: bool, recent_texts: 
         n_body = len(post["text"].replace(CTA_TEXT, "").replace(SAFETY_LINE, "").strip())
         if fmt == "short" and n_body > 90:
             errs.append(f"短文の指定なのに{n_body}字(60字目安・90字以内)")
-        elif fmt == "long" and n_body < 200:
-            errs.append(f"長文の指定なのに{n_body}字(250〜450字)")
+        elif fmt == "medium" and n_body > (MEDIUM_BODY_MAX + 40 if theme == EMERGENCY_THEME else MEDIUM_BODY_MAX):
+            errs.append(f"長すぎる({n_body}字)。本文は110字以内に削る（言いたいことを1つにする）")
         if errs:
             last_reason = "検品NG: " + " / ".join(errs)
             feedback = "; ".join(errs)
@@ -604,7 +631,7 @@ def run(slot: str | None = None, now: datetime | None = None, dry_run: bool = Fa
     log(f"枠{slot} / 案内: {'可' if allow_cta else '不可'}({cta_reason}{'' if slot in CTA_SLOTS else '・この枠は案内なし'})")
 
     fmt, typ = choose_format_and_type(recent, slot, rng)
-    theme = choose_theme(entries, now, rng)
+    theme = choose_theme(entries, now, rng, slot)
     rs = sorted_recent(recent)
     recent_texts = [p.get("text") or "" for p in rs if p.get("text")]
     post, reason = generate_post(slot, fmt, typ, allow_cta, recent_texts[:20], recent_texts[:50], generator, theme)

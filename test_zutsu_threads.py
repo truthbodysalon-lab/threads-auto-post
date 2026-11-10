@@ -386,11 +386,12 @@ class TestMisc(unittest.TestCase):
             self.assertNotEqual(fmt, "short")
 
     def test_format_distribution_roughly(self):
-        c = {"short": 0, "medium": 0, "long": 0}
+        c = {"short": 0, "medium": 0}
         rng = random.Random(0)
         for _ in range(2000):
             f, _ = D.choose_format_and_type([], "17:30", rng); c[f] += 1
-        self.assertGreater(c["short"] / 2000, 0.35); self.assertGreater(c["long"] / 2000, 0.28)
+        self.assertGreater(c["short"] / 2000, 0.4); self.assertGreater(c["medium"] / 2000, 0.4)
+        self.assertNotIn("long", D.FORMATS)    # 2026-11-10「文章長すぎ」で長文はやめた
 
     def test_parse_ts(self):
         self.assertEqual(D.parse_ts("2026-11-02T03:00:00+0000").hour, 12)
@@ -420,20 +421,24 @@ class TestSafetyLine(unittest.TestCase):
     def gen_(self, text):
         return lambda s, u: json.dumps({"text": text, "type": "t", "has_cta": False}, ensure_ascii=False)
 
-    def test_long_without_safety_line_rejected(self):
-        p, reason = D.generate_post("07:30", "long", "t", False, [], [], self.gen_(LONG_GOOD.replace(D.SAFETY_LINE, "")))
+    def test_medium_without_safety_line_rejected(self):
+        p, reason = D.generate_post("07:30", "medium", "t", False, [], [], self.gen_(MEDIUM_GOOD.replace(D.SAFETY_LINE, "")))
         self.assertIsNone(p); self.assertIn("受診の目安", reason)
 
-    def test_long_with_safety_line_ok(self):
-        p, _ = D.generate_post("07:30", "long", "t", False, [], [], self.gen_(LONG_GOOD))
+    def test_medium_with_safety_line_ok(self):
+        p, _ = D.generate_post("07:30", "medium", "t", False, [], [], self.gen_(MEDIUM_GOOD))
         self.assertIsNotNone(p)
+
+    def test_too_long_medium_rejected(self):
+        p, reason = D.generate_post("07:30", "medium", "t", False, [], [], self.gen_(LONG_GOOD))
+        self.assertIsNone(p); self.assertIn("長すぎる", reason)
 
     def test_short_does_not_need_it(self):
         p, _ = D.generate_post("07:30", "short", "t", False, [], [], self.gen_(GOOD))
         self.assertIsNotNone(p)
 
     def test_prompt_asks_for_safety_line_except_short(self):
-        _, u = D.build_prompts("long", "t", "07:30", False, [])
+        _, u = D.build_prompts("medium", "t", "07:30", False, [])
         self.assertIn(D.SAFETY_LINE, u)
         _, u = D.build_prompts("short", "t", "07:30", False, [])
         self.assertNotIn(D.SAFETY_LINE, u)
@@ -482,6 +487,34 @@ class TestTrialRun20261105(unittest.TestCase):
 
     def test_no_free_text_consult_type(self):
         self.assertNotIn("相談の入口", D.TYPES)
+
+
+MEDIUM_GOOD = ("デスクワークの夕方、頭の両側が締めつけられる。\n"
+               "そんな日は、20分ごとに20秒、遠くを見てみてください。\n"
+               "画面は目線のやや下に置くのが目安と言われています。\n" + D.SAFETY_LINE)
+
+
+class TestNagaokaLocal20261110(unittest.TestCase):
+    """2026-11-10 masa指示「文章長すぎ」「長岡市で頭痛に悩んでいる人のためになる情報も発信するようにして」"""
+    def test_local_slot_uses_local_theme(self):
+        for seed in range(30):
+            self.assertIn(D.choose_theme([], NOW, random.Random(seed), D.LOCAL_SLOT), D.LOCAL_THEMES)
+
+    def test_emergency_theme_at_most_weekly(self):
+        e = [{"ts": (NOW - timedelta(days=3)).isoformat(), "theme": D.EMERGENCY_THEME}]
+        for seed in range(30):
+            self.assertNotEqual(D.choose_theme(e, NOW, random.Random(seed), D.LOCAL_SLOT), D.EMERGENCY_THEME)
+        old = [{"ts": (NOW - timedelta(days=8)).isoformat(), "theme": D.EMERGENCY_THEME}]
+        self.assertIn(D.EMERGENCY_THEME, {D.choose_theme(old, NOW, random.Random(s), D.LOCAL_SLOT) for s in range(60)})
+
+    def test_7119_allowed_but_hashtag_ng(self):
+        self.assertEqual(D.inspect_text("夜に急な頭痛で迷ったら、新潟県の#7119で相談できます。", False), [])
+        self.assertTrue(any("ハッシュタグ" in x for x in D.inspect_text("長岡の冬は #頭痛 が増える季節です。", False)))
+
+    def test_local_prompt_mentions_region(self):
+        _, u = D.build_prompts("medium", "t", D.LOCAL_SLOT, False, [], theme=D.LOCAL_THEMES[0])
+        self.assertIn("長岡", u)
+        self.assertIn("#7119", D.FACTS_FILE.read_text(encoding="utf-8"))
 
 
 if __name__ == "__main__":

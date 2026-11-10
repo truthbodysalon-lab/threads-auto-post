@@ -6433,7 +6433,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 15,
-    "created": "2026-11-09"
+    "created": "2026-11-10"
   },
   "ぶっちゃけ、次に何を出すかの答えは、過去の投稿にあります。": {
     "segment": "PRESENT_CTA",
@@ -10343,7 +10343,7 @@
     "hook": "present",
     "present_key": "meo_50",
     "variant": 5,
-    "created": "2026-11-09"
+    "created": "2026-11-10"
   },
   "いいねの数は、気にしない。": {
     "segment": "INSTA_EASY",

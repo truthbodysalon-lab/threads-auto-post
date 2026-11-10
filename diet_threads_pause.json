@@ -1,0 +1,5 @@
+{
+  "since": "2026-11-10T13:37:17+09:00",
+  "reason": "HTTP 500: {\"error\":{\"message\":\"An unexpected error has occurred. Please retry your request later.\",\"type\":\"OAuthException\",\"is_transient\":true,\"code\":2,\"fbtrace_id\":\"A4n9gS0FYo_B2SGNnio9YW2\"}}",
+  "slot": "13:30"
+}

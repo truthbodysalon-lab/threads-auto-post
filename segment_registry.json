@@ -5311,7 +5311,7 @@
   "「リピートできている」と感じている院長へ。": {
     "segment": "R11",
     "hook": "high",
-    "created": "2026-11-05",
+    "created": "2026-11-11",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -5320,7 +5320,7 @@
   "提案を、怖がっている院長へ。": {
     "segment": "R12",
     "hook": "high",
-    "created": "2026-11-05",
+    "created": "2026-11-11",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -6787,7 +6787,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 10,
-    "created": "2026-11-09"
+    "created": "2026-11-11"
   },
   "ハイライトを、後回しにしない。": {
     "segment": "PRESENT_CTA",
@@ -7545,7 +7545,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 7,
-    "created": "2026-11-10"
+    "created": "2026-11-11"
   },
   "ぶっちゃけ、続かない人は、次に何をやるかが決まっていません。": {
     "segment": "PRESENT_CTA",
@@ -8181,7 +8181,7 @@
     "segment": "WIN_HOOK",
     "hook": "winning",
     "variant": 9,
-    "created": "2026-11-04"
+    "created": "2026-11-11"
   },
   "インスタを続けるのに、新しいネタは要りません。": {
     "segment": "WIN_HOOK",
@@ -8490,7 +8490,7 @@
   "ストーリーズは、毎日出すより、予告したほうが見られます。": {
     "segment": "I09",
     "hook": "high",
-    "created": "2026-11-07",
+    "created": "2026-11-11",
     "acct": "masa",
     "axis": "insta_pain",
     "variant": null,
@@ -9994,7 +9994,7 @@
     "segment": "WIN_HOOK",
     "hook": "winning",
     "variant": 14,
-    "created": "2026-11-04"
+    "created": "2026-11-11"
   },
   "仕事の合間に、首を回したのはいつですか？": {
     "segment": "QUESTION",
@@ -10760,6 +10760,13 @@
     "hook": "present",
     "present_key": "ai_starter",
     "variant": 5,
+    "created": "2026-11-11"
+  },
+  "返事や記録に追われて、お客さんと話す時間が足りない。": {
+    "segment": "PRESENT_CTA",
+    "hook": "present",
+    "present_key": "ai_starter",
+    "variant": 9,
     "created": "2026-11-11"
   }
 }

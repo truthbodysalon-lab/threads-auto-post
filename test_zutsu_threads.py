@@ -165,7 +165,7 @@ class TestSimilarity(unittest.TestCase):
 
     def test_regenerate_succeeds(self):
         dup = "夕方になると頭が重くなる方は、画面の高さを少し見直してみてください。"
-        new = GOOD
+        new = "雨の前の日は、天気アプリで先回りして早めに寝る。"
         seq = iter([dup, new])
         gen = lambda s, u: json.dumps({"text": next(seq), "type": "t", "has_cta": False}, ensure_ascii=False)
         p, _ = D.generate_post("07:30", "short", "t", False, [dup], [dup], gen)
@@ -175,7 +175,7 @@ class TestSimilarity(unittest.TestCase):
         calls = []
         gen = lambda s, u: (calls.append(1), json.dumps({"text": "#タグ付きの投稿です、よろしくお願いします。", "type": "t", "has_cta": False}, ensure_ascii=False))[1]
         p, reason = D.generate_post("07:30", "short", "t", False, [], [], gen)
-        self.assertIsNone(p); self.assertEqual(len(calls), 3); self.assertIn("検品NG", reason)
+        self.assertIsNone(p); self.assertEqual(len(calls), D.MAX_ATTEMPTS); self.assertIn("検品NG", reason)
 
     def test_cta_flag_rejected_when_not_allowed(self):
         t = "相談の入口です。迷っている方へ。\n" + D.CTA_TEXT
@@ -421,13 +421,21 @@ class TestSafetyLine(unittest.TestCase):
     def gen_(self, text):
         return lambda s, u: json.dumps({"text": text, "type": "t", "has_cta": False}, ensure_ascii=False)
 
+    T = D.THEMES[0]   # 緊張型（※を付けるテーマ）
+
     def test_medium_without_safety_line_rejected(self):
-        p, reason = D.generate_post("07:30", "medium", "t", False, [], [], self.gen_(MEDIUM_GOOD.replace(D.SAFETY_LINE, "")))
+        p, reason = D.generate_post("07:30", "medium", "t", False, [], [], self.gen_(MEDIUM_GOOD), self.T, D.SAFETY_LINE)
         self.assertIsNone(p); self.assertIn("受診の目安", reason)
 
     def test_medium_with_safety_line_ok(self):
-        p, _ = D.generate_post("07:30", "medium", "t", False, [], [], self.gen_(MEDIUM_GOOD))
+        p, _ = D.generate_post("07:30", "medium", "t", False, [], [], self.gen_(MEDIUM_GOOD + "\n" + D.SAFETY_LINE),
+                               self.T, D.SAFETY_LINE)
         self.assertIsNotNone(p)
+
+    def test_safety_line_rejected_when_not_asked(self):
+        """2026-11-10 masa指示「※で同じ文章を毎回上げすぎ」"""
+        p, reason = D.generate_post("07:30", "medium", "t", False, [], [], self.gen_(MEDIUM_GOOD + "\n" + D.SAFETY_LINE))
+        self.assertIsNone(p); self.assertIn("※", reason)
 
     def test_too_long_medium_rejected(self):
         p, reason = D.generate_post("07:30", "medium", "t", False, [], [], self.gen_(LONG_GOOD))
@@ -437,14 +445,26 @@ class TestSafetyLine(unittest.TestCase):
         p, _ = D.generate_post("07:30", "short", "t", False, [], [], self.gen_(GOOD))
         self.assertIsNotNone(p)
 
-    def test_prompt_asks_for_safety_line_except_short(self):
+    def test_safety_only_for_type_themes_once_a_day(self):
+        self.assertEqual(D.safety_line_for("short", self.T, [], NOW), "")
+        self.assertEqual(D.safety_line_for("medium", D.THEMES[6], [], NOW), "")          # 枕の話には付けない
+        self.assertEqual(D.safety_line_for("medium", D.EMERGENCY_THEME, [], NOW), "")    # 相談先は本文がその話
+        self.assertEqual(D.safety_line_for("medium", self.T, [], NOW), D.SAFETY_LINES[0])
+        today = [{"text": "本文\n" + D.SAFETY_LINES[0], "timestamp": ts(NOW - timedelta(hours=3))}]
+        self.assertEqual(D.safety_line_for("medium", self.T, today, NOW), "")             # 1日1本まで
+        yday = [{"text": "本文\n" + D.SAFETY_LINES[0], "timestamp": ts(NOW - timedelta(days=1))}]
+        self.assertEqual(D.safety_line_for("medium", self.T, yday, NOW), D.SAFETY_LINES[1])   # 言い方を替える
+
+    def test_prompt_asks_for_safety_line_only_when_given(self):
+        _, u = D.build_prompts("medium", "t", "07:30", False, [], safety=D.SAFETY_LINES[1])
+        self.assertIn(D.SAFETY_LINES[1], u)
         _, u = D.build_prompts("medium", "t", "07:30", False, [])
-        self.assertIn(D.SAFETY_LINE, u)
-        _, u = D.build_prompts("short", "t", "07:30", False, [])
-        self.assertNotIn(D.SAFETY_LINE, u)
+        self.assertNotIn(D.SAFETY_LINE, u); self.assertIn("※", u)
 
     def test_rules_and_facts_files_have_safety_line(self):
-        self.assertIn(D.SAFETY_LINE, D.RULES_FILE.read_text(encoding="utf-8"))
+        r = D.RULES_FILE.read_text(encoding="utf-8")
+        for x in D.SAFETY_LINES:
+            self.assertIn(x, r)
 
     def test_token_registered_for_refresh(self):
         import token_manager, auth
@@ -491,7 +511,30 @@ class TestTrialRun20261105(unittest.TestCase):
 
 MEDIUM_GOOD = ("デスクワークの夕方、頭の両側が締めつけられる。\n"
                "そんな日は、20分ごとに20秒、遠くを見てみてください。\n"
-               "画面は目線のやや下に置くのが目安と言われています。\n" + D.SAFETY_LINE)
+               "画面は目線のやや下に置くのが目安と言われています。")
+
+
+class TestCliche20261110(unittest.TestCase):
+    """2026-11-10 masa指示「ありきたりな文章使いすぎ」"""
+    def test_cliches_always_rejected(self):
+        for c in ["でも実は、場所が原因とは限りません。", "今日からできる小さなコツは、遠くを見ること。", "暗い場所で休むのが一番です。"]:
+            self.assertTrue(D.stock_phrase_errors(c, []), c)
+
+    def test_similar_opening_rejected(self):
+        recent = ["スマホを見ていると、首の片側が痛くなる。そんなときは枕を。"]
+        errs = D.stock_phrase_errors("スマホを見ていると、首の片側が重くなる。画面は目線のやや下に。", recent)
+        self.assertTrue(any("書き出し" in e for e in errs))
+
+    def test_theme_avoids_last_two_days(self):
+        e = [{"ts": ts(NOW - timedelta(days=1)), "theme": t} for t in D.THEMES[:-1]]
+        for seed in range(20):
+            self.assertEqual(D.choose_theme(e, NOW, random.Random(seed)), D.THEMES[-1])
+
+
+class TestFacts7119(unittest.TestCase):
+    def test_7119_must_be_niigata_pref(self):
+        self.assertTrue(D.inspect_text("夜に迷ったら長岡市の#7119へ。電話で確かめてから。", False))
+        self.assertFalse(any("7119" in e for e in D.inspect_text("夜に迷ったら新潟県の救急医療電話相談 #7119 へ。", False)))
 
 
 class TestNagaokaLocal20261110(unittest.TestCase):

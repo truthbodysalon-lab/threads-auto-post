@@ -44,7 +44,7 @@ MIN_GAP_MIN = 30         # 直前の投稿(手動投稿も含む)からの最低
 MAX_WAIT_MIN = 10        # 間隔が足りない時に待つ上限(超えるならこの枠は見送り)
 SIM_THRESHOLD = 0.5      # 文字バイグラムJaccardの重複しきい値
 MAX_LEN = 260   # 2026-11-10「文章長すぎ」で500→260（案内の固定文を付けても収まる長さ）
-MAX_ATTEMPTS = 3
+MAX_ATTEMPTS = 5          # 2026-11-10 ありきたりな言い回しの検品を厳しくしたため3→5
 MODELS = ["claude-haiku-4-5-20251001", "claude-sonnet-4-5"]  # 先頭から試し、失敗したら次へ
 
 # 頭痛LINE(@561yryuk)の「診断」は自動応答(id 4 頭痛タイプ診断)が返す案内済みの言葉。自由文の相談には誘導しない(自由文は手動返信のため)
@@ -52,6 +52,13 @@ CTA_TEXT = "自分の頭痛のタイプが気になる方は、公式LINE（@561
 CTA_MARK = "@561yryuk"
 # 頭痛を扱う投稿(中くらい・長文)に必ず入れる1行（ig-autopost-cloud guides/headache_facts.md #23）
 SAFETY_LINE = "※突然の激しい頭痛や手足のしびれがある場合は、先に医療機関へ。"
+# 2026-11-10 masa指示「※で同じ文章を毎回上げすぎ」: ※の1行は毎回ではなく、頭痛のタイプを扱う投稿に1日1本まで。
+# 言い方は事実16の範囲で3通りを順に替える（直前と同じ言い方にしない）
+SAFETY_LINES = [
+    SAFETY_LINE,
+    "※急な激しい痛み、手足のしびれ、ろれつが回らないときは、まず医療機関へ。",
+    "※発熱と首の硬さ、見え方の異常をともなう頭痛は、整体より先に受診を。",
+]
 
 TYPES = ["悩みの言い当て", "よくある勘違いをほどく", "今日からできる小さなコツ", "自分の頭痛のタイプを知る手がかり", "院での見方の紹介"]
 # テーマは事実ファイル(zutsu_threads_facts.md)の項目に対応させ、同じ日に同じテーマを2回使わない。
@@ -79,12 +86,14 @@ LOCAL_THEMES = [
     EMERGENCY_THEME,
 ]
 THEMES = THEMES + LOCAL_THEMES
+# ※の1行を付けるのは頭痛のタイプそのものを扱うテーマだけ（受診の目安・相談先のテーマは本文がその話なので付けない）
+SAFETY_THEMES = {THEMES[0], THEMES[1], THEMES[2], THEMES[4], THEMES[8]}
 LOCAL_SLOT = "12:15"
 EMERGENCY_EVERY_DAYS = 7
 # 2026-11-10 masa指示「文章長すぎ」: 長文(250〜450字)をやめ、短文と中くらい(本文140字以内)だけにする
 FORMATS = {
     "short": "短文(1〜3行・60字以内)",
-    "medium": "中くらい(本文60〜110字・3行まで。受診の目安の1行は別に足す。言いたいことを1つにして言い切る)",
+    "medium": "中くらい(本文60〜110字・3行まで。※の注意書きを指示されたときはそれを別に足す。言いたいことを1つにして言い切る)",
 }
 MEDIUM_BODY_MAX = 120
 
@@ -307,9 +316,34 @@ def gap_minutes(recent: list[dict], now: datetime) -> float | None:
     return None
 
 
+def safety_line_for(fmt: str, theme: str, recent: list[dict], now: datetime) -> str:
+    """今回の投稿に付ける※の1行。付けないなら空文字。
+    中くらい×頭痛のタイプのテーマだけ・その日(JST)にまだ※つきの投稿が無いときだけ・直前に使った言い方は避ける"""
+    if fmt != "medium" or theme not in SAFETY_THEMES:
+        return ""
+    d = now.strftime("%Y-%m-%d")
+    last_used = None
+    for p in sorted_recent(recent):
+        t = p.get("text") or ""
+        if "※" not in t:
+            continue
+        ts = parse_ts(p.get("timestamp", ""))
+        if ts and ts.astimezone(JST).strftime("%Y-%m-%d") == d:
+            return ""
+        if last_used is None:
+            last_used = next((x for x in SAFETY_LINES if x in t), "")
+    i = (SAFETY_LINES.index(last_used) + 1) if last_used in SAFETY_LINES else 0
+    return SAFETY_LINES[i % len(SAFETY_LINES)]
+
+
+def first_sentence(text: str) -> str:
+    return re.split(r"[。！？!?\n]", (text or "").strip(), maxsplit=1)[0]
+
+
 def classify_format(text: str) -> str:
-    n = len(text or "")
-    return "short" if n <= 60 else "medium"
+    # ※の注意書きつき、または90字を超えるものを中くらいとして数える（短文の指定でも少し長めに書かれることがあるため）
+    t = text or ""
+    return "short" if len(t) <= 90 and "※" not in t else "medium"
 
 
 def choose_format_and_type(recent: list[dict], slot: str, rng: random.Random) -> tuple[str, str]:
@@ -337,7 +371,7 @@ _NG_WORDS = [
     "今すぐ", "限定", "先着", "今だけ", "無料", "特典", "キャンペーン", "クーポン", "割引", "初回", "料金", "価格", "コース", "回数券",
     "お客様の声", "お客さまの声", "口コミ", "ビフォー", "アフター", "患者", "お客様が", "お客さまが", "来院",
     # 頭痛は医療に近いので、治る・効く系と診断の言い切りは書かない（guides/headache_facts.md「書かない」）
-    "治る", "治す", "治り", "治療", "完治", "効く", "効果", "保証", "改善率", "No.1", "唯一",
+    "治る", "治す", "治り", "治療", "完治", "効く", "効き", "効果", "有効", "に強くな", "保証", "改善率", "No.1", "唯一",
     "薬物乱用頭痛", "薬に頼らない", "頭痛薬に頼", "群発頭痛", "副鼻腔炎",
     "見てきた", "診てきた", "経験上", "これまでの経験", "実際に変わった",
 ]
@@ -369,19 +403,34 @@ _NG_REGEX = [
     (r"CGRP|セロトニン|三叉神経|閃輝暗点|後頭下筋|胸鎖乳突筋|僧帽筋|ミトコンドリア|ホルモンバランス", "専門用語"),
 ]
 
+# 2026-11-10 masa指示「ありきたりな文章使いすぎ」: 11/6〜11/10の投稿で繰り返されていた言い回しは常に使わない
+CLICHES = ["でも実は", "よくある勘違い", "今日からできる", "小さなコツ", "そんなときって", "原因とは限りません",
+           "痛い場所を揉", "が一番です", "が大切です", "ことが大切", "が大事です", "大事な視点", "価値があります",
+           "院でもここから始まります", "ここから始まります", "見直してみる", "一度見直", "近道です", "積み重ね",
+           "抜け出すきっかけ", "根っこ", "疑ってみて", "意識するだけ", "小さな工夫", "見えてきます",
+           "が大事", "次のステップ", "工夫が", "プロの", "しましょう"]
 # 決まり文句の繰り返しを避ける（手動投稿も含めた直近の投稿と比べる）
 STOCK_PHRASES = ["本当に多いです", "意外と多いです", "多いんです", "多いです", "という方", "そんな方", "思っていませんか",
                  "ありませんか", "大丈夫です", "一緒に整理", "一緒に見て", "いろんな角度",
-                 "気になりませんか", "気になることがあれば", "そういう時", "そういうとき", "向き合"]
+                 "気になりませんか", "気になることがあれば", "そういう時", "そういうとき", "向き合",
+                 "そんなとき", "そんな日", "てみてください", "していませんか", "しまいませんか", "なりませんか",
+                 "見直して", "目安です", "避けたほうが"]
 
 
 def stock_phrase_errors(text: str, recent_texts: list[str]) -> list[str]:
-    """直近3本のどれかに出ている決まり文句、または直近10本で2回以上出ている決まり文句を使っていたらNG"""
-    errs = []
-    last3, last10 = recent_texts[:3], recent_texts[:10]
+    """ありきたりな言い回し(CLICHES)は常にNG。決まり文句(STOCK_PHRASES)は直近5本のどれかに出ているか、
+    直近15本で2回以上出ていたらNG。書き出しの1文が直近15本の書き出しと似ていてもNG"""
+    errs = [f"ありきたりな言い回し「{c}」" for c in CLICHES if c in text]
+    last5, last15 = recent_texts[:5], recent_texts[:15]
     for p in STOCK_PHRASES:
-        if p in text and (any(p in t for t in last3) or sum(p in t for t in last10) >= 2):
+        if p in text and (any(p in t for t in last5) or sum(p in t for t in last15) >= 2):
             errs.append(f"決まり文句「{p}」が直近の投稿と重なる")
+    head = first_sentence(text)
+    if len(head) >= 6:
+        for t in last15:
+            if jaccard(head, first_sentence(t)) >= 0.45:
+                errs.append(f"書き出しが直近の投稿「{first_sentence(t)[:20]}」と似ている")
+                break
     return errs
 _NG_NFKC = [(re.compile(p), name) for p, name in _NG_REGEX]
 
@@ -392,6 +441,9 @@ def inspect_text(text: str, has_cta: bool) -> list[str]:
     if not text or not text.strip():
         return ["本文が空"]
     t = unicodedata.normalize("NFKC", text)
+    # #7119 は新潟県の窓口（長岡市のものではない。2026-11-10 試し生成で「長岡市の#7119」と書かれた）
+    if "7119" in t and ("新潟県" not in t or re.search(r"長岡市?の\s*#?7119", t)):
+        errs.append("#7119は「新潟県の救急医療電話相談」と書く（長岡市の窓口ではない）")
     if len(text) > MAX_LEN:
         errs.append(f"{MAX_LEN}字超過({len(text)}字)")
     if len(text.strip()) < 10:
@@ -422,18 +474,22 @@ def choose_theme(entries: list[dict], now: datetime, rng: random.Random, slot: s
     """今日まだ使っていないテーマを選ぶ(自分のログの theme で判定)。全部使っていたら全体から選ぶ。
     地域の情報の枠(LOCAL_SLOT)は長岡のテーマから選ぶ。急な頭痛の相談先は直近7日に出していれば選ばない"""
     used = {e.get("theme") for e in today_entries(entries, now)}
+    # 2026-11-10: 枕・首の話が3日続いたため、直近2日に使ったテーマもなるべく避ける
+    since2 = now - timedelta(days=2)
+    used2 = used | {e.get("theme") for e in entries if (parse_ts(e.get("ts") or "") or since2) > since2}
     since = now - timedelta(days=EMERGENCY_EVERY_DAYS)
     recent_emerg = any(e.get("theme") == EMERGENCY_THEME and (parse_ts(e.get("ts") or "") or now) >= since
                        for e in entries)
     pool = LOCAL_THEMES if slot == LOCAL_SLOT else THEMES
     if recent_emerg:
         pool = [t for t in pool if t != EMERGENCY_THEME]
+    rest2 = [t for t in pool if t not in used2]
     rest = [t for t in pool if t not in used]
-    return rng.choice(rest or pool)
+    return rng.choice(rest2 or rest or pool)
 
 
 def build_prompts(fmt: str, typ: str, slot: str, allow_cta: bool, recent_texts: list[str], feedback: str = "",
-                  theme: str = "") -> tuple[str, str]:
+                  theme: str = "", safety: str = "") -> tuple[str, str]:
     rules = RULES_FILE.read_text(encoding="utf-8") if RULES_FILE.exists() else ""
     facts = FACTS_FILE.read_text(encoding="utf-8") if FACTS_FILE.exists() else ""
     system = (
@@ -457,7 +513,14 @@ def build_prompts(fmt: str, typ: str, slot: str, allow_cta: bool, recent_texts: 
         "最後は「やり方」か「目安」で終える。「〜が変わります」「〜だけで違います」「頭の重さが変わることも」のような効果の言い方で締めない。\n"
         + ("このテーマは長岡で暮らす人向けの地域の情報。「長岡」「雪」「冬」など読者の暮らしの言葉を1つ入れ、地域の事実(事実18〜22)は書かれているとおりに使う。電話番号・時間を書くときは事実の文字どおりにし、変わることがあるので確かめてから、と添える。\n"
            if theme in LOCAL_THEMES else "")
-        + (f"短文以外は、本文の最後(公式LINE案内を付けるならその直前)に次の1行をそのまま入れる: {SAFETY_LINE}\n" if fmt != "short" else "")
+        + (f"本文の最後(公式LINE案内を付けるならその直前)に次の1行をそのまま入れる: {safety}\n" if safety
+           else "今回は「※」で始まる注意書きの1行を入れない。\n")
+        + "型の名前(「よくある勘違い」「今日からできる小さなコツ」など)を本文に書かない。"
+        "「でも実は」「そんなときは」「〜が一番です」「〜が大切です」「見直してみてください」のような、どの投稿にも書けるありきたりな言い回しを使わない。"
+        "その場面ならではの具体的な言葉で書く(ここに挙げた言葉の使い回しではなく、自分で場面を選ぶ)。体験談・お客様の話は作らない。\n"
+        "書き出しは、直近の投稿の書き出しと違う場面・違う言葉にする。直近の書き出し: "
+        + " / ".join(first_sentence(t)[:25] for t in recent_texts[:8] if t) + "\n"
+        + ("短文は60字以内・2文まで。説明を足さない。\n" if fmt == "short" else "")
         + "頭痛のタイプの話は「〜と言われています」「〜のことがあります」の言い方にし、読者の頭痛を決めつけない。\n"
         "薬の話は「飲む日が増えてきたら医師・薬剤師に相談」までにとどめ、やめる・減らす・銘柄・量の話はしない。\n"
         "専門用語(CGRP・セロトニン・三叉神経・筋肉の名前など)は使わず、中学生にも伝わる言葉に言い換える。\n"
@@ -508,14 +571,14 @@ def parse_generated(raw: str | None) -> dict | None:
 
 
 def generate_post(slot: str, fmt: str, typ: str, allow_cta: bool, recent_texts: list[str], sim_pool: list[str],
-                  generator=None, theme: str = "") -> tuple[dict | None, str]:
+                  generator=None, theme: str = "", safety: str = "") -> tuple[dict | None, str]:
     """検品と類似チェックを通った {text,type,has_cta} と、失敗時の理由。generator(system,user)->raw は差し替え可"""
     generator = generator or call_llm
     feedback = ""
     sim_fail = 0
     last_reason = "生成失敗"
     for attempt in range(1, MAX_ATTEMPTS + 1):
-        system, user = build_prompts(fmt, typ, slot, allow_cta, recent_texts, feedback, theme)
+        system, user = build_prompts(fmt, typ, slot, allow_cta, recent_texts, feedback, theme, safety)
         post = parse_generated(generator(system, user))
         if not post:
             last_reason = "LLM出力を読めない/空"
@@ -526,11 +589,13 @@ def generate_post(slot: str, fmt: str, typ: str, allow_cta: bool, recent_texts: 
             feedback = "公式LINE案内は入れない"
             continue
         errs = inspect_text(post["text"], post["has_cta"]) + stock_phrase_errors(post["text"], recent_texts)
-        if fmt != "short" and SAFETY_LINE not in post["text"]:
-            errs.append(f"受診の目安の1行「{SAFETY_LINE}」が入っていない")
-        n_body = len(post["text"].replace(CTA_TEXT, "").replace(SAFETY_LINE, "").strip())
-        if fmt == "short" and n_body > 90:
-            errs.append(f"短文の指定なのに{n_body}字(60字目安・90字以内)")
+        if safety and safety not in post["text"]:
+            errs.append(f"受診の目安の1行「{safety}」が入っていない")
+        elif not safety and "※" in post["text"]:
+            errs.append("今回は※の注意書きを入れない（1日1本まで・頭痛のタイプの投稿だけ）")
+        n_body = len(post["text"].replace(CTA_TEXT, "").replace(safety or SAFETY_LINE, "").strip())
+        if fmt == "short" and n_body > MEDIUM_BODY_MAX:
+            errs.append(f"長すぎる({n_body}字)。短文は60字目安。言いたいことを1つにする")
         elif fmt == "medium" and n_body > (MEDIUM_BODY_MAX + 40 if theme == EMERGENCY_THEME else MEDIUM_BODY_MAX):
             errs.append(f"長すぎる({n_body}字)。本文は110字以内に削る（言いたいことを1つにする）")
         if errs:
@@ -634,11 +699,21 @@ def run(slot: str | None = None, now: datetime | None = None, dry_run: bool = Fa
     theme = choose_theme(entries, now, rng, slot)
     rs = sorted_recent(recent)
     recent_texts = [p.get("text") or "" for p in rs if p.get("text")]
-    post, reason = generate_post(slot, fmt, typ, allow_cta, recent_texts[:20], recent_texts[:50], generator, theme)
+    safety = safety_line_for(fmt, theme, recent, now)
+    post, reason = generate_post(slot, fmt, typ, allow_cta, recent_texts[:20], recent_texts[:50], generator, theme, safety)
+    if not post:
+        # 2026-11-10: 同じ書き出しになりやすいテーマで見送りが増えたので、テーマを替えて1回だけやり直す
+        pool = LOCAL_THEMES if slot == LOCAL_SLOT else THEMES
+        others = [t for t in pool if t != theme and t != EMERGENCY_THEME]
+        if others:
+            log(f"テーマ「{theme[:20]}」で合格せず({reason[:80]})。テーマを替えてやり直す")
+            theme = rng.choice(others)
+            safety = safety_line_for(fmt, theme, recent, now)
+            post, reason = generate_post(slot, fmt, typ, allow_cta, recent_texts[:20], recent_texts[:50], generator, theme, safety)
     if not post:
         log(f"見送り: {reason}")
         if "類似" not in reason:
-            notify(f"{slot}枠を見送り: 3回生成しても合格しませんでした({reason[:150]})")
+            notify(f"{slot}枠を見送り: テーマを替えても合格しませんでした({reason[:150]})")
         return 0
 
     if dry_run:

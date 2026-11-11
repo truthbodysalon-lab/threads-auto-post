@@ -1,6 +1,6 @@
 {
   "acct": "nagaoka",
-  "generated_at": "2026-11-10 10:43",
+  "generated_at": "2026-11-11 10:43",
   "params": {
     "min_n": 5,
     "loser_min_n": 8,
@@ -12,17 +12,17 @@
       30
     ]
   },
-  "registry_loaded": 271,
-  "log_entries": 5479,
+  "registry_loaded": 281,
+  "log_entries": 5510,
   "windows": {
     "7d": {
       "baseline": {
-        "n": 112,
-        "median_views": 46.0,
-        "mean_views": 130.6,
-        "p90_views": 325.7
+        "n": 113,
+        "median_views": 43,
+        "mean_views": 118.4,
+        "p90_views": 339.6
       },
-      "unregistered_n": 112,
+      "unregistered_n": 113,
       "segment_hook": {
         "T1_desk__low": {
           "n": 0,
@@ -422,12 +422,12 @@
     },
     "14d": {
       "baseline": {
-        "n": 112,
-        "median_views": 46.0,
-        "mean_views": 130.6,
-        "p90_views": 325.7
+        "n": 113,
+        "median_views": 43,
+        "mean_views": 118.4,
+        "p90_views": 339.6
       },
-      "unregistered_n": 112,
+      "unregistered_n": 113,
       "segment_hook": {
         "T1_desk__low": {
           "n": 0,
@@ -827,12 +827,12 @@
     },
     "30d": {
       "baseline": {
-        "n": 112,
-        "median_views": 46.0,
-        "mean_views": 130.6,
-        "p90_views": 325.7
+        "n": 113,
+        "median_views": 43,
+        "mean_views": 118.4,
+        "p90_views": 339.6
       },
-      "unregistered_n": 112,
+      "unregistered_n": 113,
       "segment_hook": {
         "T1_desk__low": {
           "n": 0,
@@ -1751,13 +1751,13 @@
   },
   "type_report": {
     "7d": {
-      "baseline_median": 46.0,
-      "n": 112,
+      "baseline_median": 43,
+      "n": 113,
       "types": {
         "MAE_MAZU": {
-          "n": 4,
-          "median_views": 94.0,
-          "index": 2.04
+          "n": 3,
+          "median_views": 76,
+          "index": 1.77
         },
         "ZUTSUYAKU": {
           "n": 0,
@@ -1765,8 +1765,8 @@
           "index": 0.0
         },
         "WEATHER": {
-          "n": 2,
-          "median_views": 77.0,
+          "n": 4,
+          "median_views": 72.0,
           "index": 1.67
         },
         "QUESTION": {
@@ -1785,25 +1785,25 @@
           "index": 0.0
         },
         "own_adapt": {
-          "n": 15,
-          "median_views": 32,
-          "index": 0.7
+          "n": 22,
+          "median_views": 41.5,
+          "index": 0.97
         },
         "image": {
-          "n": 11,
-          "median_views": 19,
-          "index": 0.41
+          "n": 12,
+          "median_views": 19.0,
+          "index": 0.44
         }
       }
     },
     "14d": {
-      "baseline_median": 46.0,
-      "n": 112,
+      "baseline_median": 43,
+      "n": 113,
       "types": {
         "MAE_MAZU": {
-          "n": 4,
-          "median_views": 94.0,
-          "index": 2.04
+          "n": 3,
+          "median_views": 76,
+          "index": 1.77
         },
         "ZUTSUYAKU": {
           "n": 0,
@@ -1811,8 +1811,8 @@
           "index": 0.0
         },
         "WEATHER": {
-          "n": 2,
-          "median_views": 77.0,
+          "n": 4,
+          "median_views": 72.0,
           "index": 1.67
         },
         "QUESTION": {
@@ -1831,25 +1831,25 @@
           "index": 0.0
         },
         "own_adapt": {
-          "n": 15,
-          "median_views": 32,
-          "index": 0.7
+          "n": 22,
+          "median_views": 41.5,
+          "index": 0.97
         },
         "image": {
-          "n": 11,
-          "median_views": 19,
-          "index": 0.41
+          "n": 12,
+          "median_views": 19.0,
+          "index": 0.44
         }
       }
     },
     "30d": {
-      "baseline_median": 46.0,
-      "n": 112,
+      "baseline_median": 43,
+      "n": 113,
       "types": {
         "MAE_MAZU": {
-          "n": 4,
-          "median_views": 94.0,
-          "index": 2.04
+          "n": 3,
+          "median_views": 76,
+          "index": 1.77
         },
         "ZUTSUYAKU": {
           "n": 0,
@@ -1857,8 +1857,8 @@
           "index": 0.0
         },
         "WEATHER": {
-          "n": 2,
-          "median_views": 77.0,
+          "n": 4,
+          "median_views": 72.0,
           "index": 1.67
         },
         "QUESTION": {
@@ -1877,14 +1877,14 @@
           "index": 0.0
         },
         "own_adapt": {
-          "n": 15,
-          "median_views": 32,
-          "index": 0.7
+          "n": 22,
+          "median_views": 41.5,
+          "index": 0.97
         },
         "image": {
-          "n": 11,
-          "median_views": 19,
-          "index": 0.41
+          "n": 12,
+          "median_views": 19.0,
+          "index": 0.44
         }
       }
     }

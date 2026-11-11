@@ -514,5 +514,23 @@ class TestTree20261107(Base):
         self.assertTrue(D.load_topics())
 
 
+class TestPace20261111(unittest.TestCase):
+    """院長指示（2026-11-11）: Grok分を含め1日10本を目標に、ペースより先行している枠は見送る"""
+    def P(self, h, m=0):
+        return {"timestamp": datetime(2026, 11, 11, h, m, tzinfo=D.JST).isoformat()}
+
+    def test_pace(self):
+        at = lambda h, m=0: datetime(2026, 11, 11, h, m, tzinfo=D.JST)  # noqa: E731
+        self.assertIsNone(D.pace_guard([], at(6, 30)))
+        self.assertTrue(D.pace_guard([self.P(6)], at(6, 30)))
+        self.assertIsNone(D.pace_guard([self.P(7), self.P(8)], at(12, 30)))
+        self.assertTrue(D.pace_guard([self.P(7), self.P(8), self.P(10), self.P(11)], at(12, 30)))
+        self.assertIn("目標の10本", D.pace_guard([self.P(7, i) for i in range(10)], at(23, 30)))
+
+    def test_yesterday_not_counted(self):
+        y = {"timestamp": datetime(2026, 11, 10, 22, 0, tzinfo=D.JST).isoformat()}
+        self.assertEqual(D.todays_total([y], datetime(2026, 11, 11, 7, 0, tzinfo=D.JST)), 0)
+
+
 if __name__ == "__main__":
     unittest.main()

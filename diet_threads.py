@@ -38,7 +38,9 @@ JST = timezone(timedelta(hours=9))
 
 # 2026-11-02 院長指示「1日合計30投稿以上」→ Grok 10本＋API 21本。間隔30分・6時〜24時（深夜は出さない）。Grokの毎時ちょうど(7,8,10,12,14,16,17,19,21,22時)の間に置く
 SLOTS = ["06:30", "07:30", "08:30", "09:30", "10:30", "11:30", "12:30", "13:30", "14:30", "15:30", "16:30", "17:30", "18:00", "18:30", "19:30", "20:00", "20:30", "21:30", "22:30", "23:00", "23:30"]
-DAILY_CAP = 21           # API投稿の1日上限（Grokの10本と合わせて31本）
+DAILY_CAP = 10           # API投稿の1日上限（2026-11-11 院長指示「Threadsの投稿は1日10投稿を目標にして」）
+DAILY_TOTAL_TARGET = 10  # Grok Bot の分も合わせた1日の目標本数。枠はそのまま21か所で、ペースより先行している枠は見送る
+PACE_START_MIN, PACE_END_MIN = 6 * 60, 24 * 60   # この時間帯に目標本数を均等に配る
 CTA_DAILY_MAX = 2        # Grok分を含む1日の公式LINE案内の上限
 CTA_SLOTS = {"15:30", "20:00"}   # 案内を付けてよい枠(反応が取れる夕方〜夜。Grokの案内枠を食わないよう控えめ)
 MIN_GAP_MIN = 30         # 直前の投稿(誰のものでも)からの最低間隔（2026-11-02 院長指示で45→30分）
@@ -176,6 +178,31 @@ def slot_guard(entries: list[dict], slot: str, now: datetime) -> str | None:
         return f"枠 {slot} は本日投稿済み"
     if len(todays) >= DAILY_CAP:
         return f"本日のAPI投稿が上限({DAILY_CAP})に達している"
+    return None
+
+
+def todays_total(recent: list[dict], now: datetime) -> int:
+    """今日（JST）にこのアカウントから出た投稿の本数（Grok Bot の分も含む。ツリーの続きは数えない）"""
+    day = now.astimezone(JST).date()
+    n = 0
+    for p in recent:
+        t = parse_ts(p.get("timestamp", ""))
+        if t and t.astimezone(JST).date() == day:
+            n += 1
+    return n
+
+
+def pace_guard(recent: list[dict], now: datetime) -> str | None:
+    """1日の合計目標（DAILY_TOTAL_TARGET）に対して、今の時刻までに出ているべき本数より多く出ていれば見送り理由を返す。
+    Grok Bot が動いている日は Grok の分でペースが埋まるので API はほとんど出さず、止まっている日は API が埋める。"""
+    n = todays_total(recent, now)
+    if n >= DAILY_TOTAL_TARGET:
+        return f"本日の合計が目標の{DAILY_TOTAL_TARGET}本に達している（{n}本・Grok分を含む）"
+    m = now.astimezone(JST).hour * 60 + now.astimezone(JST).minute
+    frac = min(1.0, max(0.0, (m - PACE_START_MIN) / (PACE_END_MIN - PACE_START_MIN)))
+    expected = max(1, -(-int(DAILY_TOTAL_TARGET * frac * 100) // 100))   # 切り上げ
+    if n >= expected:
+        return f"ペースより先行（今日{n}本・この時刻までの目安{expected}本／1日{DAILY_TOTAL_TARGET}本）"
     return None
 
 
@@ -805,7 +832,11 @@ def run(slot: str | None = None, now: datetime | None = None, dry_run: bool = Fa
             log(f"見送り: 直前の投稿から{gap:.0f}分(30分未満)")
             return 0
 
+    why_pace = pace_guard(recent, now)
     ba = pick_ba(entries, slot, now)
+    if why_pace and not (ba and not why_pace.startswith("本日の合計")):
+        log(f"見送り: {why_pace}")
+        return 0
     if ba:
         return post_ba(ba, slot, now, dry_run, token, uid, publisher, log_path, pause_path)
 

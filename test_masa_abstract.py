@@ -132,9 +132,9 @@ class TestFixedContent(unittest.TestCase):
     def test_queue_front50(self):
         for _ in range(3):
             posts = g.generate_30_masa_posts()
-            front = posts[:50]
+            front = posts[:g.FRONT_N]   # 2026-11-11 1日20本化: 前半20本
             self.assertEqual([p for p in front if g._is_abstract_masa(p)], [])
-            self.assertGreaterEqual(sum(1 for p in front if g._is_insta_theme(p)), 32)
+            self.assertGreaterEqual(sum(1 for p in front if g._is_insta_theme(p)), g.INSTA_THEME_TARGET)
 
 
 class TestAutoPostGate(unittest.TestCase):

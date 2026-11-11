@@ -28,6 +28,7 @@ import sys
 import time
 import urllib.parse
 import urllib.request
+from daily_budget import DAILY_POSTS
 from datetime import date, datetime
 from pathlib import Path
 
@@ -37,7 +38,7 @@ SRC = Path("/Users/mt112/Threads投稿画像")
 REPO_IMG = BASE / "images"
 STATE = BASE / "image_post_state.json"     # 日次カウント・使用ログ・通知フラグ（.gitignore）
 RAW = "https://raw.githubusercontent.com/truthbodysalon-lab/threads-auto-post/main/images"
-DAILY_IMG_CAP = {"truth": 4, "nagaoka": 4}   # アカウント別の1日上限（2026-10-24 nagaokaを4枚へ。2026-10-26 masa指示でtruthも再開・nagaokaと同じ4枚）
+DAILY_IMG_CAP = {"truth": 2, "nagaoka": 2}   # アカウント別の1日上限（2026-11-11 1日20本化で4→2枚。画像も合計20本の内数・内訳は daily_budget.py）
 TIMEOUT = 30
 RECYCLE_DAYS = 7            # 使用済み画像の再利用しきい値（日）。適格0なら最終手段でLRU再利用
                             # するため実質の間隔は 画像枚数÷日次上限（例: 8枚÷2本=4日）に収束する
@@ -327,6 +328,22 @@ def record_posted(acct: str, post_id: str, text: str):
     return pfile
 
 
+def _ledger_total_today(acct: str) -> int:
+    """台帳の本日の投稿数(全種類)。読めなければ0(＝止めない)。"""
+    try:
+        today = datetime.now().strftime("%Y-%m-%d")
+        n = 0
+        for line in (BASE / f"log_{acct}_posted.jsonl").read_text(encoding="utf-8").splitlines():
+            try:
+                if json.loads(line).get("date") == today:
+                    n += 1
+            except Exception:
+                pass
+        return n
+    except Exception:
+        return 0
+
+
 def main():
     dry = "--dry-run" in sys.argv
     hour = datetime.now().hour
@@ -343,6 +360,9 @@ def main():
             folder.mkdir(parents=True, exist_ok=True)
             log(f"{acct}: 画像フォルダが無かったので作成 {folder}")
         if _count_today(st, acct) >= DAILY_IMG_CAP.get(acct, 2):
+            continue
+        if _ledger_total_today(acct) >= DAILY_POSTS:
+            log(f"{acct}: 本日{DAILY_POSTS}本(全種類の合計)に到達済み → 画像投稿は見送り")
             continue
         imgs = sorted([p for p in folder.iterdir()
                        if p.suffix.lower() in IMG_EXTS and not p.name.startswith(".")])

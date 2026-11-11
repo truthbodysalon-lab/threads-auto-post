@@ -31,7 +31,8 @@ JST = timezone(timedelta(hours=9))
 ACCTS = {"truth": "TRUTH", "nagaoka": "NAGAOKA", "masa": "MASA"}
 from account_ownership import is_local
 ACCTS = {k:v for k,v in ACCTS.items() if is_local(k)}
-POST_HOUR_START, POST_HOUR_END, DAILY_TARGET = 6, 23, 50
+from daily_budget import DAILY_POSTS as DAILY_TARGET, LEDGER_ONLY_ACCTS   # 1日20本(2026-11-11・内訳は daily_budget.py)
+POST_HOUR_START, POST_HOUR_END = 6, 23
 PACE_FULL_HOUR = int(os.environ.get("PACE_FULL_HOUR", "22"))  # auto_post.pyと同じ前倒し按分
 LOOKAHEAD_HOURS = int(os.environ.get("LOOKAHEAD_HOURS", "0"))  # auto_post.pyと同じ先読み（先行判定のみに使用）
 
@@ -42,8 +43,28 @@ for line in (BASE / ".env").read_text().splitlines():
         os.environ.setdefault(k.strip(), v.strip())
 
 
+def _ledger_count_today(acct: str) -> int:
+    """台帳(log_<acct>_posted.jsonl)の本日(JST)の自前投稿数。"""
+    try:
+        today = datetime.now(JST).date().isoformat()
+        n = 0
+        for line in (BASE / f"log_{acct}_posted.jsonl").read_text(encoding="utf-8").splitlines():
+            try:
+                if json.loads(line).get("date") == today:
+                    n += 1
+            except Exception:
+                pass
+        return n
+    except Exception:
+        return -1
+
+
 def api_count_today(acct: str) -> int:
-    """Threads APIで本日(JST)の実投稿数を数える（外形＝唯一の真実）。失敗時-1。"""
+    """Threads APIで本日(JST)の実投稿数を数える（外形＝唯一の真実）。失敗時-1。
+    2026-11-11: LEDGER_ONLY_ACCTS(nagaoka)は外部ツール(約20本/日・masa本人の手動系)が実測に混ざるため
+    数えず、台帳(自前投稿)の本数を返す（外部ツールの分で自前の20本が0本になるのを防ぐ）。"""
+    if acct in LEDGER_ONLY_ACCTS:
+        return _ledger_count_today(acct)
     uid = os.environ.get(f"THREADS_USER_ID_{ACCTS[acct]}")
     tok = os.environ.get(f"THREADS_ACCESS_TOKEN_{ACCTS[acct]}")
     today = datetime.now(JST).date().isoformat()
@@ -82,13 +103,7 @@ def api_count_today(acct: str) -> int:
             if stop or not nxt:
                 break
             url = nxt
-        if acct == "masa":
-            # 2026-10-06: uplink追加投稿(別枠)は通常50本の実績に数えない（先行しすぎ誤報・遅れの見落とし防止）
-            try:
-                import uplink_repost as _ur
-                n = max(0, n - _ur.count_today())
-            except Exception:
-                pass
+        # 2026-11-11: uplink転載(masa)も合計20本の内数のため、APIの実測からは引かない
         return n
     except Exception as e:
         print(f"{acct}: APIカウント失敗 {e}")
@@ -180,11 +195,11 @@ def main():
         # 7/10型の暴走（masa 12:56に50本）は want_ahead(15時)=31+10=41 を超えるので引き続き検知できる。
         want_ahead = int(DAILY_TARGET * min(1.0, (h + LOOKAHEAD_HOURS - POST_HOUR_START + 1)
                                             / max(1, PACE_FULL_HOUR - POST_HOUR_START + 1)))
-        if n > want_ahead + 10 and not _notified_today(st, f"front_{acct}"):
+        if n > want_ahead + 4 and not _notified_today(st, f"front_{acct}"):
             line_push(f"⚠️Threads {acct}: 投稿が先行しすぎ({n}本/先読み目標{want_ahead})。固め打ちバグの疑い(CI watchdog)")
             st[f"front_{acct}"] = today
-        # 通常は8本超の遅れで修復。21時以降は残り時間が無いため1本の不足でも埋めに行く
-        elif gap > 8 or (h >= 21 and gap > 0):
+        # 通常は4本超の遅れで修復(2026-11-11 20本化で8→4)。21時以降は残り時間が無いため1本の不足でも埋めに行く
+        elif gap > 4 or (h >= 21 and gap > 0):
             print(f"{acct}: 遅れ{gap}本 → LINE消化フラグ＋修復バッチ")
             if keeper_running():
                 print(f"{acct}: 常駐ループ稼働中 → 修復は常駐側に任せる")

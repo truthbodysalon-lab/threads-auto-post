@@ -103,7 +103,7 @@ for line in (BASE / ".env").read_text().splitlines():
 
 def load_goal() -> dict:
     g = {"target_per_account": 1_000_000, "mode": "monthly_rolling",
-         "window_days": 30, "max_posts_per_day": 50}
+         "window_days": 30, "max_posts_per_day": 20}
     if GOAL_FILE.exists():
         try:
             g.update(json.loads(GOAL_FILE.read_text()))
@@ -183,7 +183,7 @@ def main():
     goal = load_goal()
     target = goal["target_per_account"]          # 各アカウント月100万
     win = goal.get("window_days", 30)
-    cap = goal.get("max_posts_per_day", 50)
+    cap = goal.get("max_posts_per_day", 20)
     req_daily = target // win                     # 1日に必要な閲覧 = 33,334
     today = date.today()
     deadline = goal.get("deadline", "")

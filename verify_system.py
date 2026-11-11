@@ -27,6 +27,7 @@ import sys
 import traceback
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
+from daily_budget import DAILY_POSTS, FRONT_N, LEDGER_ONLY_ACCTS   # 1日20本(2026-11-11 masa指示)・前半=FRONT_N本
 
 BASE = Path(__file__).parent
 from account_ownership import is_local
@@ -250,7 +251,7 @@ def check_same_day_anchor_and_git_conflict():
 
 
 def check_test_posts_in_first50():
-    """C21: テスト投稿（悩みテスト軸1・軸2）が生成キューの前半50本に全て入るか。
+    """C21: テスト投稿（悩みテスト軸1・軸2）が生成キューの前半20本に全て入るか。
     2026-10-04: アンカー44がヒーロー挿入で58番目へずれ、毎日1本が投稿されず判定データが欠けていた。"""
     import os as _os
     _os.environ["SEGMENT_REGISTRY_DRY"] = "1"
@@ -260,11 +261,11 @@ def check_test_posts_in_first50():
         texts = {p["text"] for h in hyp if h.get("acct") == "masa" and h.get("status") != "archived" for p in h.get("posts", [])}
         posts = _g.generate_30_masa_posts()
         pos = [i for i, t in enumerate(posts) if t in texts]
-        late = [i for i in pos if i >= 50]
+        late = [i for i in pos if i >= FRONT_N]
         if late:
-            add("test_in_first50:masa", "B.ルール", "FAIL", f"テスト投稿 {len(late)}本が前半50本の外（位置{late}）＝投稿されない")
+            add("test_in_first50:masa", "B.ルール", "FAIL", f"テスト投稿 {len(late)}本が前半{FRONT_N}本の外（位置{late}）＝投稿されない")
         else:
-            add("test_in_first50:masa", "B.ルール", "PASS", f"テスト投稿{len(pos)}本すべて前半50本内（最後={max(pos) if pos else '-'}）")
+            add("test_in_first50:masa", "B.ルール", "PASS", f"テスト投稿{len(pos)}本すべて前半{FRONT_N}本内（最後={max(pos) if pos else '-'}）")
     except Exception as e:
         add("test_in_first50:masa", "B.ルール", "WARN", f"判定不能: {type(e).__name__}: {e}")
 
@@ -332,30 +333,30 @@ def check_generation():
 
 
 def check_list_habit_in_first50():
-    """truth/nagaokaの当日生成キュー前半50本に【◯◯習慣N選】型(LIST_HABIT)が1本以上あるか（無ければWARN・2026-10-06本人指示）。"""
+    """truth/nagaokaの当日生成キュー前半20本に【◯◯習慣N選】型(LIST_HABIT)が1本以上あるか（無ければWARN・2026-10-06本人指示）。"""
     import os as _os
     _os.environ["SEGMENT_REGISTRY_DRY"] = "1"
     for acct, fn in (("truth", "generate_30_posts"), ("nagaoka", "generate_40_nagaoka_posts")):
         try:
             import generate_remix as _g
-            posts = getattr(_g, fn)()[:50]
+            posts = getattr(_g, fn)()[:FRONT_N]
             hits = [i for i, t in enumerate(posts) if _g._list_habit_valid(t)]
             # 2026-10-24: 効いていないため truth=毎日1本 / nagaoka=1日0〜1本（隔日）に減らした。0本はnagaokaのみ正常。
             if acct == "nagaoka":
                 ok = len(hits) <= 1
                 add(f"list_habit_in_first50:{acct}", "B.ルール反映", "PASS" if ok else "WARN",
-                    f"{acct}前半50本中LIST_HABIT型{len(hits)}本（位置{hits}）。上限1本" if ok else
-                    f"{acct}前半50本にLIST_HABIT型が{len(hits)}本。1日0〜1本の指示（2026-10-24）を超過")
+                    f"{acct}前半20本中LIST_HABIT型{len(hits)}本（位置{hits}）。上限1本" if ok else
+                    f"{acct}前半20本にLIST_HABIT型が{len(hits)}本。1日0〜1本の指示（2026-10-24）を超過")
             else:
                 add(f"list_habit_in_first50:{acct}", "B.ルール反映", "PASS" if hits else "WARN",
-                    f"{acct}前半50本中LIST_HABIT型{len(hits)}本（位置{hits}）" if hits else
-                    f"{acct}前半50本にLIST_HABIT型(【◯◯習慣N選】)が0本。毎日1本入れる指示の実行ギャップ")
+                    f"{acct}前半20本中LIST_HABIT型{len(hits)}本（位置{hits}）" if hits else
+                    f"{acct}前半20本にLIST_HABIT型(【◯◯習慣N選】)が0本。毎日1本入れる指示の実行ギャップ")
         except Exception as e:
             add(f"list_habit_in_first50:{acct}", "B.ルール反映", "WARN", f"検査失敗: {type(e).__name__}: {e}")
 
 
 def check_type_mix_in_first50():
-    """truth/nagaokaの当日生成キュー前半50本に、効く型（2026-10-24 本人指示）が最低本数入っているか（不足はWARN）。
+    """truth/nagaokaの当日生成キュー前半20本に、効く型（2026-10-24 本人指示）が最低本数入っているか（不足はWARN）。
     truth: 頭痛薬・鎮痛剤の話(ZUTSUYAKU)3本以上＋「前に、まず」型(MAE_MAZU)2本以上
     nagaoka: 「前に、まず」型2本以上＋天気・気圧(WEATHER)1本以上＋問いかけ(QUESTION)1本以上＋お客様の声2本以上"""
     import os as _os
@@ -366,11 +367,12 @@ def check_type_mix_in_first50():
     except Exception as e:
         add("type_mix_in_first50", "B.ルール反映", "WARN", f"検査失敗: {type(e).__name__}: {e}")
         return
-    need = {"truth": {"ZUTSUYAKU": 3, "MAE_MAZU": 2},
-            "nagaoka": {"MAE_MAZU": 2, "WEATHER": 1, "QUESTION": 1, "CUSTOMER_VOICE": 2}}
+    # 2026-11-11 1日20本化: 前半20本に載る型の最低本数（truth ZUTSUYAKU 3→2・nagaoka お客様の声2→1。生成側の型の計画は daily plan 5本/6本）
+    need = {"truth": {"ZUTSUYAKU": 2, "MAE_MAZU": 2},
+            "nagaoka": {"MAE_MAZU": 2, "WEATHER": 1, "QUESTION": 1, "CUSTOMER_VOICE": 1}}
     for acct, fn in (("truth", "generate_30_posts"), ("nagaoka", "generate_40_nagaoka_posts")):
         try:
-            posts = getattr(_g, fn)()[:50]
+            posts = getattr(_g, fn)()[:FRONT_N]
             cnt = {}
             for seg in need[acct]:
                 pool = (_g.CUSTOMER_VOICE_TEMPLATES_TRUTH if acct == "truth" else _g.CUSTOMER_VOICE_TEMPLATES_NAGAOKA) \
@@ -378,19 +380,19 @@ def check_type_mix_in_first50():
                 cnt[seg] = sum(1 for t in posts if t in pool)
             short = {k: f"{cnt[k]}<{v}" for k, v in need[acct].items() if cnt[k] < v}
             add(f"type_mix_in_first50:{acct}", "B.ルール反映", "WARN" if short else "PASS",
-                f"{acct}前半50本の型 {cnt}" + (f" 不足={short}" if short else ""))
+                f"{acct}前半20本の型 {cnt}" + (f" 不足={short}" if short else ""))
         except Exception as e:
             add(f"type_mix_in_first50:{acct}", "B.ルール反映", "WARN", f"検査失敗: {type(e).__name__}: {e}")
 
 
 def check_masa_insta_theme():
-    """masaの当日生成キュー前半50本のInstagramテーマがINSTA_THEME_TARGET(32本)未満ならWARN（2026-10-04 主テーマ変更の実行ギャップ検知）。
-    2026-10-21: 閾値を50%→生成側の保証値(32本)に揃えた。補充候補の枯渇で9〜12本まで落ちても25本を割るまで気づけなかったため。"""
+    """masaの当日生成キュー前半20本のInstagramテーマがINSTA_THEME_TARGET(13本)未満ならWARN（2026-10-04 主テーマ変更の実行ギャップ検知）。
+    2026-10-21: 閾値を50%→生成側の保証値(13本)に揃えた。補充候補の枯渇で9〜12本まで落ちても25本を割るまで気づけなかったため。"""
     if not is_local("masa"):
         return
     try:
         import generate_remix as g
-        posts = g.generate_30_masa_posts()[:50]
+        posts = g.generate_30_masa_posts()[:FRONT_N]
         n = sum(1 for p in posts if g._is_insta_theme(p))
         ratio = n / max(1, len(posts))
         if n < g.INSTA_THEME_TARGET:
@@ -449,14 +451,14 @@ def check_hero_posted():
 
 
 def check_masa_abstract():
-    """masaの当日生成キュー前半50本のうち、抽象的な投稿（対象なし問いかけ・手順/具体例＋機能名のないコメント・抽象語）が
+    """masaの当日生成キュー前半20本のうち、抽象的な投稿（対象なし問いかけ・手順/具体例＋機能名のないコメント・抽象語）が
     1本でもあればWARN（2026-10-07 masa指示「問いかけの対象が不明・コメントが抽象的」の実行ギャップ検知。
     判定=generate_remix._is_abstract_masa。生成ループ・最終掃除・auto_post検品ゲートと同じ基準）。"""
     if not is_local("masa"):
         return
     try:
         import generate_remix as g
-        posts = g.generate_30_masa_posts()[:50]
+        posts = g.generate_30_masa_posts()[:FRONT_N]
         bad = [(i, g._abstract_reasons_masa(p)) for i, p in enumerate(posts) if g._is_abstract_masa(p)]
         if bad:
             detail = " / ".join(f"位置{i}:{'、'.join(r)[:30]}" for i, r in bad[:3])
@@ -630,7 +632,7 @@ def check_execution_gaps():
         else:
             add(f"exec:queue:{acct}", "C.実行ギャップ", "WARN", "今日のキュー なし（生成失敗の疑い）")
 
-    # C5b: masaのLINE言及率（feedback.json note 2026-08-23: 前半50本で5本以内=10%未満）
+    # C5b: masaのLINE言及率（feedback.json note 2026-08-23: 前半20本で5本以内=10%未満）
     # 2026-08-26に固定挿入(cta_profile2本+AI_TIME_CTA1本)がcapを素通りし
     # 22%(11/50)まで超過した実績があるため、実際の投稿実績を直近日次で監視する。
     try:
@@ -648,7 +650,7 @@ def check_execution_gaps():
         recent_dates = sorted(by_date.keys())[-3:]
         worst_rate, worst_date, worst_cnt, worst_len = 0.0, None, 0, 0
         for d in recent_dates:
-            texts = by_date[d][:50]  # 前半50本
+            texts = by_date[d][:DAILY_POSTS]  # その日の投稿全体(20本)
             if not texts:
                 continue
             cnt = sum(1 for t in texts if ("LINE" in t or "ライン" in t or "lin.ee" in t))
@@ -658,12 +660,12 @@ def check_execution_gaps():
         if worst_date is None:
             add("rule:line_rate:masa", "B.ルール反映", "WARN", "masa投稿実績が見つからず判定不可")
         else:
-            status = "PASS" if worst_cnt <= 5 else "FAIL"
+            status = "PASS" if worst_cnt <= 2 else "FAIL"   # 2026-11-11 20本化: 5本/50本→2本/20本(10%)
             # 2026-09-02修正: 分母を常に「50本」固定表示していたが、当日分は投稿途中で
             # len(texts)<50のことがあり（例: 9本中2本=22%なのに"2本/50本(22%)"と誤表示）、
             # 実際に率計算へ使った分母(worst_len)をそのまま表示するよう修正。
             add("rule:line_rate:masa", "B.ルール反映", status,
-                f"直近3日で最大 {worst_date} {worst_cnt}本/{worst_len}本（{worst_rate*100:.0f}%）LINE言及・上限5本(10%)")
+                f"直近3日で最大 {worst_date} {worst_cnt}本/{worst_len}本（{worst_rate*100:.0f}%）LINE言及・上限2本(10%・1日20本)")
     except Exception as e:
         add("rule:line_rate:masa", "B.ルール反映", "WARN", f"検査失敗: {e}")
 
@@ -676,14 +678,14 @@ def check_execution_gaps():
             posts = json.loads(lines[-1]).get("posts", []) if lines else []
             hpb = [i for i, p in enumerate(posts) if "beauty.hotpepper.jp" in p]
             acc = [i for i, p in enumerate(posts) if "専用駐車場" in p or "長岡駅から車で5分" in p]
-            bad = [x for x in hpb + acc if x >= 50]
+            bad = [x for x in hpb + acc if x >= FRONT_N]
             present = len(hpb) >= 1 and len(acc) >= 1
             if not present:
                 add(f"exec:funnel:{acct}", "C.実行ギャップ", "WARN",
                     f"誘導投稿がキューに不足（HPB{len(hpb)}/アクセス{len(acc)}）")
             elif bad:
                 add(f"exec:funnel:{acct}", "C.実行ギャップ", "FAIL",
-                    f"誘導投稿が位置50超に配置（未投稿リスク）: {bad}")
+                    f"誘導投稿が位置{FRONT_N}超に配置（未投稿リスク）: {bad}")
             else:
                 add(f"exec:funnel:{acct}", "C.実行ギャップ", "PASS",
                     f"誘導投稿は前半固定 HPB{hpb} アクセス{acc}")
@@ -693,9 +695,24 @@ def check_execution_gaps():
     # 共通ヘルパー: 昨日(JST)の実投稿数を外形API（Threads API）で数える。C8/C10で共有。
     _api_count_cache: dict = {}
     def _yesterday_posts_api_c8(acct: str) -> int:
-        """昨日の本体投稿数。スコープ不足トークンはリプライ込み概算。取得不可なら-1。"""
+        """昨日の本体投稿数。スコープ不足トークンはリプライ込み概算。取得不可なら-1。
+        2026-11-11: LEDGER_ONLY_ACCTS(nagaoka)は外部ツール(約20本/日)が実測に混ざるため台帳(自前投稿)の本数を返す。"""
         if acct in _api_count_cache:
             return _api_count_cache[acct]
+        if acct in LEDGER_ONLY_ACCTS:
+            _yd = (date.today() - timedelta(days=1)).strftime("%Y-%m-%d")
+            _n = 0
+            try:
+                for _l in (BASE / f"log_{acct}_posted.jsonl").read_text(encoding="utf-8").splitlines():
+                    try:
+                        if json.loads(_l).get("date") == _yd:
+                            _n += 1
+                    except Exception:
+                        pass
+            except Exception:
+                _n = -1
+            _api_count_cache[acct] = _n
+            return _n
         import urllib.request as _ur
         jst = timezone(timedelta(hours=9))
         y0 = datetime.now(jst).replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(days=1)
@@ -725,13 +742,7 @@ def check_execution_gaps():
                 n = len(data.get("data", []))  # リプライ込み概算（過大側）
             except Exception:
                 n = -1
-        if acct == "masa" and n >= 0:
-            # 2026-10-06: uplink追加投稿(別枠)は通常50本の実績に数えない
-            try:
-                import uplink_repost as _ur
-                n = max(0, n - _ur.count_on(y0.strftime("%Y-%m-%d")))
-            except Exception:
-                pass
+        # 2026-11-11: uplink転載(masa)も合計20本の内数のため、APIの実測から引かない
         _api_count_cache[acct] = n
         return n
 
@@ -746,7 +757,7 @@ def check_execution_gaps():
             for line in pfile.read_text(encoding="utf-8").splitlines():
                 try:
                     _e = json.loads(line)
-                    if _e.get("date") == yesterday and _e.get("kind") != "uplink_repost":
+                    if _e.get("date") == yesterday:
                         n += 1
                 except Exception:
                     pass
@@ -758,8 +769,8 @@ def check_execution_gaps():
             n = _count_from_log(acct)
             src = "ローカルログ（API不可・過少の可能性）"
         add(f"exec:daily50:{acct}", "C.実行ギャップ",
-            "PASS" if n >= 50 else "FAIL",
-            f"昨日({yesterday})の投稿 {n}本 / 必須50本（{src}）")
+            "PASS" if n >= DAILY_POSTS else "FAIL",
+            f"昨日({yesterday})の投稿 {n}本 / 必須{DAILY_POSTS}本（全種類の合計・{src}）")
 
     # C9: プレイブック（修正基準の正本）が毎朝検証・更新されているか。
     #     基準そのものを向上させるメタPDCAが止まると改善が旧基準で空回りする。
@@ -793,12 +804,12 @@ def check_execution_gaps():
             if n < 0:
                 add(f"exec:pacing:{acct}", "C.実行ギャップ", "WARN",
                     "外形API取得不可（トークンのスコープ不足等）。実投稿数はCI watchdogの外形監視が正")
-            elif n < 40:
+            elif n < int(DAILY_POSTS * 0.8):
                 add(f"exec:pacing:{acct}", "C.実行ギャップ", "FAIL",
-                    f"投稿数不足: 昨日の実投稿{n}本 < 40本（目標50本/日の8割・外形API実測）")
+                    f"投稿数不足: 昨日の実投稿{n}本 < {int(DAILY_POSTS * 0.8)}本（目標{DAILY_POSTS}本/日の8割・外形API実測）")
             else:
                 add(f"exec:pacing:{acct}", "C.実行ギャップ", "PASS",
-                    f"昨日の実投稿{n}本（外形API実測・目標50本/日）")
+                    f"昨日の実投稿{n}本（外形API実測・目標{DAILY_POSTS}本/日）")
         except Exception as e:
             add(f"exec:pacing:{acct}", "C.実行ギャップ", "WARN", f"配分検査不可: {e}")
 
@@ -1325,7 +1336,7 @@ def check_post_interval():
             add(cid, "C.実行ギャップ", "WARN", f"検査不可: {e}")
 
 
-def alive_stall_incidents(posts, spans, lo, hi, min_gap_min=90, daily_target=50):
+def alive_stall_incidents(posts, spans, lo, hi, min_gap_min=90, daily_target=DAILY_POSTS):
     """C41の判定本体（テスト用に分離）。posts=投稿時刻(JST)、spans=常駐run稼働区間[(開始,終了)]、
     lo/hi=対象時間帯。lo起点の各投稿間隔のうち min_gap_min 以上で、その間に常駐runが稼働していた
     時間（区間の和集合との重なり）が min_gap_min 以上のものを [(間隔分, 稼働分, 開始)] で返す。"""

@@ -420,7 +420,7 @@ _LINE_STATE_FILE = BASE / "line_listin_state.json"
 # 目標5〜7%を割り込み4%/日に固定化していた（30日実測25/1483・検証で発覚）。
 # キュー本数(3)に上限を合わせて是正する。
 # masaは月間URL上限2本の別ルールがあるため1のまま（実質は月2本程度）。
-_LINE_DAILY = {"truth": 3, "nagaoka": 3, "masa": 1}
+_LINE_DAILY = {"truth": 2, "nagaoka": 2, "masa": 1}   # 2026-11-11 1日20本化: リストイン1＋整体LINE1(truth)/リストイン1＋余裕1(nagaoka)
 
 
 def _is_line_listin(text: str) -> bool:
@@ -748,8 +748,8 @@ def _posted_count_today(acct: str) -> int:
     for line in pfile.read_text(encoding="utf-8").splitlines():
         try:
             e = json.loads(line)
-            # 2026-10-06: uplink追加投稿(kind=uplink_repost)は通常50本枠・DAILY_CAPに数えない別カウンタ
-            if e.get("date") == today and e.get("kind") != "uplink_repost":
+            # 2026-11-11: 1日20本化によりuplink追加投稿(kind=uplink_repost)も合計20本に数える
+            if e.get("date") == today:
                 n += 1
         except Exception:
             pass
@@ -872,8 +872,8 @@ def _hero_priority_order(acct: str, today: str, all_posts: list, posted_texts: s
                     e = json.loads(l)
                 except Exception:
                     continue
-                if e.get("date") != today or e.get("kind") == "uplink_repost":
-                    continue
+                if e.get("date") != today:
+                    continue   # 2026-11-11: uplink転載も合計20本に数える(_posted_count_todayと同じ)
                 n += 1
                 if (e.get("hk") in hero_hk) if e.get("hk") else (_hero_ledger_key(e.get("text", "")) in hero_para):
                     since, hero_today = 0, True
@@ -1835,11 +1835,10 @@ def main():
 
 
 # 1回の実行で各アカウント最大何本投稿するか（単一系統で頻度を上げる）
-# 1日の投稿目標と上限（過剰投稿=スパムを防ぎつつ、50本を均等ペースで担保）
-DAILY_TARGET = int(os.environ.get("DAILY_TARGET", "50"))   # 各アカウント1日の目標本数
-DAILY_CAP = int(os.environ.get("DAILY_CAP", "55"))         # 上限（これ以上は出さない）
-MAX_PER_RUN = int(os.environ.get("MAX_PER_RUN", "8"))      # 通常の1サイクル上限
-MAX_BURST = int(os.environ.get("MAX_BURST", "25"))         # 大きく遅れた時の一気回復上限（スリープ復帰時）
+# 1日の投稿目標と上限（過剰投稿=スパムを防ぎつつ、20本を均等ペースで担保。2026-11-11 50→20本。内訳は daily_budget.py）
+from daily_budget import DAILY_POSTS as DAILY_TARGET, DAILY_CAP   # 各アカウント1日の目標/上限(全種類の合計・2026-11-11に50/55→20/20)
+MAX_PER_RUN = int(os.environ.get("MAX_PER_RUN", "4"))      # 通常の1サイクル上限
+MAX_BURST = int(os.environ.get("MAX_BURST", "20"))         # 大きく遅れた時の一気回復上限（スリープ復帰時）
 # 先読み時間。GitHub Actionsのcronは実測で4時間以上間引かれる日があり（2026-09-04は投稿時間帯内の
 # 発火が10:03/14:49/18:58の3回のみ→truth40本/masa43本で50本割れ）、「今あるべき累計」まで埋める
 # だけでは次の発火まで進めない。次回発火が LOOKAHEAD_HOURS 後だと仮定してその時点の累計まで先に出す。
@@ -1870,7 +1869,7 @@ def _target_cumulative_by_now(hour: int) -> int:
 
 def _run_account_batch(acct: str):
     """ペースに追従して投稿する。
-    - 目標(50)に対し『今あるべき累計』との不足分を、最大 MAX_PER_RUN 本まで埋める
+    - 目標(DAILY_TARGET=20)に対し『今あるべき累計』との不足分を、最大 MAX_PER_RUN 本まで埋める
     - DAILY_CAP に達したら出さない（過剰投稿=スパム防止）
     - 遅れていればまとめて回復、進んでいれば控える（Mac休止後のキャッチアップ対応）
     """
@@ -1944,7 +1943,7 @@ def _run_account_batch(acct: str):
 
 def _run_uplink_repost():
     """uplink閲覧200以上の投稿を、本文そのままmasaへ追加枠で出す（2026-10-06 masa指示）。
-    - 通常50本・DAILY_CAPとは別カウンタ（台帳 kind=uplink_repost）。1サイクル最大1本＝時間帯が自然に分散
+    - 合計20本(DAILY_CAP)の内数（台帳 kind=uplink_repost・2026-11-11に別カウンタから変更）。1サイクル最大1本＝時間帯が自然に分散
     - 本文は無加工（URL移動・[COMMENT]分割・ブリッジコメント・CTAコメントを一切付けない）
     - 重複/検品NG/失敗は status=skipped にして次へ（同じものを選び続けない＝9/29障害の教訓）"""
     from account_ownership import is_local
@@ -1958,6 +1957,8 @@ def _run_uplink_repost():
     done = ur.count_today()
     if done >= ur.DAILY_N or done >= ur.want_cumulative(hour):
         return
+    if _posted_count_today(acct) >= DAILY_CAP:
+        return   # 2026-11-11: 転載も合計20本の内数。上限に達していたら出さない
     pool = ur.load_pool()
     item = ur.next_item(pool)
     if item is None:

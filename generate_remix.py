@@ -1467,7 +1467,7 @@ def _is_own_winner_copy(text: str, acct: str, threshold: float = 0.8) -> bool:
 
 
 HERO_GRACE_DAYS = 3        # 日付が古いヒーローファイルでも、未投稿分はこの日数まで有効（SKILLが止まった日も取りこぼさない）
-HERO_MAX_PER_DAY = 16      # 1日に扱うヒーローの上限（当日分10本＋繰越の安全枠）
+from daily_budget import HERO_MAX_PER_DAY, FRONT_N, QUEUE_LEN   # 2026-11-11 1日20本化: ヒーロー上限16→8(当日5本＋繰越3)・前半FRONT_N=20・キュー長30（内訳は daily_budget.py）
 
 
 def _hero_key(text: str) -> str:
@@ -1833,13 +1833,13 @@ def _insert_list_habit_posts(posts: list[str], acct: str, today: str, anchors: l
     # truth=毎日1本(アンカー13)／nagaoka=隔日(偶数日のみ1本＝1日0〜1本)。
     if anchors is None:
         if acct == "truth":
-            anchors = [13]
+            anchors = [7]
         else:
             try:
                 _odd = date.fromisoformat(today).toordinal() % 2
             except Exception:
                 _odd = date.today().toordinal() % 2
-            anchors = [13] if _odd == 0 else []
+            anchors = [7] if _odd == 0 else []
         if not anchors:
             return posts
     fixed = LIST_HABIT_RENDERED_TRUTH if acct == "truth" else LIST_HABIT_RENDERED_NAGAOKA
@@ -1910,15 +1910,15 @@ except Exception:   # 読めなくても既存生成は止めない
 
 # 1日あたりの型の本数（置換で入れる分）。voice_extra=お客様の声の追加分（既存アンカー1本に上乗せ）
 TYPE_DAILY_PLAN = {
-    "truth":   [("ZUTSUYAKU", 5), ("MAE_MAZU", 4)],
-    "nagaoka": [("MAE_MAZU", 4), ("WEATHER", 3), ("QUESTION", 2), ("CUSTOMER_VOICE", 2)],
+    "truth":   [("ZUTSUYAKU", 3), ("MAE_MAZU", 2)],                                        # 2026-11-11 1日20本化: 9→5本
+    "nagaoka": [("MAE_MAZU", 2), ("WEATHER", 2), ("QUESTION", 1), ("CUSTOMER_VOICE", 1)],   # 2026-11-11 1日20本化: 11→6本
 }
 # 上限を数える／型を置換する先頭範囲（ベースリスト）。導線・テスト・ヒーロー等のアンカーが約26〜28本ベースの間に入るため、
 # 実投稿される前半50本に載るベースは先頭約22〜24本。ここを広げると前半50本に効かなくなる（2026-10-24実測）。
-_TYPE_WINDOW = 23
+_TYPE_WINDOW = 12   # 2026-11-11 1日20本化: 23→12（前半20本に載るベースは約12本）
 # nagaokaは長岡市相談型など固定アンカーが多く前半50本に載るベースが少ない。さらに外部ツール併用で自動投稿は約30本/日に
 # 抑制される(project_nagaoka_external_poster)ため、型は前寄せ（先頭約13本のベース＝実投稿の先頭約40位まで）に置く
-_TYPE_WINDOW_BY_ACCT = {"truth": 23, "nagaoka": 13}
+_TYPE_WINDOW_BY_ACCT = {"truth": 12, "nagaoka": 7}
 _RE_DESK = re.compile(r"デスク|スマホ|パソコン|PC|画面")
 _RE_MASSAGE = re.compile(r"マッサージ|揉")
 _RE_YAKU = re.compile(r"薬|鎮痛|痛み止め")
@@ -1928,8 +1928,8 @@ _RE_HABIT_HEAD = re.compile(r"^【[^【】]*選】")
 _RE_NEG_NAGAOKA = re.compile(r"しても|ではありません|ません。?$|だけでは|より先に")
 # 1日あたりの上限（先頭 _TYPE_WINDOW 本のベース内）。完全禁止ではなく上限。
 TYPE_CAPS = {
-    "truth":   {"desk": 2, "massage": 1, "yaku": 1, "sango": 1, "long": 12},
-    "nagaoka": {"desk": 2, "massage": 1, "yaku": 1, "sango": 1, "water": 2, "habit": 0, "neg": 2, "long": 12},
+    "truth":   {"desk": 1, "massage": 1, "yaku": 1, "sango": 1, "long": 5},
+    "nagaoka": {"desk": 1, "massage": 1, "yaku": 1, "sango": 1, "water": 1, "habit": 0, "neg": 1, "long": 5},
 }
 
 
@@ -2109,7 +2109,7 @@ def _insert_customer_voice_post(posts: list[str], acct: str, today: str, anchor:
     _insert_list_habit_posts の後・_insert_hero_posts の前で呼ぶ。SEGMENT_REGISTRY_DRY=1では台帳を保存しない。"""
     if acct not in ("truth", "nagaoka"):
         return posts
-    anchor = anchor if anchor is not None else (20 if acct == "truth" else 17)
+    anchor = anchor if anchor is not None else (8 if acct == "truth" else 9)   # 2026-11-11 20本化: 20/17→8/9
     pool = CUSTOMER_VOICE_TEMPLATES_TRUTH if acct == "truth" else CUSTOMER_VOICE_TEMPLATES_NAGAOKA
     other = CUSTOMER_VOICE_TEMPLATES_NAGAOKA if acct == "truth" else CUSTOMER_VOICE_TEMPLATES_TRUTH
     pool = _voice_pool_for(acct, pool)
@@ -2160,9 +2160,9 @@ def _insert_hero_posts(posts: list[str], acct: str) -> list[str]:
     heroes = _load_hero_posts(acct)[:HERO_MAX_PER_DAY]
     if not heroes:
         return posts
-    step = max(4, 46 // max(1, len(heroes)))
+    step = max(2, (FRONT_N - 6) // max(1, len(heroes)))   # 2026-11-11 20本化: 前半FRONT_N本に収める
     for i, h in enumerate(heroes):
-        posts.insert(min(2 + i * step, len(posts)), h)
+        posts.insert(min(2 + i * step, FRONT_N - 3, len(posts)), h)
     # 効果測定用の印（2026-10-24 本人指示）: ヒーロー＝自分の伸びた投稿(own_winners)の型を借りた翻案投稿。
     # segment="own_adapt" で registry に登録＝segment_report.py が型別の閲覧倍率を出せる。既に別の型で登録済みの1行目は上書きしない。
     if acct in ("truth", "nagaoka"):
@@ -2179,7 +2179,7 @@ def _insert_hero_posts(posts: list[str], acct: str) -> list[str]:
                 _save_segment_registry(_reg)
         except Exception:
             pass   # 印の付与に失敗してもヒーロー投入は止めない
-    # 最終ガード: ヒーロー挿入で誘導投稿(ホットペッパー/駐車場/LINE)が位置50超へ
+    # 最終ガード: ヒーロー挿入で誘導投稿(ホットペッパー/駐車場/LINE)が位置FRONT_N(20)超へ
     # 押し出されたら前半へ戻す（1日約50本消費のため位置50超=未投稿）
     markers = ("beauty.hotpepper.jp", "専用駐車場", "長岡駅から車で5分", "lin.ee/")
     # 降順1パスだと取り残しが出る: pop(idx)→insert(44) で 44〜idx の要素が右へ1つ
@@ -2189,11 +2189,11 @@ def _insert_hero_posts(posts: list[str], acct: str) -> list[str]:
     # 残留ゼロになるまで繰り返す。1回で必ず1本が前半へ確定するので誘導投稿の
     # 本数ぶんで収束する（上限を付けて無限ループを防ぐ）。
     for _ in range(len(posts)):
-        stuck = [i for i in range(50, len(posts))
+        stuck = [i for i in range(FRONT_N, len(posts))
                  if any(m in posts[i] for m in markers)]
         if not stuck:
             break
-        posts.insert(44, posts.pop(stuck[-1]))
+        posts.insert(FRONT_N - 6, posts.pop(stuck[-1]))
     return posts
 
 
@@ -2315,10 +2315,10 @@ def generate_30_posts() -> list[str]:
     # 実行ギャップ対策: 1日の消費は約50本なので、ランダム高位置だと到達せず未投稿になる。
     # LINEリストインと同様に前半（index 5, 14, 23, 32）へアンカーして毎日確実に届ける。
     cta_posts = (
-        [_enforce_short_body(_ensure_nagaoka(generate_cta_post("katakori"))) for _ in range(2)] +
-        [_enforce_short_body(_ensure_nagaoka(generate_cta_post("zutsuu")))   for _ in range(2)]
-    )
-    cta_anchors = [5, 14, 23, 32]
+        [_enforce_short_body(_ensure_nagaoka(generate_cta_post("katakori"))) for _ in range(1)] +
+        [_enforce_short_body(_ensure_nagaoka(generate_cta_post("zutsuu")))   for _ in range(1)]
+    )   # 2026-11-11 1日20本化: 4本→2本(肩こり1・頭痛1)
+    cta_anchors = [3, 8]
     for i, cta in enumerate(cta_posts):
         pos = min(cta_anchors[i] if i < len(cta_anchors) else (i * 9 + 5), len(posts))
         posts.insert(pos, cta)
@@ -2329,8 +2329,7 @@ def generate_30_posts() -> list[str]:
     # 実行ギャップ対策: 1日の投稿は最大20本程度なので、必ず前半（index 3〜12）に配置
     # 修正: sequential insert ではなく batch build で anchor_positions を正確に保証
     listin_posts = []
-    for _ in range(3):   # 実投稿5〜7%ルール(2026-06-06)。2026-08-16検証: 実測が1日50投稿消化で
-        # 2本=4%/日と目標下限5%を割り込んでいたため3本(=6%/日、anchor 3,7,12を使用)に是正
+    for _ in range(1):   # 2026-11-11 1日20本化: 3本→1本/日(=5%/日・LINE言及目標5〜7%の下限。整体LINE1本は別枠)
         for _ in range(20):
             p = generate_line_listin_post("truth")
             if p not in listin_posts:
@@ -2338,10 +2337,7 @@ def generate_30_posts() -> list[str]:
                 break
 
     # Batch insert: anchor_positions に先読みして、最後に差し込む（insert順でインデックスシフトを回避）
-    anchor_positions = {3: listin_posts[0] if len(listin_posts) > 0 else None,
-                        7: listin_posts[1] if len(listin_posts) > 1 else None,
-                        12: listin_posts[2] if len(listin_posts) > 2 else None,
-                        18: listin_posts[3] if len(listin_posts) > 3 else None}
+    anchor_positions = {1: listin_posts[0] if len(listin_posts) > 0 else None}
 
     # 逆順で挿入（後ろから）で前半のインデックスを保護
     for pos in sorted(anchor_positions.keys(), reverse=True):
@@ -2352,19 +2348,19 @@ def generate_30_posts() -> list[str]:
     # 実行ギャップ対策: ランダム高位置(例 86)だと1日約50本の消費に届かず未投稿になっていた。
     # 前半（index 9, 19, 28）へアンカーして毎日確実に届ける。
     access_posts = []
-    for _ in range(3):
+    for _ in range(1):   # 2026-11-11 1日20本化: 3本→1本/日
         for _ in range(20):
             p = generate_store_access_post("truth")
             if p not in access_posts:
                 access_posts.append(p)
                 break
-    access_anchors = [9, 19, 28]
+    access_anchors = [3]
     for i, ap_ in enumerate(access_posts):
         pos = min(access_anchors[i] if i < len(access_anchors) else (i * 9 + 9), len(posts))
         posts.insert(pos, ap_)
 
     # 整体公式LINE(無料相談)を1日1本、前半にアンカー（goals.json ゴール3）
-    posts.insert(min(21, len(posts)), generate_seitai_line_post())
+    posts.insert(min(4, len(posts)), generate_seitai_line_post())   # 2026-11-11 1日20本化: 位置21→10
 
     # 頭痛タイプ診断(Web)への誘導を毎日確実に投稿する（2026-07-05ルール化）
     # 2026-07-21変更: リンク付き投稿の同日連発抑制（Brain記事実測）のため2本→1本/日。
@@ -2376,7 +2372,7 @@ def generate_30_posts() -> list[str]:
             if p not in shindan_posts:
                 shindan_posts.append(p)
                 break
-    shindan_anchors = [6]
+    shindan_anchors = [5]   # 2026-11-11 20本化: 位置は消化順の前半12本内へ
     for i, sp_ in enumerate(shindan_posts):
         pos = min(shindan_anchors[i] if i < len(shindan_anchors) else (i * 10 + 6), len(posts))
         posts.insert(pos, sp_)
@@ -2393,7 +2389,7 @@ def generate_30_posts() -> list[str]:
     posts = _insert_customer_voice_post(posts, "truth", TODAY)
 
     posts = _insert_hero_posts(posts, "truth")   # 全挿入の最後（位置50超への押し出し防止）
-    return posts[:100]
+    return posts[:QUEUE_LEN]   # 2026-11-11 1日20本化: 100→30本(前半20＋予備10)
 
 
 def generate_40_nagaoka_posts() -> list[str]:
@@ -2483,8 +2479,8 @@ def generate_40_nagaoka_posts() -> list[str]:
     posts = _replace_with_type_posts(posts, "nagaoka", TODAY)
 
     # CTA: 肩こり2本・頭痛1本（_ensure_nagaoka不使用）
-    cta_katakori = [generate_cta_post("katakori") for _ in range(2)]
-    cta_zutsuu   = [generate_cta_post("zutsuu")   for _ in range(1)]
+    cta_katakori = [generate_cta_post("katakori") for _ in range(1)]   # 2026-11-11 1日20本化: 3本→1本(肩こり1)
+    cta_zutsuu   = [generate_cta_post("zutsuu")   for _ in range(0)]
     cta_posts = cta_katakori + cta_zutsuu
     nagaoka_cta_idx = -1  # CTAへの長岡市追加なし
     cta_posts = [
@@ -2492,7 +2488,7 @@ def generate_40_nagaoka_posts() -> list[str]:
         for i, p in enumerate(cta_posts)
     ]
     # 実行ギャップ対策: ホットペッパー予約導線を前半（index 6, 16, 26）へ固定配置して毎日確実に届ける
-    cta_anchors = [6, 16, 26]
+    cta_anchors = [2]
     for i, cta in enumerate(cta_posts):
         pos = min(cta_anchors[i] if i < len(cta_anchors) else (i * 10 + 6), len(posts))
         posts.insert(pos, cta)
@@ -2501,7 +2497,7 @@ def generate_40_nagaoka_posts() -> list[str]:
     # 実行ギャップ対策: 前半（index 4, 10, 18）に固定配置
     # 修正: sequential insert ではなく batch build で anchor_positions を正確に保証
     listin_posts = []
-    for _ in range(3):
+    for _ in range(1):   # 2026-11-11 1日20本化: 3本→1本
         for _ in range(20):
             p = generate_line_listin_post("nagaoka")
             if p not in listin_posts:
@@ -2509,9 +2505,7 @@ def generate_40_nagaoka_posts() -> list[str]:
                 break
 
     # Batch insert: anchor_positions に先読みして、最後に差し込む（insert順でインデックスシフトを回避）
-    anchor_positions = {4: listin_posts[0] if len(listin_posts) > 0 else None,
-                        10: listin_posts[1] if len(listin_posts) > 1 else None,
-                        18: listin_posts[2] if len(listin_posts) > 2 else None}
+    anchor_positions = {1: listin_posts[0] if len(listin_posts) > 0 else None}
 
     # 逆順で挿入（後ろから）で前半のインデックスを保護
     for pos in sorted(anchor_positions.keys(), reverse=True):
@@ -2521,13 +2515,13 @@ def generate_40_nagaoka_posts() -> list[str]:
     # 場所・アクセス・駐車場・地域ワード投稿を織り交ぜる（来店ハードルを下げる）
     # 実行ギャップ対策: 前半（index 12, 21, 30）へアンカーして毎日確実に届ける
     access_posts = []
-    for _ in range(3):
+    for _ in range(1):   # 2026-11-11 1日20本化: 3本→1本
         for _ in range(20):
             p = generate_store_access_post("nagaoka")
             if p not in access_posts:
                 access_posts.append(p)
                 break
-    access_anchors = [12, 21, 30]
+    access_anchors = [6]
     for i, ap_ in enumerate(access_posts):
         pos = min(access_anchors[i] if i < len(access_anchors) else (i * 9 + 12), len(posts))
         posts.insert(pos, ap_)
@@ -2542,7 +2536,7 @@ def generate_40_nagaoka_posts() -> list[str]:
             if p not in shindan_posts:
                 shindan_posts.append(p)
                 break
-    shindan_anchors = [8]
+    shindan_anchors = [5]
     for i, sp_ in enumerate(shindan_posts):
         pos = min(shindan_anchors[i] if i < len(shindan_anchors) else (i * 10 + 8), len(posts))
         posts.insert(pos, sp_)
@@ -2557,7 +2551,7 @@ def generate_40_nagaoka_posts() -> list[str]:
     # （先に挿入すると後続アンカーの累積シフトで一部が長岡市率調整の削除対象に入り込む
     #  不具合があった）。1日の実消費(約50本)内に4投稿に1回（=3〜4投稿に1回の下限）の
     # ペースで確実に登場させる。
-    _SOUDAN_ANCHOR_POSITIONS = list(range(3, 36, 4))  # 3,7,11,...,35（末尾削除対象外のindex<=35に収める）
+    _SOUDAN_ANCHOR_POSITIONS = [3, 8]   # 2026-11-11 1日20本化: 9本(3,7,…,35)→2本
     soudan_posts, _seen_soudan = [], set()
     for _ in range(len(_SOUDAN_ANCHOR_POSITIONS)):
         for _ in range(20):
@@ -2587,7 +2581,7 @@ def generate_40_nagaoka_posts() -> list[str]:
     # ── 長岡市言及率の最終調整（アンカー挿入後） ──
     # アンカー挿入で投稿数が増えたため、長岡市率が目標(25%)を超える可能性がある。
     # 超過分を削除してルール遵守を確保。
-    final_posts = posts[:100]
+    final_posts = posts[:QUEUE_LEN + 10]   # 2026-11-11 1日20本化: 100→40本(長岡市率の調整で約10本減り、前半20＋予備約10になる。この後お客様の声1＋ヒーローが入る)
     nagaoka_mentions = sum(1 for p in final_posts if "長岡" in p)
     target_rate = 0.25
     target_count = max(1, int(len(final_posts) * target_rate))
@@ -2598,7 +2592,7 @@ def generate_40_nagaoka_posts() -> list[str]:
         # 安全マージン: index 35以降のみ削除
         excess = nagaoka_mentions - target_count
         deleted = 0
-        for i in range(len(final_posts) - 1, 35, -1):  # index 35以降から削除（全 anchor 保護）
+        for i in range(len(final_posts) - 1, FRONT_N - 1, -1):  # 2026-11-11 20本化: index FRONT_N以降から削除（全 anchor 保護）
             if deleted >= excess:
                 break
             if "長岡" in final_posts[i]:
@@ -3286,7 +3280,7 @@ from masa_insta_content import PRESENT_CTA_TEMPLATES  # noqa: E402
 # present_campaign.json の enabled:true の間だけ、1日1本を前半アンカー(PRESENT_ANCHOR)へ投入する。
 # 本文にURLは置かない（auto_postが投稿後にコメント欄へ公式LINEのURLを足す）。
 PRESENT_CAMPAIGN_FILE = BASE / "present_campaign.json"
-PRESENT_ANCHOR = 18   # 既存アンカー(4/5/8/9/12/14/16/22/26/27/30/34/44)と重ならない位置
+PRESENT_ANCHOR = 4   # 既存アンカー(4/5/8/9/12/14/16/22/26/27/30/34/44)と重ならない位置
 from present_calendar import current_present as _cal_current_present, PRESENT_CTA as _CAL_PRESENT_CTA, all_present_cta_texts as _cal_all_cta_texts  # noqa: E402
 # 2026-10-17: プレゼントは1期1つずつ（present_calendar.json）。インスタ期は masa_insta_content の20本、他の期は present_calendar.py の各10本。
 _PRESENT_CTA_SET = set(PRESENT_CTA_TEMPLATES) | _cal_all_cta_texts()
@@ -3360,8 +3354,8 @@ from masa_insta_content import INSTA_EASY_TEMPLATES, WINNING_HOOK_TEMPLATES  # n
 # 小川さん9/22助言（難しそうと思わせない）と同方向。固定テンプレ60本だけでは7日再投入禁止を
 # 満たせないため、(悩み→小さな言い換え→今日の一手)の組合せ生成を併用する。
 INSTA_THEME_RE = re.compile(r"インスタ|Instagram|リール|ストーリーズ|ハッシュタグ|DM|投稿ネタ|ネタ帳")
-INSTA_THEME_TARGET = 32      # 実投稿される前半50本のうちInstagramテーマにする下限目標（過半数=26超）
-INSTA_FRONT_LEN = 50
+INSTA_THEME_TARGET = 13      # 実投稿される前半20本のうちInstagramテーマにする下限目標（過半数=11超。2026-11-11 1日20本化で32/50→13/20）
+INSTA_FRONT_LEN = FRONT_N
 
 from masa_insta_content import INSTA_HURDLES, INSTA_GEN_STRUCTURES, build_gen_post  # noqa: E402
 
@@ -3764,9 +3758,9 @@ def _insert_hakase_posts(posts: list[str], acct: str, today: str) -> list[str]:
         pool = valid  # 直近7日除外で足りない場合はフォールバック（全滅回避）
 
     random.shuffle(pool)
-    chosen = pool[:2]
+    chosen = pool[:1]   # 2026-11-11 1日20本化: 毎日2本→1本
 
-    anchors = [22, 30]
+    anchors = [7]
     for i, text in enumerate(chosen):
         pos = anchors[i] if i < len(anchors) else min(anchors[-1], len(posts))
         posts.insert(min(pos, len(posts)), text)
@@ -3781,7 +3775,7 @@ def _insert_hakase_posts(posts: list[str], acct: str, today: str) -> list[str]:
     return posts
 
 
-WINNING_HOOK_DAILY = 4   # 勝ち型の固定原稿を前半50本へ入れる本数/日（20本を約5日で一巡）
+WINNING_HOOK_DAILY = 2   # 勝ち型の固定原稿を前半20本へ入れる本数/日（2026-11-11 1日20本化で4→2。20本を約10日で一巡）
 
 
 def _insert_winning_hook_posts(posts: list[str], acct: str, today: str, base_normal: set) -> list[str]:
@@ -4102,28 +4096,28 @@ def generate_30_masa_posts() -> list[str]:
     already_url_posted = _monthly_line_url_count("masa")        # 当月投稿済み数
     url_budget_remaining = max(0, 2 - already_url_posted - already_url_after)
     line_add = []
-    for _ in range(min(url_budget_remaining, 2)):
+    for _ in range(min(url_budget_remaining, 1)):   # 2026-11-11 1日20本化: 1日最大1本（月2本上限は不変）
         for _ in range(20):
             p = generate_masa_post("cta")        # cta = LINE追加URL付き
             if "8PsIHHC" in p and p not in line_add:
                 line_add.append(p)
                 break
     for i, lp in enumerate(line_add):
-        pos = min([5, 14][i] if i < 2 else (i * 8 + 5), len(posts))
+        pos = min([4, 11][i] if i < 2 else (i * 8 + 4), len(posts))
         posts.insert(pos, lp)
 
     # ── プロフィール経由のLINE誘導（URL無し）を毎日2本、前半に固定配置 ──
     # masaのURL付き投稿は月2本上限のため、URL無しの「プロフィールのリンクから」導線を
     # 毎日の主役にする（上限対象外・リンク抑制も回避。bioリンク=lin.ee/8PsIHHC）。
     prof_cta = []
-    for _ in range(2):
+    for _ in range(1):   # 2026-11-11 1日20本化: 毎日2本→1本
         for _ in range(20):
             p = generate_masa_post("cta_profile")
             if p and "プロフィール" in p and p not in prof_cta and not _is_masa_sales_ng(p):
                 prof_cta.append(p)
                 break
     for i, pp in enumerate(prof_cta):
-        pos = min([9, 27][i] if i < 2 else (i * 9 + 9), len(posts))
+        pos = min([4, 12][i] if i < 2 else (i * 9 + 4), len(posts))
         posts.insert(pos, pp)
 
     # ── AI活用の投稿を前半に固定配置（商材「AI活用支援」の需要醸成・2026-08-23）──
@@ -4143,7 +4137,7 @@ def generate_30_masa_posts() -> list[str]:
                 ai_posts.append(p)
                 break
     for i, ap_ in enumerate(ai_posts):
-        pos = min([4, 20, 36][i] if i < 3 else (i * 12 + 4), len(posts))
+        pos = min([2, 20, 36][i] if i < 3 else (i * 12 + 2), len(posts))
         posts.insert(pos, ap_)
 
     # AI→時短→LINE誘導を1日1本（URL無し・プロフィール経由。LINE言及枠内）
@@ -4154,7 +4148,7 @@ def generate_30_masa_posts() -> list[str]:
     for _ in range(20 if _ai_time_on else 0):
         tc = random.choice(AI_TIME_CTA_TEMPLATES)
         if not _is_masa_sales_ng(tc) and not _is_ng(tc):
-            posts.insert(min(12, len(posts)), tc)
+            posts.insert(min(10, len(posts)), tc)   # 2026-11-11 20本化: 12→10
             ai_time_cta_text = tc
             break
 
@@ -4188,14 +4182,14 @@ def generate_30_masa_posts() -> list[str]:
     protected_line_texts = set(prof_cta)
     if ai_time_cta_text is not None:
         protected_line_texts.add(ai_time_cta_text)
-    line_target = 5
+    line_target = 2   # 2026-11-11 1日20本化: 前半50本で5本→前半20本で2本(10%)
     # プレゼント誘導(PRESENT_CTA)とAI時短CTAは、同日に重なって前半50本のLINE言及が上限を超える日は交互にする
     # （偶数日=プレゼント優先・奇数日=AI時短優先。超えない日は両方出す）。
     if present_cta_text is not None:
         # 導線として確保する枠(プロフィール診断×2・URL付きLINE追加・AI時短・プレゼント)が上限を超える日だけ交互にする
         _committed = set(prof_cta) | set(line_add) | {present_cta_text} | ({ai_time_cta_text} if ai_time_cta_text else set())
-        _line_front = sum(1 for p in posts[:50] if p in _committed)
-        if _line_front > line_target and ai_time_cta_text is not None and ai_time_cta_text in posts[:50]:
+        _line_front = sum(1 for p in posts[:FRONT_N] if p in _committed)
+        if _line_front > line_target and ai_time_cta_text is not None and ai_time_cta_text in posts[:FRONT_N]:
             try:
                 _odd = date.fromisoformat(TODAY).toordinal() % 2
             except Exception:
@@ -4210,7 +4204,7 @@ def generate_30_masa_posts() -> list[str]:
                 protected_line_texts.discard(_drop)
         if present_cta_text is not None:
             protected_line_texts.add(present_cta_text)
-    front_half_len = min(50, len(posts))
+    front_half_len = min(FRONT_N, len(posts))
     line_idx_all = [
         i for i in range(front_half_len)
         if ("LINE" in posts[i] or "ライン" in posts[i] or "lin.ee" in posts[i])
@@ -4235,7 +4229,7 @@ def generate_30_masa_posts() -> list[str]:
     posts = _sweep_abstract_masa(posts)
     posts = _fill_insta_theme_posts(posts, "masa", TODAY, _base_normal_texts)
 
-    return posts[:100]
+    return posts[:QUEUE_LEN]   # 2026-11-11 1日20本化: 100→30本
 
 
 # ══════════════════════════════════════════════

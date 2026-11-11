@@ -1318,7 +1318,7 @@
    "inputs": {
     "slot": "07:30"
    },
-   "note": "2026-11-05: 頭痛Threads(@truth_nagaoka_zutsuu)のAPI自動投稿。2026-11-11 masa指示で1日10枠（うち3枠は図解カード）。止める時はenabled:false"
+   "note": "2026-11-05: 頭痛Threads(@truth_nagaoka_zutsuu)のAPI自動投稿。2026-11-11 masa指示「全てのThreads投稿を20投稿」で1日20枠（うち3枠は図解カード）。止める時はenabled:false"
   },
   {
    "id": "zutsu-threads-1215",
@@ -1331,7 +1331,7 @@
    "inputs": {
     "slot": "12:15"
    },
-   "note": "2026-11-05: 頭痛Threads(@truth_nagaoka_zutsuu)のAPI自動投稿。2026-11-11 masa指示で1日10枠（うち3枠は図解カード）。止める時はenabled:false"
+   "note": "2026-11-05: 頭痛Threads(@truth_nagaoka_zutsuu)のAPI自動投稿。2026-11-11 masa指示「全てのThreads投稿を20投稿」で1日20枠（うち3枠は図解カード）。止める時はenabled:false"
   },
   {
    "id": "zutsu-threads-1730",
@@ -1344,7 +1344,7 @@
    "inputs": {
     "slot": "17:30"
    },
-   "note": "2026-11-05: 頭痛Threads(@truth_nagaoka_zutsuu)のAPI自動投稿。2026-11-11 masa指示で1日10枠（うち3枠は図解カード）。止める時はenabled:false"
+   "note": "2026-11-05: 頭痛Threads(@truth_nagaoka_zutsuu)のAPI自動投稿。2026-11-11 masa指示「全てのThreads投稿を20投稿」で1日20枠（うち3枠は図解カード）。止める時はenabled:false"
   },
   {
    "id": "zutsu-threads-2030",
@@ -1357,7 +1357,7 @@
    "inputs": {
     "slot": "20:30"
    },
-   "note": "2026-11-05: 頭痛Threads(@truth_nagaoka_zutsuu)のAPI自動投稿。2026-11-11 masa指示で1日10枠（うち3枠は図解カード）。止める時はenabled:false"
+   "note": "2026-11-05: 頭痛Threads(@truth_nagaoka_zutsuu)のAPI自動投稿。2026-11-11 masa指示「全てのThreads投稿を20投稿」で1日20枠（うち3枠は図解カード）。止める時はenabled:false"
   },
   {
    "id": "zutsu-threads-2200",
@@ -1370,7 +1370,7 @@
    "inputs": {
     "slot": "22:00"
    },
-   "note": "2026-11-05: 頭痛Threads(@truth_nagaoka_zutsuu)のAPI自動投稿。2026-11-11 masa指示で1日10枠（うち3枠は図解カード）。止める時はenabled:false"
+   "note": "2026-11-05: 頭痛Threads(@truth_nagaoka_zutsuu)のAPI自動投稿。2026-11-11 masa指示「全てのThreads投稿を20投稿」で1日20枠（うち3枠は図解カード）。止める時はenabled:false"
   },
   {
    "id": "zutsu-threads-0900",
@@ -1383,7 +1383,7 @@
    "inputs": {
     "slot": "09:00"
    },
-   "note": "2026-11-11 masa指示「1日10投稿・画像の解説も」で追加した枠。図解カード＋解説文で投稿する枠。止める時はenabled:false"
+   "note": "2026-11-05: 頭痛Threads(@truth_nagaoka_zutsuu)のAPI自動投稿。2026-11-11 masa指示「全てのThreads投稿を20投稿」で1日20枠（うち3枠は図解カード）。止める時はenabled:false"
   },
   {
    "id": "zutsu-threads-1030",
@@ -1396,7 +1396,7 @@
    "inputs": {
     "slot": "10:30"
    },
-   "note": "2026-11-11 masa指示「1日10投稿・画像の解説も」で追加した枠。止める時はenabled:false"
+   "note": "2026-11-05: 頭痛Threads(@truth_nagaoka_zutsuu)のAPI自動投稿。2026-11-11 masa指示「全てのThreads投稿を20投稿」で1日20枠（うち3枠は図解カード）。止める時はenabled:false"
   },
   {
    "id": "zutsu-threads-1345",
@@ -1409,7 +1409,7 @@
    "inputs": {
     "slot": "13:45"
    },
-   "note": "2026-11-11 masa指示「1日10投稿・画像の解説も」で追加した枠。図解カード＋解説文で投稿する枠。止める時はenabled:false"
+   "note": "2026-11-05: 頭痛Threads(@truth_nagaoka_zutsuu)のAPI自動投稿。2026-11-11 masa指示「全てのThreads投稿を20投稿」で1日20枠（うち3枠は図解カード）。止める時はenabled:false"
   },
   {
    "id": "zutsu-threads-1530",
@@ -1422,7 +1422,7 @@
    "inputs": {
     "slot": "15:30"
    },
-   "note": "2026-11-11 masa指示「1日10投稿・画像の解説も」で追加した枠。止める時はenabled:false"
+   "note": "2026-11-05: 頭痛Threads(@truth_nagaoka_zutsuu)のAPI自動投稿。2026-11-11 masa指示「全てのThreads投稿を20投稿」で1日20枠（うち3枠は図解カード）。止める時はenabled:false"
   },
   {
    "id": "zutsu-threads-1900",
@@ -1435,7 +1435,137 @@
    "inputs": {
     "slot": "19:00"
    },
-   "note": "2026-11-11 masa指示「1日10投稿・画像の解説も」で追加した枠。図解カード＋解説文で投稿する枠。止める時はenabled:false"
+   "note": "2026-11-05: 頭痛Threads(@truth_nagaoka_zutsuu)のAPI自動投稿。2026-11-11 masa指示「全てのThreads投稿を20投稿」で1日20枠（うち3枠は図解カード）。止める時はenabled:false"
+  },
+  {
+   "id": "zutsu-threads-0640",
+   "repo": "truthbodysalon-lab/threads-auto-post",
+   "workflow": "zutsu_threads.yml",
+   "jst_time": "06:40",
+   "window_min": 25,
+   "since": "slot",
+   "enabled": true,
+   "inputs": {
+    "slot": "06:40"
+   },
+   "note": "2026-11-05: 頭痛Threads(@truth_nagaoka_zutsuu)のAPI自動投稿。2026-11-11 masa指示「全てのThreads投稿を20投稿」で1日20枠（うち3枠は図解カード）。止める時はenabled:false"
+  },
+  {
+   "id": "zutsu-threads-0820",
+   "repo": "truthbodysalon-lab/threads-auto-post",
+   "workflow": "zutsu_threads.yml",
+   "jst_time": "08:20",
+   "window_min": 25,
+   "since": "slot",
+   "enabled": true,
+   "inputs": {
+    "slot": "08:20"
+   },
+   "note": "2026-11-05: 頭痛Threads(@truth_nagaoka_zutsuu)のAPI自動投稿。2026-11-11 masa指示「全てのThreads投稿を20投稿」で1日20枠（うち3枠は図解カード）。止める時はenabled:false"
+  },
+  {
+   "id": "zutsu-threads-1000",
+   "repo": "truthbodysalon-lab/threads-auto-post",
+   "workflow": "zutsu_threads.yml",
+   "jst_time": "10:00",
+   "window_min": 25,
+   "since": "slot",
+   "enabled": true,
+   "inputs": {
+    "slot": "10:00"
+   },
+   "note": "2026-11-05: 頭痛Threads(@truth_nagaoka_zutsuu)のAPI自動投稿。2026-11-11 masa指示「全てのThreads投稿を20投稿」で1日20枠（うち3枠は図解カード）。止める時はenabled:false"
+  },
+  {
+   "id": "zutsu-threads-1130",
+   "repo": "truthbodysalon-lab/threads-auto-post",
+   "workflow": "zutsu_threads.yml",
+   "jst_time": "11:30",
+   "window_min": 25,
+   "since": "slot",
+   "enabled": true,
+   "inputs": {
+    "slot": "11:30"
+   },
+   "note": "2026-11-05: 頭痛Threads(@truth_nagaoka_zutsuu)のAPI自動投稿。2026-11-11 masa指示「全てのThreads投稿を20投稿」で1日20枠（うち3枠は図解カード）。止める時はenabled:false"
+  },
+  {
+   "id": "zutsu-threads-1300",
+   "repo": "truthbodysalon-lab/threads-auto-post",
+   "workflow": "zutsu_threads.yml",
+   "jst_time": "13:00",
+   "window_min": 25,
+   "since": "slot",
+   "enabled": true,
+   "inputs": {
+    "slot": "13:00"
+   },
+   "note": "2026-11-05: 頭痛Threads(@truth_nagaoka_zutsuu)のAPI自動投稿。2026-11-11 masa指示「全てのThreads投稿を20投稿」で1日20枠（うち3枠は図解カード）。止める時はenabled:false"
+  },
+  {
+   "id": "zutsu-threads-1440",
+   "repo": "truthbodysalon-lab/threads-auto-post",
+   "workflow": "zutsu_threads.yml",
+   "jst_time": "14:40",
+   "window_min": 25,
+   "since": "slot",
+   "enabled": true,
+   "inputs": {
+    "slot": "14:40"
+   },
+   "note": "2026-11-05: 頭痛Threads(@truth_nagaoka_zutsuu)のAPI自動投稿。2026-11-11 masa指示「全てのThreads投稿を20投稿」で1日20枠（うち3枠は図解カード）。止める時はenabled:false"
+  },
+  {
+   "id": "zutsu-threads-1630",
+   "repo": "truthbodysalon-lab/threads-auto-post",
+   "workflow": "zutsu_threads.yml",
+   "jst_time": "16:30",
+   "window_min": 25,
+   "since": "slot",
+   "enabled": true,
+   "inputs": {
+    "slot": "16:30"
+   },
+   "note": "2026-11-05: 頭痛Threads(@truth_nagaoka_zutsuu)のAPI自動投稿。2026-11-11 masa指示「全てのThreads投稿を20投稿」で1日20枠（うち3枠は図解カード）。止める時はenabled:false"
+  },
+  {
+   "id": "zutsu-threads-1815",
+   "repo": "truthbodysalon-lab/threads-auto-post",
+   "workflow": "zutsu_threads.yml",
+   "jst_time": "18:15",
+   "window_min": 25,
+   "since": "slot",
+   "enabled": true,
+   "inputs": {
+    "slot": "18:15"
+   },
+   "note": "2026-11-05: 頭痛Threads(@truth_nagaoka_zutsuu)のAPI自動投稿。2026-11-11 masa指示「全てのThreads投稿を20投稿」で1日20枠（うち3枠は図解カード）。止める時はenabled:false"
+  },
+  {
+   "id": "zutsu-threads-2000",
+   "repo": "truthbodysalon-lab/threads-auto-post",
+   "workflow": "zutsu_threads.yml",
+   "jst_time": "20:00",
+   "window_min": 25,
+   "since": "slot",
+   "enabled": true,
+   "inputs": {
+    "slot": "20:00"
+   },
+   "note": "2026-11-05: 頭痛Threads(@truth_nagaoka_zutsuu)のAPI自動投稿。2026-11-11 masa指示「全てのThreads投稿を20投稿」で1日20枠（うち3枠は図解カード）。止める時はenabled:false"
+  },
+  {
+   "id": "zutsu-threads-2115",
+   "repo": "truthbodysalon-lab/threads-auto-post",
+   "workflow": "zutsu_threads.yml",
+   "jst_time": "21:15",
+   "window_min": 25,
+   "since": "slot",
+   "enabled": true,
+   "inputs": {
+    "slot": "21:15"
+   },
+   "note": "2026-11-05: 頭痛Threads(@truth_nagaoka_zutsuu)のAPI自動投稿。2026-11-11 masa指示「全てのThreads投稿を20投稿」で1日20枠（うち3枠は図解カード）。止める時はenabled:false"
   },
   {
    "id": "diet-threads-learn",

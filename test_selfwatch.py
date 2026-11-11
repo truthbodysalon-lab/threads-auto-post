@@ -149,10 +149,10 @@ class VerifyC41(unittest.TestCase):
         posts = [lo + timedelta(minutes=m) for m in range(30, 790, 20)] + [lo.replace(hour=22, minute=57)]
         posts = [p for p in posts if not (lo.replace(hour=19, minute=8) < p < lo.replace(hour=22, minute=57))]
         spans = [(lo - timedelta(hours=1), hi)]
-        inc = vs.alive_stall_incidents(posts, spans, lo, hi)
+        inc = vs.alive_stall_incidents(posts, spans, lo, hi, daily_target=50)   # 10/23の事故再現は当時の目標50本で判定
         self.assertTrue(inc and inc[0][0] >= 200, inc)
         # 常駐が動いていなかった空白は対象外（C18の担当）
-        inc2 = vs.alive_stall_incidents(posts, [(lo, lo.replace(hour=18))], lo, hi)
+        inc2 = vs.alive_stall_incidents(posts, [(lo, lo.replace(hour=18))], lo, hi, daily_target=50)
         self.assertEqual(inc2, [])
 
 
@@ -389,7 +389,7 @@ def test_c41_trailing_gap_detected():
     lo = datetime(2026, 10, 23, 6, tzinfo=JST); hi = lo.replace(hour=23)
     posts = [lo.replace(hour=h, minute=m) for h in range(6, 19) for m in (5, 25, 45)] + [lo.replace(hour=19, minute=7)]
     spans = [(lo, hi)]
-    inc = vs.alive_stall_incidents(posts, spans, lo, hi)
+    inc = vs.alive_stall_incidents(posts, spans, lo, hi, daily_target=50)   # 10/23の事故再現は当時の目標50本で判定
     assert inc and max(i[0] for i in inc) >= 230, inc
 
 
@@ -401,7 +401,7 @@ def test_c41_gap_after_target_ignored():
     JST = timezone(timedelta(hours=9))
     lo = datetime(2026, 10, 23, 6, tzinfo=JST); hi = lo.replace(hour=23)
     posts = [lo + timedelta(minutes=18 * i) for i in range(50)]  # 50本目は約20:42
-    assert not vs.alive_stall_incidents(posts, [(lo, hi)], lo, hi)
+    assert not vs.alive_stall_incidents(posts, [(lo, hi)], lo, hi, daily_target=50)
 
 
 if __name__ == "__main__":

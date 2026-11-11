@@ -32,7 +32,7 @@ class TestHooks(unittest.TestCase):
 
     def test_daily_default(self):
         if "UPLINK_REPOST_DAILY" not in os.environ:
-            self.assertEqual(ur.DAILY_N, 3)
+            self.assertEqual(ur.DAILY_N, 2)
 
 
 class TestWinningTemplates(unittest.TestCase):

@@ -2,7 +2,7 @@
   "masa": {
     "axis": "insta_pain",
     "axis_since": "2026-10-04",
-    "per_day": 6,
+    "per_day": 3,
     "share": {
       "I01": 1,
       "I02": 1,
@@ -25,12 +25,9 @@
     "rotation": "round_robin",
     "hook_rotation": "daily_alternate",
     "anchors": [
+      3,
       8,
-      16,
-      18,
-      26,
-      28,
-      32
+      12
     ],
     "anchors_note": "2026-10-04 5本→6本/日。既存anchors[8,16,26,34,44]に18を追加(後段のヒーロー10本挿入で最大+12ずれるため、前半50本に収まる早い位置を選んだ)。generate_30_masa_posts()の既存固定アンカー(AI=4/20/36・LINE=5/14・プロフィールCTA=9/27・時短CTA=12・HAKASE=22/30)と衝突しない。ヒーロー(2+4i)は後段で挿入されるため干渉しない。",
     "min_n": 5,
@@ -66,7 +63,7 @@
       "repeat_close": {
         "axis": "repeat_close",
         "axis_since": "2026-10-04",
-        "per_day": 2,
+        "per_day": 1,
         "share": {
           "R01": 1,
           "R02": 1,
@@ -84,8 +81,7 @@
         "rotation": "round_robin",
         "hook_rotation": "daily_alternate",
         "anchors": [
-          11,
-          24
+          6
         ],
         "anchors_note": "2026-10-04 generate_30_masa_posts()を読んで既存の使用済みindexを洗い出した: AI=4/20/36・LINE=5/14・プロフィールCTA=9/27・時短CTA=12・HAKASE=22/30・軸1=8/16/18/26/34/44・ヒーロー挿入=2+4i(2,6,…,38)。これらと重ならず前半50本に収まる11と24を採用。軸2は軸1より後・HAKASE/ヒーローより前に挿入する。",
         "min_n": 5,
@@ -97,10 +93,11 @@
       }
     },
     "anchors_note_20261004": "34/44はヒーロー挿入で+10〜14ずれ48〜58番目＝前半50本外で未投稿になっていた。28/32へ前倒し（他アンカーと非衝突）。",
-    "retest_grace": {}
+    "retest_grace": {},
+    "note_20": "2026-11-11 1日20本化(masa指示): per_dayとanchorsを前半20本に収まるよう縮小。内訳は daily_budget.py"
   },
   "truth": {
-    "per_day": 4,
+    "per_day": 2,
     "share": {
       "T1": 2,
       "T2": 2,
@@ -112,18 +109,17 @@
     "rotation": "round_robin",
     "hook_rotation": "daily_alternate",
     "anchors": [
-      11,
-      16,
-      25,
-      30
+      4,
+      9
     ],
     "anchors_note": "generate_30_posts()を読んで既存固定アンカーの使用済みindexを洗い出した: CTA(肩こり2/頭痛2)=[5,14,23,32]、LINEリストイン=[3,7,12,18]、店舗アクセス=[9,19,28]、整体公式LINE=[21]、頭痛タイプ診断=[6]。これらの和集合{3,5,6,7,9,12,14,18,19,21,23,28,32}を避けて11,16,25,30を採用（_insert_hero_postsは全挿入の最後に呼ばれるため衝突なし）。T2(zutsu=週に何度も頭痛薬)はtruthが頭痛特化アカウントのためshare=2で他層の2倍配分。",
     "baseline_ref": "segment_baseline.json",
     "share_note": "2026-09-24 baseline反映: T1はindex1.25で過去実測が最も安定(n=84)しているためshare2に格上げ。T2はtruthの頭痛特化アカウント特性を維持しshare2を継続。T5はindex1.35と最高だがn=3(参考値)のためshare1に据え置き、白地層T4は仮説検証のためshare1を維持（配分を減らさない）。",
-    "min_n": 5
+    "min_n": 5,
+    "note_20": "2026-11-11 1日20本化(masa指示): per_dayとanchorsを前半20本に収まるよう縮小。内訳は daily_budget.py"
   },
   "nagaoka": {
-    "per_day": 4,
+    "per_day": 2,
     "share": {
       "T1": 2,
       "T2": 2,
@@ -135,14 +131,13 @@
     "rotation": "round_robin",
     "hook_rotation": "daily_alternate",
     "anchors": [
-      9,
-      14,
-      24,
-      29
+      4,
+      9
     ],
     "anchors_note": "generate_40_nagaoka_posts()を読んで既存固定アンカーの使用済みindexを洗い出した: CTA(肩こり2/頭痛1)=[6,16,26]、LINEリストイン=[4,10,18]、店舗アクセス=[12,21,30]、頭痛タイプ診断=[8]、長岡市相談型オープニング(nagaoka_soudan_open)=[3,7,11,15,19,23,27,31,35]。これらの和集合{3,4,6,7,8,10,11,12,15,16,18,19,21,23,26,27,30,31,35}を避けて9,14,24,29を採用。いずれも末尾の長岡市率トリム対象(index>35のみ削除対象)より内側のため安全。",
     "baseline_ref": "segment_baseline.json",
     "share_note": "2026-09-24 baseline反映: T1(index1.02)とT2(index1.15)がnagaokaの上位2層のためshare2に格上げ。T3はindex2.57だがn=2(参考値)のためshare1に据え置き、白地層T4は仮説検証のためshare1を維持（配分を減らさない）。",
-    "min_n": 5
+    "min_n": 5,
+    "note_20": "2026-11-11 1日20本化(masa指示): per_dayとanchorsを前半20本に収まるよう縮小。内訳は daily_budget.py"
   }
 }

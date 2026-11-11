@@ -409,6 +409,10 @@
       "date": "2026-10-24",
       "text": "【1行目の型の配分（本人指示2026-10-24「分析の提案をそのまま反映」）】根拠=myfiles/SNS・Threads/truth_nagaoka_1行目の型と施策の効果_2026-10-24.md（14日実測）。nagaoka: 習慣N選は隔日1本・言い切りの否定は1日2本まで。『前に、まず』4・天気／気圧3・問いかけ2・お客様の声3本を毎日。画像つき自動投稿を1日4本（兄妹・地域・天気。image_post.pyはフォルダ欠落で9/2から停止していたため復旧）。外部ツールの画像なし投稿は自システム外（触らない）。実装=generate_remix.py の TYPE_DAILY_PLAN／TYPE_CAPS／_replace_with_type_posts（導線アンカーの位置と本数は不変＝汎用ベース投稿と置換）、固定プール=type_templates.py。型別の閲覧倍率は segment_report.py（秘書日報『伸びた型』）。ヒーローは segment=own_adapt を自動登録。",
       "account": "nagaoka"
+    },
+    {
+      "date": "2026-11-11",
+      "text": "【1日の投稿数を20本に統一（本人指示2026-11-11「全てのThreads投稿の数を20投稿にして」）】truth/nagaoka/masaとも1日の合計20本（通常・画像・uplink転載・ヒーローをすべて含む）。優先順位=導線アンカー→ヒーロー(5本/日)→通常投稿。内訳表=daily_budget.py。DAILY_TARGET=20・DAILY_CAP=20(auto_post.py/watchdog_ci.py/stall_check.py/verify_system.py/views_goal.json)。生成キューは前半20本＋予備10本(30本)・導線アンカーは前半の消化順13本内に固定。LINE言及はmasa前半20本で2本(10%)・truth/nagaokaはリストイン1本＋整体LINE1本(truth)。nagaokaの外部ツール(約20本/日)は数えない(台帳のみ)。masaはBuffer(約10枠)をAPI実測で合計に数える。"
     }
   ],
   "updated_at": "2026-10-17",

@@ -6960,7 +6960,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 16,
-    "created": "2026-11-09"
+    "created": "2026-11-11"
   },
   "投稿は、出して終わりにしない。": {
     "segment": "HAKASE",
@@ -10781,6 +10781,13 @@
     "hook": "present",
     "present_key": "ai_starter",
     "variant": 6,
+    "created": "2026-11-11"
+  },
+  "時短の一歩目は、道具を買うことじゃありません。": {
+    "segment": "PRESENT_CTA",
+    "hook": "present",
+    "present_key": "ai_starter",
+    "variant": 2,
     "created": "2026-11-11"
   }
 }

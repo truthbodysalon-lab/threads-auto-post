@@ -10789,5 +10789,12 @@
     "present_key": "ai_starter",
     "variant": 2,
     "created": "2026-11-11"
+  },
+  "お店の毎日の作業は、AIで軽くできます。": {
+    "segment": "PRESENT_CTA",
+    "hook": "present",
+    "present_key": "ai_starter",
+    "variant": 0,
+    "created": "2026-11-11"
   }
 }

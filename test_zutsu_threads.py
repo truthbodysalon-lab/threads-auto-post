@@ -562,3 +562,63 @@ class TestNagaokaLocal20261110(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestImagePosts20261111(Base):
+    """2026-11-11 masa指示「Thredsの投稿を1日10投稿を目標にして その際に画像の解説も取り入れて投稿するようにして」"""
+    FIG = {"title": "画面と目の疲れ", "points": ["画面は目線のやや下に置く", "20分ごとに20秒、遠くを見る", "首の後ろを温める"]}
+    TEXT = "夕方、画面を見続けた日の頭の重さ。目の疲れがきっかけになることがあります。図の3つを、作業の区切りに順番に試す。画面の高さは今日のうちに。"
+
+    def setUp(self):
+        super().setUp()
+        os.environ["THREADS_ACCESS_TOKEN_ZUTSU"] = "t"; os.environ["THREADS_USER_ID_ZUTSU"] = "u"
+        self._base, self._push = D.BASE, D.push_figure
+        D.BASE = Path(self.tmp.name)
+        D.notify = lambda m: None
+
+    def tearDown(self):
+        D.BASE, D.push_figure = self._base, self._push
+        super().tearDown()
+
+    def gen(self, fig=FIG):
+        return lambda s, u: json.dumps({"text": self.TEXT, "type": "t", "has_cta": False, "figure": fig}, ensure_ascii=False)
+
+    def test_ten_slots_three_images(self):
+        self.assertEqual(len(D.SLOTS), 10); self.assertEqual(D.DAILY_CAP, 10)
+        self.assertTrue(D.IMAGE_SLOTS <= set(D.SLOTS)); self.assertEqual(len(D.IMAGE_SLOTS), 3)
+        self.assertEqual(D.choose_format_and_type([], "13:45", random.Random(0))[0], "image")
+
+    def test_image_slot_posts_figure_with_explanation(self):
+        D.push_figure = lambda p: True
+        got = {}
+        def img_pub(tok, uid, text, url):
+            got["url"], got["text"] = url, text; return "IMG1"
+        def txt_pub(*a): raise AssertionError("文字だけで出してはいけない")
+        self.run_(slot="13:45", now=NOW.replace(hour=13, minute=45), fetch=lambda t, n: [],
+                  generator=self.gen(), publisher=txt_pub, image_publisher=img_pub)
+        self.assertTrue(got["url"].startswith(D.RAW_IMG) and got["url"].endswith(".png"))
+        e = json.loads(self.log.read_text().splitlines()[-1])
+        self.assertEqual(e["id"], "IMG1"); self.assertEqual(e["fmt"], "image"); self.assertIn("image", e)
+        self.assertTrue((D.BASE / "images" / "zutsu" / e["image"]).exists())
+
+    def test_image_failure_falls_back_to_text(self):
+        D.push_figure = lambda p: True
+        def img_pub(*a): raise RuntimeError("image fetch failed")
+        sent = []
+        self.run_(slot="13:45", now=NOW.replace(hour=13, minute=45), fetch=lambda t, n: [],
+                  generator=self.gen(), publisher=lambda t, u, x: sent.append(x) or "TXT1", image_publisher=img_pub)
+        self.assertEqual(sent, [self.TEXT])
+        self.assertNotIn("image", json.loads(self.log.read_text().splitlines()[-1]))
+
+    def test_bad_figure_rejected(self):
+        p, reason = D.generate_post("13:45", "image", "t", False, [], [], self.gen({"title": "", "points": ["1つだけ"]}))
+        self.assertIsNone(p); self.assertIn("figure", reason)
+        p, reason = D.generate_post("13:45", "image", "t", False, [], [],
+                                    self.gen({"title": "頭痛が治る3つの方法", "points": ["枕を変える", "温める"]}))
+        self.assertIsNone(p); self.assertIn("図の文字", reason)
+
+    def test_figure_renders(self):
+        from zutsu_figure import render
+        out = render(self.FIG, Path(self.tmp.name) / "f.png")
+        from PIL import Image
+        self.assertEqual(Image.open(out).size, (1080, 1350))

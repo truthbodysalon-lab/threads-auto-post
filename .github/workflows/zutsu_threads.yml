@@ -2,13 +2,14 @@ name: Zutsu Threads Post
 
 # 頭痛Threads(@truth_nagaoka_zutsuu) API自動投稿。2026-11-05 diet_threads.yml を元に作成。
 # cronは持たない: 中央ディスパッチャ(dispatcher.py + schedule_table.json の zutsu-threads-*)が
-# 7:30 / 12:15 / 17:30 / 20:30 / 22:00 (JST) に workflow_dispatch で起動する(inputs.slot が枠)。
+# 1日10枠 7:30/9:00/10:30/12:15/13:45/15:30/17:30/19:00/20:30/22:00 (JST) に workflow_dispatch で起動する(inputs.slot が枠)。
+# 9:00/13:45/19:00 は図解カード(Pillowで描く・AI生成ではない)＋解説文の画像投稿（2026-11-11 masa指示）。
 # トークン(THREADS_ACCESS_TOKEN_ZUTSU)が未登録の間は何もせず正常終了する。
 on:
   workflow_dispatch:
     inputs:
       slot:
-        description: '枠 (07:30 / 12:15 / 17:30 / 20:30 / 22:00)'
+        description: '枠 (07:30 09:00 10:30 12:15 13:45 15:30 17:30 19:00 20:30 22:00)'
         required: true
         default: '07:30'
       dry_run:
@@ -40,6 +41,13 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+
+      - name: Install fonts and Pillow (図解カード用)
+        run: |
+          if [ "${{ github.event.inputs.slot }}" = "09:00" ] || [ "${{ github.event.inputs.slot }}" = "13:45" ] || [ "${{ github.event.inputs.slot }}" = "19:00" ]; then
+            sudo apt-get update -qq && sudo apt-get install -y -qq fonts-noto-cjk || echo "::warning::フォント導入失敗（文字だけで投稿する）"
+          fi
+          pip install -q pillow || echo "::warning::Pillow導入失敗（文字だけで投稿する）"
 
       - name: Run zutsu_threads
         env:

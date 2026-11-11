@@ -35,9 +35,13 @@ PAUSE_FILE = BASE / "zutsu_threads_pause.json"          # 警告・制限を検�
 BASE_URL = "https://graph.threads.net/v1.0"
 JST = timezone(timedelta(hours=9))
 
-# 新しいアカウントなので控えめに1日5本（制限を受けにくくするため）。通勤・昼休み・帰宅後・寝る前に置く
-SLOTS = ["07:30", "12:15", "17:30", "20:30", "22:00"]
-DAILY_CAP = 5            # API投稿の1日上限
+# 2026-11-11 masa指示「Thredsの投稿を1日10投稿を目標にして その際に画像の解説も取り入れて投稿するようにして」:
+# 1日5本→10本。うち3枠(IMAGE_SLOTS)は図解カード(zutsu_figure.py・AI生成ではない)＋その解説文で投稿する
+SLOTS = ["07:30", "09:00", "10:30", "12:15", "13:45", "15:30", "17:30", "19:00", "20:30", "22:00"]
+IMAGE_SLOTS = {"09:00", "13:45", "19:00"}
+DAILY_CAP = 10           # API投稿の1日上限
+IMAGE_BODY_MAX = 160     # 画像の解説文の本文上限
+RAW_IMG = "https://raw.githubusercontent.com/truthbodysalon-lab/threads-auto-post/main/images/zutsu"
 CTA_DAILY_MAX = 2        # 1日の公式LINE案内の上限（手動投稿分も含めて数える）
 CTA_SLOTS = {"12:15", "20:30"}   # 案内を付けてよい枠
 MIN_GAP_MIN = 30         # 直前の投稿(手動投稿も含む)からの最低間隔
@@ -94,6 +98,7 @@ EMERGENCY_EVERY_DAYS = 7
 FORMATS = {
     "short": "短文(1〜3行・60字以内)",
     "medium": "中くらい(本文60〜110字・3行まで。※の注意書きを指示されたときはそれを別に足す。言いたいことを1つにして言い切る)",
+    "image": "画像つき(図解カード1枚＋その解説文。解説文は80〜150字・4行まで)",
 }
 MEDIUM_BODY_MAX = 120
 
@@ -262,6 +267,47 @@ def publish_text(token: str, user_id: str, text: str) -> str:
 
 # ── 重複・CTA判定 ──────────────────────────────────
 
+def publish_image(token: str, user_id: str, text: str, image_url: str, sleeper=time.sleep) -> str:
+    """画像つき投稿。raw URLの反映待ちのため、コンテナ作成だけ最大3回やり直す(公開は1回だけ＝二重投稿しない)"""
+    uid = user_id or "me"
+    last = None
+    for i in range(3):
+        try:
+            c = _http(f"{BASE_URL}/{uid}/threads",
+                      {"media_type": "IMAGE", "image_url": image_url, "text": text, "access_token": token}, "POST")
+            break
+        except Exception as e:
+            last = e
+            if is_pause_error(e):
+                raise
+            sleeper(30)
+    else:
+        raise last
+    sleeper(10)   # 画像の処理待ち
+    p = _http(f"{BASE_URL}/{uid}/threads_publish", {"creation_id": c["id"], "access_token": token}, "POST")
+    return p["id"]
+
+
+def push_figure(path: Path) -> bool:
+    """図解カードをリポジトリへcommit/pushして raw URL で読めるようにする(Actionsのcheckoutは書き込み可)"""
+    import subprocess
+    try:
+        subprocess.run(["git", "-C", str(BASE), "add", str(path)], capture_output=True, timeout=60, check=True)
+        subprocess.run(["git", "-C", str(BASE), "-c", "user.name=github-actions[bot]",
+                        "-c", "user.email=github-actions[bot]@users.noreply.github.com",
+                        "commit", "-q", "-m", f"chore: zutsu threads figure {path.name} [skip ci]"],
+                       capture_output=True, timeout=60, check=True)
+        for _ in range(3):
+            if subprocess.run(["git", "-C", str(BASE), "push", "-q"], capture_output=True, timeout=120).returncode == 0:
+                return True
+            subprocess.run(["git", "-C", str(BASE), "pull", "-q", "--rebase", "--autostash", "origin", "main"],
+                           capture_output=True, timeout=120)
+        return False
+    except Exception as e:
+        log(f"図の push 失敗: {type(e).__name__}")
+        return False
+
+
 def bigrams(s: str) -> set:
     s = re.sub(r"\s+", "", unicodedata.normalize("NFKC", s or ""))
     return {s[i:i + 2] for i in range(len(s) - 1)} if len(s) >= 2 else ({s} if s else set())
@@ -319,7 +365,7 @@ def gap_minutes(recent: list[dict], now: datetime) -> float | None:
 def safety_line_for(fmt: str, theme: str, recent: list[dict], now: datetime) -> str:
     """今回の投稿に付ける※の1行。付けないなら空文字。
     中くらい×頭痛のタイプのテーマだけ・その日(JST)にまだ※つきの投稿が無いときだけ・直前に使った言い方は避ける"""
-    if fmt != "medium" or theme not in SAFETY_THEMES:
+    if fmt not in ("medium", "image") or theme not in SAFETY_THEMES:
         return ""
     d = now.strftime("%Y-%m-%d")
     last_used = None
@@ -348,6 +394,8 @@ def classify_format(text: str) -> str:
 
 def choose_format_and_type(recent: list[dict], slot: str, rng: random.Random) -> tuple[str, str]:
     """短文と中くらいを半々・同形式3連続禁止。地域の情報の枠は中身を入れるため中くらい寄り、夜は短文寄り"""
+    if slot in IMAGE_SLOTS:
+        return "image", rng.choice(TYPES)
     w = {"short": 0.50, "medium": 0.50}
     if slot == LOCAL_SLOT:
         w = {"short": 0.20, "medium": 0.80}
@@ -392,7 +440,7 @@ _NG_REGEX = [
     (r"(?:薬|くすり|痛み止め|鎮痛)(?:剤)?を(?:やめ|止め|減ら|飲まな|控え|手放)", "薬の減量・中止の指示"),
     (r"ロキソニン|(?<![ァ-ヶー])イブ(?:クイック|プロフェン)?(?![ァ-ヶー])|バファリン|カロナール|ナロン|セデス|トリプタン", "薬の銘柄"),
     # 2026-11-05 試し生成ですり抜けた言い回し
-    (r"(?:人|方)(?:も|が)(?:多い|たくさん|少なくない)|だけ(?:でも|で)[、,]?\s*(?:\S{0,8}(?:が|も))?(?:違|変わ|ラク|楽)|楽になる人|ラクになる人|違ってく|違うかも|変わってく|変わるかも|変わることも|違ってくることも|重さを変え|頭の重さが変わ", "効果・割合の示唆"),
+    (r"(?:人|方)(?:も|が)(?:多い|たくさん|少なくない)|だけ(?:でも|で)[、,]?\s*(?:\S{0,8}(?:が|も))?(?:違|変わ|ラク|楽)|楽になる人|ラクになる人|違ってく|違うかも|変わってく|変わるかも|変わることも|違ってくることも|重さを変え|頭の重さが変わ|ほぐれ|負担(?:も|が)?減(?:り|る)|和らぎ|和らげ|スッキリ|すっきり", "効果・割合の示唆"),
     (r"僕(?:も|自身)", "院長自身の体験・体質の話"),
     (r"何か(?:が|を)?(?:起き|隠れ|潜)|ただの頭痛(?:では|じゃ)|いつもの頭痛と違|放っておく|放置すると|見逃", "不安をあおる言い方"),
     (r"(?<![師医]に)(?:相談してみ|相談(?:を|して)(?:ください|みて))|ご相談|気軽に相談", "自由文の相談への誘導"),   # 医師・薬剤師・かかりつけ医への相談は可
@@ -433,6 +481,13 @@ def stock_phrase_errors(text: str, recent_texts: list[str]) -> list[str]:
                 break
     return errs
 _NG_NFKC = [(re.compile(p), name) for p, name in _NG_REGEX]
+
+
+def blocked_phrases(recent_texts: list[str]) -> list[str]:
+    """今回の生成で使えない言い回し（プロンプトに先に渡して、検品で落ちる回数を減らす）"""
+    last5, last15 = recent_texts[:5], recent_texts[:15]
+    stock = [p for p in STOCK_PHRASES if any(p in t for t in last5) or sum(p in t for t in last15) >= 2]
+    return CLICHES + stock
 
 
 def inspect_text(text: str, has_cta: bool) -> list[str]:
@@ -524,14 +579,28 @@ def build_prompts(fmt: str, typ: str, slot: str, allow_cta: bool, recent_texts: 
         + "頭痛のタイプの話は「〜と言われています」「〜のことがあります」の言い方にし、読者の頭痛を決めつけない。\n"
         "薬の話は「飲む日が増えてきたら医師・薬剤師に相談」までにとどめ、やめる・減らす・銘柄・量の話はしない。\n"
         "専門用語(CGRP・セロトニン・三叉神経・筋肉の名前など)は使わず、中学生にも伝わる言葉に言い換える。\n"
-        "直近の投稿で使われた決まり文句(「本当に多いです」「という方」「ありませんか」など)は使い回さず、言い方を変える。\n"
+        "次の言い回しは今回使えない(含めると不合格): " + "／".join(f"「{x}」" for x in blocked_phrases(recent_texts)) + "\n"
         "僕自身の体験・体質の話(「僕も気圧に弱い」など)は書かない。「楽になる人が多い」「〜するだけで違う」のような効果の言い方、"
         "「いつもの頭痛と違う何か」「放っておくと」のような不安をあおる言い方はしない。\n"
         "「相談してみませんか」など自由文の相談に誘う言い方はしない(案内は固定文だけ)。読者に問いかけるなら、答えが投稿の中にあるか、読者が自分で確かめられる問いにする。\n"
+        + (IMAGE_PROMPT if fmt == "image" else "")
         + (f"\n前回の出力は次の理由で不合格だった。直すこと: {feedback}\n" if feedback else "")
-        + '\n出力形式(JSONのみ): {"text": "本文", "type": "型", "has_cta": true または false}'
+        + ('\n出力形式(JSONのみ): {"text": "画像の解説文", "type": "型", "has_cta": true または false, '
+           '"figure": {"title": "図の見出し", "points": ["要点1", "要点2", "要点3"], "foot": "補足(任意)"}}'
+           if fmt == "image" else
+           '\n出力形式(JSONのみ): {"text": "本文", "type": "型", "has_cta": true または false}')
     )
     return system, user
+
+
+IMAGE_PROMPT = (
+    "\n今回は画像つきの投稿。図解カード(文字だけの図)の中身(figure)と、その図を解説する本文(text)を書く。\n"
+    "- figure.title: 図の見出し。16字以内。\n"
+    "- figure.points: 図に並べる要点を3つ(2〜4個)。1つ18字以内の言い切り。事実ファイルにある見分け方・目安・やり方だけを書く。\n"
+    "- figure.foot: 図の下に小さく添える一言。20字以内。無くてもよい。\n"
+    "- text: 図の解説。1文目は読者の場面から入り、図の要点を順に短く説明する。図の文字をそのまま3つ並べ直さない。80〜150字・4行まで。\n"
+    "- 図にも本文にも、効果の約束・数字の実績・料金・病名の決めつけは書かない。\n"
+)
 
 
 def call_llm(system: str, user: str, temperature: float = 0.8) -> str | None:
@@ -567,7 +636,10 @@ def parse_generated(raw: str | None) -> dict | None:
     text = (d.get("text") or "").strip()
     if not text:
         return None
-    return {"text": text, "type": str(d.get("type") or ""), "has_cta": bool(d.get("has_cta"))}
+    out = {"text": text, "type": str(d.get("type") or ""), "has_cta": bool(d.get("has_cta"))}
+    if isinstance(d.get("figure"), dict):
+        out["figure"] = d["figure"]
+    return out
 
 
 def generate_post(slot: str, fmt: str, typ: str, allow_cta: bool, recent_texts: list[str], sim_pool: list[str],
@@ -589,6 +661,13 @@ def generate_post(slot: str, fmt: str, typ: str, allow_cta: bool, recent_texts: 
             feedback = "公式LINE案内は入れない"
             continue
         errs = inspect_text(post["text"], post["has_cta"]) + stock_phrase_errors(post["text"], recent_texts)
+        if fmt == "image":
+            from zutsu_figure import validate_figure, figure_text
+            fig = post.get("figure")
+            errs += validate_figure(fig)
+            if not validate_figure(fig):
+                errs += [f"図の文字: {e}" for e in inspect_text(figure_text(fig), False) if "短すぎる" not in e]
+                errs += [f"図の文字: {e}" for e in stock_phrase_errors(figure_text(fig), []) if "書き出し" not in e]
         if safety and safety not in post["text"]:
             errs.append(f"受診の目安の1行「{safety}」が入っていない")
         elif not safety and "※" in post["text"]:
@@ -596,6 +675,8 @@ def generate_post(slot: str, fmt: str, typ: str, allow_cta: bool, recent_texts: 
         n_body = len(post["text"].replace(CTA_TEXT, "").replace(safety or SAFETY_LINE, "").strip())
         if fmt == "short" and n_body > MEDIUM_BODY_MAX:
             errs.append(f"長すぎる({n_body}字)。短文は60字目安。言いたいことを1つにする")
+        elif fmt == "image" and n_body > IMAGE_BODY_MAX:
+            errs.append(f"長すぎる({n_body}字)。画像の解説文は150字以内に削る")
         elif fmt == "medium" and n_body > (MEDIUM_BODY_MAX + 40 if theme == EMERGENCY_THEME else MEDIUM_BODY_MAX):
             errs.append(f"長すぎる({n_body}字)。本文は110字以内に削る（言いたいことを1つにする）")
         if errs:
@@ -638,7 +719,7 @@ def pick_slot(arg: str | None, now: datetime) -> str:
 
 
 def run(slot: str | None = None, now: datetime | None = None, dry_run: bool = False, generator=None,
-        fetch=None, publisher=None, sleeper=time.sleep, rng: random.Random | None = None,
+        fetch=None, publisher=None, sleeper=time.sleep, rng: random.Random | None = None, image_publisher=None,
         log_path: Path | None = None, pause_path: Path | None = None) -> int:
     """戻り値は常に0(見送りも正常終了)。失敗はDiscord通知で知らせる"""
     load_env()
@@ -649,6 +730,7 @@ def run(slot: str | None = None, now: datetime | None = None, dry_run: bool = Fa
     rng = rng or random.Random()
     fetch = fetch or fetch_recent
     publisher = publisher or publish_text
+    image_publisher = image_publisher or publish_image
     pause_path = pause_path or PAUSE_FILE
 
     if pause_path.exists():
@@ -710,21 +792,53 @@ def run(slot: str | None = None, now: datetime | None = None, dry_run: bool = Fa
             theme = rng.choice(others)
             safety = safety_line_for(fmt, theme, recent, now)
             post, reason = generate_post(slot, fmt, typ, allow_cta, recent_texts[:20], recent_texts[:50], generator, theme, safety)
+    if not post and fmt == "image":
+        # 画像の枠で合格しなかったら、文字だけ(中くらい)で1回作る。1日10本の目標を落とさないため
+        log(f"画像の枠で合格せず({reason[:80]})。文字だけで作り直す")
+        fmt = "medium"
+        safety = safety_line_for(fmt, theme, recent, now)
+        post, reason = generate_post(slot, fmt, typ, allow_cta, recent_texts[:20], recent_texts[:50], generator, theme, safety)
     if not post:
         log(f"見送り: {reason}")
         if "類似" not in reason:
             notify(f"{slot}枠を見送り: テーマを替えても合格しませんでした({reason[:150]})")
         return 0
 
+    fig_path = None
+    if fmt == "image" and post.get("figure"):
+        try:
+            from zutsu_figure import render
+            fig_path = render(post["figure"], BASE / "images" / "zutsu" / f"{now.strftime('%Y%m%d_%H%M')}.png")
+        except Exception as e:
+            log(f"図の描画に失敗({type(e).__name__}: {e})。文字だけで投稿する")
+            fig_path = None
+
     if dry_run:
         print("----- DRY_RUN 生成結果 -----")
         print(f"[枠 {slot} / 型 {post['type'] or typ} / テーマ {theme} / 形式 {fmt} / 案内 {post['has_cta']}]")
+        if post.get("figure"):
+            print(f"[図] {json.dumps(post['figure'], ensure_ascii=False)} -> {fig_path}")
         print(post["text"])
         print("----------------------------")
         return 0
 
     try:
-        pid = publisher(token, uid, post["text"])
+        if fig_path and push_figure(fig_path):
+            try:
+                pid = image_publisher(token, uid, post["text"], f"{RAW_IMG}/{fig_path.name}")
+            except Exception as e:
+                if is_pause_error(e):
+                    raise
+                # 画像で出せなくても、その枠は文字だけで出す(成果物を落とさない)。コンテナ作成で失敗したので二重投稿にはならない
+                log(f"画像投稿に失敗({str(e)[:120]})。文字だけで投稿する")
+                notify(f"{slot}枠: 画像つき投稿に失敗したため文字だけで投稿します({str(e)[:100]})")
+                fig_path = None
+                pid = publisher(token, uid, post["text"])
+        else:
+            if fmt == "image":
+                log("図を用意できなかったため文字だけで投稿する")
+                fig_path = None
+            pid = publisher(token, uid, post["text"])
     except Exception as e:
         log(f"投稿失敗: {e}")
         if is_pause_error(e):   # 再試行しない。停止して本人に報告
@@ -736,7 +850,8 @@ def run(slot: str | None = None, now: datetime | None = None, dry_run: bool = Fa
         "ts": now.isoformat(timespec="seconds"), "slot": slot, "id": pid,
         "type": post["type"] or typ, "theme": theme, "has_cta": post["has_cta"],
         "text_hash": hashlib.sha256(post["text"].encode("utf-8")).hexdigest()[:16],
-        "text": post["text"],
+        "text": post["text"], "fmt": fmt,
+        **({"image": fig_path.name, "figure": post.get("figure")} if fig_path else {}),
     }, log_path)
     log(f"投稿完了 id={pid} 型={post['type'] or typ} 案内={post['has_cta']}")
     return 0

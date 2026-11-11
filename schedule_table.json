@@ -238,7 +238,10 @@
    "window_min": 30,
    "since": "slot",
    "enabled": true,
-   "weekdays": [2, 5],
+   "weekdays": [
+    2,
+    5
+   ],
    "gate": "features",
    "skip_until": "2026-11-01 09:30",
    "catchup": true,
@@ -254,7 +257,10 @@
    "window_min": 30,
    "since": "slot",
    "enabled": true,
-   "weekdays": [2, 5],
+   "weekdays": [
+    2,
+    5
+   ],
    "gate": "features",
    "skip_until": "2026-11-01 09:30",
    "catchup": true,
@@ -270,7 +276,10 @@
    "window_min": 30,
    "since": "slot",
    "enabled": true,
-   "weekdays": [2, 5],
+   "weekdays": [
+    2,
+    5
+   ],
    "gate": "features",
    "skip_until": "2026-11-01 09:30",
    "catchup": true,
@@ -286,7 +295,10 @@
    "window_min": 30,
    "since": "slot",
    "enabled": true,
-   "weekdays": [2, 5],
+   "weekdays": [
+    2,
+    5
+   ],
    "gate": "features",
    "skip_until": "2026-11-01 09:30",
    "catchup": true,
@@ -482,7 +494,12 @@
    "window_min": 30,
    "since": "slot",
    "enabled": true,
-   "weekdays": [0, 3, 4, 5],
+   "weekdays": [
+    0,
+    3,
+    4,
+    5
+   ],
    "gate": "offer",
    "skip_until": "2026-11-01 09:30",
    "catchup": true,
@@ -498,7 +515,12 @@
    "window_min": 30,
    "since": "slot",
    "enabled": true,
-   "weekdays": [0, 3, 4, 5],
+   "weekdays": [
+    0,
+    3,
+    4,
+    5
+   ],
    "gate": "offer",
    "skip_until": "2026-11-01 09:30",
    "catchup": true,
@@ -514,7 +536,12 @@
    "window_min": 30,
    "since": "slot",
    "enabled": true,
-   "weekdays": [0, 3, 4, 5],
+   "weekdays": [
+    0,
+    3,
+    4,
+    5
+   ],
    "gate": "offer",
    "skip_until": "2026-11-01 09:30",
    "catchup": true,
@@ -530,7 +557,12 @@
    "window_min": 30,
    "since": "slot",
    "enabled": true,
-   "weekdays": [0, 3, 4, 5],
+   "weekdays": [
+    0,
+    3,
+    4,
+    5
+   ],
    "gate": "offer",
    "skip_until": "2026-11-01 09:30",
    "catchup": true,
@@ -546,7 +578,12 @@
    "window_min": 30,
    "since": "slot",
    "enabled": true,
-   "weekdays": [0, 3, 4, 5],
+   "weekdays": [
+    0,
+    3,
+    4,
+    5
+   ],
    "gate": "offer",
    "skip_until": "2026-11-01 09:30",
    "catchup": true,
@@ -562,7 +599,10 @@
    "window_min": 30,
    "since": "slot",
    "enabled": true,
-   "weekdays": [2, 5],
+   "weekdays": [
+    2,
+    5
+   ],
    "gate": "features",
    "skip_until": "2026-11-01 09:30",
    "catchup": true,
@@ -1278,7 +1318,7 @@
    "inputs": {
     "slot": "07:30"
    },
-   "note": "2026-11-05: 頭痛Threads(@truth_nagaoka_zutsuu)のAPI自動投稿（1日5枠・新規アカウントのため控えめ）。トークン未登録の間は起動しても何もしない。止める時はenabled:false"
+   "note": "2026-11-05: 頭痛Threads(@truth_nagaoka_zutsuu)のAPI自動投稿。2026-11-11 masa指示で1日10枠（うち3枠は図解カード）。止める時はenabled:false"
   },
   {
    "id": "zutsu-threads-1215",
@@ -1291,7 +1331,7 @@
    "inputs": {
     "slot": "12:15"
    },
-   "note": "2026-11-05: 頭痛Threads(@truth_nagaoka_zutsuu)のAPI自動投稿（1日5枠・新規アカウントのため控えめ）。トークン未登録の間は起動しても何もしない。止める時はenabled:false"
+   "note": "2026-11-05: 頭痛Threads(@truth_nagaoka_zutsuu)のAPI自動投稿。2026-11-11 masa指示で1日10枠（うち3枠は図解カード）。止める時はenabled:false"
   },
   {
    "id": "zutsu-threads-1730",
@@ -1304,7 +1344,7 @@
    "inputs": {
     "slot": "17:30"
    },
-   "note": "2026-11-05: 頭痛Threads(@truth_nagaoka_zutsuu)のAPI自動投稿（1日5枠・新規アカウントのため控えめ）。トークン未登録の間は起動しても何もしない。止める時はenabled:false"
+   "note": "2026-11-05: 頭痛Threads(@truth_nagaoka_zutsuu)のAPI自動投稿。2026-11-11 masa指示で1日10枠（うち3枠は図解カード）。止める時はenabled:false"
   },
   {
    "id": "zutsu-threads-2030",
@@ -1317,7 +1357,7 @@
    "inputs": {
     "slot": "20:30"
    },
-   "note": "2026-11-05: 頭痛Threads(@truth_nagaoka_zutsuu)のAPI自動投稿（1日5枠・新規アカウントのため控えめ）。トークン未登録の間は起動しても何もしない。止める時はenabled:false"
+   "note": "2026-11-05: 頭痛Threads(@truth_nagaoka_zutsuu)のAPI自動投稿。2026-11-11 masa指示で1日10枠（うち3枠は図解カード）。止める時はenabled:false"
   },
   {
    "id": "zutsu-threads-2200",
@@ -1330,7 +1370,72 @@
    "inputs": {
     "slot": "22:00"
    },
-   "note": "2026-11-05: 頭痛Threads(@truth_nagaoka_zutsuu)のAPI自動投稿（1日5枠・新規アカウントのため控えめ）。トークン未登録の間は起動しても何もしない。止める時はenabled:false"
+   "note": "2026-11-05: 頭痛Threads(@truth_nagaoka_zutsuu)のAPI自動投稿。2026-11-11 masa指示で1日10枠（うち3枠は図解カード）。止める時はenabled:false"
+  },
+  {
+   "id": "zutsu-threads-0900",
+   "repo": "truthbodysalon-lab/threads-auto-post",
+   "workflow": "zutsu_threads.yml",
+   "jst_time": "09:00",
+   "window_min": 25,
+   "since": "slot",
+   "enabled": true,
+   "inputs": {
+    "slot": "09:00"
+   },
+   "note": "2026-11-11 masa指示「1日10投稿・画像の解説も」で追加した枠。図解カード＋解説文で投稿する枠。止める時はenabled:false"
+  },
+  {
+   "id": "zutsu-threads-1030",
+   "repo": "truthbodysalon-lab/threads-auto-post",
+   "workflow": "zutsu_threads.yml",
+   "jst_time": "10:30",
+   "window_min": 25,
+   "since": "slot",
+   "enabled": true,
+   "inputs": {
+    "slot": "10:30"
+   },
+   "note": "2026-11-11 masa指示「1日10投稿・画像の解説も」で追加した枠。止める時はenabled:false"
+  },
+  {
+   "id": "zutsu-threads-1345",
+   "repo": "truthbodysalon-lab/threads-auto-post",
+   "workflow": "zutsu_threads.yml",
+   "jst_time": "13:45",
+   "window_min": 25,
+   "since": "slot",
+   "enabled": true,
+   "inputs": {
+    "slot": "13:45"
+   },
+   "note": "2026-11-11 masa指示「1日10投稿・画像の解説も」で追加した枠。図解カード＋解説文で投稿する枠。止める時はenabled:false"
+  },
+  {
+   "id": "zutsu-threads-1530",
+   "repo": "truthbodysalon-lab/threads-auto-post",
+   "workflow": "zutsu_threads.yml",
+   "jst_time": "15:30",
+   "window_min": 25,
+   "since": "slot",
+   "enabled": true,
+   "inputs": {
+    "slot": "15:30"
+   },
+   "note": "2026-11-11 masa指示「1日10投稿・画像の解説も」で追加した枠。止める時はenabled:false"
+  },
+  {
+   "id": "zutsu-threads-1900",
+   "repo": "truthbodysalon-lab/threads-auto-post",
+   "workflow": "zutsu_threads.yml",
+   "jst_time": "19:00",
+   "window_min": 25,
+   "since": "slot",
+   "enabled": true,
+   "inputs": {
+    "slot": "19:00"
+   },
+   "note": "2026-11-11 masa指示「1日10投稿・画像の解説も」で追加した枠。図解カード＋解説文で投稿する枠。止める時はenabled:false"
   },
   {
    "id": "diet-threads-learn",

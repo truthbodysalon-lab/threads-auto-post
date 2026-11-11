@@ -400,7 +400,7 @@
   "頭痛薬が常備品になっている人へ。": {
     "segment": "T2",
     "hook": "low",
-    "created": "2026-11-04",
+    "created": "2026-11-12",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z07_truth"
@@ -856,7 +856,7 @@
   "座りっぱなしで肩がガチガチな人へ。": {
     "segment": "T1",
     "hook": "low",
-    "created": "2026-11-06",
+    "created": "2026-11-12",
     "acct": "truth",
     "variant": 1
   },
@@ -877,14 +877,14 @@
   "肩の可動域が狭くなった人へ。": {
     "segment": "T1",
     "hook": "low",
-    "created": "2026-11-06",
+    "created": "2026-11-12",
     "acct": "nagaoka",
     "variant": 1
   },
   "頭痛薬をお守りのように持ち歩く人へ。": {
     "segment": "T2",
     "hook": "low",
-    "created": "2026-11-06",
+    "created": "2026-11-12",
     "acct": "nagaoka",
     "variant": 0
   },
@@ -2535,7 +2535,7 @@
   "初回の説明で、次回の話ができない院長へ。": {
     "segment": "R01",
     "hook": "low",
-    "created": "2026-11-06",
+    "created": "2026-11-12",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -4966,7 +4966,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 0,
-    "created": "2026-11-02",
+    "created": "2026-11-12",
     "acct": "truth"
   },
   "【夜まで肩がガチガチな人の習慣6選】": {
@@ -5102,7 +5102,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 2,
-    "created": "2026-10-11",
+    "created": "2026-11-12",
     "acct": "truth"
   },
   "【頭痛の日に避けたいNG行動7選】": {
@@ -5923,7 +5923,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 14,
-    "created": "2026-11-06",
+    "created": "2026-11-12",
     "acct": "nagaoka"
   },
   "インスタで、ハイライトを放置している院長へ。": {
@@ -6189,7 +6189,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 7,
-    "created": "2026-10-23",
+    "created": "2026-11-12",
     "acct": "nagaoka"
   },
   "『毎週の通院は、時間が合わない』という声を、よく聞きます。": {
@@ -6950,7 +6950,7 @@
   "ストーリーズは、1枚で全部言わない。": {
     "segment": "I09",
     "hook": "high",
-    "created": "2026-11-11",
+    "created": "2026-11-12",
     "acct": "masa",
     "axis": "insta_pain",
     "variant": null,
@@ -7545,7 +7545,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 7,
-    "created": "2026-11-11"
+    "created": "2026-11-12"
   },
   "ぶっちゃけ、続かない人は、次に何をやるかが決まっていません。": {
     "segment": "PRESENT_CTA",
@@ -7580,7 +7580,7 @@
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 2,
-    "created": "2026-11-05"
+    "created": "2026-11-12"
   },
   "忙しい日は、投稿しない日にする。": {
     "segment": "INSTA_EASY",
@@ -7598,13 +7598,13 @@
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 13,
-    "created": "2026-11-05"
+    "created": "2026-11-12"
   },
   "自己紹介は、長いほど読まれない。": {
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 3,
-    "created": "2026-11-05"
+    "created": "2026-11-12"
   },
   "反応が良かった投稿は、何度でも出す。": {
     "segment": "INSTA_EASY",
@@ -7628,7 +7628,7 @@
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 22,
-    "created": "2026-11-05"
+    "created": "2026-11-12"
   },
   "ぶっちゃけ、プロフィールで見られるのは3秒です。": {
     "segment": "INSTA_EASY",
@@ -7640,13 +7640,13 @@
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 56,
-    "created": "2026-11-05"
+    "created": "2026-11-12"
   },
   "【ネタ探しを30分やめる3ステップ】": {
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 8,
-    "created": "2026-11-05"
+    "created": "2026-11-12"
   },
   "プロフィールは、完璧にしなくていい。": {
     "segment": "INSTA_EASY",
@@ -7658,7 +7658,7 @@
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 37,
-    "created": "2026-11-05"
+    "created": "2026-11-12"
   },
   "【3つだけ】効果は、「何で知りましたか」で分かる。": {
     "segment": "INSTA_EASY",
@@ -8076,7 +8076,7 @@
     "segment": "QUESTION",
     "hook": "type",
     "variant": 0,
-    "created": "2026-11-06",
+    "created": "2026-11-12",
     "acct": "nagaoka"
   },
   "寝る前に、首の後ろは温かいですか？": {
@@ -8256,7 +8256,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 6,
-    "created": "2026-11-07",
+    "created": "2026-11-12",
     "acct": "nagaoka"
   },
   "雨が続く週は、頭の重さがたまりやすい人へ。": {
@@ -8270,7 +8270,7 @@
     "segment": "WEATHER",
     "hook": "type",
     "variant": 6,
-    "created": "2026-11-07",
+    "created": "2026-11-12",
     "acct": "nagaoka"
   },
   "晴れているのに頭が重い日、ありませんか？": {
@@ -8312,7 +8312,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 9,
-    "created": "2026-11-07",
+    "created": "2026-11-12",
     "acct": "nagaoka"
   },
   "ハイライトは、今日1つだけ作れば足ります。": {
@@ -8677,7 +8677,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 26,
-    "created": "2026-11-07",
+    "created": "2026-11-12",
     "acct": "truth"
   },
   "頭痛薬の箱が空になるのが早くなったら、薬のほかの原因も探すタイミングです。": {
@@ -8957,7 +8957,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 23,
-    "created": "2026-11-07",
+    "created": "2026-11-12",
     "acct": "truth"
   },
   "鎮痛剤を飲むたびに、頭が重くなった時間をメモしてみて。": {
@@ -9092,7 +9092,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 20,
-    "created": "2026-11-07",
+    "created": "2026-11-12",
     "acct": "truth"
   },
   "ストレッチを頑張る前に、まず痛みの出る動きを探してみて。": {
@@ -9120,7 +9120,7 @@
     "segment": "WEATHER",
     "hook": "type",
     "variant": 15,
-    "created": "2026-11-07",
+    "created": "2026-11-12",
     "acct": "nagaoka"
   },
   "我慢する前に、まず首の後ろを触ってみて。": {
@@ -9249,7 +9249,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 9,
-    "created": "2026-11-07",
+    "created": "2026-11-12",
     "acct": "truth"
   },
   "テレビをつける前に、まず寝る前の10分、首をゆっくり動かしてみて。": {
@@ -9352,7 +9352,7 @@
     "segment": "WIN_HOOK",
     "hook": "winning",
     "variant": 10,
-    "created": "2026-11-05"
+    "created": "2026-11-12"
   },
   "写真を並べれば、動画は撮らなくていい。": {
     "segment": "INSTA_EASY",
@@ -9818,7 +9818,7 @@
     "segment": "WIN_HOOK",
     "hook": "winning",
     "variant": 15,
-    "created": "2026-11-05"
+    "created": "2026-11-12"
   },
   "【3つだけ】お客様に聞かれたことが、3日分のネタになる。": {
     "segment": "INSTA_EASY",
@@ -10088,7 +10088,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 31,
-    "created": "2026-11-07",
+    "created": "2026-11-12",
     "acct": "truth"
   },
   "『月に1回の頭痛で、予定が崩れる』という声を、よく聞きます。": {
@@ -10796,5 +10796,12 @@
     "present_key": "ai_starter",
     "variant": 0,
     "created": "2026-11-11"
+  },
+  "AIで時短したい。でも難しそう。": {
+    "segment": "PRESENT_CTA",
+    "hook": "present",
+    "present_key": "ai_starter",
+    "variant": 1,
+    "created": "2026-11-12"
   }
 }

@@ -6433,7 +6433,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 15,
-    "created": "2026-11-10"
+    "created": "2026-11-11"
   },
   "ぶっちゃけ、次に何を出すかの答えは、過去の投稿にあります。": {
     "segment": "PRESENT_CTA",
@@ -7526,7 +7526,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 2,
-    "created": "2026-11-10"
+    "created": "2026-11-11"
   },
   "投稿ネタは、考えるものではなく拾うものです。": {
     "segment": "PRESENT_CTA",
@@ -8175,7 +8175,7 @@
     "segment": "WIN_HOOK",
     "hook": "winning",
     "variant": 2,
-    "created": "2026-11-04"
+    "created": "2026-11-11"
   },
   "フォロワーを増やしても、来店は増えません。": {
     "segment": "WIN_HOOK",
@@ -8649,7 +8649,7 @@
   "ストーリーズは、作り込むほど、見られなくなります。": {
     "segment": "I09",
     "hook": "high",
-    "created": "2026-11-07",
+    "created": "2026-11-11",
     "acct": "masa",
     "axis": "insta_pain",
     "variant": null,
@@ -10767,6 +10767,13 @@
     "hook": "present",
     "present_key": "ai_starter",
     "variant": 9,
+    "created": "2026-11-11"
+  },
+  "AIを入れたいけど、失敗したくない。": {
+    "segment": "PRESENT_CTA",
+    "hook": "present",
+    "present_key": "ai_starter",
+    "variant": 3,
     "created": "2026-11-11"
   }
 }

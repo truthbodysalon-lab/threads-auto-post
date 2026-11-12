@@ -1,0 +1,62 @@
+name: Ops Watch
+
+# 2026-11-12 masa指示「Macが稼働していなくてもできるように・無料の枠内で」: Mac の gh_failure_watch（失敗runの検知＋1回だけ再実行）のクラウド版。
+# 公開repoのActionsは無料・無制限。cronは持たず、中央ディスパッチャ(schedule_table.json の ops-watch@* 枠・毎時)だけが起動する。
+# 失敗runの再実行(retry)はこのworkflowだけが行う（Mac側は検知のみ）。投稿・送信系は再実行しない（ops_watch.py の NO_RERUN_*）。
+# 公開ログに出るのは件数・run番号・判定の語だけ。トークン・Webhook URL・APIの本文は出さない。
+# 必要なSecrets: GH_PAT（非公開repoの actions:read/write）, DISCORD_WEBHOOK_URL（いずれも既存）
+# 止め方: schedule_table.json の ops-watch@* を enabled:false にする（または gh workflow disable ops-watch.yml）。
+on:
+  workflow_dispatch:
+    inputs:
+      dry:
+        description: 'DRY（再実行・通知・状態の書き込みをしない。判定結果だけログに出す）'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ops-watch
+  cancel-in-progress: false
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      TZ: Asia/Tokyo
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: ops_watch
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          OPS_WATCH_DRY: ${{ github.event.inputs.dry == 'true' && '1' || '' }}
+        run: python3 ops_watch.py
+      - name: Commit state if changed
+        if: ${{ always() && github.event.inputs.dry != 'true' }}
+        run: |
+          set -euo pipefail
+          git config user.name "ops-watch-bot"
+          git config user.email "ops-watch-bot@users.noreply.github.com"
+          git add ops_watch_state.json 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "状態の変更なし"
+            exit 0
+          fi
+          git commit -m "chore: update ops watch state [skip ci]"
+          for attempt in 1 2 3 4 5; do
+            if git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}"; then
+              echo "push成功($attempt)"
+              exit 0
+            fi
+            git rebase --abort 2>/dev/null || true
+            sleep $((attempt * 5))
+          done
+          echo "::warning::状態のpushに失敗（次回の実行で再判定されます）"
+          exit 0

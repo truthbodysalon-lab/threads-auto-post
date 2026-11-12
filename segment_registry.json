@@ -276,7 +276,7 @@
   "在宅勤務で肩こりが悪化した人へ。": {
     "segment": "T1",
     "hook": "low",
-    "created": "2026-11-08",
+    "created": "2026-11-12",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z01_truth"
@@ -308,7 +308,7 @@
   "座り仕事で首がつらい人へ。": {
     "segment": "T1",
     "hook": "low",
-    "created": "2026-11-08",
+    "created": "2026-11-12",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z02_nagaoka"
@@ -863,7 +863,7 @@
   "週に何度も頭痛薬を飲む人へ。": {
     "segment": "T2",
     "hook": "low",
-    "created": "2026-11-06",
+    "created": "2026-11-12",
     "acct": "truth",
     "variant": 0
   },
@@ -951,7 +951,7 @@
   "気圧が変わると頭が重くなる人へ。": {
     "segment": "T2",
     "hook": "low",
-    "created": "2026-11-06",
+    "created": "2026-11-12",
     "acct": "nagaoka",
     "variant": 1
   },
@@ -2334,7 +2334,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 24,
-    "created": "2026-11-05",
+    "created": "2026-11-12",
     "acct": "truth"
   },
   "【食いしばり頭痛を遠ざける習慣6選】": {
@@ -2355,7 +2355,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 1,
-    "created": "2026-10-13",
+    "created": "2026-11-12",
     "acct": "nagaoka"
   },
   "『肩こりが頭痛に変わる、いつものパターンがある』という声を、よく聞きます。": {
@@ -2979,7 +2979,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 21,
-    "created": "2026-11-06",
+    "created": "2026-11-12",
     "acct": "nagaoka"
   },
   "インスタで、見られないのはアルゴリズムのせいだと思っている院長へ質問です。": {
@@ -3039,7 +3039,7 @@
   "コースの話を切り出せない院長へ。": {
     "segment": "R01",
     "hook": "low",
-    "created": "2026-11-06",
+    "created": "2026-11-12",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -5380,7 +5380,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 9,
-    "created": "2026-11-02",
+    "created": "2026-11-12",
     "acct": "truth"
   },
   "【首が前に出る人が見直すこと6選】": {
@@ -8207,7 +8207,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 4,
-    "created": "2026-11-07",
+    "created": "2026-11-12",
     "acct": "truth"
   },
   "痛み止めに手を伸ばす前に、まず水を一杯。": {
@@ -8277,7 +8277,7 @@
     "segment": "WEATHER",
     "hook": "type",
     "variant": 13,
-    "created": "2026-11-07",
+    "created": "2026-11-12",
     "acct": "nagaoka"
   },
   "「まだ我慢できる」と思いながら、何日過ごしていますか？": {
@@ -8490,7 +8490,7 @@
   "ストーリーズは、毎日出すより、予告したほうが見られます。": {
     "segment": "I09",
     "hook": "high",
-    "created": "2026-11-11",
+    "created": "2026-11-12",
     "acct": "masa",
     "axis": "insta_pain",
     "variant": null,
@@ -8573,7 +8573,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 19,
-    "created": "2026-11-07",
+    "created": "2026-11-12",
     "acct": "truth"
   },
   "夕方に頭が重くなる前に、まず昼に一度だけ立ち上がってみて。": {
@@ -8601,7 +8601,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 10,
-    "created": "2026-11-07",
+    "created": "2026-11-12",
     "acct": "nagaoka"
   },
   "冷える前に、まず首元を一枚足してみて。": {
@@ -8775,7 +8775,7 @@
     "segment": "WEATHER",
     "hook": "type",
     "variant": 11,
-    "created": "2026-11-07",
+    "created": "2026-11-12",
     "acct": "nagaoka"
   },
   "今日は一度でも、肩を落としましたか？": {
@@ -8943,14 +8943,14 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 26,
-    "created": "2026-11-07",
+    "created": "2026-11-12",
     "acct": "truth"
   },
   "頭痛薬を飲む前に、まず「いつから痛いか」を思い出してみて。": {
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 22,
-    "created": "2026-11-07",
+    "created": "2026-11-12",
     "acct": "truth"
   },
   "頭痛薬を飲む前に、まず肩の力を抜いて息を長く吐いてみて。": {
@@ -9141,7 +9141,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 27,
-    "created": "2026-11-07",
+    "created": "2026-11-12",
     "acct": "nagaoka"
   },
   "『洗い物をしていると、肩が上がってくる』という声を、よく聞きます。": {
@@ -9735,7 +9735,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 30,
-    "created": "2026-11-07",
+    "created": "2026-11-12",
     "acct": "truth"
   },
   "雨が続く週に、肩が抜けない人いますか？": {
@@ -9889,7 +9889,7 @@
     "segment": "QUESTION",
     "hook": "type",
     "variant": 19,
-    "created": "2026-11-06",
+    "created": "2026-11-12",
     "acct": "nagaoka"
   },
   "寒い朝に、首が回りにくい人いますか？": {
@@ -10802,6 +10802,83 @@
     "hook": "present",
     "present_key": "ai_starter",
     "variant": 1,
+    "created": "2026-11-12"
+  },
+  "頭痛薬を飲む回数が増えた月は、寝る姿勢も見てみて。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-12",
+    "acct": "truth"
+  },
+  "鎮痛剤に手が伸びる前に、まず奥歯の力を抜いてみて。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-12",
+    "acct": "truth"
+  },
+  "ベッドに入る前に、まず首の後ろに手を当ててみて。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-12",
+    "acct": "truth"
+  },
+  "『朝、頭が重くて布団から出られない』という声を、よく聞きます。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-12",
+    "acct": "truth"
+  },
+  "【頭痛が出やすい人の、夜の習慣6選】": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-12",
+    "acct": "truth"
+  },
+  "ストレッチを始める前に、まず息を長く吐いてみて。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-12",
+    "acct": "nagaoka"
+  },
+  "初雪の前の日に、肩が固くなる人、いますか？": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-12",
+    "acct": "nagaoka"
+  },
+  "肩が重い日は、2時間以上座りっぱなしでしたか？": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-12",
+    "acct": "nagaoka"
+  },
+  "『肩が重くて、夜になかなか寝つけない』という声を、よく聞きます。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-12",
+    "acct": "nagaoka"
+  },
+  "『雪道を運転したあとに、首が固まる』という声を、よく聞きます。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-12",
+    "acct": "nagaoka"
+  },
+  "毎日同じ作業が3つある店主さんへ。": {
+    "segment": "PRESENT_CTA",
+    "hook": "present",
+    "present_key": "ai_starter",
+    "variant": 7,
     "created": "2026-11-12"
   }
 }

@@ -1,6 +1,6 @@
 {
   "acct": "nagaoka",
-  "generated_at": "2026-11-11 10:43",
+  "generated_at": "2026-11-12 10:43",
   "params": {
     "min_n": 5,
     "loser_min_n": 8,
@@ -13,7 +13,7 @@
     ]
   },
   "registry_loaded": 281,
-  "log_entries": 5510,
+  "log_entries": 5531,
   "windows": {
     "7d": {
       "baseline": {

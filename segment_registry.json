@@ -7526,7 +7526,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 2,
-    "created": "2026-11-11"
+    "created": "2026-11-12"
   },
   "投稿ネタは、考えるものではなく拾うものです。": {
     "segment": "PRESENT_CTA",
@@ -10795,7 +10795,7 @@
     "hook": "present",
     "present_key": "ai_starter",
     "variant": 0,
-    "created": "2026-11-11"
+    "created": "2026-11-12"
   },
   "AIで時短したい。でも難しそう。": {
     "segment": "PRESENT_CTA",

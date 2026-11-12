@@ -7574,7 +7574,7 @@
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 9,
-    "created": "2026-11-05"
+    "created": "2026-11-12"
   },
   "プロフィール写真に、プロはいりません。": {
     "segment": "INSTA_EASY",
@@ -7586,7 +7586,7 @@
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 35,
-    "created": "2026-11-05"
+    "created": "2026-11-12"
   },
   "プロフィールに30分かけるのは、やめる。": {
     "segment": "INSTA_EASY",
@@ -7610,19 +7610,19 @@
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 40,
-    "created": "2026-11-05"
+    "created": "2026-11-12"
   },
   "AIへの頼み方は、話し言葉で通じます。": {
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 55,
-    "created": "2026-11-05"
+    "created": "2026-11-12"
   },
   "インスタは、気分で出さない。": {
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 70,
-    "created": "2026-11-05"
+    "created": "2026-11-12"
   },
   "ストーリーズで、売り込まなくていい。": {
     "segment": "INSTA_EASY",
@@ -7634,7 +7634,7 @@
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 1,
-    "created": "2026-11-05"
+    "created": "2026-11-12"
   },
   "ハッシュタグは、AIに10秒で頼める。": {
     "segment": "INSTA_EASY",
@@ -7652,7 +7652,7 @@
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 0,
-    "created": "2026-11-05"
+    "created": "2026-11-12"
   },
   "分析ツールは、使いこなさなくていい。": {
     "segment": "INSTA_EASY",
@@ -10886,6 +10886,13 @@
     "hook": "present",
     "present_key": "ai_starter",
     "variant": 4,
+    "created": "2026-11-12"
+  },
+  "AIの最初の一歩は、無料のもので足ります。": {
+    "segment": "PRESENT_CTA",
+    "hook": "present",
+    "present_key": "ai_starter",
+    "variant": 8,
     "created": "2026-11-12"
   }
 }

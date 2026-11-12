@@ -392,7 +392,7 @@
   "会議続きで首が痛い人へ。": {
     "segment": "T1",
     "hook": "low",
-    "created": "2026-11-10",
+    "created": "2026-11-12",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z03_truth"
@@ -513,7 +513,7 @@
   "頭痛薬なしで一日が始まらない人へ。": {
     "segment": "T2",
     "hook": "low",
-    "created": "2026-11-08",
+    "created": "2026-11-12",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z09_truth"
@@ -5230,7 +5230,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 1,
-    "created": "2026-11-03",
+    "created": "2026-11-12",
     "acct": "truth"
   },
   "【デスクワークの人が1時間ごとにやること6選】": {
@@ -6084,7 +6084,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 45,
-    "created": "2026-10-24",
+    "created": "2026-11-12",
     "acct": "truth"
   },
   "『休み明けの月曜に、必ず頭が重くなる』という声を、よく聞きます。": {
@@ -8193,7 +8193,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 2,
-    "created": "2026-11-08",
+    "created": "2026-11-12",
     "acct": "truth"
   },
   "頭痛が出る前の合図を、薬を飲む前に探してみて。": {
@@ -8538,7 +8538,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 13,
-    "created": "2026-11-08",
+    "created": "2026-11-12",
     "acct": "truth"
   },
   "頭痛薬を飲む前に、まず目を閉じて首をゆっくり回してみて。": {
@@ -8580,7 +8580,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 6,
-    "created": "2026-11-08",
+    "created": "2026-11-12",
     "acct": "truth"
   },
   "台風が近づくと、頭が重くなる人へ。": {
@@ -8964,14 +8964,14 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 24,
-    "created": "2026-11-08",
+    "created": "2026-11-12",
     "acct": "truth"
   },
   "頭痛薬を買い足す前に、まず頭が重くなる日の共通点を探してみて。": {
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 12,
-    "created": "2026-11-08",
+    "created": "2026-11-12",
     "acct": "truth"
   },
   "「いつものこと」と流す前に、まず頭の重さが出る日の共通点を探してみて。": {

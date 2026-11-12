@@ -39,7 +39,7 @@ JST = timezone(timedelta(hours=9))
 # 1日5本→10本。うち3枠(IMAGE_SLOTS)は図解カード(zutsu_figure.py・AI生成ではない)＋その解説文で投稿する
 SLOTS = ["06:40", "07:30", "08:20", "09:00", "10:00", "10:30", "11:30", "12:15", "13:00", "13:45", "14:40", "15:30", "16:30", "17:30", "18:15", "19:00", "20:00", "20:30", "21:15", "22:00"]   # 2026-11-11 masa指示「全てのThreads投稿を20投稿」で10→20枠
 IMAGE_SLOTS = {"09:00", "13:45", "19:00"}
-DAILY_CAP = 20           # API投稿の1日上限（2026-11-11 10→20）
+DAILY_CAP = 30           # API投稿の1日上限（2026-11-11 10→20／2026-11-12 masa指示「UPLINK以外は30投稿以内に抑えて」で20→30。枠は20か所のまま＝実際は最大20本）
 IMAGE_BODY_MAX = 160     # 画像の解説文の本文上限
 RAW_IMG = "https://raw.githubusercontent.com/truthbodysalon-lab/threads-auto-post/main/images/zutsu"
 CTA_DAILY_MAX = 2        # 1日の公式LINE案内の上限（手動投稿分も含めて数える）

@@ -3354,7 +3354,7 @@ from masa_insta_content import INSTA_EASY_TEMPLATES, WINNING_HOOK_TEMPLATES  # n
 # 小川さん9/22助言（難しそうと思わせない）と同方向。固定テンプレ60本だけでは7日再投入禁止を
 # 満たせないため、(悩み→小さな言い換え→今日の一手)の組合せ生成を併用する。
 INSTA_THEME_RE = re.compile(r"インスタ|Instagram|リール|ストーリーズ|ハッシュタグ|DM|投稿ネタ|ネタ帳")
-INSTA_THEME_TARGET = 13      # 実投稿される前半20本のうちInstagramテーマにする下限目標（過半数=11超。2026-11-11 1日20本化で32/50→13/20）
+INSTA_THEME_TARGET = FRONT_N * 13 // 20   # 実投稿される前半FRONT_N本のうちInstagramテーマにする下限目標（過半数超。2026-11-11 13/20→2026-11-12 30本化で19/30）
 INSTA_FRONT_LEN = FRONT_N
 
 from masa_insta_content import INSTA_HURDLES, INSTA_GEN_STRUCTURES, build_gen_post  # noqa: E402

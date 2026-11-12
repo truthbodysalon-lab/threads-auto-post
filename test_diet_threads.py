@@ -238,7 +238,8 @@ class TestGuards(Base):
         self.assertEqual(len(self.published), 1)
 
     def test_daily_cap(self):
-        for i, s in enumerate(D.SLOTS):
+        # 2026-11-12 上限30＞枠数のため、全枠＋予備名で上限の本数まで埋めて確かめる
+        for i, s in enumerate((list(D.SLOTS) + [f"extra{k}" for k in range(D.DAILY_CAP)])[:D.DAILY_CAP]):
             D.append_log({"ts": (NOW - timedelta(minutes=i)).isoformat(), "slot": s, "id": str(i), "type": "t", "has_cta": False, "text_hash": "h"}, self.log)
         self.assertIn("上限", D.slot_guard(D.read_log(self.log), "15:00x", NOW))
         self.run_(slot="20:00", fetch=lambda t, n: [], publisher=self.pub, generator=self.gen)
@@ -524,8 +525,8 @@ class TestPace20261111(unittest.TestCase):
         self.assertIsNone(D.pace_guard([], at(6, 30)))
         self.assertTrue(D.pace_guard([self.P(6)], at(6, 30)))
         self.assertIsNone(D.pace_guard([self.P(7), self.P(8)], at(12, 30)))
-        self.assertTrue(D.pace_guard([self.P(7, i) for i in range(9)], at(12, 30)))   # 20本化: 12:30の目安は8本
-        self.assertIn("目標の20本", D.pace_guard([self.P(7, i) for i in range(20)], at(23, 30)))
+        self.assertTrue(D.pace_guard([self.P(7, i) for i in range(12)], at(12, 30)))   # 30本化(2026-11-12): 12:30の目安は11本
+        self.assertIn("目標の30本", D.pace_guard([self.P(7, i) for i in range(30)], at(23, 30)))
 
     def test_yesterday_not_counted(self):
         y = {"timestamp": datetime(2026, 11, 10, 22, 0, tzinfo=D.JST).isoformat()}

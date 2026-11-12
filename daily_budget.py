@@ -1,4 +1,6 @@
-"""1アカウント1日の投稿数の唯一の定義（2026-11-11 masa指示「全てのThreads投稿の数を20投稿にして」）。
+"""1アカウント1日の投稿数の唯一の定義（2026-11-11 masa指示「全てのThreads投稿の数を20投稿にして」→ 2026-11-12 masa指示「UPLINK以外は30投稿以内に抑えて」で30本。UP LINK(~/threads-uplink)は対象外）。
+
+【2026-11-12〜 30本】下の内訳表は20本時点のもの。増えた10本はすべて「通常投稿(残り)」に入る（導線アンカー・ヒーロー・画像・転載の本数は変えていない）。
 
 【20本の内訳（アカウント別・通常投稿/画像/uplink転載/ヒーローをすべて含む合計）】
 優先順位: 導線アンカー → ヒーロー → 通常投稿
@@ -28,8 +30,8 @@
 """
 import os
 
-DAILY_POSTS = int(os.environ.get("DAILY_TARGET", "20"))     # 1日の目標(全種類の合計)
-DAILY_CAP = int(os.environ.get("DAILY_CAP", "20"))          # 上限(これ以上は出さない)
+DAILY_POSTS = int(os.environ.get("DAILY_TARGET", "30"))   # 2026-11-12 masa指示「UPLINK以外は30投稿以内に抑えて」（20→30）     # 1日の目標(全種類の合計)
+DAILY_CAP = int(os.environ.get("DAILY_CAP", "30"))   # 上限30（UP LINK以外のThreadsはこれを超えない）          # 上限(これ以上は出さない)
 FRONT_N = DAILY_POSTS                                       # キュー前半＝1日で消化される本数
 QUEUE_RESERVE = 10                                          # 予備の原稿(重複スキップ・NG落ち用)
 QUEUE_LEN = FRONT_N + QUEUE_RESERVE                         # 生成するキューの長さ

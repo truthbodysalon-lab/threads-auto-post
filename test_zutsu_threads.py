@@ -227,7 +227,8 @@ class TestGuards(Base):
         self.assertEqual(len(self.published), 1)
 
     def test_daily_cap(self):
-        for i, s in enumerate(D.SLOTS):
+        # 2026-11-12 上限30＞枠数のため、全枠＋予備名で上限の本数まで埋めて確かめる
+        for i, s in enumerate((list(D.SLOTS) + [f"extra{k}" for k in range(D.DAILY_CAP)])[:D.DAILY_CAP]):
             D.append_log({"ts": (NOW - timedelta(minutes=i)).isoformat(), "slot": s, "id": str(i), "type": "t", "has_cta": False, "text_hash": "h"}, self.log)
         self.assertIn("上限", D.slot_guard(D.read_log(self.log), "20:30x", NOW))
         self.run_(slot="22:00", fetch=lambda t, n: [], publisher=self.pub, generator=self.gen)
@@ -584,7 +585,7 @@ class TestImagePosts20261111(Base):
         return lambda s, u: json.dumps({"text": self.TEXT, "type": "t", "has_cta": False, "figure": fig}, ensure_ascii=False)
 
     def test_ten_slots_three_images(self):
-        self.assertEqual(len(D.SLOTS), 20); self.assertEqual(D.DAILY_CAP, 20)
+        self.assertEqual(len(D.SLOTS), 20); self.assertEqual(D.DAILY_CAP, 30)
         self.assertTrue(D.IMAGE_SLOTS <= set(D.SLOTS)); self.assertEqual(len(D.IMAGE_SLOTS), 3)
         self.assertEqual(D.choose_format_and_type([], "13:45", random.Random(0))[0], "image")
 

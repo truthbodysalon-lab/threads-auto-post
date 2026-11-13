@@ -52,7 +52,7 @@ class Base(unittest.TestCase):
 class TestTokenSkip(Base):
     def test_empty_token_skips_without_any_call(self):
         def boom(*a, **k): raise AssertionError("呼ばれてはいけない")
-        r = self.run_(slot="20:30", fetch=boom, publisher=boom, generator=boom)
+        r = self.run_(slot="20:15", fetch=boom, publisher=boom, generator=boom)
         self.assertEqual(r, 0)
         self.assertFalse(self.log.exists())
 
@@ -200,53 +200,53 @@ class TestGuards(Base):
         return json.dumps({"text": GOOD, "type": "悩みの言い当て", "has_cta": False}, ensure_ascii=False)
 
     def test_gap_guard_skips_when_wait_too_long(self):
-        r = self.run_(slot="20:30", fetch=lambda t, n: [post(10)], publisher=self.pub, generator=self.gen,
+        r = self.run_(slot="20:15", fetch=lambda t, n: [post(10)], publisher=self.pub, generator=self.gen,
                       sleeper=lambda s: self.fail("待ってはいけない"))
         self.assertEqual(r, 0); self.assertEqual(self.published, []); self.assertEqual(self.gen_calls, [])
 
     def test_gap_guard_waits_short_gap(self):
         slept = []
-        self.run_(slot="20:30", fetch=lambda t, n: [post(25)], publisher=self.pub, generator=self.gen,
+        self.run_(slot="20:15", fetch=lambda t, n: [post(25)], publisher=self.pub, generator=self.gen,
                   sleeper=lambda s: slept.append(s))
         self.assertEqual(len(slept), 1); self.assertEqual(len(self.published), 1)
 
     def test_gap_guard_ok_when_old_enough(self):
-        self.run_(slot="20:30", fetch=lambda t, n: [post(40)], publisher=self.pub, generator=self.gen)
+        self.run_(slot="20:15", fetch=lambda t, n: [post(40)], publisher=self.pub, generator=self.gen)
         self.assertEqual(len(self.published), 1)
         rec = D.read_log(self.log)[0]
-        self.assertEqual(rec["slot"], "20:30"); self.assertEqual(rec["id"], "pid1")
+        self.assertEqual(rec["slot"], "20:15"); self.assertEqual(rec["id"], "pid1")
         for k in ("ts", "type", "has_cta", "text_hash"):
             self.assertIn(k, rec)
 
     def test_slot_guard(self):
-        D.append_log({"ts": NOW.isoformat(), "slot": "20:30", "id": "a", "type": "t", "has_cta": False, "text_hash": "h"}, self.log)
-        self.run_(slot="20:30", fetch=lambda t, n: [], publisher=self.pub, generator=self.gen)
+        D.append_log({"ts": NOW.isoformat(), "slot": "20:15", "id": "a", "type": "t", "has_cta": False, "text_hash": "h"}, self.log)
+        self.run_(slot="20:15", fetch=lambda t, n: [], publisher=self.pub, generator=self.gen)
         self.assertEqual(self.published, [])
         # 別の枠は投稿できる
-        self.run_(slot="22:00", now=NOW.replace(hour=22), fetch=lambda t, n: [], publisher=self.pub, generator=self.gen)
+        self.run_(slot="22:30", now=NOW.replace(hour=22, minute=30), fetch=lambda t, n: [], publisher=self.pub, generator=self.gen)
         self.assertEqual(len(self.published), 1)
 
     def test_daily_cap(self):
         # 2026-11-12 上限30＞枠数のため、全枠＋予備名で上限の本数まで埋めて確かめる
         for i, s in enumerate((list(D.SLOTS) + [f"extra{k}" for k in range(D.DAILY_CAP)])[:D.DAILY_CAP]):
             D.append_log({"ts": (NOW - timedelta(minutes=i)).isoformat(), "slot": s, "id": str(i), "type": "t", "has_cta": False, "text_hash": "h"}, self.log)
-        self.assertIn("上限", D.slot_guard(D.read_log(self.log), "20:30x", NOW))
-        self.run_(slot="22:00", fetch=lambda t, n: [], publisher=self.pub, generator=self.gen)
+        self.assertIn("上限", D.slot_guard(D.read_log(self.log), "20:15x", NOW))
+        self.run_(slot="22:30", fetch=lambda t, n: [], publisher=self.pub, generator=self.gen)
         self.assertEqual(self.published, [])
 
     def test_yesterdays_log_does_not_block(self):
         y = NOW - timedelta(days=1)
-        D.append_log({"ts": y.isoformat(), "slot": "20:30", "id": "a", "type": "t", "has_cta": False, "text_hash": "h"}, self.log)
-        self.run_(slot="20:30", fetch=lambda t, n: [], publisher=self.pub, generator=self.gen)
+        D.append_log({"ts": y.isoformat(), "slot": "20:15", "id": "a", "type": "t", "has_cta": False, "text_hash": "h"}, self.log)
+        self.run_(slot="20:15", fetch=lambda t, n: [], publisher=self.pub, generator=self.gen)
         self.assertEqual(len(self.published), 1)
 
     def test_cta_blocked_in_prompt_when_two_today(self):
         rs = [post(300, "a @561yryuk"), post(200, "b @561yryuk"), post(100)]
-        self.run_(slot="20:30", fetch=lambda t, n: rs, publisher=self.pub, generator=self.gen)
+        self.run_(slot="20:15", fetch=lambda t, n: rs, publisher=self.pub, generator=self.gen)
         self.assertIn("今回は入れない", self.gen_calls[0])
 
     def test_cta_allowed_in_prompt_in_cta_slot(self):
-        self.run_(slot="20:30", fetch=lambda t, n: [post(100)], publisher=self.pub, generator=self.gen)
+        self.run_(slot="20:15", fetch=lambda t, n: [post(100)], publisher=self.pub, generator=self.gen)
         self.assertIn(D.CTA_TEXT, self.gen_calls[0])
 
     def test_no_cta_outside_cta_slots(self):
@@ -255,7 +255,7 @@ class TestGuards(Base):
         self.assertIn("今回は入れない", self.gen_calls[0])
 
     def test_recent_texts_given_to_generator(self):
-        self.run_(slot="20:30", fetch=lambda t, n: [post(100, "目印テキストAAA"), post(200, "目印テキストBBB")],
+        self.run_(slot="20:15", fetch=lambda t, n: [post(100, "目印テキストAAA"), post(200, "目印テキストBBB")],
                   publisher=self.pub, generator=self.gen)
         self.assertIn("目印テキストAAA", self.gen_calls[0])
 
@@ -263,19 +263,19 @@ class TestGuards(Base):
         def bad(t, n): raise RuntimeError("HTTP 401")
         notes = []
         D.notify = lambda m: notes.append(m)
-        self.run_(slot="20:30", fetch=bad, publisher=self.pub, generator=self.gen)
+        self.run_(slot="20:15", fetch=bad, publisher=self.pub, generator=self.gen)
         self.assertEqual(self.published, []); self.assertEqual(len(notes), 1)
 
     def test_similar_to_manual_post_is_skipped(self):
         g = lambda s, u: json.dumps({"text": GOOD, "type": "t", "has_cta": False}, ensure_ascii=False)
-        self.run_(slot="20:30", fetch=lambda t, n: [post(100, GOOD)], publisher=self.pub, generator=g)
+        self.run_(slot="20:15", fetch=lambda t, n: [post(100, GOOD)], publisher=self.pub, generator=g)
         self.assertEqual(self.published, [])
 
     def test_publish_failure_notifies_and_does_not_log(self):
         notes = []
         D.notify = lambda m: notes.append(m)
         def bad(t, u, x): raise RuntimeError("HTTP 400")
-        self.run_(slot="20:30", fetch=lambda t, n: [], publisher=bad, generator=self.gen)
+        self.run_(slot="20:15", fetch=lambda t, n: [], publisher=bad, generator=self.gen)
         self.assertEqual(len(notes), 1); self.assertFalse(self.log.exists())
 
 
@@ -286,7 +286,7 @@ class TestDryRun(Base):
         import io, contextlib
         buf = io.StringIO()
         with contextlib.redirect_stdout(buf):
-            r = self.run_(slot="20:30", dry_run=True, fetch=boom, publisher=boom, generator=gen)
+            r = self.run_(slot="20:15", dry_run=True, fetch=boom, publisher=boom, generator=gen)
         self.assertEqual(r, 0)
         self.assertIn(GOOD, buf.getvalue())
         self.assertFalse(self.log.exists())
@@ -327,11 +327,11 @@ class TestPause(Base):
 
     def test_publish_429_creates_pause_and_notifies_once(self):
         def pub(t, u, text): raise RuntimeError('HTTP 429: {"error":{"message":"rate limit"}}')
-        r = self.run_(slot="20:30", fetch=self.fetch_ok, publisher=pub, generator=self.gen)
+        r = self.run_(slot="20:15", fetch=self.fetch_ok, publisher=pub, generator=self.gen)
         self.assertEqual(r, 0)
         self.assertTrue(self.pause.exists())
         d = json.loads(self.pause.read_text(encoding="utf-8"))
-        self.assertEqual(d["slot"], "20:30"); self.assertIn("429", d["reason"]); self.assertIn("since", d)
+        self.assertEqual(d["slot"], "20:15"); self.assertIn("429", d["reason"]); self.assertIn("since", d)
         self.assertNotIn("dummy", self.pause.read_text(encoding="utf-8"))
         self.assertEqual(len(self.notes), 1)
         self.assertIn("🛑 頭痛Threads API投稿を停止しました", self.notes[0])
@@ -340,38 +340,38 @@ class TestPause(Base):
 
     def test_fetch_limit_message_pauses(self):
         def f(t, n): raise RuntimeError('HTTP 400: {"error":{"message":"Application request limit reached","code":4}}')
-        self.run_(slot="20:30", fetch=f, publisher=self.pub_ok, generator=self.gen)
+        self.run_(slot="20:15", fetch=f, publisher=self.pub_ok, generator=self.gen)
         self.assertTrue(self.pause.exists()); self.assertEqual(len(self.notes), 1)
         self.assertNotIn("pub", self.calls)
 
     def test_token_190_pauses(self):
         def pub(t, u, text): raise RuntimeError('HTTP 400: {"error":{"type":"OAuthException","code":190}}')
-        self.run_(slot="20:30", fetch=self.fetch_ok, publisher=pub, generator=self.gen)
+        self.run_(slot="20:15", fetch=self.fetch_ok, publisher=pub, generator=self.gen)
         self.assertTrue(self.pause.exists())
 
     def test_no_api_calls_while_paused_and_no_repeat_notice(self):
         self.pause.write_text("{}", encoding="utf-8")
         def boom(*a, **k): raise AssertionError("停止中にAPIを呼んではいけない")
         for _ in range(3):
-            self.assertEqual(self.run_(slot="20:30", fetch=boom, publisher=boom, generator=boom), 0)
+            self.assertEqual(self.run_(slot="20:15", fetch=boom, publisher=boom, generator=boom), 0)
         self.assertEqual(self.notes, [])
 
     def test_transient_500_does_not_pause(self):
         def pub(t, u, text): raise RuntimeError("HTTP 500: Internal Server Error")
-        self.run_(slot="20:30", fetch=self.fetch_ok, publisher=pub, generator=self.gen)
+        self.run_(slot="20:15", fetch=self.fetch_ok, publisher=pub, generator=self.gen)
         self.assertFalse(self.pause.exists())
         self.assertEqual(len(self.notes), 1)
         self.assertIn("投稿に失敗", self.notes[0])
 
     def test_transient_network_fetch_does_not_pause(self):
         def f(t, n): raise RuntimeError("通信エラー: timed out")
-        self.run_(slot="20:30", fetch=f, publisher=self.pub_ok, generator=self.gen)
+        self.run_(slot="20:15", fetch=f, publisher=self.pub_ok, generator=self.gen)
         self.assertFalse(self.pause.exists())
 
     def test_publish_never_retried(self):
         n = []
         def pub(t, u, text): n.append(1); raise RuntimeError("HTTP 429: x")
-        self.run_(slot="20:30", fetch=self.fetch_ok, publisher=pub, generator=self.gen)
+        self.run_(slot="20:15", fetch=self.fetch_ok, publisher=pub, generator=self.gen)
         self.assertEqual(len(n), 1)
 
     def test_workflow_commits_pause_file(self):
@@ -399,7 +399,7 @@ class TestMisc(unittest.TestCase):
         self.assertIsNone(D.parse_ts("garbage"))
 
     def test_prompt_contains_rules_and_facts(self):
-        s, u = D.build_prompts("short", "相談の入口", "20:30", True, ["x"])
+        s, u = D.build_prompts("short", "相談の入口", "20:15", True, ["x"])
         self.assertIn("一人称は「僕」", s); self.assertIn("頭痛の事実", s)
         self.assertIn("ハッシュタグ", s)
 
@@ -587,7 +587,7 @@ class TestImagePosts20261111(Base):
     def test_ten_slots_three_images(self):
         self.assertEqual(len(D.SLOTS), 10); self.assertEqual(D.DAILY_CAP, 10)
         self.assertTrue(D.IMAGE_SLOTS <= set(D.SLOTS)); self.assertEqual(len(D.IMAGE_SLOTS), 3)
-        self.assertEqual(D.choose_format_and_type([], "13:45", random.Random(0))[0], "image")
+        self.assertEqual(D.choose_format_and_type([], "14:30", random.Random(0))[0], "image")
 
     def test_image_slot_posts_figure_with_explanation(self):
         D.push_figure = lambda p: True
@@ -595,7 +595,7 @@ class TestImagePosts20261111(Base):
         def img_pub(tok, uid, text, url):
             got["url"], got["text"] = url, text; return "IMG1"
         def txt_pub(*a): raise AssertionError("文字だけで出してはいけない")
-        self.run_(slot="13:45", now=NOW.replace(hour=13, minute=45), fetch=lambda t, n: [],
+        self.run_(slot="14:30", now=NOW.replace(hour=14, minute=30), fetch=lambda t, n: [],
                   generator=self.gen(), publisher=txt_pub, image_publisher=img_pub)
         self.assertTrue(got["url"].startswith(D.RAW_IMG) and got["url"].endswith(".png"))
         e = json.loads(self.log.read_text().splitlines()[-1])
@@ -606,15 +606,15 @@ class TestImagePosts20261111(Base):
         D.push_figure = lambda p: True
         def img_pub(*a): raise RuntimeError("image fetch failed")
         sent = []
-        self.run_(slot="13:45", now=NOW.replace(hour=13, minute=45), fetch=lambda t, n: [],
+        self.run_(slot="14:30", now=NOW.replace(hour=14, minute=30), fetch=lambda t, n: [],
                   generator=self.gen(), publisher=lambda t, u, x: sent.append(x) or "TXT1", image_publisher=img_pub)
         self.assertEqual(sent, [self.TEXT])
         self.assertNotIn("image", json.loads(self.log.read_text().splitlines()[-1]))
 
     def test_bad_figure_rejected(self):
-        p, reason = D.generate_post("13:45", "image", "t", False, [], [], self.gen({"title": "", "points": ["1つだけ"]}))
+        p, reason = D.generate_post("14:30", "image", "t", False, [], [], self.gen({"title": "", "points": ["1つだけ"]}))
         self.assertIsNone(p); self.assertIn("figure", reason)
-        p, reason = D.generate_post("13:45", "image", "t", False, [], [],
+        p, reason = D.generate_post("14:30", "image", "t", False, [], [],
                                     self.gen({"title": "頭痛が治る3つの方法", "points": ["枕を変える", "温める"]}))
         self.assertIsNone(p); self.assertIn("図の文字", reason)
 

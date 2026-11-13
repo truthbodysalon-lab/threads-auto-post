@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """頭痛Threads(@truth_nagaoka_zutsuu) API自動投稿 (自己完結モジュール・diet_threads.py を元に2026-11-05作成)
 
-- このアカウントは API 投稿だけ(Grok Botのブラウザ投稿は無い)。1日10枠（2026-11-14〜・正本は下の SLOTS）: 7:30 / 9:00 / 10:30 / 12:15 / 13:45 / 15:30 / 17:30 / 19:00 / 20:30 / 22:00 (JST)・図解は 9:00 / 13:45 / 19:00
+- このアカウントは API 投稿だけ(Grok Botのブラウザ投稿は無い)。1日10枠（2026-11-14〜・正本は下の SLOTS）: 6:30 / 8:30 / 9:15 / 10:30 / 12:30 / 14:30 / 17:30 / 18:15 / 20:15 / 22:30 (JST)・図解は 9:15 / 14:30 / 20:15
 - 起動は中央ディスパッチャ(schedule_table.json)が workflow_dispatch で行う。ここにcronは無い
 - トークン THREADS_ACCESS_TOKEN_ZUTSU が空なら何もせず exit 0(認可前)
 - ルール正本: zutsu_threads_rules.md / 事実の根拠: zutsu_threads_facts.md (生成プロンプトに全文を入れる)
@@ -37,13 +37,13 @@ JST = timezone(timedelta(hours=9))
 
 # 2026-11-11 masa指示「Thredsの投稿を1日10投稿を目標にして その際に画像の解説も取り入れて投稿するようにして」:
 # 1日5本→10本。うち3枠(IMAGE_SLOTS)は図解カード(zutsu_figure.py・AI生成ではない)＋その解説文で投稿する
-SLOTS = ["07:30", "09:00", "10:30", "12:15", "13:45", "15:30", "17:30", "19:00", "20:30", "22:00"]   # 2026-11-11 10枠→同日20枠→2026-11-14 masa指示「各アカウント合計1日10本にして」で0b96edb0の10枠に戻す（間隔75分以上）
-IMAGE_SLOTS = {"09:00", "13:45", "19:00"}
+SLOTS = ["06:30", "08:30", "09:15", "10:30", "12:30", "14:30", "17:30", "18:15", "20:15", "22:30"]   # 2026-11-14 masa指示「各アカウント合計1日10本にして」で10枠。同日01:10 Grok側のdaietto(毎時ちょうど+数〜15分)・masa Buffer(毎時10分±15分)の時刻 7/8/10/12/14/16/17/19/21/22時 の前20分〜後30分を避けて再配置（間隔45分以上・truth毎時40〜50分/nagaoka 50〜60分の帯もなるべく避ける）
+IMAGE_SLOTS = {"09:15", "14:30", "20:15"}   # 2026-11-14 再配置: 9:00/13:45/19:00→9:15/14:30/20:15
 DAILY_CAP = 10           # API投稿の1日上限（2026-11-11 10→20／11-12 20→30／2026-11-14 masa指示「各アカウント合計1日10本にして」で10に戻す。手動投稿も含めて10本）
 IMAGE_BODY_MAX = 160     # 画像の解説文の本文上限
 RAW_IMG = "https://raw.githubusercontent.com/truthbodysalon-lab/threads-auto-post/main/images/zutsu"
 CTA_DAILY_MAX = 2        # 1日の公式LINE案内の上限（手動投稿分も含めて数える）
-CTA_SLOTS = {"12:15", "20:30"}   # 案内を付けてよい枠
+CTA_SLOTS = {"12:30", "20:15"}   # 案内を付けてよい枠（2026-11-14 再配置: 12:15/20:30→12:30/20:15）
 MIN_GAP_MIN = 30         # 直前の投稿(手動投稿も含む)からの最低間隔
 MAX_WAIT_MIN = 10        # 間隔が足りない時に待つ上限(超えるならこの枠は見送り)
 SIM_THRESHOLD = 0.5      # 文字バイグラムJaccardの重複しきい値
@@ -92,7 +92,7 @@ LOCAL_THEMES = [
 THEMES = THEMES + LOCAL_THEMES
 # ※の1行を付けるのは頭痛のタイプそのものを扱うテーマだけ（受診の目安・相談先のテーマは本文がその話なので付けない）
 SAFETY_THEMES = {THEMES[0], THEMES[1], THEMES[2], THEMES[4], THEMES[8]}
-LOCAL_SLOT = "12:15"
+LOCAL_SLOT = "12:30"   # 2026-11-14 再配置: 12:15→12:30
 EMERGENCY_EVERY_DAYS = 7
 # 2026-11-10 masa指示「文章長すぎ」: 長文(250〜450字)をやめ、短文と中くらい(本文140字以内)だけにする
 FORMATS = {
@@ -399,7 +399,7 @@ def choose_format_and_type(recent: list[dict], slot: str, rng: random.Random) ->
     w = {"short": 0.50, "medium": 0.50}
     if slot == LOCAL_SLOT:
         w = {"short": 0.20, "medium": 0.80}
-    elif slot in ("20:30", "22:00"):
+    elif slot in ("20:15", "22:30"):   # 夜の2枠（2026-11-14 再配置: 20:30/22:00→20:15/22:30）
         w = {"short": 0.65, "medium": 0.35}
     last = [classify_format(p.get("text") or "") for p in sorted_recent(recent)[:2]]
     if len(last) == 2 and last[0] == last[1]:

@@ -585,7 +585,7 @@ class TestImagePosts20261111(Base):
         return lambda s, u: json.dumps({"text": self.TEXT, "type": "t", "has_cta": False, "figure": fig}, ensure_ascii=False)
 
     def test_ten_slots_three_images(self):
-        self.assertEqual(len(D.SLOTS), 20); self.assertEqual(D.DAILY_CAP, 30)
+        self.assertEqual(len(D.SLOTS), 10); self.assertEqual(D.DAILY_CAP, 10)
         self.assertTrue(D.IMAGE_SLOTS <= set(D.SLOTS)); self.assertEqual(len(D.IMAGE_SLOTS), 3)
         self.assertEqual(D.choose_format_and_type([], "13:45", random.Random(0))[0], "image")
 

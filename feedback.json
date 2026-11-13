@@ -413,6 +413,11 @@
     {
       "date": "2026-11-11",
       "text": "【1日の投稿数を20本に統一（本人指示2026-11-11「全てのThreads投稿の数を20投稿にして」）】truth/nagaoka/masaとも1日の合計20本（通常・画像・uplink転載・ヒーローをすべて含む）。優先順位=導線アンカー→ヒーロー(5本/日)→通常投稿。内訳表=daily_budget.py。DAILY_TARGET=20・DAILY_CAP=20(auto_post.py/watchdog_ci.py/stall_check.py/verify_system.py/views_goal.json)。生成キューは前半20本＋予備10本(30本)・導線アンカーは前半の消化順13本内に固定。LINE言及はmasa前半20本で2本(10%)・truth/nagaokaはリストイン1本＋整体LINE1本(truth)。nagaokaの外部ツール(約20本/日)は数えない(台帳のみ)。masaはBuffer(約10枠)をAPI実測で合計に数える。"
+    },
+    {
+      "date": "2026-11-14",
+      "text": "【1日の投稿数を10本に統一（本人指示2026-11-14 00:17「各アカウント合計1日10本にして」・11/11の20本→11/12の30本を置き換え）】truth/nagaoka/masa/zutsu/diet(API分)とも1日の合計10本（通常・画像・uplink転載・ヒーローをすべて含む）。ヒーロー3本/日＋繰越1本（HERO_PER_DAY=3・CARRY_MAX=1）。画像はtruth/nagaoka各1枚、uplink転載1本、セグメント仮説テストはtruth/nagaoka各1・masa 2、truthのHPB CTAは頭痛1本。内訳表=daily_budget.py（DAILY_TARGET=10・DAILY_CAP=10・FRONT_N=10）。投稿時刻はペース配分＋アカウント別のずらし（auto_post.PACE_OFFSET_MIN: truth=毎時40〜50分・nagaoka=50〜60分・masa=15〜25分の間。masaのBuffer枠=毎時10分を避ける）・同じアカウントは45分以上空ける（MIN_GAP_MIN=45・1回の起動で最大1本）。zutsuは10枠 7:30/9:00/10:30/12:15/13:45/15:30/17:30/19:00/20:30/22:00（図解=9:00/13:45/19:00）。masaはBuffer(Grok側)も合計に数える。dietはGrok分込みで10本（Grok側の10本は変えない）。",
+      "account": "all"
     }
   ],
   "updated_at": "2026-10-17",

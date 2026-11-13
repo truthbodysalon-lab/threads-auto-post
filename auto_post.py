@@ -1852,7 +1852,7 @@ def main():
 
 
 # 1回の実行で各アカウント最大何本投稿するか（単一系統で頻度を上げる）
-# 1日の投稿目標と上限（過剰投稿=スパムを防ぎつつ、20本を均等ペースで担保。2026-11-11 50→20本。内訳は daily_budget.py）
+# 1日の投稿目標と上限（過剰投稿=スパムを防ぎつつ、均等ペースで担保。2026-11-11 50→20本→11-12 30本→2026-11-14 10本。内訳は daily_budget.py）
 from daily_budget import DAILY_POSTS as DAILY_TARGET, DAILY_CAP   # 各アカウント1日の目標/上限(全種類の合計・2026-11-11に50/55→20/20)
 MAX_PER_RUN = int(os.environ.get("MAX_PER_RUN", "4"))      # 通常の1サイクル上限
 MAX_BURST = int(os.environ.get("MAX_BURST", "20"))         # 大きく遅れた時の一気回復上限（スリープ復帰時）
@@ -1884,6 +1884,35 @@ def _target_cumulative_by_now(hour: int) -> int:
     return int(DAILY_TARGET * frac)
 
 
+# 2026-11-14 masa指示「各アカウント合計1日10本にして」: 1日10本だと全アカウントが毎時の同じ10分に
+# 投稿するため、アカウントごとにペースの時計を分単位でずらす（常駐ループは10分毎なので実際の投稿は
+# truth=毎時40〜50分・nagaoka=50〜60分・masa=15〜25分の間。masaはBufferが10本出ていれば自動分は出ない＝Bufferが欠けた時の穴埋めだけ）。避けている枠: masaのBuffer(Grok側)=毎時10分
+# (buffer_slots_masa.json)・頭痛zutsuの枠(起動遅れ込みで7:34/9:04/10:34/12:19/13:49/15:34/17:34/19:04/20:34/22:04頃)。
+PACE_OFFSET_MIN = {"truth": 40, "nagaoka": 50, "masa": 15}
+# 同じアカウントの投稿間隔の下限（分）。1回の起動では最大1本だけ出す。0で無効（従来どおりまとめて回復）。
+MIN_GAP_MIN = int(os.environ.get("MIN_GAP_MIN", "45"))
+
+
+def _last_post_file(acct: str):
+    import tempfile
+    from pathlib import Path as _P
+    return _P(tempfile.gettempdir()) / f"threads_last_post_{acct}"
+
+
+def _last_post_epoch(acct: str) -> float:
+    """このマシン(常駐run)で最後に投稿した時刻(epoch)。無ければ0。"""
+    try:
+        return float(_last_post_file(acct).read_text().strip() or 0)
+    except Exception:
+        return 0.0
+
+
+def _mark_last_post(acct: str) -> None:
+    try:
+        _last_post_file(acct).write_text(str(time.time()))
+    except Exception:
+        pass
+
 def _run_account_batch(acct: str):
     """ペースに追従して投稿する。
     - 目標(DAILY_TARGET=20)に対し『今あるべき累計』との不足分を、最大 MAX_PER_RUN 本まで埋める
@@ -1909,7 +1938,7 @@ def _run_account_batch(acct: str):
     if posted >= DAILY_CAP:
         log_info(acct, f"{ACCOUNTS[acct]['name']} 本日上限({DAILY_CAP})到達 → スキップ")
         return
-    hour = datetime.now().hour
+    hour = (datetime.now() - timedelta(minutes=PACE_OFFSET_MIN.get(acct, 0))).hour   # 2026-11-14: アカウント別に時計をずらす
     want = _target_cumulative_by_now(hour + LOOKAHEAD_HOURS)   # 次回発火(先読み)時点であるべき累計
     need = max(0, min(want, DAILY_TARGET) - posted)
     if need == 0 and api_n is not None and (api_n - ledger_posted) > 10:
@@ -1922,6 +1951,13 @@ def _run_account_batch(acct: str):
         n = 1   # 終盤（20時以降）のみの取りこぼし防止。終日この床を効かせると毎5分の実行が
                 # 常に1本投稿し、50本を昼までに使い切って午後が無音になる
                 # （2026-07-10 masaが12:56に50本完了→半日沈黙した実障害）。
+    if MIN_GAP_MIN > 0 and n > 0:
+        # 2026-11-14 1日10本化: 1回の起動で最大1本・同じアカウントの直前の投稿から MIN_GAP_MIN 分以上空ける
+        n = 1
+        _last = _last_post_epoch(acct)
+        if _last and time.time() - _last < MIN_GAP_MIN * 60:
+            log_info(acct, f"{ACCOUNTS[acct]['name']} 直前の投稿から{int((time.time() - _last) // 60)}分（{MIN_GAP_MIN}分未満）→ 今回は見送り")
+            return
     if n > MAX_PER_RUN:
         log_info(acct, f"{ACCOUNTS[acct]['name']} 遅れ検知（不足{need}本）→ {n}本まとめて回復")
     # 2026-09-15: 固定回数ループだと「重複スキップ」で消費した回が投稿ゼロのまま数えられ、
@@ -1953,6 +1989,7 @@ def _run_account_batch(acct: str):
         else:
             fails = 0
             done += after - before
+            _mark_last_post(acct)
         if done < n:
             time.sleep(4)
     _selfwatch_cycle(acct, _sw_need, _sw_before, _posted_count_today(acct))

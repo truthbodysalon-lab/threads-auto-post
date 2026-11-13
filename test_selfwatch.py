@@ -292,7 +292,27 @@ class Fix2CatchupAdvances(_QueueFixture):
         mock.patch.object(ap, "_target_cumulative_by_now", lambda h: 40).start()
         mock.patch.object(ap.time, "sleep", lambda s: None).start()
         mock.patch("account_ownership.is_local", lambda a: True).start()
+        mock.patch.object(ap, "MIN_GAP_MIN", getattr(self, "min_gap", 0)).start()   # 2026-11-14: まとめて回復の検証は間隔ガード無効で行う
+        mock.patch.object(ap, "_last_post_file", lambda a: self.last_file).start()
         ap._run_account_batch("truth")
+
+    def setUp(self):
+        super().setUp()
+        import tempfile as _tf, pathlib as _pl
+        self._lpdir = _tf.mkdtemp()
+        self.last_file = _pl.Path(self._lpdir) / "last"
+
+    def test_min_gap_one_per_run(self):
+        """2026-11-14 1日10本化: 間隔ガード有効なら1回の起動で1本だけ・直前の投稿から45分未満なら見送り"""
+        self.min_gap = 45
+        self._run_batch("fix124テスト専用の失敗しない候補です。\n本文。")
+        self.assertEqual(ap._posted_count_today("truth"), 1)
+        self.assertTrue(self.last_file.exists())
+        before = ap._posted_count_today("truth")
+        mock.patch.object(ap, "MIN_GAP_MIN", 45).start()
+        mock.patch.object(ap, "_last_post_file", lambda a: self.last_file).start()
+        ap._run_account_batch("truth")   # 直後の起動は見送り
+        self.assertEqual(ap._posted_count_today("truth"), before)
 
     def test_catchup_skips_same_candidate_and_advances(self):
         bad = "fix123テスト専用の失敗する候補です。\n本文。"

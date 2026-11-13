@@ -20,7 +20,7 @@ BASE = Path(__file__).parent
 sys.path.insert(0, str(BASE))
 from generate_remix import _hero_key, _hero_posted, HERO_GRACE_DAYS  # noqa: E402
 
-CARRY_MAX = 3    # 繰越の上限（2026-11-11 1日20本化: 10→3。当日ヒーロー5本＋繰越3本＝HERO_MAX_PER_DAY 8。2026-11-14にヒーロー10本へ戻し、上限は10＋3＝13）
+CARRY_MAX = 1    # 繰越の上限（2026-11-14 masa指示「各アカウント合計1日10本にして」: 3→1。当日ヒーロー3本＋繰越1本＝HERO_MAX_PER_DAY 4）
 
 
 def _head_version(acct: str):

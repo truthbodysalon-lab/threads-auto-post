@@ -368,8 +368,9 @@ def check_type_mix_in_first50():
         add("type_mix_in_first50", "B.ルール反映", "WARN", f"検査失敗: {type(e).__name__}: {e}")
         return
     # 2026-11-11 1日20本化: 前半20本に載る型の最低本数（truth ZUTSUYAKU 3→2・nagaoka お客様の声2→1。生成側の型の計画は daily plan 5本/6本）
-    need = {"truth": {"ZUTSUYAKU": 2, "MAE_MAZU": 2},
-            "nagaoka": {"MAE_MAZU": 2, "WEATHER": 1, "QUESTION": 1, "CUSTOMER_VOICE": 1}}
+    # 2026-11-14 1日10本化: 前半10本に載る型の最低本数（truth ZUTSUYAKU1／nagaoka MAE_MAZU1・WEATHER1。生成側の計画は3本/3本・truthのMAE_MAZUは日により0〜1本）
+    need = {"truth": {"ZUTSUYAKU": 1},
+            "nagaoka": {"MAE_MAZU": 1, "WEATHER": 1}}
     for acct, fn in (("truth", "generate_30_posts"), ("nagaoka", "generate_40_nagaoka_posts")):
         try:
             posts = getattr(_g, fn)()[:FRONT_N]
@@ -380,7 +381,7 @@ def check_type_mix_in_first50():
                 cnt[seg] = sum(1 for t in posts if t in pool)
             short = {k: f"{cnt[k]}<{v}" for k, v in need[acct].items() if cnt[k] < v}
             add(f"type_mix_in_first50:{acct}", "B.ルール反映", "WARN" if short else "PASS",
-                f"{acct}前半20本の型 {cnt}" + (f" 不足={short}" if short else ""))
+                f"{acct}前半{FRONT_N}本の型 {cnt}" + (f" 不足={short}" if short else ""))
         except Exception as e:
             add(f"type_mix_in_first50:{acct}", "B.ルール反映", "WARN", f"検査失敗: {type(e).__name__}: {e}")
 

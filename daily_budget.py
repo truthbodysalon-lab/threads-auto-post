@@ -1,5 +1,8 @@
 """1アカウント1日の投稿数の唯一の定義（2026-11-11 masa指示「全てのThreads投稿の数を20投稿にして」→ 2026-11-12 masa指示「UPLINK以外は30投稿以内に抑えて」で30本。UP LINK(~/threads-uplink)は対象外）。
 
+【2026-11-14〜 10本】masa指示「各アカウント合計1日10本にして」（2026-11-14 00:17）で30→10本。ヒーロー3本(＋繰越1)・画像1・uplink転載1・セグメント1〜2を含む合計。
+  10本の内訳(目安): truth=画像1・HPB(頭痛)1・LINEリストイン1・アクセス1・診断/整体LINE1〜2・セグメント1・ヒーロー3・通常残り／nagaoka=画像1・HPB1・LINE1・アクセス1・長岡市相談型・セグメント1・ヒーロー3・通常残り／masa=Buffer(Grok側の約10枠)も合計に数えるため自動分はBufferの不足分だけ。
+  投稿時刻はペース配分(6〜22時)＋アカウント別のずらし(auto_post.PACE_OFFSET_MIN)・同一アカウント45分以上空け(auto_post.MIN_GAP_MIN)。
 【2026-11-12〜 30本】下の内訳表は20本時点のもの。増えた10本はすべて「通常投稿(残り)」に入る（導線アンカー・画像・転載の本数は変えていない）。
 【2026-11-14〜 ヒーロー10本】masa指示「10本」でヒーローを5→10本/アカ/日に戻した。合計30本・上限30本は変えないので、増えた5本は「通常投稿(残り)」から回す。masaはBuffer約10枠も合計に数えるため、導線＋ヒーローで自動分の枠をほぼ使い切る（入りきらないヒーローは hero_carry で翌日へ繰越・最大3本）。
 
@@ -31,11 +34,11 @@
 """
 import os
 
-DAILY_POSTS = int(os.environ.get("DAILY_TARGET", "30"))   # 2026-11-12 masa指示「UPLINK以外は30投稿以内に抑えて」（20→30）     # 1日の目標(全種類の合計)
-DAILY_CAP = int(os.environ.get("DAILY_CAP", "30"))   # 上限30（UP LINK以外のThreadsはこれを超えない）          # 上限(これ以上は出さない)
+DAILY_POSTS = int(os.environ.get("DAILY_TARGET", "10"))   # 2026-11-12 masa指示「UPLINK以外は30投稿以内に抑えて」（20→30）     # 1日の目標(全種類の合計)
+DAILY_CAP = int(os.environ.get("DAILY_CAP", "10"))   # 上限30（UP LINK以外のThreadsはこれを超えない）          # 上限(これ以上は出さない)
 FRONT_N = DAILY_POSTS                                       # キュー前半＝1日で消化される本数
 QUEUE_RESERVE = 10                                          # 予備の原稿(重複スキップ・NG落ち用)
 QUEUE_LEN = FRONT_N + QUEUE_RESERVE                         # 生成するキューの長さ
-HERO_PER_DAY = 10                                           # ヒーロー生成本数/アカ/日（2026-11-14 masa指示「10本」で5→10。合計の上限30本は不変＝通常投稿の枠が減る）
-HERO_MAX_PER_DAY = HERO_PER_DAY + 3                         # 当日分＋繰越の安全枠
+HERO_PER_DAY = 3                                            # ヒーロー生成本数/アカ/日（2026-11-14 masa指示「各アカウント合計1日10本にして」で10→3。合計10本の内数）
+HERO_MAX_PER_DAY = HERO_PER_DAY + 1                         # 当日分＋繰越の安全枠（2026-11-14 10本化: 繰越1本＝最大4本。hero_carry.CARRY_MAXと揃える）
 LEDGER_ONLY_ACCTS = tuple(a for a in os.environ.get("LEDGER_ONLY_ACCTS", "nagaoka").split(",") if a)

@@ -525,8 +525,8 @@ class TestPace20261111(unittest.TestCase):
         self.assertIsNone(D.pace_guard([], at(6, 30)))
         self.assertTrue(D.pace_guard([self.P(6)], at(6, 30)))
         self.assertIsNone(D.pace_guard([self.P(7), self.P(8)], at(12, 30)))
-        self.assertTrue(D.pace_guard([self.P(7, i) for i in range(12)], at(12, 30)))   # 30本化(2026-11-12): 12:30の目安は11本
-        self.assertIn("目標の30本", D.pace_guard([self.P(7, i) for i in range(30)], at(23, 30)))
+        self.assertTrue(D.pace_guard([self.P(7, i) for i in range(5)], at(12, 30)))   # 10本化(2026-11-14): 12:30の目安は3本
+        self.assertIn("目標の10本", D.pace_guard([self.P(7, i) for i in range(10)], at(23, 30)))
 
     def test_yesterday_not_counted(self):
         y = {"timestamp": datetime(2026, 11, 10, 22, 0, tzinfo=D.JST).isoformat()}

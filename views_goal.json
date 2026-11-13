@@ -2,7 +2,7 @@
   "target_per_account": 1000000,
   "mode": "monthly_rolling",
   "window_days": 30,
-  "max_posts_per_day": 20,
+  "max_posts_per_day": 10,
   "deadline": "2026-11-09",
   "ramp_start": "2026-09-14",
   "ramp_weeks": 8,

@@ -1910,15 +1910,15 @@ except Exception:   # 読めなくても既存生成は止めない
 
 # 1日あたりの型の本数（置換で入れる分）。voice_extra=お客様の声の追加分（既存アンカー1本に上乗せ）
 TYPE_DAILY_PLAN = {
-    "truth":   [("ZUTSUYAKU", 3), ("MAE_MAZU", 2)],                                        # 2026-11-11 1日20本化: 9→5本
-    "nagaoka": [("MAE_MAZU", 2), ("WEATHER", 2), ("QUESTION", 1), ("CUSTOMER_VOICE", 1)],   # 2026-11-11 1日20本化: 11→6本
+    "truth":   [("ZUTSUYAKU", 2), ("MAE_MAZU", 1)],                     # 2026-11-11 1日20本化: 9→5本／2026-11-14 10本化: 5→3本
+    "nagaoka": [("MAE_MAZU", 1), ("WEATHER", 1), ("QUESTION", 1)],     # 2026-11-11 1日20本化: 11→6本／2026-11-14 10本化: 6→3本
 }
 # 上限を数える／型を置換する先頭範囲（ベースリスト）。導線・テスト・ヒーロー等のアンカーが約26〜28本ベースの間に入るため、
 # 実投稿される前半50本に載るベースは先頭約22〜24本。ここを広げると前半50本に効かなくなる（2026-10-24実測）。
 _TYPE_WINDOW = 12   # 2026-11-11 1日20本化: 23→12（前半20本に載るベースは約12本）
 # nagaokaは長岡市相談型など固定アンカーが多く前半50本に載るベースが少ない。さらに外部ツール併用で自動投稿は約30本/日に
 # 抑制される(project_nagaoka_external_poster)ため、型は前寄せ（先頭約13本のベース＝実投稿の先頭約40位まで）に置く
-_TYPE_WINDOW_BY_ACCT = {"truth": 12, "nagaoka": 7}
+_TYPE_WINDOW_BY_ACCT = {"truth": 3, "nagaoka": 3}   # 2026-11-14 1日10本化: 12/7→3/3（前半10本はアンカーが多く、ベースの先頭3本だけが確実に前半に残る＝実測5回中5回）
 _RE_DESK = re.compile(r"デスク|スマホ|パソコン|PC|画面")
 _RE_MASSAGE = re.compile(r"マッサージ|揉")
 _RE_YAKU = re.compile(r"薬|鎮痛|痛み止め")
@@ -2159,7 +2159,9 @@ def _insert_hero_posts(posts: list[str], acct: str) -> list[str]:
     バッチのヒーローがキュー末尾に回って未投稿になる事故の対策。2026-10-20）。"""
     heroes = _load_hero_posts(acct)[:HERO_MAX_PER_DAY]
     if not heroes:
-        return posts
+        # 2026-11-14 1日10本化: ヒーローが無い日も誘導投稿の前半戻しは必ず行う（前半10本だと
+        # ホットペッパー/アクセスが位置10〜12に押し出され未投稿になるため）
+        return _pull_funnel_into_front(posts)
     step = max(2, (FRONT_N - 6) // max(1, len(heroes)))   # 2026-11-11 20本化: 前半FRONT_N本に収める
     for i, h in enumerate(heroes):
         posts.insert(min(2 + i * step, FRONT_N - 3, len(posts)), h)
@@ -2181,6 +2183,12 @@ def _insert_hero_posts(posts: list[str], acct: str) -> list[str]:
             pass   # 印の付与に失敗してもヒーロー投入は止めない
     # 最終ガード: ヒーロー挿入で誘導投稿(ホットペッパー/駐車場/LINE)が位置FRONT_N(20)超へ
     # 押し出されたら前半へ戻す（1日約50本消費のため位置50超=未投稿）
+    return _pull_funnel_into_front(posts)
+
+
+
+def _pull_funnel_into_front(posts: list[str]) -> list[str]:
+    """誘導投稿(ホットペッパー/駐車場/LINE)が位置FRONT_N以降にあれば前半へ戻す（_insert_hero_posts の最終ガードを関数化・2026-11-14）。"""
     markers = ("beauty.hotpepper.jp", "専用駐車場", "長岡駅から車で5分", "lin.ee/")
     # 降順1パスだと取り残しが出る: pop(idx)→insert(44) で 44〜idx の要素が右へ1つ
     # ずれるため、index 49 にあった誘導投稿が 50 へ押し戻される。降順走査は既に
@@ -2195,7 +2203,6 @@ def _insert_hero_posts(posts: list[str], acct: str) -> list[str]:
             break
         posts.insert(FRONT_N - 6, posts.pop(stuck[-1]))
     return posts
-
 
 def _enforce_diversity(posts: list[str], prefix_len: int = 9) -> list[str]:
     """実投稿される前半に同じ冒頭・同じ骨格・同じ長さ帯が固まらないよう貪欲に並べ替える。
@@ -2315,10 +2322,10 @@ def generate_30_posts() -> list[str]:
     # 実行ギャップ対策: 1日の消費は約50本なので、ランダム高位置だと到達せず未投稿になる。
     # LINEリストインと同様に前半（index 5, 14, 23, 32）へアンカーして毎日確実に届ける。
     cta_posts = (
-        [_enforce_short_body(_ensure_nagaoka(generate_cta_post("katakori"))) for _ in range(1)] +
+        [_enforce_short_body(_ensure_nagaoka(generate_cta_post("katakori"))) for _ in range(0)] +   # 2026-11-14 1日10本化: 肩こりCTAは0本（頭痛特化アカウントのため頭痛1本だけ残す）
         [_enforce_short_body(_ensure_nagaoka(generate_cta_post("zutsuu")))   for _ in range(1)]
     )   # 2026-11-11 1日20本化: 4本→2本(肩こり1・頭痛1)
-    cta_anchors = [3, 8]
+    cta_anchors = [3]   # 2026-11-14 1日10本化: 2本[3,8]→1本[3]
     for i, cta in enumerate(cta_posts):
         pos = min(cta_anchors[i] if i < len(cta_anchors) else (i * 9 + 5), len(posts))
         posts.insert(pos, cta)
@@ -3354,7 +3361,7 @@ from masa_insta_content import INSTA_EASY_TEMPLATES, WINNING_HOOK_TEMPLATES  # n
 # 小川さん9/22助言（難しそうと思わせない）と同方向。固定テンプレ60本だけでは7日再投入禁止を
 # 満たせないため、(悩み→小さな言い換え→今日の一手)の組合せ生成を併用する。
 INSTA_THEME_RE = re.compile(r"インスタ|Instagram|リール|ストーリーズ|ハッシュタグ|DM|投稿ネタ|ネタ帳")
-INSTA_THEME_TARGET = FRONT_N * 13 // 20   # 実投稿される前半FRONT_N本のうちInstagramテーマにする下限目標（過半数超。2026-11-11 13/20→2026-11-12 30本化で19/30）
+INSTA_THEME_TARGET = FRONT_N * 13 // 20 if FRONT_N > 10 else FRONT_N // 2   # 実投稿される前半FRONT_N本のうちInstagramテーマにする下限目標（過半数超。2026-11-11 13/20→2026-11-12 30本化で19/30→2026-11-14 10本化で5/10: 前半10本は導線・AI・セグメント・ヒーローのアンカーが約半分を占め、置換できる通常枠が5本前後しか無いため半数）
 INSTA_FRONT_LEN = FRONT_N
 
 from masa_insta_content import INSTA_HURDLES, INSTA_GEN_STRUCTURES, build_gen_post  # noqa: E402

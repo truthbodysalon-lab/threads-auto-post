@@ -36,6 +36,21 @@ _LINE_DBS = {
 }
 
 
+def _d1_zutsu(sql: str):
+    """2026-11-13〜 頭痛LINE(@561yryuk)はCloudflare D1へ移行済み。wrangler経由でSELECTのみ読む。失敗時はNone。"""
+    import subprocess
+    root = "/Users/mt112/line-harness-workers"
+    try:
+        r = subprocess.run([root + "/node_modules/.bin/wrangler", "d1", "execute", "line-harness-zutsu", "--env", "zutsu",
+                            "--remote", "--json", "--command", sql], cwd=root, capture_output=True, text=True, timeout=90,
+                           env={**os.environ, "PATH": "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin", "CI": "1", "NO_COLOR": "1"})
+        if r.returncode != 0:
+            return None
+        return json.loads(r.stdout[r.stdout.index("["):])[0]["results"]
+    except Exception:
+        return None
+
+
 def follower_deltas() -> dict:
     """followers_history.json から各acctの現在値と7日デルタ。無ければ空。"""
     try:
@@ -73,6 +88,13 @@ def line_registrations() -> dict:
     """各LINEの累計/直近7日/直近30日の登録数。DB不在時は None を値に。"""
     out = {}
     for key, path in _LINE_DBS.items():
+        if key == "truth_nagaoka":
+            rows = _d1_zutsu("SELECT count(*) AS t, "
+                             "sum(added_at >= date('now','-7 days')) AS d7, "
+                             "sum(added_at >= date('now','-30 days')) AS d30 FROM friends")
+            out[key] = ({"total": rows[0]["t"], "d7": rows[0]["d7"] or 0, "d30": rows[0]["d30"] or 0}
+                        if rows else None)
+            continue
         p = Path(path)
         if not p.exists():
             out[key] = None

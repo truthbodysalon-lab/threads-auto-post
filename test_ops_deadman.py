@@ -107,6 +107,21 @@ class T(unittest.TestCase):
         self.assertEqual(self.sent, [])
         self.assertEqual(O.load_state()["line"]["read_fail"], 1)
 
+    def test_line_stale_while_mac_asleep_is_quiet(self):
+        # 2026-11-13: Macの生存信号(cloud)も2時間超古い=スリープ中 → line警告は出さない
+        self.run_once(Fake(cloud_age=7201, line_age=10801))
+        self.assertEqual(self.sent, [])
+        self.assertFalse(O.load_state()["line"].get("alerted_at"))
+        # Macが起きた(cloud新しい)のに同期だけ止まったまま → 警告する
+        self.run_once(Fake(cloud_age=60, line_age=10801))
+        self.assertEqual(len(self.sent), 1)
+        self.assertIn("ライン配信同期", self.sent[0])
+
+    def test_line_stale_cloud_unreadable_still_alerts(self):
+        # cloudが読めない時はMacの状態が不明 → 従来どおりline警告を出す
+        self.run_once(Fake(cloud_http=403, line_age=10801))
+        self.assertEqual(len(self.sent), 1)
+
     def test_exception_is_read_failure(self):
         self.run_once(Fake(cloud_http="exc", line_http="exc"))
         self.assertEqual(self.sent, [])

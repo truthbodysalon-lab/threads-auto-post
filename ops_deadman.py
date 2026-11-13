@@ -46,6 +46,11 @@ CLOUD_SUPPRESS = 43200        # 再通知抑制12時間(旧と同じ)
 LINE_THRESHOLD = 10800        # 3時間(旧 deadman.mjs と同じ)
 LINE_SUPPRESS = 10800         # 旧は抑制なし(3時間おきの実行=3時間に1回)。新も3時間に1回までで頻度は増えない
 READ_FAIL_LIMIT = 6           # 連続6回(約1時間)読めなければ「見張りが読めていない」を1回通知
+# 2026-11-13 再発防止: 「ライン配信同期が止まっています」が14日で10回以上出て、すべてMacのスリープが原因の
+# 自然回復だった（同期スクリプト自体は正常）。Macの生存信号(cloud heartbeat・1時間毎)も同時に古いときは
+# 「Mac自体が眠っている」ので line の警告は出さない（6時間で cloud の「Mac停止検知」が1通出る）。
+# Macが起きているのに同期だけ3時間止まっているとき＝本当の同期障害だけを知らせる。
+MAC_QUIET_SEC = 7200          # cloud heartbeat がこれより古ければ Mac はスリープ/停止中とみなす
 
 JST = timezone(timedelta(hours=9))
 
@@ -212,8 +217,9 @@ def save_state(st):
         log(f"state書込失敗 {type(e).__name__}")
 
 
-def check_one(name, st, now, reader, threshold, suppress, make_message, label):
-    """1系統を検査し、st[name] を更新する。戻り値: 状態の語 OK / ALERT / SUPPRESSED / READFAIL。"""
+def check_one(name, st, now, reader, threshold, suppress, make_message, label, quiet_reason=None):
+    """1系統を検査し、st[name] を更新する。戻り値: 状態の語 OK / ALERT / SUPPRESSED / READFAIL / MAC_ASLEEP。
+    quiet_reason: 古いと判定したときに呼ぶ。文字列を返したら通知せずその理由をログに残す(Macのスリープ等)。"""
     s = st.setdefault(name, {})
     try:
         value = reader()
@@ -246,6 +252,11 @@ def check_one(name, st, now, reader, threshold, suppress, make_message, label):
         s["alerted_at"] = 0     # 回復したら抑制を解除(次の停止は即通知)
         return "OK"
 
+    reason = quiet_reason() if quiet_reason else None
+    if reason:
+        log(f"{label}: heartbeat age={shown_age}s threshold={threshold}s -> 通知しない({reason})")
+        return "MAC_ASLEEP"
+
     since = now - int(s.get("alerted_at", 0) or 0)
     if since < suppress:
         log(f"{label}: heartbeat age={shown_age}s threshold={threshold}s -> ALERT(抑制中 前回通知から{since}s)")
@@ -277,12 +288,26 @@ def main():
     now = now_epoch()
     st = load_state()
     before = json.dumps(st, sort_keys=True)
+    cloud_seen = {}
+
+    def cloud_reader():
+        v = read_cloud_heartbeat_epoch()
+        cloud_seen["epoch"] = v
+        return v
+
+    def mac_quiet():
+        # cloud heartbeat を読めた時だけ判断する(読めない/コミット無し=不明→従来どおり通知)
+        ep = cloud_seen.get("epoch")
+        if ep and now - ep > MAC_QUIET_SEC:
+            return f"Macの生存信号も{(now - ep) // 60}分途絶＝スリープ/停止中。6時間でMac停止検知が出る"
+        return None
+
     if TARGET_CONFIG.get("cloud", True):
-        r1 = check_one("cloud", st, now, read_cloud_heartbeat_epoch, CLOUD_THRESHOLD, CLOUD_SUPPRESS,
+        r1 = check_one("cloud", st, now, cloud_reader, CLOUD_THRESHOLD, CLOUD_SUPPRESS,
                    cloud_message, "cloud")
     if TARGET_CONFIG.get("line", True):
         r2 = check_one("line", st, now, read_line_heartbeat_ts, LINE_THRESHOLD, LINE_SUPPRESS,
-                   line_message, "line")
+                   line_message, "line", quiet_reason=mac_quiet)
     if json.dumps(st, sort_keys=True) != before:
         save_state(st)
     return 0

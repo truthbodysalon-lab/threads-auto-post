@@ -717,12 +717,29 @@ def _masa_line_subject(text: str) -> bool:
         return False
     return not (_is_line_listin(text) or _is_shindan(text) or "『AI』" in text or _is_present_cta(text))
 
+def _masa_line_daily_max() -> int:
+    """masaのLINE言及の1日上限＝1日の本数の10%（verify rule:line_rate と同じ式）。"""
+    try:
+        from daily_budget import DAILY_POSTS as _dp
+    except Exception:
+        _dp = 30
+    return max(1, int(_dp) // 10)
+
+
 def _masa_line_overrate(text: str) -> bool:
-    """masaのLINE言及率キャップ（verify rule:line_rate=5本/日10%対策・2026-08-27）。
-    導線投稿（リストイン/診断/時短CTA=『AI』誘導）は削らない方針のため常時許可し、
-    コンテンツ投稿の付随的なLINE言及だけを本日2本でブロックする（3導線+2=最大5本）。"""
-    if not _masa_line_subject(text):
+    """masaのLINE言及率キャップ（verify rule:line_rate=1日の本数の10%）。
+    2026-08-27版: 導線投稿（リストイン/診断/時短CTA=『AI』誘導/プレゼント）は常時許可し、
+    コンテンツ投稿の付随的なLINE言及だけを本日2本でブロックしていた（50本時代=3導線+2=最大5本=10%）。
+    2026-11-13改定: 1日30本化(11/11〜12)で上限が3本になったのに導線を無制限に通していたため、
+    キューが1日3〜5回作り直されるたびに各回の導線(『AI』『MEO』誘導・診断)が出て、
+    11/8〜11/13に1日8〜10本(上限の約3倍)になり rule:line_rate:masa が毎日FAILしていた。
+    → 導線も含めた本日のLINE言及が上限(_masa_line_daily_max)に達したら導線もブロックする。
+      コンテンツ投稿の付随的なLINE言及は「上限−2本」(30本なら1本)で止め、導線の枠を残す。
+      LINE言及の無い投稿は対象外＝本数は減らない（次の候補が選ばれる）。"""
+    if not _LINE_MENTION_RE.search(text or "") or _is_line_listin(text):
         return False
+    cap = _masa_line_daily_max()
+    limit = cap if not _masa_line_subject(text) else max(1, cap - 2)
     today = date.today().strftime("%Y-%m-%d")
     n = 0
     try:
@@ -736,7 +753,7 @@ def _masa_line_overrate(text: str) -> bool:
                     n += 1
     except Exception:
         return False
-    return n >= 2
+    return n >= limit
 
 def _posted_count_today(acct: str) -> int:
     """log_{acct}_posted.jsonl の本日の投稿件数（バッチ投稿の打ち切り判定用）"""
@@ -1588,7 +1605,7 @@ def run_account(acct: str):
     while text is not None:
         _ok, _reasons = inspect_before_post(text, acct)
         if _ok and acct == "masa" and _masa_line_overrate(text):
-            _ok, _reasons = False, ["LINE言及率上限(コンテンツ枠2本/日)"]
+            _ok, _reasons = False, [f"LINE言及率上限(導線込み{_masa_line_daily_max()}本/日)"]
         if _ok:
             break
         log_info(acct, f"{name} [検品NG] {'; '.join(_reasons)[:100]} → {text[:30].replace(chr(10), ' ')}...")

@@ -404,5 +404,22 @@ def test_c41_gap_after_target_ignored():
     assert not vs.alive_stall_incidents(posts, [(lo, hi)], lo, hi, daily_target=50)
 
 
+class TestGapIsStall(unittest.TestCase):
+    """2026-11-13: 1日30本化後、ペースどおりの75〜110分の空白を『停止』と誤報しない。"""
+
+    def test_on_pace_long_gap_is_not_stall(self):
+        self.assertFalse(sc.gap_is_stall(110, 0, sc.STALL_MIN))   # 11/13 masa 14:16→16:06
+        self.assertFalse(sc.gap_is_stall(79, 2, sc.STALL_MIN))
+
+    def test_real_stall_detected(self):
+        self.assertTrue(sc.gap_is_stall(120, sc.STALL_BEHIND_MIN, sc.STALL_MIN))
+        self.assertTrue(sc.gap_is_stall(240, 7, sc.STALL_MIN))     # 10/23型（4時間0本）
+
+    def test_unknown_pace_falls_back_to_gap_only(self):
+        self.assertTrue(sc.gap_is_stall(80, None, sc.STALL_MIN))
+        self.assertFalse(sc.gap_is_stall(None, 9, sc.STALL_MIN))
+        self.assertFalse(sc.gap_is_stall(60, 9, sc.STALL_MIN))
+
+
 if __name__ == "__main__":
     test_c41_trailing_gap_detected(); test_c41_gap_after_target_ignored(); print("C41 extra tests OK")

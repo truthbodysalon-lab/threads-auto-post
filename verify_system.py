@@ -1419,7 +1419,10 @@ def check_alive_stall():
                 add(cid, "C.実行ギャップ", "SKIP", "GitHub API取得不可（常駐run区間が不明で未検査）")
                 continue
             posts = [ts for _, ts in api]
-            if acct != "nagaoka":
+            # 2026-11-13: masa は Buffer 枠も1日の本数に数える設計（daily_budget.py）で、Buffer が出た時間は
+            # 自動側が意図して休む。自動分だけで空白を測ると正常運転でも150〜180分あく（11/13 16:07→19:06=179分）
+            # ため、masa は全投稿(API)で測る。nagaoka(外部ツール除外)・truth は従来どおり。
+            if acct not in ("nagaoka", "masa"):
                 ids = set()
                 lf = BASE / f"log_{acct}_posted.jsonl"
                 if lf.exists():

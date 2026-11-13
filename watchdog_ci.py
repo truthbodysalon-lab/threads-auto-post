@@ -183,10 +183,12 @@ def main():
     today = datetime.now(JST).date().isoformat()
     want = want_now()
     repaired = []
+    counts = {}   # 2026-11-13: 下の無投稿判定で「ペースより遅れているか」に使う
     for acct in ACCTS:
         n = api_count_today(acct)
         if n < 0:
             continue
+        counts[acct] = n
         print(f"{acct}: 実投稿{n} / あるべき{want}")
         gap = want - n
         # 2026-10-06: 先行判定は auto_post.py と同じ先読み曲線(LOOKAHEAD_HOURS=3)を基準にする。
@@ -254,7 +256,12 @@ def main():
             stall_min = max(sc.STALL_MIN, sc.alive_thresholds(acct)[0]) if acct == "nagaoka" else sc.STALL_MIN
             if gap is None or gap < stall_min:
                 continue
-            print(f"{acct}: 最後の投稿から{gap}分（{stall_min}分超・停止疑い）")
+            # 2026-11-13: ペースどおりなら無投稿が長くても止まっていない（stall_check.gap_is_stall 参照）
+            behind = max(0, want - counts[acct]) if acct in counts else None
+            if not sc.gap_is_stall(gap, behind, stall_min):
+                print(f"{acct}: 最後の投稿から{gap}分だがペースどおり(遅れ{behind}本)→停止扱いしない")
+                continue
+            print(f"{acct}: 最後の投稿から{gap}分（{stall_min}分超・停止疑い・遅れ{behind}本）")
             if not keeper_running():
                 dispatch_keeper()
             if _notified_today(st, f"gap_{acct}"):

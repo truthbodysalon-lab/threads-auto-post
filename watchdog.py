@@ -229,7 +229,13 @@ def check_stall_and_keeper():
                         continue
             if gap is None or gap < _stall_threshold(acct):
                 continue
-            log(f"{acct}: 最後の投稿から{gap}分（停止疑い）")
+            # 2026-11-13: ペースどおり(遅れ STALL_BEHIND_MIN 本未満)なら無投稿が長くても止まっていない
+            # （1日30本化で1時間に1〜2本＝75〜110分あくのが普通。stall_check.gap_is_stall 参照）
+            behind = _pace_behind(acct)
+            if not sc.gap_is_stall(gap, behind, _stall_threshold(acct)):
+                log(f"{acct}: 最後の投稿から{gap}分だがペースどおり(遅れ{behind}本)→停止扱いしない")
+                continue
+            log(f"{acct}: 最後の投稿から{gap}分（停止疑い・ペースより{behind}本遅れ）")
             kick_cloud(f"{acct} 無投稿{int(gap)}分")
             _push_once_per_day(acct, sc.stall_message(acct, gap, ks), kind="stall")
         except Exception as e:

@@ -1,7 +1,7 @@
 {
   "acct": "nagaoka",
-  "version": 87,
-  "updated": "2026-11-12",
+  "version": 88,
+  "updated": "2026-11-13",
   "description": "修正ポイント（勝ち構造・死ぬ構造）の正本。毎朝サブエージェントEが実測データで各ルールを検証し、効かなくなったルールはretired、新発見はtestingで追加、実証されたらactiveに昇格する。ヒーロー投稿と新テンプレはこのプレイブックのactiveルールに従って書く。",
   "rules": [
     {
@@ -245,7 +245,7 @@
       "rule": "「〜する前に、まず〜」型（短文・3行以内）: 1行目=「◯◯する前に、まず△△してみて。」／2行目=理由を「〜ことがあります」で1文。nagaokaでは唯一伸びる型。固定側=type_templates.pyのMAE_MAZU_TEMPLATES_NAGAOKA（30本・長岡/兄妹は1本1回まで）が毎日4本、汎用ベース投稿と置換（segment=MAE_MAZU）。ヒーロー10本のうち2本以上もこの型。",
       "evidence": "分析 myfiles/SNS・Threads/truth_nagaoka_1行目の型と施策の効果_2026-10-24.md（Threads外形API 14日・truth652本/nagaoka729本）＋本人指示2026-10-24。判定は本文一致（segment_registryのsegment値＋台帳）。型別の閲覧倍率は segment_report.py の build_type_report（秘書日報「伸びた型」）。testing→前日実閲覧が中央値の3倍超でactive昇格／中央値未満が2回でretired。 「前に、まず」「要りません」型 n12 x2.25（nagaoka唯一の勝ち型）。 / 10-24「湿布を貼る前に、まず今日の座っている時間を数えてみて。」402v（中央値37の約11倍）で3倍超→active昇格",
       "added": "2026-10-24",
-      "last_validated": "2026-10-29"
+      "last_validated": "2026-11-13"
     },
     {
       "id": "W_WEATHER",
@@ -254,7 +254,7 @@
       "rule": "天気・気圧・寒暖差の話と問いかけ（短文・3行以内）: 「雨の日に頭が重くなる人、いますか？」「低気圧の日は、まず首の後ろを温めてみて。」。固定側=type_templates.pyのWEATHER_TEMPLATES_NAGAOKA（20本）が毎日3本・QUESTION_TEMPLATES_NAGAOKA（12本）が毎日2本、汎用ベースと置換（segment=WEATHER／QUESTION）。お客様の声(CUSTOMER_VOICE)は1→3本/日に増やす（既存24本・7日回し）。",
       "evidence": "分析 myfiles/SNS・Threads/truth_nagaoka_1行目の型と施策の効果_2026-10-24.md（Threads外形API 14日・truth652本/nagaoka729本）＋本人指示2026-10-24。判定は本文一致（segment_registryのsegment値＋台帳）。型別の閲覧倍率は segment_report.py の build_type_report（秘書日報「伸びた型」）。testing→前日実閲覧が中央値の3倍超でactive昇格／中央値未満が2回でretired。 天気・気圧 n27 x1.91／自動の問いかけ n33 x1.83／お客様の声（自動）n20 x2.28。",
       "added": "2026-10-24",
-      "last_validated": "2026-11-01"
+      "last_validated": "2026-11-13"
     },
     {
       "id": "W_IMAGE_AUTO",
@@ -671,6 +671,10 @@
     {
       "date": "2026-11-12",
       "note": "masa指示「2つのレポートを参考に今後の投稿を」: W_ASK_PEOPLE, L_LOCAL_OFFTOPIC を追加（Threads詳細レポート2026-11-12の実測。12/10再判定）"
+    },
+    {
+      "date": "2026-11-13",
+      "note": "プレイブック検証: TOP30(中央値28.5)は朝の頭痛・雨の日(気圧)・兄妹の人柄型が上位でW_WEATHER/W_MAE_MAZU継続。新規ルール追加なし。前日ヒーローは実閲覧未確定のためtesting据え置き"
     }
   ]
 }

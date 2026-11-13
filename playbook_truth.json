@@ -1,7 +1,7 @@
 {
   "acct": "truth",
-  "version": 91,
-  "updated": "2026-11-12",
+  "version": 92,
+  "updated": "2026-11-13",
   "description": "修正ポイント（勝ち構造・死ぬ構造）の正本。毎朝サブエージェントEが実測データで各ルールを検証し、効かなくなったルールはretired、新発見はtestingで追加、実証されたらactiveに昇格する。ヒーロー投稿と新テンプレはこのプレイブックのactiveルールに従って書く。",
   "rules": [
     {
@@ -274,7 +274,7 @@
       "rule": "頭痛薬・鎮痛剤を1行目に置く短文（3行以内）: 「頭痛薬を飲む前に、まず首の後ろを触ってみて。」「鎮痛剤の回数が増えてきたら、体からのサインです。」の型。薬を否定・指示しない（「薬の前に」「薬のほかに」「薬と一緒に」で首・睡眠・合図の見直しを足す）。医療断定・服薬中止の示唆・創作統計なし。固定側=type_templates.pyのZUTSUYAKU_TEMPLATES_TRUTH（30本）が毎日5本、効きにくい汎用ベース投稿と置換して前半50本に入る（segment_registryにsegment=ZUTSUYAKU）。ヒーロー10本のうち3本以上もこの型。",
       "evidence": "分析 myfiles/SNS・Threads/truth_nagaoka_1行目の型と施策の効果_2026-10-24.md（Threads外形API 14日・truth652本/nagaoka729本）＋本人指示2026-10-24。判定は本文一致（segment_registryのsegment値＋台帳）。型別の閲覧倍率は segment_report.py の build_type_report（秘書日報「伸びた型」）。testing→前日実閲覧が中央値の3倍超でactive昇格／中央値未満が2回でretired。 薬・鎮痛剤を1行目に置く話 n52 x2.06（最大2501v『頭痛薬を飲む前に、まず首の後ろを触ってみて。』）。 / 10-25実測: 薬話が1211v・864v・577v（truth中央値64の9〜19倍）で3倍超→active昇格",
       "added": "2026-10-24",
-      "last_validated": "2026-11-01"
+      "last_validated": "2026-11-13"
     },
     {
       "id": "W_MAE_MAZU",
@@ -283,7 +283,7 @@
       "rule": "「〜する前に、まず〜」型（短文・3行以内）: 1行目=「◯◯する前に、まず△△してみて。」／2行目=理由を「〜ことがあります」で1文。truthは頭痛・首・睡眠・気圧の話題で（デスク・スマホ・マッサージを1行目にしない）。固定側=type_templates.pyのMAE_MAZU_TEMPLATES_TRUTH（30本）が毎日4本、汎用ベース投稿と置換（segment=MAE_MAZU）。LIST_HABITを2→1本に減らした枠をここへ。",
       "evidence": "分析 myfiles/SNS・Threads/truth_nagaoka_1行目の型と施策の効果_2026-10-24.md（Threads外形API 14日・truth652本/nagaoka729本）＋本人指示2026-10-24。判定は本文一致（segment_registryのsegment値＋台帳）。型別の閲覧倍率は segment_report.py の build_type_report（秘書日報「伸びた型」）。testing→前日実閲覧が中央値の3倍超でactive昇格／中央値未満が2回でretired。 「前に、まず」「要りません」型 n24 x1.69。",
       "added": "2026-10-24",
-      "last_validated": "2026-10-24"
+      "last_validated": "2026-11-13"
     },
     {
       "id": "L_TYPE_CAPS",
@@ -308,7 +308,7 @@
       "type": "win",
       "status": "active",
       "added": "2026-11-12",
-      "last_validated": "2026-11-12",
+      "last_validated": "2026-11-13",
       "rule": "8/28型（頭痛薬を飲む頻度を問う問いかけ）を週1本出す。同じ文言の使い回しは不可（L8型疲労）。日常：本業＝2：3の混ぜ方は維持し、本業の問いかけ型だけ増やす",
       "evidence": "8/28「週に何度も頭痛薬を飲んでいませんか？」16,848回＝2位の6.7倍。判定は『2,000回超えが月2件あるか』。出典: 2026-11-12 Threads詳細レポート（Obsidian SNS分析/2026-11-12_IG・Threads詳細レポートから決めた投稿方針.md）"
     }
@@ -706,6 +706,10 @@
     {
       "date": "2026-11-12",
       "note": "masa指示「2つのレポートを参考に今後の投稿を」: W_ASK_PEOPLE, W_ZUTSUYAKU_FREQ を追加（Threads詳細レポート2026-11-12の実測。12/10再判定）"
+    },
+    {
+      "date": "2026-11-13",
+      "note": "プレイブック検証: 最新TOP30(中央値52.5)の上位8本中7本が薬・鎮痛剤の話で W_ZUTSUYAKU/W_ZUTSUYAKU_FREQ/W_MAE_MAZU は機能継続。新規ルール追加なし。前日ヒーロー(11/12)は実閲覧データ未確定のためtesting判定は据え置き"
     }
   ]
 }

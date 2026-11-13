@@ -164,7 +164,7 @@
   "産後の骨盤の歪みが気になるママへ。": {
     "segment": "T3",
     "hook": "high",
-    "created": "2026-11-09",
+    "created": "2026-11-13",
     "acct": "truth",
     "variant": 0
   },
@@ -644,7 +644,7 @@
   "骨盤の歪みが気になるママへ。": {
     "segment": "T3",
     "hook": "high",
-    "created": "2026-11-09",
+    "created": "2026-11-13",
     "acct": "nagaoka",
     "variant": 0
   },
@@ -2709,7 +2709,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 19,
-    "created": "2026-11-07",
+    "created": "2026-11-13",
     "acct": "nagaoka"
   },
   "インスタで、ハッシュタグと投稿時間で伸ばそうとしている院長へ。": {
@@ -3203,7 +3203,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 12,
-    "created": "2026-11-04",
+    "created": "2026-11-13",
     "acct": "truth"
   },
   "『いつ頭が痛くなるか不安で、気が休まらない』という声を、よく聞きます。": {
@@ -5622,7 +5622,7 @@
   "痛みが消えた日に、お客様が来なくなる院長へ。": {
     "segment": "R02",
     "hook": "high",
-    "created": "2026-10-13",
+    "created": "2026-11-13",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -5856,7 +5856,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 19,
-    "created": "2026-11-04",
+    "created": "2026-11-13",
     "acct": "truth"
   },
   "【在宅ワークの肩こり対策チェック項目8選】": {
@@ -6781,7 +6781,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 8,
-    "created": "2026-11-12"
+    "created": "2026-11-13"
   },
   "フォロワーを増やすだけが、集客じゃない。": {
     "segment": "HAKASE",
@@ -8034,7 +8034,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 1,
-    "created": "2026-11-08",
+    "created": "2026-11-13",
     "acct": "truth"
   },
   "頭痛薬を飲んでも、すっきりしない日があるなら。": {
@@ -8414,7 +8414,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 25,
-    "created": "2026-11-08",
+    "created": "2026-11-13",
     "acct": "nagaoka"
   },
   "寒暖差が大きい日は、首の後ろが固まりやすい。": {
@@ -8435,7 +8435,7 @@
     "segment": "QUESTION",
     "hook": "type",
     "variant": 8,
-    "created": "2026-11-07",
+    "created": "2026-11-13",
     "acct": "nagaoka"
   },
   "湿布を貼る前に、まず痛い場所を指で確かめてみて。": {
@@ -8636,7 +8636,7 @@
     "segment": "WEATHER",
     "hook": "type",
     "variant": 9,
-    "created": "2026-11-08",
+    "created": "2026-11-13",
     "acct": "nagaoka"
   },
   "朝、首が固まったまま起きる人はいますか？": {
@@ -8992,7 +8992,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 28,
-    "created": "2026-11-08",
+    "created": "2026-11-13",
     "acct": "nagaoka"
   },
   "家に帰ったら、座り込む前に、まず首をゆっくり回してみて。": {
@@ -9027,7 +9027,7 @@
     "segment": "WEATHER",
     "hook": "type",
     "variant": 2,
-    "created": "2026-11-08",
+    "created": "2026-11-13",
     "acct": "nagaoka"
   },
   "朝バタバタする前に、まず首を一回だけゆっくり回してみて。": {
@@ -9461,21 +9461,21 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 39,
-    "created": "2026-11-09",
+    "created": "2026-11-13",
     "acct": "truth"
   },
   "薬を探す前に、まずコップ1杯の水を飲んでみて。": {
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 34,
-    "created": "2026-11-08",
+    "created": "2026-11-13",
     "acct": "truth"
   },
   "薬を飲んだのに夕方また重くなる日は、首の使い方を振り返ってみて。": {
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 43,
-    "created": "2026-11-09",
+    "created": "2026-11-13",
     "acct": "truth"
   },
   "ごはんを食べる前に、まず肩を2回ストンと落としてみて。": {
@@ -9679,7 +9679,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 34,
-    "created": "2026-11-08",
+    "created": "2026-11-13",
     "acct": "truth"
   },
   "お風呂に入る前に、まず首の後ろに蒸しタオルを当ててみて。": {
@@ -10893,7 +10893,7 @@
     "hook": "present",
     "present_key": "ai_starter",
     "variant": 8,
-    "created": "2026-11-12"
+    "created": "2026-11-13"
   },
   "頭痛薬を切らせない人へ。": {
     "segment": "T2",
@@ -10910,5 +10910,91 @@
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z04_nagaoka"
+  },
+  "週の半分は頭痛薬を飲む人へ。": {
+    "segment": "T2",
+    "hook": "high",
+    "created": "2026-11-13",
+    "acct": "truth",
+    "variant": null,
+    "hypothesis_id": "Z07_truth"
+  },
+  "『頭痛薬が手放せない』という声を、よく聞きます。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-13",
+    "acct": "truth"
+  },
+  "鎮痛剤を飲んだ日は、日付とその日の天気だけメモしてみて。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-13",
+    "acct": "truth"
+  },
+  "病院に行く前に、まず頭痛が出る時間帯を3日だけ書いてみて。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-13",
+    "acct": "truth"
+  },
+  "湯船に入る前に、まず首の後ろへ蒸しタオルを1分。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-13",
+    "acct": "truth"
+  },
+  "【頭痛をぶり返しにくくする、夜の習慣6選】": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-13",
+    "acct": "truth"
+  },
+  "低気圧の日は頭が痛くなる人へ。": {
+    "segment": "T2",
+    "hook": "high",
+    "created": "2026-11-13",
+    "acct": "nagaoka",
+    "variant": null,
+    "hypothesis_id": "Z06_nagaoka"
+  },
+  "湿布を貼る前に、まず首をゆっくり左右に3回まわしてみて。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-13",
+    "acct": "nagaoka"
+  },
+  "雨の前の日に、肩が重くなる人は多いです。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-13",
+    "acct": "nagaoka"
+  },
+  "寒くなってくると、肩が上がってくる人いますか？": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-13",
+    "acct": "nagaoka"
+  },
+  "『夕方になると、頭が重くなるんです』という声を、よく聞きます。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-13",
+    "acct": "nagaoka"
+  },
+  "『病院で異常なしと言われたのに、まだ肩がつらい』という声も、よく聞きます。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-13",
+    "acct": "nagaoka"
   }
 }

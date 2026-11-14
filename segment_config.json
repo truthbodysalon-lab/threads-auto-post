@@ -80,7 +80,7 @@
         "rotation": "round_robin",
         "hook_rotation": "daily_alternate",
         "anchors": [
-          4
+          1
         ],
         "anchors_note": "2026-10-04 generate_30_masa_posts()を読んで既存の使用済みindexを洗い出した: AI=4/20/36・LINE=5/14・プロフィールCTA=9/27・時短CTA=12・HAKASE=22/30・軸1=8/16/18/26/34/44・ヒーロー挿入=2+4i(2,6,…,38)。これらと重ならず前半50本に収まる11と24を採用。軸2は軸1より後・HAKASE/ヒーローより前に挿入する。",
         "min_n": 5,

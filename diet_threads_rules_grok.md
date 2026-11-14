@@ -1,8 +1,8 @@
 # Grokのrules.md 原文の抜き書き（ダイエットThreads @truth_nagaoka_daietto 用）
 
-- 生成日時: 2026-11-12 06:40 JST（~/.claude/scripts/diet_threads_rules_sync.py による自動抜き書き。手で編集しない）
+- 生成日時: 2026-11-15 06:40 JST（~/.claude/scripts/diet_threads_rules_sync.py による自動抜き書き。手で編集しない）
 - 元ファイル（Obsidian vault相対）: SNS・Threads/X・Threads自動運用（Grok）/rules.md
-- 元ファイルのsha256: 4ae47b91f53e868d4f72ceb562d565799bee5fc223a36fa2b1570c64cd665e58
+- 元ファイルのsha256: 96bc000df820c937b9ab76eaef4d43434afdef91b44a09501ab9833891296b5f
 - 原文の抜き書き。diet_threads_rules.md（要約）と食い違う場合は、こちらの新しい日付の記述が優先
 - 除外: X運用・@masahide系・Buffer・DM・Obsidian保存ルール（公開リポジトリのため）
 
@@ -67,8 +67,7 @@
 - 案内文の案：「気になる方は公式LINE（@886oidmv）で『相談』と送ってください。院長が直接お返事します」。ユーザーOKが出るまでLINE案内は入れない。
 - 【確定・最優先】公式LINE案内の開始（2026-10-31 15:51 ユーザーOK「200通の上限が心配なので、案内は1日1〜2本に抑えて始めて」）：上の「3〜5本に1回」と「ユーザーOKが出るまで入れない」は無効。@truth_nagaoka_daietto の投稿（通常・栄養ネタ枠・追加投稿。引用・コメント・返信は対象外）に、1日（JST 0:00〜23:59）合計で最大2本まで、最後の一文に「気になる方は公式LINE（@886oidmv）で『相談』と送ってください。院長が直接お返事します」を入れる。入れる前に threads-post-log.md でその日の「LINE案内あり」の本数を数え、2本に達していたら入れない。2本続けない。URL・料金・効果保証・煽りは書かない。入れた投稿は「LINE案内あり」と記録。
 
-<!-- autolink:keywords:start -->
-🔑 キーワード: [[myfiles/🔑 キーワード/投稿|投稿]] ・ [[myfiles/🔑 キーワード/Threads|Threads]] ・ [[myfiles/🔑 キーワード/ダイエット|ダイエット]] ・ [[myfiles/🔑 キーワード/ニュース|ニュース]] ・ [[myfiles/🔑 キーワード/実体験|実体験]] ・ [[myfiles/🔑 キーワード/Instagram|Instagram]] ・ [[myfiles/🔑 キーワード/採用|採用]] ・ [[myfiles/🔑 キーワード/ブラウザ|ブラウザ]]
-<!-- autolink:keywords:end -->
-
-<!-- autolink:related:start -->
+## X再開（2026-11-14 00:08・ユーザー指示「X再開して」）
+- 2026-11-11 18:09 から「You've unlocked more on X」（/i/graduated-access）で止めていたXの操作は、次の枠から再開する。
+- この graduated-access 画面は問題ない画面として扱う。出たら「Got it」で閉じてそのまま続ける（停止・報告は不要、ログに1行残す）。
+- それ以外の警告・制限・人間確認・ロック画面が出たら、これまでどおりすぐ止めて報告する。

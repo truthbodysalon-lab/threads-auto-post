@@ -42,7 +42,7 @@
   "マッサージ通いに疲れた人へ。": {
     "segment": "T6",
     "hook": "high",
-    "created": "2026-11-09",
+    "created": "2026-11-15",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z19_truth"
@@ -74,7 +74,7 @@
   "何をしても一時的にしか変わらない人へ。": {
     "segment": "T6",
     "hook": "high",
-    "created": "2026-11-09",
+    "created": "2026-11-15",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z20_nagaoka"
@@ -3316,7 +3316,7 @@
   "「考えます」を断りと受け取る院長へ。": {
     "segment": "R04",
     "hook": "high",
-    "created": "2026-11-07",
+    "created": "2026-11-15",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -3511,7 +3511,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 11,
-    "created": "2026-11-08",
+    "created": "2026-11-15",
     "acct": "nagaoka"
   },
   "インスタで、「DMください」だけで動かしている院長へ。": {
@@ -5216,7 +5216,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 13,
-    "created": "2026-10-12",
+    "created": "2026-11-15",
     "acct": "truth"
   },
   "【産後ママの頭痛を遠ざける習慣6選】": {
@@ -6266,7 +6266,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 12,
-    "created": "2026-11-06",
+    "created": "2026-11-15",
     "acct": "truth"
   },
   "【重い荷物をよく持つ人の習慣5選】": {
@@ -6966,7 +6966,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 13,
-    "created": "2026-11-11"
+    "created": "2026-11-15"
   },
   "【出した投稿を、AIに直してもらう3本】": {
     "segment": "PRESENT_CTA",
@@ -7999,7 +7999,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 21,
-    "created": "2026-11-09",
+    "created": "2026-11-15",
     "acct": "truth"
   },
   "頭痛薬を飲む回数が、先月より増えていませんか？": {
@@ -8665,7 +8665,7 @@
     "segment": "WIN_HOOK",
     "hook": "winning",
     "variant": 17,
-    "created": "2026-11-11"
+    "created": "2026-11-15"
   },
   "ハイライトに入れるのは、たった3つだけ。": {
     "segment": "WIN_HOOK",
@@ -8838,7 +8838,7 @@
     "segment": "WIN_HOOK",
     "hook": "winning",
     "variant": 18,
-    "created": "2026-11-09"
+    "created": "2026-11-15"
   },
   "【3ステップ】年齢より、悩みへの答え。": {
     "segment": "INSTA_EASY",
@@ -9006,7 +9006,7 @@
     "segment": "QUESTION",
     "hook": "type",
     "variant": 7,
-    "created": "2026-11-08",
+    "created": "2026-11-15",
     "acct": "nagaoka"
   },
   "出かける前に、まず空を見て、天気をメモしてみて。": {
@@ -9440,7 +9440,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 45,
-    "created": "2026-11-09",
+    "created": "2026-11-15",
     "acct": "truth"
   },
   "鎮痛剤を飲んだあとも重さが残る日は、水と首の温めをひとつ足してみて。": {
@@ -9454,7 +9454,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 32,
-    "created": "2026-11-09",
+    "created": "2026-11-15",
     "acct": "truth"
   },
   "頭痛薬の箱を開ける前に、まず窓の外を30秒見てみて。": {
@@ -9524,7 +9524,7 @@
     "segment": "WEATHER",
     "hook": "type",
     "variant": 21,
-    "created": "2026-11-09",
+    "created": "2026-11-15",
     "acct": "nagaoka"
   },
   "寝起きに首が回りにくい日は、週に何日ありますか？": {
@@ -9784,7 +9784,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 36,
-    "created": "2026-11-08",
+    "created": "2026-11-15",
     "acct": "nagaoka"
   },
   "お昼を食べる前に、まず肩を2回落としてみて。": {
@@ -10767,7 +10767,7 @@
     "hook": "present",
     "present_key": "ai_starter",
     "variant": 9,
-    "created": "2026-11-11"
+    "created": "2026-11-15"
   },
   "AIを入れたいけど、失敗したくない。": {
     "segment": "PRESENT_CTA",
@@ -11012,5 +11012,54 @@
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z16_nagaoka"
+  },
+  "頭痛薬を飲む日が、先月より増えた人いますか？": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-15",
+    "acct": "truth"
+  },
+  "鎮痛剤に手が伸びる日が続いたら、体からのサインかもしれません。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-15",
+    "acct": "truth"
+  },
+  "寝る前に、まず奥歯の力を抜いてみて。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-15",
+    "acct": "truth"
+  },
+  "『気圧が下がる日は、頭がぼんやり重い』という声を、よく聞きます。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-15",
+    "acct": "truth"
+  },
+  "『朝、起きたときに首が回りにくい』という声を、よく聞きます。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-15",
+    "acct": "nagaoka"
+  },
+  "肩のつらい日が、週に何日あるか数えてみて。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-15",
+    "acct": "nagaoka"
+  },
+  "【肩を軽く保つ、夕方の習慣5選】": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-15",
+    "acct": "nagaoka"
   }
 }

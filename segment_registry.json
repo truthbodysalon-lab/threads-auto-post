@@ -423,7 +423,7 @@
   "1日中パソコンに向かう人へ。": {
     "segment": "T1",
     "hook": "low",
-    "created": "2026-11-10",
+    "created": "2026-11-16",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z22_nagaoka"
@@ -506,7 +506,7 @@
   "デスクワークで肩や首が重い人へ。": {
     "segment": "T1",
     "hook": "low",
-    "created": "2026-11-10",
+    "created": "2026-11-16",
     "acct": "truth",
     "variant": 0
   },
@@ -2468,7 +2468,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 5,
-    "created": "2026-11-06",
+    "created": "2026-11-16",
     "acct": "nagaoka"
   },
   "朝、首や肩が一番つらい人へ。": {
@@ -3210,7 +3210,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 6,
-    "created": "2026-11-07",
+    "created": "2026-11-16",
     "acct": "truth"
   },
   "『仕事の後半になると、足腰がきつい』という声を、よく聞きます。": {
@@ -3763,7 +3763,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 22,
-    "created": "2026-11-08",
+    "created": "2026-11-16",
     "acct": "nagaoka"
   },
   "インスタ運用で、他店のアカウントと比べて、怖くなる院長へ質問です。": {
@@ -3823,7 +3823,7 @@
   "都度払いのお客様が、そのまま離れる院長へ。": {
     "segment": "R05",
     "hook": "low",
-    "created": "2026-11-08",
+    "created": "2026-11-16",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -3980,7 +3980,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 26,
-    "created": "2026-10-17",
+    "created": "2026-11-16",
     "acct": "truth"
   },
   "【目の奥がズーンと重い人の習慣6選】": {
@@ -7539,7 +7539,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 4,
-    "created": "2026-11-09"
+    "created": "2026-11-16"
   },
   "良い投稿の前に、プロフィールを直す。": {
     "segment": "HAKASE",
@@ -8344,7 +8344,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 21,
-    "created": "2026-11-10",
+    "created": "2026-11-16",
     "acct": "truth"
   },
   "頭痛薬を飲んだあとは、まず首の後ろを温めてみて。": {
@@ -8684,7 +8684,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 20,
-    "created": "2026-11-10",
+    "created": "2026-11-16",
     "acct": "truth"
   },
   "頭痛薬を持ち歩いている人は、首の後ろを一度触ってみてください。": {
@@ -8754,7 +8754,7 @@
     "segment": "QUESTION",
     "hook": "type",
     "variant": 2,
-    "created": "2026-11-08",
+    "created": "2026-11-16",
     "acct": "nagaoka"
   },
   "立ち上がる前に、まず首の後ろを温めてみて。": {
@@ -9183,7 +9183,7 @@
     "segment": "WIN_HOOK",
     "hook": "winning",
     "variant": 1,
-    "created": "2026-11-09"
+    "created": "2026-11-16"
   },
   "【3ステップ】怖いうちは、見られない場所で練習。": {
     "segment": "INSTA_EASY",
@@ -9482,7 +9482,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 37,
-    "created": "2026-11-09",
+    "created": "2026-11-16",
     "acct": "truth"
   },
   "寝る前に、まず肩を3回落としてみて。": {
@@ -9545,7 +9545,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 37,
-    "created": "2026-11-09",
+    "created": "2026-11-16",
     "acct": "nagaoka"
   },
   "雪が降る前の日に、肩が重くなる人いますか？": {
@@ -9559,7 +9559,7 @@
     "segment": "WEATHER",
     "hook": "type",
     "variant": 24,
-    "created": "2026-11-09",
+    "created": "2026-11-16",
     "acct": "nagaoka"
   },
   "『料理をしていると、肩が上がってくる』という声を、よく聞きます。": {
@@ -9812,7 +9812,7 @@
     "segment": "WIN_HOOK",
     "hook": "winning",
     "variant": 13,
-    "created": "2026-11-09"
+    "created": "2026-11-16"
   },
   "【ストーリーズで出していい、お店の日常5選】": {
     "segment": "WIN_HOOK",
@@ -10879,7 +10879,7 @@
     "hook": "present",
     "present_key": "ai_starter",
     "variant": 7,
-    "created": "2026-11-15"
+    "created": "2026-11-16"
   },
   "1日30分、返事や記録の作業をAIに任せる。": {
     "segment": "PRESENT_CTA",
@@ -11060,6 +11060,62 @@
     "hook": "adapt",
     "variant": "hero",
     "created": "2026-11-15",
+    "acct": "nagaoka"
+  },
+  "お風呂に入る前に、まず首の後ろを蒸しタオルで温めてみて。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-16",
+    "acct": "truth"
+  },
+  "『夕方になると、こめかみがズキズキする』という声を、よく聞きます。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-16",
+    "acct": "truth"
+  },
+  "【頭痛が出やすい人の、眠る前の習慣6選】": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-16",
+    "acct": "truth"
+  },
+  "休み明けの月曜に、頭が重くなる人いますか？": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-16",
+    "acct": "truth"
+  },
+  "『気づくと肩が耳に近づいている』という声を、よく聞きます。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-16",
+    "acct": "nagaoka"
+  },
+  "『首が回らなくて、車のバックがつらい』という声を、よく聞きます。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-16",
+    "acct": "nagaoka"
+  },
+  "肩こりがつらい日、お風呂で何をしていますか？": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-16",
+    "acct": "nagaoka"
+  },
+  "水分が足りない日は、肩が重くなる人もいます。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-16",
     "acct": "nagaoka"
   }
 }

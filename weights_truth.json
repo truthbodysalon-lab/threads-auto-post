@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-14",
+  "updated_at": "2026-11-15",
   "pattern_weights": {
     "quote_empathy": 5,
     "insight": 12,
@@ -13,11 +13,11 @@
   },
   "feedback_scores": {},
   "api_scores": {
-    "insight": 0.58,
-    "story": -2.02,
-    "quote_empathy": -0.77,
-    "education": -2.46,
-    "selfcare_casual": -2.08
+    "insight": 0.54,
+    "quote_empathy": -0.69,
+    "story": -2.01,
+    "education": -2.47,
+    "selfcare_casual": -2.11
   },
   "follower_scores": {
     "insight": 3.0,

@@ -2401,8 +2401,8 @@
       ],
       "last_result": {
         "n": 1,
-        "index": 0.389,
-        "updated": "2026-09-27"
+        "index": 1.41,
+        "updated": "2026-11-15"
       }
     },
     {
@@ -2428,9 +2428,9 @@
         }
       ],
       "last_result": {
-        "n": 2,
-        "index": 0.243,
-        "updated": "2026-09-27"
+        "n": 1,
+        "index": 14.462,
+        "updated": "2026-11-15"
       }
     },
     {
@@ -2686,8 +2686,8 @@
       ],
       "last_result": {
         "n": 1,
-        "index": 2.98,
-        "updated": "2026-09-27"
+        "index": 2.941,
+        "updated": "2026-11-15"
       }
     },
     {
@@ -2714,8 +2714,8 @@
       ],
       "last_result": {
         "n": 1,
-        "index": 0.092,
-        "updated": "2026-09-30"
+        "index": 10.265,
+        "updated": "2026-11-15"
       }
     },
     {
@@ -4979,8 +4979,8 @@
       ],
       "last_result": {
         "n": 1,
-        "index": 3.824,
-        "updated": "2026-10-10"
+        "index": 1.25,
+        "updated": "2026-11-15"
       },
       "evidence": "施術中・毎回の会話で通う理由が育たない(根拠4件・中)。出典: L0428 / L0910T（出典IDは repeat_pain_categories.json の source_ids 参照）"
     },
@@ -6171,8 +6171,8 @@
       ],
       "last_result": {
         "n": 1,
-        "index": 0.185,
-        "updated": "2026-11-13"
+        "index": 0.256,
+        "updated": "2026-11-15"
       }
     }
   ]

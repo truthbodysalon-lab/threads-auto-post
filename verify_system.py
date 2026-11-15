@@ -1290,6 +1290,12 @@ def _yesterday_api_posts(acct: str):
     return out
 
 
+# 2026-11-15: 1日10本化(11/14)で投稿間隔の正常幅が広がった（10本/6-23時=平均約100分・最大約135分）。
+# 90分/180分のまま測ると正常運転でWARNが出続けるため、1日20本未満は150分WARN/240分FAILにする。
+GAP_WARN_MIN = 90 if DAILY_POSTS >= 20 else 150
+GAP_FAIL_MIN = 180 if DAILY_POSTS >= 20 else 240
+
+
 def check_post_interval():
     """C19: 昨日の自前投稿の6-23時の最大投稿間隔（log_<acct>_posted.jsonlのpost_idと
     Threads外形APIのtimestampを突合。外部ツール投稿＝台帳に無い投稿は除外）。
@@ -1332,7 +1338,7 @@ def check_post_interval():
             mx, at = max(gaps, key=lambda g: g[0])
             mins = int(mx.total_seconds() // 60)
             note = f"{day} 最大間隔{mins}分（{at.strftime('%H:%M')}〜）・自前{len(pts)}本/外部等{ext}本除外"
-            st = "FAIL" if mins > 180 else ("WARN" if mins > 90 else "PASS")
+            st = "FAIL" if mins > GAP_FAIL_MIN else ("WARN" if mins > GAP_WARN_MIN else "PASS")
             add(cid, "C.実行ギャップ", st, note)
         except Exception as e:
             add(cid, "C.実行ギャップ", "WARN", f"検査不可: {e}")
@@ -1435,12 +1441,12 @@ def check_alive_stall():
                         except Exception:
                             pass
                 posts = [ts for pid, ts in api if pid in ids]
-            inc = alive_stall_incidents(posts, spans, lo, hi)
+            inc = alive_stall_incidents(posts, spans, lo, hi, min_gap_min=GAP_WARN_MIN)
             if not inc:
                 add(cid, "C.実行ギャップ", "PASS", f"{day} 常駐稼働中に90分以上止まった時間帯なし")
                 continue
             mx = max(inc, key=lambda x: x[0])
-            st = "FAIL" if mx[0] > 180 else "WARN"
+            st = "FAIL" if mx[0] > GAP_FAIL_MIN else "WARN"
             add(cid, "C.実行ギャップ", st,
                 f"{day} 常駐run稼働中なのに{mx[0]}分無投稿（{mx[2].strftime('%H:%M')}〜・稼働{mx[1]}分）・該当{len(inc)}件")
         except Exception as e:
@@ -1468,7 +1474,9 @@ def check_ledger_gap():
                             n += 1
                     except Exception:
                         pass
-            bad = (n == 0 and len(api) > 0) or (acct != "nagaoka" and len(api) >= 10 and n < len(api) * 0.5)
+            # 2026-11-15: masaも外部枠(uplink/Buffer約10本/日)をAPI実測で合計に数える設計(daily_budget.py)＝台帳は自前分のみ。
+            # 1日10本化後は外部だけで上限に達し自前2本になるため、半数未満判定はtruthのみ（nagaoka/masaは0行のみFAIL）
+            bad = (n == 0 and len(api) > 0) or (acct not in ("nagaoka", "masa") and len(api) >= 10 and n < len(api) * 0.5)
             add(cid, "C.実行ギャップ", "FAIL" if bad else "PASS", f"{day} 台帳{n}行 / API実投稿{len(api)}本")
         except Exception as e:
             add(cid, "C.実行ギャップ", "WARN", f"検査不可: {e}")

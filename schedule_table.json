@@ -85,9 +85,9 @@
    "since": "day",
    "enabled": true,
    "weekdays": [
-    1,
-    3,
-    5
+    0,
+    2,
+    4
    ],
    "skip_until": "2026-11-01 09:30",
    "retry_failed": {
@@ -95,7 +95,7 @@
     "until_min": 300
    },
    "pause_file": "state/headache/inactive.json",
-   "note": "2026-10-21: Mac主・クラウド保険。Macが今日10:13以降にig-feed-headacheを成功していなければ起動（元の時刻10:13）。2026-10-31 院長指示「投稿は全てAM8時」でMac本番を08:00に変更→保険は10:13（Macが今日08:00以降に成功していなければ起動）。2026-11-16 masa指示で火・木・土の週3本",
+   "note": "2026-10-21: Mac主・クラウド保険。Macが今日10:13以降にig-feed-headacheを成功していなければ起動（元の時刻10:13）。2026-10-31 院長指示「投稿は全てAM8時」でMac本番を08:00に変更→保険は10:13（Macが今日08:00以降に成功していなければ起動）。2026-11-16 masa指示で週3本・リール(火・土)と被らない月・水・金",
    "catchup": true,
    "local_done": "ig-feed-headache",
    "local_done_since": "08:00"

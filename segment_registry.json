@@ -2422,7 +2422,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 5,
-    "created": "2026-11-08",
+    "created": "2026-11-17",
     "acct": "truth"
   },
   "座り仕事で肩が重い人へ。": {
@@ -4084,7 +4084,7 @@
   "縛りが嫌な人に、コースを出す院長へ。": {
     "segment": "R06",
     "hook": "high",
-    "created": "2026-10-09",
+    "created": "2026-11-17",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -4267,7 +4267,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 0,
-    "created": "2026-11-09",
+    "created": "2026-11-17",
     "acct": "nagaoka"
   },
   "インスタで、外注を怖がっている院長へ。": {
@@ -6597,7 +6597,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 14,
-    "created": "2026-11-09"
+    "created": "2026-11-17"
   },
   "困っていることは、黙っていない。": {
     "segment": "HAKASE",
@@ -8187,7 +8187,7 @@
     "segment": "WIN_HOOK",
     "hook": "winning",
     "variant": 19,
-    "created": "2026-11-10"
+    "created": "2026-11-17"
   },
   "鎮痛剤の回数が増えてきたら、体からのサインです。": {
     "segment": "ZUTSUYAKU",
@@ -8332,7 +8332,7 @@
     "segment": "WIN_HOOK",
     "hook": "winning",
     "variant": 11,
-    "created": "2026-11-10"
+    "created": "2026-11-17"
   },
   "インスタで予約を増やすのに、新しい機能は要りません。": {
     "segment": "WIN_HOOK",
@@ -8545,7 +8545,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 25,
-    "created": "2026-11-10",
+    "created": "2026-11-17",
     "acct": "truth"
   },
   "頭痛薬だけに頼る前に、まず首の後ろの硬さを確かめてみて。": {
@@ -9538,7 +9538,7 @@
     "segment": "QUESTION",
     "hook": "type",
     "variant": 17,
-    "created": "2026-11-09",
+    "created": "2026-11-17",
     "acct": "nagaoka"
   },
   "ストレッチを始める前に、まず足首を5回まわしてみて。": {
@@ -9693,7 +9693,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 35,
-    "created": "2026-11-09",
+    "created": "2026-11-17",
     "acct": "truth"
   },
   "頭痛薬のあとに眠くなる日は、首の後ろを温めて早めに横になってみて。": {
@@ -9763,7 +9763,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 32,
-    "created": "2026-11-09",
+    "created": "2026-11-17",
     "acct": "nagaoka"
   },
   "お皿を洗う前に、まず肩をストンと落としてみて。": {
@@ -9798,7 +9798,7 @@
     "segment": "WEATHER",
     "hook": "type",
     "variant": 3,
-    "created": "2026-11-09",
+    "created": "2026-11-17",
     "acct": "nagaoka"
   },
   "キャンセルや遅刻の連絡への返事で、手が止まる店主さんへ。": {
@@ -9868,7 +9868,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 36,
-    "created": "2026-11-10",
+    "created": "2026-11-17",
     "acct": "truth"
   },
   "頭痛薬の回数をメモした人は、首を温めた日にも印をつけてみて。": {
@@ -10886,7 +10886,7 @@
     "hook": "present",
     "present_key": "ai_starter",
     "variant": 4,
-    "created": "2026-11-16"
+    "created": "2026-11-17"
   },
   "AIの最初の一歩は、無料のもので足ります。": {
     "segment": "PRESENT_CTA",
@@ -11116,6 +11116,85 @@
     "hook": "adapt",
     "variant": "hero",
     "created": "2026-11-16",
+    "acct": "nagaoka"
+  },
+  "猫背で肩甲骨が固まった人へ。": {
+    "segment": "T1",
+    "hook": "high",
+    "created": "2026-11-17",
+    "acct": "truth",
+    "variant": null,
+    "hypothesis_id": "Z01_truth"
+  },
+  "【頭痛の人の飲み物チェック項目6選】": {
+    "segment": "LIST_HABIT",
+    "hook": "list",
+    "variant": 32,
+    "created": "2026-11-17",
+    "acct": "truth"
+  },
+  "こめかみが痛くなる前に、まず奥歯の力を抜いてみて。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-17",
+    "acct": "truth"
+  },
+  "寝る前に、まず枕の高さを確かめてみて。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-17",
+    "acct": "truth"
+  },
+  "『休みの日だけ、頭が痛くなる』という声を、よく聞きます。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-17",
+    "acct": "truth"
+  },
+  "『雨の前の日から、頭が締めつけられる』という声を、よく聞きます。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-17",
+    "acct": "truth"
+  },
+  "オフィスワークで肩が重い人へ。": {
+    "segment": "T1",
+    "hook": "high",
+    "created": "2026-11-17",
+    "acct": "nagaoka",
+    "variant": null,
+    "hypothesis_id": "Z02_nagaoka"
+  },
+  "雪が降りそうな朝に、首が回りにくい人いますか？": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-17",
+    "acct": "nagaoka"
+  },
+  "肩こりが強い日は、寝つきが悪い？それとも朝がつらい？": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-17",
+    "acct": "nagaoka"
+  },
+  "『肩が上がったまま、おろせない』という声を、よく聞きます。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-17",
+    "acct": "nagaoka"
+  },
+  "『首を動かすと、肩の奥が引っかかる』という声を、よく聞きます。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-17",
     "acct": "nagaoka"
   }
 }

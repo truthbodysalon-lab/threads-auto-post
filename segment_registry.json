@@ -276,7 +276,7 @@
   "在宅勤務で肩こりが悪化した人へ。": {
     "segment": "T1",
     "hook": "low",
-    "created": "2026-11-12",
+    "created": "2026-11-16",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z01_truth"
@@ -535,7 +535,7 @@
   "スマホ首で悩む人へ。": {
     "segment": "T1",
     "hook": "low",
-    "created": "2026-11-10",
+    "created": "2026-11-16",
     "acct": "nagaoka",
     "variant": 0
   },
@@ -2348,7 +2348,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 28,
-    "created": "2026-10-14",
+    "created": "2026-11-16",
     "acct": "nagaoka"
   },
   "【首こりの人がやめること6選】": {
@@ -2688,7 +2688,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 8,
-    "created": "2026-11-07",
+    "created": "2026-11-16",
     "acct": "truth"
   },
   "【抱っこで肩がつらいママの習慣6選】": {
@@ -4525,7 +4525,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 3,
-    "created": "2026-11-08",
+    "created": "2026-11-16",
     "acct": "nagaoka"
   },
   "インスタ運用で、外注すると自分らしさが消えると思っている院長へ質問です。": {
@@ -5744,7 +5744,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 43,
-    "created": "2026-11-03",
+    "created": "2026-11-16",
     "acct": "truth"
   },
   "『冷たい飲み物を、つい一気に飲んでしまう』という声を、よく聞きます。": {
@@ -6149,7 +6149,7 @@
   "回数券を売り込みだと感じる院長へ。": {
     "segment": "R05",
     "hook": "low",
-    "created": "2026-11-08",
+    "created": "2026-11-16",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -7266,7 +7266,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 3,
-    "created": "2026-11-09"
+    "created": "2026-11-16"
   },
   "1週間で結果が出ないのは、普通です。": {
     "segment": "HAKASE",
@@ -8284,7 +8284,7 @@
     "segment": "QUESTION",
     "hook": "type",
     "variant": 11,
-    "created": "2026-11-09",
+    "created": "2026-11-16",
     "acct": "nagaoka"
   },
   "首を左右に回して、引っかかる方向はありますか？": {
@@ -8351,7 +8351,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 9,
-    "created": "2026-11-10",
+    "created": "2026-11-16",
     "acct": "truth"
   },
   "頭痛薬の回数をメモしている人は、一歩先に進んでいます。": {
@@ -8456,7 +8456,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 8,
-    "created": "2026-11-09",
+    "created": "2026-11-16",
     "acct": "nagaoka"
   },
   "肩が重い日の前日、何をしていたか覚えていますか？": {
@@ -8733,7 +8733,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 3,
-    "created": "2026-11-10",
+    "created": "2026-11-16",
     "acct": "truth"
   },
   "気圧が下がる日の朝、起きた瞬間に頭が重い人いますか？": {
@@ -9489,7 +9489,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 32,
-    "created": "2026-11-09",
+    "created": "2026-11-16",
     "acct": "truth"
   },
   "外に出る前に、まず首にタオルを巻いてみて。": {
@@ -9552,7 +9552,7 @@
     "segment": "WEATHER",
     "hook": "type",
     "variant": 20,
-    "created": "2026-11-09",
+    "created": "2026-11-16",
     "acct": "nagaoka"
   },
   "朝晩が冷え込む時期に、肩が重くなる人いますか？": {
@@ -10886,7 +10886,7 @@
     "hook": "present",
     "present_key": "ai_starter",
     "variant": 4,
-    "created": "2026-11-13"
+    "created": "2026-11-16"
   },
   "AIの最初の一歩は、無料のもので足ります。": {
     "segment": "PRESENT_CTA",

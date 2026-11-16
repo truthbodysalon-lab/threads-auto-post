@@ -52,6 +52,9 @@ MODES = {
     "daily": {"accounts": ["masa"], "kind": None},
 }
 KNOWN_KINDS = ("friday_features", "offer", "qa_video")
+# 2026-11-16: 通常ストーリーの結にCanva画像を出す回（ig_story_pool: kind="canva_end"）は、通常ストーリーのplanと同じ扱い
+#   （未知のkind扱いにすると毎回「起動する」になり、無料枠を無駄にする）
+NORMAL_KINDS = (None, "canva_end")
 
 # 2026-10-21 追加アカウント（頭痛特化=headache / ダイエット特化=diet）。トークン登録前（＝一度も動いていない）は story_plan.json が
 # リポジトリに無い（取得は None）。その状態で毎回「plan不明→起動」と判定すると、起動前ゲートが効かなくなり無料枠を無駄にするため、
@@ -166,7 +169,7 @@ def nothing_happens(mode, acct, plan, now):
         if valid:
             if kind in KNOWN_KINDS:
                 return True, f"{acct}: 継続中の{kind} planがあり通常フローは触らない"
-            if kind is None:
+            if kind in NORMAL_KINDS:
                 if complete:
                     return True, f"{acct}: 通常ストーリー本日分完了(posted={posted}/{len(frames)})"
                 return False, f"{acct}: 通常ストーリー未完了(posted={posted})"
@@ -192,7 +195,7 @@ def nothing_happens(mode, acct, plan, now):
         if complete:
             return True, f"{acct}: {want_kind}本日分完了(posted={posted}/{len(frames)})"
         return False, f"{acct}: {want_kind}未完了(posted={posted})"
-    if valid and kind not in (None,) + KNOWN_KINDS:
+    if valid and kind not in NORMAL_KINDS + KNOWN_KINDS:
         return False, f"{acct}: 未知のkind={kind!r}"
     # 同種の有効planが無い: 新規作成できる曜日(allow_create)か、他種planの上書き(専用日)なら動く。そうでなければ何もしない
     if allow_create:

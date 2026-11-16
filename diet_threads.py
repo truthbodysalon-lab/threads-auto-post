@@ -527,7 +527,8 @@ def build_prompts(fmt: str, typ: str, slot: str, allow_cta: bool, recent_texts: 
         if allow_cta else "公式LINE案内は今回は入れない(has_ctaはfalse。@886oidmv や「公式LINE」の語を本文に書かない)。"
     )
     user = (
-        f"投稿枠: {slot} (JST)\nテーマ: {typ}\n形式: {FORMATS[fmt]}\n{cta_line}\n" + topic_block(topic) + "\n"
+        f"投稿枠: {slot} (JST)\n今日: {datetime.now(JST).month}月（季節の切り口は【栄養の事実ファイル】の I-1 から今月の行を使う。季節外れの話は書かない）\n"
+        f"テーマ: {typ}\n形式: {FORMATS[fmt]}\n{cta_line}\n" + topic_block(topic) + "\n"
         "直近の投稿(Grok Botの投稿を含む)。次のテーマ・書き出しと被らないこと:\n" + avoid + "\n\n"
         "1文目は「問いかけ(〇〇、1日に何個食べていますか？ など)」か「身近な食べ物の意外な事実」で始める。「」で始めない(閲覧データで「」始まりは平均の半分以下)。"
         "具体的な食べ物の名前を必ず1つ以上出す。最後は答えやすい問いかけで終えると反応が増えやすい。ハッシュタグ・URL・絵文字の乱用はしない。\n"

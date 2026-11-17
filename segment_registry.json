@@ -3742,7 +3742,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 16,
-    "created": "2026-11-08",
+    "created": "2026-11-17",
     "acct": "truth"
   },
   "【肩こりを遠ざける朝の習慣6選】": {
@@ -5401,7 +5401,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 8,
-    "created": "2026-11-09",
+    "created": "2026-11-17",
     "acct": "nagaoka"
   },
   "インスタで、これでいいのかと迷って出せない院長へ質問です。": {
@@ -6175,7 +6175,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 8,
-    "created": "2026-10-15",
+    "created": "2026-11-17",
     "acct": "truth"
   },
   "『朝起きると、顎がこわばっている』という声を、よく聞きます。": {
@@ -6247,7 +6247,7 @@
   "通う人の本当の負担を見ていない院長へ。": {
     "segment": "R06",
     "hook": "high",
-    "created": "2026-10-15",
+    "created": "2026-11-17",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -6622,7 +6622,7 @@
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 58,
-    "created": "2026-11-09"
+    "created": "2026-11-17"
   },
   "【ストーリーズ4枚の起承転結】": {
     "segment": "INSTA_EASY",
@@ -7520,7 +7520,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 5,
-    "created": "2026-11-10"
+    "created": "2026-11-17"
   },
   "ネタが尽きたのは、あなたが飽きたから。": {
     "segment": "HAKASE",
@@ -8291,7 +8291,7 @@
     "segment": "QUESTION",
     "hook": "type",
     "variant": 5,
-    "created": "2026-11-09",
+    "created": "2026-11-17",
     "acct": "nagaoka"
   },
   "「まだ大丈夫」と思う前に、まず首を左右に回して引っかかりを確かめてみて。": {
@@ -8506,7 +8506,7 @@
     "segment": "WIN_HOOK",
     "hook": "winning",
     "variant": 6,
-    "created": "2026-11-10"
+    "created": "2026-11-17"
   },
   "インスタで予約が入る店が見ているのは、たった3つ。": {
     "segment": "WIN_HOOK",
@@ -9496,7 +9496,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 33,
-    "created": "2026-11-09",
+    "created": "2026-11-17",
     "acct": "truth"
   },
   "掃除機をかける前に、まず首の付け根に手を当ててみて。": {
@@ -9770,7 +9770,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 35,
-    "created": "2026-11-09",
+    "created": "2026-11-17",
     "acct": "nagaoka"
   },
   "雨の日の夕方に、肩が上がってくる人いますか？": {
@@ -9861,7 +9861,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 42,
-    "created": "2026-11-10",
+    "created": "2026-11-17",
     "acct": "truth"
   },
   "頭痛薬を飲むかどうか迷う日は、まず首の後ろの固さを確かめてみて。": {
@@ -9875,7 +9875,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 44,
-    "created": "2026-11-10",
+    "created": "2026-11-17",
     "acct": "truth"
   },
   "頭痛薬を飲んだ日は、寝た時間も一緒に書いておいてみて。": {
@@ -9896,7 +9896,7 @@
     "segment": "WEATHER",
     "hook": "type",
     "variant": 22,
-    "created": "2026-11-10",
+    "created": "2026-11-17",
     "acct": "nagaoka"
   },
   "首を後ろに倒したとき、重さを感じる人はいますか？": {
@@ -10893,7 +10893,7 @@
     "hook": "present",
     "present_key": "ai_starter",
     "variant": 8,
-    "created": "2026-11-13"
+    "created": "2026-11-17"
   },
   "頭痛薬を切らせない人へ。": {
     "segment": "T2",
@@ -11191,6 +11191,64 @@
     "acct": "nagaoka"
   },
   "『首を動かすと、肩の奥が引っかかる』という声を、よく聞きます。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-17",
+    "acct": "nagaoka"
+  },
+  "同じ姿勢が続いて肩が重い人へ。": {
+    "segment": "T1",
+    "hook": "high",
+    "created": "2026-11-17",
+    "acct": "truth",
+    "variant": null,
+    "hypothesis_id": "Z03_truth"
+  },
+  "頭痛薬を飲む日が増えた週は、まず睡眠の長さをメモしてみて。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-17",
+    "acct": "truth"
+  },
+  "鎮痛剤を飲む前に、まず水を1杯飲んでみて。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-17",
+    "acct": "truth"
+  },
+  "頭痛薬が手放せない日は、体からの合図です。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-17",
+    "acct": "truth"
+  },
+  "デスクワークで首の後ろが痛い人へ。": {
+    "segment": "T1",
+    "hook": "high",
+    "created": "2026-11-17",
+    "acct": "nagaoka",
+    "variant": null,
+    "hypothesis_id": "Z22_nagaoka"
+  },
+  "湿布を貼る前に、まず首の後ろを触ってみて。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-17",
+    "acct": "nagaoka"
+  },
+  "立ち上がる前に、まず肩を耳から離して息を吐いてみて。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-17",
+    "acct": "nagaoka"
+  },
+  "冬の冷え込む朝は、肩がじわっと上がってきます。": {
     "segment": "own_adapt",
     "hook": "adapt",
     "variant": "hero",

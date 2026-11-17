@@ -644,6 +644,23 @@ def parse_generated(raw: str | None) -> dict | None:
     return out
 
 
+_CTA_MARKERS = ("公式LINE", "561yryuk", "『診断』と送", "「診断」と送")
+
+
+def attach_fixed_cta(text: str) -> str:
+    """案内らしき文（公式LINE・@561yryuk・「診断」と送って を含む文）を本文から外し、固定文 CTA_TEXT を最後の行に付ける"""
+    out_lines = []
+    for line in text.replace(CTA_TEXT, "").splitlines():
+        if any(m in line for m in _CTA_MARKERS):
+            # 行の中の案内の文だけを外す（。！？で区切った文単位）
+            parts = re.split(r"(?<=[。！？!?])", line)
+            line = "".join(p for p in parts if not any(m in p for m in _CTA_MARKERS))
+        out_lines.append(line.rstrip())
+    body = "\n".join(out_lines).strip()
+    body = re.sub(r"\n{3,}", "\n\n", body)
+    return f"{body}\n\n{CTA_TEXT}" if body else CTA_TEXT
+
+
 def generate_post(slot: str, fmt: str, typ: str, allow_cta: bool, recent_texts: list[str], sim_pool: list[str],
                   generator=None, theme: str = "", safety: str = "") -> tuple[dict | None, str]:
     """検品と類似チェックを通った {text,type,has_cta} と、失敗時の理由。generator(system,user)->raw は差し替え可"""
@@ -662,6 +679,10 @@ def generate_post(slot: str, fmt: str, typ: str, allow_cta: bool, recent_texts: 
             last_reason = "案内不可なのに案内つき"
             feedback = "公式LINE案内は入れない"
             continue
+        if post["has_cta"]:
+            # 2026-11-17: LLMが固定文を一字一句写せず10回とも検品NG→枠見送り（20:15枠）。
+            # 案内文はLLMに任せず、案内らしき文を外してから固定文をプログラムで最後に付ける
+            post["text"] = attach_fixed_cta(post["text"])
         errs = inspect_text(post["text"], post["has_cta"]) + stock_phrase_errors(post["text"], recent_texts)
         if fmt == "image":
             from zutsu_figure import validate_figure, figure_text

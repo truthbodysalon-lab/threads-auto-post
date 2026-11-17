@@ -561,6 +561,24 @@ class TestNagaokaLocal20261110(unittest.TestCase):
         self.assertIn("#7119", D.FACTS_FILE.read_text(encoding="utf-8"))
 
 
+class TestFixedCta20261117(unittest.TestCase):
+    """2026-11-17 20:15枠: LLMが案内の固定文を一字一句写せず10回NG→見送り。固定文はプログラムで付ける"""
+    def test_paraphrased_cta_is_replaced(self):
+        for t in ["雨の前は予定を軽めに。気になる方は公式LINEで『診断』と送ってね。",
+                  "雨の前は予定を軽めに。\n自分の頭痛のタイプが気になる方は、公式LINE(@561yryuk)で「診断」と送ってください。",
+                  "雨の前は予定を軽めに。\n" + D.CTA_TEXT + "\n" + D.SAFETY_LINE]:
+            r = D.attach_fixed_cta(t)
+            self.assertTrue(r.endswith(D.CTA_TEXT))
+            self.assertEqual(r.count(D.CTA_TEXT), 1)
+            self.assertEqual([e for e in D.inspect_text(r, True) if "案内" in e], [])
+
+    def test_generate_post_passes_with_paraphrased_cta(self):
+        raw = json.dumps({"text": GOOD + "\n気になる方は公式LINEで診断と送ってください。", "type": "tips", "has_cta": True}, ensure_ascii=False)
+        post, reason = D.generate_post("20:15", "medium", "tips", True, [], [], lambda s, u: raw, "", "")
+        self.assertIsNotNone(post, reason)
+        self.assertTrue(post["text"].endswith(D.CTA_TEXT))
+
+
 if __name__ == "__main__":
     unittest.main()
 

@@ -284,7 +284,7 @@
   "月に何度も頭痛薬を飲む人へ。": {
     "segment": "T2",
     "hook": "low",
-    "created": "2026-11-10",
+    "created": "2026-11-18",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z05_truth"
@@ -316,7 +316,7 @@
   "光や音がつらい頭痛がある人へ。": {
     "segment": "T2",
     "hook": "low",
-    "created": "2026-11-10",
+    "created": "2026-11-18",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z04_nagaoka"
@@ -2944,7 +2944,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 38,
-    "created": "2026-10-23",
+    "created": "2026-11-18",
     "acct": "truth"
   },
   "【季節の変わり目に頭痛を遠ざける習慣7選】": {
@@ -3490,7 +3490,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 15,
-    "created": "2026-11-09",
+    "created": "2026-11-18",
     "acct": "truth"
   },
   "【肩こりの人の休日の過ごし方6選】": {
@@ -4837,7 +4837,7 @@
   "新規を増やしても、売上が安定しない院長へ。": {
     "segment": "R07",
     "hook": "low",
-    "created": "2026-10-10",
+    "created": "2026-11-18",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -5137,7 +5137,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 2,
-    "created": "2026-11-09",
+    "created": "2026-11-18",
     "acct": "nagaoka"
   },
   "インスタ運用で、プロフィールに自信がない院長へ。": {
@@ -5863,7 +5863,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 12,
-    "created": "2026-11-08",
+    "created": "2026-11-18",
     "acct": "nagaoka"
   },
   "【足を組むクセがやめられない人が見直すこと5選】": {
@@ -7086,7 +7086,7 @@
   "日々の10秒とAIの台本で足ります。": {
     "segment": "I05",
     "hook": "high",
-    "created": "2026-11-10",
+    "created": "2026-11-18",
     "acct": "masa",
     "axis": "insta_pain",
     "variant": null,
@@ -7450,7 +7450,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 6,
-    "created": "2026-11-10"
+    "created": "2026-11-18"
   },
   "感覚より、数字の方が正直です。": {
     "segment": "HAKASE",
@@ -8048,7 +8048,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 23,
-    "created": "2026-11-10",
+    "created": "2026-11-18",
     "acct": "truth"
   },
   "鎮痛剤が頭から離れない日は、まず頭を支える首の力みを疑ってみて。": {
@@ -8062,7 +8062,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 13,
-    "created": "2026-11-09",
+    "created": "2026-11-18",
     "acct": "nagaoka"
   },
   "気圧アプリを見て、頭が重い日と重なっている人へ。": {
@@ -8200,7 +8200,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 8,
-    "created": "2026-11-11",
+    "created": "2026-11-18",
     "acct": "truth"
   },
   "我慢する前に、まず今日飲んだ水の量を数えてみて。": {
@@ -8566,7 +8566,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 15,
-    "created": "2026-11-11",
+    "created": "2026-11-18",
     "acct": "truth"
   },
   "頭痛薬を飲む前に、まず背中を壁につけて立ってみて。": {
@@ -9041,7 +9041,7 @@
     "segment": "QUESTION",
     "hook": "type",
     "variant": 10,
-    "created": "2026-11-10",
+    "created": "2026-11-18",
     "acct": "nagaoka"
   },
   "ぶっちゃけ、投稿文はゼロから書くより、直す方が速い。": {
@@ -9910,7 +9910,7 @@
     "segment": "WEATHER",
     "hook": "type",
     "variant": 26,
-    "created": "2026-11-10",
+    "created": "2026-11-18",
     "acct": "nagaoka"
   },
   "朝晩の冷え込みで、首が固くなる人いますか？": {
@@ -9994,7 +9994,7 @@
     "segment": "WIN_HOOK",
     "hook": "winning",
     "variant": 14,
-    "created": "2026-11-11"
+    "created": "2026-11-18"
   },
   "仕事の合間に、首を回したのはいつですか？": {
     "segment": "QUESTION",
@@ -11316,6 +11316,55 @@
     "hook": "present",
     "present_key": "free_shindan",
     "variant": 1,
+    "created": "2026-11-18"
+  },
+  "鎮痛剤を飲む前に、まず首の後ろに手を当ててみて。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-18",
+    "acct": "truth"
+  },
+  "『休み明けの月曜に、頭が重くなる』という声を、よく聞きます。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-18",
+    "acct": "truth"
+  },
+  "【雨の前に頭が重い日の、朝の習慣5選】": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-18",
+    "acct": "truth"
+  },
+  "傘をさす前に、まず肩を耳から離して息を吐いてみて。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-18",
+    "acct": "nagaoka"
+  },
+  "『夕方になると、後頭部がズキズキする』という声を、よく聞きます。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-18",
+    "acct": "nagaoka"
+  },
+  "【肩こりを夕方まで残さない、昼休みの習慣5選】": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-18",
+    "acct": "nagaoka"
+  },
+  "お店の集客で、まず何を直すか迷っている方へ。": {
+    "segment": "PRESENT_CTA",
+    "hook": "present",
+    "present_key": "free_shindan",
+    "variant": 8,
     "created": "2026-11-18"
   }
 }

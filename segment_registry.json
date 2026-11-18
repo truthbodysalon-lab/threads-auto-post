@@ -1520,7 +1520,7 @@
   "最後の日に、次の話をしている院長へ。": {
     "segment": "R08",
     "hook": "high",
-    "created": "2026-11-09",
+    "created": "2026-11-19",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -3994,7 +3994,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 10,
-    "created": "2026-11-10",
+    "created": "2026-11-19",
     "acct": "truth"
   },
   "【デスクワークの肩こりチェック項目8選】": {
@@ -4959,7 +4959,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 15,
-    "created": "2026-11-11",
+    "created": "2026-11-19",
     "acct": "truth"
   },
   "『朝から頭が重くて、体が起きてくれない』という声を、よく聞きます。": {
@@ -5553,7 +5553,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 9,
-    "created": "2026-11-10",
+    "created": "2026-11-19",
     "acct": "nagaoka"
   },
   "インスタ運用で、成果が出ず、意味を感じなくなった院長へ質問です。": {
@@ -6830,7 +6830,7 @@
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 43,
-    "created": "2026-11-08"
+    "created": "2026-11-19"
   },
   "肩書きは、15〜17字で足ります。": {
     "segment": "INSTA_EASY",
@@ -7526,7 +7526,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 2,
-    "created": "2026-11-12"
+    "created": "2026-11-19"
   },
   "投稿ネタは、考えるものではなく拾うものです。": {
     "segment": "PRESENT_CTA",
@@ -8104,7 +8104,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 20,
-    "created": "2026-11-09",
+    "created": "2026-11-19",
     "acct": "nagaoka"
   },
   "肩こりを我慢する前に、まず「どの動きがつらいか」を探してみて。": {
@@ -8169,7 +8169,7 @@
     "segment": "WIN_HOOK",
     "hook": "winning",
     "variant": 8,
-    "created": "2026-11-11"
+    "created": "2026-11-19"
   },
   "フォロワーが増えない店ほど、これをやっています。": {
     "segment": "WIN_HOOK",
@@ -8181,7 +8181,7 @@
     "segment": "WIN_HOOK",
     "hook": "winning",
     "variant": 9,
-    "created": "2026-11-11"
+    "created": "2026-11-19"
   },
   "インスタを続けるのに、新しいネタは要りません。": {
     "segment": "WIN_HOOK",
@@ -8214,7 +8214,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 6,
-    "created": "2026-11-11",
+    "created": "2026-11-19",
     "acct": "truth"
   },
   "横になる前に、まず首の後ろの冷えを確かめてみて。": {
@@ -8242,7 +8242,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 14,
-    "created": "2026-11-11",
+    "created": "2026-11-19",
     "acct": "truth"
   },
   "頭痛薬を飲むほどではない日は、まず首の後ろを温めてみて。": {
@@ -8705,7 +8705,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 14,
-    "created": "2026-11-10",
+    "created": "2026-11-19",
     "acct": "truth"
   },
   "予定を詰め込む前に、まず1日の中で力を抜く時間を決めてみて。": {
@@ -9756,7 +9756,7 @@
     "segment": "QUESTION",
     "hook": "type",
     "variant": 20,
-    "created": "2026-11-10",
+    "created": "2026-11-19",
     "acct": "nagaoka"
   },
   "車を降りたら、まず肩を耳から遠ざけて落としてみて。": {
@@ -9959,7 +9959,7 @@
     "segment": "WEATHER",
     "hook": "type",
     "variant": 25,
-    "created": "2026-11-10",
+    "created": "2026-11-19",
     "acct": "nagaoka"
   },
   "肩が上がっているのに気づくのは、朝・昼・夕方のどれですか？": {
@@ -11366,5 +11366,28 @@
     "present_key": "free_shindan",
     "variant": 8,
     "created": "2026-11-18"
+  },
+  "頭痛薬の量が増えている人へ。": {
+    "segment": "T2",
+    "hook": "high",
+    "created": "2026-11-19",
+    "acct": "truth",
+    "variant": null,
+    "hypothesis_id": "Z09_truth"
+  },
+  "頭痛薬を飲む回数が増えた人へ。": {
+    "segment": "T2",
+    "hook": "high",
+    "created": "2026-11-19",
+    "acct": "nagaoka",
+    "variant": null,
+    "hypothesis_id": "Z08_nagaoka"
+  },
+  "新規が少ないのか、リピートが少ないのか。": {
+    "segment": "PRESENT_CTA",
+    "hook": "present",
+    "present_key": "free_shindan",
+    "variant": 2,
+    "created": "2026-11-19"
   }
 }

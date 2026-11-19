@@ -4246,7 +4246,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 2,
-    "created": "2026-11-10",
+    "created": "2026-11-19",
     "acct": "truth"
   },
   "【立ち仕事の後半に腰が持たない人の習慣6選】": {
@@ -4594,7 +4594,7 @@
   "売上がガタンと落ちる月がある院長へ。": {
     "segment": "R08",
     "hook": "high",
-    "created": "2026-11-09",
+    "created": "2026-11-19",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -4742,7 +4742,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 48,
-    "created": "2026-10-25",
+    "created": "2026-11-19",
     "acct": "truth"
   },
   "【朝起きた瞬間から首が重い人の習慣7選】": {
@@ -5877,7 +5877,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 4,
-    "created": "2026-11-10",
+    "created": "2026-11-19",
     "acct": "nagaoka"
   },
   "インスタ運用で、気分に左右されて続かない院長へ。": {
@@ -7272,7 +7272,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 12,
-    "created": "2026-11-11"
+    "created": "2026-11-19"
   },
   "ぶっちゃけ、プロフィールは自分で悩むほど遠回りです。": {
     "segment": "PRESENT_CTA",
@@ -8006,7 +8006,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 1,
-    "created": "2026-11-11",
+    "created": "2026-11-19",
     "acct": "truth"
   },
   "頭痛薬を飲んだ日は、まず湯船で首を温めてみて。": {
@@ -8097,7 +8097,7 @@
     "segment": "WEATHER",
     "hook": "type",
     "variant": 1,
-    "created": "2026-11-10",
+    "created": "2026-11-19",
     "acct": "nagaoka"
   },
   "歩き出す前に、まず首の後ろを温めてみて。": {
@@ -8358,14 +8358,14 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 11,
-    "created": "2026-11-11",
+    "created": "2026-11-19",
     "acct": "truth"
   },
   "出かける前に、まず首元を冷やさない服を選んでみて。": {
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 27,
-    "created": "2026-11-10",
+    "created": "2026-11-19",
     "acct": "truth"
   },
   "気圧が下がる前に、まず首の後ろを温めておいてみて。": {
@@ -8594,7 +8594,7 @@
     "segment": "QUESTION",
     "hook": "type",
     "variant": 4,
-    "created": "2026-11-10",
+    "created": "2026-11-19",
     "acct": "nagaoka"
   },
   "運転する前に、まず首を左右に1回ずつ回してみて。": {
@@ -9270,7 +9270,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 2,
-    "created": "2026-11-10",
+    "created": "2026-11-19",
     "acct": "nagaoka"
   },
   "スタッフ向けのマニュアルを、白紙から書く必要はありません。": {
@@ -11388,6 +11388,70 @@
     "hook": "present",
     "present_key": "free_shindan",
     "variant": 2,
+    "created": "2026-11-19"
+  },
+  "『頭痛が不安で、いつも気が休まらない』という声を、よく聞きます。": {
+    "segment": "T2",
+    "hook": "high",
+    "created": "2026-11-19",
+    "acct": "truth",
+    "variant": null,
+    "hypothesis_id": "ZC02_truth"
+  },
+  "頭痛薬を飲む前に、まず目の奥を1分あたためてみて。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-19",
+    "acct": "truth"
+  },
+  "『朝、頭が重くて体が起きてくれない』という声を、よく聞きます。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-19",
+    "acct": "truth"
+  },
+  "【頭が重い日の夜に、先にやっておく習慣5選】": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-19",
+    "acct": "truth"
+  },
+  "頭痛の頻度を数えたことがない人へ。": {
+    "segment": "T2",
+    "hook": "high",
+    "created": "2026-11-19",
+    "acct": "nagaoka",
+    "variant": 0
+  },
+  "低気圧が来る前に、まず首をぐるっとゆっくり回してみて。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-19",
+    "acct": "nagaoka"
+  },
+  "雨の日、肩が耳に近づいている人いますか？": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-19",
+    "acct": "nagaoka"
+  },
+  "『目の奥がズーンと重くなる』という声を、よく聞きます。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-19",
+    "acct": "nagaoka"
+  },
+  "リピート率が分からない店主さんへ。": {
+    "segment": "PRESENT_CTA",
+    "hook": "present",
+    "present_key": "free_shindan",
+    "variant": 5,
     "created": "2026-11-19"
   }
 }

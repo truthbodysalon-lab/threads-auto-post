@@ -324,7 +324,7 @@
   "育児中に自分の体を後回しにするママへ。": {
     "segment": "T3",
     "hook": "low",
-    "created": "2026-11-08",
+    "created": "2026-11-20",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z10_nagaoka"
@@ -1583,7 +1583,7 @@
   "3か月来ていない人に、連絡できない院長へ。": {
     "segment": "R09",
     "hook": "low",
-    "created": "2026-11-10",
+    "created": "2026-11-20",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -2391,7 +2391,7 @@
   "抱っこで肩がつらいママへ。": {
     "segment": "T3",
     "hook": "low",
-    "created": "2026-11-08",
+    "created": "2026-11-20",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "ZC03_truth"
@@ -2674,7 +2674,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 39,
-    "created": "2026-10-14",
+    "created": "2026-11-20",
     "acct": "truth"
   },
   "【頭痛を遠ざける水分と食事の習慣7選】": {
@@ -3233,7 +3233,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 27,
-    "created": "2026-10-17",
+    "created": "2026-11-20",
     "acct": "nagaoka"
   },
   "【かがんだ瞬間に腰が不安な人の習慣6選】": {
@@ -5116,7 +5116,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 3,
-    "created": "2026-11-11",
+    "created": "2026-11-20",
     "acct": "truth"
   },
   "【同じ姿勢のあとが一番つらい人の習慣6選】": {
@@ -5667,7 +5667,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 16,
-    "created": "2026-11-10",
+    "created": "2026-11-20",
     "acct": "nagaoka"
   },
   "インスタ運用で、反応がなくて止めようとしている院長へ。": {
@@ -6950,7 +6950,7 @@
   "ストーリーズは、1枚で全部言わない。": {
     "segment": "I09",
     "hook": "high",
-    "created": "2026-11-12",
+    "created": "2026-11-20",
     "acct": "masa",
     "axis": "insta_pain",
     "variant": null,
@@ -7111,7 +7111,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 9,
-    "created": "2026-11-09"
+    "created": "2026-11-20"
   },
   "【今日のストーリーズ、4枚の空欄埋め】": {
     "segment": "PRESENT_CTA",
@@ -8249,7 +8249,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 13,
-    "created": "2026-11-11",
+    "created": "2026-11-20",
     "acct": "truth"
   },
   "「少し休めば楽になる」と流す前に、まず重さが出る日を数えてみて。": {
@@ -8338,7 +8338,7 @@
     "segment": "WIN_HOOK",
     "hook": "winning",
     "variant": 16,
-    "created": "2026-11-10"
+    "created": "2026-11-20"
   },
   "雨の日の頭痛薬は、飲む前に首の後ろを温めておくと楽な人もいます。": {
     "segment": "ZUTSUYAKU",
@@ -8372,7 +8372,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 11,
-    "created": "2026-11-10",
+    "created": "2026-11-20",
     "acct": "truth"
   },
   "頭痛薬をかばんに入れておかないと不安な人へ。": {
@@ -8442,7 +8442,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 1,
-    "created": "2026-11-10",
+    "created": "2026-11-20",
     "acct": "nagaoka"
   },
   "湿気の多い日に、体がだるい人へ。": {
@@ -8691,7 +8691,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 16,
-    "created": "2026-11-11",
+    "created": "2026-11-20",
     "acct": "truth"
   },
   "痛み止めが手放せない人へ。": {
@@ -9352,7 +9352,7 @@
     "segment": "WIN_HOOK",
     "hook": "winning",
     "variant": 10,
-    "created": "2026-11-12"
+    "created": "2026-11-20"
   },
   "写真を並べれば、動画は撮らなくていい。": {
     "segment": "INSTA_EASY",
@@ -9973,14 +9973,14 @@
     "segment": "WEATHER",
     "hook": "type",
     "variant": 27,
-    "created": "2026-11-10",
+    "created": "2026-11-20",
     "acct": "nagaoka"
   },
   "最近、空を見上げたのはいつですか？": {
     "segment": "QUESTION",
     "hook": "type",
     "variant": 21,
-    "created": "2026-11-10",
+    "created": "2026-11-20",
     "acct": "nagaoka"
   },
   "AIが本当に時短になるか、ストップウォッチで測って確かめられます。": {
@@ -11453,5 +11453,12 @@
     "present_key": "free_shindan",
     "variant": 5,
     "created": "2026-11-19"
+  },
+  "来月の集客を考える前に、今月の状態を知ってください。": {
+    "segment": "PRESENT_CTA",
+    "hook": "present",
+    "present_key": "free_shindan",
+    "variant": 4,
+    "created": "2026-11-20"
   }
 }

@@ -1,0 +1,1653 @@
+#!/usr/bin/env python3
+"""
+システム自己検証バッテリー（実装エラー＋フィードバック反映＋実行ギャップの検出）
+
+「実装したつもりで実際は動いていない」を自動で炙り出すための検査群。
+サブエージェントがこれを実行し、FAIL/WARN を解釈・修正判断する土台。
+
+カテゴリ:
+  A. コードエラー   … 全モジュールimport・3アカウント生成が例外なく通るか
+  B. ルール反映     … NGワード・1文目ルール・短文が生成物で守られているか
+  C. 実行ギャップ   … 直近で実際に投稿/調整/取得できているか（最重要）
+  D. ログエラー     … error.log 等に直近のエラーが無いか
+  E. 同期           … ローカルの未pushが溜まっていないか
+
+使い方:
+  python3 verify_system.py            # 人間可読レポート
+  python3 verify_system.py --json     # JSON（サブエージェント用）
+"""
+from __future__ import annotations
+
+import importlib
+import json
+import os
+import re
+import subprocess
+import sys
+import traceback
+from datetime import date, datetime, timedelta, timezone
+from pathlib import Path
+from daily_budget import DAILY_POSTS, FRONT_N, LEDGER_ONLY_ACCTS   # 1日20本(2026-11-11 masa指示)・前半=FRONT_N本
+
+BASE = Path(__file__).parent
+from account_ownership import is_local
+ACCTS = [a for a in ["truth", "nagaoka", "masa"] if is_local(a)]
+results = []  # {"id","category","status","detail"}  status: PASS/WARN/FAIL
+
+
+def add(cid, category, status, detail):
+    if not is_local("masa") and ("masa" in cid or "uplink" in cid):
+        status, detail = "SKIP", "Managed by minetownmasa-dotcom/threads-marketing"
+    results.append({"id": cid, "category": category, "status": status, "detail": detail})
+
+
+def _recent(path: Path, days: int) -> bool:
+    if not path.exists():
+        return False
+    try:
+        mtime = datetime.fromtimestamp(path.stat().st_mtime)
+        return mtime >= datetime.now() - timedelta(days=days)
+    except Exception:
+        return False
+
+
+# ── A. コードエラー ───────────────────────────────
+def check_imports():
+    mods = ["generate_remix", "myfiles_loader", "analyze_and_tune",
+            "auto_post", "insights", "follower_tracker", "line_tracker",
+            "duplicate_guard", "token_manager", "git_sync", "inspector"]
+    for m in mods:
+        try:
+            importlib.import_module(m)
+            add(f"import:{m}", "A.コード", "PASS", "import OK")
+        except Exception as e:
+            add(f"import:{m}", "A.コード", "FAIL", f"{type(e).__name__}: {e}")
+
+
+# 検証目的の生成呼び出しが segment_registry.json を汚染しないようにする（2026-09-23）
+os.environ["SEGMENT_REGISTRY_DRY"] = "1"
+
+
+def check_next_post_smoke():
+    """C16: get_next_post が3アカウントとも例外なく動く（2026-09-24: _listin_last_used_order
+    未定義のNameErrorで全停止・masa丸1日0本の再発防止。生成検証だけでは検知できなかった）。"""
+    import os as _os
+    _os.environ["SEGMENT_REGISTRY_DRY"] = "1"
+    try:
+        import auto_post as _ap
+        from datetime import date as _d
+        today = _d.today().strftime("%Y-%m-%d")
+        for acct in ("truth", "nagaoka", "masa"):
+            try:
+                _ap.get_next_post(acct, today, avoid_url=False)
+                add(f"next_post:{acct}", "A.コード", "PASS", "get_next_post 正常")
+            except Exception as e:
+                add(f"next_post:{acct}", "A.コード", "FAIL", f"{type(e).__name__}: {e}")
+    except Exception as e:
+        add("next_post:all", "A.コード", "FAIL", f"auto_post読込失敗: {e}")
+
+
+def check_dup_reselect_guard():
+    """C17: [API直近重複]で弾かれた候補を同じ実行内で再選択しない（2026-09-29: 選択側のAPI照合が
+    空振り→同じLINE投稿を選び続け3連続失敗で毎ラン諦め、truthが4時間超0本になった障害の回帰テスト）。"""
+    import os as _os
+    _os.environ["SEGMENT_REGISTRY_DRY"] = "1"
+    try:
+        import auto_post as _ap
+        from datetime import date as _d
+        today = _d.today().strftime("%Y-%m-%d")
+        orig = _ap._recent_api_firstlines
+        _ap._recent_api_firstlines = lambda acct, hours=12: set()
+        try:
+            for acct in ("truth", "nagaoka", "masa"):
+                saved = set(_ap._RUN_BLOCKED_FIRSTLINES.get(acct, set()))
+                t1, _ = _ap.get_next_post(acct, today, avoid_url=False)
+                if not t1:
+                    add(f"dup_reselect:{acct}", "A.コード", "PASS", "候補なし（判定対象外）"); continue
+                k = _ap._firstline_key(t1)
+                _ap._RUN_BLOCKED_FIRSTLINES.setdefault(acct, set()).add(k)
+                t2, _ = _ap.get_next_post(acct, today, avoid_url=False)
+                _ap._RUN_BLOCKED_FIRSTLINES[acct] = saved
+                if t2 and _ap._firstline_key(t2) == k:
+                    add(f"dup_reselect:{acct}", "A.コード", "FAIL", f"重複で弾かれた候補を再選択: {k}")
+                else:
+                    add(f"dup_reselect:{acct}", "A.コード", "PASS", "弾かれた候補を再選択しない")
+        finally:
+            _ap._recent_api_firstlines = orig
+    except Exception as e:
+        add("dup_reselect:all", "A.コード", "FAIL", f"{type(e).__name__}: {e}")
+
+
+def check_stuck_anchor_reselect():
+    """C40: 2026-10-23 truth 40/50本の回帰テスト。朝に投稿済みの診断アンカー（台帳は「？」・URL除去後、
+    キュー原文は「。」・URL付き＝正規化が一致しない）が、API12h窓の失効後に選択され続け、
+    投稿直前の同日チェックで毎回見送り→連続3回失敗で諦める、を約4時間繰り返した。
+    本日投稿済みの同一1文目のアンカーを get_next_post が返さないこと、通常投稿が選ばれることを確認する。"""
+    import os as _os, tempfile as _tf, json as _json
+    from pathlib import Path as _P
+    _os.environ["SEGMENT_REGISTRY_DRY"] = "1"
+    try:
+        import auto_post as _ap
+        day = "2099-01-01"
+        anchor = "自分の頭痛のタイプ、答えられますか。\n緊張型か、片頭痛か、薬の使いすぎか。\n10問・60秒でわかる無料診断を作りました👇\n" + _ap._SHINDAN_URL
+        normal = "C25回帰テスト専用の通常投稿です。\n肩の力を抜く姿勢を一つだけ試してみてください。"
+        with _tf.TemporaryDirectory() as d:
+            lg, pf = _P(d) / "log.jsonl", _P(d) / "posted.jsonl"
+            lg.write_text(_json.dumps({"account": "truth", "theme": "t", "date": day, "posts": [anchor, normal]}, ensure_ascii=False) + "\n")
+            pf.write_text(_json.dumps({"date": day, "index": 0, "post_id": "x",
+                                       "text": "自分の頭痛のタイプ、答えられますか？\n緊張型か、片頭痛か、薬の使いすぎか。",
+                                       "is_shindan": True}, ensure_ascii=False) + "\n")
+            o_lg, o_pf, o_api = _ap.ACCOUNTS["truth"]["log"], _ap.ACCOUNTS["truth"]["posted"], _ap._recent_api_firstlines
+            _ap.ACCOUNTS["truth"]["log"], _ap.ACCOUNTS["truth"]["posted"] = lg, pf
+            _ap._recent_api_firstlines = lambda acct, hours=12: set()   # 12h窓が切れた状況
+            try:
+                t, _ = _ap.get_next_post("truth", day)
+            finally:
+                _ap.ACCOUNTS["truth"]["log"], _ap.ACCOUNTS["truth"]["posted"], _ap._recent_api_firstlines = o_lg, o_pf, o_api
+        if t and _ap._is_shindan(t):
+            add("stuck_anchor:truth", "A.コード", "FAIL", "本日投稿済みの診断アンカーを再選択（10/23と同型の詰まり）")
+        else:
+            add("stuck_anchor:truth", "A.コード", "PASS", "本日投稿済みアンカーを再選択せず通常投稿へ進む")
+    except Exception as e:
+        add("stuck_anchor:truth", "A.コード", "FAIL", f"{type(e).__name__}: {e}")
+
+
+def check_dedup_key_window():
+    """C42: 2026-10-14/15/20/23 truth 診断アンカーの同日再選択（047538d6以前は19時台の二重投稿・以後は見送りループ）の回帰テスト。
+    (1) 台帳に照合キー pk（キュー原文の _normalize_post_key）が記録され、同日1文目ガードが無くても同日同一原稿を再選択しない
+    (2) API重複窓が max(本日0:00 JST, 12h)（19:08 に 07:08 の投稿を含む）
+    (3) まとめて回復の同一バッチ内で投稿に至らなかった候補を連続で選ばない（_batch_note_attempt）"""
+    import os as _os, tempfile as _tf, json as _json
+    from pathlib import Path as _P
+    from datetime import datetime as _dt, timedelta as _td, timezone as _tz
+    _os.environ["SEGMENT_REGISTRY_DRY"] = "1"
+    try:
+        import auto_post as _ap
+        day = "2099-01-01"
+        anchor = "自分の頭痛のタイプ、答えられますか。\n緊張型か、片頭痛か、薬の使いすぎか。\n10問・60秒でわかる無料診断を作りました👇\n" + _ap._SHINDAN_URL
+        normal = "C42回帰テスト専用の通常投稿です。\n肩の力を抜く姿勢を一つだけ試してみてください。"
+        bad = []
+        with _tf.TemporaryDirectory() as d:
+            lg, pf = _P(d) / "log.jsonl", _P(d) / "posted.jsonl"
+            lg.write_text(_json.dumps({"account": "truth", "theme": "t", "date": day, "posts": [anchor, normal]}, ensure_ascii=False) + "\n")
+            pf.write_text("")
+            o = (_ap.ACCOUNTS["truth"]["log"], _ap.ACCOUNTS["truth"]["posted"], _ap._recent_api_firstlines,
+                 _ap._today_ledger_firstline_keys, _ap._hero_priority_order, _ap.dg_marked_today, _ap.dg_is_duplicate)
+            _ap.ACCOUNTS["truth"]["log"], _ap.ACCOUNTS["truth"]["posted"] = lg, pf
+            _ap._recent_api_firstlines = lambda acct, hours=12: set()
+            _ap._today_ledger_firstline_keys = lambda a, t: set()       # 047538d6/7b6e7639 以前の状態を模擬
+            _ap._hero_priority_order = lambda a, t, posts, pt: list(range(len(posts)))
+            _ap.dg_marked_today = lambda n, a: False
+            _ap.dg_is_duplicate = lambda n, a: False
+            try:
+                _ap.mark_posted("truth", day, 0, "x", "自分の頭痛のタイプ、答えられますか？\n緊張型か、片頭痛か、薬の使いすぎか。",
+                                is_shindan=True, orig_text=anchor)
+                e = _json.loads(pf.read_text().splitlines()[-1])
+                if e.get("pk") != _ap._normalize_post_key(anchor):
+                    bad.append("台帳にpkが記録されない")
+                t, _ = _ap.get_next_post("truth", day)
+                if t and _ap._is_shindan(t):
+                    bad.append("同日投稿済みの診断アンカーを再選択（二重投稿/見送りループ）")
+            finally:
+                (_ap.ACCOUNTS["truth"]["log"], _ap.ACCOUNTS["truth"]["posted"], _ap._recent_api_firstlines,
+                 _ap._today_ledger_firstline_keys, _ap._hero_priority_order, _ap.dg_marked_today, _ap.dg_is_duplicate) = o
+        jst = _tz(_td(hours=9))
+        now = _dt(2026, 10, 23, 19, 8, tzinfo=jst).astimezone(_tz.utc)
+        if _ap._api_dedup_cutoff(now) > _dt(2026, 10, 23, 7, 8, tzinfo=jst).astimezone(_tz.utc):
+            bad.append("API重複窓が本日0:00 JSTまで届かない")
+        saved = _ap._BATCH_SKIP_FIRSTLINES.get("truth")
+        _ap._BATCH_SKIP_FIRSTLINES["truth"] = set()
+        try:
+            if not (_ap._batch_note_attempt("truth", "k", False) and "k" in _ap._BATCH_SKIP_FIRSTLINES["truth"]):
+                bad.append("まとめて回復で不成立候補を次候補へ進めない")
+        finally:
+            if saved is None:
+                _ap._BATCH_SKIP_FIRSTLINES.pop("truth", None)
+            else:
+                _ap._BATCH_SKIP_FIRSTLINES["truth"] = saved
+        if bad:
+            add("dedup_key:truth", "A.コード", "FAIL", " / ".join(bad))
+        else:
+            add("dedup_key:truth", "A.コード", "PASS", "台帳pk照合・API窓(0:00 JST〜)・まとめて回復の前進がすべて有効")
+    except Exception as e:
+        add("dedup_key:truth", "A.コード", "FAIL", f"{type(e).__name__}: {e}")
+
+
+def check_same_day_anchor_and_git_conflict():
+    """C23: 2026-10-06障害の回帰テスト。
+    (1) 頭痛診断アンカーの当日重複判定が、URL抽出後の台帳本文でも効くか（_is_shindan(台帳text)が常にFalseで
+        同日二重投稿が常態化していた）。
+    (2) auto_post.yml が autostash復元の競合(未解決U)を自動解消するか（手元pushとの衝突で70分commit全失敗）。"""
+    import os as _os, tempfile as _tf, json as _json
+    from pathlib import Path as _P
+    _os.environ["SEGMENT_REGISTRY_DRY"] = "1"
+    try:
+        import auto_post as _ap
+        first = "C22回帰テスト用の診断1文目です。"
+        with _tf.TemporaryDirectory() as d:
+            pf = _P(d) / "posted.jsonl"
+            pf.write_text(_json.dumps({"date": "2099-01-01", "index": 6, "post_id": "x",
+                                       "text": first, "is_shindan": True}, ensure_ascii=False) + "\n")
+            orig = _ap.ACCOUNTS["truth"]["posted"]
+            _ap.ACCOUNTS["truth"]["posted"] = pf
+            try:
+                ok = _ap._shindan_anchor_ok("truth", "2099-01-01", first + "\n" + _ap._SHINDAN_URL)
+            finally:
+                _ap.ACCOUNTS["truth"]["posted"] = orig
+        if ok:
+            add("same_day_anchor:shindan", "A.コード", "FAIL", "診断アンカーが同日同一テンプレを再許可（台帳本文URL除去で判定不能）")
+        else:
+            add("same_day_anchor:shindan", "A.コード", "PASS", "同日同一テンプレの診断アンカーを弾く")
+    except Exception as e:
+        add("same_day_anchor:shindan", "A.コード", "FAIL", f"{type(e).__name__}: {e}")
+    try:
+        y = (BASE / ".github/workflows/auto_post.yml").read_text(encoding="utf-8")
+        if "--diff-filter=U" in y and "stash drop" in y:
+            add("same_day_anchor:git_unmerged", "A.コード", "PASS", "autostash競合の自動解消あり")
+        else:
+            add("same_day_anchor:git_unmerged", "A.コード", "FAIL", "auto_post.ymlにautostash競合(U)の自動解消が無い（10/06に70分commit全失敗）")
+    except Exception as e:
+        add("same_day_anchor:git_unmerged", "A.コード", "WARN", f"検査不可: {e}")
+
+
+def check_test_posts_in_first50():
+    """C21: テスト投稿（悩みテスト軸1・軸2）が生成キューの前半20本に全て入るか。
+    2026-10-04: アンカー44がヒーロー挿入で58番目へずれ、毎日1本が投稿されず判定データが欠けていた。"""
+    import os as _os
+    _os.environ["SEGMENT_REGISTRY_DRY"] = "1"
+    try:
+        import generate_remix as _g
+        hyp = json.loads((BASE / "segment_hypotheses.json").read_text(encoding="utf-8")).get("hypotheses", [])
+        texts = {p["text"] for h in hyp if h.get("acct") == "masa" and h.get("status") != "archived" for p in h.get("posts", [])}
+        posts = _g.generate_30_masa_posts()
+        pos = [i for i, t in enumerate(posts) if t in texts]
+        late = [i for i in pos if i >= FRONT_N]
+        if late:
+            add("test_in_first50:masa", "B.ルール", "FAIL", f"テスト投稿 {len(late)}本が前半{FRONT_N}本の外（位置{late}）＝投稿されない")
+        else:
+            add("test_in_first50:masa", "B.ルール", "PASS", f"テスト投稿{len(pos)}本すべて前半{FRONT_N}本内（最後={max(pos) if pos else '-'}）")
+    except Exception as e:
+        add("test_in_first50:masa", "B.ルール", "WARN", f"判定不能: {type(e).__name__}: {e}")
+
+
+def check_same_day_duplicates():
+    """C24: 同じ本文(1行目)が同日に2回以上投稿されていないか（外形API・直近100本）。
+    2026-10-07: 常駐run並走で masa に同文が3秒差で2本出た。uplink追加投稿は元から1回限りなので対象に含める。"""
+    import urllib.request, urllib.parse
+    from datetime import datetime, timedelta, timezone
+    JST = timezone(timedelta(hours=9))
+    for acct, key in (("truth", "TRUTH"), ("nagaoka", "NAGAOKA"), ("masa", "MASA")):
+        tok = os.environ.get(f"THREADS_ACCESS_TOKEN_{key}"); uid = os.environ.get(f"THREADS_USER_ID_{key}")
+        if not tok or not uid:
+            add(f"dup_sameday:{acct}", "C.実行ギャップ", "SKIP", "トークン無し"); continue
+        try:
+            url = f"https://graph.threads.net/v1.0/{uid}/threads?" + urllib.parse.urlencode({"fields": "text,timestamp,is_reply", "limit": "100", "access_token": tok})
+            with urllib.request.urlopen(url, timeout=20) as r:
+                data = json.loads(r.read()).get("data", [])
+            seen = {}
+            for p in data:
+                if p.get("is_reply") or not p.get("text"):
+                    continue
+                d = datetime.strptime(p["timestamp"], "%Y-%m-%dT%H:%M:%S%z").astimezone(JST).date().isoformat()
+                k = (d, p["text"].strip()[:80])  # 1行目だけだと別本文の同フック(外部ツール等)を誤検知する(2026-10-10)
+                seen[k] = seen.get(k, 0) + 1
+            dups = [f"{d} {t}" for (d, t), n in seen.items() if n >= 2]
+            # 2026-10-14: 自システムの台帳に無い本文＝外部ツール投稿（masaの「本当にありがとうございました！！」等）は対象外
+            try:
+                _own = set()
+                for _l in (Path(__file__).parent / f"log_{acct}_posted.jsonl").read_text(encoding="utf-8").splitlines():
+                    try:
+                        _own.add(json.loads(_l).get("text", "").strip()[:80])
+                    except Exception:
+                        pass
+                if _own:
+                    dups = [x for x in dups if x.split(" ", 1)[1] in _own]
+            except Exception:
+                pass
+            if acct == "nagaoka":
+                add(f"dup_sameday:{acct}", "C.実行ギャップ", "PASS", f"外部ツール併用のため参考: 同日重複{len(dups)}件")
+            elif dups:
+                add(f"dup_sameday:{acct}", "C.実行ギャップ", "FAIL", f"同日に同じ投稿が2回以上: {dups[:3]}")
+            else:
+                add(f"dup_sameday:{acct}", "C.実行ギャップ", "PASS", "同日重複なし")
+        except Exception as e:
+            add(f"dup_sameday:{acct}", "C.実行ギャップ", "WARN", f"判定不能: {type(e).__name__}")
+
+
+def check_generation():
+    try:
+        import generate_remix as g
+        fns = {"truth": g.generate_30_posts, "nagaoka": g.generate_40_nagaoka_posts,
+               "masa": g.generate_30_masa_posts}
+        for acct, fn in fns.items():
+            try:
+                posts = fn()
+                if posts:
+                    add(f"gen:{acct}", "A.コード", "PASS", f"{len(posts)}本生成")
+                else:
+                    add(f"gen:{acct}", "A.コード", "FAIL", "0本（生成失敗）")
+            except Exception as e:
+                add(f"gen:{acct}", "A.コード", "FAIL", f"{type(e).__name__}: {e}")
+    except Exception as e:
+        add("gen:all", "A.コード", "FAIL", f"generate_remix読込失敗: {e}")
+
+
+def check_list_habit_in_first50():
+    """truth/nagaokaの当日生成キュー前半20本に【◯◯習慣N選】型(LIST_HABIT)が1本以上あるか（無ければWARN・2026-10-06本人指示）。"""
+    import os as _os
+    _os.environ["SEGMENT_REGISTRY_DRY"] = "1"
+    for acct, fn in (("truth", "generate_30_posts"), ("nagaoka", "generate_40_nagaoka_posts")):
+        try:
+            import generate_remix as _g
+            posts = getattr(_g, fn)()[:FRONT_N]
+            hits = [i for i, t in enumerate(posts) if _g._list_habit_valid(t)]
+            # 2026-10-24: 効いていないため truth=毎日1本 / nagaoka=1日0〜1本（隔日）に減らした。0本はnagaokaのみ正常。
+            if acct == "nagaoka":
+                ok = len(hits) <= 1
+                add(f"list_habit_in_first50:{acct}", "B.ルール反映", "PASS" if ok else "WARN",
+                    f"{acct}前半20本中LIST_HABIT型{len(hits)}本（位置{hits}）。上限1本" if ok else
+                    f"{acct}前半20本にLIST_HABIT型が{len(hits)}本。1日0〜1本の指示（2026-10-24）を超過")
+            else:
+                add(f"list_habit_in_first50:{acct}", "B.ルール反映", "PASS" if hits else "WARN",
+                    f"{acct}前半20本中LIST_HABIT型{len(hits)}本（位置{hits}）" if hits else
+                    f"{acct}前半20本にLIST_HABIT型(【◯◯習慣N選】)が0本。毎日1本入れる指示の実行ギャップ")
+        except Exception as e:
+            add(f"list_habit_in_first50:{acct}", "B.ルール反映", "WARN", f"検査失敗: {type(e).__name__}: {e}")
+
+
+def check_type_mix_in_first50():
+    """truth/nagaokaの当日生成キュー前半20本に、効く型（2026-10-24 本人指示）が最低本数入っているか（不足はWARN）。
+    truth: 頭痛薬・鎮痛剤の話(ZUTSUYAKU)3本以上＋「前に、まず」型(MAE_MAZU)2本以上
+    nagaoka: 「前に、まず」型2本以上＋天気・気圧(WEATHER)1本以上＋問いかけ(QUESTION)1本以上＋お客様の声2本以上"""
+    import os as _os
+    _os.environ["SEGMENT_REGISTRY_DRY"] = "1"
+    try:
+        import generate_remix as _g
+        from type_templates import TYPE_POOLS as _tp
+    except Exception as e:
+        add("type_mix_in_first50", "B.ルール反映", "WARN", f"検査失敗: {type(e).__name__}: {e}")
+        return
+    # 2026-11-11 1日20本化: 前半20本に載る型の最低本数（truth ZUTSUYAKU 3→2・nagaoka お客様の声2→1。生成側の型の計画は daily plan 5本/6本）
+    need = {"truth": {"ZUTSUYAKU": 2, "MAE_MAZU": 2},
+            "nagaoka": {"MAE_MAZU": 2, "WEATHER": 1, "QUESTION": 1, "CUSTOMER_VOICE": 1}}
+    for acct, fn in (("truth", "generate_30_posts"), ("nagaoka", "generate_40_nagaoka_posts")):
+        try:
+            posts = getattr(_g, fn)()[:FRONT_N]
+            cnt = {}
+            for seg in need[acct]:
+                pool = (_g.CUSTOMER_VOICE_TEMPLATES_TRUTH if acct == "truth" else _g.CUSTOMER_VOICE_TEMPLATES_NAGAOKA) \
+                    if seg == "CUSTOMER_VOICE" else _tp.get((acct, seg), [])
+                cnt[seg] = sum(1 for t in posts if t in pool)
+            short = {k: f"{cnt[k]}<{v}" for k, v in need[acct].items() if cnt[k] < v}
+            add(f"type_mix_in_first50:{acct}", "B.ルール反映", "WARN" if short else "PASS",
+                f"{acct}前半20本の型 {cnt}" + (f" 不足={short}" if short else ""))
+        except Exception as e:
+            add(f"type_mix_in_first50:{acct}", "B.ルール反映", "WARN", f"検査失敗: {type(e).__name__}: {e}")
+
+
+def check_masa_insta_theme():
+    """masaの当日生成キュー前半20本のInstagramテーマがINSTA_THEME_TARGET(13本)未満ならWARN（2026-10-04 主テーマ変更の実行ギャップ検知）。
+    2026-10-21: 閾値を50%→生成側の保証値(13本)に揃えた。補充候補の枯渇で9〜12本まで落ちても25本を割るまで気づけなかったため。"""
+    if not is_local("masa"):
+        return
+    try:
+        import generate_remix as g
+        posts = g.generate_30_masa_posts()[:FRONT_N]
+        n = sum(1 for p in posts if g._is_insta_theme(p))
+        ratio = n / max(1, len(posts))
+        if n < g.INSTA_THEME_TARGET:
+            add("masa_insta_theme", "B.ルール反映", "WARN",
+                f"masa前半{len(posts)}本中Instagramテーマ{n}本({ratio:.0%})。目標は{g.INSTA_THEME_TARGET}本以上（補充候補の枯渇を疑う）")
+        else:
+            add("masa_insta_theme", "B.ルール反映", "PASS", f"masa前半{len(posts)}本中Instagramテーマ{n}本({ratio:.0%})")
+    except Exception as e:
+        add("masa_insta_theme", "B.ルール反映", "WARN", f"検査失敗: {type(e).__name__}: {e}")
+
+
+def check_hero_posted():
+    """ヒーロー投稿が「全て投稿される」状態か（2026-10-20 オーナー指示）。
+    過去の日付のヒーローに未投稿が残っていればWARN（原因: NGフィルタ除外／重複ガード／DAILY_CAP／優先投稿の不具合）。
+    ヒーローファイルが2日以上更新されていない場合もWARN（SKILL停止の検知）。"""
+    try:
+        import generate_remix as g
+        today = date.today()
+        for acct in ACCTS:
+            f = BASE / f"hero_{acct}.json"
+            if not f.exists():
+                add(f"hero_posted:{acct}", "B.ルール反映", "WARN", "hero ファイルなし")
+                continue
+            d = json.loads(f.read_text(encoding="utf-8"))
+            try:
+                fdate = date.fromisoformat(str(d.get("date")))
+            except Exception:
+                add(f"hero_posted:{acct}", "B.ルール反映", "WARN", f"hero date 不正: {d.get('date')}")
+                continue
+            raw = [(str(d.get("date")), p) for p in d.get("posts", []) if isinstance(p, str)]   # (生成日, 本文)
+            for c in (d.get("carry") or []):
+                _t = c.get("text") if isinstance(c, dict) else c
+                if isinstance(_t, str):
+                    raw.append((str(c.get("date") or d.get("date")) if isinstance(c, dict) else str(d.get("date")), _t))
+            done = g._hero_posted(acct)   # 全文キー(hk)＋旧エントリーは最初の段落で照合（auto_post/hero_carry と同じ定義）
+            unposted_raw = list({g._hero_key(p): p for od, p in raw if not done.contains(p, od)}.values())   # 全文キーで重複除去
+            valid = g._load_hero_posts(acct)            # 未投稿かつNG等のフィルタ通過
+            dropped = len(unposted_raw) - len(valid)    # フィルタで除外された(=永久に投稿されない)本数
+            age = (today - fdate).days
+            msgs = []
+            status = "PASS"
+            if age >= 2:
+                status = "WARN"
+                msgs.append(f"ヒーロー未更新(最終{fdate}・{age}日前)")
+            if age >= 1 and valid:
+                status = "WARN"
+                msgs.append(f"過去日のヒーロー{len(valid)}本が未投稿")
+            if dropped > 0:
+                status = "WARN"
+                msgs.append(f"フィルタ除外で投稿されないヒーロー{dropped}本(書き直し要)")
+            if not msgs:
+                msgs.append(f"生成{len(raw)}本中 未投稿{len(valid)}本(最終{fdate})")
+            add(f"hero_posted:{acct}", "B.ルール反映", status, " / ".join(msgs))
+    except Exception as e:
+        add("hero_posted", "B.ルール反映", "WARN", f"検査失敗: {type(e).__name__}: {e}")
+
+
+def check_masa_abstract():
+    """masaの当日生成キュー前半20本のうち、抽象的な投稿（対象なし問いかけ・手順/具体例＋機能名のないコメント・抽象語）が
+    1本でもあればWARN（2026-10-07 masa指示「問いかけの対象が不明・コメントが抽象的」の実行ギャップ検知。
+    判定=generate_remix._is_abstract_masa。生成ループ・最終掃除・auto_post検品ゲートと同じ基準）。"""
+    if not is_local("masa"):
+        return
+    try:
+        import generate_remix as g
+        posts = g.generate_30_masa_posts()[:FRONT_N]
+        bad = [(i, g._abstract_reasons_masa(p)) for i, p in enumerate(posts) if g._is_abstract_masa(p)]
+        if bad:
+            detail = " / ".join(f"位置{i}:{'、'.join(r)[:30]}" for i, r in bad[:3])
+            add("masa_abstract", "B.ルール反映", "WARN",
+                f"masa前半{len(posts)}本中、抽象的な投稿{len(bad)}本（{detail}）。対象のない問いかけ・手順なしコメントの再発")
+        else:
+            add("masa_abstract", "B.ルール反映", "PASS", f"masa前半{len(posts)}本に抽象的な投稿なし（対象つき問いかけ・具体手順）")
+    except Exception as e:
+        add("masa_abstract", "B.ルール反映", "WARN", f"検査失敗: {type(e).__name__}: {e}")
+
+
+# nagaoka専用「長岡市で〜相談が増えてます」型オープニングの1文目パターン（2026-07-24追加）。
+# generate_remix.NAGAOKA_SOUDAN_OPENINGSの実際の書き出しバリエーションに合わせて限定的に許可。
+_NAGAOKA_SOUDAN_OPEN_RE = re.compile(
+    r"^長岡市で.{2,20}(という相談|のご相談|に悩む方|という方)"
+)
+
+
+# ── B. ルール反映（フィードバックが効いているか）──────────
+def check_rules():
+    try:
+        import generate_remix as g
+        fb = json.loads((BASE / "feedback.json").read_text())
+        ng_words = fb.get("ng_words", [])
+        fns = {"truth": g.generate_30_posts, "nagaoka": g.generate_40_nagaoka_posts,
+               "masa": g.generate_30_masa_posts}
+        for acct, fn in fns.items():
+            ng_hit, first_bad = 0, 0
+            for _ in range(3):
+                for p in fn():
+                    if g._is_ng(p):
+                        ng_hit += 1
+                    first = p.split("\n")[0].strip()
+                    # nagaoka専用の意図的な例外（2026-07-24追加）:
+                    # 「長岡市で〜相談が増えてます」型オープニング（NAGAOKA_SOUDAN_OPENINGS由来）
+                    # のみ「長岡市」始まりを許可する。それ以外の「長岡市/施術実績/実績」始まりは
+                    # 引き続きNG（ザルにしない）。
+                    is_soudan_open = (acct == "nagaoka" and _NAGAOKA_SOUDAN_OPEN_RE.match(first))
+                    if (acct in ("truth", "nagaoka") and first.startswith(("長岡市", "施術実績", "実績"))
+                            and not is_soudan_open):
+                        first_bad += 1
+            add(f"rule:ng:{acct}", "B.ルール反映",
+                "PASS" if ng_hit == 0 else "FAIL",
+                f"NGワード混入 {ng_hit}件（3回生成）")
+            if acct in ("truth", "nagaoka"):
+                add(f"rule:1文目:{acct}", "B.ルール反映",
+                    "PASS" if first_bad == 0 else "FAIL",
+                    f"1文目NG違反 {first_bad}件（3回生成）")
+        add("rule:ng_words_count", "B.ルール反映", "PASS" if ng_words else "WARN",
+            f"NGワード登録 {len(ng_words)}件")
+    except Exception as e:
+        add("rule:all", "B.ルール反映", "FAIL", f"検査失敗: {e}")
+
+
+# ── B'. ルール衛生（検品ゲート導入・2026-07-21）───────────────
+def check_rule_hygiene():
+    """feedback.json notesの肥大化・inspection_log.jsonlのNG急増を検知する。
+    Brain記事(aoi_ai 2026-07-20)実測: ルール1万字肥大→矛盾→品質低下、
+    3,536字へ剪定で回復。noteは足すより削る運用を維持できているかの健全性チェック。"""
+    try:
+        fb = json.loads((BASE / "feedback.json").read_text(encoding="utf-8"))
+        notes = fb.get("notes", [])
+        total_chars = sum(len(n.get("text", "")) for n in notes)
+        n_count = len(notes)
+        status = "PASS" if (n_count <= 60 and total_chars <= 20000) else "WARN"
+        add("hygiene:notes", "B.ルール反映", status,
+            f"notes {n_count}件・合計{total_chars}字" +
+            ("（ルール剪定要）" if status == "WARN" else ""))
+    except Exception as e:
+        add("hygiene:notes", "B.ルール反映", "WARN", f"確認失敗: {e}")
+
+    try:
+        log_file = BASE / "inspection_log.jsonl"
+        if not log_file.exists():
+            add("hygiene:inspection_ng", "B.ルール反映", "PASS", "inspection_log.jsonl なし（NGなし）")
+        else:
+            today = date.today().strftime("%Y-%m-%d")
+            n_today = 0
+            for line in log_file.read_text(encoding="utf-8").splitlines():
+                if not line.strip():
+                    continue
+                try:
+                    if json.loads(line).get("date") == today:
+                        n_today += 1
+                except Exception:
+                    pass
+            status = "PASS" if n_today <= 20 else "WARN"
+            add("hygiene:inspection_ng", "B.ルール反映", status,
+                f"本日の検品NG {n_today}件" +
+                ("（誤検知 or 生成品質劣化の疑い）" if status == "WARN" else ""))
+    except Exception as e:
+        add("hygiene:inspection_ng", "B.ルール反映", "WARN", f"確認失敗: {e}")
+
+
+# ── C. 実行ギャップ（実装≠実行 を検出）──────────────
+def _posted_recent_texts(acct: str, days: int):
+    pfile = BASE / f"log_{acct}_posted.jsonl"
+    cutoff = (datetime.now() - timedelta(days=days)).date()
+    out = []
+    if not pfile.exists():
+        return out
+    for line in pfile.read_text(encoding="utf-8").splitlines():
+        try:
+            e = json.loads(line)
+            d = datetime.strptime(e.get("date", ""), "%Y-%m-%d").date()
+            if d >= cutoff:
+                out.append(e.get("text", ""))
+        except Exception:
+            pass
+    return out
+
+
+def check_execution_gaps():
+    # C1: LINEリストインが直近で実際に投稿されているか（再発検知）。
+    #     2026-08-21改訂: 8/18からURLは本文でなくコメント欄のため、本文キーワードでなく
+    #     リストインテンプレの「1文目」と動的照合する（プール変更にも自動追従）。
+    try:
+        import generate_remix as _g
+        _listin_fls = {t.split("\n")[0].strip() for t in _g.LINE_LISTIN_TEMPLATES}
+    except Exception:
+        _listin_fls = set()
+    for acct in ("truth", "nagaoka"):
+        texts = _posted_recent_texts(acct, 3)
+        line_cnt = sum(1 for t in texts if (
+            t.split("\n")[0].strip() in _listin_fls or "lin.ee" in t))
+        status = "PASS" if line_cnt >= 1 else "FAIL"
+        add(f"exec:line_listin:{acct}", "C.実行ギャップ", status,
+            f"直近3日のLINEリストイン投稿 {line_cnt}件（{len(texts)}投稿中・1文目照合）")
+
+    # C2: 重みが直近で更新されているか（チューニング稼働）
+    for acct in ACCTS:
+        f = BASE / f"weights_{acct}.json"
+        ok = _recent(f, 2)
+        add(f"exec:weights:{acct}", "C.実行ギャップ", "PASS" if ok else "WARN",
+            f"weights更新 {'直近2日内' if ok else '2日以上前 or なし'}")
+
+    # C3: insightsに実データ（avg_views>0）が入っているか（null取得バグ検知）
+    for acct in ACCTS:
+        try:
+            d = json.loads((BASE / f"insights_{acct}.json").read_text())
+            av = d.get("avg_views", 0)
+            add(f"exec:insights:{acct}", "C.実行ギャップ",
+                "PASS" if av and av > 0 else "WARN",
+                f"平均閲覧 {av}（0なら指標取得不全の疑い）")
+        except Exception as e:
+            add(f"exec:insights:{acct}", "C.実行ギャップ", "WARN", f"読込不可: {e}")
+
+    # C4: フォロワー履歴が直近更新されているか
+    ok = _recent(BASE / "followers_history.json", 2)
+    add("exec:followers", "C.実行ギャップ", "PASS" if ok else "WARN",
+        f"フォロワー履歴更新 {'直近2日内' if ok else '停滞の疑い'}")
+
+    # C5: 今日のキューが存在するか（朝の生成時間帯=8時より前は未生成でも正常）
+    today = date.today().strftime("%Y-%m-%d")
+    before_gen = datetime.now().hour < 8  # 生成は朝6〜7時。8時前は未生成でもOK
+    for acct in ACCTS:
+        f = BASE / f"log_{acct}.jsonl"
+        has = False
+        if f.exists():
+            for line in f.read_text(encoding="utf-8").splitlines():
+                try:
+                    e = json.loads(line)
+                    if e.get("date") == today and e.get("posts"):
+                        has = True
+                except Exception:
+                    pass
+        if has:
+            add(f"exec:queue:{acct}", "C.実行ギャップ", "PASS", "今日のキュー あり")
+        elif before_gen:
+            add(f"exec:queue:{acct}", "C.実行ギャップ", "PASS", "今日のキュー未生成（朝の生成前で正常）")
+        else:
+            add(f"exec:queue:{acct}", "C.実行ギャップ", "WARN", "今日のキュー なし（生成失敗の疑い）")
+
+    # C5b: masaのLINE言及率（feedback.json note 2026-08-23: 前半20本で5本以内=10%未満）
+    # 2026-08-26に固定挿入(cta_profile2本+AI_TIME_CTA1本)がcapを素通りし
+    # 22%(11/50)まで超過した実績があるため、実際の投稿実績を直近日次で監視する。
+    try:
+        by_date = {}
+        pfile = BASE / "log_masa_posted.jsonl"
+        if pfile.exists():
+            for line in pfile.read_text(encoding="utf-8").splitlines():
+                try:
+                    e = json.loads(line)
+                    d = e.get("date")
+                    if d:
+                        by_date.setdefault(d, []).append(e.get("text", ""))
+                except Exception:
+                    pass
+        recent_dates = sorted(by_date.keys())[-3:]
+        worst_rate, worst_date, worst_cnt, worst_len = 0.0, None, 0, 0
+        for d in recent_dates:
+            texts = by_date[d][:DAILY_POSTS]  # その日の投稿全体(20本)
+            if not texts:
+                continue
+            cnt = sum(1 for t in texts if ("LINE" in t or "ライン" in t or "lin.ee" in t))
+            rate = cnt / len(texts)
+            if rate > worst_rate:
+                worst_rate, worst_date, worst_cnt, worst_len = rate, d, cnt, len(texts)
+        if worst_date is None:
+            add("rule:line_rate:masa", "B.ルール反映", "WARN", "masa投稿実績が見つからず判定不可")
+        else:
+            status = "PASS" if worst_cnt <= max(1, DAILY_POSTS // 10) else "FAIL"   # 10%（2026-11-11 20本→2本／2026-11-12 30本→3本）
+            # 2026-09-02修正: 分母を常に「50本」固定表示していたが、当日分は投稿途中で
+            # len(texts)<50のことがあり（例: 9本中2本=22%なのに"2本/50本(22%)"と誤表示）、
+            # 実際に率計算へ使った分母(worst_len)をそのまま表示するよう修正。
+            add("rule:line_rate:masa", "B.ルール反映", status,
+                f"直近3日で最大 {worst_date} {worst_cnt}本/{worst_len}本（{worst_rate*100:.0f}%）LINE言及・上限{max(1, DAILY_POSTS // 10)}本(10%・1日{DAILY_POSTS}本)")
+    except Exception as e:
+        add("rule:line_rate:masa", "B.ルール反映", "WARN", f"検査失敗: {e}")
+
+    # C6: 誘導投稿（ホットペッパー予約・店舗アクセス）がキュー前半(<50)に固定されているか
+    #     ランダム高位置だと1日約50本の消費に届かず未投稿になるバグの再発検知。
+    for acct in ("truth", "nagaoka"):
+        f = BASE / f"log_{acct}.jsonl"
+        try:
+            lines = [l for l in f.read_text(encoding="utf-8").splitlines() if l.strip()]
+            posts = json.loads(lines[-1]).get("posts", []) if lines else []
+            hpb = [i for i, p in enumerate(posts) if "beauty.hotpepper.jp" in p]
+            acc = [i for i, p in enumerate(posts) if "専用駐車場" in p or "長岡駅から車で5分" in p]
+            bad = [x for x in hpb + acc if x >= FRONT_N]
+            present = len(hpb) >= 1 and len(acc) >= 1
+            if not present:
+                add(f"exec:funnel:{acct}", "C.実行ギャップ", "WARN",
+                    f"誘導投稿がキューに不足（HPB{len(hpb)}/アクセス{len(acc)}）")
+            elif bad:
+                add(f"exec:funnel:{acct}", "C.実行ギャップ", "FAIL",
+                    f"誘導投稿が位置{FRONT_N}超に配置（未投稿リスク）: {bad}")
+            else:
+                add(f"exec:funnel:{acct}", "C.実行ギャップ", "PASS",
+                    f"誘導投稿は前半固定 HPB{hpb} アクセス{acc}")
+        except Exception as e:
+            add(f"exec:funnel:{acct}", "C.実行ギャップ", "WARN", f"キュー確認不可: {e}")
+
+    # 共通ヘルパー: 昨日(JST)の実投稿数を外形API（Threads API）で数える。C8/C10で共有。
+    _api_count_cache: dict = {}
+    def _yesterday_posts_api_c8(acct: str) -> int:
+        """昨日の本体投稿数。スコープ不足トークンはリプライ込み概算。取得不可なら-1。
+        2026-11-11: LEDGER_ONLY_ACCTS(nagaoka)は外部ツール(約20本/日)が実測に混ざるため台帳(自前投稿)の本数を返す。"""
+        if acct in _api_count_cache:
+            return _api_count_cache[acct]
+        if acct in LEDGER_ONLY_ACCTS:
+            _yd = (date.today() - timedelta(days=1)).strftime("%Y-%m-%d")
+            _n = 0
+            try:
+                for _l in (BASE / f"log_{acct}_posted.jsonl").read_text(encoding="utf-8").splitlines():
+                    try:
+                        if json.loads(_l).get("date") == _yd:
+                            _n += 1
+                    except Exception:
+                        pass
+            except Exception:
+                _n = -1
+            _api_count_cache[acct] = _n
+            return _n
+        import urllib.request as _ur
+        jst = timezone(timedelta(hours=9))
+        y0 = datetime.now(jst).replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(days=1)
+        envf = BASE / ".env"
+        if envf.exists():
+            for _l in envf.read_text().splitlines():
+                if "=" in _l and not _l.startswith("#"):
+                    _k, _v = _l.split("=", 1)
+                    os.environ.setdefault(_k.strip(), _v.strip())
+        uid = os.environ.get(f"THREADS_USER_ID_{acct.upper()}")
+        tok = os.environ.get(f"THREADS_ACCESS_TOKEN_{acct.upper()}")
+        if not uid or not tok:
+            _api_count_cache[acct] = -1
+            return -1
+        url = (f"https://graph.threads.net/v1.0/{uid}/threads?fields=id,is_reply"
+               f"&since={int(y0.timestamp())}&until={int((y0 + timedelta(days=1)).timestamp())}"
+               f"&limit=100&access_token={tok}")
+        n = -1
+        try:
+            with _ur.urlopen(url, timeout=20) as r:
+                data = json.loads(r.read())
+            n = sum(1 for x in data.get("data", []) if not x.get("is_reply"))
+        except Exception:
+            try:
+                with _ur.urlopen(url.replace("id,is_reply", "id"), timeout=20) as r:
+                    data = json.loads(r.read())
+                n = len(data.get("data", []))  # リプライ込み概算（過大側）
+            except Exception:
+                n = -1
+        # 2026-11-11: uplink転載(masa)も合計20本の内数のため、APIの実測から引かない
+        _api_count_cache[acct] = n
+        return n
+
+    # C8: 1日50投稿の遵守（昨日の実績）。ユーザー必須ルール。
+    # 2026-07-13改修: ローカルログはCIコミット経由の不完全ミラーで過少カウント（偽FAIL）を
+    # 出すため、外形API実測（C10と同じ_yesterday_posts_api）を正とし、API不可時のみログで代替。
+    yesterday = (date.today() - timedelta(days=1)).strftime("%Y-%m-%d")
+    def _count_from_log(acct: str) -> int:
+        pfile = BASE / f"log_{acct}_posted.jsonl"
+        n = 0
+        if pfile.exists():
+            for line in pfile.read_text(encoding="utf-8").splitlines():
+                try:
+                    _e = json.loads(line)
+                    if _e.get("date") == yesterday:
+                        n += 1
+                except Exception:
+                    pass
+        return n
+    for acct in ACCTS:
+        n = _yesterday_posts_api_c8(acct)
+        src = "外形API実測"
+        if n < 0:
+            n = _count_from_log(acct)
+            src = "ローカルログ（API不可・過少の可能性）"
+        add(f"exec:daily50:{acct}", "C.実行ギャップ",
+            "PASS" if n >= DAILY_POSTS else "FAIL",
+            f"昨日({yesterday})の投稿 {n}本 / 必須{DAILY_POSTS}本（全種類の合計・{src}）")
+
+    # C9: プレイブック（修正基準の正本）が毎朝検証・更新されているか。
+    #     基準そのものを向上させるメタPDCAが止まると改善が旧基準で空回りする。
+    for acct in ACCTS:
+        f = BASE / f"playbook_{acct}.json"
+        try:
+            pb = json.loads(f.read_text(encoding="utf-8"))
+            upd = pb.get("updated", "2000-01-01")
+            days_old = (date.today() - date.fromisoformat(upd)).days
+            active = sum(1 for r in pb.get("rules", []) if r.get("status") == "active")
+            testing = sum(1 for r in pb.get("rules", []) if r.get("status") == "testing")
+            if days_old > 2:
+                add(f"exec:playbook:{acct}", "C.実行ギャップ", "WARN",
+                    f"プレイブック未検証{days_old}日（毎朝検証・updated更新が必須）")
+            elif active == 0:
+                add(f"exec:playbook:{acct}", "C.実行ギャップ", "WARN",
+                    f"activeルール0件（testing{testing}件。昇格判定が機能していない疑い）")
+            else:
+                add(f"exec:playbook:{acct}", "C.実行ギャップ", "PASS",
+                    f"v{pb.get('version','?')} 更新{upd} active{active}/testing{testing}")
+        except Exception as e:
+            add(f"exec:playbook:{acct}", "C.実行ギャップ", "WARN", f"playbook読込不可: {e}")
+
+    # C10: 昨日の実投稿数チェック（外形監視=Threads APIを正とする。2026-07-12改修）
+    #      旧実装はautopost_*.log（CIコミット経由の不完全ミラー）を数えており、
+    #      ログ遅延で「18本しか投稿していない」等の偽FAILを出していた。
+    #      時間帯の偏りはCIバースト設計（memory: project_mac_independence）どおりのため検査しない。
+    for acct in ACCTS:
+        try:
+            n = _yesterday_posts_api_c8(acct)
+            if n < 0:
+                add(f"exec:pacing:{acct}", "C.実行ギャップ", "WARN",
+                    "外形API取得不可（トークンのスコープ不足等）。実投稿数はCI watchdogの外形監視が正")
+            elif n < int(DAILY_POSTS * 0.8):
+                add(f"exec:pacing:{acct}", "C.実行ギャップ", "FAIL",
+                    f"投稿数不足: 昨日の実投稿{n}本 < {int(DAILY_POSTS * 0.8)}本（目標{DAILY_POSTS}本/日の8割・外形API実測）")
+            else:
+                add(f"exec:pacing:{acct}", "C.実行ギャップ", "PASS",
+                    f"昨日の実投稿{n}本（外形API実測・目標{DAILY_POSTS}本/日）")
+        except Exception as e:
+            add(f"exec:pacing:{acct}", "C.実行ギャップ", "WARN", f"配分検査不可: {e}")
+
+    # C11: watchdogが直近に動いているか（見張り番自体の死活監視）
+    # 2026-09-12修正: watchdog.logはMac常駐launchd時代（Mac非依存化2026-07-10で廃止済み）
+    # の遺物で更新が止まって当然なのに、24h基準の誤WARNを毎回出していた。
+    # 実体はGitHub Actions health_check.ymlのwatchdog_ci.pyが正（30分毎cron）。
+    # ローカルgit履歴の「chore: watchdog-ci state」コミット（差分がある回のみ記録される
+    # ため猶予は48h）で外形的に確認する。git不可時のみ旧ファイルにフェイルオープン。
+    ok = False
+    detail = ""
+    try:
+        r = subprocess.run(
+            ["git", "log", "-1", "--format=%at", "--grep=watchdog-ci state"],
+            cwd=BASE, capture_output=True, text=True, timeout=10,
+        )
+        ts = r.stdout.strip()
+        if ts:
+            last = datetime.fromtimestamp(int(ts))
+            ok = last >= datetime.now() - timedelta(hours=48)
+            detail = f"最終watchdog-ciコミット {last.strftime('%Y-%m-%d %H:%M')}"
+    except Exception:
+        ts = ""
+    if not ts:
+        ok = _recent(BASE / "watchdog.log", 1)
+        detail = "git履歴取得不可 → 旧watchdog.logで代替判定"
+    add("exec:watchdog", "C.実行ギャップ", "PASS" if ok else "WARN",
+        (f"watchdog稼働中（{detail}）" if ok else f"watchdog-ci 48h以上コミットなし・要確認（{detail}）"))
+
+    # C13: 整体系の予約誘導はHPB一本化（2026-08-14ユーザールール）。
+    #      キューと直近実績で「予約語×非HPB URL」を検出したらFAIL。
+    try:
+        from generate_remix import _is_seitai_reserve_violation
+        for acct in ("truth", "nagaoka"):
+            bad_q = bad_p = 0
+            f = BASE / f"log_{acct}.jsonl"
+            if f.exists():
+                lines = [l for l in f.read_text(encoding="utf-8").splitlines() if l.strip()]
+                posts = json.loads(lines[-1]).get("posts", []) if lines else []
+                bad_q = sum(1 for p in posts if _is_seitai_reserve_violation(p))
+            for t in _posted_recent_texts(acct, 3):
+                if _is_seitai_reserve_violation(t):
+                    bad_p += 1
+            add(f"exec:hpb_only:{acct}", "C.実行ギャップ",
+                "PASS" if bad_q == 0 and bad_p == 0 else "FAIL",
+                f"予約誘導のHPB一本化 キュー違反{bad_q}/直近3日実績違反{bad_p}")
+    except Exception as e:
+        add("exec:hpb_only", "C.実行ギャップ", "WARN", f"検査不可: {e}")
+
+    # C14: 画像投稿パイプラインの健全性（2026-08-21改訂）。
+    #      在庫画像の経過日数は正常（ストックは2枚/日で消化）。「在庫があるのに
+    #      2日以上投稿されていない」=パイプライン停止のみをWARNにする。
+    try:
+        img_src = Path("/Users/mt112/Threads投稿画像")
+        has_stock = any((img_src / a).exists() and any(
+            p.suffix.lower() in (".jpg", ".jpeg", ".png", ".heic")
+            for p in (img_src / a).iterdir()) for a in ("truth", "nagaoka"))
+        if has_stock:
+            recent_img = False
+            for acct in ("truth", "nagaoka"):
+                pfile = BASE / f"log_{acct}_posted.jsonl"
+                if not pfile.exists():
+                    continue
+                cutoff2 = (date.today() - timedelta(days=2)).isoformat()
+                for line in pfile.read_text(encoding="utf-8").splitlines()[-200:]:
+                    try:
+                        e = json.loads(line)
+                        if e.get("kind") == "image" and e.get("date", "") >= cutoff2:
+                            recent_img = True
+                    except Exception:
+                        pass
+            add("exec:imagepost", "C.実行ギャップ",
+                "PASS" if recent_img else "WARN",
+                "画像投稿 稼働中（在庫あり・直近2日に投稿あり）" if recent_img
+                else "在庫があるのに直近2日画像投稿なし（launchd com.threads.imagepost要確認）")
+        else:
+            add("exec:imagepost", "C.実行ギャップ", "PASS", "画像在庫なし（投稿待ちなし）")
+    except Exception as e:
+        add("exec:imagepost", "C.実行ギャップ", "WARN", f"確認不可: {e}")
+
+    # C15: セグメントテスト（小川さんセッション2026-09-22・masa=S1-S5→2026-10-04からInstagram悩みI01-I16。
+    #      2026-09-23にtruth/nagaoka=T1-T6へ拡張）が実際に回っているか、acctごとに判定。
+    #      昨日segment_registryにそのacctで登録済みの投稿が3本未満ならWARN。
+    #      registryが空（導入初日）は「検査していない」ではなく判定材料が無いだけなので
+    #      PASS扱い（SKIPにはしない）。truth/nagaokaは原稿投入前のプレースホルダ段階だと
+    #      候補0件で登録も0件になりうるため、その場合は「原稿未投入」の理由を明示してPASSにする
+    #      （担当Cの原稿投入が終わっていないだけで実装の不具合ではないため）。
+    try:
+        reg = json.loads((BASE / "segment_registry.json").read_text(encoding="utf-8"))
+        if not isinstance(reg, dict):
+            reg = {}
+    except Exception:
+        reg = {}
+
+    try:
+        seg_cfg = json.loads((BASE / "segment_config.json").read_text(encoding="utf-8"))
+        if not isinstance(seg_cfg, dict):
+            seg_cfg = {}
+    except Exception:
+        seg_cfg = {}
+
+    try:
+        import generate_remix as _gseg
+        _templates_by_acct = getattr(_gseg, "SEGMENT_TEST_TEMPLATES_BY_ACCT", {})
+    except Exception:
+        _templates_by_acct = {}
+
+    def _acct_of(entry):
+        return (entry.get("acct") or "masa") if isinstance(entry, dict) else None
+
+    if not reg:
+        for acct in ACCTS:
+            add(f"exec:segment_test:{acct}", "C.実行ギャップ", "PASS",
+                "segment_registry.json 空（導入初日 or 未生成）のため判定保留")
+    else:
+        yday = (date.today() - timedelta(days=1)).isoformat()
+        for acct in ACCTS:
+            pain_axis = (acct == "masa" and (seg_cfg.get("masa") or {}).get("axis") == "insta_pain")
+            n_yday = sum(1 for v in reg.values()
+                         if isinstance(v, dict) and v.get("created") == yday and _acct_of(v) == acct
+                         and (not pain_axis or str(v.get("segment", "")).startswith("I")))
+            if pain_axis and yday < (seg_cfg["masa"].get("axis_since") or "0000-00-00") and n_yday < 3:
+                add(f"exec:segment_test:{acct}", "C.実行ギャップ", "PASS",
+                    f"masaはテスト軸をInstagram悩み(I01-I16)へ切替({seg_cfg['masa'].get('axis_since')})。"
+                    f"切替前日({yday})の悩み登録は無くて当然のため判定保留")
+                continue
+            has_content = any(
+                any(hooks.get("low") or hooks.get("high"))
+                for hooks in (_templates_by_acct.get(acct) or {}).values()
+            ) if acct != "masa" else True
+            if n_yday >= 3:
+                add(f"exec:segment_test:{acct}", "C.実行ギャップ", "PASS",
+                    f"昨日({yday})のsegment_registry登録{n_yday}件")
+            elif not has_content and acct in seg_cfg:
+                add(f"exec:segment_test:{acct}", "C.実行ギャップ", "PASS",
+                    f"{acct}: セグメントテンプレ原稿未投入（プレースホルダのみ）のため判定保留"
+                    "（担当Cの原稿投入待ち・実装の不具合ではない）")
+            else:
+                add(f"exec:segment_test:{acct}", "C.実行ギャップ", "WARN",
+                    f"昨日({yday})のsegment_registry登録{n_yday}件"
+                    "（3本未満・セグメントテスト投稿が回っていない疑い）")
+
+    # C15追加(2026-10-04): masaの軸2「来店後のリピート・クロージング悩み」(R01-R12・segment_config masa.axes.repeat_close)
+    #   昨日のR系登録(axis=repeat_close)が1本未満ならWARN。導入日(axis_since)前日までは判定保留のPASS。
+    try:
+        _ax2 = ((seg_cfg.get("masa") or {}).get("axes") or {}).get("repeat_close")
+        if _ax2:
+            _yd = (date.today() - timedelta(days=1)).isoformat()
+            _n2 = sum(1 for v in reg.values()
+                      if isinstance(v, dict) and v.get("created") == _yd and _acct_of(v) == "masa"
+                      and v.get("axis") == "repeat_close")
+            _since = _ax2.get("axis_since") or "0000-00-00"
+            if _n2 >= 1:
+                add("exec:segment_test:masa_repeat", "C.実行ギャップ", "PASS", f"昨日({_yd})の軸2(来店後)登録{_n2}件")
+            elif _yd < _since:
+                add("exec:segment_test:masa_repeat", "C.実行ギャップ", "PASS",
+                    f"軸2(来店後のリピート・クロージング)は{_since}導入。前日({_yd})の登録は無くて当然のため判定保留")
+            else:
+                add("exec:segment_test:masa_repeat", "C.実行ギャップ", "WARN",
+                    f"昨日({_yd})の軸2(来店後)登録{_n2}件（1本未満・軸2の投稿が回っていない疑い）")
+            # 全カテゴリにlow/high原稿があるか（欠けるとその日の軸2が2本未満になる）
+            try:
+                _hy2 = json.loads((BASE / "segment_hypotheses.json").read_text(encoding="utf-8")).get("hypotheses", [])
+            except Exception:
+                _hy2 = []
+            _miss2 = []
+            for _c in (_ax2.get("share") or {}):
+                for _hook in ("low", "high"):
+                    if not any(isinstance(h, dict) and (h.get("acct") or "masa") == "masa" and h.get("axis") == "repeat_close"
+                               and h.get("segment") == _c and h.get("status") not in ("archived", "retired", "loser")
+                               and any(isinstance(p, dict) and p.get("hook") == _hook and p.get("text") for p in h.get("posts") or [])
+                               for h in _hy2):
+                        _miss2.append(f"{_c}/{_hook}")
+            add("exec:segment_repeat_pool", "C.実行ギャップ", "PASS" if not _miss2 else "WARN",
+                f"来店後{len(_ax2.get('share') or {})}カテゴリ全てにlow/high原稿あり・per_day={_ax2.get('per_day')}"
+                if not _miss2 else f"原稿の無いカテゴリ/フック: {', '.join(_miss2[:8])}（軸2が2本未満になる）")
+    except Exception as e:
+        add("exec:segment_test:masa_repeat", "C.実行ギャップ", "WARN", f"確認不可: {e}")
+
+    # C15追加: Obsidian由来の店舗経営の悩み・質問から作った仮説(segment_hypotheses.json)が
+    #          実際に投稿枠へ投入されているか、acctごとに判定。ファイル不在 or hypotheses 0件は
+    #          「仮説の中身は別エージェントが並行して作成中」で未着手なだけなのでPASS（WARNにしない）。
+    #          仮説が1件以上あるのに直近7日でhypothesis_id付き登録が無ければWARN。
+    try:
+        hyp_data = json.loads((BASE / "segment_hypotheses.json").read_text(encoding="utf-8"))
+    except Exception:
+        hyp_data = None
+    if not isinstance(hyp_data, dict) or not hyp_data.get("hypotheses"):
+        for acct in ACCTS:
+            add(f"exec:segment_hypothesis:{acct}", "C.実行ギャップ", "PASS",
+                "segment_hypotheses.json 不在または仮説0件のため判定対象外")
+    else:
+        cutoff7 = (date.today() - timedelta(days=7)).isoformat()
+        hyps = hyp_data["hypotheses"]
+        for acct in ACCTS:
+            n_hyp_acct = sum(
+                1 for h in hyps
+                if isinstance(h, dict) and (h.get("acct") or "masa") == acct
+            )
+            if n_hyp_acct == 0:
+                add(f"exec:segment_hypothesis:{acct}", "C.実行ギャップ", "PASS",
+                    f"{acct}向け仮説0件のため判定対象外")
+                continue
+            n_hyp_recent = sum(
+                1 for v in reg.values()
+                if isinstance(v, dict) and v.get("hypothesis_id") and _acct_of(v) == acct
+                and v.get("created", "") >= cutoff7
+            )
+            add(f"exec:segment_hypothesis:{acct}", "C.実行ギャップ",
+                "PASS" if n_hyp_recent >= 1 else "WARN",
+                f"仮説{n_hyp_acct}件・直近7日のhypothesis_id付き登録{n_hyp_recent}件" +
+                ("" if n_hyp_recent >= 1 else "（仮説投稿が実際の投稿枠に投入されていない疑い）"))
+
+    # C15追加(2026-10-04): masaのテスト軸=Instagram悩みカテゴリ(I01-I16)。全カテゴリに
+    #   low/high両方の原稿（archived/retired/loser以外の仮説）があるか＝1日6本を回し続けられるかを検査。
+    #   欠けたカテゴリは固定テンプレ代替が無く、その日のテスト投稿が6本未満になる。
+    try:
+        _mc = seg_cfg.get("masa") or {}
+        if _mc.get("axis") == "insta_pain":
+            _hyps = (hyp_data or {}).get("hypotheses", []) if isinstance(hyp_data, dict) else []
+            _missing = []
+            for _c in (_mc.get("share") or {}):
+                for _hook in ("low", "high"):
+                    ok_ = any(
+                        isinstance(h, dict) and (h.get("acct") or "masa") == "masa" and h.get("segment") == _c
+                        and h.get("status") not in ("archived", "retired", "loser")
+                        and any(isinstance(p, dict) and p.get("hook") == _hook and p.get("text") for p in h.get("posts") or [])
+                        for h in _hyps)
+                    if not ok_:
+                        _missing.append(f"{_c}/{_hook}")
+            add("exec:segment_pain_pool", "C.実行ギャップ", "PASS" if not _missing else "WARN",
+                f"悩み{len(_mc.get('share') or {})}カテゴリ全てにlow/high原稿あり・per_day={_mc.get('per_day')}"
+                if not _missing else f"原稿の無いカテゴリ/フック: {', '.join(_missing[:8])}（テスト投稿が6本未満になる）")
+    except Exception as e:
+        add("exec:segment_pain_pool", "C.実行ギャップ", "WARN", f"確認不可: {e}")
+
+    # C22: uplink追加投稿（2026-10-06 masa指示: 閲覧200以上をそのまま追加枠で出す）
+    #      昨日N本中何本出たか（半分未満WARN）・プール残数（7日分未満でWARN）
+    try:
+        import uplink_repost as _ur
+        yd = (date.today() - timedelta(days=1)).strftime("%Y-%m-%d")
+        out_n = _ur.count_on(yd)
+        pool = _ur.load_pool()
+        q = _ur.queued_count(pool)
+        days_left = q / max(1, _ur.DAILY_N)
+        if not any(i.get("status") == "posted" for i in pool) and out_n == 0:
+            add("exec:uplink_repost", "C.実行ギャップ", "PASS", f"uplink追加投稿 稼働開始前（初回投稿待ち・プール残{q}件）")
+        elif out_n * 2 < _ur.DAILY_N:
+            add("exec:uplink_repost", "C.実行ギャップ", "WARN",
+                f"uplink追加投稿 昨日({yd}) {out_n}/{_ur.DAILY_N}本（半分未満・プール残{q}件）")
+        elif days_left < 7:
+            add("exec:uplink_repost", "C.実行ギャップ", "WARN",
+                f"uplink追加投稿のプール残{q}件＝{days_left:.1f}日分（7日分未満・uplink_repost_refresh.pyの毎朝実行を確認）")
+        else:
+            add("exec:uplink_repost", "C.実行ギャップ", "PASS",
+                f"uplink追加投稿 昨日{out_n}/{_ur.DAILY_N}本・プール残{q}件({days_left:.0f}日分)")
+    except Exception as e:
+        add("exec:uplink_repost", "C.実行ギャップ", "WARN", f"検査不可: {e}")
+
+    # C7: 月100万ペース（常時アラーム）。views_action.json を読み、未達アカウントを明示。
+    #     達成は野心的目標のため未達は WARN（恒常監視・改善誘導が目的。FAILにはしない）。
+    # 2026-09-20: views_action.json は .gitignore L10 で明示除外されたMac専用の
+    # ローカル生成物で、CIのチェックアウトには原理的に絶対に存在しない
+    # （実測: FileNotFoundError '/home/runner/work/.../views_action.json'）。
+    # そのままだとCI実行のたびに100%WARNになる恒常誤検知だったため、CI実行
+    # （GITHUB_ACTIONS環境変数）を検知した場合はWARNではなくSKIPにする。
+    # 注意: SKIPは「問題なし」ではなく「検査していない」ことを表す。ゼロ件と
+    # 検査不能を混同しないよう、detail文言で必ず明示する（単にWARNを消すだけ
+    # の変更にはしない）。
+    if os.environ.get("GITHUB_ACTIONS") == "true":
+        add("exec:views_pace", "C.実行ギャップ", "SKIP",
+            "検査不能（Mac専用チェック）: views_action.jsonはMacローカル専用生成物で"
+            "CI上には存在しない。月100万ペースの監視はMac側のみで実施・CI側では未検査")
+        return
+    try:
+        va = json.loads((BASE / "views_action.json").read_text())
+        per = va.get("per_acct", {})
+        behind = va.get("behind", [])
+        for acct in ACCTS:
+            s = per.get(acct, {})
+            pace = s.get("pace", 0)
+            status = "PASS" if pace >= 100 else "WARN"
+            add(f"exec:views_pace:{acct}", "C.実行ギャップ", status,
+                f"月次pace {pace}%（30日{s.get('v30',0):,} / 1投稿{s.get('avg_post',0)}→必要{s.get('need_avg',0)}）")
+        if behind:
+            add("exec:views_weakest", "C.実行ギャップ", "WARN",
+                f"月100万未達 {len(behind)}件・最弱={va.get('weakest')}（優先テコ入れ要）")
+        # C7b: 期限ランプ（2026-09-03に月100万）の軌道チェック
+        ramp = va.get("ramp", {})
+        off = [a for a, r in ramp.items() if not r.get("on_track")]
+        if ramp:
+            add("exec:views_ramp", "C.実行ギャップ",
+                "PASS" if not off else "WARN",
+                ("全アカウント軌道内" if not off else
+                 "軌道遅れ: " + ", ".join(
+                     f"{a}({ramp[a]['actual_avg_post_7d']}<{ramp[a]['target_avg_post_7d']})" for a in off)
+                 + f" → 週{next(iter(ramp.values()))['week']}/8・期限{va.get('deadline')}"))
+    except Exception as e:
+        add("exec:views_pace", "C.実行ギャップ", "WARN", f"views_action.json未生成: {e}（views_report.py要実行）")
+
+
+# ── D. ログエラー ─────────────────────────────────
+def check_logs():
+    logs = ["error.log", "gitsync_error.log"]
+    cutoff = datetime.now() - timedelta(days=1)
+    for lg in logs:
+        f = BASE / lg
+        if not f.exists():
+            add(f"log:{lg}", "D.ログ", "PASS", "ログなし（エラー記録なし）")
+            continue
+        try:
+            lines = f.read_text(encoding="utf-8", errors="ignore").splitlines()[-200:]
+            # リトライ/フォールバックで回復する一時的エラーは除外し、最終失敗のみ問題視
+            # ネットワーク一時エラー（接続リセット・DNS解決失敗・タイムアウト・SSL切断・投稿失敗code=0）も除外
+            transient = (
+                "リトライ", "fallback", "retrying", "後にリトライ",
+                "Connection reset", "Connection Reset",
+                "nodename nor servname", "Errno 8", "Errno 54", "Errno 60",
+                "Operation timed out", "EOF occurred in violation",
+                "投稿失敗 (code=0)",
+            )
+            errs = [l for l in lines
+                    if any(k in l for k in ("Traceback", "Error", "ERROR", "Exception", "失敗"))
+                    and not any(t in l for t in transient)]
+            add(f"log:{lg}", "D.ログ", "PASS" if not errs else "WARN",
+                f"未回復エラー {len(errs)}件" + (f" 例: {errs[-1][:80]}" if errs else ""))
+        except Exception as e:
+            add(f"log:{lg}", "D.ログ", "WARN", f"読込失敗: {e}")
+
+
+# ── E. 同期 ───────────────────────────────────────
+def check_sync():
+    try:
+        subprocess.run(["git", "fetch", "origin", "main"], cwd=str(BASE),
+                       capture_output=True, timeout=30)
+        r = subprocess.run(["git", "rev-list", "--count", "origin/main..HEAD"],
+                           cwd=str(BASE), capture_output=True, text=True)
+        n = int(r.stdout.strip() or "0")
+        add("sync:unpushed", "E.同期", "PASS" if n == 0 else "WARN",
+            f"未pushコミット {n}件" + ("（溜まっている）" if n > 3 else ""))
+    except Exception as e:
+        add("sync:unpushed", "E.同期", "WARN", f"確認失敗: {e}")
+
+
+# ── 停止系の再発検知（2026-10-02追加: C18/C19/C20）──────────────────
+# 共通の弱点=「GitHub上はsuccessなのに止まっている」を人が気付くまで数時間かかった。
+# stall_check.py等に依存せず、ここで自前にGitHub API / Threads APIを叩く。
+GH_REPO_DEFAULT = "truthbodysalon-lab/threads-auto-post"
+JST = timezone(timedelta(hours=9))
+# 台帳(INCIDENTS.md)の「再発防止の検査ID」→ verify_system.py内で add() される検査idの接頭辞。
+# C20がこの対応と実コードの存在を突合する（台帳だけ書いて検査が消える事故を防ぐ）。
+CHECK_REGISTRY = {
+    "C8": "exec:daily50:", "C10": "exec:pacing:", "C11": "exec:watchdog",
+    "C13": "exec:hpb_only", "C14": "exec:imagepost", "C15": "exec:segment_test:",
+    "C16": "next_post:", "C17": "dup_reselect:", "C23": "same_day_anchor:", "C24": "dup_sameday:",
+    "C21": "exec:log_sync", "C26": "hero_posted:", "C40": "stuck_anchor:", "C25": "ledger_gap:", "C18": "exec:chain_gap", "C19": "exec:post_interval:", "C20": "ledger:",
+    "C27": "masa_insta_theme", "C41": "alive_stall:", "C42": "dedup_key:",
+}
+
+
+def _load_dotenv():
+    envf = BASE / ".env"
+    if envf.exists():
+        for _l in envf.read_text().splitlines():
+            if "=" in _l and not _l.startswith("#"):
+                _k, _v = _l.split("=", 1)
+                os.environ.setdefault(_k.strip(), _v.strip())
+
+
+def _gh_token() -> str:
+    _load_dotenv()
+    tok = os.environ.get("GH_PAT") or os.environ.get("GITHUB_TOKEN") or ""
+    if tok:
+        return tok
+    try:
+        r = subprocess.run(["gh", "auth", "token"], capture_output=True, text=True, timeout=10)
+        return r.stdout.strip()
+    except Exception:
+        return ""
+
+
+def _parse_iso(s: str) -> datetime:
+    return datetime.fromisoformat(s.replace("Z", "+00:00"))
+
+
+def check_chain_gap():
+    """C18: 常駐連鎖（auto_post.yml）。直近24hで「どの常駐runも動いていなかった空白」の最大値。
+    30分超WARN・90分超FAIL。現在in_progressが0本ならFAIL（2026-10-02: GitHub cron間引きで
+    5.5時間全アカ停止・runはsuccessのまま気付けなかった障害）。"""
+    import urllib.request as _ur
+    tok = _gh_token()
+    if not tok:
+        add("exec:chain_gap", "C.実行ギャップ", "SKIP", "GH_PAT/gh認証なし（常駐連鎖は未検査）")
+        return
+    repo = os.environ.get("GH_REPO", GH_REPO_DEFAULT)
+    now = datetime.now(timezone.utc)
+    since = now - timedelta(hours=24)
+    try:
+        runs, page = [], 1
+        while page <= 5:
+            url = (f"https://api.github.com/repos/{repo}/actions/workflows/auto_post.yml/runs"
+                   f"?per_page=100&page={page}&created=%3E%3D{(since - timedelta(hours=8)).strftime('%Y-%m-%d')}")
+            req = _ur.Request(url, headers={"Authorization": f"Bearer {tok}",
+                                            "Accept": "application/vnd.github+json"})
+            with _ur.urlopen(req, timeout=20) as r:
+                batch = json.loads(r.read()).get("workflow_runs", [])
+            runs += batch
+            if len(batch) < 100:
+                break
+            page += 1
+    except Exception as e:
+        add("exec:chain_gap", "C.実行ギャップ", "WARN", f"GitHub API取得不可: {e}")
+        return
+    in_prog = [r for r in runs if r.get("status") == "in_progress"]
+    spans = []
+    for r in runs:
+        try:
+            st = _parse_iso(r["run_started_at"])
+            if r.get("status") == "in_progress":
+                en = now
+            else:
+                en = _parse_iso(r["updated_at"])
+                if (en - st).total_seconds() < 300:
+                    continue  # 数秒で終わる single-keeper 即終了run等は「常駐」に数えない
+            spans.append((max(st, since), min(en, now)))
+        except Exception:
+            continue
+    spans = sorted(s for s in spans if s[1] > s[0])
+    cur, gaps = since, []
+    for st, en in spans:
+        if st > cur:
+            gaps.append((st - cur, cur))
+        cur = max(cur, en)
+    if now > cur:
+        gaps.append((now - cur, cur))
+    mx, at = max(gaps, key=lambda g: g[0]) if gaps else (timedelta(0), since)
+    mins = int(mx.total_seconds() // 60)
+    where = at.astimezone(JST).strftime("%m/%d %H:%M")
+    if not in_prog:
+        add("exec:chain_gap", "C.実行ギャップ", "FAIL",
+            f"常駐run(in_progress)が0本＝今この瞬間投稿が止まっている。24h最大空白{mins}分（{where}JST〜）")
+    elif mins > 90:
+        add("exec:chain_gap", "C.実行ギャップ", "FAIL", f"24h最大空白{mins}分（{where}JST〜）> 90分")
+    elif mins > 30:
+        add("exec:chain_gap", "C.実行ギャップ", "WARN", f"24h最大空白{mins}分（{where}JST〜）> 30分")
+    else:
+        add("exec:chain_gap", "C.実行ギャップ", "PASS",
+            f"常駐in_progress {len(in_prog)}本・24h最大空白{mins}分（run {len(spans)}区間）")
+
+
+def _yesterday_api_posts(acct: str):
+    """昨日(JST)の本体投稿 [(post_id, datetime JST)]。取得不可はNone。"""
+    import urllib.request as _ur
+    _load_dotenv()
+    uid = os.environ.get(f"THREADS_USER_ID_{acct.upper()}")
+    tok = os.environ.get(f"THREADS_ACCESS_TOKEN_{acct.upper()}")
+    if not uid or not tok:
+        return None
+    y0 = datetime.now(JST).replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(days=1)
+    url = (f"https://graph.threads.net/v1.0/{uid}/threads?fields=id,timestamp,is_reply"
+           f"&since={int(y0.timestamp())}&until={int((y0 + timedelta(days=1)).timestamp())}"
+           f"&limit=100&access_token={tok}")
+    out, pages = [], 0
+    while url and pages < 6:
+        try:
+            with _ur.urlopen(url, timeout=20) as r:
+                data = json.loads(r.read())
+        except Exception:
+            return None if not out else out
+        for x in data.get("data", []):
+            if x.get("is_reply") or not x.get("timestamp"):
+                continue
+            ts = datetime.strptime(x["timestamp"], "%Y-%m-%dT%H:%M:%S%z").astimezone(JST)
+            out.append((x["id"], ts))
+        url = (data.get("paging") or {}).get("next")
+        pages += 1
+    return out
+
+
+def check_post_interval():
+    """C19: 昨日の自前投稿の6-23時の最大投稿間隔（log_<acct>_posted.jsonlのpost_idと
+    Threads外形APIのtimestampを突合。外部ツール投稿＝台帳に無い投稿は除外）。
+    90分超WARN・180分超FAIL（2026-10-02: 5.5時間0本・50本/日でも日中の空白は件数では見えない）。"""
+    day = (datetime.now(JST) - timedelta(days=1)).strftime("%Y-%m-%d")
+    for acct in ACCTS:
+        cid = f"exec:post_interval:{acct}"
+        try:
+            api = _yesterday_api_posts(acct)
+            if api is None:
+                add(cid, "C.実行ギャップ", "SKIP", "Threads API取得不可/トークンなし（未検査）")
+                continue
+            ids = set()
+            lf = BASE / f"log_{acct}_posted.jsonl"
+            if lf.exists():
+                for line in lf.read_text(encoding="utf-8").splitlines():
+                    try:
+                        d = json.loads(line)
+                        if d.get("post_id"):
+                            ids.add(str(d["post_id"]))
+                    except Exception:
+                        pass
+            own = sorted(ts for pid, ts in api if pid in ids)
+            ext = len(api) - len(own)
+            if acct in ("nagaoka", "masa"):
+                # 2026-11-12: masaもBuffer(外部約10枠)をAPI実測で合計に数える設計(daily_budget.py)＝自前のみだと午後の空白が誤FAIL（11/11 14:13〜18:12・全投稿では最大72分）
+                # 2026-10-09: nagaokaは外部ツール(約20本/日・正常)の投稿もペース計算に算入され自前の開始が遅れる設計
+                # （auto_post._run_account_batch はAPI実測数を採用）。自前のみだと朝の空白が誤FAILになるため全投稿で判定
+                own = sorted(ts for pid, ts in api)
+                ext = 0
+            lo = datetime.strptime(day, "%Y-%m-%d").replace(tzinfo=JST, hour=6)
+            hi = lo.replace(hour=23)
+            pts = [t for t in own if lo <= t <= hi]
+            if len(pts) < 2:
+                add(cid, "C.実行ギャップ", "FAIL" if len(api) else "WARN",
+                    f"{day} 6-23時の自前投稿{len(pts)}本（API全{len(api)}本・台帳突合{len(own)}本）→間隔算出不能")
+                continue
+            seq = [lo] + pts  # 6:00起点（朝の立ち上がり遅れも拾う）
+            gaps = [(seq[i + 1] - seq[i], seq[i]) for i in range(len(seq) - 1)]
+            mx, at = max(gaps, key=lambda g: g[0])
+            mins = int(mx.total_seconds() // 60)
+            note = f"{day} 最大間隔{mins}分（{at.strftime('%H:%M')}〜）・自前{len(pts)}本/外部等{ext}本除外"
+            st = "FAIL" if mins > 180 else ("WARN" if mins > 90 else "PASS")
+            add(cid, "C.実行ギャップ", st, note)
+        except Exception as e:
+            add(cid, "C.実行ギャップ", "WARN", f"検査不可: {e}")
+
+
+def alive_stall_incidents(posts, spans, lo, hi, min_gap_min=90, daily_target=DAILY_POSTS):
+    """C41の判定本体（テスト用に分離）。posts=投稿時刻(JST)、spans=常駐run稼働区間[(開始,終了)]、
+    lo/hi=対象時間帯。lo起点の各投稿間隔のうち min_gap_min 以上で、その間に常駐runが稼働していた
+    時間（区間の和集合との重なり）が min_gap_min 以上のものを [(間隔分, 稼働分, 開始)] で返す。"""
+    pts = sorted(t for t in posts if lo <= t <= hi)
+    # 2026-10-24: 最後の投稿から hi(23時)までの空白も対象にする（10/23 truth 19:07以降0本を見逃していた）
+    seq = [lo] + pts + [hi]
+    spans = sorted(spans)
+    out = []
+    for idx, (a, b) in enumerate(zip(seq, seq[1:])):
+        gap = (b - a).total_seconds() / 60
+        if gap < min_gap_min:
+            continue
+        if idx >= daily_target:  # その日の目標本数を出し終えた後の空白は正常（例: 21時台に50本完了）
+            continue
+        covered, cur = 0.0, a
+        for st, en in spans:
+            st, en = max(st, cur), min(en, b)
+            if en > st:
+                covered += (en - st).total_seconds() / 60
+                cur = en
+        if covered >= min_gap_min:
+            out.append((int(gap), int(covered), a))
+    return out
+
+
+def _keeper_spans_between(lo, hi):
+    """auto_post.yml の常駐run稼働区間(JST)。5分未満で終わるrun(single-keeper即終了)は除外。取得不可はNone。"""
+    import urllib.request as _ur
+    tok = _gh_token()
+    if not tok:
+        return None
+    repo = os.environ.get("GH_REPO", GH_REPO_DEFAULT)
+    now = datetime.now(timezone.utc)
+    runs, page = [], 1
+    try:
+        while page <= 6:
+            url = (f"https://api.github.com/repos/{repo}/actions/workflows/auto_post.yml/runs"
+                   f"?per_page=100&page={page}&created=%3E%3D{(lo - timedelta(days=1)).astimezone(timezone.utc).strftime('%Y-%m-%d')}")
+            req = _ur.Request(url, headers={"Authorization": f"Bearer {tok}", "Accept": "application/vnd.github+json"})
+            with _ur.urlopen(req, timeout=20) as r:
+                batch = json.loads(r.read()).get("workflow_runs", [])
+            runs += batch
+            if len(batch) < 100:
+                break
+            page += 1
+    except Exception:
+        return None
+    spans = []
+    for r in runs:
+        try:
+            st = _parse_iso(r["run_started_at"])
+            en = now if r.get("status") == "in_progress" else _parse_iso(r["updated_at"])
+            if (en - st).total_seconds() < 300:
+                continue
+            spans.append((st.astimezone(JST), en.astimezone(JST)))
+        except Exception:
+            continue
+    return spans
+
+
+def check_alive_stall():
+    """C41: 昨日、投稿時間帯(6-23時)に「常駐runが稼働中なのに90分以上投稿が止まった」時間帯があったか。
+    2026-10-23 truth: 常駐は正常稼働のまま19:08〜22:57の約230分0本→見張りは『kick見送り』のみで通知3時間超。
+    外形API(投稿時刻)と auto_post.yml の run 区間で判定。90分超WARN・180分超FAIL（C19と同基準）。"""
+    day = (datetime.now(JST) - timedelta(days=1)).strftime("%Y-%m-%d")
+    lo = datetime.strptime(day, "%Y-%m-%d").replace(tzinfo=JST, hour=6)
+    hi = lo.replace(hour=23)
+    spans = None
+    for acct in ACCTS:
+        cid = f"alive_stall:{acct}"
+        try:
+            api = _yesterday_api_posts(acct)
+            if api is None:
+                add(cid, "C.実行ギャップ", "SKIP", "Threads API取得不可/トークンなし（未検査）")
+                continue
+            if spans is None:
+                spans = _keeper_spans_between(lo, hi)
+            if spans is None:
+                add(cid, "C.実行ギャップ", "SKIP", "GitHub API取得不可（常駐run区間が不明で未検査）")
+                continue
+            posts = [ts for _, ts in api]
+            if acct != "nagaoka":
+                ids = set()
+                lf = BASE / f"log_{acct}_posted.jsonl"
+                if lf.exists():
+                    for line in lf.read_text(encoding="utf-8").splitlines():
+                        try:
+                            d = json.loads(line)
+                            if d.get("post_id"):
+                                ids.add(str(d["post_id"]))
+                        except Exception:
+                            pass
+                posts = [ts for pid, ts in api if pid in ids]
+            inc = alive_stall_incidents(posts, spans, lo, hi)
+            if not inc:
+                add(cid, "C.実行ギャップ", "PASS", f"{day} 常駐稼働中に90分以上止まった時間帯なし")
+                continue
+            mx = max(inc, key=lambda x: x[0])
+            st = "FAIL" if mx[0] > 180 else "WARN"
+            add(cid, "C.実行ギャップ", st,
+                f"{day} 常駐run稼働中なのに{mx[0]}分無投稿（{mx[2].strftime('%H:%M')}〜・稼働{mx[1]}分）・該当{len(inc)}件")
+        except Exception as e:
+            add(cid, "C.実行ギャップ", "WARN", f"検査不可: {e}")
+
+
+def check_ledger_gap():
+    """C25: 昨日の実投稿(外形API)に対し台帳(log_<acct>_posted.jsonl)が欠けていないか。
+    2026-10-07監査: 10/03が3アカウントとも台帳0行・10/04,10/06も欠落→重複ガードが効かず同文が数時間後に再投稿された。
+    台帳が0行、またはAPI件数の半分未満(truth/masa)ならFAIL（nagaokaは外部ツール投稿があるため0行のみFAIL）。"""
+    day = (datetime.now(JST) - timedelta(days=1)).strftime("%Y-%m-%d")
+    for acct in ACCTS:
+        cid = f"ledger_gap:{acct}"
+        try:
+            api = _yesterday_api_posts(acct)
+            if api is None:
+                add(cid, "C.実行ギャップ", "SKIP", "Threads API取得不可（未検査）")
+                continue
+            n = 0
+            lf = BASE / f"log_{acct}_posted.jsonl"
+            if lf.exists():
+                for line in lf.read_text(encoding="utf-8").splitlines():
+                    try:
+                        if json.loads(line).get("date") == day:
+                            n += 1
+                    except Exception:
+                        pass
+            bad = (n == 0 and len(api) > 0) or (acct != "nagaoka" and len(api) >= 10 and n < len(api) * 0.5)
+            add(cid, "C.実行ギャップ", "FAIL" if bad else "PASS", f"{day} 台帳{n}行 / API実投稿{len(api)}本")
+        except Exception as e:
+            add(cid, "C.実行ギャップ", "WARN", f"検査不可: {e}")
+
+
+def check_log_sync():
+    """C21: 投稿ログ(log_*_posted.jsonl)のpush停滞。常駐runがpushに失敗するとログがrunner内に残り
+    重複ガード・集計・検証が全て古い値になる（2026-10-03: 未コミット変更でpull --rebaseが失敗し約16時間停滞）。
+    6-23時JSTにmainの「chore: update logs」コミットが3時間以上無ければFAIL、90分以上でWARN。"""
+    import urllib.request as _ur
+    tok = _gh_token()
+    if not tok:
+        add("exec:log_sync", "C.実行ギャップ", "SKIP", "GH_PAT/gh認証なし")
+        return
+    repo = os.environ.get("GH_REPO", GH_REPO_DEFAULT)
+    try:
+        url = f"https://api.github.com/repos/{repo}/commits?path=log_truth_posted.jsonl&per_page=1"
+        req = _ur.Request(url, headers={"Authorization": f"Bearer {tok}", "Accept": "application/vnd.github+json"})
+        with _ur.urlopen(req, timeout=20) as r:
+            c = json.loads(r.read())[0]
+        ts = _parse_iso(c["commit"]["committer"]["date"])
+        now = datetime.now(timezone.utc)
+        lag = (now - ts).total_seconds() / 60
+        hh = now.astimezone(JST).hour
+        if not (7 <= hh < 23):
+            add("exec:log_sync", "C.実行ギャップ", "PASS", f"夜間のため判定対象外（最終log push {lag:.0f}分前）")
+        elif lag > 180:
+            add("exec:log_sync", "C.実行ギャップ", "FAIL", f"投稿ログのpushが{lag:.0f}分停滞（常駐runのpush失敗の疑い）")
+        elif lag > 90:
+            add("exec:log_sync", "C.実行ギャップ", "WARN", f"投稿ログのpushが{lag:.0f}分前")
+        else:
+            add("exec:log_sync", "C.実行ギャップ", "PASS", f"最終log push {lag:.0f}分前")
+    except Exception as e:
+        add("exec:log_sync", "C.実行ギャップ", "WARN", f"GitHub API取得不可: {e}")
+
+
+def check_incident_ledger():
+    """C20: INCIDENTS.mdの各障害行の「再発防止の検査ID」がverify_system.py内に実在するか。
+    無ければFAIL（台帳だけ書いて検査が消える/最初から無い事故を防ぐ）。"""
+    f = BASE / "INCIDENTS.md"
+    if not f.exists():
+        add("ledger:file", "C.実行ギャップ", "FAIL", "INCIDENTS.md が無い（障害台帳の欠落）")
+        return
+    try:
+        src = Path(__file__).read_text(encoding="utf-8")
+        rows = []
+        for line in f.read_text(encoding="utf-8").splitlines():
+            m = re.match(r"\|\s*(20\d\d-\d\d-\d\d)\s*\|(.*)\|\s*$", line)
+            if m:
+                cells = [c.strip() for c in line.strip().strip("|").split("|")]
+                rows.append(cells)
+        bad = []
+        for cells in rows:
+            day, ids_cell = cells[0], (cells[4] if len(cells) > 4 else "")
+            ids = re.findall(r"\bC\d+\b", ids_cell)
+            if not ids:
+                bad.append(f"{day}:検査ID無し")
+                continue
+            for cid in ids:
+                marker = CHECK_REGISTRY.get(cid)
+                if not marker or not re.search(r'(add\(\s*f?"|cid = f?")' + re.escape(marker), src):
+                    bad.append(f"{day}:{cid}が実在しない")
+        if not rows:
+            add("ledger:rows", "C.実行ギャップ", "FAIL", "INCIDENTS.mdに障害行が1件も無い（表の書式崩れ）")
+        elif bad:
+            add("ledger:rows", "C.実行ギャップ", "FAIL", f"{len(bad)}件: " + " / ".join(bad[:8]))
+        else:
+            add("ledger:rows", "C.実行ギャップ", "PASS", f"障害{len(rows)}件すべて検査IDが実在")
+    except Exception as e:
+        add("ledger:rows", "C.実行ギャップ", "WARN", f"台帳検査不可: {e}")
+
+
+def mirror_incidents_to_obsidian():
+    """INCIDENTS.mdをObsidianへ書き出す（ローカル実行時のみ・失敗しても検査結果に影響させない）。"""
+    if os.environ.get("GITHUB_ACTIONS") == "true":
+        return
+    try:
+        body = (BASE / "INCIDENTS.md").read_text(encoding="utf-8")
+        d = Path("/Users/mt112/Desktop/my files/myfiles/SNS・Threads/分析レポート")
+        d.mkdir(parents=True, exist_ok=True)
+        head = (f"<!-- 正本: threads-auto-post/INCIDENTS.md。verify_system.pyが自動ミラー"
+                f"（{datetime.now().strftime('%Y-%m-%d %H:%M')}）。ここを編集しない -->\n\n")
+        (d / "Threads投稿障害台帳.md").write_text(head + body, encoding="utf-8")
+    except Exception:
+        pass
+
+
+def run_all():
+    check_imports()
+    check_generation()
+    check_next_post_smoke()
+    check_dup_reselect_guard()
+    check_same_day_duplicates()
+    check_same_day_anchor_and_git_conflict()
+    check_stuck_anchor_reselect()
+    check_dedup_key_window()
+    check_test_posts_in_first50()
+    check_rules()
+    check_masa_insta_theme()
+    check_hero_posted()
+    check_masa_abstract()
+    check_list_habit_in_first50()
+    check_type_mix_in_first50()
+    check_rule_hygiene()
+    check_execution_gaps()
+    check_logs()
+    check_sync()
+    check_chain_gap()
+    check_post_interval()
+    check_alive_stall()
+    check_log_sync()
+    check_ledger_gap()
+    check_incident_ledger()
+
+
+def main():
+    # --json 時は検査中の標準出力（auto_post.log_info 等の print・子プロセス出力）を stderr へ逃がし、
+    # stdout には最後の JSON だけを出す（2026-10-24: 814c61e2 の [Buffer回避] ログが JSON の前に混入し
+    # verify_ci.py が JSON解析失敗→Daily Verify 2日連続失敗）。fd レベルで差し替えるので子プロセスも対象。
+    json_mode = "--json" in sys.argv
+    saved_fd = None
+    if json_mode:
+        sys.stdout.flush()
+        saved_fd = os.dup(1)
+        os.dup2(2, 1)
+    try:
+        run_all()
+    except Exception:
+        add("verify:crash", "A.コード", "FAIL", traceback.format_exc()[-300:])
+    finally:
+        if saved_fd is not None:
+            sys.stdout.flush()
+            os.dup2(saved_fd, 1)
+            os.close(saved_fd)
+
+    fails = [r for r in results if r["status"] == "FAIL"]
+    warns = [r for r in results if r["status"] == "WARN"]
+    # SKIP = 「問題なし」ではなく「検査していない」（例: exec:views_pace のCI実行時）。
+    # ゼロ件と検査不能を混同しないよう、PASS件数には含めず別枠で集計する（2026-09-20）。
+    skips = [r for r in results if r["status"] == "SKIP"]
+    summary = {
+        "checked_at": datetime.now().strftime("%Y-%m-%d %H:%M"),
+        "total": len(results), "fail": len(fails), "warn": len(warns),
+        "skip": len(skips),
+        "pass": len(results) - len(fails) - len(warns) - len(skips),
+        "overall": "FAIL" if fails else ("WARN" if warns else "PASS"),
+    }
+
+    # Obsidianへレポート保存（--report）
+    if "--report" in sys.argv:
+        try:
+            rd = Path("/Users/mt112/Desktop/my files/myfiles/システム検証")
+            rd.mkdir(parents=True, exist_ok=True)
+            lines = [f"# システム検証 {summary['checked_at']}", "",
+                     f"総合: **{summary['overall']}** | PASS {summary['pass']} / WARN {summary['warn']} / FAIL {summary['fail']}",
+                     "", "## 要対応・注意（FAIL/WARN）", ""]
+            nonpass = [r for r in results if r["status"] != "PASS"]
+            if nonpass:
+                for r in nonpass:
+                    lines.append(f"- **{r['status']}** [{r['category']}] `{r['id']}`: {r['detail']}")
+            else:
+                lines.append("- なし（全項目PASS）")
+            (rd / f"検証_{date.today().strftime('%Y-%m-%d')}.md").write_text("\n".join(lines), encoding="utf-8")
+        except Exception:
+            pass
+
+    if "--json" in sys.argv:
+        print(json.dumps({"summary": summary, "results": results}, ensure_ascii=False, indent=2))
+    else:
+        print(f"=== システム検証 {summary['checked_at']} ===")
+        print(f"総合: {summary['overall']} | PASS {summary['pass']} / WARN {summary['warn']} / FAIL {summary['fail']} / SKIP {summary['skip']}\n")
+        for r in results:
+            mark = {"PASS": "✓", "WARN": "⚠", "FAIL": "✗", "SKIP": "・"}[r["status"]]
+            if r["status"] != "PASS":
+                print(f"  {mark} [{r['category']}] {r['id']}: {r['detail']}")
+        if not fails and not warns and not skips:
+            print("  全項目PASS")
+        elif not fails and not warns:
+            print(f"  PASS/SKIPのみ（SKIP {len(skips)}件はゼロ件ではなく未検査）")
+
+    mirror_incidents_to_obsidian()
+    sys.exit(1 if fails else 0)
+
+
+if __name__ == "__main__":
+    main()

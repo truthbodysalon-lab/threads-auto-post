@@ -1,0 +1,278 @@
+#!/usr/bin/env python3
+"""
+CI版watchdog（GitHub Actionsから30分毎に実行。Macが停止していても動く最終防衛線）。
+
+ローカル版watchdog.pyと違い、投稿数を**Threads API（外形）**で数える。
+リポジトリのログはローカルMacの未同期分を含まないため、外形カウントが唯一の真実。
+
+チェック（アカウント毎）:
+  A. ペース回廊: API実投稿数 vs 今あるべき累計（6〜23時に50本を均等配分）
+     - 遅れ8本超 → 詰まりと判定: LINEリストイン消化フラグを立て、修復バッチ実行
+     - 先行10本超 → 固め打ちバグ再発: 通知記録のみ
+  B. 修復しても遅れが解消しなければ 通知記録（旧LINE Push。2026-07-21方針でLINE送信は廃止）
+     （1日1回/acctまで。state=repo内ファイル）
+"""
+from __future__ import annotations
+
+import json
+import os
+import subprocess
+import sys
+import urllib.error
+import urllib.request
+import urllib.parse
+from datetime import date, datetime, timezone, timedelta
+from pathlib import Path
+
+BASE = Path(__file__).parent
+STATE = BASE / "watchdog_ci_state.json"
+NOTIFICATIONS = BASE / "notifications.jsonl"
+JST = timezone(timedelta(hours=9))
+ACCTS = {"truth": "TRUTH", "nagaoka": "NAGAOKA", "masa": "MASA"}
+from account_ownership import is_local
+ACCTS = {k:v for k,v in ACCTS.items() if is_local(k)}
+from daily_budget import DAILY_POSTS as DAILY_TARGET, LEDGER_ONLY_ACCTS   # 1日20本(2026-11-11・内訳は daily_budget.py)
+POST_HOUR_START, POST_HOUR_END = 6, 23
+PACE_FULL_HOUR = int(os.environ.get("PACE_FULL_HOUR", "22"))  # auto_post.pyと同じ前倒し按分
+LOOKAHEAD_HOURS = int(os.environ.get("LOOKAHEAD_HOURS", "0"))  # auto_post.pyと同じ先読み（先行判定のみに使用）
+
+for line in (BASE / ".env").read_text().splitlines():
+    line = line.strip()
+    if line and not line.startswith("#") and "=" in line:
+        k, v = line.split("=", 1)
+        os.environ.setdefault(k.strip(), v.strip())
+
+
+def _ledger_count_today(acct: str) -> int:
+    """台帳(log_<acct>_posted.jsonl)の本日(JST)の自前投稿数。"""
+    try:
+        today = datetime.now(JST).date().isoformat()
+        n = 0
+        for line in (BASE / f"log_{acct}_posted.jsonl").read_text(encoding="utf-8").splitlines():
+            try:
+                if json.loads(line).get("date") == today:
+                    n += 1
+            except Exception:
+                pass
+        return n
+    except Exception:
+        return -1
+
+
+def api_count_today(acct: str) -> int:
+    """Threads APIで本日(JST)の実投稿数を数える（外形＝唯一の真実）。失敗時-1。
+    2026-11-11: LEDGER_ONLY_ACCTS(nagaoka)は外部ツール(約20本/日・masa本人の手動系)が実測に混ざるため
+    数えず、台帳(自前投稿)の本数を返す（外部ツールの分で自前の20本が0本になるのを防ぐ）。"""
+    if acct in LEDGER_ONLY_ACCTS:
+        return _ledger_count_today(acct)
+    uid = os.environ.get(f"THREADS_USER_ID_{ACCTS[acct]}")
+    tok = os.environ.get(f"THREADS_ACCESS_TOKEN_{ACCTS[acct]}")
+    today = datetime.now(JST).date().isoformat()
+    n, url = 0, f"https://graph.threads.net/v1.0/{uid}/threads?fields=id,timestamp,is_reply&limit=100&access_token={tok}"
+    # スコープ耐性: threads_read_replies が無いトークン（nagaokaで実発生・2026-07-12）は
+    # is_reply指定が code10 で失敗する。その場合はis_reply抜きで数え、リプライ込み概算として扱う
+    # （監視が沈黙するより過大側の概算で継続する方が安全）。
+    def _fetch(u):
+        with urllib.request.urlopen(u, timeout=20) as r:
+            return json.loads(r.read())
+    try:
+        try:
+            _fetch(url.replace("&limit=100", "&limit=1"))
+        except Exception:
+            url = url.replace("id,timestamp,is_reply", "id,timestamp")
+            print(f"{acct}: is_reply不可トークン→リプライ込み概算で継続")
+        for _ in range(3):  # コメント除外後の本体50本を確実に拾う
+            with urllib.request.urlopen(url, timeout=20) as r:
+                d = json.loads(r.read())
+            stop = False
+            for p in d.get("data", []):
+                if p.get("is_reply"):
+                    continue   # コメント（返信）は本体投稿数に含めない
+                ts = p.get("timestamp", "")
+                try:
+                    # Threadsは "+0000" 形式（fromisoformatはPy3.11未満で非対応）
+                    dt = datetime.strptime(ts.replace("Z", "+0000"), "%Y-%m-%dT%H:%M:%S%z")
+                    jst_d = dt.astimezone(JST).date().isoformat()
+                except Exception:
+                    continue
+                if jst_d == today:
+                    n += 1
+                else:
+                    stop = True
+            nxt = d.get("paging", {}).get("next")
+            if stop or not nxt:
+                break
+            url = nxt
+        # 2026-11-11: uplink転載(masa)も合計20本の内数のため、APIの実測からは引かない
+        return n
+    except Exception as e:
+        print(f"{acct}: APIカウント失敗 {e}")
+        return -1
+
+
+def want_now() -> int:
+    h = datetime.now(JST).hour
+    if h < POST_HOUR_START:
+        return 0
+    frac = min(1.0, (h - POST_HOUR_START + 1) / max(1, PACE_FULL_HOUR - POST_HOUR_START + 1))
+    return int(DAILY_TARGET * frac)
+
+
+def line_push(msg: str):
+    """通知記録（旧: LINE Push）。
+    2026-07-21ユーザー方針によりLINEへは一切送信しない（メッセージ件数消費のため）。
+    代わりにリポジトリ内 notifications.jsonl へ追記し、CIがcommit→ローカルpull_sync.shが
+    Obsidian(_通知)+~/.claude/notifications.log へ転送する。"""
+    try:
+        entry = {"ts": datetime.now(JST).isoformat(timespec="seconds"), "msg": msg}
+        with NOTIFICATIONS.open("a", encoding="utf-8") as f:
+            f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+        print(f"通知記録: {msg[:60]}")
+    except Exception as e:
+        print(f"通知記録失敗: {e}")
+
+
+def _state() -> dict:
+    try:
+        return json.loads(STATE.read_text())
+    except Exception:
+        return {}
+
+
+def _notified_today(st: dict, key: str) -> bool:
+    return st.get(key) == datetime.now(JST).date().isoformat()
+
+
+
+def keeper_running() -> bool:
+    """auto_post.yml の常駐ループが動いているか（2026-10-02 常駐化）。動いていれば修復は
+    常駐側に任せ、ここから auto_post.py を並走させない（同時投稿・台帳競合の防止）。"""
+    try:
+        import urllib.request as _u
+        tok = os.environ.get("GH_PAT", "")
+        repo = os.environ.get("GH_REPO", "truthbodysalon-lab/threads-auto-post")
+        req = _u.Request(f"https://api.github.com/repos/{repo}/actions/workflows/auto_post.yml/runs?status=in_progress&per_page=5",
+                         headers={"Authorization": f"Bearer {tok}", "Accept": "application/vnd.github+json"})
+        with _u.urlopen(req, timeout=15) as r:
+            return json.loads(r.read()).get("total_count", 0) > 0
+    except Exception as e:
+        print(f"keeper_running 判定失敗: {e}")
+        return False
+
+
+def dispatch_keeper() -> None:
+    try:
+        import urllib.request as _u
+        tok = os.environ.get("GH_PAT", "")
+        repo = os.environ.get("GH_REPO", "truthbodysalon-lab/threads-auto-post")
+        req = _u.Request(f"https://api.github.com/repos/{repo}/actions/workflows/auto_post.yml/dispatches",
+                         data=json.dumps({"ref": "main"}).encode(), method="POST",
+                         headers={"Authorization": f"Bearer {tok}", "Accept": "application/vnd.github+json"})
+        _u.urlopen(req, timeout=15)
+        print("常駐ループ停止を検知 → auto_post.yml を起動")
+    except Exception as e:
+        print(f"auto_post.yml 起動失敗: {e}")
+
+
+def main():
+    h = datetime.now(JST).hour
+    if not (POST_HOUR_START <= h < POST_HOUR_END):
+        print(f"投稿時間外({h}時JST) → スキップ")
+        return
+    st = _state()
+    today = datetime.now(JST).date().isoformat()
+    want = want_now()
+    repaired = []
+    for acct in ACCTS:
+        n = api_count_today(acct)
+        if n < 0:
+            continue
+        print(f"{acct}: 実投稿{n} / あるべき{want}")
+        gap = want - n
+        # 2026-10-06: 先行判定は auto_post.py と同じ先読み曲線(LOOKAHEAD_HOURS=3)を基準にする。
+        # 投稿側は設計上 target(h+3) まで先に出すため、target(h)+10 だと正常運転だけで閾値に張り付き
+        # 外部ツール/手動の数本で誤報になっていた（10/6 truth30本=自動25+手動6、masa27本=通常24+uplink3）。
+        # 7/10型の暴走（masa 12:56に50本）は want_ahead(15時)=31+10=41 を超えるので引き続き検知できる。
+        want_ahead = int(DAILY_TARGET * min(1.0, (h + LOOKAHEAD_HOURS - POST_HOUR_START + 1)
+                                            / max(1, PACE_FULL_HOUR - POST_HOUR_START + 1)))
+        if n > want_ahead + 4 and not _notified_today(st, f"front_{acct}"):
+            line_push(f"⚠️Threads {acct}: 投稿が先行しすぎ({n}本/先読み目標{want_ahead})。固め打ちバグの疑い(CI watchdog)")
+            st[f"front_{acct}"] = today
+        # 通常は4本超の遅れで修復(2026-11-11 20本化で8→4)。21時以降は残り時間が無いため1本の不足でも埋めに行く
+        elif gap > 4 or (h >= 21 and gap > 0):
+            print(f"{acct}: 遅れ{gap}本 → LINE消化フラグ＋修復バッチ")
+            if keeper_running():
+                print(f"{acct}: 常駐ループ稼働中 → 修復は常駐側に任せる")
+                continue
+            dispatch_keeper()
+            # LINE無限ループの可能性を先に潰す（消化済み扱い）
+            try:
+                f = BASE / "line_listin_state.json"
+                d = json.loads(f.read_text()) if f.exists() else {}
+                d[acct] = {"date": today, "count": 9}
+                f.write_text(json.dumps(d, ensure_ascii=False))
+            except Exception:
+                pass
+            try:
+                subprocess.run([sys.executable, str(BASE / "auto_post.py"), acct],
+                               capture_output=True, timeout=780)
+            except subprocess.TimeoutExpired:
+                # 2026-09-24: 未捕捉だと先のアカウントの修復タイムアウトで落ち、後続(masa)の
+                # 判定に到達しない（9/20・9/23再発）。タイムアウトは記録して次へ進む
+                print(f"{acct}: 修復バッチが780秒でタイムアウト（投稿済み分は有効・次のアカウントへ）")
+            except Exception as e:
+                print(f"{acct}: 修復バッチ例外 {type(e).__name__}: {e}")
+            after = api_count_today(acct)
+            print(f"{acct}: 修復後 {n}→{after}本")
+            if gap > 8 and after - n < 3 and not _notified_today(st, f"stall_{acct}"):
+                line_push(f"🚨Threads {acct}: 投稿停止の疑い({after}本/目標{want}・CI修復でも回復小)。Mac/トークン/キューを確認してください")
+                st[f"stall_{acct}"] = today
+            repaired.append(acct)
+    # 2026-10-02: 最後の投稿からの経過（ペースとは別軸の停止検知）
+    try:
+        import stall_check as sc
+        ks = None
+        for acct in ACCTS:
+            gap = sc.last_post_gap_minutes(acct)
+            # 2026-10-24: 常駐run稼働中でも、無投稿60分＋ペース5本遅れで通知・90分で常駐を再起動
+            # （従来は keeper_running() なら並走せず黙っていた＝10/23 truth 4時間0本が見えなかった）。
+            if gap is not None and gap >= sc.alive_thresholds(acct)[0] and keeper_running():
+                n_api = api_count_today(acct)
+                behind = max(0, want - n_api) if n_api >= 0 else 0
+
+                def _send(m, _a=acct):
+                    ok = sc.discord_send(m)
+                    line_push(m + "（CI watchdog）")
+                    return ok
+                act = sc.handle_alive_stall(acct, gap, behind, st, _send, today=today)
+                if act:
+                    print(f"{acct}: 常駐稼働中の停滞 → {act}")
+                    continue
+            # 2026-11-02: nagaoka は朝(6〜8時台)の初回自前投稿が9時前後になるため、Mac側 watchdog.py の
+            # _stall_threshold / alive_thresholds と同じく180分に延ばす（CI側だけ75分のままで、
+            # gap=6時起点の経過分になり毎朝7:15〜8:59に誤報＝11/2 08:47 167分）。9時以降・他アカウントは従来どおり。
+            stall_min = max(sc.STALL_MIN, sc.alive_thresholds(acct)[0]) if acct == "nagaoka" else sc.STALL_MIN
+            if gap is None or gap < stall_min:
+                continue
+            print(f"{acct}: 最後の投稿から{gap}分（{stall_min}分超・停止疑い）")
+            if not keeper_running():
+                dispatch_keeper()
+            if _notified_today(st, f"gap_{acct}"):
+                continue
+            ks = ks or sc.keeper_status()
+            msg = sc.stall_message(acct, gap, ks) + "（CI watchdog）"
+            if not sc.discord_send(msg):
+                print("Discord未送信（DISCORD_WEBHOOK_URL未設定/失敗）→ 通知記録のみ")
+            line_push(msg)
+            st[f"gap_{acct}"] = today
+    except Exception as e:
+        print(f"停止検知の例外 {type(e).__name__}: {e}")
+    try:
+        STATE.write_text(json.dumps(st, ensure_ascii=False))
+    except Exception:
+        pass
+    print(f"watchdog_ci完了 修復対象={repaired or 'なし'}")
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,259 @@
+#!/usr/bin/env python3
+"""
+日中の投稿見張り番（30分毎にlaunchdから実行）。監視＋LINE通知専用（投稿は行わない）。
+
+2026-07-10の実障害（①masa: ペースフロアバグで50本を昼に使い切り午後無音
+②truth: LINE重複の無限再選択で16本のまま夜まで全停止）を受けて新設。
+当初は「ログ上は正常でも外形上は止まっている」を日中に検知し、自己修復
+（auto_post.py直接実行）まで行っていた。
+
+2026-07-21改修: クラウド一本化（07-10）後もこの自己修復が生きていたため、
+ローカルの投稿記録（mark_postedによるlog_*_posted.jsonl追記）がcommitされず、
+30分毎のpull_sync.shの`git reset --hard origin/main`で消去され続ける事故が
+発生（07-20は3アカウントとも外形実測で約50本投稿済みなのに正本台帳には
+11/3/11本しか残らず、台帳・PDCA分析データが欠損。二重運用による重複スキップ
+も誘発した）。これを受け、投稿の修復はクラウド側watchdog_ci.py
+（health_check.yml、30分毎、外形API基準、遅れ8本超で自動修復）に完全一本化。
+本スクリプトはauto_post.pyの実行を一切行わず、外形監視とLINE通知のみを担う。
+
+チェック（アカウント毎）:
+  A. ペース回廊: 投稿数（外形API実測を第一とする）が「今あるべき累計」から
+     大きく外れていないか
+     - 遅れ(want-15超の不足) → クラウド側watchdog_ciの自己修復が追いついて
+       いない疑いとしてLINE通知のみ（修復は行わない）
+     - 進みすぎ(want+10超) → 固め打ちバグの再発を検知（通知のみ）
+"""
+from __future__ import annotations
+
+import json
+import subprocess
+import sys
+from datetime import date, datetime
+from pathlib import Path
+
+BASE = Path(__file__).parent
+sys.path.insert(0, str(BASE))
+import auto_post as ap  # noqa: E402  (ACCOUNTS / ペース関数を再利用)
+from watchdog_ci import api_count_today  # noqa: E402  (外形API実測)
+
+STATE = BASE / "watchdog_state.json"
+LOG = BASE / "watchdog.log"
+PUSH = "/Users/mt112/.claude/scripts/notify.sh"  # Discord通知（LINE送信は禁止）
+
+
+def log(msg: str):
+    line = f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] {msg}"
+    print(line)
+    with open(LOG, "a") as f:
+        f.write(line + "\n")
+
+
+def _state() -> dict:
+    try:
+        return json.loads(STATE.read_text())
+    except Exception:
+        return {}
+
+
+def _save_state(d: dict):
+    try:
+        STATE.write_text(json.dumps(d, ensure_ascii=False))
+    except Exception:
+        pass
+
+
+def _push_once_per_day(acct: str, msg: str, kind: str = ""):
+    """同一(アカウント×種別)につき1日1回だけ通知。kindで種別を分け同一事象の連投を防ぐ。"""
+    st = _state()
+    key = f"push_{acct}" + (f"_{kind}" if kind else "")
+    today = date.today().isoformat()
+    if st.get(key) == today:
+        return
+    try:
+        # 2026-09-02修正: notify.sh(旧line-push-masahide.sh)はDiscord送信に
+        # 最大3回リトライ(各20秒)し得るため、旧timeout=30だと道半ばでkillされ
+        # 通知未達になっていた（09-01にmasa遅れ通知が複数回timeout実測）。
+        # views_report.pyの実績値(timeout=60)に合わせる。
+        subprocess.run([PUSH, msg], capture_output=True, timeout=60)
+        st[key] = today
+        _save_state(st)
+        log(f"Discord通知送信: {msg[:60]}")
+    except Exception as e:
+        log(f"Discord通知失敗: {e}")
+
+
+# ── クラウド実行の起動キック（2026-10-02）─────────────────────────────
+# GitHub Actions の schedule は混雑時に大幅に間引かれ、10/2は auto_post が1日3回
+# (6:06/9:43/15:17)しか起動せず全アカウントが5時間半停止した。workflow_dispatch は
+# 間引かれないため、ローカルで遅れを検知したら実行役(クラウド)を起動するだけ行う。
+# 投稿自体は従来どおりクラウドのみ（ローカル投稿は二重運用事故のため禁止のまま）。
+import subprocess, shutil
+GH = shutil.which("gh") or "/opt/homebrew/bin/gh"
+KICK_BEHIND = 5          # この本数以上遅れたら起動
+KICK_COOLDOWN_MIN = 20   # 連続起動の抑止
+
+
+def kick_cloud(reason: str) -> bool:
+    st = _state()
+    last = st.get("last_kick")
+    now = datetime.now()
+    if last:
+        try:
+            if (now - datetime.fromisoformat(last)).total_seconds() < KICK_COOLDOWN_MIN * 60:
+                log(f"kick見送り（{KICK_COOLDOWN_MIN}分以内に起動済み）: {reason}")
+                return False
+        except Exception:
+            pass
+    try:
+        r = subprocess.run([GH, "run", "list", "--repo", "truthbodysalon-lab/threads-auto-post",
+                            "--workflow=auto_post.yml", "--limit", "3", "--json", "status",
+                            "-q", ".[].status"], capture_output=True, text=True, timeout=30)
+        if any(x in r.stdout for x in ("in_progress", "queued", "waiting")):
+            log(f"kick見送り（auto_post実行中）: {reason}")
+            return False
+        r = subprocess.run([GH, "workflow", "run", "auto_post.yml", "--repo",
+                            "truthbodysalon-lab/threads-auto-post"],
+                           capture_output=True, text=True, timeout=30)
+        ok = r.returncode == 0
+        log(f"クラウド起動キック {'成功' if ok else '失敗'}: {reason} {r.stderr.strip()[:120]}")
+        if ok:
+            st["last_kick"] = now.isoformat(timespec="seconds")
+            _save_state(st)
+        else:
+            _push_once_per_day("kick", f"🚨Threads: auto_post の起動キックに失敗（gh: {r.stderr.strip()[:80]}）")
+        return ok
+    except Exception as e:
+        log(f"クラウド起動キック例外: {e}")
+        return False
+
+
+def check_account(acct: str) -> int:
+    from account_ownership import is_local
+    if not is_local(acct):
+        return
+    hour = datetime.now().hour
+
+    # 投稿数は外形API実測を第一とする（ローカル台帳はpull_syncの同期ラグで
+    # 過少カウントし得るため、台帳単独での遅れ判定は誤報になる）。
+    # API照会に失敗した場合は誤報を避けるため監視をスキップする
+    # （クラウド側watchdog_ciが引き続き防衛線）。
+    try:
+        api_n = api_count_today(acct)
+        if api_n < 0:
+            raise RuntimeError("api_count_today failed")
+    except Exception as e:
+        log(f"{acct}: API実測不可のため監視スキップ ({e})")
+        return 0
+
+    posted = max(ap._posted_count_today(acct), api_n)
+    want = ap._target_cumulative_by_now(hour)
+
+    # A-2: 固め打ち検知（ペースより大幅先行 = フロア/暴走バグの再発）
+    # 2026-10-06: 投稿側は設計上 LOOKAHEAD_HOURS 先まで先に出すので、先行判定も同じ先読み曲線を基準にする
+    # （watchdog_ci.pyと同修正。基準が現在時刻だと正常運転だけで閾値に張り付き誤報になる）
+    want_ahead = ap._target_cumulative_by_now(hour + ap.LOOKAHEAD_HOURS)
+    if posted > want_ahead + 10:
+        log(f"{acct}: 固め打ち疑い posted={posted} want_ahead={want_ahead}")
+        _push_once_per_day(acct, f"⚠️Threads {acct}: 投稿が先行しすぎ({posted}本/先読み目標{want_ahead})。固め打ちバグの疑い。")
+        return 0
+
+    # A-1: 遅れ検知（クラウド側watchdog_ciが遅れ8本超で自動修復するため、
+    # ローカルは「クラウド修復が機能していない」深刻な停滞のみ通知する）
+    behind = want - posted
+    if behind <= 15:
+        return max(0, behind)  # 通知は深刻時のみ。起動キック判定には不足数を返す
+
+    log(f"{acct}: 遅れ検知 posted={posted} want={want} (不足{behind})")
+    _push_once_per_day(acct, f"🚨Threads {acct}: 投稿ペース停滞（{posted}本/目標{want}・クラウド自己修復が追いついていない疑い）。health_check.ymlの実行状況を確認してください")
+    return behind
+
+
+def _stall_threshold(acct: str, hour: int = None) -> int:
+    """停止疑いと見なす無投稿の分数。
+    2026-10-20: nagaoka は外部ツールが約20本/日投稿しており、朝の最初の投稿が8:10〜9:10頃になる
+    （10/17〜10/20に毎朝7:15〜9:00台に『最後の投稿から75〜184分』の誤報が出ていた。
+    gap は投稿窓の開始(6:00)から数えるため）。6〜8時台だけ180分(=9:00まで無投稿でも鳴らさない)に延ばす。
+    9時以降と他アカウントは従来どおり sc.STALL_MIN。"""
+    import stall_check as sc
+    h = datetime.now().hour if hour is None else hour
+    if acct == "nagaoka" and 6 <= h < 9:
+        return 180
+    return sc.STALL_MIN
+
+
+def _notify_raw(msg: str) -> bool:
+    """間隔制御は呼び出し側(stall_check.handle_alive_stall)が持つ。Discord(notify.sh)へ送るだけ。"""
+    try:
+        subprocess.run([PUSH, msg], capture_output=True, timeout=60)
+        log(f"Discord通知送信: {msg[:60]}")
+        return True
+    except Exception as e:
+        log(f"Discord通知失敗: {e}")
+        return False
+
+
+def _pace_behind(acct: str) -> int:
+    """今あるべき累計 - 実投稿（外形API優先・失敗時は台帳）。取得不可は0（誤報回避）。"""
+    try:
+        api_n = api_count_today(acct)
+        posted = max(ap._posted_count_today(acct), api_n if api_n >= 0 else 0)
+        return max(0, ap._target_cumulative_by_now(datetime.now().hour) - posted)
+    except Exception:
+        return 0
+
+
+def check_stall_and_keeper():
+    """2026-10-02 管理体制強化: ペースとは別軸の「停止」検知。
+    (i) 常駐runが0本 → 即kick＋通知  (ii) 投稿時間帯に最後の自前投稿から75分以上 → kick＋通知。"""
+    import stall_check as sc
+    ks = sc.keeper_status()
+    if ks["ok"] and ks["in_progress"] == 0 and ks["queued"] == 0:
+        log("常駐run 0本を検知")
+        kick_cloud("常駐停止")
+        _push_once_per_day("keeper", "🚨Threads: auto_post常駐runが0本（常駐停止）。起動キックを実行しました。"
+                           f"直近run: {sc.latest_run_url() or '取得不可'}", kind="keeperstop")
+    if not sc.in_post_window():
+        return
+    for acct in ("truth", "nagaoka", "masa"):
+        try:
+            gap = sc.last_post_gap_minutes(acct)
+            # 常駐runが動いている場合（2026-10-24）: kick見送りで黙らず、無投稿60分＋ペース5本遅れで通知、
+            # 90分で常駐runを止めて起動し直す。_push_once_per_dayとは別キー・別間隔。
+            if gap is not None and ks["ok"] and (ks["in_progress"] > 0 or ks["queued"] > 0):
+                if gap >= sc.alive_thresholds(acct)[0]:
+                    st = _state()
+                    act = sc.handle_alive_stall(acct, gap, _pace_behind(acct), st, _notify_raw)
+                    _save_state(st)
+                    if act:
+                        log(f"{acct}: 常駐稼働中の停滞 → {act}（無投稿{int(gap)}分）")
+                        continue
+            if gap is None or gap < _stall_threshold(acct):
+                continue
+            log(f"{acct}: 最後の投稿から{gap}分（停止疑い）")
+            kick_cloud(f"{acct} 無投稿{int(gap)}分")
+            _push_once_per_day(acct, sc.stall_message(acct, gap, ks), kind="stall")
+        except Exception as e:
+            log(f"{acct}: 停止検知例外 {e}")
+
+
+def main():
+    try:
+        check_stall_and_keeper()
+    except Exception as e:
+        log(f"停止検知の例外 {e}")
+    hour = datetime.now().hour
+    if not (ap.POST_HOUR_START <= hour < ap.POST_HOUR_END):
+        return
+    behind = {}
+    for acct in ("truth", "nagaoka", "masa"):
+        try:
+            behind[acct] = check_account(acct) or 0
+        except Exception as e:
+            log(f"{acct}: watchdog例外 {e}")
+    late = {a: b for a, b in behind.items() if b >= KICK_BEHIND}
+    if late:
+        kick_cloud("遅れ " + ", ".join(f"{a}:{b}本" for a, b in late.items()))
+
+
+if __name__ == "__main__":
+    main()

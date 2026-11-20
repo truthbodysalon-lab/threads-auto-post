@@ -1,23 +1,24 @@
 {
  "account": "truth",
- "generated": "2026-11-12",
+ "generated": "2026-11-20",
  "window_days": 90,
  "note": "自動投稿システム以外から出た本人の投稿のうち伸びたもの。翻案必須・同一文面の再投稿は禁止（型疲労L8）。構造（フックの型・展開・締め）だけを借りる",
- "fetched_posts": 4416,
- "own_posts": 55,
+ "fetched_posts": 4132,
+ "own_posts": 54,
  "classification": {
-  "exact_body80": 4334,
-  "OWN": 55,
-  "exact_line1": 17,
+  "exact_body80": 4051,
+  "OWN": 54,
+  "exact_line1": 16,
   "skeleton": 4,
-  "tail_sig": 6
+  "tail_sig": 6,
+  "template_prefix": 1
  },
- "account_median_views": 68.0,
- "winner_threshold": 102.0,
+ "account_median_views": 48.5,
+ "winner_threshold": 72.75,
  "winners": [
   {
    "id": "18125202077514991",
-   "views": 1940,
+   "views": 1944,
    "date": "2026-11-05",
    "media": "TEXT_POST",
    "first_line": "長岡市でランチ行くなら",
@@ -52,18 +53,6 @@
    ],
    "repeats_in_window": 1,
    "text": "こめかみの痛みが月に何日あるか、数えたことはありますか？10日を超えたら寝姿勢の悪さを整えるタイミングです。"
-  },
-  {
-   "id": "18127790473852153",
-   "views": 349,
-   "date": "2026-10-02",
-   "media": "TEXT_POST",
-   "first_line": "病院で『異常なし』と言われた頭の重さ、運動不足が検査に映らないまま原因になっていることも。",
-   "labels": [
-    "短文"
-   ],
-   "repeats_in_window": 1,
-   "text": "病院で『異常なし』と言われた頭の重さ、運動不足が検査に映らないまま原因になっていることも。"
   },
   {
    "id": "18135192001629863",
@@ -202,23 +191,8 @@
    "text": "緊張型頭痛で夜に目が覚めた日、週に何回ですか？3回以上なら運動不足という原因を疑ってみて。"
   },
   {
-   "id": "18107246918596430",
-   "views": 117,
-   "date": "2026-08-17",
-   "media": "IMAGE",
-   "first_line": "今日は弾丸でこちらへ",
-   "labels": [
-    "画像・動画つき",
-    "開いた問い",
-    "日常・ご報告",
-    "短文"
-   ],
-   "repeats_in_window": 1,
-   "text": "今日は弾丸でこちらへ\nさてどこでしょう？"
-  },
-  {
    "id": "18112522589462421",
-   "views": 115,
+   "views": 119,
    "date": "2026-11-11",
    "media": "TEXT_POST",
    "first_line": "え！すご！",
@@ -230,6 +204,18 @@
    "text": "え！すご！\n長岡市でやるんですね！"
   },
   {
+   "id": "18120420665092007",
+   "views": 104,
+   "date": "2026-11-11",
+   "media": "TEXT_POST",
+   "first_line": "TKって何ですか？？🤔",
+   "labels": [
+    "短文"
+   ],
+   "repeats_in_window": 1,
+   "text": "TKって何ですか？？🤔"
+  },
+  {
    "id": "18111549185594996",
    "views": 102,
    "date": "2026-10-06",
@@ -238,6 +224,55 @@
    "labels": [],
    "repeats_in_window": 1,
    "text": "頭痛の原因って\nそれぞれ違いがあるのご存知ですか？\n\nあなたに合った頭痛対策は"
+  },
+  {
+   "id": "17964792605984203",
+   "views": 84,
+   "date": "2026-10-10",
+   "media": "TEXT_POST",
+   "first_line": "眉間やおでこ周辺の",
+   "labels": [
+    "短文"
+   ],
+   "repeats_in_window": 1,
+   "text": "眉間やおでこ周辺の\n頭痛で悩んでいる人"
+  },
+  {
+   "id": "18116671312791066",
+   "views": 83,
+   "date": "2026-10-17",
+   "media": "TEXT_POST",
+   "first_line": "今日高校野球の北信越大会",
+   "labels": [
+    "日常・ご報告",
+    "短文"
+   ],
+   "repeats_in_window": 1,
+   "text": "今日高校野球の北信越大会\n帝京長岡がんばれ！！"
+  },
+  {
+   "id": "18092106056222070",
+   "views": 81,
+   "date": "2026-10-29",
+   "media": "TEXT_POST",
+   "first_line": "鼻うがいオススメです！",
+   "labels": [
+    "短文"
+   ],
+   "repeats_in_window": 1,
+   "text": "鼻うがいオススメです！\nお大事になさってください！"
+  },
+  {
+   "id": "17954110782038362",
+   "views": 77,
+   "date": "2026-10-09",
+   "media": "TEXT_POST",
+   "first_line": "【悲報です】",
+   "labels": [
+    "短文"
+   ],
+   "repeats_in_window": 1,
+   "text": "【悲報です】\n頭痛を抱えている人ほど60万損してます"
   }
  ]
 }

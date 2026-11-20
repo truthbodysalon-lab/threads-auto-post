@@ -1,0 +1,1743 @@
+#!/usr/bin/env python3
+"""
+自動投稿スクリプト（確認なし・自動エラー修正）
+launchd から30分おきに呼ばれ、両アカウントに1本ずつ投稿する。
+投稿時間帯: 6:00〜23:00
+
+自動エラー対処:
+  - 投稿データなし  → 自動生成して続行
+  - トークン期限切れ → 自動リフレッシュして再試行
+  - ネットワーク系  → 最大3回リトライ
+  - レート制限      → 60秒待機後リトライ
+"""
+
+from __future__ import annotations
+
+import fcntl
+import json
+import os
+import random
+import re
+import subprocess
+import sys
+import time
+import urllib.parse
+import urllib.request
+from datetime import date, datetime, timedelta, timezone
+from pathlib import Path
+try:
+    from duplicate_guard import (
+        normalize_text as dg_normalize,
+        is_duplicate as dg_is_duplicate,
+        mark_pending as dg_mark_pending,
+        mark_posted as dg_mark_posted,
+        marked_today as dg_marked_today,
+    )
+except ImportError:
+    def dg_normalize(t): return t
+    def dg_is_duplicate(t, a): return False
+    def dg_mark_pending(t, a): pass
+    def dg_mark_posted(t, a, pid): pass
+    def dg_marked_today(t, a): return False
+
+try:
+    import inspector as _inspector
+except Exception:
+    _inspector = None
+
+
+def inspect_before_post(text: str, acct: str):
+    """投稿直前の検品ゲート（2026-07-21）。inspector未読込・例外時はフェイルオープン
+    （検品で全停止しない。既存の自動エラー回復方針と同じ思想）。
+    2026-10-07: masaのみ抽象度チェック(_is_abstract_masa)を追加。本文＋コメント部分の両方を見る。
+    NGは呼び出し側が既存の検品NG処理（消費済みにして次候補へ・全停止しない）で扱う。"""
+    if not text:
+        return True, []
+    ok, reasons = True, []
+    if _inspector is not None:
+        try:
+            ok, reasons = _inspector.inspect_post(text, acct)
+        except Exception:
+            ok, reasons = True, []
+    if ok and acct == "masa":
+        try:
+            from generate_remix import _abstract_reasons_masa
+            ar = _abstract_reasons_masa(text)
+            if ar:
+                ok, reasons = False, ["masa抽象度NG: " + "; ".join(ar)]
+        except Exception:
+            pass
+    return ok, reasons
+
+# get_next_post / get_posted_texts で使う正規化（duplicate_guard と同じロジック）
+_normalize_post_key = dg_normalize
+
+BASE = Path(__file__).parent
+ERROR_LOG = BASE / "error.log"
+LOCK_FILE = BASE / ".autopost.lock"
+POST_HOUR_START = 6
+POST_HOUR_END = 23
+MAX_RETRY = 3
+
+ACCOUNTS = {
+    "truth": {
+        "name": "@truth_body_salon",
+        "log": BASE / "log_truth.jsonl",
+        "posted": BASE / "log_truth_posted.jsonl",
+        "token_key": "THREADS_ACCESS_TOKEN_TRUTH",
+        "uid_key": "THREADS_USER_ID_TRUTH",
+        "autopost_log": BASE / "autopost_truth.log",
+        "bridge_text": "ご予約・詳細はこちらから 👇",
+    },
+    "nagaoka": {
+        "name": "@truth_nagaoka",
+        "log": BASE / "log_nagaoka.jsonl",
+        "posted": BASE / "log_nagaoka_posted.jsonl",
+        "token_key": "THREADS_ACCESS_TOKEN_NAGAOKA",
+        "uid_key": "THREADS_USER_ID_NAGAOKA",
+        "autopost_log": BASE / "autopost_nagaoka.log",
+        "bridge_text": "ご予約・詳細はこちらから 👇",
+    },
+    "masa": {
+        "name": "@masahide_takahashi_",
+        "log": BASE / "log_masa.jsonl",
+        "posted": BASE / "log_masa_posted.jsonl",
+        "token_key": "THREADS_ACCESS_TOKEN_MASA",
+        "uid_key": "THREADS_USER_ID_MASA",
+        "autopost_log": BASE / "autopost_masa.log",
+        "bridge_text": "詳しくはこちら 👇",
+    },
+}
+BASE_URL = "https://graph.threads.net/v1.0"
+ENV_FILE = BASE / ".env"
+
+
+# ── .env 読み書き ─────────────────────────────────────
+
+def load_env():
+    for line in ENV_FILE.read_text().splitlines():
+        line = line.strip()
+        if line and not line.startswith("#") and "=" in line:
+            k, v = line.split("=", 1)
+            os.environ[k.strip()] = v.strip()
+
+def save_env_key(key: str, value: str):
+    lines = ENV_FILE.read_text().splitlines()
+    new_lines, updated = [], False
+    for line in lines:
+        if line.strip().startswith(f"{key}="):
+            new_lines.append(f"{key}={value}")
+            updated = True
+        else:
+            new_lines.append(line)
+    if not updated:
+        new_lines.append(f"{key}={value}")
+    ENV_FILE.write_text("\n".join(new_lines) + "\n")
+    os.environ[key] = value
+
+load_env()
+
+
+# ── ログ ──────────────────────────────────────────────
+
+def log_info(acct: str, msg: str):
+    ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    line = f"[{ts}] {msg}\n"
+    print(line, end="")
+    with open(ACCOUNTS[acct]["autopost_log"], "a") as f:
+        f.write(line)
+
+def log_error(msg: str):
+    ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    line = f"[{ts}] ERROR: {msg}\n"
+    print(line, end="", file=sys.stderr)
+    with open(ERROR_LOG, "a") as f:
+        f.write(line)
+
+
+# ── Claude APIで2本目コメント生成 ───────────────────────────
+
+ACCOUNT_PERSONAS = {
+    "truth": "整体院（truth body salon）のアカウント。首・肩・腰・頭痛など体の不調を根本から改善する整体サロン。",
+    "masa": "整体サロンのオーナー・masahide_takahashiの個人アカウント。店舗経営者向けに「Instagramで集客する方法・ノウハウ・考え方」を、運用のハードルを下げる伝え方（1日1分・スマホだけ・撮影や編集なしでもOK・フォロワーが少なくてもOK・AIに任せて確認だけ）で発信する。中学生にも分かる言葉で、専門用語・面談・金額・店舗名や所在地・創作した統計は書かない。"
+        # 2026-10-07 masa指示: 問いかけの対象が不明・コメントが抽象的で読まれない、への対応（ルールA〜C）
+        "【必須ルール】A.問いかけには必ず対象（院長・店主・サロンオーナー等）を書く。B.コメントは具体的な手順（①②③の番号付き2〜4ステップ）か、実際に書く文言の例（「」で囲む）だけで書き、Instagramの具体的な機能・操作名（プロフィール1行目・ハイライト・固定投稿・リールの冒頭1秒・ストーリーズのスタンプ・保存数・インサイトのリーチ等）を必ず入れる。「大切なのは継続です」「意識してください」「工夫が必要です」「価値を届けましょう」のような抽象的な文は書かない。C.ノウハウは言い切り、最後は今日やる1つを何を・どこに・何分で書く。",
+}
+
+_BRIDGE_DISABLED = False  # 2026-07-03: Anthropic API(従量課金)→Gemini API(既存キー・無料枠)に切替
+
+
+def _load_gemini_key() -> str:
+    key = os.environ.get("GEMINI_API_KEY", "")
+    if key:
+        return key
+    # ~/.claude/secrets/gemini.env が正本（2026-07-03ローテーション後）。~/.env は旧キーの可能性あり
+    for path in ("~/.claude/secrets/gemini.env", "~/.zshenv", "~/.env"):
+        try:
+            with open(os.path.expanduser(path)) as f:
+                for line in f:
+                    line = line.strip()
+                    if line.startswith("export "):
+                        line = line[len("export "):]
+                    if line.startswith("GEMINI_API_KEY"):
+                        return line.split("=", 1)[1].strip().strip('"').strip("'")
+        except OSError:
+            continue
+    return ""
+
+
+def _bridge_default(clean_text: str, acct: str) -> str:
+    """Gemini不可・不採用時の既定コメント。masaは情報量のある固定の具体ノウハウ（投稿テーマ別の手順）を返す
+    （2026-10-07: 「詳しくはこちら」だけの空コメントを廃止）。他アカウントは従来どおり。"""
+    if acct == "masa":
+        try:
+            from masa_insta_content import masa_bridge_fallback
+            return masa_bridge_fallback(clean_text)
+        except Exception:
+            pass
+    return ACCOUNTS[acct].get("bridge_text", "詳しくはこちら 👇")
+
+
+def _masa_bridge_bad(text: str) -> list[str]:
+    """masaのブリッジコメントが抽象的ならNG理由を返す（空=合格）。検査器が読めない時はフェイルオープン。"""
+    try:
+        from generate_remix import _abstract_reasons_masa_comment
+        return _abstract_reasons_masa_comment(text)
+    except Exception:
+        return []
+
+
+def generate_bridge_comment(clean_text: str, acct: str) -> str:
+    """メイン投稿の内容をもとにGemini APIで補足説明コメントを生成する。失敗時はデフォルトテキストを返す。
+    masaは抽象的なコメント(手順/具体例＋機能名なし・抽象語)を弾き、1回だけ再生成→それでもNGなら固定の具体ノウハウ。"""
+    global _BRIDGE_DISABLED
+    api_key = _load_gemini_key()
+    if not api_key or _BRIDGE_DISABLED:
+        return _bridge_default(clean_text, acct)
+
+    persona = ACCOUNT_PERSONAS.get(acct, "")
+    if acct == "masa":
+        conditions = (
+            "【条件】\n"
+            "- 投稿内容を、読んだ人が今日そのまま実行できる具体的なノウハウに落とす\n"
+            "- 手順は「① ② ③」の番号付き2〜4ステップ。実際に書く文言は「」で囲んで例を示す\n"
+            "- Instagramの具体的な機能・操作名（プロフィール1行目・ハイライト・固定投稿・リールの冒頭1秒・ストーリーズのスタンプ・保存数・インサイトのリーチ等）を必ず入れる\n"
+            "- 誰に向けた話かが分かるように、院長・店主・サロンオーナー等の対象を明示する\n"
+            "- 「大切なのは」「意識して」「工夫が必要」「価値を届ける」のような抽象的な文は絶対に書かない\n"
+            "- 最後は『今日は、〇〇を△分でやってください』のように、何を・どこに・何分で、を1つだけ書く\n"
+            "- 150〜350文字程度。絵文字は使わない\n"
+            "- URLや「ご予約はこちら」などの案内は絶対に含めない\n"
+            "- コメント本文のみを出力（前置き・説明不要）\n\n"
+        )
+        max_len = 400
+    else:
+        conditions = (
+            "【条件】\n"
+            "- 投稿内容の原因・メカニズム・具体的な補足情報を解説する\n"
+            "- 100〜180文字程度\n"
+            "- 自然な話し言葉。絵文字は1〜2個まで\n"
+            "- URLや「ご予約はこちら」などの案内は絶対に含めない\n"
+            "- コメント本文のみを出力（前置き・説明不要）\n\n"
+        )
+        max_len = 250
+    prompt = (
+        f"あなたは{persona}\n\n"
+        "以下のThreads投稿（1/3）に続く、2/3のコメントを書いてください。\n"
+        + conditions +
+        f"【投稿内容】\n{clean_text}"
+    )
+
+    payload = json.dumps({
+        "contents": [{"parts": [{"text": prompt}]}],
+        # thinkingBudget:0 で思考トークンを止めないと、maxOutputTokens を思考が食い潰して本文が途切れる
+        "generationConfig": {"maxOutputTokens": 768 if acct == "masa" else 512, "thinkingConfig": {"thinkingBudget": 0}},
+    }, ensure_ascii=False).encode()
+
+    # 503(高負荷)・429(レート制限)は一時的なので、モデルを変えつつ最大3回試す
+    attempts = ["gemini-flash-latest", "gemini-flash-lite-latest", "gemini-flash-latest"]
+    regen_used = False  # masa: 抽象的だった場合の再生成は1回だけ
+    for i, model in enumerate(attempts):
+        req = urllib.request.Request(
+            f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={api_key}",
+            data=payload,
+            headers={"content-type": "application/json"},
+            method="POST",
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=30) as r:
+                result = json.loads(r.read())
+            parts = result["candidates"][0]["content"].get("parts", [])
+            text = "".join(p.get("text", "") for p in parts).strip()
+            # 途切れ・極端な長短は不採用（デフォルト文の方がマシ）
+            if text and 40 <= len(text) <= max_len and result["candidates"][0].get("finishReason") == "STOP":
+                if acct != "masa":
+                    return text
+                bad = _masa_bridge_bad(text)
+                if not bad:
+                    return text
+                print(f"[generate_bridge_comment] masaコメントが抽象的のため不採用: {'; '.join(bad)[:80]}", file=sys.stderr)
+                if regen_used:
+                    break  # 2回連続NG → 固定の具体ノウハウ
+                regen_used = True
+                continue  # 1回だけ再生成
+        except Exception as e:
+            body = ""
+            if isinstance(e, urllib.error.HTTPError):
+                try:
+                    body = e.read().decode()
+                except Exception:
+                    body = ""
+            # 認証エラー等の恒久的失敗は以降スキップ（無駄打ち・ログ連発を止める）
+            if isinstance(e, urllib.error.HTTPError) and e.code in (400, 401, 403):
+                if not _BRIDGE_DISABLED:
+                    print(f"[generate_bridge_comment] Gemini APIが恒久エラーのため、以降はデフォルト文に固定: {body[:120]}", file=sys.stderr)
+                _BRIDGE_DISABLED = True
+                break
+            if i < len(attempts) - 1:
+                time.sleep(3)
+    return _bridge_default(clean_text, acct)
+
+
+# ── トークン自動リフレッシュ ──────────────────────────────
+
+def refresh_token(acct: str) -> bool:
+    token = os.environ.get(ACCOUNTS[acct]["token_key"], "")
+    url = f"{BASE_URL}/refresh_access_token?grant_type=th_refresh_token&access_token={token}"
+    try:
+        with urllib.request.urlopen(url) as r:
+            data = json.loads(r.read())
+        new_token = data.get("access_token", "")
+        if new_token:
+            save_env_key(ACCOUNTS[acct]["token_key"], new_token)
+            log_info(acct, f"トークン自動リフレッシュ完了")
+            return True
+    except Exception as e:
+        log_error(f"{ACCOUNTS[acct]['name']} トークンリフレッシュ失敗: {e}")
+    return False
+
+
+# ── 投稿データ管理 ────────────────────────────────────
+
+def get_posted_indices(acct: str, today: str) -> set:
+    pfile = ACCOUNTS[acct]["posted"]
+    if not pfile.exists():
+        return set()
+    return {
+        json.loads(l)["index"]
+        for l in pfile.read_text().splitlines()
+        if l.strip() and json.loads(l).get("date") == today
+    }
+
+def _legacy_posted_indices(acct: str, today: str) -> set:
+    """text フィールドの無い旧形式エントリー（indexだけ記録していた時代）の index 集合。"""
+    pfile = ACCOUNTS[acct]["posted"]
+    out = set()
+    if not pfile.exists():
+        return out
+    for l in pfile.read_text().splitlines():
+        if not l.strip():
+            continue
+        try:
+            e = json.loads(l)
+        except Exception:
+            continue
+        if e.get("date") == today and not e.get("text") and isinstance(e.get("index"), int):
+            out.add(e["index"])
+    return out
+
+def mark_posted(acct: str, today: str, index: int, post_id: str, text: str = "", is_line: bool = False, is_shindan: bool = False, orig_text: str = ""):
+    entry = {"date": today, "index": index, "post_id": post_id, "text": text}
+    # 2026-10-20: 台帳の text は最初の段落(clean_text)だけで全文が残らないため、ヒーロー照合用に
+    # 「キューから選んだ原文全体」のキー(hk)を併記する（_hero_key。ヒーローの投稿済み判定・優先順位で使う）。
+    if orig_text:
+        try:
+            from generate_remix import _hero_key as _hk
+            entry["hk"] = _hk(orig_text)
+        except Exception:
+            pass
+    if is_line:
+        # 2026-09-12修正: text は extract_url_and_cta 後の本文（URL除去済み）を保存するため、
+        # _is_line_listin(text) では二度とLINEリストイン投稿だと判定できない
+        # （2026-08-18のURL全面コメント化以降、7日重複ガードが常に空集合を返し無効化していた
+        # 実障害。例: truthの同一テンプレが09-05/09-08/09-10と7日以内に3回連続投稿）。
+        # 判定結果をログ自体に残し、_recent_listin_firstlines 側で再利用する。
+        entry["is_line"] = True
+    if is_shindan:
+        # 2026-09-22修正: is_lineと同型の障害。判定結果をログに残し、
+        # _last_post_had_visible_url 側でclean_textの再判定を不要にする。
+        entry["is_shindan"] = True
+    with open(ACCOUNTS[acct]["posted"], "a") as f:
+        f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+
+def get_posted_texts(acct: str) -> set:
+    """全期間の投稿済みテキスト一覧（重複防止用）"""
+    pfile = ACCOUNTS[acct]["posted"]
+    if not pfile.exists():
+        return set()
+    texts = set()
+    for l in pfile.read_text().splitlines():
+        if l.strip():
+            try:
+                entry = json.loads(l)
+                if entry.get("text"):
+                    texts.add(entry["text"])
+            except json.JSONDecodeError:
+                pass  # 書き込み競合で生じた不完全行はスキップ
+    return texts
+
+# ── LINEリストイン投稿：定期織り込み（1日1回・重複ガード免除）─────
+# 「織り交ぜる」意図どおり毎日確実に出すため、通常の7日重複ガードを免除し
+# 1日1回に制限する（同URL系を重複扱いしてブロックされ続ける問題への対処）。
+# truth/nagaoka: lin.ee/qbRbPAm (頭痛改善情報配信LINE)
+# masa: lin.ee/8PsIHHC (SNS集客相談LINE)
+_LINE_LISTIN_URLS = ["lin.ee/qbRbPAm", "lin.ee/8PsIHHC"]
+_LINE_STATE_FILE = BASE / "line_listin_state.json"
+# 1日あたりのLINEリストイン投稿回数の上限。
+# 2026-09-26修正: generate_remix.pyは2026-08-16是正でtruth/nagaokaとも
+# キューに3本（anchor 3件）を積む設計になっているが、ここの上限が2のまま
+# 据え置かれていたため実投稿が常に2/日に頭打ちし、truthのLINEリストイン頻度が
+# 目標5〜7%を割り込み4%/日に固定化していた（30日実測25/1483・検証で発覚）。
+# キュー本数(3)に上限を合わせて是正する。
+# masaは月間URL上限2本の別ルールがあるため1のまま（実質は月2本程度）。
+_LINE_DAILY = {"truth": 3, "nagaoka": 3, "masa": 1}
+
+
+def _is_line_listin(text: str) -> bool:
+    return any(url in (text or "") for url in _LINE_LISTIN_URLS)
+
+
+def _recent_listin_firstlines(acct: str, days: int = 7) -> set:
+    """直近 days 日に投稿済みのLINEリストイン投稿の1文目集合。
+    リストインは重複ガード(skip_dup=True)を免除しているため、同一テンプレが
+    7日以内に再投稿されるのを防ぐ目的で個別ログから直接1文目を収集する。"""
+    pfile = ACCOUNTS[acct]["posted"]
+    if not pfile.exists():
+        return set()
+    cutoff = (date.today() - timedelta(days=days)).strftime("%Y-%m-%d")
+    fls = set()
+    for line in pfile.read_text(encoding="utf-8").splitlines():
+        try:
+            e = json.loads(line)
+        except Exception:
+            continue
+        if (e.get("date") or "")[:10] < cutoff:
+            continue
+        t = e.get("text", "")
+        # 2026-09-12修正: posted ログの text は URL 抽出後の本文（2026-08-18〜）のため
+        # _is_line_listin(t) 単独では判定できない。mark_posted が付与する is_line フラグを
+        # 優先し、フラグの無い旧エントリ（Aug 18以前・URLが本文に残っていた期間）は
+        # 従来どおり _is_line_listin(t) にフォールバックする。
+        if e.get("is_line") or _is_line_listin(t):
+            fls.add(t.split("\n")[0].strip())
+    return fls
+
+
+_SHINDAN_URL = "https://truthbodysalon-lab.github.io/zutsu-shindan/"
+
+
+def _is_shindan(text: str) -> bool:
+    """頭痛タイプ診断アンカー投稿の判定（2026-07-05導入）"""
+    return _SHINDAN_URL in (text or "")
+
+
+def _shindan_anchor_ok(acct: str, today: str, text: str) -> bool:
+    """頭痛タイプ診断アンカー投稿の7日重複ガード緩和判定（2026-07-11追加）。
+    各アカウントのテンプレは4種のみで毎日2本必要なため、7日ガードだと
+    2日目以降は全滅して一度も投稿されない実障害があった
+    （_access_anchor_ok と同じ問題パターン）。当日未使用の1文目なら通す。"""
+    if not _is_shindan(text):
+        return False
+    pfile = ACCOUNTS[acct]["posted"]
+    if not pfile.exists():
+        return True
+    first = (text or "").split("\n")[0].strip()
+    for line in pfile.read_text(encoding="utf-8").splitlines():
+        try:
+            e = json.loads(line)
+        except Exception:
+            continue
+        if (e.get("date") or "")[:10] != today:
+            continue
+        t = e.get("text", "")
+        # 2026-10-06修正: 台帳textはURL抽出後の本文（2026-08-18〜）のため _is_shindan(t) は常にFalseで、
+        # 当日同一テンプレの判定が一度も効かず同日二重投稿が常態化していた（10/06 06:09と13:05ほか
+        # 8/27〜10月に多数）。_hpb_anchor_ok と同様、種別を問わず1文目一致で判定する。
+        if t.split("\n")[0].strip() == first:
+            return False  # 本日すでに同一テンプレ使用済み
+    return True
+
+
+def _is_store_access(text: str) -> bool:
+    """店舗アクセスアンカー投稿の判定（全テンプレ共通の確定フレーズで判定）"""
+    t = text or ""
+    return "長岡駅" in t and "車で5分" in t
+
+
+def _access_anchor_ok(acct: str, today: str, text: str) -> bool:
+    """店舗アクセス投稿の7日重複ガード緩和判定（2026-07-03追加）。
+    テンプレ約9種が7日ガードで全滅し nagaoka は06-26以降0本になっていたため、
+    『1日1本まで・3日以内の同一1文目は回避』に緩和して毎日のアンカー投稿を確保する。"""
+    if not _is_store_access(text):
+        return False
+    pfile = ACCOUNTS[acct]["posted"]
+    if not pfile.exists():
+        return True
+    cutoff = (date.today() - timedelta(days=3)).strftime("%Y-%m-%d")
+    first = (text or "").split("\n")[0].strip()
+    for line in pfile.read_text(encoding="utf-8").splitlines():
+        try:
+            e = json.loads(line)
+        except Exception:
+            continue
+        d = (e.get("date") or "")[:10]
+        t = e.get("text", "")
+        if not _is_store_access(t):
+            continue
+        if d == today:
+            return False  # 本日すでにアクセス投稿済み（1日1本まで）
+        if d >= cutoff and t.split("\n")[0].strip() == first:
+            return False  # 3日以内に同一テンプレを使用済み
+    return True
+
+
+def _is_hpb_cta(text: str) -> bool:
+    """ホットペッパー予約導線CTA投稿の判定（肩こり/頭痛CTA共通）"""
+    return "beauty.hotpepper.jp" in (text or "")
+
+
+def _hpb_anchor_ok(acct: str, today: str, text: str) -> bool:
+    """ホットペッパー予約導線CTAの7日重複ガード緩和判定（2026-07-15追加）。
+    CTA_KATAKORI_TEMPLATES/CTA_ZUTSUU_TEMPLATESは各12種のみで固定フレーズの
+    1文目が実質12パターンしかなく、7日ガード＋truth/nagaoka共有の
+    shared_posted_guardにより全滅し、実測で1度も実投稿されていなかった
+    （_access_anchor_ok/_shindan_anchor_ok と同じ障害パターン）。
+    実投稿ログ(clean_text=URL抽出後の本文)は1文目が候補と一致するため、
+    本日まだ同一1文目を使っていなければ通す。"""
+    if not _is_hpb_cta(text):
+        return False
+    pfile = ACCOUNTS[acct]["posted"]
+    if not pfile.exists():
+        return True
+    first = (text or "").split("\n")[0].strip()
+    for line in pfile.read_text(encoding="utf-8").splitlines():
+        try:
+            e = json.loads(line)
+        except Exception:
+            continue
+        if (e.get("date") or "")[:10] != today:
+            continue
+        if (e.get("text") or "").split("\n")[0].strip() == first:
+            return False  # 本日すでに同一テンプレ使用済み
+    return True
+
+
+def _is_cta_profile(text: str) -> bool:
+    """masa: プロフィール経由の無料診断アンカー投稿の判定（cta_profileテンプレ、2026-07-16導入）。
+    「プロフィールのリンク」はtruth/nagaokaのHPB予約CTAにも使われる文言のため、
+    診断関連の言い回し（診断/3問）と組み合わせて誤検知を避ける。"""
+    t = text or ""
+    return "プロフィールのリンク" in t and ("診断" in t or "3問" in t)
+
+
+def _cta_profile_anchor_ok(acct: str, today: str, text: str) -> bool:
+    """プロフィール経由診断アンカーの7日重複ガード緩和判定（2026-08-17追加）。
+    テンプレは12種のみで毎日2本必要なため、7日ガード（さらに全期間dedupで
+    already_posted_ever該当）だと全テンプレが枯渇し、2026-08-03以降0本化していた
+    実障害を修正（_hpb_anchor_ok/_shindan_anchor_ok と同じ障害パターン）。
+    当日まだ同一1文目を使っていなければ通す。"""
+    if not _is_cta_profile(text):
+        return False
+    pfile = ACCOUNTS[acct]["posted"]
+    if not pfile.exists():
+        return True
+    first = (text or "").split("\n")[0].strip()
+    for line in pfile.read_text(encoding="utf-8").splitlines():
+        try:
+            e = json.loads(line)
+        except Exception:
+            continue
+        if (e.get("date") or "")[:10] != today:
+            continue
+        if (e.get("text") or "").split("\n")[0].strip() == first:
+            return False  # 本日すでに同一テンプレ使用済み
+    return True
+
+
+try:
+    # masa: AI活用実例/AI活用でこうなる/AIの基礎知識/AI時短LINE誘導の固定テンプレ一覧
+    # （generate_remix.py 2026-08-23導入）。exact-match判定のため直接import。
+    # generate_remix.py はモジュールトップレベルにファイルI/O等の副作用が無いことを確認済み。
+    from generate_remix import (
+        AI_JITSUREI_TEMPLATES as _AI_JITSUREI_TEMPLATES,
+        AI_DEKIRU_TEMPLATES as _AI_DEKIRU_TEMPLATES,
+        AI_KISO_TEMPLATES as _AI_KISO_TEMPLATES,
+        AI_TIME_CTA_TEMPLATES as _AI_TIME_CTA_TEMPLATES,
+        PRESENT_CTA_TEMPLATES as _PRESENT_CTA_TEMPLATES,
+    )
+    # 2026-10-17: プレゼント誘導(PRESENT_CTA)も固定テンプレのアンカー扱い（全期間dedupでプールが枯渇しない）
+    from present_calendar import all_present_cta_texts as _cal_texts
+    _PRESENT_CTA_SET = set(_PRESENT_CTA_TEMPLATES) | _cal_texts()   # 2026-10-17 プレゼント順番表の各期の誘導
+    _AI_CONTENT_TEMPLATES = set(
+        _AI_JITSUREI_TEMPLATES + _AI_DEKIRU_TEMPLATES + _AI_KISO_TEMPLATES + _AI_TIME_CTA_TEMPLATES
+    ) | _PRESENT_CTA_SET
+except Exception:
+    _AI_CONTENT_TEMPLATES = set()
+    _PRESENT_CTA_SET = set()
+
+# プレゼント誘導の受け取り先（公式LINE）。本文にはURLを置かず、投稿後にコメント欄へ足す（2026-10-17 本人指示）。
+PRESENT_CTA_COMMENT = "▶ 受け取りはこちら（公式LINE）\nhttps://lin.ee/8PsIHHC"
+PRESENT_BRIDGE = "受け取りはこちら 👇"
+
+
+def _is_present_cta(text: str) -> bool:
+    return (text or "") in _PRESENT_CTA_SET
+
+
+def _is_ai_content(text: str) -> bool:
+    """masa: AI活用実例/AI活用でこうなる/AIの基礎知識/AI時短LINE誘導のアンカー判定
+    （2026-09-13追加）。各プールは15/10/10/8種のみの固定完全一致文で、
+    _hpb_anchor_ok/_cta_profile_anchor_ok と全く同じ障害パターン：
+    全期間dedup(posted_texts)に阻まれ2026-08-23導入からプールが枯渇し、
+    2026-09-12に実質0本化していた（日次検証2026-09-13で発覚）。"""
+    return (text or "") in _AI_CONTENT_TEMPLATES
+
+
+def _ai_content_anchor_ok(acct: str, today: str, text: str) -> bool:
+    """AI活用系アンカーの7日重複ガード緩和判定（2026-09-13追加）。
+    当日まだ同一1文目を使っていなければ通す（_hpb_anchor_ok と同じロジック）。"""
+    if not _is_ai_content(text):
+        return False
+    pfile = ACCOUNTS[acct]["posted"]
+    if not pfile.exists():
+        return True
+    first = (text or "").split("\n")[0].strip()
+    for line in pfile.read_text(encoding="utf-8").splitlines():
+        try:
+            e = json.loads(line)
+        except Exception:
+            continue
+        if (e.get("date") or "")[:10] != today:
+            continue
+        if (e.get("text") or "").split("\n")[0].strip() == first:
+            return False  # 本日すでに同一テンプレ使用済み
+    return True
+
+
+# ── URL連続回避（2026-07-21・Brain記事「AIでThreadsを事故ゼロ運用する方法」実測）─
+# URL入り投稿の同日連発はリーチを下げる。導線投稿(goals.json保護)は削らないが、
+# 直前候補がLINEリストイン/頭痛タイプ診断（=元テキストにURLを含むテンプレ種別）
+# だったなら、次はそれ以外の候補を優先選択する。無ければそのまま投稿する
+# （導線アンカーを削除しない・新規URL枠も追加しない）。
+# 【2026-08-18以降】全テンプレでURLは extract_url_and_cta により本文からコメントへ
+# 移動する統一仕様のため、最終投稿本文にURLがそのまま残ることは無い（この関数は
+# 「元テキストがLINEリストイン/頭痛診断テンプレか」の判定に使っているのみで、
+# 実際に本文にURLが可視で残るという意味ではない。旧仕様の名残でこの名称のままだが
+# 意味を変えないよう関数名・呼び出し側は維持する）。
+
+def _text_has_visible_url(text: str) -> bool:
+    """元テキスト（抽出前）がLINEリストイン/頭痛タイプ診断テンプレかどうか。
+    HPB CTA・店舗アクセス等も含め、最終投稿本文のURLは extract_url_and_cta で
+    必ずコメント欄へ移動する（2026-08-18社長指示・本文URL全廃）ため、
+    実際に本文にURLが可視で残るテンプレは現在存在しない。この関数はURL連続回避の
+    候補分類にのみ使用する（関数名は後方互換のため維持）。"""
+    return _is_line_listin(text or "") or _is_shindan(text or "")
+
+
+def _last_post_had_visible_url(acct: str, today: str) -> bool:
+    """本日この投稿者の直近投稿がメイン本文にURLを含んでいたか。無ければFalse。
+    単体テスト可能な純粋関数（auto_post.py自体は実行しなくても検証できる）。
+    2026-09-22修正: 以前はposted.jsonlに保存済みのtext（extract_url_and_cta後の
+    clean_text=URL除去済み）に対して_text_has_visible_url（内部で_is_line_listin/
+    _is_shindanを呼ぶ）を再判定していたため、2026-08-18のURL全文コメント化以降
+    常にFalseを返し続け、URL連続回避機能(pick_avoiding_consecutive_url)が
+    1ヶ月以上無音で死んでいた（mark_posted側で判定済みのis_line/is_shindan
+    フラグをそのままログへ保存し、それを読むよう変更。テキストの再判定はしない。
+    旧ログにフラグが無い行はFalse扱いになるだけで、判定側の安全性は変えない）。"""
+    pfile = ACCOUNTS[acct]["posted"]
+    if not pfile.exists():
+        return False
+    last_entry = None
+    for line in pfile.read_text(encoding="utf-8").splitlines():
+        if not line.strip():
+            continue
+        try:
+            e = json.loads(line)
+        except Exception:
+            continue
+        if (e.get("date") or "")[:10] != today:
+            continue
+        last_entry = e
+    if last_entry is None:
+        return False
+    return bool(last_entry.get("is_line") or last_entry.get("is_shindan"))
+
+
+def pick_avoiding_consecutive_url(candidates, last_had_url: bool):
+    """候補リスト（選択優先順）から、直前投稿がURL入りだった場合はURL無しの
+    候補を優先して返す純粋関数。見つからなければ先頭候補をそのまま返す
+    （導線投稿を削らない・取りこぼさない）。candidates: list[(text, index)]。
+    候補が空なら None を返す。"""
+    if not candidates:
+        return None
+    if not last_had_url:
+        return candidates[0]
+    for text, idx in candidates:
+        if not _text_has_visible_url(text):
+            return (text, idx)
+    return candidates[0]
+
+
+_LINE_MENTION_RE = re.compile(r"LINE|ライン", re.IGNORECASE)
+
+def _masa_line_subject(text: str) -> bool:
+    """LINE言及率キャップの対象か（コンテンツ投稿の付随的なLINE言及。導線投稿は対象外）。
+    _masa_line_overrate と hero_check.py の共通実装。"""
+    if not _LINE_MENTION_RE.search(text or ""):
+        return False
+    return not (_is_line_listin(text) or _is_shindan(text) or "『AI』" in text or _is_present_cta(text))
+
+def _masa_line_overrate(text: str) -> bool:
+    """masaのLINE言及率キャップ（verify rule:line_rate=5本/日10%対策・2026-08-27）。
+    導線投稿（リストイン/診断/時短CTA=『AI』誘導）は削らない方針のため常時許可し、
+    コンテンツ投稿の付随的なLINE言及だけを本日2本でブロックする（3導線+2=最大5本）。"""
+    if not _masa_line_subject(text):
+        return False
+    today = date.today().strftime("%Y-%m-%d")
+    n = 0
+    try:
+        with open(ACCOUNTS["masa"]["posted"], encoding="utf-8") as f:
+            for l in f:
+                if not l.strip():
+                    continue
+                r = json.loads(l)
+                if r.get("date") == today and _LINE_MENTION_RE.search(r.get("text", "")) \
+                        and not _is_line_listin(r.get("text", "")):
+                    n += 1
+    except Exception:
+        return False
+    return n >= 2
+
+def _posted_count_today(acct: str) -> int:
+    """log_{acct}_posted.jsonl の本日の投稿件数（バッチ投稿の打ち切り判定用）"""
+    pfile = ACCOUNTS[acct]["posted"]
+    if not pfile.exists():
+        return 0
+    today = date.today().strftime("%Y-%m-%d")
+    n = 0
+    for line in pfile.read_text(encoding="utf-8").splitlines():
+        try:
+            e = json.loads(line)
+            # 2026-10-06: uplink追加投稿(kind=uplink_repost)は通常50本枠・DAILY_CAPに数えない別カウンタ
+            if e.get("date") == today and e.get("kind") != "uplink_repost":
+                n += 1
+        except Exception:
+            pass
+    return n
+
+
+def _listin_last_used_order(acct: str) -> dict:
+    """LINEリストイン候補のLRU判定用: 台帳(log_<acct>_posted.jsonl)から
+    1文目 → 最終使用日(YYYY-MM-DD) の辞書を返す。未使用は辞書に無い（=空文字扱いで最優先）。
+    2026-09-24: 呼び出し側(get_next_post)だけ残り定義が欠落 → NameErrorで全アカウント
+    処理が停止しmasaが丸1日0本になった障害の復旧で定義を復元。"""
+    order: dict = {}
+    try:
+        with open(ACCOUNTS[acct]["posted"], encoding="utf-8") as f:
+            for line in f:
+                if not line.strip():
+                    continue
+                try:
+                    r = json.loads(line)
+                except Exception:
+                    continue
+                text = r.get("text", "") or ""
+                if not (r.get("is_line") or _is_line_listin(text)):
+                    continue
+                first = text.split("\n")[0].strip()
+                d = r.get("date", "") or ""
+                if first and d >= order.get(first, ""):
+                    order[first] = d
+    except Exception:
+        return {}
+    return order
+
+
+def _line_count_today(acct: str, today: str) -> int:
+    """本日すでに投稿したLINEリストインの回数。旧形式（値が日付文字列）も後方互換で解釈。"""
+    try:
+        v = json.loads(_LINE_STATE_FILE.read_text()).get(acct)
+    except Exception:
+        return 0
+    if isinstance(v, dict):
+        return v.get("count", 0) if v.get("date") == today else 0
+    # 旧形式: {acct: "YYYY-MM-DD"} は「その日1回済み」を意味する
+    return 1 if v == today else 0
+
+
+def _monthly_line_url_count(acct: str) -> int:
+    """当月に実投稿済みのLINE URL(lin.ee)付き投稿数。
+    feedbackルール『masa: LINE URLありは月間2本以下』の実投稿側ガード用。
+    2026-09-22修正: 2026-08-18のURL全面コメント化以降、log_*_posted.jsonlのtextは
+    extract_url_and_cta後（URL除去済み）のため "lin.ee" in text では常に0件になる
+    偽陰性バグだった（同型バグはverify_line_listin側で2026-09-12に同じ理由で修正済み）。
+    mark_posted が付与する is_line フラグを優先し、フラグの無い旧エントリ（Aug 18以前）
+    のみ従来の "lin.ee" 文字列一致にフォールバックする。"""
+    pfile = ACCOUNTS[acct]["posted"]
+    if not pfile.exists():
+        return 0
+    month = date.today().strftime("%Y-%m")
+    n = 0
+    for line in pfile.read_text(encoding="utf-8").splitlines():
+        try:
+            e = json.loads(line)
+        except Exception:
+            continue
+        if (e.get("date") or "")[:7] != month:
+            continue
+        if e.get("is_line") or "lin.ee" in (e.get("text") or ""):
+            n += 1
+    return n
+
+
+def _line_done_today(acct: str, today: str) -> bool:
+    # masaはfeedbackルール「LINE URL付きは月間2本以下」が最優先。
+    # 「1日1回確実に織り込む」ロジックがmasaにも毎日適用され月30本ペースに
+    # なっていた設計矛盾を修正（2026-07-03）。上限到達後はLINE投稿を完了扱いにする。
+    if acct == "masa" and _monthly_line_url_count("masa") >= 2:
+        return True
+    return _line_count_today(acct, today) >= _LINE_DAILY.get(acct, 1)
+
+
+def _mark_line_done(acct: str, today: str):
+    try:
+        d = json.loads(_LINE_STATE_FILE.read_text()) if _LINE_STATE_FILE.exists() else {}
+    except Exception:
+        d = {}
+    cur = _line_count_today(acct, today)
+    d[acct] = {"date": today, "count": cur + 1}
+    try:
+        _LINE_STATE_FILE.write_text(json.dumps(d, ensure_ascii=False))
+    except Exception:
+        pass
+
+
+# ── ヒーロー投稿の優先投稿（2026-10-20 オーナー指示「ヒーロー投稿は全て投稿」）────────
+# 経緯: 毎朝のヒーロー(hero_<acct>.json)は朝6:47の生成バッチの「後」に push → generate_remix を再実行して
+# 追加バッチとして log_<acct>.jsonl に積まれる。get_next_post は全バッチを「先着順」で並べて先頭から
+# 未投稿を選ぶため、ヒーローは最初のバッチ(約100本)の後ろ＝位置100超に回り、1日50本では届かず
+# 直近7日の生成30本/アカに対し実投稿0本だった(10/14〜10/20)。
+# 対策: 未投稿のヒーローを「今日の残り枠に均等に散らして」割り込ませる。誘導アンカー(LINE/アクセス/
+# 診断/HPB/プロフィール/AI)は常にヒーローより先に選ぶ（アンカー固定ルールを壊さない）。
+def _hero_priority_order(acct: str, today: str, all_posts: list, posted_texts: set) -> list:
+    """get_next_post の走査順(インデックス列)を返す。ヒーローが「今出す番」なら、先頭のアンカー群の
+    直後にヒーローを差し込む。失敗時・該当なしは自然順(range)を返す（フェイルオープン）。"""
+    natural = list(range(len(all_posts)))
+    try:
+        from generate_remix import _load_hero_posts, _hero_key, _hero_para_key, _hero_ledger_key
+        pending = _load_hero_posts(acct)                       # 未投稿のヒーロー（NG/重複フィルタ済み）
+        if not pending:
+            return natural
+        # 台帳エントリーが「ヒーローの投稿」か: hk(原文全文キー)があれば全文で厳密照合、無い旧エントリーだけ
+        # 最初の段落で照合（通常テンプレの1文目がヒーローと同じでもヒーロー扱いしない。2026-10-20）
+        _all_h = _load_hero_posts(acct, include_posted=True)
+        hero_hk = {_hero_key(h) for h in _all_h}
+        hero_para = {_hero_para_key(h) for h in _all_h}
+        # 今日の投稿数と「最後のヒーロー投稿からの本数」を台帳(時系列)から数える
+        n, since, hero_today = 0, 0, False
+        pfile = ACCOUNTS[acct]["posted"]
+        if pfile.exists():
+            for l in pfile.read_text(encoding="utf-8").splitlines():
+                try:
+                    e = json.loads(l)
+                except Exception:
+                    continue
+                if e.get("date") != today or e.get("kind") == "uplink_repost":
+                    continue
+                n += 1
+                if (e.get("hk") in hero_hk) if e.get("hk") else (_hero_ledger_key(e.get("text", "")) in hero_para):
+                    since, hero_today = 0, True
+                else:
+                    since += 1
+        s_rem = max(0, DAILY_TARGET - n)
+        h_rem = len(pending)
+        # 残り枠(の8割)にヒーローを等間隔で配置。残り枠がヒーロー数の2倍以上あるうちは最低1本は通常投稿を挟む
+        gap = max(0, (s_rem * 4 // 5) // h_rem - 1)
+        if s_rem >= 2 * h_rem:
+            gap = max(gap, 1)
+        if not hero_today:
+            gap = min(gap, 3)   # 1日の最初のヒーローは早めに（序盤3本以内）
+        # ヒーローを all_posts 上のインデックスに対応づける。照合は「全文キー」のみ（最初の段落が同じだけの
+        # 通常テンプレをヒーローと取り違えない。無ければ末尾に追加＝本物のヒーローを必ず出す）
+        idx_by_key = {}
+        for i, t in enumerate(all_posts):
+            idx_by_key.setdefault(_hero_key(t), i)
+        hero_idx = []
+        for h in pending:
+            j = idx_by_key.get(_hero_key(h))
+            if j is None:
+                all_posts.append(h)
+                j = len(all_posts) - 1
+                idx_by_key[_hero_key(h)] = j
+            if j not in hero_idx:
+                hero_idx.append(j)
+        hs = set(hero_idx)
+        # 最初の段落がヒーローと同じ通常テンプレ(全文は別物)は、先に投稿されるとヒーローが全期間dedup/7日ガードで
+        # 永久に出なくなる（後から出た方が弾かれる）。ヒーローが未投稿の間は走査対象から外す（2026-10-20）。
+        # ヒーローが投稿された後は、どのみち同じ理由でテンプレ側が弾かれる。
+        hero_norms = {_normalize_post_key(all_posts[j])[:80] for j in hero_idx}
+        shadow = {i for i, t in enumerate(all_posts)
+                  if i not in hs and _normalize_post_key(t)[:80] in hero_norms and not _is_line_listin(t)
+                  and not (_is_store_access(t) or _is_shindan(t) or _is_hpb_cta(t) or _is_cta_profile(t) or _is_ai_content(t))}
+        natural = [i for i in range(len(all_posts)) if i not in shadow]   # 未投稿ヒーローは(出番前でも)末尾までに必ず含める＝キュー枯渇時の取りこぼし防止
+        if since < gap:
+            return natural
+        rest = [i for i in natural if i not in hs]
+        # 先頭の「アンカー系 or 投稿済み」を飛ばした最初の通常投稿の手前にヒーローを差し込む
+        p_ins = 0
+        for pos, i in enumerate(rest):
+            t = all_posts[i]
+            norm = _normalize_post_key(t)
+            is_anchor = (_is_line_listin(t) or _is_store_access(t) or _is_shindan(t) or _is_hpb_cta(t)
+                         or _is_cta_profile(t) or _is_ai_content(t))
+            if is_anchor or norm in posted_texts:
+                p_ins = pos + 1
+                continue
+            break
+        order = rest[:p_ins] + hero_idx + rest[p_ins:]
+        return order
+    except Exception as ex:
+        log_error(f"ヒーロー優先順の計算失敗(自然順で続行): {type(ex).__name__}: {ex}")
+        return list(range(len(all_posts)))
+
+
+def get_next_post(acct: str, today: str, avoid_url: bool = False):
+    log_file = ACCOUNTS[acct]["log"]
+    if not log_file.exists():
+        return None, -1
+    entries = [json.loads(l) for l in log_file.read_text().splitlines() if l.strip()]
+    today_entries = [e for e in entries if e.get("date") == today]
+    if not today_entries:
+        return None, -1
+
+    # 全バッチから候補を収集（正規化キーで重複排除）
+    seen_keys = set()
+    all_posts = []
+    for entry in today_entries:
+        for post in entry.get("posts", []):
+            key = _normalize_post_key(post)[:80]
+            if key not in seen_keys:
+                seen_keys.add(key)
+                all_posts.append(post)
+
+    # 投稿済みテキスト（新フォーマット: text フィールドあり）
+    posted_texts = get_posted_texts(acct)
+
+    # 旧フォーマット対応: インデックス→テキスト変換（最終バッチ基準・正規化済み）
+    # 2026-10-20: 対象は text フィールドの無い本物の旧エントリーだけ。text 付きエントリーの index は
+    # 「全バッチ統合キュー(all_posts)」上の位置であり、最終バッチの位置とは別物。これを最終バッチへ
+    # 当てはめると無関係な最終バッチ原稿（前半に差し込まれたヒーロー等）が「投稿済み」扱いで永久に
+    # 飛ばされた（模擬で truth のヒーロー4本・nagaoka 1本が出ず）。text 付きは posted_texts で判定済み。
+    last_batch = today_entries[-1].get("posts", [])
+    old_posted_keys = set()
+    for idx in _legacy_posted_indices(acct, today):
+        if idx < len(last_batch):
+            old_posted_keys.add(_normalize_post_key(last_batch[idx])[:80])
+
+    line_done = _line_done_today(acct, today)
+
+    # API実投稿の直近1文目（CIが先に投稿した分をローカルが再選択しないよう除外）
+    api_recent = _recent_api_firstlines(acct) | _RUN_BLOCKED_FIRSTLINES.get(acct, set())
+
+    # LINEリストインは1日1回、確実に織り込む（重複ガード免除）。
+    # フィードバック: truth/nagaoka は5〜7%の頻度で投稿されるべき。
+    # 序盤でも投稿される確率を高めて目標達成を目指す。
+    if not line_done:
+        posted_today = len(get_posted_indices(acct, today))
+        # 確率的採用から確定採用へ変更（feedback.json: truth 5-7%, nagaoka <10%）
+        # 序盤(0-2本)では確実に出す、3本以上で判定再開するが優先採用維持
+        should_post_line = (posted_today <= 1) or (posted_today >= 1 and random.random() < 0.9)
+        if should_post_line:
+            # リストインは重複ガード免除のため、ここで7日以内の同一1文目を避ける。
+            # さらにAPI直近実投稿(12h)とも突き合わせ、重複で弾かれる候補を最初から選ばない
+            # （2026-08-21障害: プール枯渇→先頭固定→API重複→未投稿のまま枠消化、の再発防止）。
+            recent_listin = _recent_listin_firstlines(acct)
+            line_candidates = [(i, t) for i, t in enumerate(all_posts) if _is_line_listin(t)]
+            eligible = [(i, t) for i, t in line_candidates
+                        if dg_normalize(_fix_question_endings(t)).split("\n")[0].strip()[:40] not in api_recent]
+            for i, text in eligible:
+                if text.split("\n")[0].strip() not in recent_listin:
+                    return text, i
+            # 全候補が7日以内使用済み → 最も昔に使った候補(LRU)を採用（先頭固定にしない）
+            if eligible:
+                order = _listin_last_used_order(acct)
+                eligible.sort(key=lambda it: order.get(it[1].split("\n")[0].strip(), ""))
+                return eligible[0][1], eligible[0][0]
+            # 適格候補ゼロ（全てAPI直近重複）→ 今回はLINEを見送り通常投稿へ（枠は温存）
+
+    # avoid_url=True の場合、直前投稿URL連発回避のため候補を集めてから選ぶ
+    # （既定のavoid_url=Falseでは従来どおり最初の適格候補を即返す＝挙動を変えない）
+    eligible: list[tuple[str, int]] = []
+    _scan_order = _hero_priority_order(acct, today, all_posts, posted_texts)   # ヒーロー優先(2026-10-20)
+    for i in _scan_order:
+        text = all_posts[i]
+        if _is_line_listin(text):
+            continue  # LINEは上で処理（未実施なら採用済み／実施済みならスキップ）
+        # mark_posted が保存するテキストと同じ正規化で比較する
+        norm = _normalize_post_key(text)
+        already_posted_ever = norm in posted_texts or norm[:80] in old_posted_keys
+        # アンカー投稿（店舗アクセス・頭痛タイプ診断・ホットペッパー予約導線・
+        # masaプロフィール診断導線）は固定テンプレのプールが小さく、variable無しの
+        # 完全一致文が多い。全期間dedup（posted_texts）でしか判定しないと
+        # 全テンプレ使用済み後は永久に選ばれなくなる実障害があった
+        # （2026-06-21導入以降、truthは07-06・nagaokaは07-11を最後に
+        # 0本化＝約1ヶ月間、駐車場/アクセス誘導が実質未投稿だった。2026-08-14検証で発覚・修正。
+        # masaのcta_profileも同型障害で2026-08-03以降0本化していたのを2026-08-17検証で修正）。
+        # 以下の anchor_ok 緩和ルート（既存・HPB/shindanで実績あり）に必ず到達させる。
+        is_anchor_pool_type = (
+            _is_store_access(text) or _is_shindan(text) or _is_hpb_cta(text)
+            or _is_cta_profile(text) or _is_ai_content(text)
+        )
+        if already_posted_ever and not is_anchor_pool_type:
+            continue
+        if already_posted_ever or dg_is_duplicate(norm, acct):
+            # 7日以内の重複（または全期間で使用済みの固定アンカーテンプレ）は
+            # 投稿せずスキップ（ループで次の候補へ）。ただし店舗アクセスアンカー
+            # （2026-07-03）・頭痛タイプ診断アンカー（2026-07-11）・
+            # ホットペッパー予約導線CTA（2026-07-15）・masaプロフィール診断導線
+            # （2026-08-17）は緩和ルールで採用可
+            anchor_ok = _access_anchor_ok(acct, today, text) \
+                or _shindan_anchor_ok(acct, today, text) \
+                or _hpb_anchor_ok(acct, today, text) \
+                or _cta_profile_anchor_ok(acct, today, text) \
+                or _ai_content_anchor_ok(acct, today, text)
+            if not anchor_ok:
+                continue
+            # アンカー緩和が効いても、本日すでにshared guardに記録済み
+            # （投稿成功済み or 直前の試行がAPI側で重複拒否されPENDING記録済み）なら
+            # post_to_threads側の通常dup判定で必ず再度弾かれるため、再選択しない。
+            # これを入れないと同一アンカー候補を延々選び続けて丸1日投稿が止まる
+            # （2026-07-15 truth/nagaoka障害・2026-07-16修正）。
+            if dg_marked_today(norm, acct):
+                continue
+        # API実投稿の直近に同じ1文目があれば飛ばす（系統間ラグ対策）
+        if dg_normalize(_fix_question_endings(text)).split("\n")[0].strip()[:40] in api_recent:
+            continue
+        if not avoid_url:
+            return text, i  # 従来どおり即返す（挙動不変）
+        eligible.append((text, i))
+        if len(eligible) >= 20:
+            break  # 取りすぎない（性能・挙動は従来と同等の範囲で十分）
+
+    if avoid_url:
+        picked = pick_avoiding_consecutive_url(eligible, last_had_url=True)
+        if picked is not None:
+            return picked
+
+    # 通常投稿が尽きていて、LINEが未実施なら最後に出す（取りこぼし防止）
+    if not line_done:
+        recent_listin = _recent_listin_firstlines(acct)
+        line_candidates = [(i, t) for i, t in enumerate(all_posts) if _is_line_listin(t)]
+        for i, text in line_candidates:
+            if text.split("\n")[0].strip() not in recent_listin:
+                return text, i
+        if line_candidates:
+            return line_candidates[0][1], line_candidates[0][0]
+    return None, -1
+
+def ensure_generated(acct: str, today: str):
+    log_file = ACCOUNTS[acct]["log"]
+    if log_file.exists():
+        entries = [json.loads(l) for l in log_file.read_text().splitlines() if l.strip()]
+        # posts が空配列のエントリーは「生成済み」とみなさない
+        if any(e.get("date") == today and e.get("posts") for e in entries):
+            return
+    log_info(acct, "投稿データなし → 自動生成中...")
+    result = subprocess.run(
+        [sys.executable, str(BASE / "generate_remix.py"), acct],
+        capture_output=True, text=True
+    )
+    if result.returncode == 0:
+        log_info(acct, result.stdout.splitlines()[0] if result.stdout else "生成完了")
+    else:
+        log_error(f"{ACCOUNTS[acct]['name']} 生成失敗: {result.stderr[:200]}")
+
+
+# ── API呼び出し（リトライ付き） ────────────────────────────
+
+def api_request(url: str, data: bytes = None, retry: int = 0) -> dict:
+    try:
+        req = urllib.request.Request(url, data=data, method="POST" if data else "GET")
+        with urllib.request.urlopen(req) as r:
+            return json.loads(r.read())
+    except urllib.error.HTTPError as e:
+        body = e.read().decode()
+        err_data = json.loads(body) if body.startswith("{") else {}
+        code = err_data.get("error", {}).get("code", 0)
+        # レート制限 → 60秒待機リトライ
+        if code in (4, 17, 32) and retry < MAX_RETRY:
+            log_error(f"レート制限(code={code}) → 60秒後リトライ ({retry+1}/{MAX_RETRY})")
+            time.sleep(60)
+            return api_request(url, data, retry + 1)
+        raise e
+    except urllib.error.URLError as e:
+        # ネットワーク系 → 10秒待機リトライ
+        if retry < MAX_RETRY:
+            log_error(f"ネットワークエラー → 10秒後リトライ ({retry+1}/{MAX_RETRY}): {e}")
+            time.sleep(10)
+            return api_request(url, data, retry + 1)
+        raise e
+
+
+_URL_RE = re.compile(r'https?://\S+')
+
+# 恒久ルール（検証サブエージェントD運用ルール）: 問いかけ文は「〜ですか？」のように
+# 疑問符で終える。生成テンプレート側の表記揺れ（「ですか。」等の句点終わり）を
+# 投稿直前に一括で統一する。「ですか/でしょうか/ますか」限定でマッチさせ、
+# 「そうか。」等の非疑問文への誤爆を避ける（2026-09-10検証で表記揺れを検出し追加）。
+_Q_END_RE = re.compile(r'(ですか|でしょうか|ますか)。')
+
+
+def _fix_question_endings(text: str) -> str:
+    """疑問文の句点終わりを疑問符に統一する。"""
+    return _Q_END_RE.sub(r'\1？', text or "")
+
+
+def extract_url_and_cta(text: str):
+    """
+    本文からURLとその直前のCTAラベル行を切り出す。
+    戻り値: (URL除去済み本文, CTAブロック文字列 or None)
+    例: CTAブロック = "▶ 予約はこちら\nhttps://beauty.hotpepper.jp/..."
+    """
+    match = _URL_RE.search(text)
+    if not match:
+        return text, None
+
+    lines = text.split('\n')
+    url_idx = next(i for i, l in enumerate(lines) if _URL_RE.search(l))
+
+    # URLの直前に空でない行があればCTAラベルとして含める
+    cta_start = url_idx
+    if url_idx > 0 and lines[url_idx - 1].strip():
+        cta_start = url_idx - 1
+
+    # 2026-09-24: cta_startがテキスト先頭行(0)まで遡ると本文が全消滅するバグへの対処。
+    # 「診断できます。\nLINEの無料・集客の健康診断はこちら👉 https://...」のように、
+    # URL直前の行がCTAラベルではなく本文そのもの（文末が「。」等で終わる通常の文）で、
+    # かつそれが全文の1行目である場合、そこまで吸収するとclean_textが空になり
+    # post_to_threadsでAPI拒否→再選択の無限ループを招く実障害があった
+    # （2026-09-21 masa 44/50、2026-09-23 masa 18/50で確認）。
+    # この場合は前の行を本文側に残し、CTAブロックはURL自身の行（同一行内の
+    # 誘導文言＋URL）のみとする。
+    if cta_start == 0 and url_idx > 0:
+        cta_start = url_idx
+
+    # 本文末尾の空行を除去
+    body_end = cta_start
+    while body_end > 0 and not lines[body_end - 1].strip():
+        body_end -= 1
+
+    body = '\n'.join(lines[:body_end])
+    cta_block = '\n'.join(lines[cta_start:url_idx + 1])
+    return body, cta_block
+
+
+def post_reply_to_threads(acct: str, reply_to_id: str, text: str) -> str:
+    """指定投稿へのコメント（返信）を投稿してpost IDを返す"""
+    token = os.environ[ACCOUNTS[acct]["token_key"]]
+    user_id = os.environ[ACCOUNTS[acct]["uid_key"]]
+
+    data = urllib.parse.urlencode({
+        "media_type": "TEXT",
+        "text": text,
+        "reply_to_id": reply_to_id,
+        "access_token": token,
+    }).encode()
+    container_id = api_request(f"{BASE_URL}/{user_id}/threads", data)["id"]
+    time.sleep(2)
+    data2 = urllib.parse.urlencode({"creation_id": container_id, "access_token": token}).encode()
+    return api_request(f"{BASE_URL}/{user_id}/threads_publish", data2)["id"]
+
+
+def _recently_posted_on_threads(acct: str, text: str, hours: int = 12) -> bool:
+    """Threads APIの実投稿を正とする最終重複チェック（投稿系統をまたぐ二重投稿を防ぐ）。
+    直近 hours 時間内に同じ1文目の投稿があれば True。API失敗時は False（通常フローに委ねる）。"""
+    try:
+        target_fl = dg_normalize(_fix_question_endings(text)).split("\n")[0].strip()[:40]
+        if not target_fl:
+            return False
+        token = os.environ[ACCOUNTS[acct]["token_key"]]
+        uid = os.environ[ACCOUNTS[acct]["uid_key"]]
+        url = f"{BASE_URL}/{uid}/threads?fields=id,text,timestamp&limit=100&access_token={token}"
+        with urllib.request.urlopen(url, timeout=15) as r:
+            data = json.loads(r.read())
+        cutoff = datetime.now(timezone.utc) - timedelta(hours=hours)
+        for p in data.get("data", []):
+            ptext = p.get("text", "")
+            if not ptext:
+                continue
+            try:
+                pts = datetime.fromisoformat(p.get("timestamp", "").replace("Z", "+00:00"))
+            except Exception:
+                pts = datetime.now(timezone.utc)
+            if pts < cutoff:
+                continue
+            if dg_normalize(_fix_question_endings(ptext)).split("\n")[0].strip()[:40] == target_fl:
+                return True
+        return False
+    except Exception:
+        return False
+
+
+def _parse_ts(ts: str):
+    try:
+        return datetime.strptime(ts.replace("Z", "+0000"), "%Y-%m-%dT%H:%M:%S%z")
+    except Exception:
+        return None
+
+
+# 2026-09-29: 同一プロセス内で[API直近重複]に弾かれた候補の1文目。選択側の api_recent 取得が
+# CIで空振り(API失敗は空集合で握りつぶす)すると、LINE等 skip_dup 投稿は消費済みにならないため
+# 同じ候補を選び続け「連続3回失敗→諦める」を毎ラン繰り返し、truthが4時間以上0本になった。
+_RUN_BLOCKED_FIRSTLINES: dict = {}
+
+
+def _firstline_key(text: str) -> str:
+    return dg_normalize(_fix_question_endings(text or "")).split("\n")[0].strip()[:40]
+
+
+def _recent_api_firstlines(acct: str, hours: int = 12) -> set:
+    """直近 hours 時間に Threads へ実投稿された1文目の集合（選択段階での除外用）。
+    get_next_post がこれを使い、CIが先に投稿した記事をローカルが再選択して
+    投稿が止まる事故を防ぐ。API失敗時は空集合（通常フローに委ねる）。"""
+    try:
+        token = os.environ[ACCOUNTS[acct]["token_key"]]
+        uid = os.environ[ACCOUNTS[acct]["uid_key"]]
+        url = f"{BASE_URL}/{uid}/threads?fields=id,text,timestamp&limit=100&access_token={token}"
+        with urllib.request.urlopen(url, timeout=15) as r:
+            data = json.loads(r.read())
+        cutoff = datetime.now(timezone.utc) - timedelta(hours=hours)
+        out = set()
+        for p in data.get("data", []):
+            ptext = p.get("text", "")
+            if not ptext:
+                continue
+            pts = _parse_ts(p.get("timestamp", ""))
+            if pts and pts < cutoff:
+                continue
+            fl = dg_normalize(_fix_question_endings(ptext)).split("\n")[0].strip()[:40]
+            if fl:
+                out.add(fl)
+        return out
+    except Exception as e:
+        log_error(f"[{acct}] _recent_api_firstlines 取得失敗（選択側の重複回避が無効）: {type(e).__name__}: {e}")
+        return set()
+
+
+def post_to_threads(acct: str, text: str, skip_dup: bool = False) -> str:
+    """Threads に投稿して post ID を返す。
+    重複チェックをここで行う — run_account の実装に関わらず必ず通る。
+    重複の場合は DuplicatePost 例外を投げる（呼び出し側でログしてスキップ）。
+    skip_dup=True（LINEリストイン等の意図的な定期投稿）は重複ガードを免除する。
+    """
+    norm = dg_normalize(text)
+    if not skip_dup:
+        if dg_is_duplicate(norm, acct):
+            raise _DuplicatePost(f"{text[:50]}")
+    # API実投稿を正とする最終重複チェック（系統をまたぐ二重投稿を防ぐ。LINEも対象）
+    if _recently_posted_on_threads(acct, text):
+        # 消費済みとして記録してから弾く。これをしないと get_next_post が同じ投稿を
+        # 選び続けて最大12時間パイプラインが詰まり、1日50本を割る原因になる。
+        if not skip_dup:
+            dg_mark_pending(norm, acct)
+        raise _DuplicatePost(f"[API直近重複] {text[:50]}")
+    if not skip_dup:
+        dg_mark_pending(norm, acct)   # API呼び出し前に記録（タイムアウト対策）
+
+    token = os.environ[ACCOUNTS[acct]["token_key"]]
+    user_id = os.environ[ACCOUNTS[acct]["uid_key"]]
+    data = urllib.parse.urlencode({"media_type": "TEXT", "text": text, "access_token": token}).encode()
+    container_id = api_request(f"{BASE_URL}/{user_id}/threads", data)["id"]
+    time.sleep(2)
+    data2 = urllib.parse.urlencode({"creation_id": container_id, "access_token": token}).encode()
+    post_id = api_request(f"{BASE_URL}/{user_id}/threads_publish", data2)["id"]
+    if not skip_dup:
+        dg_mark_posted(norm, acct, post_id)   # 成功後に確定記録
+    return post_id
+
+
+class _DuplicatePost(Exception):
+    """post_to_threads が重複を検知したときに投げる内部例外"""
+    pass
+
+
+# ── アカウント実行 ────────────────────────────────────
+
+def run_account(acct: str):
+    from account_ownership import is_local
+    if not is_local(acct):
+        return
+    today = date.today().strftime("%Y-%m-%d")
+    name = ACCOUNTS[acct]["name"]
+
+    ensure_generated(acct, today)
+
+    avoid_url = _last_post_had_visible_url(acct, today)
+    text, index = get_next_post(acct, today, avoid_url=avoid_url)
+    if text is None and _posted_count_today(acct) < DAILY_TARGET:
+        # 適格な投稿が尽きたが目標50本に未達 → 追加バッチを生成して補充する
+        # （キューはあっても重複除外で選べる投稿が枯渇するケースがある）
+        log_info(acct, f"{name} 適格投稿が枯渇（{_posted_count_today(acct)}本/{DAILY_TARGET}）→ 追加生成")
+        subprocess.run([sys.executable, str(BASE / "generate_remix.py"), acct],
+                       capture_output=True, text=True, timeout=300)
+        text, index = get_next_post(acct, today, avoid_url=avoid_url)
+
+    # ── 検品ゲート（2026-07-21）: 投稿直前に最終チェック。NGは既存のpending消費済み
+    # マーク機構で弾いて次候補へ（無限ループ禁止のため最大5回まで・全停止しない）。
+    _MAX_INSPECT_ATTEMPTS = 5
+    _inspect_attempts = 0
+    while text is not None:
+        _ok, _reasons = inspect_before_post(text, acct)
+        if _ok and acct == "masa" and _masa_line_overrate(text):
+            _ok, _reasons = False, ["LINE言及率上限(コンテンツ枠2本/日)"]
+        if _ok:
+            break
+        log_info(acct, f"{name} [検品NG] {'; '.join(_reasons)[:100]} → {text[:30].replace(chr(10), ' ')}...")
+        try:
+            dg_mark_pending(dg_normalize(text), acct)  # 消費済みにして次回同一候補を再選択しない
+        except Exception:
+            pass
+        _inspect_attempts += 1
+        if _inspect_attempts >= _MAX_INSPECT_ATTEMPTS:
+            log_info(acct, f"{name} 検品NGが{_inspect_attempts}回連続 → 本サイクルは見送り")
+            text = None
+            break
+        text, index = get_next_post(acct, today, avoid_url=avoid_url)
+
+    is_line = _is_line_listin(text or "")  # 元テキスト(URL付き)でLINEリストイン判定
+    is_shindan = _is_shindan(text or "")   # 頭痛タイプ診断アンカー判定（2026-07-11）
+    # ホットペッパー予約CTA・店舗アクセスアンカーも get_next_post 側で7日重複ガードを
+    # 緩和して選ばれている（_hpb_anchor_ok/_access_anchor_ok）。post_to_threads側の
+    # 通常dup判定（緩和なし）に skip_dup=False のまま渡すと、選ばれた直後に必ず
+    # [重複スキップ]で弾かれ実質0投稿になる実障害があったため、同様にskip_dup対象に含める
+    # （2026-07-18検証で発覚: 07-10以降HPB CTA本文が一度も実投稿されていなかった。
+    # 2026-08-17検証で発覚: masaのcta_profile（プロフィール診断導線）も同型障害で
+    # 08-03以降0本化していたため同様にskip_dup対象へ追加）。
+    is_hpb = _is_hpb_cta(text or "")
+    is_access = _is_store_access(text or "")
+    is_ctaprofile = _is_cta_profile(text or "")
+    is_aicontent = _is_ai_content(text or "")  # AI活用系アンカー判定（2026-09-13追加・同型障害修正）
+    if text is None:
+        log_info(acct, f"{name} 今日の投稿完了")
+        return
+
+    comment_parts: list[str] = []
+
+    # 【2026-08-18 社長指示で方針変更】「URLは最初の投稿に載せるな。URLはコメント欄に掲載しろ」
+    # （2026-08-06・08-18の2回にわたり同じ指摘。旧仕様=LINEリストイン/頭痛診断のみ本文末尾に
+    #  URLを残す設計だったが、本文にURLがあると到達が落ち（実測8〜13閲覧）、結果として
+    #  登録数も伸びないため全面的にコメント欄方式へ統一する。**この分岐を元に戻さないこと**）
+    # 「👇」等でURLを指し示す文言は extract_url_and_cta 側で本文から除去されるため、
+    # 本文が「👇」で終わって宙に浮かないよう、末尾の指示記号を落としてから使う。
+    clean_text, cta_block = extract_url_and_cta(text)
+    is_present = _is_present_cta(text)
+    if is_present and cta_block is None:
+        cta_block = PRESENT_CTA_COMMENT   # プレゼント誘導: 公式LINEのURLはコメント欄に置く（本文は無URL）
+    clean_text = re.sub(r"[\s👇⬇️↓]+$", "", clean_text).strip()
+    clean_text = _fix_question_endings(clean_text)
+
+    # テキストをコメント部分に分割する
+    # 優先順位: [COMMENT] タグ → 【続き】マーカー → \n\n 段落区切り
+    if "[COMMENT]" in clean_text:
+        # [COMMENT] で複数コメントに分割
+        # 前後の改行・空白の有無に関わらず確実に分割する（末尾に改行のない
+        # [COMMENT] が本文に混入して literal 表示される実障害を防ぐ・2026-07-21）
+        segments = [s.strip() for s in re.split(r"\[COMMENT\]", clean_text) if s.strip()]
+        clean_text = segments[0] if segments else ""
+        comment_parts = segments[1:]
+    elif "\n\n【続き】\n" in clean_text:
+        parts = clean_text.split("\n\n【続き】\n", 1)
+        clean_text = parts[0].strip()
+        if parts[1].strip():
+            comment_parts = [parts[1].strip()]
+    elif "\n\n" in clean_text:
+        # マーカーなし長文 → 最初の段落のみ本文、残りをコメントへ
+        first_para, rest = clean_text.split("\n\n", 1)
+        rest = rest.strip()
+        if rest:
+            clean_text = first_para.rstrip()
+            comment_parts = [rest]
+
+    # 最終防衛: どの分岐を通っても [COMMENT]/【続き】マーカーが本文・コメントに
+    # 残らないよう除去する（literal 表示の再発防止・2026-07-21）
+    def _strip_markers(s: str) -> str:
+        return re.sub(r"\s*(?:\[COMMENT\]|【続き】)\s*", "\n", s or "").strip()
+    clean_text   = _strip_markers(clean_text)
+    comment_parts = [p for p in (_strip_markers(p) for p in comment_parts) if p]
+
+    if not clean_text.strip():
+        # 2026-09-22: extract_url_and_cta が本文とURLの間に改行が無いテンプレ
+        # （例:「診断できます。\nLINEの...👉 https://...」）を全文CTA扱いし、
+        # clean_textが空になるケースがある。空本文をそのままpost_to_threadsへ
+        # 渡すとThreads API側で拒否され（HTTPError・body空→code=0）、この失敗パスは
+        # dg_mark_pendingを呼ばないため同一候補が延々再選択され続け、バースト予算
+        # （max_attempts = n+6）を消費して目標本数に届かない実障害があった
+        # （2026-09-21 masa 44/50本・run=35563956767で確認、[115本目]表記で毎回本文空）。
+        # 検品NGと同様に消費済みにして見送る（投稿数を増やす変更ではない）。
+        log_info(acct, f"{name} [本文空につき見送り] {text[:40].replace(chr(10), ' ')}...")
+        try:
+            dg_mark_pending(dg_normalize(text), acct)
+        except Exception:
+            pass
+        return
+
+    log_info(acct, f"{name} [{index+1}本目]: {clean_text[:40].replace(chr(10), ' ')}...")
+
+    # 2026-10-14: 診断アンカーは skip_dup=True で投稿されるため、選定後〜投稿直前に台帳が更新された場合
+    # （常駐run重複・再選択）に同日同文が2本出ていた（10/12 truth index6が2回）。投稿直前に台帳を再読して弾く。
+    if is_shindan:
+        _first = clean_text.split("\n")[0].strip()
+        _pf = ACCOUNTS[acct]["posted"]
+        if _pf.exists():
+            for _l in _pf.read_text(encoding="utf-8").splitlines():
+                try:
+                    _e = json.loads(_l)
+                except Exception:
+                    continue
+                if (_e.get("date") or "")[:10] == today and (_e.get("text", "").split("\n")[0].strip() == _first):
+                    log_info(acct, f"{name} [同日同文の診断アンカー済みにつき見送り] {_first[:30]}")
+                    return
+
+    # URLがある場合のみ補足説明コメントをAIで事前生成（投稿前に準備）
+    bridge = PRESENT_BRIDGE if is_present else (generate_bridge_comment(clean_text, acct) if cta_block else None)
+
+    def _post_comments(post_id: str, suffix: str = ""):
+        """コメント部分→CTAを順番に投稿するヘルパー"""
+        last_id = post_id
+        for part in comment_parts:
+            try:
+                time.sleep(3)
+                last_id = post_reply_to_threads(acct, last_id, part)
+                log_info(acct, f"{name} ✓ コメント投稿完了{suffix}")
+            except Exception as ce:
+                log_error(f"{name} コメント投稿失敗{suffix}: {ce}")
+        if cta_block:
+            try:
+                b = bridge or ACCOUNTS[acct].get("bridge_text", "詳しくはこちら 👇")
+                time.sleep(3)
+                r1 = post_reply_to_threads(acct, last_id, b)
+                time.sleep(2)
+                post_reply_to_threads(acct, r1, cta_block)
+                log_info(acct, f"{name} ✓ コメントにURL投稿完了{suffix}")
+            except Exception as ce:
+                log_error(f"{name} URL投稿失敗{suffix}: {ce}")
+
+    try:
+        # post_to_threads 内部で重複チェック・pending・posted を一括処理
+        post_id = post_to_threads(acct, clean_text, skip_dup=(is_line or is_shindan or is_hpb or is_access or is_ctaprofile or is_aicontent))
+        mark_posted(acct, today, index, post_id, clean_text, is_line=is_line, is_shindan=is_shindan, orig_text=text)
+        if is_line:
+            _mark_line_done(acct, today)
+        log_info(acct, f"{name} ✓ 完了 (ID: {post_id})")
+        _post_comments(post_id)
+
+    except _DuplicatePost as dp:
+        log_info(acct, f"{name} [重複スキップ] {str(dp)[:60]}")
+        _RUN_BLOCKED_FIRSTLINES.setdefault(acct, set()).add(_firstline_key(clean_text))
+        if is_line:
+            # 2026-08-21改訂: 枠(_mark_line_done)は燃やさない。選択側がAPI直近重複を
+            # 事前回避するため同一候補の無限再選択は起きない（全滅時はLINE見送りで前進）。
+            # 旧実装は「消化済みマークだけ付いて未投稿」でnagaokaのLINEが3日停止した。
+            pass
+        else:
+            # 設計原則: 弾いた投稿は必ず消費済みにする。本文分割後(clean_text)が重複でも
+            # 元のキュー全文は未マークのため、ここで全文normを消費済みにしないと
+            # 同じ投稿を無限再選択して停止する（2026-07-16 truthが5本で停止した実障害）。
+            try:
+                dg_mark_pending(dg_normalize(text), acct)
+            except Exception:
+                pass
+
+    except urllib.error.HTTPError as e:
+        body = e.read().decode()
+        err_data = json.loads(body) if body.startswith("{") else {}
+        code = err_data.get("error", {}).get("code", 0)
+
+        # トークン期限切れ → 自動リフレッシュして再投稿
+        if code == 190:
+            log_info(acct, f"{name} トークン期限切れ → 自動リフレッシュ...")
+            if refresh_token(acct):
+                try:
+                    post_id = post_to_threads(acct, clean_text, skip_dup=(is_line or is_shindan or is_hpb or is_access or is_ctaprofile or is_aicontent))
+                    mark_posted(acct, today, index, post_id, clean_text, is_line=is_line, is_shindan=is_shindan, orig_text=text)
+                    if is_line:
+                        _mark_line_done(acct, today)
+                    log_info(acct, f"{name} ✓ 完了（リフレッシュ後） (ID: {post_id})")
+                    _post_comments(post_id, "（リフレッシュ後）")
+                except _DuplicatePost as dp:
+                    log_info(acct, f"{name} [重複スキップ] {str(dp)[:60]}")
+                    _RUN_BLOCKED_FIRSTLINES.setdefault(acct, set()).add(_firstline_key(clean_text))
+                except Exception as e2:
+                    log_error(f"{name} リフレッシュ後も失敗 → 手動で auth.py を実行してください: {e2}")
+            else:
+                log_error(f"{name} トークン再取得が必要です（手動: python3 auth.py）")
+        else:
+            log_error(f"{name} 投稿失敗 (code={code}): {body[:200]}")
+
+    except Exception as e:
+        log_error(f"{name} 予期しないエラー: {e}")
+
+
+# ── メイン ────────────────────────────────────────────
+
+def _ensure_caffeinate():
+    """投稿時間帯にAC電源なら、スリープ防止(caffeinate)が動いているか確認し、無ければ起動する。
+    Mac再起動・日中の復帰でも自動でスリープ防止を効かせる（sudo不要・AC時のみ）。"""
+    try:
+        now = datetime.now()
+        if not (POST_HOUR_START <= now.hour < POST_HOUR_END):
+            return
+        batt = subprocess.run(["pmset", "-g", "batt"], capture_output=True, text=True, timeout=5).stdout
+        if "AC Power" not in batt:        # バッテリー時は何もしない（浪費防止）
+            return
+        running = subprocess.run(["pgrep", "-f", "caffeinate -s"], capture_output=True, text=True).stdout.strip()
+        if running:                        # 既に効いている
+            return
+        end = now.replace(hour=POST_HOUR_END, minute=0, second=0, microsecond=0)
+        sec = max(60, int((end - now).total_seconds()))
+        subprocess.Popen(["caffeinate", "-s", "-t", str(sec)])
+        log_info("system", f"AC電源を検知 → スリープ防止を自動起動（{sec}秒）")
+    except Exception:
+        pass
+
+
+def main():
+    now = datetime.now()
+    if not (POST_HOUR_START <= now.hour < POST_HOUR_END):
+        print(f"[{now.strftime('%H:%M')}] 投稿時間外 → スキップ")
+        return
+
+    _ensure_caffeinate()   # AC電源を検知してスリープ防止を自動起動
+
+    # 並行実行防止（launchd が重なった場合にスキップ）
+    lock_fd = open(LOCK_FILE, "w")
+    try:
+        fcntl.flock(lock_fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except BlockingIOError:
+        print(f"[{now.strftime('%H:%M')}] 別プロセスが実行中 → スキップ")
+        lock_fd.close()
+        return
+
+    try:
+        _run_main()
+    finally:
+        fcntl.flock(lock_fd, fcntl.LOCK_UN)
+        lock_fd.close()
+
+
+# 1回の実行で各アカウント最大何本投稿するか（単一系統で頻度を上げる）
+# 1日の投稿目標と上限（過剰投稿=スパムを防ぎつつ、50本を均等ペースで担保）
+DAILY_TARGET = int(os.environ.get("DAILY_TARGET", "50"))   # 各アカウント1日の目標本数
+DAILY_CAP = int(os.environ.get("DAILY_CAP", "55"))         # 上限（これ以上は出さない）
+MAX_PER_RUN = int(os.environ.get("MAX_PER_RUN", "8"))      # 通常の1サイクル上限
+MAX_BURST = int(os.environ.get("MAX_BURST", "25"))         # 大きく遅れた時の一気回復上限（スリープ復帰時）
+# 先読み時間。GitHub Actionsのcronは実測で4時間以上間引かれる日があり（2026-09-04は投稿時間帯内の
+# 発火が10:03/14:49/18:58の3回のみ→truth40本/masa43本で50本割れ）、「今あるべき累計」まで埋める
+# だけでは次の発火まで進めない。次回発火が LOOKAHEAD_HOURS 後だと仮定してその時点の累計まで先に出す。
+# cronが密な日は曲線が3時間前倒しになるだけ（18時に満了）で、昼に使い切って沈黙する事故は起きない。
+# 2026-10-06: 常駐ループ化（10分毎に確実に発火）で先読みは不要になった。先読み3hのままだと
+# 6時に9時分まで出して19時台に50本満了→夜が3時間以上無投稿になっていた（truth/masa 10/6）。
+LOOKAHEAD_HOURS = int(os.environ.get("LOOKAHEAD_HOURS", "0"))
+POSTS_PER_RUN = int(os.environ.get("POSTS_PER_RUN", "3"))  # 後方互換
+
+
+# 累計目標が100%に到達する時刻。POST_HOUR_END(23時)より前倒しにする理由:
+# GitHub Actionsのcronは10-20分間隔設定でも実際は40分〜4時間に間引かれるため、
+# 22時100%だと21時台以降にcronが発火しない日は取りこぼす
+# （2026-07-21 全アカウント47/50本: 21:45の実行後、時間帯内にcron未発火）。
+# 21時100%なら、21〜23時のどこか1回の発火で残りを埋め切れる。
+PACE_FULL_HOUR = int(os.environ.get("PACE_FULL_HOUR", "22"))   # 2026-10-06: 21→22（22時台まで均等に出す）
+
+
+def _target_cumulative_by_now(hour: int) -> int:
+    """投稿時間帯(6時〜PACE_FULL_HOUR時)で DAILY_TARGET を均等配分した、現時点であるべき累計本数。
+    PACE_FULL_HOUR 時に100%へ到達し、以降は満額（=DAILY_TARGET）を要求する。"""
+    start = POST_HOUR_START
+    if hour < start:
+        return 0
+    frac = min(1.0, (hour - start + 1) / max(1, PACE_FULL_HOUR - start + 1))
+    return int(DAILY_TARGET * frac)
+
+
+def _run_account_batch(acct: str):
+    """ペースに追従して投稿する。
+    - 目標(50)に対し『今あるべき累計』との不足分を、最大 MAX_PER_RUN 本まで埋める
+    - DAILY_CAP に達したら出さない（過剰投稿=スパム防止）
+    - 遅れていればまとめて回復、進んでいれば控える（Mac休止後のキャッチアップ対応）
+    """
+    from account_ownership import is_local
+    if not is_local(acct):
+        return
+    posted = _posted_count_today(acct)
+    ledger_posted = posted
+    api_n = None
+    # ログ同期ラグ（pull_syncのreset等）でローカルログが実投稿数を過小カウントし
+    # 上限超過する事故（2026-07-16 nagaoka71本）を防ぐため、外形(API実測)と比べて大きい方を使う
+    try:
+        from watchdog_ci import api_count_today
+        api_n = api_count_today(acct)
+        if api_n > posted:
+            log_info(acct, f"{ACCOUNTS[acct]['name']} ログ{posted}本<API実測{api_n}本 → 実測を採用")
+            posted = api_n
+    except Exception:
+        pass
+    if posted >= DAILY_CAP:
+        log_info(acct, f"{ACCOUNTS[acct]['name']} 本日上限({DAILY_CAP})到達 → スキップ")
+        return
+    hour = datetime.now().hour
+    want = _target_cumulative_by_now(hour + LOOKAHEAD_HOURS)   # 次回発火(先読み)時点であるべき累計
+    need = max(0, min(want, DAILY_TARGET) - posted)
+    if need == 0 and api_n is not None and (api_n - ledger_posted) > 10:
+        log_info(acct, f"{ACCOUNTS[acct]['name']} 台帳{ledger_posted}本だがAPI実測{api_n}本で目標充足→自パイプライン以外の投稿を検知(差分{api_n - ledger_posted}本)")
+    # 遅れ幅を自動検知してバースト量を調整（スリープ復帰時に一気に回復）
+    # 通常は MAX_PER_RUN まで。大きく遅れている時は最大 MAX_BURST 本まで一気に出す。
+    burst_cap = MAX_BURST if need > MAX_PER_RUN else MAX_PER_RUN
+    n = min(need, burst_cap)
+    if n == 0 and posted < DAILY_TARGET and hour >= 20:
+        n = 1   # 終盤（20時以降）のみの取りこぼし防止。終日この床を効かせると毎5分の実行が
+                # 常に1本投稿し、50本を昼までに使い切って午後が無音になる
+                # （2026-07-10 masaが12:56に50本完了→半日沈黙した実障害）。
+    if n > MAX_PER_RUN:
+        log_info(acct, f"{ACCOUNTS[acct]['name']} 遅れ検知（不足{need}本）→ {n}本まとめて回復")
+    # 2026-09-15: 固定回数ループだと「重複スキップ」で消費した回が投稿ゼロのまま数えられ、
+    # 最終バーストで不足が残る（9/11: 不足14本→重複スキップ2回→12本投稿→48本で終了しDaily Verify FAIL）。
+    # 「実際に増えた本数」が n に達するまで回し、試行回数の上限だけ n+6 で抑える。
+    fails = 0
+    done = 0
+    attempts = 0
+    max_attempts = n + 6
+    while done < n and attempts < max_attempts:
+        if _posted_count_today(acct) >= DAILY_CAP:
+            break
+        before = _posted_count_today(acct)
+        run_account(acct)
+        after = _posted_count_today(acct)
+        attempts += 1
+        if after <= before:
+            # 1本の失敗（重複スキップ等）で全体を打ち切らない。連続3回失敗で今回は諦める
+            fails += 1
+            if fails >= 3:
+                break
+        else:
+            fails = 0
+            done += after - before
+        if done < n:
+            time.sleep(4)
+
+
+def _run_uplink_repost():
+    """uplink閲覧200以上の投稿を、本文そのままmasaへ追加枠で出す（2026-10-06 masa指示）。
+    - 通常50本・DAILY_CAPとは別カウンタ（台帳 kind=uplink_repost）。1サイクル最大1本＝時間帯が自然に分散
+    - 本文は無加工（URL移動・[COMMENT]分割・ブリッジコメント・CTAコメントを一切付けない）
+    - 重複/検品NG/失敗は status=skipped にして次へ（同じものを選び続けない＝9/29障害の教訓）"""
+    from account_ownership import is_local
+    if not is_local("masa"):
+        return
+    import uplink_repost as ur
+    acct = "masa"
+    hour = datetime.now().hour
+    if not (POST_HOUR_START <= hour < POST_HOUR_END):
+        return
+    done = ur.count_today()
+    if done >= ur.DAILY_N or done >= ur.want_cumulative(hour):
+        return
+    pool = ur.load_pool()
+    item = ur.next_item(pool)
+    if item is None:
+        log_info(acct, "[uplink追加] プール空（queued 0件）")
+        return
+    text = item["text"]
+    src = item.get("source")
+    comment = item.get("comment")
+    why = ur.judge(text, src, comment)   # 投稿直前に再判定（面談例外はsource=uplink_rewrite_mendanのみ）（ルール更新・masa既出に追従）
+    if why:
+        item["status"] = "skipped"
+        item["skip_reason"] = "judge:" + ",".join(why)[:80]
+        ur.save_pool(pool)
+        log_info(acct, f"[uplink追加] 検品NGでskip: {item['id']} {why}")
+        return
+    try:
+        post_id = post_to_threads(acct, text)   # 重複ガード＋API直近重複チェックを通る。本文は無加工
+    except _DuplicatePost as e:
+        item["status"] = "skipped"
+        item["skip_reason"] = "duplicate"
+        ur.save_pool(pool)
+        log_info(acct, f"[uplink追加] 重複でskip: {e}")
+        return
+    except Exception as e:
+        item["fail"] = item.get("fail", 0) + 1
+        if item["fail"] >= ur.MAX_FAIL:
+            item["status"] = "skipped"
+            item["skip_reason"] = f"error:{type(e).__name__}"
+        ur.save_pool(pool)
+        log_error(f"[{acct}] uplink追加投稿失敗({item['id']} fail={item['fail']}): {type(e).__name__}: {e}")
+        return
+    now = datetime.now()
+    item["status"] = "posted"
+    item["posted_at"] = now.strftime("%Y-%m-%dT%H:%M:%S")
+    item["masa_post_id"] = post_id
+    ur.save_pool(pool)
+    if src == ur.SRC_MENDAN and comment:
+        # 書き直し投稿: 公式LINE(URL)と個別面談の案内はコメント欄へ（本文にURLを置かない既存ルール）
+        try:
+            time.sleep(3)
+            post_reply_to_threads(acct, post_id, comment)
+        except Exception as e:
+            log_error(f"[{acct}] uplink面談コメント投稿失敗({item['id']}): {type(e).__name__}: {e}")
+    entry = {"date": now.strftime("%Y-%m-%d"), "index": -1, "post_id": post_id, "text": text,
+             "kind": "uplink_repost", "source_id": item["id"], "source_views": item.get("views")}
+    if src:
+        entry["source"] = src
+    with open(ACCOUNTS[acct]["posted"], "a", encoding="utf-8") as f:
+        f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+    log_info(acct, f"[uplink追加] 投稿 {done + 1}/{ur.DAILY_N}本目 src={item['id']}({item.get('views')}v) → {post_id}")
+
+
+def _run_main():
+    target = sys.argv[1].lower() if len(sys.argv) > 1 else "all"
+
+    def _safe_batch(acct: str):
+        # 2026-09-24: 1アカウントの例外(NameError等)でプロセスごと落ち、後続のmasaが
+        # 丸1日0本になった障害の再発防止。例外はログに残して次のアカウントへ進む。
+        try:
+            _run_account_batch(acct)
+        except Exception as e:
+            import traceback
+            log_error(acct, f"_run_account_batch 例外: {type(e).__name__}: {e}")
+            traceback.print_exc()
+
+    if target in ("truth", "nagaoka", "masa"):
+        _safe_batch(target)
+    else:
+        _safe_batch("truth")
+        time.sleep(5)
+        _safe_batch("nagaoka")
+        time.sleep(5)
+        _safe_batch("masa")
+
+    # uplink追加枠（masaのみ・通常枠の後・失敗しても通常運用に影響させない）
+    if target in ("masa", "all"):
+        try:
+            _run_uplink_repost()
+        except Exception as e:
+            log_error(f"[masa] _run_uplink_repost 例外: {type(e).__name__}: {e}")
+
+    # 投稿後にObsidianレポートを自動更新
+    try:
+        subprocess.run([sys.executable, str(BASE / "report.py")],
+                       capture_output=True, timeout=30)
+    except Exception:
+        pass
+
+
+if __name__ == "__main__":
+    main()

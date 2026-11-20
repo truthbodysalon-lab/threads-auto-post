@@ -58,7 +58,7 @@
   "看護や介護の仕事で脚がだるい人へ。": {
     "segment": "T4",
     "hook": "high",
-    "created": "2026-11-09",
+    "created": "2026-11-21",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z13_truth"
@@ -90,7 +90,7 @@
   "夜勤続きで腰が重い人へ。": {
     "segment": "T4",
     "hook": "high",
-    "created": "2026-11-09",
+    "created": "2026-11-21",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z14_nagaoka"
@@ -1796,7 +1796,7 @@
   "紹介を、待つものだと思っている院長へ。": {
     "segment": "R10",
     "hook": "high",
-    "created": "2026-10-05",
+    "created": "2026-11-21",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -4966,7 +4966,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 0,
-    "created": "2026-11-12",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "【夜まで肩がガチガチな人の習慣6選】": {
@@ -5109,7 +5109,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 11,
-    "created": "2026-10-18",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "『頭痛薬が手放せなくて、外出が不安』という声を、よく聞きます。": {
@@ -6098,7 +6098,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 10,
-    "created": "2026-11-11",
+    "created": "2026-11-21",
     "acct": "nagaoka"
   },
   "インスタで、AIは難しい、丸投げは気持ち悪いと思っている院長へ質問です。": {
@@ -6854,7 +6854,7 @@
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 64,
-    "created": "2026-11-09"
+    "created": "2026-11-21"
   },
   "他店と比べるのは、やめる。": {
     "segment": "INSTA_EASY",
@@ -6960,7 +6960,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 16,
-    "created": "2026-11-14"
+    "created": "2026-11-21"
   },
   "投稿は、出して終わりにしない。": {
     "segment": "HAKASE",
@@ -7598,7 +7598,7 @@
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 13,
-    "created": "2026-11-12"
+    "created": "2026-11-21"
   },
   "自己紹介は、長いほど読まれない。": {
     "segment": "INSTA_EASY",
@@ -7652,7 +7652,7 @@
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 0,
-    "created": "2026-11-12"
+    "created": "2026-11-21"
   },
   "分析ツールは、使いこなさなくていい。": {
     "segment": "INSTA_EASY",
@@ -8013,7 +8013,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 17,
-    "created": "2026-11-12",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "週末に予定を詰める前に、まず平日の疲れを抜く日を作ってみて。": {
@@ -8118,7 +8118,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 7,
-    "created": "2026-11-10",
+    "created": "2026-11-21",
     "acct": "nagaoka"
   },
   "ひじを机に預ける。": {
@@ -8326,7 +8326,7 @@
     "segment": "WIN_HOOK",
     "hook": "winning",
     "variant": 3,
-    "created": "2026-11-14"
+    "created": "2026-11-21"
   },
   "おしゃれな写真にしても、予約は増えません。": {
     "segment": "WIN_HOOK",
@@ -8400,7 +8400,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 12,
-    "created": "2026-11-10",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "肩を回す前に、まず息をゆっくり吐いてみて。": {
@@ -8512,7 +8512,7 @@
     "segment": "WIN_HOOK",
     "hook": "winning",
     "variant": 4,
-    "created": "2026-11-14"
+    "created": "2026-11-21"
   },
   "インスタの更新が続く店ほど、これをやっています。": {
     "segment": "WIN_HOOK",
@@ -8796,7 +8796,7 @@
     "segment": "WEATHER",
     "hook": "type",
     "variant": 0,
-    "created": "2026-11-11",
+    "created": "2026-11-21",
     "acct": "nagaoka"
   },
   "『寝起きの首と肩が、いちばんつらい』という声を、よく聞きます。": {
@@ -8971,7 +8971,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 12,
-    "created": "2026-11-12",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "「いつものこと」と流す前に、まず頭の重さが出る日の共通点を探してみて。": {
@@ -9966,7 +9966,7 @@
     "segment": "QUESTION",
     "hook": "type",
     "variant": 12,
-    "created": "2026-11-11",
+    "created": "2026-11-21",
     "acct": "nagaoka"
   },
   "気温が急に下がった日の朝、肩が上がる人いますか？": {
@@ -11509,5 +11509,12 @@
     "present_key": "free_shindan",
     "variant": 9,
     "created": "2026-11-20"
+  },
+  "無料の集客診断をやっています。": {
+    "segment": "PRESENT_CTA",
+    "hook": "present",
+    "present_key": "free_shindan",
+    "variant": 3,
+    "created": "2026-11-21"
   }
 }

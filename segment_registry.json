@@ -3735,7 +3735,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 41,
-    "created": "2026-10-21",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "『いつ頭が痛くなるのか、自分でもわからない』という声を、よく聞きます。": {
@@ -3987,7 +3987,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 44,
-    "created": "2026-11-06",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "『頭痛が続く週は、夕方になると話す元気がなくなる』という声を、よく聞きます。": {
@@ -8221,7 +8221,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 8,
-    "created": "2026-11-11",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "コーヒーを増やす前に、まず水を一杯飲んでみて。": {
@@ -8379,7 +8379,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 4,
-    "created": "2026-11-14",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "頭痛薬を飲む前の1分で、首の後ろに蒸しタオルを。": {
@@ -9447,7 +9447,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 35,
-    "created": "2026-11-14",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "頭痛薬を飲んだ時間を、スマホにメモしてみて。": {
@@ -9707,14 +9707,14 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 40,
-    "created": "2026-11-14",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "スマホを置く前に、まず首をゆっくり左右に倒してみて。": {
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 31,
-    "created": "2026-11-11",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "頭痛薬を飲んだ翌朝に、首を左右に倒してみて。": {
@@ -9854,7 +9854,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 38,
-    "created": "2026-11-14",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "頭痛薬を飲む前に、まず今日どれだけ水を飲んだか思い出してみて。": {

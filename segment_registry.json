@@ -2951,7 +2951,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 21,
-    "created": "2026-11-09",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "『マッサージに行っても、すぐ元に戻る』という声を、よく聞きます。": {
@@ -4749,7 +4749,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 34,
-    "created": "2026-10-27",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "朝起きるのがつらい人へ。": {
@@ -8207,7 +8207,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 4,
-    "created": "2026-11-12",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "痛み止めに手を伸ばす前に、まず水を一杯。": {
@@ -8545,7 +8545,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 25,
-    "created": "2026-11-17",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "頭痛薬だけに頼る前に、まず首の後ろの硬さを確かめてみて。": {
@@ -9249,7 +9249,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 9,
-    "created": "2026-11-12",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "テレビをつける前に、まず寝る前の10分、首をゆっくり動かしてみて。": {
@@ -9861,21 +9861,21 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 42,
-    "created": "2026-11-17",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "頭痛薬を飲むかどうか迷う日は、まず首の後ろの固さを確かめてみて。": {
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 36,
-    "created": "2026-11-17",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "頭痛薬の回数をメモした人は、首を温めた日にも印をつけてみて。": {
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 44,
-    "created": "2026-11-17",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "頭痛薬を飲んだ日は、寝た時間も一緒に書いておいてみて。": {

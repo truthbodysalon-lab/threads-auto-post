@@ -3476,7 +3476,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 40,
-    "created": "2026-11-14",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "【頭痛を遠ざける呼吸の習慣5選】": {
@@ -8344,14 +8344,14 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 21,
-    "created": "2026-11-16",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "頭痛薬を飲んだあとは、まず首の後ろを温めてみて。": {
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 9,
-    "created": "2026-11-16",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "頭痛薬の回数をメモしている人は、一歩先に進んでいます。": {
@@ -8943,7 +8943,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 26,
-    "created": "2026-11-12",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "頭痛薬を飲む前に、まず「いつから痛いか」を思い出してみて。": {

@@ -202,7 +202,7 @@
   "不規則な勤務で通院を諦めた人へ。": {
     "segment": "T4",
     "hook": "high",
-    "created": "2026-11-09",
+    "created": "2026-11-21",
     "acct": "nagaoka",
     "variant": 0
   },
@@ -623,7 +623,7 @@
   "立ち仕事で脚がパンパンな人へ。": {
     "segment": "T4",
     "hook": "high",
-    "created": "2026-11-09",
+    "created": "2026-11-21",
     "acct": "truth",
     "variant": 0
   },
@@ -3728,7 +3728,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 27,
-    "created": "2026-11-03",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "【寝る前にスマホを手放せない人が見直すこと5選】": {
@@ -5206,7 +5206,7 @@
   "口コミを、お願いして集めている院長へ。": {
     "segment": "R10",
     "hook": "high",
-    "created": "2026-10-11",
+    "created": "2026-11-21",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -5751,7 +5751,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 13,
-    "created": "2026-11-12",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "【猫背が気になる人の習慣6選】": {
@@ -5772,7 +5772,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 7,
-    "created": "2026-11-11",
+    "created": "2026-11-21",
     "acct": "nagaoka"
   },
   "インスタで、気分で投稿している院長へ質問です。": {
@@ -6787,7 +6787,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 10,
-    "created": "2026-11-11"
+    "created": "2026-11-21"
   },
   "ハイライトを、後回しにしない。": {
     "segment": "PRESENT_CTA",
@@ -8449,7 +8449,7 @@
     "segment": "WEATHER",
     "hook": "type",
     "variant": 12,
-    "created": "2026-11-11",
+    "created": "2026-11-21",
     "acct": "nagaoka"
   },
   "横になる前に、まず肩の力を抜いてみて。": {
@@ -8719,7 +8719,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 3,
-    "created": "2026-11-10",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "食いしばる前に、まず奥歯の力を抜いてみて。": {
@@ -8929,7 +8929,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 0,
-    "created": "2026-11-12",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "夜更かしする前に、まず首を温めて深呼吸を3回。": {
@@ -8950,7 +8950,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 22,
-    "created": "2026-11-12",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "頭痛薬を飲む前に、まず肩の力を抜いて息を長く吐いてみて。": {
@@ -8999,7 +8999,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 26,
-    "created": "2026-11-10",
+    "created": "2026-11-21",
     "acct": "nagaoka"
   },
   "1日の中で、肩に力が入っている時間はいつですか？": {
@@ -9749,7 +9749,7 @@
     "segment": "QUESTION",
     "hook": "type",
     "variant": 14,
-    "created": "2026-11-11",
+    "created": "2026-11-21",
     "acct": "nagaoka"
   },
   "朝いちばんに、肩が軽い日と重い日はありますか？": {
@@ -11515,6 +11515,55 @@
     "hook": "present",
     "present_key": "free_shindan",
     "variant": 3,
+    "created": "2026-11-21"
+  },
+  "『朝起きた瞬間から、首が固まっている』という声を、よく聞きます。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-21",
+    "acct": "truth"
+  },
+  "頭痛薬を飲んだ日を、先月と今月で数えてみて。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-21",
+    "acct": "truth"
+  },
+  "お風呂に入る前に、まず首の後ろを手のひらで触ってみて。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-21",
+    "acct": "truth"
+  },
+  "『雨の日になると、肩がずっしり重い』という声を、よく聞きます。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-21",
+    "acct": "nagaoka"
+  },
+  "寒くなると、肩が上がったまま戻らなくなります。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-21",
+    "acct": "nagaoka"
+  },
+  "【冬の肩こりを軽くする習慣5選】": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-21",
+    "acct": "nagaoka"
+  },
+  "広告を出す前に、確認してほしいことがあります。": {
+    "segment": "PRESENT_CTA",
+    "hook": "present",
+    "present_key": "free_shindan",
+    "variant": 7,
     "created": "2026-11-21"
   }
 }

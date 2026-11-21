@@ -1,0 +1,5 @@
+{
+  "since": "2026-11-21T12:30:29+09:00",
+  "reason": "HTTP 400: {\"error\":{\"message\":\"Error validating access token=[省略] Threads account needs to complete a checkpoint before it can access this app. To recover access, log in to www.threads.com and follow ",
+  "slot": "12:30"
+}

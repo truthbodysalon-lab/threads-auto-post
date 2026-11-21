@@ -3203,7 +3203,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 12,
-    "created": "2026-11-13",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "『いつ頭が痛くなるか不安で、気が休まらない』という声を、よく聞きます。": {
@@ -6182,7 +6182,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 7,
-    "created": "2026-11-14",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "【巻き肩の人が見直すこと6選】": {
@@ -8936,7 +8936,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 19,
-    "created": "2026-11-11",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "家事を片づける前に、まず5分だけ座って首を休ませてみて。": {
@@ -9461,7 +9461,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 39,
-    "created": "2026-11-13",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "薬を探す前に、まずコップ1杯の水を飲んでみて。": {
@@ -9679,7 +9679,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 34,
-    "created": "2026-11-13",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "お風呂に入る前に、まず首の後ろに蒸しタオルを当ててみて。": {

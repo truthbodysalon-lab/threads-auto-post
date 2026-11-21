@@ -724,7 +724,7 @@
   "介護の抱え上げで腰を痛めた人へ。": {
     "segment": "T4",
     "hook": "high",
-    "created": "2026-11-11",
+    "created": "2026-11-21",
     "acct": "truth",
     "variant": 1
   },
@@ -2341,7 +2341,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 6,
-    "created": "2026-10-30",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "【眼精疲労と首こりを遠ざける習慣7選】": {
@@ -4232,7 +4232,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 29,
-    "created": "2026-11-05",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "【頭痛を遠ざける朝の習慣7選】": {
@@ -4497,7 +4497,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 47,
-    "created": "2026-11-02",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "『年齢のせいだと、半分あきらめていた』という声を、よく聞きます。": {
@@ -5646,7 +5646,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 11,
-    "created": "2026-11-13",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "【首こりを遠ざける枕と寝姿勢のチェック項目6選】": {
@@ -5856,7 +5856,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 19,
-    "created": "2026-11-13",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "【在宅ワークの肩こり対策チェック項目8選】": {
@@ -5909,7 +5909,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 14,
-    "created": "2026-11-14",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "【肩こりを溜めない仕事中の習慣7選】": {
@@ -8027,7 +8027,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 29,
-    "created": "2026-11-13",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "寝だめする前に、まず朝起きる時間をそろえてみて。": {
@@ -8193,7 +8193,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 2,
-    "created": "2026-11-12",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "頭痛が出る前の合図を、薬を飲む前に探してみて。": {
@@ -8559,7 +8559,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 25,
-    "created": "2026-11-11",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "頭痛薬を飲むタイミングを迷う人へ。": {
@@ -8677,7 +8677,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 26,
-    "created": "2026-11-12",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "頭痛薬の箱が空になるのが早くなったら、薬のほかの原因も探すタイミングです。": {
@@ -8726,7 +8726,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 17,
-    "created": "2026-11-11",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "頭痛薬の効きが前より弱いと感じたら、薬以外の手がかりも探してみて。": {
@@ -8964,7 +8964,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 24,
-    "created": "2026-11-12",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "頭痛薬を買い足す前に、まず頭が重くなる日の共通点を探してみて。": {
@@ -9085,7 +9085,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 2,
-    "created": "2026-11-11",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "姿勢を正す前に、まず息を吐ききってみて。": {
@@ -9475,7 +9475,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 43,
-    "created": "2026-11-13",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "ごはんを食べる前に、まず肩を2回ストンと落としてみて。": {
@@ -9700,7 +9700,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 41,
-    "created": "2026-11-13",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "痛み止めを飲む前に、まず肩を3回ゆっくり落としてみて。": {

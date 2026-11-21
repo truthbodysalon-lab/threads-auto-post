@@ -7456,7 +7456,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 17,
-    "created": "2026-11-10"
+    "created": "2026-11-21"
   },
   "【ハイライトを、今日1つ作る】": {
     "segment": "PRESENT_CTA",
@@ -11564,6 +11564,13 @@
     "hook": "present",
     "present_key": "free_shindan",
     "variant": 7,
+    "created": "2026-11-21"
+  },
+  "お店の集客を、3つの質問で診断します。": {
+    "segment": "PRESENT_CTA",
+    "hook": "present",
+    "present_key": "free_shindan",
+    "variant": 0,
     "created": "2026-11-21"
   }
 }

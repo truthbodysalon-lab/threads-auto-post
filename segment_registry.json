@@ -5223,7 +5223,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 9,
-    "created": "2026-11-10",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "『夕方になると頭がズキズキする』という声を、よく聞きます。": {
@@ -8531,7 +8531,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 15,
-    "created": "2026-11-12",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "頭が痛くなる前に、まず自分の「いつもの合図」を探してみて。": {
@@ -8684,7 +8684,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 20,
-    "created": "2026-11-16",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "頭痛薬を持ち歩いている人は、首の後ろを一度触ってみてください。": {
@@ -8733,7 +8733,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 3,
-    "created": "2026-11-16",
+    "created": "2026-11-21",
     "acct": "truth"
   },
   "気圧が下がる日の朝、起きた瞬間に頭が重い人いますか？": {

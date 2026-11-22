@@ -1175,6 +1175,10 @@ def api_request(url: str, data: bytes = None, retry: int = 0) -> dict:
             log_error(f"レート制限(code={code}) → 60秒後リトライ ({retry+1}/{MAX_RETRY})")
             time.sleep(60)
             return api_request(url, data, retry + 1)
+        # 2026-11-23: 本文はここで読み切るので、呼び出し側が読めるよう例外に持たせる。
+        # 以前は呼び出し側が e.read() をもう一度呼んで空になり、code=0・本文なしの「投稿失敗」に化けて
+        # 原因（nagaokaのセキュリティ確認=code190）が30時間以上だれにも見えなかった
+        e.threads_body = body
         raise e
     except urllib.error.URLError as e:
         # ネットワーク系 → 10秒待機リトライ
@@ -1340,6 +1344,63 @@ def _sw_save(st: dict):
         os.replace(tmp, SELFWATCH_STATE)
     except Exception:
         pass
+
+
+# ── アカウント停止（セキュリティ確認・トークン無効）の検知 ─────────────────
+# 2026-11-23 masa指示「原因突き止めて同じミス起きないようにして」: nagaokaが11/21夕方からThreadsの
+# セキュリティ確認（checkpoint）で投稿できず、10分ごとに失敗を繰り返したまま約30時間だれにも知らされなかった。
+# 止まったアカウントは1時間投稿を止め（試し直しは1時間後）、本人へ🙋を1日1回だけ送る。投稿に成功したら解除。
+_BLOCK_FILE = BASE / "account_block_state.json"
+BLOCK_RETRY_MIN = 60
+
+
+def _block_state() -> dict:
+    try:
+        return json.loads(_BLOCK_FILE.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+
+
+def _block_save(st: dict) -> None:
+    try:
+        _BLOCK_FILE.write_text(json.dumps(st, ensure_ascii=False, indent=1), encoding="utf-8")
+    except Exception:
+        pass
+
+
+def _account_blocked(acct: str) -> bool:
+    e = _block_state().get(acct) or {}
+    return time.time() < float(e.get("until") or 0)
+
+
+def _mark_account_blocked(acct: str, msg: str) -> None:
+    st = _block_state()
+    e = st.get(acct) or {}
+    today = datetime.now().strftime("%Y-%m-%d")
+    e["until"] = time.time() + BLOCK_RETRY_MIN * 60
+    e["msg"] = str(msg)[:300]
+    e.setdefault("since", datetime.now().isoformat(timespec="seconds"))
+    if e.get("notified") != today:
+        name = ACCOUNTS.get(acct, {}).get("name", acct)
+        if "checkpoint" in str(msg).lower():
+            how = ("Threadsのセキュリティ確認（チェックポイント）で止まっています。"
+                   "このアカウントで https://www.threads.com にログインし、表示される案内を最後まで進めてください。")
+        else:
+            how = ("アクセストークンが使えなくなっています。Threadsにログインできるか確かめたうえで、"
+                   "トークンを作り直してください（python3 auth.py）。")
+        text = (f"🙋手動操作のお願い: Threads {name} の自動投稿が止まっています（{e['since']}〜）。{how}"
+                f"終われば1時間以内に自動で再開します。理由: {str(msg)[:160]}")
+        if _notify_discord(text):
+            e["notified"] = today
+    st[acct] = e
+    _block_save(st)
+
+
+def _clear_account_block(acct: str) -> None:
+    st = _block_state()
+    if acct in st:
+        st.pop(acct, None)
+        _block_save(st)
 
 
 def _notify_discord(text: str) -> bool:
@@ -1750,6 +1811,7 @@ def run_account(acct: str):
         if is_line:
             _mark_line_done(acct, today)
         log_info(acct, f"{name} ✓ 完了 (ID: {post_id})")
+        _clear_account_block(acct)
         _post_comments(post_id)
 
     except _DuplicatePost as dp:
@@ -1771,9 +1833,20 @@ def run_account(acct: str):
                 pass
 
     except urllib.error.HTTPError as e:
-        body = e.read().decode()
+        body = getattr(e, "threads_body", None)
+        if body is None:
+            body = e.read().decode()
         err_data = json.loads(body) if body.startswith("{") else {}
         code = err_data.get("error", {}).get("code", 0)
+        _emsg = str(err_data.get("error", {}).get("message", ""))
+
+        # 2026-11-23: アカウントがThreadsのセキュリティ確認（checkpoint）で止まっている → リフレッシュしても直らない。
+        # 何度も投稿し直さずに1時間止め、本人に🙋で知らせる（ログインして確認を終えるのは本人だけ）
+        if code == 190 and "checkpoint" in _emsg.lower():
+            _note_skip(acct, clean_text, "例外")
+            log_error(f"{name} 投稿失敗: Threadsのセキュリティ確認待ち（code=190）: {_emsg[:160]}")
+            _mark_account_blocked(acct, _emsg)
+            return
 
         # トークン期限切れ → 自動リフレッシュして再投稿
         if code == 190:
@@ -1793,8 +1866,10 @@ def run_account(acct: str):
                 except Exception as e2:
                     _note_skip(acct, clean_text, "例外")
                     log_error(f"{name} リフレッシュ後も失敗 → 手動で auth.py を実行してください: {e2}")
+                    _mark_account_blocked(acct, f"リフレッシュ後も失敗: {e2}")
             else:
-                log_error(f"{name} トークン再取得が必要です（手動: python3 auth.py）")
+                log_error(f"{name} トークン再取得が必要です（手動: python3 auth.py）: {_emsg[:160]}")
+                _mark_account_blocked(acct, _emsg or "トークンのリフレッシュに失敗")
         else:
             _note_skip(acct, clean_text, "例外")
             log_error(f"{name} 投稿失敗 (code={code}): {body[:200]}")
@@ -1893,6 +1968,28 @@ PACE_OFFSET_MIN = {"truth": 40, "nagaoka": 50, "masa": 15}
 MIN_GAP_MIN = int(os.environ.get("MIN_GAP_MIN", "45"))
 
 
+# 直前の投稿（全種類）からこの分数以上空いたら、ペースが足りていても1本出す（2026-11-23）
+MAX_GAP_MIN = int(os.environ.get("MAX_GAP_MIN", "150"))
+
+
+def _api_last_post_epoch(acct: str) -> float:
+    """Threads APIで、このアカウントの最新の投稿時刻(epoch)を返す（リプライ・コメントは除く）。失敗時0。"""
+    try:
+        token = os.environ[ACCOUNTS[acct]["token_key"]]
+        uid = os.environ[ACCOUNTS[acct]["uid_key"]]
+        q = urllib.parse.urlencode({"fields": "id,timestamp,is_reply", "limit": 10, "access_token": token})
+        with urllib.request.urlopen(f"{BASE_URL}/{uid}/threads?{q}", timeout=20) as r:
+            items = json.loads(r.read()).get("data", [])
+        for it in items:
+            if it.get("is_reply"):
+                continue
+            ts = it.get("timestamp", "")
+            return datetime.strptime(ts[:19], "%Y-%m-%dT%H:%M:%S").replace(tzinfo=timezone.utc).timestamp()
+    except Exception:
+        pass
+    return 0.0
+
+
 def _last_post_file(acct: str):
     import tempfile
     from pathlib import Path as _P
@@ -1921,6 +2018,10 @@ def _run_account_batch(acct: str):
     """
     from account_ownership import is_local
     if not is_local(acct):
+        return
+    if _account_blocked(acct):
+        log_info(acct, f"{ACCOUNTS[acct]['name']} 停止中（セキュリティ確認・トークン無効）→ {BLOCK_RETRY_MIN}分おきに試し直す: "
+                       f"{(_block_state().get(acct) or {}).get('msg', '')[:80]}")
         return
     posted = _posted_count_today(acct)
     ledger_posted = posted
@@ -1951,6 +2052,15 @@ def _run_account_batch(acct: str):
         n = 1   # 終盤（20時以降）のみの取りこぼし防止。終日この床を効かせると毎5分の実行が
                 # 常に1本投稿し、50本を昼までに使い切って午後が無音になる
                 # （2026-07-10 masaが12:56に50本完了→半日沈黙した実障害）。
+    if n == 0 and posted < DAILY_TARGET and POST_HOUR_START <= datetime.now().hour < POST_HOUR_END:
+        # 2026-11-23: ペース曲線（切り捨て）と、画像・外部の投稿も本数に数える設計が重なり、truthで朝〜昼に
+        # 約5時間投稿が空いた（11/21 11:49〜・11/22 07:41〜）。1日10本の範囲のまま、直前の投稿（全種類・API実測）
+        # から MAX_GAP_MIN 分空いたら1本出す（検品の180分FAILより前に埋める）
+        _lp = _api_last_post_epoch(acct)
+        if _lp and time.time() - _lp >= MAX_GAP_MIN * 60:
+            log_info(acct, f"{ACCOUNTS[acct]['name']} 直前の投稿から{int((time.time() - _lp) // 60)}分空いた"
+                           f"（{MAX_GAP_MIN}分以上）→ 1本出す")
+            n = 1
     if MIN_GAP_MIN > 0 and n > 0:
         # 2026-11-14 1日10本化: 1回の起動で最大1本・同じアカウントの直前の投稿から MIN_GAP_MIN 分以上空ける
         n = 1

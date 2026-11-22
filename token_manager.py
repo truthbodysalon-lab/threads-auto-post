@@ -9,6 +9,7 @@ from __future__ import annotations
 import json
 import os
 import sys
+import time
 import urllib.parse
 import urllib.request
 from base64 import b64decode, b64encode
@@ -174,17 +175,35 @@ def sync_secrets():
         return
 
     print("=== トークン同期 ===")
+    # 2026-11-23: 以前は常駐ループの10分ごと（1日約140回×全アカウント）にリフレッシュ＋Secret書き換えをしていた。
+    # トークンは60日有効で、Metaもリフレッシュは発行から24時間以上たってからを想定している。
+    # 不自然なアクセスとしてアカウント確認（nagaokaのcheckpoint・11/21）を招く恐れもあるため、1アカウント20時間に1回へ
+    st_path = BASE / "token_refresh_state.json"
+    try:
+        st = json.loads(st_path.read_text(encoding="utf-8"))
+    except Exception:
+        st = {}
+    now = time.time()
+    changed = False
     for acct, info in ACCOUNTS.items():
         token = os.environ.get(info["token_key"], "")
         if not token:
             continue
-        # 常にリフレッシュ（60日で期限切れを防ぐ）
+        if now - float(st.get(acct, 0) or 0) < 20 * 3600:
+            continue
         new_token = refresh_token(acct)
+        st[acct] = now   # 失敗しても20時間は叩き直さない（失敗の連打を避ける。止まりは auto_post 側の🙋が知らせる）
+        changed = True
         if new_token:
             ok = update_github_secret(repo, info["token_key"], new_token)
             print(f"  [{acct}] GitHub Secret 更新: {'✓' if ok else '失敗'}")
         else:
             print(f"  [{acct}] リフレッシュ不要またはスキップ")
+    if changed:
+        try:
+            st_path.write_text(json.dumps(st, indent=1), encoding="utf-8")
+        except Exception:
+            pass
 
 
 def show_status():

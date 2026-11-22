@@ -141,7 +141,7 @@ jobs:
                      weights_truth.json weights_nagaoka.json weights_masa.json \
                      feedback.json line_listin_state.json shared_posted_guard.jsonl \
                      segment_registry.json dispatch_state.json deadman_state.json stepmail_gate_state.json log_x_truth_posted.jsonl \
-                     uplink_repost_pool.json; do
+                     uplink_repost_pool.json account_block_state.json token_refresh_state.json; do
               [ -e "$f" ] && git add "$f" 2>/dev/null
             done
             true

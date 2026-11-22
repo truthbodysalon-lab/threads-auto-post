@@ -1320,7 +1320,9 @@ def check_post_interval():
                         pass
             own = sorted(ts for pid, ts in api if pid in ids)
             ext = len(api) - len(own)
-            if acct in ("nagaoka", "masa"):
+            # 2026-11-23: truthも全種類で判定（1日10本は画像・外部の投稿も含む合計＝auto_postのペースもAPI実測で数える。
+            #   自前だけで見ると、画像で埋まった時間帯が「空白」に見えて誤FAILになる。空白そのものは auto_post の MAX_GAP_MIN が防ぐ）
+            if acct in ("nagaoka", "masa", "truth"):
                 # 2026-11-12: masaもBuffer(外部約10枠)をAPI実測で合計に数える設計(daily_budget.py)＝自前のみだと午後の空白が誤FAIL（11/11 14:13〜18:12・全投稿では最大72分）
                 # 2026-10-09: nagaokaは外部ツール(約20本/日・正常)の投稿もペース計算に算入され自前の開始が遅れる設計
                 # （auto_post._run_account_batch はAPI実測数を採用）。自前のみだと朝の空白が誤FAILになるため全投稿で判定

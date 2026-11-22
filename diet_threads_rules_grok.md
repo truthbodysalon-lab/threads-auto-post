@@ -1,8 +1,8 @@
 # Grokのrules.md 原文の抜き書き（ダイエットThreads @truth_nagaoka_daietto 用）
 
-- 生成日時: 2026-11-20 06:40 JST（~/.claude/scripts/diet_threads_rules_sync.py による自動抜き書き。手で編集しない）
+- 生成日時: 2026-11-23 06:40 JST（~/.claude/scripts/diet_threads_rules_sync.py による自動抜き書き。手で編集しない）
 - 元ファイル（Obsidian vault相対）: SNS・Threads/X・Threads自動運用（Grok）/rules.md
-- 元ファイルのsha256: bc17927baaa1a1008c860b5986b1020cf06e55de84406c7857e0e994f7765163
+- 元ファイルのsha256: 96bc000df820c937b9ab76eaef4d43434afdef91b44a09501ab9833891296b5f
 - 原文の抜き書き。diet_threads_rules.md（要約）と食い違う場合は、こちらの新しい日付の記述が優先
 - 除外: X運用・@masahide系・Buffer・DM・Obsidian保存ルール（公開リポジトリのため）
 
@@ -71,9 +71,3 @@
 - 2026-11-11 18:09 から「You've unlocked more on X」（/i/graduated-access）で止めていたXの操作は、次の枠から再開する。
 - この graduated-access 画面は問題ない画面として扱う。出たら「Got it」で閉じてそのまま続ける（停止・報告は不要、ログに1行残す）。
 - それ以外の警告・制限・人間確認・ロック画面が出たら、これまでどおりすぐ止めて報告する。
-
-<!-- autolink:keywords:start -->
-🔑 キーワード: [[myfiles/🔑 キーワード/投稿|投稿]] ・ [[myfiles/🔑 キーワード/Threads|Threads]] ・ [[myfiles/🔑 キーワード/ダイエット|ダイエット]] ・ [[myfiles/🔑 キーワード/ニュース|ニュース]] ・ [[myfiles/🔑 キーワード/実体験|実体験]] ・ [[myfiles/🔑 キーワード/Instagram|Instagram]] ・ [[myfiles/🔑 キーワード/採用|採用]] ・ [[myfiles/🔑 キーワード/ブラウザ|ブラウザ]]
-<!-- autolink:keywords:end -->
-
-<!-- autolink:related:start -->

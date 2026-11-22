@@ -186,7 +186,7 @@
   "他院で結果が出なかった人へ。": {
     "segment": "T6",
     "hook": "high",
-    "created": "2026-11-11",
+    "created": "2026-11-23",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z21_truth"
@@ -1994,7 +1994,7 @@
   "全員に合わせて、疲れている院長へ。": {
     "segment": "R12",
     "hook": "high",
-    "created": "2026-11-11",
+    "created": "2026-11-23",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -2979,7 +2979,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 21,
-    "created": "2026-11-12",
+    "created": "2026-11-23",
     "acct": "nagaoka"
   },
   "インスタで、見られないのはアルゴリズムのせいだと思っている院長へ質問です。": {
@@ -6168,7 +6168,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 10,
-    "created": "2026-11-01",
+    "created": "2026-11-23",
     "acct": "truth"
   },
   "【頭痛の人の入浴の習慣5選】": {
@@ -6266,7 +6266,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 12,
-    "created": "2026-11-15",
+    "created": "2026-11-23",
     "acct": "truth"
   },
   "【重い荷物をよく持つ人の習慣5選】": {
@@ -6427,7 +6427,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 1,
-    "created": "2026-11-13"
+    "created": "2026-11-23"
   },
   "同じ発信をする人が増えても、困らない。": {
     "segment": "HAKASE",
@@ -7586,7 +7586,7 @@
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 35,
-    "created": "2026-11-12"
+    "created": "2026-11-23"
   },
   "プロフィールに30分かけるのは、やめる。": {
     "segment": "INSTA_EASY",
@@ -8090,7 +8090,7 @@
     "segment": "WEATHER",
     "hook": "type",
     "variant": 16,
-    "created": "2026-11-11",
+    "created": "2026-11-23",
     "acct": "nagaoka"
   },
   "天気が崩れる前日から、肩が重い人は少なくありません。": {
@@ -8552,7 +8552,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 10,
-    "created": "2026-11-18",
+    "created": "2026-11-23",
     "acct": "truth"
   },
   "動き出す前に、まず首の後ろを温めてみて。": {
@@ -8665,7 +8665,7 @@
     "segment": "WIN_HOOK",
     "hook": "winning",
     "variant": 17,
-    "created": "2026-11-15"
+    "created": "2026-11-23"
   },
   "ハイライトに入れるのは、たった3つだけ。": {
     "segment": "WIN_HOOK",
@@ -8698,7 +8698,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 18,
-    "created": "2026-11-18",
+    "created": "2026-11-23",
     "acct": "truth"
   },
   "筋トレを増やす前に、まず首の後ろが固まっていないか確かめてみて。": {
@@ -8747,7 +8747,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 21,
-    "created": "2026-11-10",
+    "created": "2026-11-23",
     "acct": "nagaoka"
   },
   "頭が重い日が週に何日あるか、数えたことはありますか？": {
@@ -9092,7 +9092,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 20,
-    "created": "2026-11-12",
+    "created": "2026-11-23",
     "acct": "truth"
   },
   "ストレッチを頑張る前に、まず痛みの出る動きを探してみて。": {
@@ -9183,7 +9183,7 @@
     "segment": "WIN_HOOK",
     "hook": "winning",
     "variant": 1,
-    "created": "2026-11-16"
+    "created": "2026-11-23"
   },
   "【3ステップ】怖いうちは、見られない場所で練習。": {
     "segment": "INSTA_EASY",
@@ -9889,7 +9889,7 @@
     "segment": "QUESTION",
     "hook": "type",
     "variant": 19,
-    "created": "2026-11-12",
+    "created": "2026-11-23",
     "acct": "nagaoka"
   },
   "寒い朝に、首が回りにくい人いますか？": {
@@ -10102,7 +10102,7 @@
   "『起きた直後の腰のこわばりが、一日でいちばんつらい』という声を、よく聞きます。": {
     "segment": "T6",
     "hook": "high",
-    "created": "2026-11-11",
+    "created": "2026-11-23",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "ZC08_nagaoka"
@@ -11564,7 +11564,7 @@
     "hook": "present",
     "present_key": "free_shindan",
     "variant": 7,
-    "created": "2026-11-21"
+    "created": "2026-11-23"
   },
   "お店の集客を、3つの質問で診断します。": {
     "segment": "PRESENT_CTA",
@@ -11588,5 +11588,33 @@
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z18_nagaoka"
+  },
+  "夕方になるとこめかみが重くなる人、いますか？": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-23",
+    "acct": "truth"
+  },
+  "寒暖差が大きい朝に、首が固まって動かしにくい人いますか？": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-23",
+    "acct": "nagaoka"
+  },
+  "『午後になると、肩と首が板みたいに固い』という声を、よく聞きます。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-23",
+    "acct": "nagaoka"
+  },
+  "朝いちばんに、コップ1杯の水を飲んでみて。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-23",
+    "acct": "nagaoka"
   }
 }

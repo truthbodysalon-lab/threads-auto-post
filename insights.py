@@ -231,6 +231,11 @@ def run(acct: str):
         posts = fetch_posts_with_metrics(acct, limit=200)
         print(f"  {len(posts)}件取得")
 
+        # 0件取得（checkpoint等でAPIが空を返す）時は既存の past_posts/insights を空で上書きしない
+        if not posts:
+            print("  ⚠ 0件取得のため past_posts / insights の更新をスキップ（既存データ保持）")
+            return
+
         # past_posts更新
         past_file = ACCOUNTS[acct]["past_posts_file"]
         with open(past_file, "w") as f:

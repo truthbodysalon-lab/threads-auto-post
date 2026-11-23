@@ -308,7 +308,7 @@
   "座り仕事で首がつらい人へ。": {
     "segment": "T1",
     "hook": "low",
-    "created": "2026-11-12",
+    "created": "2026-11-24",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z02_nagaoka"
@@ -392,7 +392,7 @@
   "会議続きで首が痛い人へ。": {
     "segment": "T1",
     "hook": "low",
-    "created": "2026-11-12",
+    "created": "2026-11-24",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z03_truth"
@@ -2535,7 +2535,7 @@
   "初回の説明で、次回の話ができない院長へ。": {
     "segment": "R01",
     "hook": "low",
-    "created": "2026-11-12",
+    "created": "2026-11-24",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -3210,7 +3210,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 6,
-    "created": "2026-11-16",
+    "created": "2026-11-24",
     "acct": "truth"
   },
   "『仕事の後半になると、足腰がきつい』という声を、よく聞きます。": {
@@ -5216,7 +5216,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 13,
-    "created": "2026-11-15",
+    "created": "2026-11-24",
     "acct": "truth"
   },
   "【産後ママの頭痛を遠ざける習慣6選】": {
@@ -5923,7 +5923,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 14,
-    "created": "2026-11-12",
+    "created": "2026-11-24",
     "acct": "nagaoka"
   },
   "インスタで、ハイライトを放置している院長へ。": {
@@ -6597,7 +6597,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 14,
-    "created": "2026-11-17"
+    "created": "2026-11-24"
   },
   "困っていることは、黙っていない。": {
     "segment": "HAKASE",
@@ -6774,7 +6774,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 44,
-    "created": "2026-10-29",
+    "created": "2026-11-24",
     "acct": "nagaoka"
   },
   "名前を売るより、仕組みに名前を付ける。": {
@@ -8006,7 +8006,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 1,
-    "created": "2026-11-19",
+    "created": "2026-11-24",
     "acct": "truth"
   },
   "頭痛薬を飲んだ日は、まず湯船で首を温めてみて。": {
@@ -8034,7 +8034,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 1,
-    "created": "2026-11-13",
+    "created": "2026-11-24",
     "acct": "truth"
   },
   "頭痛薬を飲んでも、すっきりしない日があるなら。": {
@@ -8187,7 +8187,7 @@
     "segment": "WIN_HOOK",
     "hook": "winning",
     "variant": 19,
-    "created": "2026-11-17"
+    "created": "2026-11-24"
   },
   "鎮痛剤の回数が増えてきたら、体からのサインです。": {
     "segment": "ZUTSUYAKU",
@@ -8214,7 +8214,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 6,
-    "created": "2026-11-19",
+    "created": "2026-11-24",
     "acct": "truth"
   },
   "横になる前に、まず首の後ろの冷えを確かめてみて。": {
@@ -8263,7 +8263,7 @@
     "segment": "WEATHER",
     "hook": "type",
     "variant": 17,
-    "created": "2026-11-12",
+    "created": "2026-11-24",
     "acct": "nagaoka"
   },
   "曇りの日は、肩が重くなりやすい人へ。": {
@@ -8435,7 +8435,7 @@
     "segment": "QUESTION",
     "hook": "type",
     "variant": 8,
-    "created": "2026-11-13",
+    "created": "2026-11-24",
     "acct": "nagaoka"
   },
   "湿布を貼る前に、まず痛い場所を指で確かめてみて。": {
@@ -8506,7 +8506,7 @@
     "segment": "WIN_HOOK",
     "hook": "winning",
     "variant": 6,
-    "created": "2026-11-17"
+    "created": "2026-11-24"
   },
   "インスタで予約が入る店が見ているのは、たった3つ。": {
     "segment": "WIN_HOOK",
@@ -9263,7 +9263,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 24,
-    "created": "2026-11-11",
+    "created": "2026-11-24",
     "acct": "nagaoka"
   },
   "寝る前に、まず首元を温めてみて。": {
@@ -11515,7 +11515,7 @@
     "hook": "present",
     "present_key": "free_shindan",
     "variant": 3,
-    "created": "2026-11-21"
+    "created": "2026-11-24"
   },
   "『朝起きた瞬間から、首が固まっている』という声を、よく聞きます。": {
     "segment": "own_adapt",

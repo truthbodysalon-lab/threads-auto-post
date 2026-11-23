@@ -2402,7 +2402,7 @@
       "last_result": {
         "n": 1,
         "index": 0.911,
-        "updated": "2026-11-22"
+        "updated": "2026-11-23"
       }
     },
     {
@@ -2430,7 +2430,7 @@
       "last_result": {
         "n": 1,
         "index": 9.171,
-        "updated": "2026-11-22"
+        "updated": "2026-11-23"
       }
     },
     {
@@ -2458,7 +2458,7 @@
       "last_result": {
         "n": 1,
         "index": 4.309,
-        "updated": "2026-11-22"
+        "updated": "2026-11-23"
       }
     },
     {
@@ -2742,7 +2742,7 @@
       "last_result": {
         "n": 1,
         "index": 34.476,
-        "updated": "2026-11-22"
+        "updated": "2026-11-23"
       }
     },
     {
@@ -4980,7 +4980,7 @@
       "last_result": {
         "n": 1,
         "index": 1.0,
-        "updated": "2026-11-22"
+        "updated": "2026-11-23"
       },
       "evidence": "施術中・毎回の会話で通う理由が育たない(根拠4件・中)。出典: L0428 / L0910T（出典IDは repeat_pain_categories.json の source_ids 参照）"
     },
@@ -5500,7 +5500,7 @@
       "last_result": {
         "n": 1,
         "index": 1.6,
-        "updated": "2026-11-22"
+        "updated": "2026-11-23"
       },
       "evidence": "口コミ・紹介が自然に生まれない(根拠4件・中)。出典: HYP P070 / HYP P072 / L0307N / L0428（出典IDは repeat_pain_categories.json の source_ids 参照）"
     },

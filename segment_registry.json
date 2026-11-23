@@ -665,7 +665,7 @@
   "揉んでもすぐ戻ると感じる人へ。": {
     "segment": "T6",
     "hook": "high",
-    "created": "2026-11-11",
+    "created": "2026-11-23",
     "acct": "nagaoka",
     "variant": 1
   },
@@ -731,7 +731,7 @@
   "他院に通っても改善しない人へ。": {
     "segment": "T6",
     "hook": "high",
-    "created": "2026-11-11",
+    "created": "2026-11-23",
     "acct": "truth",
     "variant": 1
   },
@@ -2688,7 +2688,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 8,
-    "created": "2026-11-16",
+    "created": "2026-11-23",
     "acct": "truth"
   },
   "【抱っこで肩がつらいママの習慣6選】": {
@@ -3247,7 +3247,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 15,
-    "created": "2026-11-12",
+    "created": "2026-11-23",
     "acct": "nagaoka"
   },
   "インスタ運用で、登録ページに誘導しているのに、登録がない院長へ。": {
@@ -5320,7 +5320,7 @@
   "提案を、怖がっている院長へ。": {
     "segment": "R12",
     "hook": "high",
-    "created": "2026-11-11",
+    "created": "2026-11-23",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -5744,7 +5744,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 43,
-    "created": "2026-11-16",
+    "created": "2026-11-23",
     "acct": "truth"
   },
   "『冷たい飲み物を、つい一気に飲んでしまう』という声を、よく聞きます。": {
@@ -7539,7 +7539,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 4,
-    "created": "2026-11-16"
+    "created": "2026-11-23"
   },
   "良い投稿の前に、プロフィールを直す。": {
     "segment": "HAKASE",
@@ -8076,7 +8076,7 @@
     "segment": "QUESTION",
     "hook": "type",
     "variant": 0,
-    "created": "2026-11-12",
+    "created": "2026-11-23",
     "acct": "nagaoka"
   },
   "寝る前に、首の後ろは温かいですか？": {
@@ -8242,7 +8242,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 14,
-    "created": "2026-11-19",
+    "created": "2026-11-23",
     "acct": "truth"
   },
   "頭痛薬を飲むほどではない日は、まず首の後ろを温めてみて。": {
@@ -8305,7 +8305,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 17,
-    "created": "2026-11-11",
+    "created": "2026-11-23",
     "acct": "nagaoka"
   },
   "買い物に出かける前に、まず首を冷やさない服を選んでみて。": {
@@ -8358,7 +8358,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 11,
-    "created": "2026-11-19",
+    "created": "2026-11-23",
     "acct": "truth"
   },
   "出かける前に、まず首元を冷やさない服を選んでみて。": {
@@ -9120,7 +9120,7 @@
     "segment": "WEATHER",
     "hook": "type",
     "variant": 15,
-    "created": "2026-11-12",
+    "created": "2026-11-23",
     "acct": "nagaoka"
   },
   "我慢する前に、まず首の後ろを触ってみて。": {
@@ -9468,7 +9468,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 34,
-    "created": "2026-11-13",
+    "created": "2026-11-23",
     "acct": "truth"
   },
   "薬を飲んだのに夕方また重くなる日は、首の使い方を振り返ってみて。": {
@@ -9812,7 +9812,7 @@
     "segment": "WIN_HOOK",
     "hook": "winning",
     "variant": 13,
-    "created": "2026-11-16"
+    "created": "2026-11-23"
   },
   "【ストーリーズで出していい、お店の日常5選】": {
     "segment": "WIN_HOOK",
@@ -11501,7 +11501,7 @@
     "hook": "present",
     "present_key": "free_shindan",
     "variant": 6,
-    "created": "2026-11-20"
+    "created": "2026-11-23"
   },
   "診断といっても難しくありません。": {
     "segment": "PRESENT_CTA",
@@ -11611,6 +11611,41 @@
     "acct": "nagaoka"
   },
   "朝いちばんに、コップ1杯の水を飲んでみて。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-23",
+    "acct": "nagaoka"
+  },
+  "『頭痛薬が効きにくくなってきた気がする』という声を、よく聞きます。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-23",
+    "acct": "truth"
+  },
+  "朝、起き上がる前に、まず首の後ろに手を当ててみて。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-23",
+    "acct": "truth"
+  },
+  "【頭痛が重い日に、やめておきたいこと6選】": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-23",
+    "acct": "truth"
+  },
+  "お布団から出る前に、まず肩を3回すくめてみて。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-23",
+    "acct": "nagaoka"
+  },
+  "【肩こりを軽くする朝の習慣6選】": {
     "segment": "own_adapt",
     "hook": "adapt",
     "variant": "hero",

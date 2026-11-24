@@ -1715,6 +1715,20 @@
    "since": "slot",
    "enabled": true,
    "note": "2026-11-12 Mac非稼働でも動かす移行(A-2): 失敗runの検知＋1回だけ再実行(gh_failure_watchのクラウド版・公開repo=無料)。再実行はクラウド側だけ（Mac側は検知のみ）。止める時はenabled:false"
+  },
+  {
+   "id": "gbp-post",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "gbp-post.yml",
+   "jst_time": "14:30",
+   "window_min": 240,
+   "since": "day",
+   "enabled": true,
+   "retry_failed": {
+    "after_min": 40,
+    "until_min": 300
+   },
+   "note": "2026-11-24 masa指示「なるべくパソコンが稼働していない状態でも投稿できる仕組みに・できない場合はChromeから」: GBP最新情報のクラウド保険。gbp_post.py がAPIで当日の投稿一覧を確かめ、無いときだけ定型文＋予備画像で投稿（Mac 10〜19時の API→Chrome 投稿が先に出していれば何もしない）"
   }
  ]
 }

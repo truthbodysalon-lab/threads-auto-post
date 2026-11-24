@@ -1,0 +1,40 @@
+name: Podcast Threads Announce (cloud insurance)
+
+# stand.fm ラジオ更新の Threads(@masahide_takahashi_) 告知。Mac主(launchd com.mt112.podcast-threads-announce 7:20/9:20/12:20)、
+# Macが止まっていた日だけ中央ディスパッチャ(schedule_table.json の podcast-threads-announce-cloud)がこれを起動する。
+# cronは持たない。二重投稿ガードは podcast_announce_cloud.py が Threads API で行う。公開repoなので Actions 無料。
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: '1なら判定と本文表示だけ(Threadsへ投稿しない)'
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+
+concurrency:
+  group: podcast-announce
+  cancel-in-progress: false
+
+jobs:
+  announce:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      TZ: Asia/Tokyo
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Announce
+        env:
+          THREADS_ACCESS_TOKEN_MASA: ${{ secrets.THREADS_ACCESS_TOKEN_MASA }}
+          THREADS_USER_ID_MASA: ${{ secrets.THREADS_USER_ID_MASA }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          DRY_RUN: ${{ github.event.inputs.dry_run }}
+        run: python3 podcast_announce_cloud.py

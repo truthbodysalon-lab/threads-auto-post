@@ -420,7 +420,7 @@
       "account": "all"
     }
   ],
-  "updated_at": "2026-10-17",
+  "updated_at": "2026-11-24 14:34",
   "precedence": "ルールの優先順位（2026-07-19監査で制定）: ①goals.json(ゴール・導線保護) ②playbookのactiveルール(構造の勝敗・実測で進化) ③notesの最新日付 ④旧note。同一テーマのnoteは最新日付が旧を上書きする（旧noteとの矛盾はFAILにしない）。導線投稿(HPB/LINE/診断/整体LINE/cta_profile)は閲覧基準の負けテンプレ判定・pruneの対象外",
   "extra_templates_legacy": {
     "masa": [
@@ -446,5 +446,16 @@
       "患者が離れる理由の多くは、施術の腕ではなく「次いつ来ればいいか分からない」ことにある。\n次回の目安をその場で伝えるだけで、来院間隔が安定しやすい。\n今日やる一手:今日の患者全員に、次回の目安を口頭で伝える。"
     ],
     "note": "2026-10-04退避: 経営一般(患者・価格・カウンセリング)主体の旧masa追加テンプレ20本。主テーマをInstagram集客へ移したため毎日の先頭注入を停止。戻す場合はextra_templates.masaへ戻す"
+  },
+  "dead_openings_auto": {
+    "masa": [
+      {
+        "regex": "^ラジオ更新しまし",
+        "motif": "ラジオ更新しまし",
+        "losses": 3,
+        "auto": true,
+        "added": "2026-11-24"
+      }
+    ]
   }
 }

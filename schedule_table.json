@@ -846,33 +846,6 @@
    "skip_until": "2026-11-01 09:30"
   },
   {
-   "id": "payment-dunning",
-   "repo": "truthbodysalon-lab/cloud-daily-tasks",
-   "workflow": "payment-dunning.yml",
-   "jst_time": "10:05",
-   "window_min": 240,
-   "since": "day",
-   "enabled": false
-  },
-  {
-   "id": "subscription-watch@09:30",
-   "repo": "truthbodysalon-lab/cloud-daily-tasks",
-   "workflow": "subscription-watch.yml",
-   "jst_time": "09:30",
-   "window_min": 180,
-   "since": "slot",
-   "enabled": false
-  },
-  {
-   "id": "subscription-watch@18:30",
-   "repo": "truthbodysalon-lab/cloud-daily-tasks",
-   "workflow": "subscription-watch.yml",
-   "jst_time": "18:30",
-   "window_min": 180,
-   "since": "slot",
-   "enabled": false
-  },
-  {
    "id": "note-daily",
    "repo": "truthbodysalon-lab/note-auto",
    "workflow": "daily.yml",
@@ -1729,6 +1702,134 @@
     "until_min": 300
    },
    "note": "2026-11-24 masa指示「なるべくパソコンが稼働していない状態でも投稿できる仕組みに・できない場合はChromeから」: GBP最新情報のクラウド保険。gbp_post.py がAPIで当日の投稿一覧を確かめ、無いときだけ定型文＋予備画像で投稿（Mac 10〜19時の API→Chrome 投稿が先に出していれば何もしない）"
+  },
+  {
+   "id": "podcast-threads-announce-cloud",
+   "repo": "truthbodysalon-lab/threads-auto-post",
+   "workflow": "podcast_announce.yml",
+   "jst_time": "12:50",
+   "window_min": 150,
+   "since": "day",
+   "enabled": true,
+   "note": "2026-11-25: Mac主・クラウド保険。Mac(launchd 7:20/9:20/12:20)が告知しなかった日の最終保険。二重投稿ガードはrun側がThreads APIで外形確認。公開repo=Actions無料"
+  },
+  {
+   "id": "ig-token-health-catchup@14:42",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-token-health.yml",
+   "jst_time": "14:42",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true,
+   "local_done": "ig-token-health",
+   "local_done_since": "12:00",
+   "catchup": true,
+   "note": "2026-11-25 Mac主・クラウド保険: Macが当日12:00以降にig-token-healthを点検済みなら起動しない",
+   "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "ig-token-health-catchup@21:42",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "ig-token-health.yml",
+   "jst_time": "21:42",
+   "window_min": 60,
+   "since": "slot",
+   "enabled": true,
+   "local_done": "ig-token-health",
+   "local_done_since": "19:00",
+   "catchup": true,
+   "note": "2026-11-25 Mac主・クラウド保険: Macが当日19:00以降にig-token-healthを点検済みなら起動しない",
+   "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "ameba-rank-am",
+   "repo": "truthbodysalon-lab/threads-auto-post",
+   "workflow": "ameba_rank.yml",
+   "jst_time": "11:05",
+   "window_min": 120,
+   "since": "slot",
+   "enabled": true,
+   "catchup": true,
+   "local_done": "ameba-rank",
+   "local_done_since": "10:00",
+   "note": "2026-11-25 Mac主(launchd com.mt112.ameba-rank 10:05)・クラウド保険。Macが10:00以降に成功していれば起動しない",
+   "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "ameba-rank-pm",
+   "repo": "truthbodysalon-lab/threads-auto-post",
+   "workflow": "ameba_rank.yml",
+   "jst_time": "23:05",
+   "window_min": 50,
+   "since": "slot",
+   "enabled": true,
+   "catchup": true,
+   "local_done": "ameba-rank",
+   "local_done_since": "22:00",
+   "note": "2026-11-25 Mac主(22:05)・クラウド保険。Macが22:00以降に成功していれば起動しない",
+   "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "payment-dunning",
+   "repo": "truthbodysalon-lab/cloud-daily-tasks",
+   "workflow": "payment-dunning.yml",
+   "jst_time": "12:35",
+   "window_min": 240,
+   "since": "day",
+   "enabled": true,
+   "catchup": true,
+   "local_done": "payment-dunning",
+   "local_done_since": "10:00",
+   "note": "2026-11-25 Mac主・クラウド保険: Macが今日10:00以降に催促を成功していなければ12:35に起動。クラウドの本番送信ゲート(repo変数CLOUD_ACTIVE_PAYMENT_DUNNING)は0のままなので、メールは送らず『送る予定』をDiscordに報告するだけ（本番化はmasa了承後）。retry_failedは付けない",
+   "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "subscription-watch@10:30",
+   "repo": "truthbodysalon-lab/cloud-daily-tasks",
+   "workflow": "subscription-watch.yml",
+   "jst_time": "10:30",
+   "window_min": 180,
+   "since": "slot",
+   "enabled": true,
+   "local_done": "subscription-watch",
+   "local_done_since": "09:25",
+   "catchup": true,
+   "inputs": {
+    "mac_done_since": "09:25"
+   },
+   "note": "2026-11-25 Mac主(9:30)・クラウド保険",
+   "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "subscription-watch@19:30",
+   "repo": "truthbodysalon-lab/cloud-daily-tasks",
+   "workflow": "subscription-watch.yml",
+   "jst_time": "19:30",
+   "window_min": 180,
+   "since": "slot",
+   "enabled": true,
+   "local_done": "subscription-watch",
+   "local_done_since": "18:25",
+   "catchup": true,
+   "inputs": {
+    "mac_done_since": "18:25"
+   },
+   "note": "2026-11-25 Mac主(18:30)・クラウド保険",
+   "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "hpb-draft-catchup",
+   "repo": "truthbodysalon-lab/cloud-daily-tasks",
+   "workflow": "hpb-draft.yml",
+   "jst_time": "09:40",
+   "window_min": 240,
+   "since": "day",
+   "enabled": true,
+   "local_done": "hpb",
+   "local_done_since": "08:00",
+   "catchup": true,
+   "note": "2026-11-25 Mac主・クラウド保険(c2l-hpb)。Macが今日8:00以降にhpbを成功していなければ9:40以降に起動。本文の下書きmdのみ(画像・サロンボード自動下書きはMacのみ・HPBへは投稿しない)",
+   "skip_until": "2026-11-01 09:30"
   }
  ]
 }

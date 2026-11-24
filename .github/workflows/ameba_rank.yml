@@ -1,0 +1,51 @@
+name: Ameba Rank (cloud backup)
+
+# 2026-11-25 masa指示「パソコンが開いているときはパソコン、そうでなければ別のシステムで・課金せず」:
+# Mac launchd com.mt112.ameba-rank(10:05/22:05)の保険。Macが当日成功していれば中央ディスパッチャが起動しない(local_done)。
+# 公開repo=無料。cronなし(起動はディスパッチャのみ)。公開ページの順位だけを読む。秘密は DISCORD_WEBHOOK_URL(既存)のみ。
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'DRY_RUN（記録・通知しない）'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ameba-rank
+  cancel-in-progress: false
+
+jobs:
+  rank:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      TZ: Asia/Tokyo
+      DRY_RUN: ${{ github.event.inputs.dry_run == 'true' && '1' || '' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: record rank
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: python3 ameba_rank_cloud.py
+      - name: Commit record
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: |
+          set -euo pipefail
+          git config user.name "ameba-rank-bot"
+          git config user.email "ameba-rank-bot@users.noreply.github.com"
+          git add ameba_rank/rank_history_cloud.csv 2>/dev/null || true
+          if git diff --cached --quiet; then echo "変更なし"; exit 0; fi
+          git commit -m "chore: ameba rank record [skip ci]"
+          for attempt in 1 2 3 4 5; do
+            if git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}"; then exit 0; fi
+            git rebase --abort 2>/dev/null || true
+            sleep $((attempt * 5))
+          done
+          exit 1

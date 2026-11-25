@@ -1993,7 +1993,7 @@ except Exception:   # 読めなくても既存生成は止めない
 
 NAGAOKA_LOCAL_PER_DAY = int(os.environ.get("NAGAOKA_LOCAL_PER_DAY", "10"))   # 2026-11-26 本人指示「長岡市の投稿を10本」
 NAGAOKA_LOCAL_REUSE_DAYS = 8          # duplicate_guard が1行目一致を7日間はじくため、8日は同じ原稿を出さない
-NAGAOKA_LOCAL_ANCHORS = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18]   # 前半20本に1本おきで散らす
+NAGAOKA_LOCAL_ANCHORS = [0, 3, 6, 9, 12, 15, 18, 21, 24, 27]   # 前半30本（通常20本＋長岡市10本）に3本に1本で散らす
 # 種類ごとの1日の上限（合計は NAGAOKA_LOCAL_PER_DAY）。地域ネタ→院長型→呼びかけ型の順に埋め、足りない分は呼びかけ型で補う。
 NAGAOKA_LOCAL_KIND_MAX = [("local", 6), ("owner", 1), ("target", 10)]
 

@@ -10,9 +10,10 @@ from daily_budget import front_n
 
 fails = []
 firsts = {}
-for vid, months, text in n.NAGAOKA_LOCAL_TRUTH:
+ALL = [(k, vid, text) for k, items in n.KINDS.items() for vid, _, text in items]
+for kind, vid, text in ALL:
     f = text.split("\n")[0]
-    for r in n.validate(text):
+    for r in n.validate(text, kind):
         fails.append(f"型NG {vid}: {r}")
     ok, why = inspector.inspect_post(text, "truth")
     if not ok:
@@ -27,11 +28,14 @@ for vid, months, text in n.NAGAOKA_LOCAL_TRUTH:
         fails.append(f"1行目重複 {vid}: {f}（既出 {firsts[f]}）")
     firsts[f] = vid
 
-# 冬(12〜1月)は1日6本、原稿が少ない月でも3本は出せる
+# 3種類あわせて毎月1日10本を出せる。地域ネタ型は冬(12〜1月)6本、原稿が少ない月でも3本
 for m in range(1, 13):
     per = len(n.eligible(m)) // g.NAGAOKA_LOCAL_REUSE_DAYS
     if per < 3 or (m in (12, 1) and per < 6):
         fails.append(f"{m}月の原稿不足: 1日{per}本ぶん")
+    tot = sum(min(mx, len(n.eligible(m, k)) // g.NAGAOKA_LOCAL_REUSE_DAYS) for k, mx in g.NAGAOKA_LOCAL_KIND_MAX)
+    if tot < 10:
+        fails.append(f"{m}月は3種類あわせて1日{tot}本ぶんしかない")
 
 # キューに入るか・決まり文句が残っていないか・導線が前半から押し出されていないか
 g.TODAY = "2026-12-10"
@@ -41,8 +45,15 @@ front = front_n("truth")
 for _ in range(3):
     posts = g.generate_30_posts()[:front]
     local = [p for p in posts if n.is_local_post(p)]
-    if len(local) < 6:
-        fails.append(f"前半{front}本中の地域ネタ型が{len(local)}本（6本のはず）")
+    if len(local) < 10:
+        fails.append(f"前半{front}本中の長岡市の投稿が{len(local)}本（10本のはず）")
+    kinds = [n.kind_of(p) for p in local]
+    if kinds.count("owner") != 1 or kinds.count("local") < 3:
+        fails.append(f"種類の内訳がおかしい: {kinds}")
+    who = [p.split("悩んでいる")[1].split("\n")[0] for p in local if n.kind_of(p) == "target"]
+    who = [w.replace("必見", "").rstrip("へ") for w in who]
+    if len(set(who)) != len(who):
+        fails.append(f"呼びかけ型で同じ相手が1日に2回: {who}")
     if any(ph in p for p in posts for ph in g.NAGAOKA_PHRASES):
         fails.append("truthに決まり文句の差し込みが残っている")
     if len({p.split(chr(10))[0] for p in posts}) != len(posts):
@@ -67,4 +78,4 @@ if fails:
     for x in fails:
         print(" -", x)
     sys.exit(1)
-print(f"OK: 地域ネタ型 {len(n.NAGAOKA_LOCAL_TRUTH)}本・全検査通過")
+print(f"OK: 長岡市の原稿 {len(ALL)}本（地域ネタ{len(n.NAGAOKA_LOCAL_TRUTH)}・院長{len(n.NAGAOKA_OWNER_TRUTH)}・呼びかけ{len(n.NAGAOKA_TARGET_TRUTH)}）・全検査通過")

@@ -1991,25 +1991,24 @@ try:
 except Exception:   # 読めなくても既存生成は止めない
     _nagaoka_local = None
 
-NAGAOKA_LOCAL_PER_DAY = int(os.environ.get("NAGAOKA_LOCAL_PER_DAY", "6"))   # 1日20本のうち6本
+NAGAOKA_LOCAL_PER_DAY = int(os.environ.get("NAGAOKA_LOCAL_PER_DAY", "10"))   # 2026-11-26 本人指示「長岡市の投稿を10本」
 NAGAOKA_LOCAL_REUSE_DAYS = 8          # duplicate_guard が1行目一致を7日間はじくため、8日は同じ原稿を出さない
-NAGAOKA_LOCAL_ANCHORS = [0, 6, 9, 12, 14, 16]   # 前半20本に散らす（導線アンカーは前半の先頭側に固まっている）
+NAGAOKA_LOCAL_ANCHORS = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18]   # 前半20本に1本おきで散らす
+# 種類ごとの1日の上限（合計は NAGAOKA_LOCAL_PER_DAY）。地域ネタ→院長型→呼びかけ型の順に埋め、足りない分は呼びかけ型で補う。
+NAGAOKA_LOCAL_KIND_MAX = [("local", 6), ("owner", 1), ("target", 10)]
 
 
 def _insert_nagaoka_local_posts(posts: list[str], acct: str, today: str) -> list[str]:
-    """truth: 「長岡市で〜な人いませんか？」＋ツリー2本の地域ネタ型を前半へ入れ、segment_registry.json に
+    """truth: 長岡市向けの投稿（地域ネタ型・院長型・呼びかけ型）を前半へ入れ、segment_registry.json に
     segment="NAGAOKA_LOCAL" で登録する。8日以内に使った原稿は出さない。
-    出せる原稿が足りない月は本数を減らす（同じ文の使い回しはしない＝playbook L8）。"""
+    出せる原稿が足りない時は本数を減らす（同じ文の使い回しはしない＝playbook L8）。"""
     if acct != "truth" or _nagaoka_local is None or NAGAOKA_LOCAL_PER_DAY <= 0:
         return posts
     try:
         today_date = date.fromisoformat(today)
     except Exception:
         today_date = date.today()
-    pool = _nagaoka_local.eligible(today_date.month)
-    per_day = min(NAGAOKA_LOCAL_PER_DAY, len(NAGAOKA_LOCAL_ANCHORS), len(pool) // NAGAOKA_LOCAL_REUSE_DAYS)
-    if per_day <= 0:
-        return posts
+    total = min(NAGAOKA_LOCAL_PER_DAY, len(NAGAOKA_LOCAL_ANCHORS))
     registry = _load_segment_registry()
     recent_keys = set()
     for key, entry in registry.items():
@@ -2025,21 +2024,33 @@ def _insert_nagaoka_local_posts(posts: list[str], acct: str, today: str) -> list
     except Exception:
         recent_first = set()
     used_keys = {_segment_registry_key(p) for p in posts}
-    random.shuffle(pool)
-    chosen: list[tuple[str, str]] = []
-    for vid, text in pool:
-        if len(chosen) >= per_day:
-            break
-        k = _segment_registry_key(text)
-        if (k in recent_keys or k in used_keys or text.split("\n")[0].strip() in recent_first
-                or _nagaoka_local.validate(text) or _is_ng(text)
-                or not _inspect_ok(text, acct, pattern_name="nagaoka_local", log=False)):
-            continue
-        chosen.append((vid, text))
-        used_keys.add(k)
-    for pos, (vid, text) in zip(NAGAOKA_LOCAL_ANCHORS, chosen):
+    chosen: list[tuple[str, str, str]] = []
+    used_who: set[str] = set()
+    for kind, kind_max in NAGAOKA_LOCAL_KIND_MAX:
+        pool = _nagaoka_local.eligible(today_date.month, kind)
+        quota = min(kind_max, len(pool) // NAGAOKA_LOCAL_REUSE_DAYS, total - len(chosen))
+        random.shuffle(pool)
+        got = 0
+        for vid, text in pool:
+            if got >= quota:
+                break
+            k = _segment_registry_key(text)
+            who = vid.split("-")[1] if kind == "target" else None   # 呼びかけ型は同じ相手を1日に2回出さない
+            if who and who in used_who:
+                continue
+            if (k in recent_keys or k in used_keys or text.split("\n")[0].strip() in recent_first
+                    or _nagaoka_local.validate(text, kind) or _is_ng(text)
+                    or not _inspect_ok(text, acct, pattern_name="nagaoka_" + kind, log=False)):
+                continue
+            chosen.append((kind, vid, text))
+            used_keys.add(k)
+            if who:
+                used_who.add(who)
+            got += 1
+    random.shuffle(chosen)   # 種類が固まらないように混ぜる
+    for pos, (kind, vid, text) in zip(NAGAOKA_LOCAL_ANCHORS, chosen):
         posts.insert(min(pos, len(posts)), text)
-        registry[_segment_registry_key(text)] = {"segment": "NAGAOKA_LOCAL", "hook": "local", "variant": vid,
+        registry[_segment_registry_key(text)] = {"segment": "NAGAOKA_LOCAL", "hook": kind, "variant": vid,
                                                   "created": today, "acct": acct}
     _save_segment_registry(registry)
     return posts

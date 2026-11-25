@@ -529,11 +529,12 @@ def check_nagaoka_local():
         from datetime import date as _date
         posts = _g.generate_30_posts()[:_front_n("truth")]
         hits = [i for i, t in enumerate(posts) if _n.is_local_post(t)]
+        _m = _date.today().month
         need = min(_g.NAGAOKA_LOCAL_PER_DAY, len(_g.NAGAOKA_LOCAL_ANCHORS),
-                   len(_n.eligible(_date.today().month)) // _g.NAGAOKA_LOCAL_REUSE_DAYS)
+                   sum(min(mx, len(_n.eligible(_m, k)) // _g.NAGAOKA_LOCAL_REUSE_DAYS) for k, mx in _g.NAGAOKA_LOCAL_KIND_MAX))
         # 直近8日に使った原稿は出さないので、足りない日は1〜2本少なくなることがある（使い回しはしない）
         add("nagaoka_local:truth", "B.ルール反映", "PASS" if len(hits) >= max(1, need - 2) else "WARN",
-            f"truth前半{len(posts)}本中 長岡市の地域ネタ型{len(hits)}本（位置{hits}・目安{need}本）")
+            f"truth前半{len(posts)}本中 長岡市の投稿{len(hits)}本（位置{hits}・目安{need}本）")
         filler = [i for i, t in enumerate(posts) if any(ph in t for ph in _g.NAGAOKA_PHRASES)]
         add("nagaoka_filler:truth", "B.ルール反映", "PASS" if not filler else "FAIL",
             "truthに長岡市の決まり文句の差し込みなし" if not filler else

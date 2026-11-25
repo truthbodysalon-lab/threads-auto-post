@@ -344,11 +344,21 @@ def _build_target() -> list[tuple[str, tuple[int, ...] | None, str]]:
 
 NAGAOKA_TARGET_TRUTH = _build_target()
 
-KINDS = {"local": NAGAOKA_LOCAL_TRUTH, "owner": NAGAOKA_OWNER_TRUTH, "target": NAGAOKA_TARGET_TRUTH}
+# ── 周辺の市向け（2026-11-26 本人指示「見附・小千谷・柏崎・三条この地域の人たちにもリーチするようにして」）──
+# 呼びかけ型の1行目の市名だけを替える（本文は同じ）。1日に各市1本ずつ＝4本。id の2番目は相手（同じ相手を1日に2回出さない）。
+NEARBY_CITIES = [("mitsuke", "見附市"), ("ojiya", "小千谷市"), ("kashiwazaki", "柏崎市"), ("sanjo", "三条市")]
+NEARBY_TARGET_TRUTH = [
+    (f"X-{vid.split('-', 1)[1]}-{cid}", months, text.replace("長岡市で", f"{city}で", 1))
+    for cid, city in NEARBY_CITIES
+    for vid, months, text in NAGAOKA_TARGET_TRUTH
+]
+
+KINDS = {"local": NAGAOKA_LOCAL_TRUTH, "owner": NAGAOKA_OWNER_TRUTH, "target": NAGAOKA_TARGET_TRUTH,
+         "near": NEARBY_TARGET_TRUTH}
 
 
 def eligible(month: int, kind: str = "local") -> list[tuple[str, str]]:
-    """その月に出してよい原稿 (id, 本文) の一覧。kind = local(地域ネタ) / owner(院長型) / target(呼びかけ型)。"""
+    """その月に出してよい原稿 (id, 本文) の一覧。kind = local(地域ネタ) / owner(院長型) / target(呼びかけ型) / near(周辺の市向け呼びかけ型)。"""
     return [(i, t) for i, m, t in KINDS[kind] if m is None or month in m]
 
 
@@ -361,7 +371,7 @@ def kind_of(text: str) -> str | None:
 
 
 def is_local_post(text: str) -> bool:
-    """長岡市向けの原稿（3種類のどれか）か。verify・テスト用。"""
+    """長岡市・周辺の市向けの原稿（4種類のどれか）か。verify・テスト用。"""
     return kind_of(text) is not None
 
 
@@ -372,8 +382,9 @@ def validate(text: str, kind: str = "local") -> list[str]:
     if len(parts) != 3:
         return [f"ツリーが{len(parts) - 1}本（2本にする）"]
     parent = [l for l in parts[0].split("\n") if l.strip()]
-    if not parent or not parent[0].startswith("長岡市"):
-        reasons.append("親投稿が「長岡市」で始まっていない")
+    starts = tuple(c for _, c in NEARBY_CITIES) if kind == "near" else ("長岡市",)
+    if not parent or not parent[0].startswith(starts):
+        reasons.append("親投稿が市名（" + "・".join(starts) + "）で始まっていない")
     if len(parent) != 2:
         reasons.append(f"親投稿が{len(parent)}行（2行にする）")
     if kind == "local" and not parts[0].rstrip().endswith(("？", "?")):

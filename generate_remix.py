@@ -1995,7 +1995,8 @@ NAGAOKA_LOCAL_PER_DAY = int(os.environ.get("NAGAOKA_LOCAL_PER_DAY", "10"))   # 2
 NAGAOKA_LOCAL_REUSE_DAYS = 8          # duplicate_guard が1行目一致を7日間はじくため、8日は同じ原稿を出さない
 NAGAOKA_LOCAL_ANCHORS = [0, 3, 6, 9, 12, 15, 18, 21, 24, 27]   # 前半30本（通常20本＋長岡市10本）に3本に1本で散らす
 # 種類ごとの1日の上限（合計は NAGAOKA_LOCAL_PER_DAY）。地域ネタ→院長型→呼びかけ型の順に埋め、足りない分は呼びかけ型で補う。
-NAGAOKA_LOCAL_KIND_MAX = [("local", 6), ("owner", 1), ("target", 10)]
+# 2026-11-26 本人指示「見附・小千谷・柏崎・三条にもリーチ」: 10本のうち4本は周辺の市向け（near・各市1本）。
+NAGAOKA_LOCAL_KIND_MAX = [("local", 5), ("owner", 1), ("near", 4), ("target", 10)]
 
 
 def _insert_nagaoka_local_posts(posts: list[str], acct: str, today: str) -> list[str]:
@@ -2026,6 +2027,7 @@ def _insert_nagaoka_local_posts(posts: list[str], acct: str, today: str) -> list
     used_keys = {_segment_registry_key(p) for p in posts}
     chosen: list[tuple[str, str, str]] = []
     used_who: set[str] = set()
+    used_city: set[str] = set()
     for kind, kind_max in NAGAOKA_LOCAL_KIND_MAX:
         pool = _nagaoka_local.eligible(today_date.month, kind)
         quota = min(kind_max, len(pool) // NAGAOKA_LOCAL_REUSE_DAYS, total - len(chosen))
@@ -2035,8 +2037,9 @@ def _insert_nagaoka_local_posts(posts: list[str], acct: str, today: str) -> list
             if got >= quota:
                 break
             k = _segment_registry_key(text)
-            who = vid.split("-")[1] if kind == "target" else None   # 呼びかけ型は同じ相手を1日に2回出さない
-            if who and who in used_who:
+            who = vid.split("-")[1] if kind in ("target", "near") else None   # 呼びかけ型は同じ相手を1日に2回出さない
+            city = vid.split("-")[-1] if kind == "near" else None            # 周辺の市向けは各市1日1本
+            if (who and who in used_who) or (city and city in used_city):
                 continue
             if (k in recent_keys or k in used_keys or text.split("\n")[0].strip() in recent_first
                     or _nagaoka_local.validate(text, kind) or _is_ng(text)
@@ -2046,6 +2049,8 @@ def _insert_nagaoka_local_posts(posts: list[str], acct: str, today: str) -> list
             used_keys.add(k)
             if who:
                 used_who.add(who)
+            if city:
+                used_city.add(city)
             got += 1
     random.shuffle(chosen)   # 種類が固まらないように混ぜる
     for pos, (kind, vid, text) in zip(NAGAOKA_LOCAL_ANCHORS, chosen):

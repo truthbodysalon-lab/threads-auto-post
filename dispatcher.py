@@ -376,6 +376,8 @@ def main():
                 continue
             if e.get("weekdays") is not None and now.weekday() not in e["weekdays"]:
                 continue
+            if e.get("monthdays") is not None and now.day not in e["monthdays"]:  # 2026-11-25: 月次（例 [25]）
+                continue
             if skip_until_active(e, now):  # 一時停止中は起動しない（YYYY-MM-DD未満の日 / "YYYY-MM-DD HH:MM"(JST)未満の時刻）
                 continue
             hh, mm = map(int, e["jst_time"].split(":"))

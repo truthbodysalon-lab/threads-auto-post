@@ -623,6 +623,7 @@ TYPE_LABELS = {
     "QUESTION": "問いかけ",
     "CUSTOMER_VOICE": "お客様の声",
     "LIST_HABIT": "習慣N選",
+    "NAGAOKA_LOCAL": "長岡市の地域ネタ",
     "own_adapt": "伸びた投稿の翻案",
     "image": "画像つき",
 }

@@ -1967,6 +1967,13 @@ def _target_cumulative_by_now(hour: int, acct: str | None = None) -> int:
 PACE_OFFSET_MIN = {"truth": 40, "nagaoka": 50, "masa": 15}
 # 同じアカウントの投稿間隔の下限（分）。1回の起動では最大1本だけ出す。0で無効（従来どおりまとめて回復）。
 MIN_GAP_MIN = int(os.environ.get("MIN_GAP_MIN", "45"))
+# 2026-11-26 truth 1日30本（masa指示）: 6〜23時に30本を出すには約34分に1本が必要。45分空け（常駐ループ10分毎で実質50分）だと
+# 1日20本前後で頭打ちになるため、truth だけ25分（実質30分に1本）にする。MIN_GAP_MIN=0（無効）の時は従来どおり無効。
+MIN_GAP_BY_ACCT = {"truth": int(os.environ.get("MIN_GAP_MIN_TRUTH", "25"))}
+
+
+def _min_gap_min(acct: str) -> int:
+    return min(MIN_GAP_MIN, MIN_GAP_BY_ACCT.get(acct, MIN_GAP_MIN)) if MIN_GAP_MIN > 0 else 0
 
 
 # 直前の投稿（全種類）からこの分数以上空いたら、ペースが足りていても1本出す（2026-11-23）
@@ -2067,8 +2074,8 @@ def _run_account_batch(acct: str):
         # 2026-11-14 1日10本化: 1回の起動で最大1本・同じアカウントの直前の投稿から MIN_GAP_MIN 分以上空ける
         n = 1
         _last = _last_post_epoch(acct)
-        if _last and time.time() - _last < MIN_GAP_MIN * 60:
-            log_info(acct, f"{ACCOUNTS[acct]['name']} 直前の投稿から{int((time.time() - _last) // 60)}分（{MIN_GAP_MIN}分未満）→ 今回は見送り")
+        if _last and time.time() - _last < _min_gap_min(acct) * 60:
+            log_info(acct, f"{ACCOUNTS[acct]['name']} 直前の投稿から{int((time.time() - _last) // 60)}分（{_min_gap_min(acct)}分未満）→ 今回は見送り")
             return
     if n > MAX_PER_RUN:
         log_info(acct, f"{ACCOUNTS[acct]['name']} 遅れ検知（不足{need}本）→ {n}本まとめて回復")

@@ -1983,6 +1983,80 @@ def _insert_list_habit_posts(posts: list[str], acct: str, today: str, anchors: l
 
 
 # ══════════════════════════════════════════════
+# 長岡市の地域ネタ型（2026-11-25 本人指示「長岡市の人にリーチするように地域ネタなども取り入れて」）
+# 根拠: 閲覧者の長岡市比率 3.2%（2026-10-26〜11-24）。原稿と型の決まり = nagaoka_local_templates.py
+# ══════════════════════════════════════════════
+try:
+    import nagaoka_local_templates as _nagaoka_local
+except Exception:   # 読めなくても既存生成は止めない
+    _nagaoka_local = None
+
+NAGAOKA_LOCAL_PER_DAY = int(os.environ.get("NAGAOKA_LOCAL_PER_DAY", "10"))   # 2026-11-26 本人指示「長岡市の投稿を10本」
+NAGAOKA_LOCAL_REUSE_DAYS = 8          # duplicate_guard が1行目一致を7日間はじくため、8日は同じ原稿を出さない
+NAGAOKA_LOCAL_ANCHORS = [0, 3, 6, 9, 12, 15, 18, 21, 24, 27]   # 前半30本（通常20本＋長岡市10本）に3本に1本で散らす
+# 種類ごとの1日の上限（合計は NAGAOKA_LOCAL_PER_DAY）。地域ネタ→院長型→呼びかけ型の順に埋め、足りない分は呼びかけ型で補う。
+NAGAOKA_LOCAL_KIND_MAX = [("local", 6), ("owner", 1), ("target", 10)]
+
+
+def _insert_nagaoka_local_posts(posts: list[str], acct: str, today: str) -> list[str]:
+    """truth: 長岡市向けの投稿（地域ネタ型・院長型・呼びかけ型）を前半へ入れ、segment_registry.json に
+    segment="NAGAOKA_LOCAL" で登録する。8日以内に使った原稿は出さない。
+    出せる原稿が足りない時は本数を減らす（同じ文の使い回しはしない＝playbook L8）。"""
+    if acct != "truth" or _nagaoka_local is None or NAGAOKA_LOCAL_PER_DAY <= 0:
+        return posts
+    try:
+        today_date = date.fromisoformat(today)
+    except Exception:
+        today_date = date.today()
+    total = min(NAGAOKA_LOCAL_PER_DAY, len(NAGAOKA_LOCAL_ANCHORS))
+    registry = _load_segment_registry()
+    recent_keys = set()
+    for key, entry in registry.items():
+        if not isinstance(entry, dict) or entry.get("segment") != "NAGAOKA_LOCAL":
+            continue
+        try:
+            if (today_date - date.fromisoformat(entry.get("created", ""))).days < NAGAOKA_LOCAL_REUSE_DAYS:
+                recent_keys.add(key)
+        except Exception:
+            continue
+    try:
+        recent_first = _get_recent_first_lines(acct, days=NAGAOKA_LOCAL_REUSE_DAYS)
+    except Exception:
+        recent_first = set()
+    used_keys = {_segment_registry_key(p) for p in posts}
+    chosen: list[tuple[str, str, str]] = []
+    used_who: set[str] = set()
+    for kind, kind_max in NAGAOKA_LOCAL_KIND_MAX:
+        pool = _nagaoka_local.eligible(today_date.month, kind)
+        quota = min(kind_max, len(pool) // NAGAOKA_LOCAL_REUSE_DAYS, total - len(chosen))
+        random.shuffle(pool)
+        got = 0
+        for vid, text in pool:
+            if got >= quota:
+                break
+            k = _segment_registry_key(text)
+            who = vid.split("-")[1] if kind == "target" else None   # 呼びかけ型は同じ相手を1日に2回出さない
+            if who and who in used_who:
+                continue
+            if (k in recent_keys or k in used_keys or text.split("\n")[0].strip() in recent_first
+                    or _nagaoka_local.validate(text, kind) or _is_ng(text)
+                    or not _inspect_ok(text, acct, pattern_name="nagaoka_" + kind, log=False)):
+                continue
+            chosen.append((kind, vid, text))
+            used_keys.add(k)
+            if who:
+                used_who.add(who)
+            got += 1
+    random.shuffle(chosen)   # 種類が固まらないように混ぜる
+    for pos, (kind, vid, text) in zip(NAGAOKA_LOCAL_ANCHORS, chosen):
+        posts.insert(min(pos, len(posts)), text)
+        registry[_segment_registry_key(text)] = {"segment": "NAGAOKA_LOCAL", "hook": kind, "variant": vid,
+                                                  "created": today, "acct": acct}
+    _save_segment_registry(registry)
+    return posts
+
+
+# ══════════════════════════════════════════════
 # 1行目の型の配分（2026-10-24 本人指示「分析の提案をそのまま反映」）
 # 根拠: myfiles/SNS・Threads/truth_nagaoka_1行目の型と施策の効果_2026-10-24.md
 #  - 効く型（truth: 薬・鎮痛剤／前に、まず／nagaoka: 天気・気圧／前に、まず／声／問いかけ）を増やし、
@@ -2381,7 +2455,10 @@ def generate_30_posts() -> list[str]:
         for _ in range(50):
             raw = generate_post(pk)
             # zutsuu_types は長岡市配置を作り込み済みのため _ensure_nagaoka を通さない
-            post = _enforce_short_body(raw if pk == "zutsuu_types" else _ensure_nagaoka(raw))
+            # 2026-11-25 本人指示: truth は「長岡市の整体院でも同じ相談が多いです」等の決まり文句(NAGAOKA_PHRASES)を
+            # 本文に足さない（playbook L7/L13 で禁止の伝聞・自己紹介文そのもの。実測でも反応は変わらなかった）。
+            # 長岡の人へは地域ネタ型(_insert_nagaoka_local_posts)で届ける。
+            post = _enforce_short_body(raw)
             key = post[:100]
             first_line = post.split("\n")[0].strip()
             # 1文目NG・NGワード・重複チェック
@@ -2399,7 +2476,7 @@ def generate_30_posts() -> list[str]:
     # feedback の追加テンプレを先頭に差し込む
     for tmpl in _load_extra_templates("truth"):
         try:
-            posts.insert(0, _enforce_short_body(_ensure_nagaoka(fill(tmpl))))
+            posts.insert(0, _enforce_short_body(fill(tmpl)))
         except Exception:
             pass
 
@@ -2411,8 +2488,8 @@ def generate_30_posts() -> list[str]:
     # 実行ギャップ対策: 1日の消費は約50本なので、ランダム高位置だと到達せず未投稿になる。
     # LINEリストインと同様に前半（index 5, 14, 23, 32）へアンカーして毎日確実に届ける。
     cta_posts = (
-        [_enforce_short_body(_ensure_nagaoka(generate_cta_post("katakori"))) for _ in range(0)] +   # 2026-11-14 1日10本化: 肩こりCTAは0本（頭痛特化アカウントのため頭痛1本だけ残す）
-        [_enforce_short_body(_ensure_nagaoka(generate_cta_post("zutsuu")))   for _ in range(1)]
+        [_enforce_short_body(generate_cta_post("katakori")) for _ in range(0)] +   # 2026-11-14 1日10本化: 肩こりCTAは0本（頭痛特化アカウントのため頭痛1本だけ残す）
+        [_enforce_short_body(generate_cta_post("zutsuu"))   for _ in range(1)]
     )   # 2026-11-11 1日20本化: 4本→2本(肩こり1・頭痛1)
     cta_anchors = [3]   # 2026-11-14 1日10本化: 2本[3,8]→1本[3]
     for i, cta in enumerate(cta_posts):
@@ -2483,6 +2560,9 @@ def generate_30_posts() -> list[str]:
     posts = _insert_list_habit_posts(posts, "truth", TODAY)
     # お客様の声型(CUSTOMER_VOICE・2026-10-06本人指示)を毎日1本、前半アンカー20へ投入
     posts = _insert_customer_voice_post(posts, "truth", TODAY)
+
+    # 長岡市の地域ネタ型(NAGAOKA_LOCAL・2026-11-25本人指示)を前半へ。ヒーローの前に入れる
+    posts = _insert_nagaoka_local_posts(posts, "truth", TODAY)
 
     posts = _insert_hero_posts(posts, "truth")   # 全挿入の最後（位置50超への押し出し防止）
     return posts[:_queue_len("truth")]   # 2026-11-25 truthは1日20本: 前半20＋予備10＝30本（他アカウントは10＋10）

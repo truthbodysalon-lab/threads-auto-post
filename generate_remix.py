@@ -873,11 +873,42 @@ _LISTIN_POOLS = {
 }
 
 
+def _listin_fresh_pool(acct: str, pool: list, days: int = 7) -> list:
+    """直近days日に投稿済みの1文目を除いたリストイン候補。全て使用済みなら最も昔に使った候補を返す。
+    1バッチに入るリストインは1本だけなので、投稿側(auto_post)のLRUは生成時に偏ると効かない
+    （2026-11-25検証: truthで同じ原稿が4日で3回投稿された）。"""
+    def key(t: str) -> str:
+        return t.split("\n")[0].strip().rstrip("。？?")
+
+    last: dict = {}
+    try:
+        for line in (BASE / f"log_{acct}_posted.jsonl").read_text(encoding="utf-8").splitlines():
+            try:
+                e = json.loads(line)
+            except Exception:
+                continue
+            text = e.get("text") or ""
+            if not (e.get("is_line") or "lin.ee" in text):
+                continue
+            k, d = key(text), (e.get("date") or "")[:10]
+            if d >= last.get(k, ""):
+                last[k] = d
+    except OSError:
+        return pool
+    cutoff = (date.today() - timedelta(days=days)).strftime("%Y-%m-%d")
+    fresh = [t for t in pool if last.get(key(t), "") < cutoff]
+    if fresh:
+        return fresh
+    oldest = min(last.get(key(t), "") for t in pool)
+    return [t for t in pool if last.get(key(t), "") == oldest]
+
+
 def generate_line_listin_post(acct: str = "truth") -> str:
     """公式LINE（頭痛改善情報）へのリストイン投稿を生成。
-    acct ごとに別テンプレ群から選び、truth/nagaoka間の同一文重複を防ぐ。"""
+    acct ごとに別テンプレ群から選び、truth/nagaoka間の同一文重複を防ぐ。
+    直近7日に投稿した原稿は候補から外す。"""
     pool = _LISTIN_POOLS.get(acct) or LINE_LISTIN_TEMPLATES
-    tmpl = random.choice(pool)
+    tmpl = random.choice(_listin_fresh_pool(acct, pool))
     return fill(tmpl.replace("{url}", LINE_LISTIN_URL))
 
 

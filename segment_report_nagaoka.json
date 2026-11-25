@@ -1,6 +1,6 @@
 {
   "acct": "nagaoka",
-  "generated_at": "2026-11-23 10:43",
+  "generated_at": "2026-11-25 10:43",
   "params": {
     "min_n": 5,
     "loser_min_n": 8,
@@ -12,17 +12,17 @@
       30
     ]
   },
-  "registry_loaded": 332,
+  "registry_loaded": 335,
   "log_entries": 5659,
   "windows": {
     "7d": {
       "baseline": {
-        "n": 53,
-        "median_views": 21,
-        "mean_views": 80.9,
-        "p90_views": 167.6
+        "n": 33,
+        "median_views": 14,
+        "mean_views": 50.7,
+        "p90_views": 129.8
       },
-      "unregistered_n": 52,
+      "unregistered_n": 32,
       "segment_hook": {
         "T1_desk__low": {
           "n": 0,
@@ -61,7 +61,7 @@
           "p90_views": 724,
           "like_rate": 0.0,
           "reply_rate": 0.0014,
-          "index": 34.476,
+          "index": 51.714,
           "verdict": "判定保留"
         },
         "T3_sango__low": {
@@ -163,7 +163,7 @@
           "p90_views": 724,
           "like_rate": 0.0,
           "reply_rate": 0.0014,
-          "index": 34.476,
+          "index": 51.714,
           "verdict": "判定保留"
         },
         "T3_sango": {
@@ -272,7 +272,7 @@
           "segment": "T2_zutsu",
           "like_rate": 0.0,
           "reply_rate": 0.0014,
-          "index": 34.476,
+          "index": 51.714,
           "verdict": "判定保留"
         },
         "Z10_nagaoka": {
@@ -1795,8 +1795,8 @@
   },
   "type_report": {
     "7d": {
-      "baseline_median": 21,
-      "n": 53,
+      "baseline_median": 14,
+      "n": 33,
       "types": {
         "MAE_MAZU": {
           "n": 0,
@@ -1816,7 +1816,7 @@
         "QUESTION": {
           "n": 1,
           "median_views": 10,
-          "index": 0.48
+          "index": 0.71
         },
         "CUSTOMER_VOICE": {
           "n": 0,
@@ -1829,14 +1829,14 @@
           "index": 0.0
         },
         "own_adapt": {
-          "n": 18,
-          "median_views": 13.0,
-          "index": 0.62
+          "n": 13,
+          "median_views": 7,
+          "index": 0.5
         },
         "image": {
-          "n": 6,
-          "median_views": 17.5,
-          "index": 0.83
+          "n": 4,
+          "median_views": 19.0,
+          "index": 1.36
         }
       }
     },

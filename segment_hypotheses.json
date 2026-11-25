@@ -2401,8 +2401,8 @@
       ],
       "last_result": {
         "n": 1,
-        "index": 0.911,
-        "updated": "2026-11-23"
+        "index": 0.762,
+        "updated": "2026-11-25"
       }
     },
     {
@@ -2429,8 +2429,8 @@
       ],
       "last_result": {
         "n": 1,
-        "index": 9.171,
-        "updated": "2026-11-23"
+        "index": 7.673,
+        "updated": "2026-11-25"
       }
     },
     {
@@ -2457,8 +2457,8 @@
       ],
       "last_result": {
         "n": 1,
-        "index": 4.309,
-        "updated": "2026-11-23"
+        "index": 3.605,
+        "updated": "2026-11-25"
       }
     },
     {
@@ -2742,7 +2742,7 @@
       "last_result": {
         "n": 1,
         "index": 34.476,
-        "updated": "2026-11-23"
+        "updated": "2026-11-25"
       }
     },
     {
@@ -4979,8 +4979,8 @@
       ],
       "last_result": {
         "n": 1,
-        "index": 1.0,
-        "updated": "2026-11-23"
+        "index": 0.833,
+        "updated": "2026-11-25"
       },
       "evidence": "施術中・毎回の会話で通う理由が育たない(根拠4件・中)。出典: L0428 / L0910T（出典IDは repeat_pain_categories.json の source_ids 参照）"
     },
@@ -5499,8 +5499,8 @@
       ],
       "last_result": {
         "n": 1,
-        "index": 1.6,
-        "updated": "2026-11-23"
+        "index": 1.5,
+        "updated": "2026-11-25"
       },
       "evidence": "口コミ・紹介が自然に生まれない(根拠4件・中)。出典: HYP P070 / HYP P072 / L0307N / L0428（出典IDは repeat_pain_categories.json の source_ids 参照）"
     },
@@ -5551,8 +5551,8 @@
       ],
       "last_result": {
         "n": 1,
-        "index": 13.333,
-        "updated": "2026-10-09"
+        "index": 1.167,
+        "updated": "2026-11-25"
       },
       "evidence": "リピート率・次回予約率の見方が分からない(根拠4件・強)。出典: G0326 / HYP P010/VM323 / HYP P026 / L0307T（出典IDは repeat_pain_categories.json の source_ids 参照）"
     },
@@ -5757,7 +5757,12 @@
           "hook": "high",
           "text": "『しっかり寝たはずなのに、朝がつらい』という声を、よく聞きます。\n\n睡眠は時間だけでなく、寝る前の過ごし方や首まわりの緊張にも左右されます。\n寝る前の1時間を整えるところから。"
         }
-      ]
+      ],
+      "last_result": {
+        "n": 1,
+        "index": 4.558,
+        "updated": "2026-11-25"
+      }
     },
     {
       "id": "ZC06_truth",

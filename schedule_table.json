@@ -1830,6 +1830,61 @@
    "catchup": true,
    "note": "2026-11-25 Mac主・クラウド保険(c2l-hpb)。Macが今日8:00以降にhpbを成功していなければ9:40以降に起動。本文の下書きmdのみ(画像・サロンボード自動下書きはMacのみ・HPBへは投稿しない)",
    "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "meo-rank",
+   "repo": "truthbodysalon-lab/ig-autopost-cloud",
+   "workflow": "meo-rank.yml",
+   "jst_time": "11:00",
+   "window_min": 240,
+   "since": "day",
+   "enabled": true,
+   "weekdays": [
+    0
+   ],
+   "local_done": "meo-rank",
+   "local_done_since": "08:00",
+   "catchup": true,
+   "skip_until": "2026-11-01 09:30",
+   "retry_failed": {
+    "after_min": 40,
+    "until_min": 300
+   },
+   "note": "2026-11-25 Mac主(launchd com.mt112.meo-rank-check 月曜8:00)・クラウド保険。Macが今日08:00以降にmeo-rankを成功していなければ11:00以降に起動。workflow内でも gbp/meo_plan の plan が今週分なら何もしない。順位とplanだけ作る（Insights/週次ノート/地図はMac復帰後）"
+  },
+  {
+   "id": "square-digest-weekly",
+   "repo": "truthbodysalon-lab/cloud-daily-tasks",
+   "workflow": "square-digest.yml",
+   "jst_time": "10:50",
+   "window_min": 180,
+   "since": "day",
+   "enabled": true,
+   "weekdays": [
+    0
+   ],
+    "inputs": {
+    "mode": "weekly"
+   },
+   "note": "2026-11-25 Mac主・クラウド保険(square)。月曜の顧客分析クラウドルーティン(11:33)の前処理。workflow冒頭でheartbeatが1.5h未満なら即終了（Mac稼働中）。AIなし・Square読み取りのみ",
+   "skip_until": "2026-11-01 09:30"
+  },
+  {
+   "id": "square-digest-monthly",
+   "repo": "truthbodysalon-lab/cloud-daily-tasks",
+   "workflow": "square-digest.yml",
+   "jst_time": "12:50",
+   "window_min": 180,
+   "since": "day",
+   "enabled": true,
+   "monthdays": [
+    25
+   ],
+    "inputs": {
+    "mode": "monthly"
+   },
+   "note": "2026-11-25 Mac主・クラウド保険(square)。毎月25日の折込チラシ案クラウドルーティン(14:40)の前処理。町名×クラスタ集計(flyer_area_YYYY-MM.json)も作る。heartbeat判定は同上",
+   "skip_until": "2026-11-01 09:30"
   }
  ]
 }

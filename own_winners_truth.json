@@ -1,20 +1,20 @@
 {
  "account": "truth",
- "generated": "2026-11-20",
+ "generated": "2026-11-25",
  "window_days": 90,
  "note": "自動投稿システム以外から出た本人の投稿のうち伸びたもの。翻案必須・同一文面の再投稿は禁止（型疲労L8）。構造（フックの型・展開・締め）だけを借りる",
- "fetched_posts": 4132,
- "own_posts": 54,
+ "fetched_posts": 3930,
+ "own_posts": 55,
  "classification": {
-  "exact_body80": 4051,
-  "OWN": 54,
+  "exact_body80": 3848,
+  "OWN": 55,
   "exact_line1": 16,
   "skeleton": 4,
   "tail_sig": 6,
   "template_prefix": 1
  },
- "account_median_views": 48.5,
- "winner_threshold": 72.75,
+ "account_median_views": 71.0,
+ "winner_threshold": 106.5,
  "winners": [
   {
    "id": "18125202077514991",
@@ -130,18 +130,33 @@
    "text": "@aoi_ogawa_sns \n@tatsuya.nishiwaki_ \n\nご報告です！！\n1試合目負けましたーー！\nめっちゃ強かった！\n\nあと名古屋の試合見てますけど強すぎる、、、"
   },
   {
-   "id": "17978625815900259",
-   "views": 171,
-   "date": "2026-08-22",
+   "id": "18094402313694867",
+   "views": 186,
+   "date": "2026-11-22",
    "media": "TEXT_POST",
-   "first_line": "仕事後、家に帰って",
+   "first_line": "宮崎到着しましたが",
    "labels": [
-    "リスト型",
-    "人柄・関係性",
+    "地名・出来事",
     "4行以上"
    ],
    "repeats_in_window": 1,
-   "text": "仕事後、家に帰って\n風呂入って夜ご飯食べて\nアイス食べながら嫁ちゃんと\n・ジョハリの窓\n・マズロー5段階欲求\n・事実と解釈の違い\n\nこれについて2人で語ってましたが\n控えめに言って最高です笑"
+   "text": "宮崎到着しましたが\n長岡市のみなさん！\n宮崎めっちゃあったかい！！\n\n現場から以上です"
+  },
+  {
+   "id": "17959260303275680",
+   "views": 163,
+   "date": "2026-11-21",
+   "media": "IMAGE",
+   "first_line": "雪国長岡市を抜け出して",
+   "labels": [
+    "画像・動画つき",
+    "地名・出来事",
+    "日常動作の指示",
+    "日常・ご報告",
+    "短文"
+   ],
+   "repeats_in_window": 1,
+   "text": "雪国長岡市を抜け出して\n今日から宮崎に旅立ちます。"
   },
   {
    "id": "17954464266335663",
@@ -202,77 +217,6 @@
    ],
    "repeats_in_window": 1,
    "text": "え！すご！\n長岡市でやるんですね！"
-  },
-  {
-   "id": "18120420665092007",
-   "views": 104,
-   "date": "2026-11-11",
-   "media": "TEXT_POST",
-   "first_line": "TKって何ですか？？🤔",
-   "labels": [
-    "短文"
-   ],
-   "repeats_in_window": 1,
-   "text": "TKって何ですか？？🤔"
-  },
-  {
-   "id": "18111549185594996",
-   "views": 102,
-   "date": "2026-10-06",
-   "media": "TEXT_POST",
-   "first_line": "頭痛の原因って",
-   "labels": [],
-   "repeats_in_window": 1,
-   "text": "頭痛の原因って\nそれぞれ違いがあるのご存知ですか？\n\nあなたに合った頭痛対策は"
-  },
-  {
-   "id": "17964792605984203",
-   "views": 84,
-   "date": "2026-10-10",
-   "media": "TEXT_POST",
-   "first_line": "眉間やおでこ周辺の",
-   "labels": [
-    "短文"
-   ],
-   "repeats_in_window": 1,
-   "text": "眉間やおでこ周辺の\n頭痛で悩んでいる人"
-  },
-  {
-   "id": "18116671312791066",
-   "views": 83,
-   "date": "2026-10-17",
-   "media": "TEXT_POST",
-   "first_line": "今日高校野球の北信越大会",
-   "labels": [
-    "日常・ご報告",
-    "短文"
-   ],
-   "repeats_in_window": 1,
-   "text": "今日高校野球の北信越大会\n帝京長岡がんばれ！！"
-  },
-  {
-   "id": "18092106056222070",
-   "views": 81,
-   "date": "2026-10-29",
-   "media": "TEXT_POST",
-   "first_line": "鼻うがいオススメです！",
-   "labels": [
-    "短文"
-   ],
-   "repeats_in_window": 1,
-   "text": "鼻うがいオススメです！\nお大事になさってください！"
-  },
-  {
-   "id": "17954110782038362",
-   "views": 77,
-   "date": "2026-10-09",
-   "media": "TEXT_POST",
-   "first_line": "【悲報です】",
-   "labels": [
-    "短文"
-   ],
-   "repeats_in_window": 1,
-   "text": "【悲報です】\n頭痛を抱えている人ほど60万損してます"
   }
  ]
 }

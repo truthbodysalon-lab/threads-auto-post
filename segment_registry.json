@@ -431,7 +431,7 @@
   "朝からこめかみが重い人へ。": {
     "segment": "T2",
     "hook": "low",
-    "created": "2026-11-10",
+    "created": "2026-11-26",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z06_nagaoka"
@@ -3571,7 +3571,7 @@
   "会計のときに、次回の話をお客様に任せる院長へ。": {
     "segment": "R03",
     "hook": "low",
-    "created": "2026-11-14",
+    "created": "2026-11-26",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -4015,7 +4015,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 13,
-    "created": "2026-11-14",
+    "created": "2026-11-26",
     "acct": "nagaoka"
   },
   "インスタ運用で、100点にならないと出せない院長へ質問です。": {
@@ -4246,7 +4246,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 2,
-    "created": "2026-11-19",
+    "created": "2026-11-26",
     "acct": "truth"
   },
   "【立ち仕事の後半に腰が持たない人の習慣6選】": {
@@ -5660,7 +5660,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 48,
-    "created": "2026-10-13",
+    "created": "2026-11-26",
     "acct": "nagaoka"
   },
   "『水分は、コーヒーとお茶ばかり』という声を、よく聞きます。": {
@@ -5993,7 +5993,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 19,
-    "created": "2026-11-11",
+    "created": "2026-11-26",
     "acct": "truth"
   },
   "『整体は初めてで、不安』という声を、よく聞きます。": {
@@ -7545,7 +7545,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 7,
-    "created": "2026-11-14"
+    "created": "2026-11-26"
   },
   "ぶっちゃけ、続かない人は、次に何をやるかが決まっていません。": {
     "segment": "PRESENT_CTA",
@@ -7736,7 +7736,7 @@
     "hook": "present",
     "present_key": "insta_kit",
     "variant": 17,
-    "created": "2026-10-22"
+    "created": "2026-11-26"
   },
   "頼み方は、普通の言葉で通じる。": {
     "segment": "INSTA_EASY",
@@ -8169,7 +8169,7 @@
     "segment": "WIN_HOOK",
     "hook": "winning",
     "variant": 8,
-    "created": "2026-11-19"
+    "created": "2026-11-26"
   },
   "フォロワーが増えない店ほど、これをやっています。": {
     "segment": "WIN_HOOK",
@@ -8181,7 +8181,7 @@
     "segment": "WIN_HOOK",
     "hook": "winning",
     "variant": 9,
-    "created": "2026-11-19"
+    "created": "2026-11-26"
   },
   "インスタを続けるのに、新しいネタは要りません。": {
     "segment": "WIN_HOOK",
@@ -8235,7 +8235,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 0,
-    "created": "2026-11-14",
+    "created": "2026-11-26",
     "acct": "truth"
   },
   "薬の前に、まず首の後ろを触る。": {
@@ -8733,7 +8733,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 3,
-    "created": "2026-11-21",
+    "created": "2026-11-26",
     "acct": "truth"
   },
   "気圧が下がる日の朝、起きた瞬間に頭が重い人いますか？": {
@@ -8768,7 +8768,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 29,
-    "created": "2026-11-11",
+    "created": "2026-11-26",
     "acct": "nagaoka"
   },
   "雨の日は、動き出す前に、まず首の後ろを温めてみて。": {
@@ -8985,7 +8985,7 @@
     "segment": "WEATHER",
     "hook": "type",
     "variant": 8,
-    "created": "2026-11-13",
+    "created": "2026-11-26",
     "acct": "nagaoka"
   },
   "気分転換に出かける前に、まず首をひとまわし。": {
@@ -9006,7 +9006,7 @@
     "segment": "QUESTION",
     "hook": "type",
     "variant": 7,
-    "created": "2026-11-15",
+    "created": "2026-11-26",
     "acct": "nagaoka"
   },
   "出かける前に、まず空を見て、天気をメモしてみて。": {
@@ -9707,7 +9707,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 40,
-    "created": "2026-11-21",
+    "created": "2026-11-26",
     "acct": "truth"
   },
   "スマホを置く前に、まず首をゆっくり左右に倒してみて。": {
@@ -10584,7 +10584,7 @@
   "頭痛薬を飲んだ日は、手帳に○をつけてみて。": {
     "segment": "T2",
     "hook": "low",
-    "created": "2026-11-10",
+    "created": "2026-11-26",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "SN02_truth"

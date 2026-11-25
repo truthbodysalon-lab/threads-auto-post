@@ -1969,7 +1969,8 @@ MIN_GAP_MIN = int(os.environ.get("MIN_GAP_MIN", "45"))
 
 
 # 直前の投稿（全種類）からこの分数以上空いたら、ペースが足りていても1本出す（2026-11-23）
-MAX_GAP_MIN = int(os.environ.get("MAX_GAP_MIN", "150"))
+# 2026-11-25: 150→135。常駐ループは10分毎のため150では実際の間隔が150〜160分になり、C19の注意しきい値150分を超えていた。
+MAX_GAP_MIN = int(os.environ.get("MAX_GAP_MIN", "135"))
 
 
 def _api_last_post_epoch(acct: str) -> float:

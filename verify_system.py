@@ -656,7 +656,7 @@ def check_execution_gaps():
                 continue
             cnt = sum(1 for t in texts if ("LINE" in t or "ライン" in t or "lin.ee" in t))
             rate = cnt / len(texts)
-            if rate > worst_rate:
+            if worst_date is None or rate > worst_rate:  # 全日0%でも判定する（2026-11-25: 誤って「判定不可」になった）
                 worst_rate, worst_date, worst_cnt, worst_len = rate, d, cnt, len(texts)
         if worst_date is None:
             add("rule:line_rate:masa", "B.ルール反映", "WARN", "masa投稿実績が見つからず判定不可")

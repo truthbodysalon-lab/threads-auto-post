@@ -1969,7 +1969,8 @@ PACE_OFFSET_MIN = {"truth": 40, "nagaoka": 50, "masa": 15}
 MIN_GAP_MIN = int(os.environ.get("MIN_GAP_MIN", "45"))
 # 2026-11-26 truth 1日30本（masa指示）: 6〜23時に30本を出すには約34分に1本が必要。45分空け（常駐ループ10分毎で実質50分）だと
 # 1日20本前後で頭打ちになるため、truth だけ25分（実質30分に1本）にする。MIN_GAP_MIN=0（無効）の時は従来どおり無効。
-MIN_GAP_BY_ACCT = {"truth": int(os.environ.get("MIN_GAP_MIN_TRUTH", "25"))}
+MIN_GAP_BY_ACCT = {"truth": int(os.environ.get("MIN_GAP_MIN_TRUTH", "25")),
+                   "nagaoka": int(os.environ.get("MIN_GAP_MIN_NAGAOKA", "25"))}   # 2026-11-26 nagaokaも1日30本
 
 
 def _min_gap_min(acct: str) -> int:

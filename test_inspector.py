@@ -54,7 +54,8 @@ def main():
     results.append(_assert_ng("ご存知ですか？姿勢の重要性について", "nagaoka", "ご存知ですか型"))
 
     print("\n=== ④ dead_openings（体験談型）が検出されること ===")
-    results.append(_assert_ng("先日、お客様から嬉しい言葉をもらいました。", "truth", "先日型（truth）"))
+    # truth(2026-11-25)・nagaoka(2026-11-26)は masa指示で書き出しを固定で禁止しない（反応が悪かった書き出しは dead_openings_auto で止まる）
+    results.append(_assert_ng("先日、お客様から嬉しい言葉をもらいました。", "masa", "先日型（masa）"))
     results.append(_assert_ng("私は整体師になって10年経ちました。", "masa", "私は型（masa・非免除パターン）"))
 
     print("\n=== ⑤ 助詞重複・句読点破綻が検出されること ===")

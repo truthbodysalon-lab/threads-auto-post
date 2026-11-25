@@ -51,10 +51,14 @@ LEDGER_ONLY_ACCTS = tuple(a for a in os.environ.get("LEDGER_ONLY_ACCTS", "nagaok
 # 増えた10本はすべて通常投稿。導線(HPB・LINE・アクセス・整体LINE・診断)は「各案内1日1本ずつ」のまま増やさない（同日の masa指示）。
 # 【2026-11-26 30本】masa指示「（通常20本に長岡市の投稿10本を足して）1日30本にする」。
 # 増えた10本は長岡市の投稿（generate_remix._insert_nagaoka_local_posts）。20本化は11/26開始で未実施のまま30本に置き換える。
-DAILY_POSTS_BY_ACCT = {"truth": int(os.environ.get("DAILY_TARGET_TRUTH", "30"))}
+# 【2026-11-26 nagaoka 30本】masa指示「（@truth_nagaokaの自動投稿は）全体は30本、うち5本〜10本は地域ネタ」。
+# 地域ネタ＝本業外の地元の話題5本（generate_remix._insert_nagaoka_store_local_posts）＋長岡市の相談型2本。導線は各1本のまま。
+# nagaoka は外部ツールの投稿を数えない（LEDGER_ONLY_ACCTS）ので、この30本は自前の台帳の本数。
+DAILY_POSTS_BY_ACCT = {"truth": int(os.environ.get("DAILY_TARGET_TRUTH", "30")),
+                       "nagaoka": int(os.environ.get("DAILY_TARGET_NAGAOKA", "30"))}
 # 切り替え日（JSTの日付）。指示が出た11/25夜に当日分の目標が10→20へ跳ねると、22時台に不足10本を一気に出してしまう。
 # また翌朝の検品は「昨日(11/25)＝10本の日」を20本で測って誤FAILになる。どちらも防ぐため翌日から効かせる。
-BY_ACCT_FROM = {"truth": "2026-11-26"}
+BY_ACCT_FROM = {"truth": "2026-11-26", "nagaoka": "2026-11-26"}   # nagaokaは11/26 0時台の指示＝当日の投稿開始(6時)前なので当日から
 
 
 def _today_jst() -> str:

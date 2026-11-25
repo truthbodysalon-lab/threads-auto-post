@@ -1300,7 +1300,8 @@ def _is_valid_first_line(text: str, acct: str = "truth", pattern_name: str | Non
         return True
     # 2026-11-25 masa指示: @truth_body_salon は書き出しを固定で禁止しない。反応が悪かった書き出しは
     # inspector の dead_openings_auto（負け投稿から自動追記）と feedback.json の all で止める（playbook R_OWNER_PDCA）
-    if acct == "truth":
+    # 2026-11-26 masa指示: @truth_nagaoka も「truthと同様な書き出しルール」＝固定で禁止しない
+    if acct in ("truth", "nagaoka"):
         return True
     first_line = text.split("\n")[0].strip()
 
@@ -2573,6 +2574,95 @@ def generate_30_posts() -> list[str]:
     return posts[:_queue_len("truth")]   # 2026-11-25 truthは1日20本: 前半20＋予備10＝30本（他アカウントは10＋10）
 
 
+# ══════════════════════════════════════════════
+# @truth_nagaoka 2026-11-26 masa指示
+#  ・ペルソナに「自分の体が不調で思い通りにいかず、家族にも憤りや苛立ちを感じている人」を加える
+#    （言い方はお客様の声＝voices_latest.json／Plaud170件の実際の言葉:「イライラが家族にうつってしまうのが申し訳ない」
+#      「やっぱイライラしますね」「すごく苛立ちを覚える」「余裕がない」）
+#  ・地元の店など本業と関係ない地域ネタを1日5本（nagaoka_store_local.py）
+# ══════════════════════════════════════════════
+NAGAOKA_PATTERNS["kazoku_iraira"] = {
+    "desc": "体が思い通りにならず、家族にまで苛立ってしまう人へ（責めずに、体の張りと気持ちの余裕をつなげる）",
+    "templates": [
+        "体がしんどい日ほど\n家族にきつく当たってしまう人へ。",
+        "頭痛の日に、子どもの声が\nいつもより響いてしまう。\nそんな自分を責めていませんか？",
+        "「イライラが家族にうつってしまうのが申し訳ない」\n\nそう話してくれたお客様がいました。\n首と肩の張りがゆるむと、気持ちの余裕も戻りやすくなります。",
+        "思い通りに動かない体に\n一番イライラしているのは、自分自身かもしれません。\n\n頑張らなくていいので、今夜は首の後ろを温めてみて。",
+        "肩も首もガチガチの日は\n家族の何気ない一言にも、カッとしやすくなります。\n\n性格のせいではなく、体の張りのせいかもしれません。",
+        "夕方になると疲れて\nイライラが増える人いますか？",
+        "夕方のイライラ、昼ごはんで\n血糖が大きく上下していることも関係します。\n\nお昼はご飯だけで済ませず、おかずを一品足してみて。",
+        "「やっぱり、イライラしますね」\n\n頭痛が続く日の、正直な気持ちだと思います。\nまず体の張りをゆるめるところからで大丈夫です。",
+        "家族に優しくしたいのに\n体がつらくて余裕がない。\n\nそれは我慢が足りないのではなく、体が限界に近いサインです。",
+        "頭痛で横になっている間\n家族に家事を任せるのが心苦しい人へ。",
+    ],
+}
+
+try:
+    import nagaoka_store_local as _nagaoka_store_local
+except Exception:   # 原稿ファイルが読めなくても生成全体は止めない
+    _nagaoka_store_local = None
+
+NAGAOKA_STORE_LOCAL_PER_DAY = int(os.environ.get("NAGAOKA_STORE_LOCAL_PER_DAY", "5"))   # 2026-11-26 masa指示「1日5本」
+NAGAOKA_STORE_LOCAL_ANCHORS = [3, 9, 14, 19, 23]   # 前半30本に散らす（後からお客様の声・ヒーローが入って後ろへずれても30本に収まる位置）
+
+
+def _insert_nagaoka_store_local_posts(posts: list[str], today: str) -> list[str]:
+    """nagaoka: 本業外の地元の話題（食べ物・場所・行事・暮らし）を前半へ入れ、segment_registry.json に
+    segment="NAGAOKA_STORE_LOCAL" で登録する。同じ原稿は8日、同じ話題は3日あける。
+    足りない時は本数を減らす（同じ文の使い回しはしない）。"""
+    if _nagaoka_store_local is None or NAGAOKA_STORE_LOCAL_PER_DAY <= 0:
+        return posts
+    try:
+        today_date = date.fromisoformat(today)
+    except Exception:
+        today_date = date.today()
+    m = _nagaoka_store_local
+    total = min(NAGAOKA_STORE_LOCAL_PER_DAY, len(NAGAOKA_STORE_LOCAL_ANCHORS))
+    registry = _load_segment_registry()
+    recent_keys, recent_topics = set(), set()
+    for key, entry in registry.items():
+        if not isinstance(entry, dict) or entry.get("segment") != "NAGAOKA_STORE_LOCAL":
+            continue
+        try:
+            age = (today_date - date.fromisoformat(entry.get("created", ""))).days
+        except Exception:
+            continue
+        if age < m.REUSE_DAYS:
+            recent_keys.add(key)
+        if age < m.TOPIC_COOLDOWN_DAYS:
+            recent_topics.add(entry.get("hook"))
+    try:
+        recent_first = _get_recent_first_lines("nagaoka", days=m.REUSE_DAYS)
+    except Exception:
+        recent_first = set()
+    used_keys = {_segment_registry_key(p) for p in posts}
+    pool = m.eligible(today_date.month)
+    random.shuffle(pool)
+    chosen, used_topics = [], set()
+    for relax in (False, True):   # まず話題も3日あける。足りなければ話題の間隔だけゆるめる（原稿の8日は守る）
+        for vid, topic, text in pool:
+            if len(chosen) >= total:
+                break
+            k = _segment_registry_key(text)
+            if topic in used_topics or (not relax and topic in recent_topics):
+                continue
+            if (k in recent_keys or k in used_keys or text.split("\n")[0].strip() in recent_first
+                    or m.validate(text) or _is_ng(text)
+                    or not _inspect_ok(text, "nagaoka", pattern_name="nagaoka_store_local", log=False)):
+                continue
+            chosen.append((vid, topic, text))
+            used_keys.add(k)
+            used_topics.add(topic)
+    if len(chosen) < total:
+        print(f"[nagaoka] 地域ネタ型: 出せる原稿が足りず {len(chosen)}/{total} 本（8日以内の使い回しはしない）")
+    for pos, (vid, topic, text) in zip(NAGAOKA_STORE_LOCAL_ANCHORS, chosen):
+        posts.insert(min(pos, len(posts)), text)
+        registry[_segment_registry_key(text)] = {"segment": "NAGAOKA_STORE_LOCAL", "hook": topic, "variant": vid,
+                                                  "created": today, "acct": "nagaoka"}
+    _save_segment_registry(registry)
+    return posts
+
+
 def generate_40_nagaoka_posts() -> list[str]:
     """@truth_nagaoka 専用: 軽症者・まだ我慢できる人ターゲット 40本生成
     方針: 短文（2〜4行）を重視。長岡市は先頭追加（末尾追加しない）。
@@ -2594,6 +2684,7 @@ def generate_40_nagaoka_posts() -> list[str]:
         "keisei_checklist":        6,  # 2026-07-28: ①〜⑤チェックリスト横展開(NG習慣型+ポジティブ型・軽症者トーン)でプール10→18件に拡充したため増量
         # ── インスタハカせ理論 ──
         "nanimono_kizuki":         6,  # 「自分は何者か」×「気づき1つ」
+        "kazoku_iraira":           4,  # 2026-11-26 masa指示: 体が思い通りにならず家族に苛立ってしまう人へ
         # ── 短い共通パターン ──
         "insight":       6,
         "hook_one_line": 4,
@@ -2617,7 +2708,8 @@ def generate_40_nagaoka_posts() -> list[str]:
     # _enforce_diversity()の直後に別枠でアンカー配置するため、ここではweighted plan
     # には含めない（フォーマット重複キャップに巻き込まれ出現率が安定しない対策）。
     # 1文目NG・末尾単独追加NGルール厳守のため、中盤・本文内に挿入
-    target_nagaoka_count = max(1, len(plan) // 4)  # 全体の25%程度
+    # 2026-11-26: 地域ネタ型5本＋相談型2本が長岡を含むため、通常投稿への差し込みは10%に下げる（全体で3〜4投稿に1回）
+    target_nagaoka_count = max(1, len(plan) // 10)
     nagaoka_count = 0
 
     for pk in plan:
@@ -2647,10 +2739,8 @@ def generate_40_nagaoka_posts() -> list[str]:
     for tmpl in _load_extra_templates("nagaoka"):
         try:
             filled = fill(tmpl)
-            # 1文目NG検証: 長岡市/実績/自己紹介で始まるテンプレは除外（startswith のみ）
-            first_line = filled.split("\n")[0].strip()
-            ng_starts = ["長岡市", "長岡", "整体師", "施術", "実績", "改善率", "1万人", "1万", "13,000"]
-            if not any(first_line.startswith(ng) for ng in ng_starts):
+            # 2026-11-26 masa指示で書き出しを固定で禁止しない（反応が悪かった書き出しは inspector の dead_openings_auto で止まる）
+            if _inspect_ok(filled, "nagaoka", log=False):
                 posts.insert(0, filled)
         except Exception:
             pass
@@ -2762,7 +2852,8 @@ def generate_40_nagaoka_posts() -> list[str]:
     # ── 長岡市言及率の最終調整（アンカー挿入後） ──
     # アンカー挿入で投稿数が増えたため、長岡市率が目標(25%)を超える可能性がある。
     # 超過分を削除してルール遵守を確保。
-    final_posts = posts[:QUEUE_LEN + 10]   # 2026-11-11 1日20本化: 100→40本(長岡市率の調整で約10本減り、前半20＋予備約10になる。この後お客様の声1＋ヒーローが入る)
+    _nfn, _nql = _front_n("nagaoka"), _queue_len("nagaoka")   # 2026-11-26 masa指示で1日30本（daily_budget）
+    final_posts = posts[:_nql + 10]   # 2026-11-11 1日20本化: 100→40本(長岡市率の調整で約10本減り、前半20＋予備約10になる。この後お客様の声1＋ヒーローが入る)
     nagaoka_mentions = sum(1 for p in final_posts if "長岡" in p)
     target_rate = 0.25
     target_count = max(1, int(len(final_posts) * target_rate))
@@ -2773,7 +2864,7 @@ def generate_40_nagaoka_posts() -> list[str]:
         # 安全マージン: index 35以降のみ削除
         excess = nagaoka_mentions - target_count
         deleted = 0
-        for i in range(len(final_posts) - 1, FRONT_N - 1, -1):  # 2026-11-11 20本化: index FRONT_N以降から削除（全 anchor 保護）
+        for i in range(len(final_posts) - 1, _nfn - 1, -1):  # 2026-11-11 20本化: index FRONT_N以降から削除（全 anchor 保護）
             if deleted >= excess:
                 break
             if "長岡" in final_posts[i]:
@@ -2782,6 +2873,7 @@ def generate_40_nagaoka_posts() -> list[str]:
 
     # お客様の声型(CUSTOMER_VOICE・2026-10-06本人指示)を毎日1本、前半アンカー17へ投入。
     # 長岡市言及率の削除(index>35)の後に入れる＝先に入れると+1ずれて位置35の導線アンカーが削除対象に落ちるため
+    final_posts = _insert_nagaoka_store_local_posts(final_posts, TODAY)   # 2026-11-26 地域ネタ型（本業外）1日5本
     final_posts = _insert_customer_voice_post(final_posts, "nagaoka", TODAY)
     final_posts = _insert_hero_posts(final_posts, "nagaoka")   # 全挿入の最後
     return final_posts

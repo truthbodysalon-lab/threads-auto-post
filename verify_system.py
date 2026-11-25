@@ -488,28 +488,16 @@ def check_rules():
         fns = {"truth": g.generate_30_posts, "nagaoka": g.generate_40_nagaoka_posts,
                "masa": g.generate_30_masa_posts}
         for acct, fn in fns.items():
-            ng_hit, first_bad = 0, 0
+            ng_hit = 0
             for _ in range(3):
                 for p in fn():
                     if g._is_ng(p):
                         ng_hit += 1
-                    first = p.split("\n")[0].strip()
-                    # nagaoka専用の意図的な例外（2026-07-24追加）:
-                    # 「長岡市で〜相談が増えてます」型オープニング（NAGAOKA_SOUDAN_OPENINGS由来）
-                    # のみ「長岡市」始まりを許可する。それ以外の「長岡市/施術実績/実績」始まりは
-                    # 引き続きNG（ザルにしない）。
-                    is_soudan_open = (acct == "nagaoka" and _NAGAOKA_SOUDAN_OPEN_RE.match(first))
-                    # truth は2026-11-25の本人指示で書き出しを固定で禁止しない（地域ネタ型は「長岡市で〜」で始める）
-                    if (acct == "nagaoka" and first.startswith(("長岡市", "施術実績", "実績"))
-                            and not is_soudan_open):
-                        first_bad += 1
+                    # truth は2026-11-25、nagaoka は2026-11-26の本人指示で書き出しを固定で禁止しない
+                    # （反応が悪かった書き出しは inspector の dead_openings_auto で止まる）。1文目の検査は両アカとも外した
             add(f"rule:ng:{acct}", "B.ルール反映",
                 "PASS" if ng_hit == 0 else "FAIL",
                 f"NGワード混入 {ng_hit}件（3回生成）")
-            if acct in ("truth", "nagaoka"):
-                add(f"rule:1文目:{acct}", "B.ルール反映",
-                    "PASS" if first_bad == 0 else "FAIL",
-                    f"1文目NG違反 {first_bad}件（3回生成）")
         add("rule:ng_words_count", "B.ルール反映", "PASS" if ng_words else "WARN",
             f"NGワード登録 {len(ng_words)}件")
     except Exception as e:
@@ -541,6 +529,27 @@ def check_nagaoka_local():
             f"truth前半に決まり文句（同じ相談が多いです等）が{len(filler)}本（位置{filler}）")
     except Exception as e:
         add("nagaoka_local:truth", "B.ルール反映", "WARN", f"検査失敗: {type(e).__name__}: {e}")
+
+
+def check_nagaoka_store_local():
+    """nagaokaの当日生成キュー前半に、本業外の地域ネタ型(NAGAOKA_STORE_LOCAL)が入っているか
+    （2026-11-26 本人指示「地元の店など本業と関係ない題材は1日5本」「全体は30本、うち5本〜10本は地域ネタ」）。"""
+    import os as _os
+    _os.environ["SEGMENT_REGISTRY_DRY"] = "1"
+    try:
+        import generate_remix as _g
+        import nagaoka_store_local as _s
+        from daily_budget import front_n as _front_n
+        posts = _g.generate_40_nagaoka_posts()[:_front_n("nagaoka")]
+        hits = [i for i, t in enumerate(posts) if _s.is_store_local_post(t)]
+        soudan = [i for i, t in enumerate(posts) if _NAGAOKA_SOUDAN_OPEN_RE.match(t.split("\n")[0].strip())]
+        need = _g.NAGAOKA_STORE_LOCAL_PER_DAY
+        # 直近8日に使った原稿は出さないので、原稿の少ない月は1本少なくなることがある（使い回しはしない）
+        total = len(hits) + len(soudan)
+        add("nagaoka_store_local", "B.ルール反映", "PASS" if len(hits) >= need - 1 and total <= 10 else "WARN",
+            f"nagaoka前半{len(posts)}本中 地域ネタ型{len(hits)}本（位置{hits}）＋相談型{len(soudan)}本＝{total}本（目安5〜10本）")
+    except Exception as e:
+        add("nagaoka_store_local", "B.ルール反映", "WARN", f"検査失敗: {type(e).__name__}: {e}")
 
 
 def check_rule_hygiene():
@@ -707,14 +716,16 @@ def check_execution_gaps():
             posts = json.loads(lines[-1]).get("posts", []) if lines else []
             hpb = [i for i, p in enumerate(posts) if "beauty.hotpepper.jp" in p]
             acc = [i for i, p in enumerate(posts) if "専用駐車場" in p or "長岡駅から車で5分" in p]
-            bad = [x for x in hpb + acc if x >= FRONT_N]
+            from daily_budget import front_n as _acct_front_n   # 2026-11-26: truth/nagaokaは前半30本（アカウント別）
+            _afn = _acct_front_n(acct)
+            bad = [x for x in hpb + acc if x >= _afn]
             present = len(hpb) >= 1 and len(acc) >= 1
             if not present:
                 add(f"exec:funnel:{acct}", "C.実行ギャップ", "WARN",
                     f"誘導投稿がキューに不足（HPB{len(hpb)}/アクセス{len(acc)}）")
             elif bad:
                 add(f"exec:funnel:{acct}", "C.実行ギャップ", "FAIL",
-                    f"誘導投稿が位置{FRONT_N}超に配置（未投稿リスク）: {bad}")
+                    f"誘導投稿が位置{_afn}超に配置（未投稿リスク）: {bad}")
             else:
                 add(f"exec:funnel:{acct}", "C.実行ギャップ", "PASS",
                     f"誘導投稿は前半固定 HPB{hpb} アクセス{acc}")
@@ -1612,6 +1623,7 @@ def run_all():
     check_list_habit_in_first50()
     check_type_mix_in_first50()
     check_nagaoka_local()
+    check_nagaoka_store_local()
     check_rule_hygiene()
     check_execution_gaps()
     check_logs()

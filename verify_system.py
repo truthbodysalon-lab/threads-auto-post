@@ -27,6 +27,7 @@ import sys
 import traceback
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
+from daily_budget import daily_posts as _daily_posts   # 2026-11-25: アカウント別（truth=20本・他10本）
 from daily_budget import DAILY_POSTS, FRONT_N, LEDGER_ONLY_ACCTS   # 1日20本(2026-11-11 masa指示)・前半=FRONT_N本
 
 BASE = Path(__file__).parent
@@ -769,9 +770,10 @@ def check_execution_gaps():
         if n < 0:
             n = _count_from_log(acct)
             src = "ローカルログ（API不可・過少の可能性）"
+        _need = _daily_posts(acct, yesterday)   # 昨日に有効だった本数で測る（切り替え日の誤FAIL防止）
         add(f"exec:daily50:{acct}", "C.実行ギャップ",
-            "PASS" if n >= DAILY_POSTS else "FAIL",
-            f"昨日({yesterday})の投稿 {n}本 / 必須{DAILY_POSTS}本（全種類の合計・{src}）")
+            "PASS" if n >= _need else "FAIL",
+            f"昨日({yesterday})の投稿 {n}本 / 必須{_need}本（全種類の合計・{src}）")
 
     # C9: プレイブック（修正基準の正本）が毎朝検証・更新されているか。
     #     基準そのものを向上させるメタPDCAが止まると改善が旧基準で空回りする。
@@ -805,12 +807,12 @@ def check_execution_gaps():
             if n < 0:
                 add(f"exec:pacing:{acct}", "C.実行ギャップ", "WARN",
                     "外形API取得不可（トークンのスコープ不足等）。実投稿数はCI watchdogの外形監視が正")
-            elif n < int(DAILY_POSTS * 0.8):
+            elif n < int(_daily_posts(acct, yesterday) * 0.8):
                 add(f"exec:pacing:{acct}", "C.実行ギャップ", "FAIL",
-                    f"投稿数不足: 昨日の実投稿{n}本 < {int(DAILY_POSTS * 0.8)}本（目標{DAILY_POSTS}本/日の8割・外形API実測）")
+                    f"投稿数不足: 昨日の実投稿{n}本 < {int(_daily_posts(acct, yesterday) * 0.8)}本（目標{_daily_posts(acct, yesterday)}本/日の8割・外形API実測）")
             else:
                 add(f"exec:pacing:{acct}", "C.実行ギャップ", "PASS",
-                    f"昨日の実投稿{n}本（外形API実測・目標{DAILY_POSTS}本/日）")
+                    f"昨日の実投稿{n}本（外形API実測・目標{_daily_posts(acct, yesterday)}本/日）")
         except Exception as e:
             add(f"exec:pacing:{acct}", "C.実行ギャップ", "WARN", f"配分検査不可: {e}")
 

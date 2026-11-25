@@ -896,7 +896,7 @@ def _hero_priority_order(acct: str, today: str, all_posts: list, posted_texts: s
                     since, hero_today = 0, True
                 else:
                     since += 1
-        s_rem = max(0, DAILY_TARGET - n)
+        s_rem = max(0, _daily_target(acct) - n)
         h_rem = len(pending)
         # 残り枠(の8割)にヒーローを等間隔で配置。残り枠がヒーロー数の2倍以上あるうちは最低1本は通常投稿を挟む
         gap = max(0, (s_rem * 4 // 5) // h_rem - 1)
@@ -1651,10 +1651,10 @@ def run_account(acct: str):
 
     avoid_url = _last_post_had_visible_url(acct, today)
     text, index = get_next_post(acct, today, avoid_url=avoid_url)
-    if text is None and _posted_count_today(acct) < DAILY_TARGET:
+    if text is None and _posted_count_today(acct) < _daily_target(acct):
         # 適格な投稿が尽きたが目標50本に未達 → 追加バッチを生成して補充する
         # （キューはあっても重複除外で選べる投稿が枯渇するケースがある）
-        log_info(acct, f"{name} 適格投稿が枯渇（{_posted_count_today(acct)}本/{DAILY_TARGET}）→ 追加生成")
+        log_info(acct, f"{name} 適格投稿が枯渇（{_posted_count_today(acct)}本/{_daily_target(acct)}）→ 追加生成")
         subprocess.run([sys.executable, str(BASE / "generate_remix.py"), acct],
                        capture_output=True, text=True, timeout=300)
         text, index = get_next_post(acct, today, avoid_url=avoid_url)
@@ -1929,6 +1929,7 @@ def main():
 # 1回の実行で各アカウント最大何本投稿するか（単一系統で頻度を上げる）
 # 1日の投稿目標と上限（過剰投稿=スパムを防ぎつつ、均等ペースで担保。2026-11-11 50→20本→11-12 30本→2026-11-14 10本。内訳は daily_budget.py）
 from daily_budget import DAILY_POSTS as DAILY_TARGET, DAILY_CAP   # 各アカウント1日の目標/上限(全種類の合計・2026-11-11に50/55→20/20)
+from daily_budget import daily_posts as _daily_target, daily_cap as _daily_cap   # 2026-11-25: アカウント別（truth=20本・他10本）。実処理はこちらを使う
 MAX_PER_RUN = int(os.environ.get("MAX_PER_RUN", "4"))      # 通常の1サイクル上限
 MAX_BURST = int(os.environ.get("MAX_BURST", "20"))         # 大きく遅れた時の一気回復上限（スリープ復帰時）
 # 先読み時間。GitHub Actionsのcronは実測で4時間以上間引かれる日があり（2026-09-04は投稿時間帯内の
@@ -1949,14 +1950,14 @@ POSTS_PER_RUN = int(os.environ.get("POSTS_PER_RUN", "3"))  # 後方互換
 PACE_FULL_HOUR = int(os.environ.get("PACE_FULL_HOUR", "22"))   # 2026-10-06: 21→22（22時台まで均等に出す）
 
 
-def _target_cumulative_by_now(hour: int) -> int:
-    """投稿時間帯(6時〜PACE_FULL_HOUR時)で DAILY_TARGET を均等配分した、現時点であるべき累計本数。
-    PACE_FULL_HOUR 時に100%へ到達し、以降は満額（=DAILY_TARGET）を要求する。"""
+def _target_cumulative_by_now(hour: int, acct: str | None = None) -> int:
+    """投稿時間帯(6時〜PACE_FULL_HOUR時)で そのアカウントの1日目標 を均等配分した、現時点であるべき累計本数。
+    PACE_FULL_HOUR 時に100%へ到達し、以降は満額（=1日目標）を要求する。acct省略時は既定本数(DAILY_TARGET)。"""
     start = POST_HOUR_START
     if hour < start:
         return 0
     frac = min(1.0, (hour - start + 1) / max(1, PACE_FULL_HOUR - start + 1))
-    return int(DAILY_TARGET * frac)
+    return int(_daily_target(acct) * frac)
 
 
 # 2026-11-14 masa指示「各アカウント合計1日10本にして」: 1日10本だと全アカウントが毎時の同じ10分に
@@ -2037,23 +2038,23 @@ def _run_account_batch(acct: str):
             posted = api_n
     except Exception:
         pass
-    if posted >= DAILY_CAP:
-        log_info(acct, f"{ACCOUNTS[acct]['name']} 本日上限({DAILY_CAP})到達 → スキップ")
+    if posted >= _daily_cap(acct):
+        log_info(acct, f"{ACCOUNTS[acct]['name']} 本日上限({_daily_cap(acct)})到達 → スキップ")
         return
     hour = (datetime.now() - timedelta(minutes=PACE_OFFSET_MIN.get(acct, 0))).hour   # 2026-11-14: アカウント別に時計をずらす
-    want = _target_cumulative_by_now(hour + LOOKAHEAD_HOURS)   # 次回発火(先読み)時点であるべき累計
-    need = max(0, min(want, DAILY_TARGET) - posted)
+    want = _target_cumulative_by_now(hour + LOOKAHEAD_HOURS, acct)   # 次回発火(先読み)時点であるべき累計
+    need = max(0, min(want, _daily_target(acct)) - posted)
     if need == 0 and api_n is not None and (api_n - ledger_posted) > 10:
         log_info(acct, f"{ACCOUNTS[acct]['name']} 台帳{ledger_posted}本だがAPI実測{api_n}本で目標充足→自パイプライン以外の投稿を検知(差分{api_n - ledger_posted}本)")
     # 遅れ幅を自動検知してバースト量を調整（スリープ復帰時に一気に回復）
     # 通常は MAX_PER_RUN まで。大きく遅れている時は最大 MAX_BURST 本まで一気に出す。
     burst_cap = MAX_BURST if need > MAX_PER_RUN else MAX_PER_RUN
     n = min(need, burst_cap)
-    if n == 0 and posted < DAILY_TARGET and hour >= 20:
+    if n == 0 and posted < _daily_target(acct) and hour >= 20:
         n = 1   # 終盤（20時以降）のみの取りこぼし防止。終日この床を効かせると毎5分の実行が
                 # 常に1本投稿し、50本を昼までに使い切って午後が無音になる
                 # （2026-07-10 masaが12:56に50本完了→半日沈黙した実障害）。
-    if n == 0 and posted < DAILY_TARGET and POST_HOUR_START <= datetime.now().hour < POST_HOUR_END:
+    if n == 0 and posted < _daily_target(acct) and POST_HOUR_START <= datetime.now().hour < POST_HOUR_END:
         # 2026-11-23: ペース曲線（切り捨て）と、画像・外部の投稿も本数に数える設計が重なり、truthで朝〜昼に
         # 約5時間投稿が空いた（11/21 11:49〜・11/22 07:41〜）。1日10本の範囲のまま、直前の投稿（全種類・API実測）
         # から MAX_GAP_MIN 分空いたら1本出す（検品の180分FAILより前に埋める）
@@ -2082,7 +2083,7 @@ def _run_account_batch(acct: str):
     attempts = 0
     max_attempts = n + 6
     while done < n and attempts < max_attempts:
-        if _posted_count_today(acct) >= DAILY_CAP:
+        if _posted_count_today(acct) >= _daily_cap(acct):
             break
         before = _posted_count_today(acct)
         _LAST_PICK_KEY.pop(acct, None)
@@ -2122,7 +2123,7 @@ def _run_uplink_repost():
     done = ur.count_today()
     if done >= ur.DAILY_N or done >= ur.want_cumulative(hour):
         return
-    if _posted_count_today(acct) >= DAILY_CAP:
+    if _posted_count_today(acct) >= _daily_cap(acct):
         return   # 2026-11-11: 転載も合計20本の内数。上限に達していたら出さない
     pool = ur.load_pool()
     item = ur.next_item(pool)

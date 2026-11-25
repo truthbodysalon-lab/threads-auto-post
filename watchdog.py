@@ -146,12 +146,12 @@ def check_account(acct: str) -> int:
         return 0
 
     posted = max(ap._posted_count_today(acct), api_n)
-    want = ap._target_cumulative_by_now(hour)
+    want = ap._target_cumulative_by_now(hour, acct)
 
     # A-2: 固め打ち検知（ペースより大幅先行 = フロア/暴走バグの再発）
     # 2026-10-06: 投稿側は設計上 LOOKAHEAD_HOURS 先まで先に出すので、先行判定も同じ先読み曲線を基準にする
     # （watchdog_ci.pyと同修正。基準が現在時刻だと正常運転だけで閾値に張り付き誤報になる）
-    want_ahead = ap._target_cumulative_by_now(hour + ap.LOOKAHEAD_HOURS)
+    want_ahead = ap._target_cumulative_by_now(hour + ap.LOOKAHEAD_HOURS, acct)
     if posted > want_ahead + 10:
         log(f"{acct}: 固め打ち疑い posted={posted} want_ahead={want_ahead}")
         _push_once_per_day(acct, f"⚠️Threads {acct}: 投稿が先行しすぎ({posted}本/先読み目標{want_ahead})。固め打ちバグの疑い。")
@@ -197,7 +197,7 @@ def _pace_behind(acct: str) -> int:
     try:
         api_n = api_count_today(acct)
         posted = max(ap._posted_count_today(acct), api_n if api_n >= 0 else 0)
-        return max(0, ap._target_cumulative_by_now(datetime.now().hour) - posted)
+        return max(0, ap._target_cumulative_by_now(datetime.now().hour, acct) - posted)
     except Exception:
         return 0
 

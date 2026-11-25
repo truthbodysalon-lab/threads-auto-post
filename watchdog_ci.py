@@ -32,6 +32,7 @@ ACCTS = {"truth": "TRUTH", "nagaoka": "NAGAOKA", "masa": "MASA"}
 from account_ownership import is_local
 ACCTS = {k:v for k,v in ACCTS.items() if is_local(k)}
 from daily_budget import DAILY_POSTS as DAILY_TARGET, LEDGER_ONLY_ACCTS   # 1日20本(2026-11-11・内訳は daily_budget.py)
+from daily_budget import daily_posts as _daily_posts   # 2026-11-25: アカウント別（truth=20本・他10本）
 POST_HOUR_START, POST_HOUR_END = 6, 23
 PACE_FULL_HOUR = int(os.environ.get("PACE_FULL_HOUR", "22"))  # auto_post.pyと同じ前倒し按分
 LOOKAHEAD_HOURS = int(os.environ.get("LOOKAHEAD_HOURS", "0"))  # auto_post.pyと同じ先読み（先行判定のみに使用）
@@ -110,12 +111,12 @@ def api_count_today(acct: str) -> int:
         return -1
 
 
-def want_now() -> int:
+def want_now(acct: str | None = None) -> int:
     h = datetime.now(JST).hour
     if h < POST_HOUR_START:
         return 0
     frac = min(1.0, (h - POST_HOUR_START + 1) / max(1, PACE_FULL_HOUR - POST_HOUR_START + 1))
-    return int(DAILY_TARGET * frac)
+    return int(_daily_posts(acct) * frac)
 
 
 def line_push(msg: str):
@@ -181,7 +182,7 @@ def main():
         return
     st = _state()
     today = datetime.now(JST).date().isoformat()
-    want = want_now()
+    want = want_now()   # 既定本数。アカウント別の値はループ内で want_now(acct)
     repaired = []
     counts = {}   # 2026-11-13: 下の無投稿判定で「ペースより遅れているか」に使う
     for acct in ACCTS:
@@ -189,13 +190,14 @@ def main():
         if n < 0:
             continue
         counts[acct] = n
+        want = want_now(acct)
         print(f"{acct}: 実投稿{n} / あるべき{want}")
         gap = want - n
         # 2026-10-06: 先行判定は auto_post.py と同じ先読み曲線(LOOKAHEAD_HOURS=3)を基準にする。
         # 投稿側は設計上 target(h+3) まで先に出すため、target(h)+10 だと正常運転だけで閾値に張り付き
         # 外部ツール/手動の数本で誤報になっていた（10/6 truth30本=自動25+手動6、masa27本=通常24+uplink3）。
         # 7/10型の暴走（masa 12:56に50本）は want_ahead(15時)=31+10=41 を超えるので引き続き検知できる。
-        want_ahead = int(DAILY_TARGET * min(1.0, (h + LOOKAHEAD_HOURS - POST_HOUR_START + 1)
+        want_ahead = int(_daily_posts(acct) * min(1.0, (h + LOOKAHEAD_HOURS - POST_HOUR_START + 1)
                                             / max(1, PACE_FULL_HOUR - POST_HOUR_START + 1)))
         if n > want_ahead + 4 and not _notified_today(st, f"front_{acct}"):
             line_push(f"⚠️Threads {acct}: 投稿が先行しすぎ({n}本/先読み目標{want_ahead})。固め打ちバグの疑い(CI watchdog)")
@@ -240,7 +242,7 @@ def main():
             # （従来は keeper_running() なら並走せず黙っていた＝10/23 truth 4時間0本が見えなかった）。
             if gap is not None and gap >= sc.alive_thresholds(acct)[0] and keeper_running():
                 n_api = api_count_today(acct)
-                behind = max(0, want - n_api) if n_api >= 0 else 0
+                behind = max(0, want_now(acct) - n_api) if n_api >= 0 else 0
 
                 def _send(m, _a=acct):
                     ok = sc.discord_send(m)
@@ -257,7 +259,7 @@ def main():
             if gap is None or gap < stall_min:
                 continue
             # 2026-11-13: ペースどおりなら無投稿が長くても止まっていない（stall_check.gap_is_stall 参照）
-            behind = max(0, want - counts[acct]) if acct in counts else None
+            behind = max(0, want_now(acct) - counts[acct]) if acct in counts else None
             if not sc.gap_is_stall(gap, behind, stall_min):
                 print(f"{acct}: 最後の投稿から{gap}分だがペースどおり(遅れ{behind}本)→停止扱いしない")
                 continue

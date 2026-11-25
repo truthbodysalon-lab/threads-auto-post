@@ -31,7 +31,8 @@ JST = timezone(timedelta(hours=9))
 ACCTS = {"truth": "TRUTH", "nagaoka": "NAGAOKA", "masa": "MASA"}
 POST_HOUR_START, POST_HOUR_END = 6, 23
 from daily_budget import DAILY_POSTS as _DAILY   # 1日20本(2026-11-11・uplink転載/画像も合計に含む)
-GOAL_REACHED = {"truth": _DAILY, "masa": _DAILY, "nagaoka": _DAILY}  # 自前投稿の本日目標
+from daily_budget import daily_posts as _daily_posts   # 2026-11-25: アカウント別（truth=20本）
+GOAL_REACHED = {a: _daily_posts(a) for a in ("truth", "masa", "nagaoka")}  # 自前投稿の本日目標
 STALL_MIN = 75          # 投稿時間帯にこれ以上空いたら停止疑い
 # 2026-11-13: 無投稿の長さだけでは止まったと判断しない。ペースより STALL_BEHIND_MIN 本以上
 # 遅れている時だけ「停止疑い」にする。11/11〜12に1日50本→20本→30本へ減らしてから、目標の

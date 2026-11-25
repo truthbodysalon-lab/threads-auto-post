@@ -1498,6 +1498,7 @@ def _is_own_winner_copy(text: str, acct: str, threshold: float = 0.8) -> bool:
 
 
 HERO_GRACE_DAYS = 3        # 日付が古いヒーローファイルでも、未投稿分はこの日数まで有効（SKILLが止まった日も取りこぼさない）
+from daily_budget import front_n as _front_n, queue_len as _queue_len   # 2026-11-25: アカウント別（truth=前半20本）
 from daily_budget import HERO_MAX_PER_DAY, FRONT_N, QUEUE_LEN   # 2026-11-11 1日20本化: ヒーロー上限16→8(当日5本＋繰越3)・前半FRONT_N=20・キュー長30（内訳は daily_budget.py）
 
 
@@ -2192,10 +2193,11 @@ def _insert_hero_posts(posts: list[str], acct: str) -> list[str]:
     if not heroes:
         # 2026-11-14 1日10本化: ヒーローが無い日も誘導投稿の前半戻しは必ず行う（前半10本だと
         # ホットペッパー/アクセスが位置10〜12に押し出され未投稿になるため）
-        return _pull_funnel_into_front(posts)
-    step = max(2, (FRONT_N - 6) // max(1, len(heroes)))   # 2026-11-11 20本化: 前半FRONT_N本に収める
+        return _pull_funnel_into_front(posts, _front_n(acct))
+    _fn = _front_n(acct)   # 2026-11-25: アカウント別の前半本数（truth=20・他10）
+    step = max(2, (_fn - 6) // max(1, len(heroes)))   # 2026-11-11 20本化: 前半FRONT_N本に収める
     for i, h in enumerate(heroes):
-        posts.insert(min(2 + i * step, FRONT_N - 3, len(posts)), h)
+        posts.insert(min(2 + i * step, _fn - 3, len(posts)), h)
     # 効果測定用の印（2026-10-24 本人指示）: ヒーロー＝自分の伸びた投稿(own_winners)の型を借りた翻案投稿。
     # segment="own_adapt" で registry に登録＝segment_report.py が型別の閲覧倍率を出せる。既に別の型で登録済みの1行目は上書きしない。
     if acct in ("truth", "nagaoka"):
@@ -2214,12 +2216,13 @@ def _insert_hero_posts(posts: list[str], acct: str) -> list[str]:
             pass   # 印の付与に失敗してもヒーロー投入は止めない
     # 最終ガード: ヒーロー挿入で誘導投稿(ホットペッパー/駐車場/LINE)が位置FRONT_N(20)超へ
     # 押し出されたら前半へ戻す（1日約50本消費のため位置50超=未投稿）
-    return _pull_funnel_into_front(posts)
+    return _pull_funnel_into_front(posts, _fn)
 
 
 
-def _pull_funnel_into_front(posts: list[str]) -> list[str]:
-    """誘導投稿(ホットペッパー/駐車場/LINE)が位置FRONT_N以降にあれば前半へ戻す（_insert_hero_posts の最終ガードを関数化・2026-11-14）。"""
+def _pull_funnel_into_front(posts: list[str], front: int | None = None) -> list[str]:
+    """誘導投稿(ホットペッパー/駐車場/LINE)が位置 front(既定 FRONT_N) 以降にあれば前半へ戻す（_insert_hero_posts の最終ガードを関数化・2026-11-14）。"""
+    FRONT_N = front or globals()["FRONT_N"]   # 2026-11-25: アカウント別の前半本数を受け取る
     markers = ("beauty.hotpepper.jp", "専用駐車場", "長岡駅から車で5分", "lin.ee/")
     # 降順1パスだと取り残しが出る: pop(idx)→insert(44) で 44〜idx の要素が右へ1つ
     # ずれるため、index 49 にあった誘導投稿が 50 へ押し戻される。降順走査は既に
@@ -2427,7 +2430,7 @@ def generate_30_posts() -> list[str]:
     posts = _insert_customer_voice_post(posts, "truth", TODAY)
 
     posts = _insert_hero_posts(posts, "truth")   # 全挿入の最後（位置50超への押し出し防止）
-    return posts[:QUEUE_LEN]   # 2026-11-11 1日20本化: 100→30本(前半20＋予備10)
+    return posts[:_queue_len("truth")]   # 2026-11-25 truthは1日20本: 前半20＋予備10＝30本（他アカウントは10＋10）
 
 
 def generate_40_nagaoka_posts() -> list[str]:

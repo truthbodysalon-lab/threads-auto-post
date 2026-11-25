@@ -289,7 +289,7 @@ class Fix2CatchupAdvances(_QueueFixture):
         fake_wd = types.ModuleType("watchdog_ci"); fake_wd.api_count_today = lambda a: -1
         mock.patch.dict(_s.modules, {"watchdog_ci": fake_wd}).start()
         mock.patch.object(ap, "run_account", fake_run_account).start()
-        mock.patch.object(ap, "_target_cumulative_by_now", lambda h: 40).start()
+        mock.patch.object(ap, "_target_cumulative_by_now", lambda h, acct=None: 40).start()
         mock.patch.object(ap.time, "sleep", lambda s: None).start()
         mock.patch("account_ownership.is_local", lambda a: True).start()
         mock.patch.object(ap, "MIN_GAP_MIN", getattr(self, "min_gap", 0)).start()   # 2026-11-14: まとめて回復の検証は間隔ガード無効で行う

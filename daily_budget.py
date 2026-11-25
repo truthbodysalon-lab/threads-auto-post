@@ -32,6 +32,8 @@
 - nagaoka は外部ツール(約20本/日)を数えない＝台帳(自前投稿)だけで20本。
 - 生成側のキューは「前半 FRONT_N(=20)本」に導線アンカーを収め、その後ろは予備(少量)だけ。
 """
+from __future__ import annotations
+
 import os
 
 DAILY_POSTS = int(os.environ.get("DAILY_TARGET", "10"))   # 2026-11-12 masa指示「UPLINK以外は30投稿以内に抑えて」（20→30）     # 1日の目標(全種類の合計)
@@ -42,3 +44,41 @@ QUEUE_LEN = FRONT_N + QUEUE_RESERVE                         # 生成するキュ
 HERO_PER_DAY = 3                                            # ヒーロー生成本数/アカ/日（2026-11-14 masa指示「各アカウント合計1日10本にして」で10→3。合計10本の内数）
 HERO_MAX_PER_DAY = HERO_PER_DAY + 1                         # 当日分＋繰越の安全枠（2026-11-14 10本化: 繰越1本＝最大4本。hero_carry.CARRY_MAXと揃える）
 LEDGER_ONLY_ACCTS = tuple(a for a in os.environ.get("LEDGER_ONLY_ACCTS", "nagaoka").split(",") if a)
+
+# 【2026-11-25〜 アカウント別の本数】masa指示「（@truth_body_salonの）自動投稿は1日20本」。
+# 上の DAILY_POSTS/DAILY_CAP/FRONT_N/QUEUE_LEN は「アカウント指定なし＝既定(10本)」として残し、
+# アカウントごとの本数は必ず下の関数で引く（truth だけ20本・nagaoka/masa は10本のまま）。
+# 増えた10本はすべて通常投稿。導線(HPB・LINE・アクセス・整体LINE・診断)は「各案内1日1本ずつ」のまま増やさない（同日の masa指示）。
+DAILY_POSTS_BY_ACCT = {"truth": int(os.environ.get("DAILY_TARGET_TRUTH", "20"))}
+# 切り替え日（JSTの日付）。指示が出た11/25夜に当日分の目標が10→20へ跳ねると、22時台に不足10本を一気に出してしまう。
+# また翌朝の検品は「昨日(11/25)＝10本の日」を20本で測って誤FAILになる。どちらも防ぐため翌日から効かせる。
+BY_ACCT_FROM = {"truth": "2026-11-26"}
+
+
+def _today_jst() -> str:
+    from datetime import datetime, timedelta, timezone
+    return datetime.now(timezone(timedelta(hours=9))).strftime("%Y-%m-%d")
+
+
+def daily_posts(acct: str | None = None, day: str | None = None) -> int:
+    """そのアカウントの1日の目標本数（全種類の合計）。day=YYYY-MM-DD（省略時は今日JST）で、その日に有効だった本数を返す。"""
+    if acct in DAILY_POSTS_BY_ACCT and (day or _today_jst()) >= BY_ACCT_FROM.get(acct, "0000-00-00"):
+        return DAILY_POSTS_BY_ACCT[acct]
+    return DAILY_POSTS
+
+
+def daily_cap(acct: str | None = None, day: str | None = None) -> int:
+    """そのアカウントの1日の上限本数。アカウント別の指定がある日はそれ、無ければ DAILY_CAP。"""
+    if acct in DAILY_POSTS_BY_ACCT and (day or _today_jst()) >= BY_ACCT_FROM.get(acct, "0000-00-00"):
+        return DAILY_POSTS_BY_ACCT[acct]
+    return DAILY_CAP
+
+
+def front_n(acct: str | None = None) -> int:
+    """キュー前半＝1日で消化される本数（導線アンカー・ヒーローはこの内側に置く）。"""
+    return daily_posts(acct)
+
+
+def queue_len(acct: str | None = None) -> int:
+    """生成するキューの長さ（前半＋予備）。"""
+    return front_n(acct) + QUEUE_RESERVE

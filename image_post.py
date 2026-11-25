@@ -28,7 +28,7 @@ import sys
 import time
 import urllib.parse
 import urllib.request
-from daily_budget import DAILY_POSTS
+from daily_budget import DAILY_POSTS, daily_posts as _daily_posts   # 2026-11-25: アカウント別（truth=20本）
 from datetime import date, datetime
 from pathlib import Path
 
@@ -361,8 +361,8 @@ def main():
             log(f"{acct}: 画像フォルダが無かったので作成 {folder}")
         if _count_today(st, acct) >= DAILY_IMG_CAP.get(acct, 2):
             continue
-        if _ledger_total_today(acct) >= DAILY_POSTS:
-            log(f"{acct}: 本日{DAILY_POSTS}本(全種類の合計)に到達済み → 画像投稿は見送り")
+        if _ledger_total_today(acct) >= _daily_posts(acct):
+            log(f"{acct}: 本日{_daily_posts(acct)}本(全種類の合計)に到達済み → 画像投稿は見送り")
             continue
         imgs = sorted([p for p in folder.iterdir()
                        if p.suffix.lower() in IMG_EXTS and not p.name.startswith(".")])

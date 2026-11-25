@@ -499,7 +499,8 @@ def check_rules():
                     # のみ「長岡市」始まりを許可する。それ以外の「長岡市/施術実績/実績」始まりは
                     # 引き続きNG（ザルにしない）。
                     is_soudan_open = (acct == "nagaoka" and _NAGAOKA_SOUDAN_OPEN_RE.match(first))
-                    if (acct in ("truth", "nagaoka") and first.startswith(("長岡市", "施術実績", "実績"))
+                    # truth は2026-11-25の本人指示で書き出しを固定で禁止しない（地域ネタ型は「長岡市で〜」で始める）
+                    if (acct == "nagaoka" and first.startswith(("長岡市", "施術実績", "実績"))
                             and not is_soudan_open):
                         first_bad += 1
             add(f"rule:ng:{acct}", "B.ルール反映",
@@ -516,6 +517,31 @@ def check_rules():
 
 
 # ── B'. ルール衛生（検品ゲート導入・2026-07-21）───────────────
+def check_nagaoka_local():
+    """truthの当日生成キュー前半に長岡市の地域ネタ型(NAGAOKA_LOCAL)が入っているか、決まり文句の差し込みが
+    残っていないか（2026-11-25 本人指示「長岡市の人にリーチするように地域ネタなども取り入れて」）。"""
+    import os as _os
+    _os.environ["SEGMENT_REGISTRY_DRY"] = "1"
+    try:
+        import generate_remix as _g
+        import nagaoka_local_templates as _n
+        from daily_budget import front_n as _front_n
+        from datetime import date as _date
+        posts = _g.generate_30_posts()[:_front_n("truth")]
+        hits = [i for i, t in enumerate(posts) if _n.is_local_post(t)]
+        need = min(_g.NAGAOKA_LOCAL_PER_DAY, len(_g.NAGAOKA_LOCAL_ANCHORS),
+                   len(_n.eligible(_date.today().month)) // _g.NAGAOKA_LOCAL_REUSE_DAYS)
+        # 直近8日に使った原稿は出さないので、足りない日は1〜2本少なくなることがある（使い回しはしない）
+        add("nagaoka_local:truth", "B.ルール反映", "PASS" if len(hits) >= max(1, need - 2) else "WARN",
+            f"truth前半{len(posts)}本中 長岡市の地域ネタ型{len(hits)}本（位置{hits}・目安{need}本）")
+        filler = [i for i, t in enumerate(posts) if any(ph in t for ph in _g.NAGAOKA_PHRASES)]
+        add("nagaoka_filler:truth", "B.ルール反映", "PASS" if not filler else "FAIL",
+            "truthに長岡市の決まり文句の差し込みなし" if not filler else
+            f"truth前半に決まり文句（同じ相談が多いです等）が{len(filler)}本（位置{filler}）")
+    except Exception as e:
+        add("nagaoka_local:truth", "B.ルール反映", "WARN", f"検査失敗: {type(e).__name__}: {e}")
+
+
 def check_rule_hygiene():
     """feedback.json notesの肥大化・inspection_log.jsonlのNG急増を検知する。
     Brain記事(aoi_ai 2026-07-20)実測: ルール1万字肥大→矛盾→品質低下、
@@ -1584,6 +1610,7 @@ def run_all():
     check_masa_abstract()
     check_list_habit_in_first50()
     check_type_mix_in_first50()
+    check_nagaoka_local()
     check_rule_hygiene()
     check_execution_gaps()
     check_logs()

@@ -48,12 +48,18 @@ for _ in range(3):
     if len(local) < 10:
         fails.append(f"前半{front}本中の長岡市の投稿が{len(local)}本（10本のはず）")
     kinds = [n.kind_of(p) for p in local]
+    near = [p.split("で")[0] for p in local if n.kind_of(p) == "near"]
+    if sorted(near) != sorted(c for _, c in n.NEARBY_CITIES):
+        fails.append(f"周辺の市向けが各市1本になっていない: {near}")
     if kinds.count("owner") != 1 or kinds.count("local") < 3:
         fails.append(f"種類の内訳がおかしい: {kinds}")
-    who = [p.split("悩んでいる")[1].split("\n")[0] for p in local if n.kind_of(p) == "target"]
+    who = [p.split("悩んでいる")[1].split("\n")[0] for p in local if n.kind_of(p) in ("target", "near")]
     who = [w.replace("必見", "").rstrip("へ") for w in who]
     if len(set(who)) != len(who):
         fails.append(f"呼びかけ型で同じ相手が1日に2回: {who}")
+    plain = [p for p in posts if not n.is_local_post(p) and "長岡駅" not in p]
+    if any(c in p for p in plain for c in ("見附", "小千谷", "柏崎", "三条")):
+        fails.append("通常の投稿に周辺の市名が入っている")
     if any(ph in p for p in posts for ph in g.NAGAOKA_PHRASES):
         fails.append("truthに決まり文句の差し込みが残っている")
     if len({p.split(chr(10))[0] for p in posts}) != len(posts):
@@ -78,4 +84,4 @@ if fails:
     for x in fails:
         print(" -", x)
     sys.exit(1)
-print(f"OK: 長岡市の原稿 {len(ALL)}本（地域ネタ{len(n.NAGAOKA_LOCAL_TRUTH)}・院長{len(n.NAGAOKA_OWNER_TRUTH)}・呼びかけ{len(n.NAGAOKA_TARGET_TRUTH)}）・全検査通過")
+print(f"OK: 長岡市の原稿 {len(ALL)}本（地域ネタ{len(n.NAGAOKA_LOCAL_TRUTH)}・院長{len(n.NAGAOKA_OWNER_TRUTH)}・呼びかけ{len(n.NAGAOKA_TARGET_TRUTH)}・周辺の市{len(n.NEARBY_TARGET_TRUTH)}）・全検査通過")

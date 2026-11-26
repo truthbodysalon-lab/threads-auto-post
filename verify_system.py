@@ -694,6 +694,15 @@ def check_execution_gaps():
             if not texts:
                 continue
             cnt = sum(1 for t in texts if ("LINE" in t or "ライン" in t or "lin.ee" in t))
+            # 2026-11-26 masa指示「CTAを公式LINEに」「CTAを明確にする文章であれば問題ない」: はっきりした導線は3本まで・付随的な言及は10%のまま
+            try:
+                import auto_post as _ap_l
+                cnt = sum(1 for t in texts if _ap_l._masa_line_subject(t))   # 付随的なLINE言及だけを10%で見る
+                _cta_n = sum(1 for t in texts if ("LINE" in t or "ライン" in t or "lin.ee" in t)) - cnt
+                if _cta_n > max(1, DAILY_POSTS // 10, getattr(_ap_l, "_MASA_CTA_DAILY_MAX", 3)):
+                    cnt = max(cnt, _cta_n)   # 導線の本数が上限を超えた日はFAILにする
+            except Exception:
+                pass
             rate = cnt / len(texts)
             if worst_date is None or rate > worst_rate:  # 全日0%でも判定する（2026-11-25: 誤って「判定不可」になった）
                 worst_rate, worst_date, worst_cnt, worst_len = rate, d, cnt, len(texts)
@@ -705,7 +714,7 @@ def check_execution_gaps():
             # len(texts)<50のことがあり（例: 9本中2本=22%なのに"2本/50本(22%)"と誤表示）、
             # 実際に率計算へ使った分母(worst_len)をそのまま表示するよう修正。
             add("rule:line_rate:masa", "B.ルール反映", status,
-                f"直近3日で最大 {worst_date} {worst_cnt}本/{worst_len}本（{worst_rate*100:.0f}%）LINE言及・上限{max(1, DAILY_POSTS // 10)}本(10%・1日{DAILY_POSTS}本)")
+                f"直近3日で最大 {worst_date} {worst_cnt}本/{worst_len}本（{worst_rate*100:.0f}%）付随的なLINE言及・上限{max(1, DAILY_POSTS // 10)}本(10%・1日{DAILY_POSTS}本)。はっきりした導線（公式LINE・プレゼント）は別に1日3本まで（2026-11-26）")
     except Exception as e:
         add("rule:line_rate:masa", "B.ルール反映", "WARN", f"検査失敗: {e}")
 

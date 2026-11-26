@@ -21,15 +21,12 @@ class TestAbstractMasa(unittest.TestCase):
     def test_good_passes(self):
         self.assertEqual(g._abstract_reasons_masa(GOOD), [])
 
-    def test_question_without_target(self):
+    def test_question_without_target_is_allowed(self):
+        # 2026-11-26 masa指示「【対象】へ質問です…この内容はいらない」: 宛先の必須チェックは廃止
         t = "インスタで『機械が苦手』と、手が止まっていませんか？\n[COMMENT]\n① 「＋」を押す\n② 写真を選ぶ"
-        self.assertIn("対象なし問いかけ", g._abstract_reasons_masa(t))
-        self.assertIn("対象なし問いかけ", g._abstract_reasons_masa("あなたはどうですか？"))
-
-    def test_bare_address(self):
-        t = "リールを怖がっている人へ。\n[COMMENT]\n① 「＋」→「リール」を押す\n② 写真を3枚選ぶ"
-        self.assertIn("宛名が「人」だけ", g._abstract_reasons_masa(t))
-        t2 = t.replace("リールを怖がっている人へ", "リールを怖がっているサロンオーナーへ")
+        self.assertNotIn("対象なし問いかけ", g._abstract_reasons_masa(t))
+        self.assertNotIn("対象なし問いかけ", g._abstract_reasons_masa("あなたはどうですか？"))
+        t2 = "リールを怖がっている人へ。\n[COMMENT]\n① 「＋」→「リール」を押す\n② 写真を3枚選ぶ"
         self.assertEqual(g._abstract_reasons_masa(t2), [])
 
     def test_quoted_question_is_not_a_question(self):
@@ -140,15 +137,76 @@ class TestFixedContent(unittest.TestCase):
 class TestAutoPostGate(unittest.TestCase):
     def test_gate_and_bridge(self):
         import auto_post as a
-        ok, reasons = a.inspect_before_post("あなたはどうですか？", "masa")
+        ok, reasons = a.inspect_before_post("院長へ。\n大切なのは継続です。", "masa")   # 2026-11-26〜 宛先なしの問いかけはNGにしない
         self.assertFalse(ok)
         self.assertTrue(reasons[0].startswith("masa抽象度NG"))
-        self.assertTrue(a.inspect_before_post("あなたはどうですか？", "truth")[0])  # masa以外には適用しない
+        self.assertTrue(a.inspect_before_post("あなたはどうですか？", "masa")[0])
+        self.assertTrue(a.inspect_before_post("院長へ。\n大切なのは継続です。", "truth")[0])  # masa以外には適用しない
         self.assertTrue(a.inspect_before_post(GOOD, "masa")[0])
         self.assertTrue(a._masa_bridge_bad("大切なのは継続です。"))
         self.assertFalse(a._masa_bridge_bad("① 「プロフィールを編集」を押す\n② 自己紹介を書く"))
         self.assertIn("プロフィール", a._bridge_default("プロフィールの話", "masa"))
         self.assertEqual(a._bridge_default("x", "truth"), a.ACCOUNTS["truth"]["bridge_text"])
+
+
+
+class TestOwnerRules20261126(unittest.TestCase):
+    """2026-11-26 masa指示: コメントは話し言葉・専門用語は言い換え・字数の上限なし・本人指定テーマ。"""
+
+    def test_spoken_comment(self):
+        t = ("ハッシュタグを増やしても、予約は増えません。\n[COMMENT]\n① 投稿のキャプション欄を開く\n② ハッシュタグを2つ付ける\n"
+             "③ シェアを押す\n\n今日は、次の投稿のハッシュタグを3つに絞ってください（3分）。")
+        q = g._masa_spoken(t)
+        self.assertEqual(q.split("\n")[0], t.split("\n")[0])
+        self.assertNotIn("①", q)
+        self.assertIn("まず、投稿のキャプション欄を開く。", q)
+        self.assertIn("最後に、シェアを押す。", q)
+        self.assertIn("だから今日は、次の投稿のハッシュタグを3つに絞ってください。", q)
+        self.assertIn("3分あれば終わります。", q)
+        self.assertEqual(g._abstract_reasons_masa(q), [])
+
+    def test_spoken_keeps_lists_with_heading(self):
+        t = "見出し\n[COMMENT]\n【中身は3つです】\n① A\n② B\n③ C"
+        self.assertIn("①", g._masa_spoken(t))
+
+    def test_jargon_plain_except_first_line(self):
+        t = "LTVの話。\n集客×成約×LTVと、MEO対策。\nhttps://example.com/LTV"
+        q = g._masa_plain_jargon(t)
+        self.assertTrue(q.startswith("LTVの話。"))
+        self.assertIn("集客×成約×通い続けてもらう力と、グーグルマップで上に出る工夫。", q)
+        self.assertIn("https://example.com/LTV", q)
+
+    def test_no_250_cap(self):
+        self.assertTrue(g._masa_len_ok("あ" * 400))
+        self.assertFalse(g._masa_len_ok("あ" * 501))
+
+    def test_owner_topics(self):
+        import masa_owner_topics as ot
+        texts = [t for L in (ot.DOUGA_KOUKOKU, ot.CATCH_COPY, ot.AI_INSTA) for _, t in L]
+        self.assertGreaterEqual(len(ot.DOUGA_KOUKOKU), 8)
+        self.assertGreaterEqual(len(ot.CATCH_COPY), 8)
+        firsts = [t.split("\n")[0] for t in texts]
+        self.assertEqual(len(firsts), len(set(firsts)))
+        known = {t.split("\n")[0] for t in list(g.INSTA_EASY_TEMPLATES) + list(g.HAKASE_TEMPLATES)}
+        self.assertFalse(set(firsts) & known, "既存原稿と1行目が同じ")
+        for t in texts:
+            TestFixedContent._all_ok(self, t)
+            self.assertNotIn("①", t)          # コメントは話し言葉
+            self.assertNotRegex(t, r"長岡|トゥルース|lin\.ee|http")
+
+    def test_queue_front_is_mostly_instagram(self):
+        posts = g.generate_30_masa_posts()[:g.FRONT_N]
+        n = sum(1 for p in posts if g._is_insta_theme(p))
+        self.assertGreaterEqual(n, g.INSTA_THEME_TARGET, f"前半{len(posts)}本中Instagram{n}本")
+        self.assertEqual([p for p in posts if g._is_abstract_masa(p)], [])
+
+    def test_hour_report(self):
+        import masa_hour_report as hr
+        posts = [{"timestamp": f"2026-11-2{d}T13:00:00+0000", "text": "x", "views": 50} for d in range(6)]   # 22時台
+        posts += [{"timestamp": f"2026-11-2{d}T23:00:00+0000", "text": "y", "views": 5} for d in range(6)]   # 8時台
+        r = hr.build(posts)
+        self.assertEqual(r["best_hours"][0], "22時台")
+        self.assertEqual(r["hours"]["08"]["avg_views"], 5.0)
 
 
 if __name__ == "__main__":

@@ -251,6 +251,12 @@ def run(acct: str):
 
         print_report(result)
         print(f"\n  → {insights_file.name} に保存しました")
+        if acct == "masa":   # 2026-11-26 masa指示「投稿の反応パターンを見ながら随時更新して」: よく見られる時間帯を数え直す
+            try:
+                import masa_hour_report
+                masa_hour_report.run()
+            except Exception as e:
+                print(f"  ⚠ 時間帯の集計に失敗（投稿には影響なし）: {type(e).__name__}")
 
     except urllib.error.HTTPError as e:
         print(f"  ERROR: {e.read().decode()}")

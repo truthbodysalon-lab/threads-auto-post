@@ -30,7 +30,7 @@ DATA_FILES = [
     "followers_history.json", "line_history.json",
     "shared_posted_guard.jsonl", "feedback.json",
     "line_listin_state.json",
-    "views_goal.json", "views_history.json",  # LINEリストイン 1日1回 の状態（cross-system共有）
+    "views_goal.json", "views_history.json", "masa_best_hours.json",  # LINEリストイン 1日1回 の状態（cross-system共有）
 ]
 
 

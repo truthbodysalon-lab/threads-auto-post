@@ -1,0 +1,95 @@
+{
+  "account": "masa",
+  "updated_at": "2026-11-26 15:38",
+  "source": "past_posts_masa.json（Threads APIの直近の投稿）",
+  "posts_counted": 200,
+  "min_posts_per_hour": 5,
+  "best_hours": [
+    "22時台",
+    "10時台",
+    "20時台"
+  ],
+  "weak_hours": [
+    "06時台",
+    "08時台",
+    "07時台"
+  ],
+  "hours": {
+    "06": {
+      "posts": 5,
+      "avg_views": 17.0,
+      "median_views": 14
+    },
+    "07": {
+      "posts": 29,
+      "avg_views": 13.4,
+      "median_views": 6
+    },
+    "08": {
+      "posts": 14,
+      "avg_views": 13.5,
+      "median_views": 9.5
+    },
+    "09": {
+      "posts": 2,
+      "avg_views": 5.0,
+      "median_views": 5.0
+    },
+    "10": {
+      "posts": 15,
+      "avg_views": 40.5,
+      "median_views": 10
+    },
+    "11": {
+      "posts": 3,
+      "avg_views": 7.3,
+      "median_views": 7
+    },
+    "12": {
+      "posts": 14,
+      "avg_views": 29.9,
+      "median_views": 8.5
+    },
+    "13": {
+      "posts": 1,
+      "avg_views": 72.0,
+      "median_views": 72
+    },
+    "14": {
+      "posts": 16,
+      "avg_views": 19.1,
+      "median_views": 12.0
+    },
+    "16": {
+      "posts": 18,
+      "avg_views": 17.8,
+      "median_views": 9.0
+    },
+    "17": {
+      "posts": 20,
+      "avg_views": 29.1,
+      "median_views": 14.0
+    },
+    "19": {
+      "posts": 18,
+      "avg_views": 30.3,
+      "median_views": 13.0
+    },
+    "20": {
+      "posts": 18,
+      "avg_views": 30.8,
+      "median_views": 4.0
+    },
+    "21": {
+      "posts": 14,
+      "avg_views": 17.7,
+      "median_views": 11.0
+    },
+    "22": {
+      "posts": 13,
+      "avg_views": 50.9,
+      "median_views": 19
+    }
+  },
+  "note": "平均閲覧数の多い順（本数5本以上の時間帯だけ）。masa本人の指示で、時間帯のルールはこのファイルの実測に合わせて随時更新する。"
+}

@@ -166,9 +166,9 @@ def log_error(msg: str):
 
 ACCOUNT_PERSONAS = {
     "truth": "整体院（truth body salon）のアカウント。首・肩・腰・頭痛など体の不調を根本から改善する整体サロン。",
-    "masa": "整体サロンのオーナー・masahide_takahashiの個人アカウント。店舗経営者向けに「Instagramで集客する方法・ノウハウ・考え方」を、運用のハードルを下げる伝え方（1日1分・スマホだけ・撮影や編集なしでもOK・フォロワーが少なくてもOK・AIに任せて確認だけ）で発信する。中学生にも分かる言葉で、専門用語・面談・金額・店舗名や所在地・創作した統計は書かない。"
-        # 2026-10-07 masa指示: 問いかけの対象が不明・コメントが抽象的で読まれない、への対応（ルールA〜C）
-        "【必須ルール】A.問いかけには必ず対象（院長・店主・サロンオーナー等）を書く。B.コメントは具体的な手順（①②③の番号付き2〜4ステップ）か、実際に書く文言の例（「」で囲む）だけで書き、Instagramの具体的な機能・操作名（プロフィール1行目・ハイライト・固定投稿・リールの冒頭1秒・ストーリーズのスタンプ・保存数・インサイトのリーチ等）を必ず入れる。「大切なのは継続です」「意識してください」「工夫が必要です」「価値を届けましょう」のような抽象的な文は書かない。C.ノウハウは言い切り、最後は今日やる1つを何を・どこに・何分で書く。",
+    "masa": "髙橋雅英（インスタ集客の先生）の個人アカウント。月商50万→100万円を目指す店舗オーナー・個人事業主向けに、Instagramを使った店舗の新規集客のノウハウ・考え方・賢い使い方（スマホ1つで作れる動画広告・キャッチコピーの作り方・AIを使ったインスタ運用を含む）を、運用のハードルを下げる伝え方（1日1分・スマホだけ・撮影や編集なしでもOK・フォロワーが少なくてもOK）で、明日使える知識として発信する。中学生にも分かる言葉で、面談・金額・店舗名や所在地・創作した統計は書かない。専門用語はわかりやすい言葉に置き換える（例: MEO対策→グーグルマップで上に出る工夫）。"
+        # 2026-10-07 masa指示のルールA〜Cを、2026-11-26 masa指示「形式的な文章で飽きられるから話し言葉に近い文章で」で改定（宛先の必須は廃止）
+        "【必須ルール】A.コメントは話し言葉で書く（例「だからこれやってください」「これだけでいいからやってみて」）。手順を書くときも①②③の箇条書きにせず「まず、〜。次に、〜。最後に、〜。」と話すように書く。B.Instagramの具体的な機能・操作名（プロフィール1行目・ハイライト・固定投稿・リールの冒頭1秒・ストーリーズのスタンプ・保存数・インサイトのリーチ等）を必ず入れる。「大切なのは継続です」「意識してください」「工夫が必要です」「価値を届けましょう」のような抽象的な文は書かない。C.ノウハウは言い切り、最後は今日やってほしいこと1つを、何を・どこで・何分でかが分かるように話し言葉で頼む。",
 }
 
 _BRIDGE_DISABLED = False  # 2026-07-03: Anthropic API(従量課金)→Gemini API(既存キー・無料枠)に切替
@@ -726,6 +726,9 @@ def _masa_line_daily_max() -> int:
     return max(1, int(_dp) // 10)
 
 
+_MASA_CTA_DAILY_MAX = 3   # 2026-11-26 masa指示: はっきりした導線（公式LINE・プレゼント）の1日の上限（旧=1日の本数の10%＝1本）
+
+
 def _masa_line_overrate(text: str) -> bool:
     """masaのLINE言及率キャップ（verify rule:line_rate=1日の本数の10%）。
     2026-08-27版: 導線投稿（リストイン/診断/時短CTA=『AI』誘導/プレゼント）は常時許可し、
@@ -739,7 +742,9 @@ def _masa_line_overrate(text: str) -> bool:
     if not _LINE_MENTION_RE.search(text or "") or _is_line_listin(text):
         return False
     cap = _masa_line_daily_max()
-    limit = cap if not _masa_line_subject(text) else max(1, cap - 2)
+    # 2026-11-26 masa指示「CTAを公式LINEにしてプレゼントも投稿して」「CTAを明確にする文章であれば問題ない」:
+    # はっきりした導線（プロフィールの公式LINE・プレゼント・診断・『AI』）は1日 _MASA_CTA_DAILY_MAX 本まで。付随的なLINE言及は従来どおり。
+    limit = max(cap, _MASA_CTA_DAILY_MAX) if not _masa_line_subject(text) else max(1, cap - 2)
     today = date.today().strftime("%Y-%m-%d")
     n = 0
     try:
@@ -1666,7 +1671,7 @@ def run_account(acct: str):
     while text is not None:
         _ok, _reasons = inspect_before_post(text, acct)
         if _ok and acct == "masa" and _masa_line_overrate(text):
-            _ok, _reasons = False, [f"LINE言及率上限(導線込み{_masa_line_daily_max()}本/日)"]
+            _ok, _reasons = False, [f"LINE言及の上限(はっきりした導線{max(_masa_line_daily_max(), _MASA_CTA_DAILY_MAX)}本/日・付随的な言及{_masa_line_daily_max()}本/日)"]
         if _ok:
             break
         log_info(acct, f"{name} [検品NG] {'; '.join(_reasons)[:100]} → {text[:30].replace(chr(10), ' ')}...")

@@ -229,7 +229,9 @@ _MASA_FEATURE_RE = re.compile(
     r"カルーセル|フィード|字幕|閲覧数|テンプレート|リンク欄|1枚目|1行目|予約投稿|コラボ|位置情報|メモ帳|"
     r"ChatGPT|チャットGPT|AI|閲覧者|親しい友達|「＋」|「シェア」|「次へ」")
 
-_MASA_STEPS_RE = re.compile(r"[①②③④]|(?m:^\s*[1-4１-４][\.．)）])")
+# 2026-11-26 masa指示「形式的な文章で飽きられるから話し言葉に近い文章で」: 「まず、／次に、／最後に、」の話し言葉の手順も手順として数える
+_MASA_STEPS_RE = re.compile(r"[①②③④]|(?m:^\s*[1-4１-４][\.．)）])|(?m:^(?:まず|次に|それから|最後に|あとは)、)")
+_MASA_SPOKEN_ASK_RE = re.compile(r"やって(?:ください|みて)|してください|これだけでいい")
 _MASA_EXAMPLE_RE = re.compile(r"「[^」\n]{6,}」")
 _MASA_QUESTION_RE = re.compile(r"[？?]|(?:ませんか|ですか|でしょうか|ますか)[。．]?\s*$", re.M)
 _MASA_BARE_ADDRESS_RE = re.compile(r"^[^\n]*人へ[。．]?\s*$", re.M)
@@ -254,7 +256,8 @@ def _masa_concrete_ok(part: str) -> bool:
     """手順（番号付き2つ以上）か具体例（「」の例文）があり、かつInstagramの機能・操作名を含む。"""
     has_steps = len(_MASA_STEPS_RE.findall(part)) >= 2
     has_example = bool(_MASA_EXAMPLE_RE.search(part))
-    return (has_steps or has_example) and bool(_MASA_FEATURE_RE.search(part))
+    has_spoken_ask = bool(_MASA_SPOKEN_ASK_RE.search(part))   # 2026-11-26: 話し言葉で頼む形も可
+    return (has_steps or has_example or has_spoken_ask) and bool(_MASA_FEATURE_RE.search(part))
 
 
 def _abstract_reasons_masa(text: str) -> list[str]:
@@ -264,15 +267,8 @@ def _abstract_reasons_masa(text: str) -> list[str]:
     if m:
         reasons.append(f"抽象語: {m.group()}")
     body, comment = _masa_split_body_comment(t)
-    # 対象のない問いかけ: 問いを含む本文に宛先（院長・店主・経営者…）が無い（「」『』内の引用は除外）
-    body_noq = re.sub(r"「[^」]*」|『[^』]*』", "", body)
-    if _MASA_QUESTION_RE.search(body_noq) and not _MASA_TARGET_RE.search(body):
-        reasons.append("対象なし問いかけ")
-    elif _MASA_BARE_ADDRESS_RE.search(body):
-        for line in body.split("\n"):
-            if re.search(r"人へ[。．]?\s*$", line) and not _MASA_TARGET_RE.search(line):
-                reasons.append("宛名が「人」だけ")
-                break
+    # 2026-11-26 masa指示「（本文120〜200字・1行目15字・数字かやらないことリスト・【対象】へ質問です）この内容はいらない」で、
+    # 問いかけの宛先の必須チェック（対象なし問いかけ／宛名が「人」だけ）は廃止した（playbook_masa W_OWNER_WRITING）。
     # コメントの具体性: Instagramテーマの投稿は、コメントに手順か具体例＋機能名が必須
     # （LINE導線のCTA投稿はノウハウ解説ではないため対象外。抽象語・対象なし問いかけは上で検査済み）
     if _is_insta_theme(t) and "lin.ee" not in t and "プロフィールのリンク" not in t:
@@ -1647,11 +1643,11 @@ def _hero_reject_reason(p: str, acct: str) -> str:
         if _is_own_winner_copy(p, acct):   # 自分の伸びた投稿の原文コピーは弾く（翻案のみ可）
             return "自分の伸びた投稿の原文コピー(翻案のみ可)"
     if acct == "masa":
-        # 面談/金額/決済の機械ガード＋250字上限（masa10原則）
+        # 面談/金額/決済の機械ガード＋Threadsの上限（2026-11-26に250字の上限は廃止）
         if _is_masa_sales_ng(p):
             return "売り込み/金額/決済NG"
         if not _masa_len_ok(p):
-            return "字数超過(250字上限)"
+            return "字数超過(本文500字・Threadsの上限)"
         if _is_abstract_masa(p):
             return "抽象度NG"
     return ""
@@ -3626,8 +3622,13 @@ from masa_insta_content import INSTA_EASY_TEMPLATES, WINNING_HOOK_TEMPLATES  # n
 # 「ハードルを下げる」（1日1分・スマホだけ・撮影編集なし・フォロワー少でもOK・AIに任せて確認だけ）。
 # 小川さん9/22助言（難しそうと思わせない）と同方向。固定テンプレ60本だけでは7日再投入禁止を
 # 満たせないため、(悩み→小さな言い換え→今日の一手)の組合せ生成を併用する。
-INSTA_THEME_RE = re.compile(r"インスタ|Instagram|リール|ストーリーズ|ハッシュタグ|DM|投稿ネタ|ネタ帳")
-INSTA_THEME_TARGET = FRONT_N * 13 // 20 if FRONT_N > 10 else FRONT_N // 2   # 実投稿される前半FRONT_N本のうちInstagramテーマにする下限目標（過半数超。2026-11-11 13/20→2026-11-12 30本化で19/30→2026-11-14 10本化で5/10: 前半10本は導線・AI・セグメント・ヒーローのアンカーが約半分を占め、置換できる通常枠が5本前後しか無いため半数）
+# 2026-11-26: Instagramの機能名（インサイト・固定投稿・ハイライト・キャプション・プロフィール等）だけで書いた投稿も
+# Instagramテーマとして数える（「インスタ」の語が無いと数えず、前半の主テーマ比率を少なく見ていた）。
+# 「プロフィールのリンクから」等の導線の言い回しは数えない。
+INSTA_THEME_RE = re.compile(r"インスタ|Instagram|リール|ストーリーズ|ハッシュタグ|DM|投稿ネタ|ネタ帳|"
+                            r"インサイト|固定投稿|ハイライト|キャプション|フィード投稿|プロフェッショナルダッシュボード|"
+                            r"プロフィール(?!のリンク|から|の公式|経由|を見て)")
+INSTA_THEME_TARGET = FRONT_N * 6 // 10   # 2026-11-26 masa指示「もっとInstagramの活用した集客術や発信方法をメインにして」で前半の半数→6割以上（前半10本のうちURL付きLINE・診断・軸2(リピート)の3〜4本は置き換えない枠のため、確実に届く上限が6本。実測は6〜7本）。旧式=FRONT_N * 13 // 20 if FRONT_N > 10 else FRONT_N // 2   # 実投稿される前半FRONT_N本のうちInstagramテーマにする下限目標（過半数超。2026-11-11 13/20→2026-11-12 30本化で19/30→2026-11-14 10本化で5/10: 前半10本は導線・AI・セグメント・ヒーローのアンカーが約半分を占め、置換できる通常枠が5本前後しか無いため半数）
 INSTA_FRONT_LEN = FRONT_N
 
 from masa_insta_content import INSTA_HURDLES, INSTA_GEN_STRUCTURES, build_gen_post  # noqa: E402
@@ -3642,17 +3643,17 @@ def _is_insta_theme(text: str) -> bool:
 _INSTA_KNOWN_TEXTS = set(INSTA_EASY_TEMPLATES) | set(HAKASE_TEMPLATES)
 
 
-MASA_BODY_MAX = 250      # メイン投稿(本文)の上限
+MASA_BODY_MAX = 500      # メイン投稿(本文)の上限。2026-11-26 masa指示「本文120〜200字（最大250字）…この内容はいらない」で250→Threadsの上限500字
 MASA_COMMENT_MAX = 400   # コメント(手順＋今日の1つ)の上限（Threadsの返信は500字まで）
 
 
 def _masa_len_ok(text: str) -> bool:
-    """masa投稿の長さ検査。[COMMENT]でコメントを分ける投稿は 本文250字・コメント400字、
-    それ以外は全体250字（従来どおり）。"""
+    """masa投稿の長さ検査。[COMMENT]でコメントを分ける投稿は 本文500字・コメント400字、
+    それ以外は全体500字（Threadsの上限。2026-11-26に250字の上限を廃止）。"""
     if "[COMMENT]" in (text or ""):
         body, comment = _masa_split_body_comment(text)
         return len(body) <= MASA_BODY_MAX and len(comment) <= MASA_COMMENT_MAX
-    return len(text or "") <= MASA_BODY_MAX   # [COMMENT]なしは従来どおり全体250字
+    return len(text or "") <= MASA_BODY_MAX   # [COMMENT]なしは全体でThreadsの上限まで
 
 
 def _insta_sentence_ok(text: str) -> bool:
@@ -4214,6 +4215,146 @@ def _sweep_abstract_masa(posts: list[str]) -> list[str]:
     return posts
 
 
+# ── masa 2026-11-26 masa指示の仕上げ（話し言葉のコメント・専門用語の言い換え・本人指定テーマ）──────
+try:
+    import masa_owner_topics as _masa_owner_topics
+except Exception:
+    _masa_owner_topics = None
+
+# 専門用語は、わかりやすい言葉に置き換えて使う（2026-11-26 masa指示「これをわかりやすい表現に置き換えて活用して」）。
+# 1行目は inspector が専門用語を止めるので（segment_registry の鍵＝1行目を変えないため）、2行目以降だけ置き換える。
+_MASA_JARGON_PLAIN = (
+    (re.compile(r"MEO対策"), "グーグルマップで上に出る工夫"),
+    (re.compile(r"LINEステップ配信"), "LINE登録後に自動で届くメッセージ"),
+    (re.compile(r"ステップ配信"), "登録後に自動で届くメッセージ"),
+    (re.compile(r"PASONA法則"), "「悩み→共感→解決」の順で書く型"),
+    (re.compile(r"(?<![A-Za-z])LTV(?![A-Za-z])"), "通い続けてもらう力"),
+    (re.compile(r"(?<![A-Za-z])CVR(?![A-Za-z])"), "申し込みにつながる割合"),
+    (re.compile(r"(?<![A-Za-z])CPA(?![A-Za-z])"), "お客様1人を集めるのにかかった広告費"),
+    (re.compile(r"(?<![A-Za-z])MEO(?![A-Za-z])"), "グーグルマップ対策"),
+)
+
+
+def _masa_plain_jargon(text: str) -> str:
+    lines = (text or "").split("\n")
+    out = lines[:1]
+    for line in lines[1:]:
+        cut = line.find("http") if "http" in line else len(line)   # URLの中は触らない
+        head = line[:cut]
+        for rx, plain in _MASA_JARGON_PLAIN:
+            head = rx.sub(plain, head)
+        out.append(head + line[cut:])
+    return "\n".join(out)
+
+
+_MASA_STEP_LINE_RE = re.compile(r"^\s*([①②③④])\s*(.+?)\s*$")
+_MASA_SPOKEN_ORDER = {2: ("まず", "あとは"), 3: ("まず", "次に", "最後に"), 4: ("まず", "次に", "それから", "最後に")}
+_MASA_SPOKEN_LEAD = ("やることは{n}つだけです。", "{n}つだけ、やってください。", "手順は{n}つです。", "難しくないです。{n}つだけ。")
+_MASA_SPOKEN_TAIL = ("これだけでいいから、やってみてください。", "まずはこれだけ、やってみて。",
+                     "難しく考えなくて大丈夫。これだけやってください。", "スマホだけでできます。やってみて。")
+_MASA_CLOSING_RE = re.compile(r"^今日は、(.+?)(?:（(\d+分)）)?。$")
+
+
+def _masa_spoken_part(part: str, seed: int) -> str:
+    """コメント（または本文の締め）を話し言葉に直す（2026-11-26 masa指示「形式的な文章で飽きられるから話し言葉に近い文章で。
+    例えば『だからこれやってください』『これだけでいいからやって』」）。
+    ①②③の箇条書き(2〜4個・連続)→「まず、〜。次に、〜。最後に、〜。」／締めの「今日は、〜（3分）。」→「だから今日は、〜。」＋話し言葉の一言。
+    【〜】見出し付き（プレゼントの中身の一覧など）は手順ではないので触らない。"""
+    lines = part.split("\n")
+    idx = [i for i, l in enumerate(lines) if _MASA_STEP_LINE_RE.match(l)]
+    out = lines[:]
+    if (2 <= len(idx) <= 4 and "【" not in part and idx == list(range(idx[0], idx[0] + len(idx)))
+            and not any(re.match(r"^(?:まず|次に|最後に)、", l) for l in lines)):
+        order = _MASA_SPOKEN_ORDER[len(idx)]
+        for k, i in enumerate(idx):
+            step = _MASA_STEP_LINE_RE.match(lines[i]).group(2).rstrip("。")
+            out[i] = f"{order[k]}、{step}。"
+        out.insert(idx[0], _MASA_SPOKEN_LEAD[seed % len(_MASA_SPOKEN_LEAD)].format(n=len(idx)))
+    for j in range(len(out) - 1, -1, -1):
+        line = out[j].strip()
+        if not line:
+            continue
+        m = _MASA_CLOSING_RE.match(line)
+        if m:
+            tail = (f"{m.group(2)}あれば終わります。" if m.group(2) else "") + _MASA_SPOKEN_TAIL[seed % len(_MASA_SPOKEN_TAIL)]
+            out[j] = f"だから今日は、{m.group(1)}。\n{tail}"
+        break
+    return "\n".join(out)
+
+
+def _masa_spoken(text: str) -> str:
+    t = text or ""
+    seed = sum(map(ord, t.split("\n")[0]))
+    if "[COMMENT]" in t:
+        body, comment = t.split("[COMMENT]", 1)
+        return body + "[COMMENT]" + _masa_spoken_part(comment, seed)
+    return _masa_spoken_part(t, seed)
+
+
+def _masa_finalize(posts: list[str]) -> list[str]:
+    """masaキューの仕上げ。直した結果が検品（長さ・抽象度・NG・検品ゲート）を通らないときは元の文を残す。1行目は変えない。"""
+    out = []
+    for p in posts:
+        q = _masa_spoken(_masa_plain_jargon(p))
+        if q != p and q.split("\n")[0] == p.split("\n")[0] and _masa_len_ok(q) and not _is_abstract_masa(q) \
+                and not _is_ng(q) and not _is_masa_sales_ng(q) and _inspect_ok(q, "masa", log=False):
+            out.append(q)
+        else:
+            out.append(p)
+    return out
+
+
+def _insert_masa_owner_topics(posts: list[str], today: str, base_normal: set) -> list[str]:
+    """本人指定テーマ（偶数日=スマホ1つで作れる動画広告・奇数日=キャッチコピーの作り方）を前半の通常枠へ1本。
+    segment_registry.json に segment="MASA_OWNER_TOPIC" で登録し、同じ原稿は8日あける。足りない日は入れない。"""
+    m = _masa_owner_topics
+    if m is None:
+        return posts
+    try:
+        today_date = date.fromisoformat(today)
+    except Exception:
+        today_date = date.today()
+    topic = ("douga_koukoku", "catch_copy")[today_date.toordinal() % 2]
+    registry = _load_segment_registry()
+    recent_keys = set()
+    for key, entry in registry.items():
+        if isinstance(entry, dict) and entry.get("segment") == "MASA_OWNER_TOPIC":
+            try:
+                if 0 < (today_date - date.fromisoformat(entry.get("created", ""))).days < m.REUSE_DAYS:
+                    recent_keys.add(key)
+            except Exception:
+                continue
+    recent_first = _get_recent_first_lines("masa", days=m.REUSE_DAYS)
+    used_keys = {_segment_registry_key(p) for p in posts}
+    pool = list(m.TOPICS[topic])
+    today_keys = {k for k, e in registry.items()
+                  if isinstance(e, dict) and e.get("segment") == "MASA_OWNER_TOPIC" and e.get("created") == today}
+    random.shuffle(pool)
+    pool.sort(key=lambda c: _segment_registry_key(c[1]) not in today_keys)   # 同じ日の作り直しは同じ原稿を選ぶ
+    chosen = None
+    for vid, text in pool:
+        k = _segment_registry_key(text)
+        if (k in recent_keys or k in used_keys or text.split("\n")[0].strip() in recent_first
+                or _is_ng(text) or _is_masa_sales_ng(text) or _is_abstract_masa(text)
+                or not _inspect_ok(text, "masa", pattern_name="masa_owner_topic", log=False)):
+            continue
+        chosen = (vid, text)
+        break
+    if chosen is None:
+        print(f"[masa] 本人指定テーマ({topic}): 8日以内に使っていない原稿が無いため今日は入れない")
+        return posts
+    front = min(FRONT_N, len(posts))
+    slots = [i for i in range(1, front) if posts[i] in base_normal and not _is_anchor_post(posts[i])]
+    if slots:
+        posts[slots[0]] = chosen[1]
+    else:
+        posts.insert(min(1, len(posts)), chosen[1])
+    registry[_segment_registry_key(chosen[1])] = {"segment": "MASA_OWNER_TOPIC", "hook": topic, "variant": chosen[0],
+                                                  "created": today, "acct": "masa"}
+    _save_segment_registry(registry)
+    return posts
+
+
 def generate_30_masa_posts() -> list[str]:
     w = _load_weights("masa")
     # インスタハカセ理論 + コンサル伸びた投稿リスト分析を反映（2026-04-20）
@@ -4398,7 +4539,12 @@ def generate_30_masa_posts() -> list[str]:
     # 2026-10-04: 主テーマをInstagram集客へ移したため3本/日→1本/日へ縮小（削除はせず、
     # 3柱を日替わりで1本ずつ回す。同日、AI系の方向性は『店舗経営の事業効率を上げるAI活用法』に統一（Instagramは題材の1つ）。「AIでインスタ運用を楽にする」側は INSTA_EASY の AI時短群が担う）
     ai_posts = []
-    _ai_pools = (AI_JITSUREI_TEMPLATES, AI_DEKIRU_TEMPLATES, AI_KISO_TEMPLATES)
+    # 2026-11-26 masa指示「AI活用とInstagramの掛け合わせとかを考えて、あくまでInstagramの活用方法として」:
+    # 日替わり1本は AI×Instagram の原稿（masa_owner_topics.AI_INSTA＋INSTA_EASY のAI群）から出す。
+    # 旧の3柱（店舗経営の事業効率＝AI_JITSUREI/DEKIRU/KISO）は使わない（原稿は残す）。
+    _ai_insta = list(_masa_owner_topics.AI_INSTA_TEXTS) if _masa_owner_topics else []
+    _ai_insta += [t for t in INSTA_EASY_TEMPLATES if "AI" in t and _is_insta_theme(t)]   # インスタの話になっていないAI原稿は除く
+    _ai_pools = (_ai_insta,) * 3 if _ai_insta else (AI_JITSUREI_TEMPLATES, AI_DEKIRU_TEMPLATES, AI_KISO_TEMPLATES)
     try:
         _ai_day = date.fromisoformat(TODAY).toordinal()
     except Exception:
@@ -4406,7 +4552,8 @@ def generate_30_masa_posts() -> list[str]:
     for pool in (_ai_pools[_ai_day % 3],):
         for _ in range(20):
             p = random.choice(pool)
-            if p not in ai_posts and not _is_masa_sales_ng(p) and not _is_ng(p):
+            if (p not in ai_posts and not _is_masa_sales_ng(p) and not _is_ng(p)
+                    and p.split("\n")[0].strip() not in _get_recent_first_lines("masa", days=8)):
                 ai_posts.append(p)
                 break
     for i, ap_ in enumerate(ai_posts):
@@ -4455,7 +4602,7 @@ def generate_30_masa_posts() -> list[str]:
     protected_line_texts = set(prof_cta)
     if ai_time_cta_text is not None:
         protected_line_texts.add(ai_time_cta_text)
-    line_target = 2   # 2026-11-11 1日20本化: 前半50本で5本→前半20本で2本(10%)
+    line_target = 3   # 2026-11-26 masa指示「CTAを公式LINEにしてプレゼントも投稿して」「CTAを明確にする文章であれば問題ない」で2→3（プロフィール導線・プレゼント・AI時短を同じ日に出せる。付随的なLINE言及はこの枠の残りだけ）
     # プレゼント誘導(PRESENT_CTA)とAI時短CTAは、同日に重なって前半50本のLINE言及が上限を超える日は交互にする
     # （偶数日=プレゼント優先・奇数日=AI時短優先。超えない日は両方出す）。
     if present_cta_text is not None:
@@ -4501,8 +4648,11 @@ def generate_30_masa_posts() -> list[str]:
     # 抽象的な投稿(対象なし問いかけ・手順なしコメント等)の最終掃除（2026-10-07 masa指示）
     posts = _sweep_abstract_masa(posts)
     posts = _fill_insta_theme_posts(posts, "masa", TODAY, _base_normal_texts)
+    # 本人指定テーマ（スマホ1つで作れる動画広告／キャッチコピーの作り方）を日替わりで1本（2026-11-26）
+    posts = _insert_masa_owner_topics(posts, TODAY, _base_normal_texts)
 
-    return posts[:QUEUE_LEN]   # 2026-11-11 1日20本化: 100→30本
+    # 仕上げ: コメントを話し言葉に・本文の専門用語をわかりやすい言葉に（2026-11-26 masa指示）
+    return _masa_finalize(posts[:QUEUE_LEN])   # 2026-11-11 1日20本化: 100→30本
 
 
 # ══════════════════════════════════════════════

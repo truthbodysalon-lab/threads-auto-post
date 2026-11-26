@@ -1,6 +1,6 @@
 {
  "nagaoka": {
-  "until": 1795683702.263917,
+  "until": 1795687930.1848574,
   "msg": "Error validating access token: This Threads account needs to complete a checkpoint before it can access this app. To recover access, log in to www.threads.com and follow the instructions.",
   "since": "2026-11-23T07:53:27",
   "notified": "2026-11-26"

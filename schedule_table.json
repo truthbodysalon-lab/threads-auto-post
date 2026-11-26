@@ -1440,6 +1440,136 @@
    "note": "2026-11-05: 頭痛Threads(@truth_nagaoka_zutsuu)のAPI自動投稿。2026-11-14 masa指示「各アカウント合計1日10本にして」で1日10枠。同日Grok側daietto(毎時ちょうど)・masa Buffer(毎時10分)を避けて再配置（図解=9:15/14:30/20:15）。止める時はenabled:false"
   },
   {
+   "id": "zutsu-threads-0600",
+   "repo": "truthbodysalon-lab/threads-auto-post",
+   "workflow": "zutsu_threads.yml",
+   "jst_time": "06:00",
+   "window_min": 25,
+   "since": "slot",
+   "enabled": true,
+   "inputs": {
+    "slot": "06:00"
+   },
+   "note": "2026-11-26 masa指示「投稿は20投稿にして」で足した枠（Grok側daietto・masa Bufferの時刻を避けた）。頭痛Threads(@truth_nagaoka_zutsuu)のAPI自動投稿。止める時はenabled:false"
+  },
+  {
+   "id": "zutsu-threads-0735",
+   "repo": "truthbodysalon-lab/threads-auto-post",
+   "workflow": "zutsu_threads.yml",
+   "jst_time": "07:35",
+   "window_min": 25,
+   "since": "slot",
+   "enabled": true,
+   "inputs": {
+    "slot": "07:35"
+   },
+   "note": "2026-11-26 masa指示「投稿は20投稿にして」で足した枠（Grok側daietto・masa Bufferの時刻を避けた）。頭痛Threads(@truth_nagaoka_zutsuu)のAPI自動投稿。止める時はenabled:false"
+  },
+  {
+   "id": "zutsu-threads-0950",
+   "repo": "truthbodysalon-lab/threads-auto-post",
+   "workflow": "zutsu_threads.yml",
+   "jst_time": "09:50",
+   "window_min": 25,
+   "since": "slot",
+   "enabled": true,
+   "inputs": {
+    "slot": "09:50"
+   },
+   "note": "2026-11-26 masa指示「投稿は20投稿にして」で足した枠（Grok側daietto・masa Bufferの時刻を避けた）。頭痛Threads(@truth_nagaoka_zutsuu)のAPI自動投稿。止める時はenabled:false"
+  },
+  {
+   "id": "zutsu-threads-1115",
+   "repo": "truthbodysalon-lab/threads-auto-post",
+   "workflow": "zutsu_threads.yml",
+   "jst_time": "11:15",
+   "window_min": 25,
+   "since": "slot",
+   "enabled": true,
+   "inputs": {
+    "slot": "11:15"
+   },
+   "note": "2026-11-26 masa指示「投稿は20投稿にして」で足した枠（Grok側daietto・masa Bufferの時刻を避けた）。頭痛Threads(@truth_nagaoka_zutsuu)のAPI自動投稿。止める時はenabled:false"
+  },
+  {
+   "id": "zutsu-threads-1315",
+   "repo": "truthbodysalon-lab/threads-auto-post",
+   "workflow": "zutsu_threads.yml",
+   "jst_time": "13:15",
+   "window_min": 25,
+   "since": "slot",
+   "enabled": true,
+   "inputs": {
+    "slot": "13:15"
+   },
+   "note": "2026-11-26 masa指示「投稿は20投稿にして」で足した枠（Grok側daietto・masa Bufferの時刻を避けた）。頭痛Threads(@truth_nagaoka_zutsuu)のAPI自動投稿。止める時はenabled:false"
+  },
+  {
+   "id": "zutsu-threads-1515",
+   "repo": "truthbodysalon-lab/threads-auto-post",
+   "workflow": "zutsu_threads.yml",
+   "jst_time": "15:15",
+   "window_min": 25,
+   "since": "slot",
+   "enabled": true,
+   "inputs": {
+    "slot": "15:15"
+   },
+   "note": "2026-11-26 masa指示「投稿は20投稿にして」で足した枠（Grok側daietto・masa Bufferの時刻を避けた）。頭痛Threads(@truth_nagaoka_zutsuu)のAPI自動投稿。止める時はenabled:false"
+  },
+  {
+   "id": "zutsu-threads-1635",
+   "repo": "truthbodysalon-lab/threads-auto-post",
+   "workflow": "zutsu_threads.yml",
+   "jst_time": "16:35",
+   "window_min": 25,
+   "since": "slot",
+   "enabled": true,
+   "inputs": {
+    "slot": "16:35"
+   },
+   "note": "2026-11-26 masa指示「投稿は20投稿にして」で足した枠（Grok側daietto・masa Bufferの時刻を避けた）。頭痛Threads(@truth_nagaoka_zutsuu)のAPI自動投稿。止める時はenabled:false"
+  },
+  {
+   "id": "zutsu-threads-1935",
+   "repo": "truthbodysalon-lab/threads-auto-post",
+   "workflow": "zutsu_threads.yml",
+   "jst_time": "19:35",
+   "window_min": 25,
+   "since": "slot",
+   "enabled": true,
+   "inputs": {
+    "slot": "19:35"
+   },
+   "note": "2026-11-26 masa指示「投稿は20投稿にして」で足した枠（Grok側daietto・masa Bufferの時刻を避けた）。頭痛Threads(@truth_nagaoka_zutsuu)のAPI自動投稿。止める時はenabled:false"
+  },
+  {
+   "id": "zutsu-threads-2135",
+   "repo": "truthbodysalon-lab/threads-auto-post",
+   "workflow": "zutsu_threads.yml",
+   "jst_time": "21:35",
+   "window_min": 25,
+   "since": "slot",
+   "enabled": true,
+   "inputs": {
+    "slot": "21:35"
+   },
+   "note": "2026-11-26 masa指示「投稿は20投稿にして」で足した枠（Grok側daietto・masa Bufferの時刻を避けた）。頭痛Threads(@truth_nagaoka_zutsuu)のAPI自動投稿。止める時はenabled:false"
+  },
+  {
+   "id": "zutsu-threads-2315",
+   "repo": "truthbodysalon-lab/threads-auto-post",
+   "workflow": "zutsu_threads.yml",
+   "jst_time": "23:15",
+   "window_min": 25,
+   "since": "slot",
+   "enabled": true,
+   "inputs": {
+    "slot": "23:15"
+   },
+   "note": "2026-11-26 masa指示「投稿は20投稿にして」で足した枠（Grok側daietto・masa Bufferの時刻を避けた）。頭痛Threads(@truth_nagaoka_zutsuu)のAPI自動投稿。止める時はenabled:false"
+  },
+  {
    "id": "diet-threads-learn",
    "repo": "truthbodysalon-lab/threads-auto-post",
    "workflow": "diet_threads_learn.yml",
@@ -1863,7 +1993,7 @@
    "weekdays": [
     0
    ],
-    "inputs": {
+   "inputs": {
     "mode": "weekly"
    },
    "note": "2026-11-25 Mac主・クラウド保険(square)。月曜の顧客分析クラウドルーティン(11:33)の前処理。workflow冒頭でheartbeatが1.5h未満なら即終了（Mac稼働中）。AIなし・Square読み取りのみ",
@@ -1880,7 +2010,7 @@
    "monthdays": [
     25
    ],
-    "inputs": {
+   "inputs": {
     "mode": "monthly"
    },
    "note": "2026-11-25 Mac主・クラウド保険(square)。毎月25日の折込チラシ案クラウドルーティン(14:40)の前処理。町名×クラスタ集計(flyer_area_YYYY-MM.json)も作る。heartbeat判定は同上",

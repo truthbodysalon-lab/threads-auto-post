@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """頭痛Threads(@truth_nagaoka_zutsuu) API自動投稿 (自己完結モジュール・diet_threads.py を元に2026-11-05作成)
 
-- このアカウントは API 投稿だけ(Grok Botのブラウザ投稿は無い)。1日10枠（2026-11-14〜・正本は下の SLOTS）: 6:30 / 8:30 / 9:15 / 10:30 / 12:30 / 14:30 / 17:30 / 18:15 / 20:15 / 22:30 (JST)・図解は 9:15 / 14:30 / 20:15
+- このアカウントは API 投稿だけ(Grok Botのブラウザ投稿は無い)。1日20枠（2026-11-26 masa指示「投稿は20投稿にして」・正本は下の SLOTS）・図解は 9:15 / 14:30 / 20:15
 - 起動は中央ディスパッチャ(schedule_table.json)が workflow_dispatch で行う。ここにcronは無い
 - トークン THREADS_ACCESS_TOKEN_ZUTSU が空なら何もせず exit 0(認可前)
 - ルール正本: zutsu_threads_rules.md / 事実の根拠: zutsu_threads_facts.md (生成プロンプトに全文を入れる)
@@ -37,22 +37,40 @@ JST = timezone(timedelta(hours=9))
 
 # 2026-11-11 masa指示「Thredsの投稿を1日10投稿を目標にして その際に画像の解説も取り入れて投稿するようにして」:
 # 1日5本→10本。うち3枠(IMAGE_SLOTS)は図解カード(zutsu_figure.py・AI生成ではない)＋その解説文で投稿する
-SLOTS = ["06:30", "08:30", "09:15", "10:30", "12:30", "14:30", "17:30", "18:15", "20:15", "22:30"]   # 2026-11-14 masa指示「各アカウント合計1日10本にして」で10枠。同日01:10 Grok側のdaietto(毎時ちょうど+数〜15分)・masa Buffer(毎時10分±15分)の時刻 7/8/10/12/14/16/17/19/21/22時 の前20分〜後30分を避けて再配置（間隔45分以上・truth毎時40〜50分/nagaoka 50〜60分の帯もなるべく避ける）
+# 2026-11-26 masa指示「投稿は20投稿にして」で10→20枠。既存10枠はそのまま、Grok側daietto(毎時ちょうど・前20分〜後30分)・masa Buffer(毎時10分±15分)を避けて10枠を足した（間隔30分以上）
+SLOTS = ["06:00", "06:30", "07:35", "08:30", "09:15", "09:50", "10:30", "11:15", "12:30", "13:15",
+         "14:30", "15:15", "16:35", "17:30", "18:15", "19:35", "20:15", "21:35", "22:30", "23:15"]
+_OLD_SLOTS_20261114 = ["06:30", "08:30", "09:15", "10:30", "12:30", "14:30", "17:30", "18:15", "20:15", "22:30"]   # 2026-11-14 masa指示「各アカウント合計1日10本にして」で10枠。同日01:10 Grok側のdaietto(毎時ちょうど+数〜15分)・masa Buffer(毎時10分±15分)の時刻 7/8/10/12/14/16/17/19/21/22時 の前20分〜後30分を避けて再配置（間隔45分以上・truth毎時40〜50分/nagaoka 50〜60分の帯もなるべく避ける）
 IMAGE_SLOTS = {"09:15", "14:30", "20:15"}   # 2026-11-14 再配置: 9:00/13:45/19:00→9:15/14:30/20:15
-DAILY_CAP = 10           # API投稿の1日上限（2026-11-11 10→20／11-12 20→30／2026-11-14 masa指示「各アカウント合計1日10本にして」で10に戻す。手動投稿も含めて10本）
+DAILY_CAP = 20           # 2026-11-26 masa指示「投稿は20投稿にして」で10→20。旧: API投稿の1日上限（2026-11-11 10→20／11-12 20→30／2026-11-14 masa指示「各アカウント合計1日10本にして」で10に戻す。手動投稿も含めて10本）
 IMAGE_BODY_MAX = 160     # 画像の解説文の本文上限
 RAW_IMG = "https://raw.githubusercontent.com/truthbodysalon-lab/threads-auto-post/main/images/zutsu"
 CTA_DAILY_MAX = 2        # 1日の公式LINE案内の上限（手動投稿分も含めて数える）
-CTA_SLOTS = {"12:30", "20:15"}   # 案内を付けてよい枠（2026-11-14 再配置: 12:15/20:30→12:30/20:15）
+CTA_SLOTS = {"12:30", "17:30", "20:15", "21:35"}   # 公式LINE案内を付けてよい枠（1日2本まで・2本続けない。2026-11-26 20枠化で4枠に）
+# 2026-11-26 masa指示「（締めの固定文）→他のCTAで試して」: LINEの『診断』案内は言い方を4通りにし、フォロー・保存の誘いも試す。
+# どれを付けたかは log の cta_id に残し、zutsu_cta_report.py が閲覧数で比べる。公式LINEから誘うのは『診断』だけ（自由文の相談には誘わない）
+OTHER_CTA_SLOTS = {"08:30", "11:15", "15:15", "19:35", "22:30"}   # フォロー・保存の誘いを付けてよい枠
+OTHER_CTA_DAILY_MAX = 3
 MIN_GAP_MIN = 30         # 直前の投稿(手動投稿も含む)からの最低間隔
 MAX_WAIT_MIN = 10        # 間隔が足りない時に待つ上限(超えるならこの枠は見送り)
 SIM_THRESHOLD = 0.5      # 文字バイグラムJaccardの重複しきい値
-MAX_LEN = 260   # 2026-11-10「文章長すぎ」で500→260（案内の固定文を付けても収まる長さ）
+MAX_LEN = 260   # 1投稿（ツリーは1つずつ）の上限。 2026-11-10「文章長すぎ」で500→260（案内の固定文を付けても収まる長さ）
 MAX_ATTEMPTS = 5          # 2026-11-10 ありきたりな言い回しの検品を厳しくしたため3→5
 MODELS = ["claude-haiku-4-5-20251001", "claude-sonnet-4-5"]  # 先頭から試し、失敗したら次へ
 
 # 頭痛LINE(@561yryuk)の「診断」は自動応答(id 4 頭痛タイプ診断)が返す案内済みの言葉。自由文の相談には誘導しない(自由文は手動返信のため)
 CTA_TEXT = "自分の頭痛のタイプが気になる方は、公式LINE（@561yryuk）で『診断』と送ってください"
+LINE_CTA_VARIANTS = {   # 公式LINEの『診断』案内の言い方（2026-11-26〜 試し分け。どれも『診断』の自動応答＝頭痛タイプ診断へ）
+    "L1": CTA_TEXT,
+    "L2": "頭痛のタイプを知りたい方は、公式LINE（@561yryuk）に『診断』とだけ送ってください",
+    "L3": "公式LINE（@561yryuk）で『診断』と送ると、頭痛のタイプ診断が返ってきます",
+    "L4": "『診断』の2文字を、公式LINE（@561yryuk）に送ってください",
+}
+OTHER_CTA_VARIANTS = {   # LINE以外の締め（2026-11-26〜 試し分け）
+    "F1": "長岡の天気と頭痛の話を、毎日書いています。フォローしておくと流れてきます",
+    "F2": "頭が重くなりやすい季節の話も続けます。気になる方はフォローを",
+    "S1": "頭が重い日に見返せるように、保存しておいてください",
+}
 CTA_MARK = "@561yryuk"
 # 頭痛を扱う投稿(中くらい・長文)に必ず入れる1行（ig-autopost-cloud guides/headache_facts.md #23）
 SAFETY_LINE = "※突然の激しい頭痛や手足のしびれがある場合は、先に医療機関へ。"
@@ -64,7 +82,9 @@ SAFETY_LINES = [
     "※発熱と首の硬さ、見え方の異常をともなう頭痛は、整体より先に受診を。",
 ]
 
-TYPES = ["悩みの言い当て", "よくある勘違いをほどく", "今日からできる小さなコツ", "自分の頭痛のタイプを知る手がかり", "院での見方の紹介"]
+# 2026-11-26 masa指示「頭痛の種類や対処法などの情報も追加で伝えて」で情報の型を2つ足した（ツリーの投稿はこの2つを多めに使う）
+INFO_TYPES = ["頭痛の種類と見分け方の情報", "頭痛が出たときの対処法の情報"]
+TYPES = ["悩みの言い当て", "よくある勘違いをほどく", "今日からできる小さなコツ", "自分の頭痛のタイプを知る手がかり", "院での見方の紹介"] + INFO_TYPES
 # テーマは事実ファイル(zutsu_threads_facts.md)の項目に対応させ、同じ日に同じテーマを2回使わない。
 # 2026-11-05 試し生成で5枠すべてが「雨の前に頭が重い」になったため追加
 THEMES = [
@@ -88,19 +108,33 @@ LOCAL_THEMES = [
     "長岡の冬の寒暖差（暖房の部屋と外）と頭痛（事実19）",
     "冬に水分をとる量が減りやすいことと頭の重さ（事実20）",
     EMERGENCY_THEME,
+    # 2026-11-26 masa指示「長岡市の方達や周辺地域の方達に認知して最終的に来店してもらう。だからそれにまつわる情報も発信して」
+    "長岡駅から車で5分の整体院トゥルースの通いやすさ（夜22時まで・土日祝も営業・個室・完全予約制。事実2・23・24）",
+    "仕事帰りや休日に寄れる時間（夜22時まで・土日祝も営業。事実2・24）",
+    "初めて来たときの流れ（カウンセリング→検査→原因の説明→施術→セルフケア。事実3〜8）",
+    "見附・小千谷・柏崎・三条から長岡へ車で通う人の、運転中の首肩と頭の重さ（事実18・25）",
+    "長岡と周りの市（見附・小千谷・柏崎・三条）で冬を過ごす人の寒暖差と水分（事実19・20・25）",
 ]
 THEMES = THEMES + LOCAL_THEMES
+STORE_THEMES = LOCAL_THEMES[5:]   # 2026-11-26 追加の店・周りの市のテーマは地域の枠(LOCAL_SLOTS)だけで使う（ほかの枠が店の話ばかりにならないように）
 # ※の1行を付けるのは頭痛のタイプそのものを扱うテーマだけ（受診の目安・相談先のテーマは本文がその話なので付けない）
 SAFETY_THEMES = {THEMES[0], THEMES[1], THEMES[2], THEMES[4], THEMES[8]}
 LOCAL_SLOT = "12:30"   # 2026-11-14 再配置: 12:15→12:30
+LOCAL_SLOTS = {LOCAL_SLOT, "16:35", "19:35"}   # 2026-11-26 20枠化＋「長岡と周りの市の人に知ってもらい来店へ」で1日1本→3本
 EMERGENCY_EVERY_DAYS = 7
 # 2026-11-10 masa指示「文章長すぎ」: 長文(250〜450字)をやめ、短文と中くらい(本文140字以内)だけにする
 FORMATS = {
+    # 2026-11-26 masa指示「投稿内容についてはツリー投稿も入れて」「（長さ）長すぎ。長文になる場合はツリー投稿で」
+    "tree": "ツリー(親投稿は1〜2行・60字以内で、続きが読みたくなる言い切りか場面。続きは返信1〜2本に分け、1本110字以内。頭痛の種類や対処法の情報は返信に書く)",
     "short": "短文(1〜3行・60字以内)",
     "medium": "中くらい(本文60〜110字・3行まで。※の注意書きを指示されたときはそれを別に足す。言いたいことを1つにして言い切る)",
     "image": "画像つき(図解カード1枚＋その解説文。解説文は80〜150字・4行まで)",
 }
 MEDIUM_BODY_MAX = 120
+TREE_PARENT_MAX = 65     # ツリーの親投稿（目安60字）
+SHORT_BODY_MAX = 70      # 短文（目安60字）。2026-11-26 masa指示「長すぎ」で、短文の上限を中くらいと同じ120字→70字に
+TREE_REPLY_MAX = 115     # ツリーの返信1本（目安110字）
+TREE_REPLIES_MAX = 2
 
 
 # ── ログ・時刻ユーティリティ ─────────────────────────
@@ -288,6 +322,17 @@ def publish_image(token: str, user_id: str, text: str, image_url: str, sleeper=t
     return p["id"]
 
 
+def publish_reply(token: str, user_id: str, text: str, reply_to: str, sleeper=time.sleep) -> str:
+    """ツリーの返信（reply_to_id つき）。2段階投稿。再試行しない(二重投稿防止)"""
+    uid = user_id or "me"
+    sleeper(3)
+    c = _http(f"{BASE_URL}/{uid}/threads",
+              {"media_type": "TEXT", "text": text, "reply_to_id": reply_to, "access_token": token}, "POST")
+    sleeper(2)
+    p = _http(f"{BASE_URL}/{uid}/threads_publish", {"creation_id": c["id"], "access_token": token}, "POST")
+    return p["id"]
+
+
 def push_figure(path: Path) -> bool:
     """図解カードをリポジトリへcommit/pushして raw URL で読めるようにする(Actionsのcheckoutは書き込み可)"""
     import subprocess
@@ -382,11 +427,49 @@ def safety_line_for(fmt: str, theme: str, recent: list[dict], now: datetime) -> 
     return SAFETY_LINES[i % len(SAFETY_LINES)]
 
 
+def strip_ctas(text: str) -> str:
+    """締めの決まった文（LINEの『診断』案内・フォロー・保存の誘い）を外した本文"""
+    t = text or ""
+    for c in list(LINE_CTA_VARIANTS.values()) + list(OTHER_CTA_VARIANTS.values()):
+        t = t.replace(c, "")
+    return t.strip()
+
+
+def _cta_counts(entries: list[dict], days: int, now: datetime) -> dict:
+    since = now - timedelta(days=days)
+    out: dict = {}
+    for e in entries:
+        ts = parse_ts(e.get("ts") or "")
+        if ts and ts >= since and e.get("cta_id"):
+            out[e["cta_id"]] = out.get(e["cta_id"], 0) + 1
+    return out
+
+
+def choose_cta_variant(kind: str, entries: list[dict], now: datetime, rng: random.Random) -> str:
+    """試し分け: 直近14日で使った回数が一番少ない言い方を選ぶ（同数ならランダム）"""
+    pool = LINE_CTA_VARIANTS if kind == "line" else OTHER_CTA_VARIANTS
+    used = _cta_counts(entries, 14, now)
+    low = min(used.get(k, 0) for k in pool)
+    return rng.choice(sorted(k for k in pool if used.get(k, 0) == low))
+
+
+def other_cta_ok(entries: list[dict], recent: list[dict], slot: str, now: datetime) -> bool:
+    """フォロー・保存の誘いを付けてよいか（その枠・1日3本まで・直前の投稿が締めつきでない）"""
+    if slot not in OTHER_CTA_SLOTS:
+        return False
+    n = sum(1 for e in today_entries(entries, now) if str(e.get("cta_id") or "")[:1] in ("F", "S"))
+    if n >= OTHER_CTA_DAILY_MAX:
+        return False
+    rs = sorted_recent(recent)
+    last = (rs[0].get("text") or "") if rs else ""
+    return not (CTA_MARK in last or any(c in last for c in OTHER_CTA_VARIANTS.values()))
+
+
 def first_sentence(text: str) -> str:
     return re.split(r"[。！？!?\n]", (text or "").strip(), maxsplit=1)[0]
 
 
-def classify_format(text: str) -> str:
+def classify_format(text: str) -> str:  # ツリーの親は短文として数える
     # ※の注意書きつき、または90字を超えるものを中くらいとして数える（短文の指定でも少し長めに書かれることがあるため）
     t = text or ""
     return "short" if len(t) <= 90 and "※" not in t else "medium"
@@ -396,11 +479,12 @@ def choose_format_and_type(recent: list[dict], slot: str, rng: random.Random) ->
     """短文と中くらいを半々・同形式3連続禁止。地域の情報の枠は中身を入れるため中くらい寄り、夜は短文寄り"""
     if slot in IMAGE_SLOTS:
         return "image", rng.choice(TYPES)
-    w = {"short": 0.50, "medium": 0.50}
-    if slot == LOCAL_SLOT:
-        w = {"short": 0.20, "medium": 0.80}
-    elif slot in ("20:15", "22:30"):   # 夜の2枠（2026-11-14 再配置: 20:30/22:00→20:15/22:30）
-        w = {"short": 0.65, "medium": 0.35}
+    # 2026-11-26: 短文4割・中くらい3割・ツリー3割（長くなる話はツリーへ）
+    w = {"short": 0.40, "medium": 0.30, "tree": 0.30}
+    if slot in LOCAL_SLOTS:
+        w = {"short": 0.10, "medium": 0.50, "tree": 0.40}
+    elif slot in ("21:35", "22:30", "23:15"):   # 夜の枠は短文寄り
+        w = {"short": 0.55, "medium": 0.25, "tree": 0.20}
     last = [classify_format(p.get("text") or "") for p in sorted_recent(recent)[:2]]
     if len(last) == 2 and last[0] == last[1]:
         w[last[0]] = 0.0
@@ -408,7 +492,7 @@ def choose_format_and_type(recent: list[dict], slot: str, rng: random.Random) ->
             w = {"short": 0.5, "medium": 0.5}
     fmts, ws = zip(*w.items())
     fmt = rng.choices(fmts, weights=ws)[0]
-    typ = rng.choice(TYPES)
+    typ = rng.choice(INFO_TYPES) if (fmt == "tree" and rng.random() < 0.7) else rng.choice(TYPES)
     return fmt, typ
 
 
@@ -449,15 +533,25 @@ _NG_REGEX = [
     (r"朝日|日光|日差し|サプリ|カフェイン|コーヒー|お酒|アルコール|ストレッチ|マッサージ|ツボ|レンジ|\d+\s*秒(?:〜|～|-)", "事実ファイルにない対処"),   # 20秒(20-20-20)は事実にあるので範囲指定だけ弾く
     # 根拠ファイルにない体の仕組みの話は書かない
     (r"内臓|骨盤|骨(?:の|が)(?:ずれ|ゆがみ|歪み)|ゆがみ(?:が|の)原因|歪み(?:が|の)原因|リンパ|老廃物|血流が(?:良くな|よくな|改善)|体質が変わ", "根拠のない体の仕組みの話"),
+    # 2026-11-26 ツリーの試し生成で「血管が急に縮みやすくなる」「意識しておくと違います」が出た（事実ファイルに無い仕組み・効果の示唆）
+    (r"血管(?:が|は)?(?:急に)?(?:縮|収縮|広が|拡張|ひら)|自律神経(?:が|を)(?:乱|整)", "根拠のない体の仕組みの話"),
+    (r"(?:と|ば|たら|ておくと|ていると)、?(?:全然|かなり|ぐっと|だいぶ)?(?:違います|違ってきます|変わってきます|変わります)|重さが(?:変わ|軽く|減)|変わりやすい|軽くなりやすい|戻りにく|多くの場合|ほとんどの(?:頭痛|人|方)", "効果・割合の示唆"),
+    (r"胃に負担|水分を失|汗をかかなくても|体が(?:温度|気温)(?:変化)?に対応|渇き|持ち越し|引きずらな|(?:運転|移動)中(?:は|も)?(?:特に)?水分", "事実ファイルにない体の仕組み・効果の話"),
     # 専門用語は読者に伝わらないので使わない（言い換える）
     (r"CGRP|セロトニン|三叉神経|閃輝暗点|後頭下筋|胸鎖乳突筋|僧帽筋|ミトコンドリア|ホルモンバランス", "専門用語"),
 ]
 
 # 2026-11-10 masa指示「ありきたりな文章使いすぎ」: 11/6〜11/10の投稿で繰り返されていた言い回しは常に使わない
-CLICHES = ["でも実は", "よくある勘違い", "今日からできる", "小さなコツ", "そんなときって", "原因とは限りません",
-           "痛い場所を揉", "が一番です", "が大切です", "ことが大切", "が大事です", "大事な視点", "価値があります",
-           "院でもここから始まります", "ここから始まります", "見直してみる", "一度見直", "近道です", "積み重ね",
-           "抜け出すきっかけ", "根っこ", "疑ってみて", "意識するだけ", "小さな工夫", "見えてきます",
+# 2026-11-26 masa指示「（使わない言い回し）→言い回しとして使わないという選択肢を持ってもいいけど話し言葉で回してみて」:
+# 本人が挙げた12個（SOFT_PHRASES）は常時禁止をやめ、直近10本に出ていなければ使ってよい（同じ言い回しを続けない）。
+# 型の名前・効果寄りの言い回し（下の CLICHES）は従来どおり使わない。
+SOFT_PHRASES = ["でも実は", "そんなときって", "原因とは限りません", "痛い場所を揉", "が一番です", "が大切です",
+                "見直してみる", "院でもここから始まります", "根っこ", "意識するだけ", "小さな工夫", "見えてきます"]
+SOFT_RECENT_N = 10
+CLICHES = ["よくある勘違い", "今日からできる", "小さなコツ",
+           "ことが大切", "が大事です", "大事な視点", "価値があります",
+           "ここから始まります", "一度見直", "近道です", "積み重ね",
+           "抜け出すきっかけ", "疑ってみて",
            "が大事", "次のステップ", "工夫が", "プロの", "しましょう"]
 # 決まり文句の繰り返しを避ける（手動投稿も含めた直近の投稿と比べる）
 STOCK_PHRASES = ["本当に多いです", "意外と多いです", "多いんです", "多いです", "という方", "そんな方", "思っていませんか",
@@ -470,7 +564,10 @@ STOCK_PHRASES = ["本当に多いです", "意外と多いです", "多いんで
 def stock_phrase_errors(text: str, recent_texts: list[str]) -> list[str]:
     """ありきたりな言い回し(CLICHES)は常にNG。決まり文句(STOCK_PHRASES)は直近5本のどれかに出ているか、
     直近15本で2回以上出ていたらNG。書き出しの1文が直近15本の書き出しと似ていてもNG"""
-    errs = [f"ありきたりな言い回し「{c}」" for c in CLICHES if c in text]
+    text = strip_ctas(text)
+    errs = [f"ありきたりな言い回し「{c}」" for c in CLICHES if c in text and not (c == "ここから始まります" and "院でもここから始まります" in text)]
+    errs += [f"言い回し「{c}」が直近{SOFT_RECENT_N}本と重なる" for c in SOFT_PHRASES
+             if c in text and any(c in t for t in recent_texts[:SOFT_RECENT_N])]
     last5, last15 = recent_texts[:5], recent_texts[:15]
     for p in STOCK_PHRASES:
         if p in text and (any(p in t for t in last5) or sum(p in t for t in last15) >= 2):
@@ -489,7 +586,8 @@ def blocked_phrases(recent_texts: list[str]) -> list[str]:
     """今回の生成で使えない言い回し（プロンプトに先に渡して、検品で落ちる回数を減らす）"""
     last5, last15 = recent_texts[:5], recent_texts[:15]
     stock = [p for p in STOCK_PHRASES if any(p in t for t in last5) or sum(p in t for t in last15) >= 2]
-    return CLICHES + stock
+    soft = [p for p in SOFT_PHRASES if any(p in t for t in recent_texts[:SOFT_RECENT_N])]
+    return CLICHES + soft + stock
 
 
 def inspect_text(text: str, has_cta: bool) -> list[str]:
@@ -505,8 +603,8 @@ def inspect_text(text: str, has_cta: bool) -> list[str]:
         errs.append(f"{MAX_LEN}字超過({len(text)}字)")
     if len(text.strip()) < 10:
         errs.append("短すぎる")
-    # 公式LINE案内は固定文のみ許可(NFKCでは全角@が崩れるので原文で判定)
-    body = text.replace(CTA_TEXT, "") if has_cta else text
+    # 公式LINE案内は決めた言い方(LINE_CTA_VARIANTS)のみ許可(NFKCでは全角@が崩れるので原文で判定)
+    body = strip_ctas(text)
     nb = unicodedata.normalize("NFKC", body)
     for w in _NG_WORDS:
         if w in nb:
@@ -515,9 +613,10 @@ def inspect_text(text: str, has_cta: bool) -> list[str]:
         if rx.search(nb):
             errs.append(f"NG表現: {name}")
     if has_cta:
-        if CTA_TEXT not in text:
+        used = [c for c in LINE_CTA_VARIANTS.values() if c in text]
+        if not used:
             errs.append("案内ありなのに固定文が一字一句一致していない")
-        elif not text.rstrip().endswith(CTA_TEXT):
+        elif not any(text.rstrip().endswith(c) for c in used):
             errs.append("案内文が最後の一文になっていない")
     else:
         if "561yryuk" in t or "公式LINE" in t:
@@ -537,12 +636,25 @@ def choose_theme(entries: list[dict], now: datetime, rng: random.Random, slot: s
     since = now - timedelta(days=EMERGENCY_EVERY_DAYS)
     recent_emerg = any(e.get("theme") == EMERGENCY_THEME and (parse_ts(e.get("ts") or "") or now) >= since
                        for e in entries)
-    pool = LOCAL_THEMES if slot == LOCAL_SLOT else THEMES
+    pool = LOCAL_THEMES if slot in LOCAL_SLOTS else [t for t in THEMES if t not in STORE_THEMES]
     if recent_emerg:
         pool = [t for t in pool if t != EMERGENCY_THEME]
     rest2 = [t for t in pool if t not in used2]
     rest = [t for t in pool if t not in used]
     return rng.choice(rest2 or rest or pool)
+
+
+def seitai_reference(n: int = 8) -> str:
+    """整体アカウント（@truth_body_salon・@truth_nagaoka）の頭痛の種類・対処法の投稿（zutsuu_templates.py）から数本。
+    2026-11-26 masa指示「（根拠は頭痛の事実ファイルだけ）→整体のアカウントの発信内容を参考にして」"""
+    try:
+        from zutsuu_templates import ZUTSUU_TRUTH, ZUTSUU_NAGAOKA
+        pool = list(ZUTSUU_TRUTH) + list(ZUTSUU_NAGAOKA)
+    except Exception:
+        return "(読み込めず)"
+    rng = random.Random(datetime.now(JST).strftime("%Y%m%d%H"))
+    pick = rng.sample(pool, min(n, len(pool)))
+    return "\n".join("- " + t.replace("\n[COMMENT]\n", " ／続き: ").replace("\n", " ")[:220] for t in pick)
 
 
 def build_prompts(fmt: str, typ: str, slot: str, allow_cta: bool, recent_texts: list[str], feedback: str = "",
@@ -551,16 +663,19 @@ def build_prompts(fmt: str, typ: str, slot: str, allow_cta: bool, recent_texts: 
     facts = FACTS_FILE.read_text(encoding="utf-8") if FACTS_FILE.exists() else ""
     system = (
         "あなたは長岡市の整体院トゥルースの院長として、Threadsの頭痛専用アカウント(@truth_nagaoka_zutsuu)の投稿を1本書く。"
-        "以下の【運用ルール】と【頭痛の事実ファイル】だけに従う。"
-        "頭痛についての主張は【頭痛の事実ファイル】にあることだけを使い、ここにない事実・数字・病名・薬の話・体験談(「見てきた」「経験上」など)は書かない。"
+        "以下の【運用ルール】と【頭痛の事実ファイル】に従い、【整体アカウントの頭痛の発信】を中身と言い方の参考にする。"
+        "頭痛についての主張は【頭痛の事実ファイル】と【整体アカウントの頭痛の発信】にあることだけを使い、どちらにもない事実・数字・病名・薬の話・体験談(「見てきた」「経験上」など)は書かない。"
+        "整体アカウントの発信を参考にするときも、このアカウントの禁止事項（効果の約束・薬の量や回数の話・食べ物の名前・病名の決めつけ・断定）は守る。"
         "整体は医療の代替ではない。診断・治療・効果の約束はしない。"
+        "文章は話し言葉で、読者に話しかけるように書く。"
         "出力はJSONオブジェクト1つだけ。\n\n【運用ルール】\n" + rules + "\n\n【頭痛の事実ファイル】\n" + facts
+        + "\n\n【整体アカウントの頭痛の発信（@truth_body_salon・@truth_nagaoka の実際の投稿。参考）】\n" + seitai_reference()
     )
     avoid = "\n".join(f"- {t.strip()[:80].replace(chr(10), ' ')}" for t in recent_texts[:20]) or "(なし)"
     cta_line = (
-        f"公式LINE案内は付けても付けなくてもよい。付ける場合は本文の最後の一文を次の固定文にし、has_ctaをtrueにする: {CTA_TEXT}"
+        f"公式LINE案内は付けても付けなくてもよい。付ける場合は本文の最後の一文を次の固定文にし、has_ctaをtrueにする（言い方はプログラムが差し替える）: {CTA_TEXT}"
         if allow_cta else "公式LINE案内は今回は入れない(has_ctaはfalse。@561yryuk や「公式LINE」の語を本文に書かない)。"
-    )
+    ) + "フォローや保存のお願いは書かない（必要ならプログラムが最後に付ける）。"
     user = (
         f"投稿枠: {slot} (JST)\n型: {typ}\n" + (f"テーマ: {theme}（このテーマの事実だけを使う）\n" if theme else "")
         + f"長さ: {FORMATS[fmt]}\n{cta_line}\n\n"
@@ -568,7 +683,9 @@ def build_prompts(fmt: str, typ: str, slot: str, allow_cta: bool, recent_texts: 
         "1文目は「読者のセリフ(「夕方になると頭が重い」など)」か「身近な場面(デスクワーク・スマホ・雨の前の日など)」で始める。ハッシュタグ・URL・絵文字の乱用はしない。\n"
         "短く書く。言いたいことは1つだけ。前置き・言い換え・まとめの繰り返しはしない。1文は40字以内。\n"
         "最後は「やり方」か「目安」で終える。「〜が変わります」「〜だけで違います」「頭の重さが変わることも」のような効果の言い方で締めない。\n"
-        + ("このテーマは長岡で暮らす人向けの地域の情報。「長岡」「雪」「冬」など読者の暮らしの言葉を1つ入れ、地域の事実(事実18〜22)は書かれているとおりに使う。電話番号・時間を書くときは事実の文字どおりにし、変わることがあるので確かめてから、と添える。\n"
+        + ("このテーマは長岡と周りの市（見附・小千谷・柏崎・三条）で暮らす人向けの地域の情報。読者に整体院トゥルースを知ってもらい、来てみようと思ってもらうための投稿。"
+           "「長岡」「雪」「冬」や市の名前など読者の暮らしの言葉を入れ、地域と店の事実(事実2〜8・18〜25)は書かれているとおりに使う。"
+           "電話番号・時間を書くときは事実の文字どおりにし、変わることがあるので確かめてから、と添える。店の住所・電話番号・料金は書かない。\n"
            if theme in LOCAL_THEMES else "")
         + (f"本文の最後(公式LINE案内を付けるならその直前)に次の1行をそのまま入れる: {safety}\n" if safety
            else "今回は「※」で始まる注意書きの1行を入れない。\n")
@@ -578,7 +695,11 @@ def build_prompts(fmt: str, typ: str, slot: str, allow_cta: bool, recent_texts: 
         "書き出しは、直近の投稿の書き出しと違う場面・違う言葉にする。直近の書き出し: "
         + " / ".join(first_sentence(t)[:25] for t in recent_texts[:8] if t) + "\n"
         + ("短文は60字以内・2文まで。説明を足さない。\n" if fmt == "short" else "")
+        + ("ツリー: 親投稿(text)は60字以内・2文までで、続きを読みたくなる場面か言い切りにする（答えは返信に置く）。"
+           "返信(replies)は1〜2本、1本110字以内・3行まで。頭痛の種類・見分け方・対処法などの情報は返信に書く。"
+           "「※」の1行を指示されたときは最後の返信の最後に入れる。\n" if fmt == "tree" else "")
         + "頭痛のタイプの話は「〜と言われています」「〜のことがあります」の言い方にし、読者の頭痛を決めつけない。\n"
+        + "事実ファイルと整体アカウントの発信に無い理由づけ（体の中で何が起きているか・水分が減る理由など）は、「〜と言われています」を付けても足さない。\n"
         "薬の話は「飲む日が増えてきたら医師・薬剤師に相談」までにとどめ、やめる・減らす・銘柄・量の話はしない。\n"
         "専門用語(CGRP・セロトニン・三叉神経・筋肉の名前など)は使わず、中学生にも伝わる言葉に言い換える。\n"
         "次の言い回しは今回使えない(含めると不合格): " + "／".join(f"「{x}」" for x in blocked_phrases(recent_texts)) + "\n"
@@ -590,6 +711,8 @@ def build_prompts(fmt: str, typ: str, slot: str, allow_cta: bool, recent_texts: 
         + ('\n出力形式(JSONのみ): {"text": "画像の解説文", "type": "型", "has_cta": true または false, '
            '"figure": {"title": "図の見出し", "points": ["要点1", "要点2", "要点3"], "foot": "補足(任意)"}}'
            if fmt == "image" else
+           '\n出力形式(JSONのみ): {"text": "親投稿", "replies": ["返信1", "返信2(任意)"], "type": "型", "has_cta": true または false}'
+           if fmt == "tree" else
            '\n出力形式(JSONのみ): {"text": "本文", "type": "型", "has_cta": true または false}')
     )
     return system, user
@@ -639,6 +762,8 @@ def parse_generated(raw: str | None) -> dict | None:
     if not text:
         return None
     out = {"text": text, "type": str(d.get("type") or ""), "has_cta": bool(d.get("has_cta"))}
+    if isinstance(d.get("replies"), list):
+        out["replies"] = [str(r).strip() for r in d["replies"] if str(r).strip()][:TREE_REPLIES_MAX]
     if isinstance(d.get("figure"), dict):
         out["figure"] = d["figure"]
     return out
@@ -647,10 +772,10 @@ def parse_generated(raw: str | None) -> dict | None:
 _CTA_MARKERS = ("公式LINE", "561yryuk", "『診断』と送", "「診断」と送")
 
 
-def attach_fixed_cta(text: str) -> str:
-    """案内らしき文（公式LINE・@561yryuk・「診断」と送って を含む文）を本文から外し、固定文 CTA_TEXT を最後の行に付ける"""
+def attach_fixed_cta(text: str, cta: str = CTA_TEXT) -> str:
+    """案内らしき文（公式LINE・@561yryuk・「診断」と送って を含む文）を本文から外し、決めた案内文 cta を最後の行に付ける"""
     out_lines = []
-    for line in text.replace(CTA_TEXT, "").splitlines():
+    for line in strip_ctas(text).splitlines():
         if any(m in line for m in _CTA_MARKERS):
             # 行の中の案内の文だけを外す（。！？で区切った文単位）
             parts = re.split(r"(?<=[。！？!?])", line)
@@ -658,11 +783,11 @@ def attach_fixed_cta(text: str) -> str:
         out_lines.append(line.rstrip())
     body = "\n".join(out_lines).strip()
     body = re.sub(r"\n{3,}", "\n\n", body)
-    return f"{body}\n\n{CTA_TEXT}" if body else CTA_TEXT
+    return f"{body}\n\n{cta}" if body else cta
 
 
 def generate_post(slot: str, fmt: str, typ: str, allow_cta: bool, recent_texts: list[str], sim_pool: list[str],
-                  generator=None, theme: str = "", safety: str = "") -> tuple[dict | None, str]:
+                  generator=None, theme: str = "", safety: str = "", line_cta: str = CTA_TEXT) -> tuple[dict | None, str]:
     """検品と類似チェックを通った {text,type,has_cta} と、失敗時の理由。generator(system,user)->raw は差し替え可"""
     generator = generator or call_llm
     feedback = ""
@@ -679,11 +804,30 @@ def generate_post(slot: str, fmt: str, typ: str, allow_cta: bool, recent_texts: 
             last_reason = "案内不可なのに案内つき"
             feedback = "公式LINE案内は入れない"
             continue
+        replies = post.get("replies") or []
+        eff = fmt
+        if fmt == "tree" and not replies:
+            eff = "medium"   # 返信が無ければ1投稿として扱う（長さは中くらいの基準で検品）
+        if fmt != "tree":
+            replies = []
+            post.pop("replies", None)
         if post["has_cta"]:
             # 2026-11-17: LLMが固定文を一字一句写せず10回とも検品NG→枠見送り（20:15枠）。
-            # 案内文はLLMに任せず、案内らしき文を外してから固定文をプログラムで最後に付ける
-            post["text"] = attach_fixed_cta(post["text"])
-        errs = inspect_text(post["text"], post["has_cta"]) + stock_phrase_errors(post["text"], recent_texts)
+            # 案内文はLLMに任せず、案内らしき文を外してから決めた言い方をプログラムで最後に付ける（ツリーは最後の返信）
+            if replies:
+                post["text"] = strip_ctas(post["text"])
+                replies[-1] = attach_fixed_cta(replies[-1], line_cta)
+            else:
+                post["text"] = attach_fixed_cta(post["text"], line_cta)
+        if replies:
+            post["replies"] = replies
+        last_part = replies[-1] if replies else post["text"]
+        errs = inspect_text(post["text"], post["has_cta"] and not replies) + stock_phrase_errors(post["text"], recent_texts)
+        for k, r in enumerate(replies):
+            errs += [f"返信{k + 1}: {e}" for e in inspect_text(r, post["has_cta"] and k == len(replies) - 1) if "短すぎる" not in e]
+            errs += [f"返信{k + 1}: {e}" for e in stock_phrase_errors(r, recent_texts) if "書き出し" not in e]
+            if len(strip_ctas(r).replace(safety or SAFETY_LINE, "").strip()) > TREE_REPLY_MAX:
+                errs.append(f"返信{k + 1}が長すぎる。110字以内に削る")
         if fmt == "image":
             from zutsu_figure import validate_figure, figure_text
             fig = post.get("figure")
@@ -691,23 +835,26 @@ def generate_post(slot: str, fmt: str, typ: str, allow_cta: bool, recent_texts: 
             if not validate_figure(fig):
                 errs += [f"図の文字: {e}" for e in inspect_text(figure_text(fig), False) if "短すぎる" not in e]
                 errs += [f"図の文字: {e}" for e in stock_phrase_errors(figure_text(fig), []) if "書き出し" not in e]
-        if safety and safety not in post["text"]:
-            errs.append(f"受診の目安の1行「{safety}」が入っていない")
-        elif not safety and "※" in post["text"]:
+        all_text = "\n".join([post["text"]] + replies)
+        if safety and safety not in last_part:
+            errs.append(f"受診の目安の1行「{safety}」が{'最後の返信に' if replies else ''}入っていない")
+        elif not safety and "※" in all_text:
             errs.append("今回は※の注意書きを入れない（1日1本まで・頭痛のタイプの投稿だけ）")
-        n_body = len(post["text"].replace(CTA_TEXT, "").replace(safety or SAFETY_LINE, "").strip())
-        if fmt == "short" and n_body > MEDIUM_BODY_MAX:
+        n_body = len(strip_ctas(post["text"]).replace(safety or SAFETY_LINE, "").strip())
+        if eff == "tree" and n_body > TREE_PARENT_MAX:
+            errs.append(f"親投稿が長すぎる({n_body}字)。60字以内にして続きは返信へ")
+        elif eff == "short" and n_body > SHORT_BODY_MAX:
             errs.append(f"長すぎる({n_body}字)。短文は60字目安。言いたいことを1つにする")
         elif fmt == "image" and n_body > IMAGE_BODY_MAX:
             errs.append(f"長すぎる({n_body}字)。画像の解説文は150字以内に削る")
-        elif fmt == "medium" and n_body > (MEDIUM_BODY_MAX + 40 if theme == EMERGENCY_THEME else MEDIUM_BODY_MAX):
+        elif eff == "medium" and n_body > (MEDIUM_BODY_MAX + 40 if theme == EMERGENCY_THEME else MEDIUM_BODY_MAX):
             errs.append(f"長すぎる({n_body}字)。本文は110字以内に削る（言いたいことを1つにする）")
         if errs:
             last_reason = "検品NG: " + " / ".join(errs)
             feedback = "; ".join(errs)
             log(f"試行{attempt}: {last_reason}")
             continue
-        sim, other = max_similarity(post["text"], sim_pool)
+        sim, other = max_similarity(all_text if replies else post["text"], sim_pool)
         if sim >= SIM_THRESHOLD:
             sim_fail += 1
             last_reason = f"直近投稿と類似(Jaccard {sim:.2f})"
@@ -743,7 +890,7 @@ def pick_slot(arg: str | None, now: datetime) -> str:
 
 def run(slot: str | None = None, now: datetime | None = None, dry_run: bool = False, generator=None,
         fetch=None, publisher=None, sleeper=time.sleep, rng: random.Random | None = None, image_publisher=None,
-        log_path: Path | None = None, pause_path: Path | None = None) -> int:
+        log_path: Path | None = None, pause_path: Path | None = None, reply_publisher=None) -> int:
     """戻り値は常に0(見送りも正常終了)。失敗はDiscord通知で知らせる"""
     load_env()
     now = now or datetime.now(JST)
@@ -754,6 +901,7 @@ def run(slot: str | None = None, now: datetime | None = None, dry_run: bool = Fa
     fetch = fetch or fetch_recent
     publisher = publisher or publish_text
     image_publisher = image_publisher or publish_image
+    reply_publisher = reply_publisher or publish_reply
     pause_path = pause_path or PAUSE_FILE
 
     if pause_path.exists():
@@ -804,28 +952,42 @@ def run(slot: str | None = None, now: datetime | None = None, dry_run: bool = Fa
     theme = choose_theme(entries, now, rng, slot)
     rs = sorted_recent(recent)
     recent_texts = [p.get("text") or "" for p in rs if p.get("text")]
-    safety = safety_line_for(fmt, theme, recent, now)
-    post, reason = generate_post(slot, fmt, typ, allow_cta, recent_texts[:20], recent_texts[:50], generator, theme, safety)
+    safety = safety_line_for(fmt if fmt != "tree" else "medium", theme, recent, now)
+    line_cta_id = choose_cta_variant("line", entries, now, rng)
+    line_cta = LINE_CTA_VARIANTS[line_cta_id]
+    post, reason = generate_post(slot, fmt, typ, allow_cta, recent_texts[:20], recent_texts[:50], generator, theme, safety, line_cta)
     if not post:
         # 2026-11-10: 同じ書き出しになりやすいテーマで見送りが増えたので、テーマを替えて1回だけやり直す
-        pool = LOCAL_THEMES if slot == LOCAL_SLOT else THEMES
+        pool = LOCAL_THEMES if slot in LOCAL_SLOTS else [t for t in THEMES if t not in STORE_THEMES]
         others = [t for t in pool if t != theme and t != EMERGENCY_THEME]
         if others:
             log(f"テーマ「{theme[:20]}」で合格せず({reason[:80]})。テーマを替えてやり直す")
             theme = rng.choice(others)
-            safety = safety_line_for(fmt, theme, recent, now)
-            post, reason = generate_post(slot, fmt, typ, allow_cta, recent_texts[:20], recent_texts[:50], generator, theme, safety)
+            safety = safety_line_for(fmt if fmt != "tree" else "medium", theme, recent, now)
+            post, reason = generate_post(slot, fmt, typ, allow_cta, recent_texts[:20], recent_texts[:50], generator, theme, safety, line_cta)
     if not post and fmt == "image":
         # 画像の枠で合格しなかったら、文字だけ(中くらい)で1回作る。1日10本の目標を落とさないため
         log(f"画像の枠で合格せず({reason[:80]})。文字だけで作り直す")
         fmt = "medium"
         safety = safety_line_for(fmt, theme, recent, now)
-        post, reason = generate_post(slot, fmt, typ, allow_cta, recent_texts[:20], recent_texts[:50], generator, theme, safety)
+        post, reason = generate_post(slot, fmt, typ, allow_cta, recent_texts[:20], recent_texts[:50], generator, theme, safety, line_cta)
     if not post:
         log(f"見送り: {reason}")
         if "類似" not in reason:
             notify(f"{slot}枠を見送り: テーマを替えても合格しませんでした({reason[:150]})")
         return 0
+
+    # 締めの言い方の記録（試し分け）。LINEの案内が無い枠では、フォロー・保存の誘いを付けることがある
+    cta_id = line_cta_id if post["has_cta"] else ""
+    if not post["has_cta"] and theme != EMERGENCY_THEME and other_cta_ok(entries, recent, slot, now):
+        oid = choose_cta_variant("other", entries, now, rng)
+        cand = (post.get("replies") or [post["text"]])[-1].rstrip() + "\n\n" + OTHER_CTA_VARIANTS[oid]
+        if len(cand) <= MAX_LEN and not inspect_text(cand, False):
+            if post.get("replies"):
+                post["replies"][-1] = cand
+            else:
+                post["text"] = cand
+            cta_id = oid
 
     fig_path = None
     if fmt == "image" and post.get("figure"):
@@ -838,10 +1000,12 @@ def run(slot: str | None = None, now: datetime | None = None, dry_run: bool = Fa
 
     if dry_run:
         print("----- DRY_RUN 生成結果 -----")
-        print(f"[枠 {slot} / 型 {post['type'] or typ} / テーマ {theme} / 形式 {fmt} / 案内 {post['has_cta']}]")
+        print(f"[枠 {slot} / 型 {post['type'] or typ} / テーマ {theme} / 形式 {fmt} / 案内 {post['has_cta']} / 締め {cta_id or 'なし'}]")
         if post.get("figure"):
             print(f"[図] {json.dumps(post['figure'], ensure_ascii=False)} -> {fig_path}")
         print(post["text"])
+        for k, r in enumerate(post.get("replies") or []):
+            print(f"  └ 返信{k + 1}: " + r.replace("\n", "\n    "))
         print("----------------------------")
         return 0
 
@@ -869,11 +1033,26 @@ def run(slot: str | None = None, now: datetime | None = None, dry_run: bool = Fa
             return 0
         notify(f"{slot}枠の投稿に失敗: {str(e)[:150]}")
         return 0
+    # ツリーの返信（親を出した後に続ける。返信が失敗しても親の記録は残す＝同じ枠を出し直さない）
+    reply_ids = []
+    parent = pid
+    for k, r in enumerate(post.get("replies") or []):
+        try:
+            parent = reply_publisher(token, uid, r, parent)
+            reply_ids.append(parent)
+        except Exception as e:
+            log(f"返信{k + 1}の投稿に失敗: {str(e)[:120]}")
+            if is_pause_error(e):
+                pause_and_notify(str(e), slot, now, pause_path)
+            else:
+                notify(f"{slot}枠: ツリーの返信{k + 1}を出せませんでした（親投稿は公開済み）: {str(e)[:100]}")
+            break
     append_log({
         "ts": now.isoformat(timespec="seconds"), "slot": slot, "id": pid,
         "type": post["type"] or typ, "theme": theme, "has_cta": post["has_cta"],
         "text_hash": hashlib.sha256(post["text"].encode("utf-8")).hexdigest()[:16],
-        "text": post["text"], "fmt": fmt,
+        "text": post["text"], "fmt": fmt, "cta_id": cta_id,
+        **({"replies": post.get("replies"), "reply_ids": reply_ids} if post.get("replies") else {}),
         **({"image": fig_path.name, "figure": post.get("figure")} if fig_path else {}),
     }, log_path)
     log(f"投稿完了 id={pid} 型={post['type'] or typ} 案内={post['has_cta']}")

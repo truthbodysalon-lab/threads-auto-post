@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """zutsu_threads.py のテスト(ネットワークは使わない)。実行: python3 test_zutsu_threads.py"""
-import json, os, random, sys, tempfile, unittest
+import json
+import re, os, random, sys, tempfile, unittest
 from datetime import datetime, timedelta
 from pathlib import Path
 
@@ -15,6 +16,12 @@ LONG_GOOD = ("「頭が痛いから、とりあえず首を温めよう」。じ
              "一方で、片側がズキズキ脈打って、動くと響く痛みは片頭痛のことがあり、温めるより暗く静かな場所で休むのが向いています。\n\n"
              "まずは自分の痛みがどちらに近いか、痛む場所ときっかけをメモしてみてください。\n" + D.SAFETY_LINE)
 
+
+
+def with_safety(user, text):
+    """2026-11-26: 指示された※の1行を入れる（本物のLLMと同じ動き。型が増えて乱数の流れが変わり、※つきのテーマに当たる枠が出たため）"""
+    m = re.search(r"次の1行をそのまま入れる: (※[^\n]+)", user or "")
+    return text + "\n" + m.group(1) if m else text
 
 def ts(dt):
     return dt.astimezone(D.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S+0000")
@@ -197,7 +204,7 @@ class TestGuards(Base):
 
     def gen(self, system, user):
         self.gen_calls.append(user)
-        return json.dumps({"text": GOOD, "type": "悩みの言い当て", "has_cta": False}, ensure_ascii=False)
+        return json.dumps({"text": with_safety(user, GOOD), "type": "悩みの言い当て", "has_cta": False}, ensure_ascii=False)
 
     def test_gap_guard_skips_when_wait_too_long(self):
         r = self.run_(slot="20:15", fetch=lambda t, n: [post(10)], publisher=self.pub, generator=self.gen,
@@ -250,7 +257,8 @@ class TestGuards(Base):
         self.assertIn(D.CTA_TEXT, self.gen_calls[0])
 
     def test_no_cta_outside_cta_slots(self):
-        self.run_(slot="17:30", now=NOW.replace(hour=17, minute=30), fetch=lambda t, n: [post(100, now=NOW.replace(hour=17, minute=30))],
+        # 2026-11-26: 17:30 は案内を付けてよい枠になったので、案内の無い枠(18:15)で確かめる
+        self.run_(slot="18:15", now=NOW.replace(hour=18, minute=15), fetch=lambda t, n: [post(100, now=NOW.replace(hour=18, minute=15))],
                   publisher=self.pub, generator=self.gen)
         self.assertIn("今回は入れない", self.gen_calls[0])
 
@@ -267,7 +275,7 @@ class TestGuards(Base):
         self.assertEqual(self.published, []); self.assertEqual(len(notes), 1)
 
     def test_similar_to_manual_post_is_skipped(self):
-        g = lambda s, u: json.dumps({"text": GOOD, "type": "t", "has_cta": False}, ensure_ascii=False)
+        g = lambda s, u: json.dumps({"text": with_safety(u, GOOD), "type": "t", "has_cta": False}, ensure_ascii=False)
         self.run_(slot="20:15", fetch=lambda t, n: [post(100, GOOD)], publisher=self.pub, generator=g)
         self.assertEqual(self.published, [])
 
@@ -282,7 +290,7 @@ class TestGuards(Base):
 class TestDryRun(Base):
     def test_dry_run_no_api_calls_prints_text(self):
         def boom(*a, **k): raise AssertionError("API呼び出し禁止")
-        gen = lambda s, u: json.dumps({"text": GOOD, "type": "悩みの言い当て", "has_cta": False}, ensure_ascii=False)
+        gen = lambda s, u: json.dumps({"text": with_safety(u, GOOD), "type": "悩みの言い当て", "has_cta": False}, ensure_ascii=False)
         import io, contextlib
         buf = io.StringIO()
         with contextlib.redirect_stdout(buf):
@@ -304,7 +312,7 @@ class TestPause(Base):
 
     def gen(self, system, user):
         self.calls.append("gen")
-        return json.dumps({"text": GOOD, "type": "悩みの言い当て", "has_cta": False}, ensure_ascii=False)
+        return json.dumps({"text": with_safety(user, GOOD), "type": "悩みの言い当て", "has_cta": False}, ensure_ascii=False)
 
     def fetch_ok(self, t, n):
         self.calls.append("fetch"); return []
@@ -387,11 +395,13 @@ class TestMisc(unittest.TestCase):
             self.assertNotEqual(fmt, "short")
 
     def test_format_distribution_roughly(self):
-        c = {"short": 0, "medium": 0}
+        # 2026-11-26 masa指示「長文になる場合はツリー投稿で」: 短文4割・中くらい3割・ツリー3割
+        c = {"short": 0, "medium": 0, "tree": 0}
         rng = random.Random(0)
         for _ in range(2000):
             f, _ = D.choose_format_and_type([], "17:30", rng); c[f] += 1
-        self.assertGreater(c["short"] / 2000, 0.4); self.assertGreater(c["medium"] / 2000, 0.4)
+        self.assertGreater(c["short"] / 2000, 0.32); self.assertGreater(c["medium"] / 2000, 0.22)
+        self.assertGreater(c["tree"] / 2000, 0.22)
         self.assertNotIn("long", D.FORMATS)    # 2026-11-10「文章長すぎ」で長文はやめた
 
     def test_parse_ts(self):
@@ -493,9 +503,10 @@ class TestTrialRun20261105(unittest.TestCase):
         self.assertEqual(self.errs("痛み止めの日が増えたら、医師や薬剤師に相談してみてください。"), [])
 
     def test_theme_not_repeated_same_day(self):
-        entries = [{"ts": NOW.isoformat(), "theme": t} for t in D.THEMES[:-1]]
+        th = [t for t in D.THEMES if t not in D.STORE_THEMES]   # 2026-11-26: 店・周りの市のテーマは地域の枠だけ
+        entries = [{"ts": NOW.isoformat(), "theme": t} for t in th[:-1]]
         for seed in range(20):
-            self.assertEqual(D.choose_theme(entries, NOW, random.Random(seed)), D.THEMES[-1])
+            self.assertEqual(D.choose_theme(entries, NOW, random.Random(seed)), th[-1])
 
     def test_yesterdays_theme_can_be_reused(self):
         y = NOW - timedelta(days=1)
@@ -518,8 +529,15 @@ MEDIUM_GOOD = ("デスクワークの夕方、頭の両側が締めつけられ�
 class TestCliche20261110(unittest.TestCase):
     """2026-11-10 masa指示「ありきたりな文章使いすぎ」"""
     def test_cliches_always_rejected(self):
-        for c in ["でも実は、場所が原因とは限りません。", "今日からできる小さなコツは、遠くを見ること。", "暗い場所で休むのが一番です。"]:
-            self.assertTrue(D.stock_phrase_errors(c, []), c)
+        # 型の名前は常にNG
+        self.assertTrue(D.stock_phrase_errors("今日からできる小さなコツは、遠くを見ること。", []))
+
+    def test_soft_phrases_rotate_20261126(self):
+        # 2026-11-26 masa指示「使わないという選択肢を持ってもいいけど話し言葉で回してみて」: 本人が挙げた言い回しは直近10本に無ければ可
+        t = "暗い場所で休むのが一番です。"
+        self.assertEqual([e for e in D.stock_phrase_errors(t, []) if e.startswith("言い回し")], [])
+        self.assertTrue([e for e in D.stock_phrase_errors(t, ["静かな部屋で休むのが一番です。"]) if e.startswith("言い回し")])
+        self.assertEqual([e for e in D.stock_phrase_errors(t, ["x"] * 10 + ["静かな部屋で休むのが一番です。"]) if e.startswith("言い回し")], [])
 
     def test_similar_opening_rejected(self):
         recent = ["スマホを見ていると、首の片側が痛くなる。そんなときは枕を。"]
@@ -527,9 +545,10 @@ class TestCliche20261110(unittest.TestCase):
         self.assertTrue(any("書き出し" in e for e in errs))
 
     def test_theme_avoids_last_two_days(self):
-        e = [{"ts": ts(NOW - timedelta(days=1)), "theme": t} for t in D.THEMES[:-1]]
+        th = [t for t in D.THEMES if t not in D.STORE_THEMES]
+        e = [{"ts": ts(NOW - timedelta(days=1)), "theme": t} for t in th[:-1]]
         for seed in range(20):
-            self.assertEqual(D.choose_theme(e, NOW, random.Random(seed)), D.THEMES[-1])
+            self.assertEqual(D.choose_theme(e, NOW, random.Random(seed)), th[-1])
 
 
 class TestFacts7119(unittest.TestCase):
@@ -577,6 +596,79 @@ class TestFixedCta20261117(unittest.TestCase):
         post, reason = D.generate_post("20:15", "medium", "tips", True, [], [], lambda s, u: raw, "", "")
         self.assertIsNotNone(post, reason)
         self.assertTrue(post["text"].endswith(D.CTA_TEXT))
+
+
+class TestRules20261126(Base):
+    """2026-11-26 masa指示: 20本・ツリー・締めの試し分け・フォロー/保存の誘い。"""
+    def setUp(self):
+        super().setUp()
+        os.environ["THREADS_ACCESS_TOKEN_ZUTSU"] = "dummy"
+        os.environ["THREADS_USER_ID_ZUTSU"] = "123"
+        self.published, self.replies = [], []
+
+    def pub(self, token, uid, text):
+        self.published.append(text); return "pid1"
+
+    def rep(self, token, uid, text, reply_to):
+        self.replies.append((reply_to, text)); return f"r{len(self.replies)}"
+
+    def test_twenty_slots(self):
+        self.assertEqual(len(D.SLOTS), 20); self.assertEqual(D.DAILY_CAP, 20)
+        mins = [int(x[:2]) * 60 + int(x[3:]) for x in D.SLOTS]
+        self.assertEqual(mins, sorted(mins))
+        self.assertGreaterEqual(min(b - a for a, b in zip(mins, mins[1:])), D.MIN_GAP_MIN)
+        self.assertTrue(set(D._OLD_SLOTS_20261114) <= set(D.SLOTS))
+
+    def test_tree_publishes_replies_in_chain(self):
+        def gen(system, user):
+            return json.dumps({"text": "「夕方になると頭が重い」。その重さ、2つに分かれます。",
+                               "replies": [with_safety(user, "締めつけられる重さは、肩や首のこりがきっかけのことがあります。"),
+                                           "ズキズキして動くと響くなら、暗く静かな場所で休むのが合うと言われています。"],
+                               "type": "頭痛の種類と見分け方の情報", "has_cta": False}, ensure_ascii=False)
+        rng = random.Random(3)
+        orig = D.choose_format_and_type
+        D.choose_format_and_type = lambda recent, slot, r: ("tree", "頭痛の種類と見分け方の情報")
+        try:
+            self.run_(slot="13:15", now=NOW.replace(hour=13, minute=15), fetch=lambda t, n: [post(100, now=NOW.replace(hour=13, minute=15))],
+                      publisher=self.pub, generator=gen, reply_publisher=self.rep, rng=rng)
+        finally:
+            D.choose_format_and_type = orig
+        self.assertEqual(len(self.published), 1)
+        self.assertEqual([r[0] for r in self.replies], ["pid1", "r1"])   # 親→返信1→返信2 の順につなぐ
+        rec = D.read_log(self.log)[0]
+        self.assertEqual(rec["fmt"], "tree"); self.assertEqual(rec["reply_ids"], ["r1", "r2"])
+
+    def test_line_cta_variant_least_used(self):
+        now = NOW
+        entries = [{"ts": (now - timedelta(days=1)).isoformat(), "cta_id": k} for k in ("L1", "L2", "L3")]
+        self.assertEqual(D.choose_cta_variant("line", entries, now, random.Random(0)), "L4")
+        for v in D.LINE_CTA_VARIANTS.values():
+            self.assertIn("@561yryuk", v); self.assertIn("『診断』", v)
+            self.assertNotIn("相談", v)   # 自由文の相談には誘わない
+            self.assertEqual(D.inspect_text("頭痛のタイプ、気になりますね。\n" + v, True), [])
+
+    def test_other_cta_attached_and_logged(self):
+        gen = lambda s, u: json.dumps({"text": with_safety(u, GOOD), "type": "t", "has_cta": False}, ensure_ascii=False)
+        t = NOW.replace(hour=8, minute=30)
+        self.run_(slot="08:30", now=t, fetch=lambda tk, n: [post(100, now=t)], publisher=self.pub, generator=gen)
+        rec = D.read_log(self.log)[0]
+        self.assertIn(rec["cta_id"], D.OTHER_CTA_VARIANTS)
+        self.assertTrue(self.published[0].rstrip().endswith(D.OTHER_CTA_VARIANTS[rec["cta_id"]]))
+        for v in D.OTHER_CTA_VARIANTS.values():
+            self.assertEqual(D.inspect_text(GOOD + "\n\n" + v, False), [], v)
+
+    def test_other_cta_daily_max(self):
+        t = NOW.replace(hour=22, minute=30)
+        entries = [{"ts": (t - timedelta(hours=k + 1)).isoformat(), "cta_id": "F1"} for k in range(D.OTHER_CTA_DAILY_MAX)]
+        self.assertFalse(D.other_cta_ok(entries, [post(100, now=t)], "22:30", t))
+        self.assertFalse(D.other_cta_ok([], [post(100, now=t)], "18:15", t))   # 枠の外
+
+    def test_local_slots_use_local_and_store_themes(self):
+        for slot in D.LOCAL_SLOTS:
+            th = D.choose_theme([], NOW, random.Random(0), slot)
+            self.assertIn(th, D.LOCAL_THEMES)
+        self.assertTrue(any("長岡駅から車で5分" in x for x in D.LOCAL_THEMES))
+        self.assertTrue(any("見附" in x for x in D.LOCAL_THEMES))
 
 
 if __name__ == "__main__":

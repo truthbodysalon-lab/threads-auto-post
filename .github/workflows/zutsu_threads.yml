@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
     inputs:
       slot:
-        description: '枠 (06:30 08:30 09:15 10:30 12:30 14:30 17:30 18:15 20:15 22:30)'
+        description: '枠 (zutsu_threads.SLOTS の20枠: 06:00〜23:15)'
         required: true
         default: '08:30'
       dry_run:
@@ -45,7 +45,8 @@ jobs:
 
       - name: Install fonts and Pillow (図解カード用)
         run: |
-          if [ "${{ github.event.inputs.slot }}" = "09:00" ] || [ "${{ github.event.inputs.slot }}" = "13:45" ] || [ "${{ github.event.inputs.slot }}" = "19:00" ]; then
+          # 図解の枠（zutsu_threads.IMAGE_SLOTS）。2026-11-26: 11/14の再配置で枠が9:15/14:30/20:15になったのに、ここだけ旧時刻のままだったのを直した
+          if [ "${{ github.event.inputs.slot }}" = "09:15" ] || [ "${{ github.event.inputs.slot }}" = "14:30" ] || [ "${{ github.event.inputs.slot }}" = "20:15" ]; then
             sudo apt-get update -qq && sudo apt-get install -y -qq fonts-noto-cjk || echo "::warning::フォント導入失敗（文字だけで投稿する）"
           fi
           pip install -q pillow || echo "::warning::Pillow導入失敗（文字だけで投稿する）"
@@ -60,6 +61,14 @@ jobs:
           DRY_RUN: ${{ github.event.inputs.dry_run }}
         run: python3 zutsu_threads.py
 
+      # 締めの試し分けの集計（1日1回・最後の枠のあと。2026-11-26 masa指示「→他のCTAで試して」）。失敗しても投稿には影響しない
+      - name: CTA report
+        if: github.event.inputs.slot == '23:15'
+        continue-on-error: true
+        env:
+          THREADS_ACCESS_TOKEN_ZUTSU: ${{ secrets.THREADS_ACCESS_TOKEN_ZUTSU }}
+        run: python3 zutsu_cta_report.py || true
+
       # 投稿ログと(警告・制限による)停止ファイルを必ず保存する(失敗しても、投稿済みなら二重投稿を防ぐため)。log_zutsu_posted.jsonl は merge=union
       - name: Commit post log and pause file
         if: always()
@@ -68,6 +77,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           [ -e log_zutsu_posted.jsonl ] && git add log_zutsu_posted.jsonl
           [ -e zutsu_threads_pause.json ] && git add zutsu_threads_pause.json
+          [ -e zutsu_cta_report.json ] && git add zutsu_cta_report.json
           git diff --cached --quiet && { echo "ログ変更なし"; exit 0; }
           git commit -q -m "chore: update zutsu threads log [skip ci]"
           for i in 1 2 3; do

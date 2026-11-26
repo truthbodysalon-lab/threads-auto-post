@@ -1,0 +1,13 @@
+{
+  "updated_at": "2026-11-26 22:27",
+  "days": 14,
+  "by_cta": {
+    "なし": {
+      "posts": 127,
+      "avg_views": 5.0,
+      "median_views": 1,
+      "text": "締めなし"
+    }
+  },
+  "note": "本数が5本未満の締めは比べる材料が足りない。良かった言い方は zutsu_threads.py の LINE_CTA_VARIANTS / OTHER_CTA_VARIANTS に残す"
+}

@@ -55,7 +55,8 @@ jobs:
         env:
           THREADS_ACCESS_TOKEN_ZUTSU: ${{ secrets.THREADS_ACCESS_TOKEN_ZUTSU }}
           THREADS_USER_ID_ZUTSU: ${{ secrets.THREADS_USER_ID_ZUTSU }}
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          # 2026-11-26 masa指示「課金はなし」: Anthropic API（従量課金）をやめ、Gemini の無料枠で生成する
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
           ZUTSU_SLOT: ${{ github.event.inputs.slot }}
           DRY_RUN: ${{ github.event.inputs.dry_run }}

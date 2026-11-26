@@ -56,7 +56,9 @@ MAX_WAIT_MIN = 10        # 間隔が足りない時に待つ上限(超えるな�
 SIM_THRESHOLD = 0.5      # 文字バイグラムJaccardの重複しきい値
 MAX_LEN = 260   # 1投稿（ツリーは1つずつ）の上限。 2026-11-10「文章長すぎ」で500→260（案内の固定文を付けても収まる長さ）
 MAX_ATTEMPTS = 5          # 2026-11-10 ありきたりな言い回しの検品を厳しくしたため3→5
-MODELS = ["claude-haiku-4-5-20251001", "claude-sonnet-4-5"]  # 先頭から試し、失敗したら次へ
+# 2026-11-26 masa指示「課金はなし 無料枠の範囲内で完結させて」で Anthropic API（従量課金）→ Gemini 無料枠（free_llm.py）へ切替。
+# 旧: MODELS = ["claude-haiku-4-5-20251001", "claude-sonnet-4-5"]。最初に試すモデルだけアカウントごとに変えて、無料枠を分け合う
+LLM_FIRST_MODEL = "gemini-3.6-flash"
 
 # 頭痛LINE(@561yryuk)の「診断」は自動応答(id 4 頭痛タイプ診断)が返す案内済みの言葉。自由文の相談には誘導しない(自由文は手動返信のため)
 CTA_TEXT = "自分の頭痛のタイプが気になる方は、公式LINE（@561yryuk）で『診断』と送ってください"
@@ -729,23 +731,9 @@ IMAGE_PROMPT = (
 
 
 def call_llm(system: str, user: str, temperature: float = 0.8) -> str | None:
-    """既存方式(agents/generator.py)と同じくAnthropic Messages APIをurllibで叩く。モデルは順にフォールバック"""
-    key = os.environ.get("ANTHROPIC_API_KEY", "")
-    if not key:
-        return None
-    for model in MODELS:
-        payload = json.dumps({
-            "model": model, "max_tokens": 1500, "temperature": temperature,
-            "system": system, "messages": [{"role": "user", "content": user}],
-        }).encode()
-        req = urllib.request.Request("https://api.anthropic.com/v1/messages", data=payload, headers={
-            "x-api-key": key, "anthropic-version": "2023-06-01", "content-type": "application/json"})
-        try:
-            with urllib.request.urlopen(req, timeout=60) as r:
-                return json.loads(r.read())["content"][0]["text"]
-        except Exception as e:
-            log(f"LLM失敗({model}): {type(e).__name__}")
-    return None
+    """Gemini の無料枠で生成する（free_llm.py）。有料の API は呼ばない。全モデルだめなら None＝この枠は見送り"""
+    import free_llm
+    return free_llm.generate(system, user, temperature=temperature, first=LLM_FIRST_MODEL, log=log)
 
 
 def parse_generated(raw: str | None) -> dict | None:

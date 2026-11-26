@@ -45,7 +45,6 @@ jobs:
           THREADS_USER_ID_MASA=${{ secrets.THREADS_USER_ID_MASA }}
           GH_PAT=${{ secrets.GH_PAT }}
           GH_REPO=${{ github.repository }}
-          ANTHROPIC_API_KEY=${{ secrets.ANTHROPIC_API_KEY }}
           EOF
 
       - name: Run verify_system (CI検品 → 通知記録)

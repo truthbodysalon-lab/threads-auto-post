@@ -695,7 +695,8 @@ class TestImagePosts20261111(Base):
         return lambda s, u: json.dumps({"text": self.TEXT, "type": "t", "has_cta": False, "figure": fig}, ensure_ascii=False)
 
     def test_ten_slots_three_images(self):
-        self.assertEqual(len(D.SLOTS), 10); self.assertEqual(D.DAILY_CAP, 10)
+        # 2026-11-26 masa指示「投稿は20投稿にして」で10→20枠。画像つきは3枠のまま
+        self.assertEqual(len(D.SLOTS), 20); self.assertEqual(D.DAILY_CAP, 20)
         self.assertTrue(D.IMAGE_SLOTS <= set(D.SLOTS)); self.assertEqual(len(D.IMAGE_SLOTS), 3)
         self.assertEqual(D.choose_format_and_type([], "14:30", random.Random(0))[0], "image")
 

@@ -400,7 +400,7 @@
   "頭痛薬が常備品になっている人へ。": {
     "segment": "T2",
     "hook": "low",
-    "created": "2026-11-12",
+    "created": "2026-11-26",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z07_truth"
@@ -542,7 +542,7 @@
   "頭痛で仕事に集中できない人へ。": {
     "segment": "T2",
     "hook": "low",
-    "created": "2026-11-12",
+    "created": "2026-11-26",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z08_nagaoka"
@@ -2681,7 +2681,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 5,
-    "created": "2026-11-18",
+    "created": "2026-11-26",
     "acct": "truth"
   },
   "『どうせ変わらないと思っていた』という声を、よく聞きます。": {
@@ -3994,7 +3994,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 10,
-    "created": "2026-11-19",
+    "created": "2026-11-26",
     "acct": "truth"
   },
   "【デスクワークの肩こりチェック項目8選】": {
@@ -4777,7 +4777,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 18,
-    "created": "2026-11-15",
+    "created": "2026-11-26",
     "acct": "nagaoka"
   },
   "インスタで、任せる人がいなくて、一人で抱えている院長へ。": {
@@ -5244,7 +5244,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 20,
-    "created": "2026-10-21",
+    "created": "2026-11-26",
     "acct": "nagaoka"
   },
   "『かがんだ瞬間に、腰がピキッとくる』という声を、よく聞きます。": {
@@ -6065,7 +6065,7 @@
   "次回の予約を「あとでネットから」で終える院長へ。": {
     "segment": "R03",
     "hook": "low",
-    "created": "2026-11-14",
+    "created": "2026-11-26",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -6433,7 +6433,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 15,
-    "created": "2026-11-18"
+    "created": "2026-11-26"
   },
   "ぶっちゃけ、次に何を出すかの答えは、過去の投稿にあります。": {
     "segment": "PRESENT_CTA",
@@ -6694,7 +6694,7 @@
     "segment": "INSTA_EASY",
     "hook": "fixed",
     "variant": 57,
-    "created": "2026-11-09"
+    "created": "2026-11-26"
   },
   "ハイライトは、4つあれば足ります。": {
     "segment": "INSTA_EASY",
@@ -7552,7 +7552,7 @@
     "hook": "present",
     "present_key": "insta_kit",
     "variant": 16,
-    "created": "2026-10-21"
+    "created": "2026-11-26"
   },
   "写真3枚を並べるだけで、リールになります。": {
     "segment": "I05",
@@ -7999,7 +7999,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 21,
-    "created": "2026-11-15",
+    "created": "2026-11-26",
     "acct": "truth"
   },
   "頭痛薬を飲む回数が、先月より増えていませんか？": {
@@ -8284,7 +8284,7 @@
     "segment": "QUESTION",
     "hook": "type",
     "variant": 11,
-    "created": "2026-11-16",
+    "created": "2026-11-26",
     "acct": "nagaoka"
   },
   "首を左右に回して、引っかかる方向はありますか？": {
@@ -8608,7 +8608,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 22,
-    "created": "2026-11-11",
+    "created": "2026-11-26",
     "acct": "nagaoka"
   },
   "夕方に重くなる前に、まず昼に一度、肩の力を抜いてみて。": {
@@ -8971,7 +8971,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 12,
-    "created": "2026-11-21",
+    "created": "2026-11-26",
     "acct": "truth"
   },
   "「いつものこと」と流す前に、まず頭の重さが出る日の共通点を探してみて。": {
@@ -9027,7 +9027,7 @@
     "segment": "WEATHER",
     "hook": "type",
     "variant": 2,
-    "created": "2026-11-13",
+    "created": "2026-11-26",
     "acct": "nagaoka"
   },
   "朝バタバタする前に、まず首を一回だけゆっくり回してみて。": {
@@ -9454,7 +9454,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 32,
-    "created": "2026-11-21",
+    "created": "2026-11-26",
     "acct": "truth"
   },
   "頭痛薬の箱を開ける前に、まず窓の外を30秒見てみて。": {
@@ -11729,5 +11729,152 @@
     "created": "2026-11-25",
     "acct": "truth",
     "variant": 1
+  },
+  "長岡市で肩こりに悩んでいる車通勤の方へ": {
+    "segment": "NAGAOKA_LOCAL",
+    "hook": "target",
+    "variant": "T-car-kata-b",
+    "created": "2026-11-26",
+    "acct": "truth"
+  },
+  "柏崎市で肩こりに悩んでいるデスクワークの方必見": {
+    "segment": "NAGAOKA_LOCAL",
+    "hook": "near",
+    "variant": "X-desk-kata-a-kashiwazaki",
+    "created": "2026-11-26",
+    "acct": "truth"
+  },
+  "見附市で首こりに悩んでいる50代の女性必見": {
+    "segment": "NAGAOKA_LOCAL",
+    "hook": "near",
+    "variant": "X-w50-kubi-a-mitsuke",
+    "created": "2026-11-26",
+    "acct": "truth"
+  },
+  "小千谷市で頭痛に悩んでいるママさん必見": {
+    "segment": "NAGAOKA_LOCAL",
+    "hook": "near",
+    "variant": "X-mama-zutsu-a-ojiya",
+    "created": "2026-11-26",
+    "acct": "truth"
+  },
+  "長岡市で、仕事帰りの運転中": {
+    "segment": "NAGAOKA_LOCAL",
+    "hook": "local",
+    "variant": "N29",
+    "created": "2026-11-26",
+    "acct": "truth"
+  },
+  "長岡市で肩こりと頭痛専門の整体院をしていますが": {
+    "segment": "NAGAOKA_LOCAL",
+    "hook": "owner",
+    "variant": "O02",
+    "created": "2026-11-26",
+    "acct": "truth"
+  },
+  "長岡市で首こりに悩んでいる介護のお仕事の方必見": {
+    "segment": "NAGAOKA_LOCAL",
+    "hook": "target",
+    "variant": "T-kaigo-kubi-a",
+    "created": "2026-11-26",
+    "acct": "truth"
+  },
+  "長岡市で、運転席に座ると": {
+    "segment": "NAGAOKA_LOCAL",
+    "hook": "local",
+    "variant": "N31",
+    "created": "2026-11-26",
+    "acct": "truth"
+  },
+  "三条市で頭痛に悩んでいる立ち仕事の方必見": {
+    "segment": "NAGAOKA_LOCAL",
+    "hook": "near",
+    "variant": "X-stand-zutsu-a-sanjo",
+    "created": "2026-11-26",
+    "acct": "truth"
+  },
+  "長岡市で、休みの日になると": {
+    "segment": "NAGAOKA_LOCAL",
+    "hook": "local",
+    "variant": "N36",
+    "created": "2026-11-26",
+    "acct": "truth"
+  },
+  "頭痛薬を飲む前に、まず前に食べた時間を思い出してみて。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-26",
+    "acct": "truth"
+  },
+  "「家事がはかどらず、子どもと遊ぶ時間が減った」": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-26",
+    "acct": "truth"
+  },
+  "【週末の頭痛が気になる人の習慣6選】": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-26",
+    "acct": "truth"
+  },
+  "長岡の地酒、飲むなら": {
+    "segment": "NAGAOKA_STORE_LOCAL",
+    "hook": "sake",
+    "variant": "S13b",
+    "created": "2026-11-26",
+    "acct": "nagaoka"
+  },
+  "道の駅に寄ると、つい": {
+    "segment": "NAGAOKA_STORE_LOCAL",
+    "hook": "michinoeki",
+    "variant": "S31b",
+    "created": "2026-11-26",
+    "acct": "nagaoka"
+  },
+  "長岡は車がないと不便": {
+    "segment": "NAGAOKA_STORE_LOCAL",
+    "hook": "kuruma",
+    "variant": "S09a",
+    "created": "2026-11-26",
+    "acct": "nagaoka"
+  },
+  "洋風カツ丼、県外の友だちに": {
+    "segment": "NAGAOKA_STORE_LOCAL",
+    "hook": "katsudon",
+    "variant": "S03b",
+    "created": "2026-11-26",
+    "acct": "nagaoka"
+  },
+  "県外で「どこから来たの？」と聞かれて": {
+    "segment": "NAGAOKA_STORE_LOCAL",
+    "hook": "nagaokakyo",
+    "variant": "S30b",
+    "created": "2026-11-26",
+    "acct": "nagaoka"
+  },
+  "「イライラが家族にうつるのが申し訳ない」": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-26",
+    "acct": "nagaoka"
+  },
+  "天気予報を閉じる前に、まず奥歯が当たっていないか確かめてみて。": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-26",
+    "acct": "nagaoka"
+  },
+  "【首こりをためたくない人の台所習慣5選】": {
+    "segment": "own_adapt",
+    "hook": "adapt",
+    "variant": "hero",
+    "created": "2026-11-26",
+    "acct": "nagaoka"
   }
 }

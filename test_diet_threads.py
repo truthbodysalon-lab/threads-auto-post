@@ -525,12 +525,45 @@ class TestPace20261111(unittest.TestCase):
         self.assertIsNone(D.pace_guard([], at(6, 30)))
         self.assertTrue(D.pace_guard([self.P(6)], at(6, 30)))
         self.assertIsNone(D.pace_guard([self.P(7), self.P(8)], at(12, 30)))
-        self.assertTrue(D.pace_guard([self.P(7, i) for i in range(5)], at(12, 30)))   # 10本化(2026-11-14): 12:30の目安は3本
-        self.assertIn("目標の10本", D.pace_guard([self.P(7, i) for i in range(10)], at(23, 30)))
+        self.assertTrue(D.pace_guard([self.P(7, i) for i in range(9)], at(12, 30)))   # 20本化(2026-11-26 masa指示「全体で20投稿にして」): 12:30の目安は8本
+        self.assertIsNone(D.pace_guard([self.P(7, i) for i in range(5)], at(12, 30)))
+        self.assertIn("目標の20本", D.pace_guard([self.P(7, i) for i in range(20)], at(23, 30)))
 
     def test_yesterday_not_counted(self):
         y = {"timestamp": datetime(2026, 11, 10, 22, 0, tzinfo=D.JST).isoformat()}
         self.assertEqual(D.todays_total([y], datetime(2026, 11, 11, 7, 0, tzinfo=D.JST)), 0)
+
+
+class TestRules20261126(unittest.TestCase):
+    """2026-11-26 masa指示: 全体20本・長岡市のネタ・締めの言い方を固定しない（目的は明確に）。"""
+
+    def test_twenty(self):
+        self.assertEqual(D.DAILY_TOTAL_TARGET, 20); self.assertEqual(D.DAILY_CAP, 20)
+
+    def test_nagaoka_type(self):
+        self.assertIn(D.NAGAOKA_TYPE, D.TYPES)
+        self.assertIn("J.", D.FACTS_FILE.read_text(encoding="utf-8"))
+
+    def test_cta_variants_purpose_clear(self):
+        for k, v in D.CTA_SOUDAN.items():
+            self.assertIn("@886oidmv", v); self.assertIn("『相談』", v); self.assertIn("院長", v)
+        for k, v in D.CTA_YOYAKU.items():
+            self.assertIn("@886oidmv", v); self.assertIn("『予約』", v); self.assertIn("予約ページ", v)
+        for v in D.CTA_TEXTS:
+            self.assertEqual(D.inspect_text("夜にお腹が空く日、ありますよね。\n" + v, True), [], v)
+
+    def test_cta_alternates_kind_and_rotates_wording(self):
+        now = datetime(2026, 11, 26, 20, 0, tzinfo=D.JST)
+        e = [{"ts": (now - timedelta(hours=3)).isoformat(), "text": "x\n" + D.CTA_SOUDAN["C1"], "cta_id": "C1"}]
+        self.assertIn(D.next_cta_text(e, [], now), D.CTA_YOYAKU.values())   # 前回が相談版なら予約版
+        e2 = [{"ts": (now - timedelta(days=1, hours=h)).isoformat(), "text": "x\n" + D.CTA_YOYAKU[k], "cta_id": k}
+              for h, k in enumerate(["R1", "R2", "R3"])]
+        self.assertEqual(D.next_cta_text(e2, [], now), D.CTA_SOUDAN["C1"])   # 前回が予約版なら相談版
+        e3 = [{"ts": (now - timedelta(days=1, hours=h)).isoformat(), "text": "x\n" + D.CTA_SOUDAN[k], "cta_id": k}
+              for h, k in enumerate(["C1", "C2"])] + e2
+        self.assertEqual(D.next_cta_text(e3, [], now), D.CTA_SOUDAN["C3"])   # 使っていない言い方から
+        # Grok Botが固定文で出した分も相談版/予約版として数える
+        self.assertEqual(D._cta_kind_in("…公式LINE（@886oidmv）で『予約』と送ってください。"), "R")
 
 
 if __name__ == "__main__":

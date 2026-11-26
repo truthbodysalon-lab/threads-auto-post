@@ -38,8 +38,8 @@ JST = timezone(timedelta(hours=9))
 
 # 2026-11-02 院長指示「1日合計30投稿以上」→ Grok 10本＋API 21本。間隔30分・6時〜24時（深夜は出さない）。Grokの毎時ちょうど(7,8,10,12,14,16,17,19,21,22時)の間に置く
 SLOTS = ["06:30", "07:30", "08:30", "09:30", "10:30", "11:30", "12:30", "13:30", "14:30", "15:30", "16:30", "17:30", "18:00", "18:30", "19:30", "20:00", "20:30", "21:30", "22:30", "23:00", "23:30"]
-DAILY_CAP = 10           # API投稿の1日上限（2026-11-11 10→20／11-12 20→30／2026-11-14 masa指示「各アカウント合計1日10本にして」で10に戻す）
-DAILY_TOTAL_TARGET = 10  # Grok Bot の分も合わせた1日の目標本数（2026-11-14 30→10・bdf4307e と同じ。Grok分が10本出ている日はAPI側は出さない）。枠はそのまま21か所で、ペースより先行している枠は見送る
+DAILY_CAP = 20           # 2026-11-26 masa指示「（Grok Botの分と合わせて1日10本）→全体で20投稿にして」で10→20。旧: API投稿の1日上限（2026-11-11 10→20／11-12 20→30／2026-11-14 masa指示「各アカウント合計1日10本にして」で10に戻す）
+DAILY_TOTAL_TARGET = 20  # 2026-11-26 masa指示「全体で20投稿にして」で10→20（Grok分が10本ならAPIが10本）。旧: Grok Bot の分も合わせた1日の目標本数（2026-11-14 30→10・bdf4307e と同じ。Grok分が10本出ている日はAPI側は出さない）。枠はそのまま21か所で、ペースより先行している枠は見送る
 PACE_START_MIN, PACE_END_MIN = 6 * 60, 24 * 60   # この時間帯に目標本数を均等に配る
 CTA_DAILY_MAX = 2        # Grok分を含む1日の公式LINE案内の上限
 CTA_SLOTS = {"15:30", "20:00"}   # 案内を付けてよい枠(反応が取れる夕方〜夜。Grokの案内枠を食わないよう控えめ)
@@ -52,7 +52,23 @@ MODELS = ["claude-haiku-4-5-20251001", "claude-sonnet-4-5"]  # 先頭から試�
 
 CTA_TEXT = "気になる方は公式LINE（@886oidmv）で『相談』と送ってください。院長が直接お返事します"
 CTA_TEXT_RESERVE = "ご予約は公式LINE（@886oidmv）で『予約』と送ってください。ホットペッパーの初回クーポンの予約ページが届きます"   # 2026-11-10 院長指示(HPBクーポン誘導)
-CTA_TEXTS = [CTA_TEXT, CTA_TEXT_RESERVE]   # 案内を付ける回は交互に使う
+# 2026-11-26 masa指示「（相談版）→頭痛と同じでCTAをさまざまなパターンで出して」「（予約版）→文章は固定化しないで目的は明確にして」:
+# 相談版・予約版それぞれ4通りの言い方を順に使う（直近14日で使った回数が少ないものから）。どれも『相談』『予約』のキーワードと @886oidmv を含み、
+# 送ると何が返ってくるか（院長が直接返事／ホットペッパーの初回クーポンの予約ページ）が分かる文にする。相談版と予約版の交互・1日2本・連続なしは従来どおり。
+CTA_SOUDAN = {
+    "C1": CTA_TEXT,
+    "C2": "食べ方で迷ったら、公式LINE（@886oidmv）に『相談』と送ってください。院長が直接お返事します",
+    "C3": "公式LINE（@886oidmv）で『相談』と送ると、院長が直接お返事します",
+    "C4": "自分に合う食べ方を知りたい方は、公式LINE（@886oidmv）で『相談』と送ってください。院長がお返事します",
+}
+CTA_YOYAKU = {
+    "R1": CTA_TEXT_RESERVE,
+    "R2": "公式LINE（@886oidmv）で『予約』と送ると、ホットペッパーの初回クーポンの予約ページが届きます",
+    "R3": "来院のご予約は、公式LINE（@886oidmv）に『予約』と送ってください。初回クーポンの予約ページをお送りします",
+    "R4": "『予約』の2文字を公式LINE（@886oidmv）に送ってください。ホットペッパーの初回クーポンの予約ページが届きます",
+}
+CTA_VARIANTS = {**CTA_SOUDAN, **CTA_YOYAKU}
+CTA_TEXTS = list(CTA_VARIANTS.values())   # 長いものから外す必要はない（どれも全文一致で扱う）
 CTA_MARK = "@886oidmv"
 
 
@@ -71,17 +87,48 @@ def cta_in(text: str) -> str | None:
     return None
 
 
-def next_cta_text(entries: list[dict], recent: list[dict] | None = None) -> str:
-    """直近の自分のログで前回使った案内と逆の方。ログに案内がなければ相談版(自分のログに無ければ取得した直近投稿も見る)"""
+def cta_id_of(text: str) -> str:
+    """本文に入っている案内の言い方のID（C1〜C4=相談版・R1〜R4=予約版。無ければ空）"""
+    for k, c in CTA_VARIANTS.items():
+        if c in (text or ""):
+            return k
+    return ""
+
+
+def _cta_kind_in(text: str) -> str:
+    """相談版か予約版か（Grok Botの言い方が違っても『相談』『予約』で見分ける）"""
+    t = text or ""
+    if CTA_MARK not in t:
+        return ""
+    return "R" if "『予約』" in t else ("C" if "『相談』" in t else "")
+
+
+def next_cta_text(entries: list[dict], recent: list[dict] | None = None, now: datetime | None = None) -> str:
+    """直近で前回使った案内と逆の版（相談版⇔予約版）。その版の中では、直近14日で使った回数が一番少ない言い方
+    (自分のログに無ければ取得した直近投稿＝Grok Botの分も見る)"""
+    kind = "C"
     for src in (list(reversed(entries)), sorted_recent(recent or [])):
-        for e in src:
-            c = cta_in(e.get("text") or "")
-            if c:
-                return CTA_TEXT_RESERVE if c == CTA_TEXT else CTA_TEXT
-    return CTA_TEXT
+        found = next((_cta_kind_in(e.get("text") or "") for e in src if _cta_kind_in(e.get("text") or "")), "")
+        if found:
+            kind = "R" if found == "C" else "C"
+            break
+    pool = CTA_YOYAKU if kind == "R" else CTA_SOUDAN
+    now = now or datetime.now(JST)
+    used = {k: 0 for k in pool}
+    for e in entries:
+        ts = parse_ts(e.get("ts") or "")
+        if ts and ts >= now - timedelta(days=14):
+            k = e.get("cta_id") or cta_id_of(e.get("text") or "")
+            if k in used:
+                used[k] += 1
+    low = min(used.values())
+    return pool[sorted(k for k in pool if used[k] == low)[0]]
 
 # 2026-11-07 院長指示「Threadsの投稿に関しては文章がながい。太りやすい食材や食べ方、痩せやすい方法を端的にまとめて投稿とかツリー投稿を活用して」
-TYPES = ["太りやすい食材", "太りやすい食べ方", "やせやすい方法・続けやすい食べ方", "よくある勘違い", "お悩み別の食材"]
+# 2026-11-26 masa指示「（5つのテーマ）→長岡市のネタも追加して」で6つ目を追加（根拠は事実ファイルの J）
+TYPES = ["太りやすい食材", "太りやすい食べ方", "やせやすい方法・続けやすい食べ方", "よくある勘違い", "お悩み別の食材",
+         "長岡市のネタ（長岡の食べ物・暮らしとダイエット）"]
+NAGAOKA_TYPE = TYPES[-1]
 FORMATS = {
     "short": "短文(1〜2行・50字以内。要点を1つだけ端的に)",
     "tree": "ツリー(1つ目は40字以内のフック1〜2行。続きのツリーを2〜3個、各60字以内で1つずつ端的に。最後のツリーはまとめか答えやすい問いかけ)",
@@ -528,7 +575,10 @@ def build_prompts(fmt: str, typ: str, slot: str, allow_cta: bool, recent_texts: 
     )
     user = (
         f"投稿枠: {slot} (JST)\n今日: {datetime.now(JST).month}月（季節の切り口は【栄養の事実ファイル】の I-1 から今月の行を使う。季節外れの話は書かない）\n"
-        f"テーマ: {typ}\n形式: {FORMATS[fmt]}\n{cta_line}\n" + topic_block(topic) + "\n"
+        f"テーマ: {typ}\n形式: {FORMATS[fmt]}\n{cta_line}\n"
+        + ("このテーマは長岡で暮らす人向けの長岡市のネタ。【栄養の事実ファイル】の J（長岡の食べ物と暮らし）から1つ選び、"
+           "そこに書いてある範囲で、ダイエット中の食べ方・体の動かし方の話につなげる。実在の店名・会社名は書かない。\n"
+           if typ == NAGAOKA_TYPE else topic_block(topic)) + "\n"
         "直近の投稿(Grok Botの投稿を含む)。次のテーマ・書き出しと被らないこと:\n" + avoid + "\n\n"
         "1文目は「問いかけ(〇〇、1日に何個食べていますか？ など)」か「身近な食べ物の意外な事実」で始める。「」で始めない(閲覧データで「」始まりは平均の半分以下)。"
         "具体的な食べ物の名前を必ず1つ以上出す。最後は答えやすい問いかけで終えると反応が増えやすい。ハッシュタグ・URL・絵文字の乱用はしない。\n"
@@ -850,7 +900,7 @@ def run(slot: str | None = None, now: datetime | None = None, dry_run: bool = Fa
     rs = sorted_recent(recent)
     recent_texts = [p.get("text") or "" for p in rs if p.get("text")]
     recent_texts += [e.get("text", "") for e in reversed(entries[-20:]) if e.get("text")]   # 自分のツリーの続きも重複判定に入れる
-    cta_text = next_cta_text(entries, recent)
+    cta_text = next_cta_text(entries, recent, now)
     post, reason = generate_post(slot, fmt, typ, allow_cta, recent_texts[:40], recent_texts[:70], generator, topic, cta_text)
     if not post:
         log(f"見送り: {reason}")
@@ -861,7 +911,7 @@ def run(slot: str | None = None, now: datetime | None = None, dry_run: bool = Fa
     if dry_run:
         print("----- DRY_RUN 生成結果 -----")
         fmt = post.get("fmt", fmt)
-        print(f"[枠 {slot} / テーマ {post['type'] or typ} / 形式 {fmt} / 題材 {(topic or {}).get('id')} / 案内 {post['has_cta']}]")
+        print(f"[枠 {slot} / テーマ {post['type'] or typ} / 形式 {fmt} / 題材 {(topic or {}).get('id')} / 案内 {post['has_cta']} {cta_id_of(full_text(post))}]")
         print(post["text"])
         for r in post["replies"]:
             print("  └ " + r)
@@ -896,7 +946,8 @@ def run(slot: str | None = None, now: datetime | None = None, dry_run: bool = Fa
     whole = full_text(post)
     append_log({
         "ts": now.isoformat(timespec="seconds"), "slot": slot, "id": pid, "fmt": fmt, "reply_ids": reply_ids,
-        "topic_id": (topic or {}).get("id"), "type": post["type"] or typ, "has_cta": post["has_cta"],
+        "topic_id": None if typ == NAGAOKA_TYPE else (topic or {}).get("id"), "type": post["type"] or typ, "has_cta": post["has_cta"],
+        "cta_id": cta_id_of(whole),
         "text_hash": hashlib.sha256(whole.encode("utf-8")).hexdigest()[:16],
         "text": whole, **({"reply_error": reply_err[:200]} if reply_err else {}),
     }, log_path)

@@ -4525,7 +4525,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 3,
-    "created": "2026-11-16",
+    "created": "2026-11-27",
     "acct": "nagaoka"
   },
   "インスタ運用で、外注すると自分らしさが消えると思っている院長へ質問です。": {
@@ -5380,7 +5380,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 9,
-    "created": "2026-11-20",
+    "created": "2026-11-27",
     "acct": "truth"
   },
   "【首が前に出る人が見直すこと6選】": {
@@ -5525,7 +5525,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 22,
-    "created": "2026-11-10",
+    "created": "2026-11-27",
     "acct": "truth"
   },
   "【子育て中の頭痛を遠ざける習慣7選】": {
@@ -7256,7 +7256,7 @@
   "「どうしますか」と聞いている院長へ。": {
     "segment": "R04",
     "hook": "high",
-    "created": "2026-11-07",
+    "created": "2026-11-27",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -7526,7 +7526,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 2,
-    "created": "2026-11-19"
+    "created": "2026-11-27"
   },
   "投稿ネタは、考えるものではなく拾うものです。": {
     "segment": "PRESENT_CTA",
@@ -7557,7 +7557,7 @@
   "写真3枚を並べるだけで、リールになります。": {
     "segment": "I05",
     "hook": "high",
-    "created": "2026-11-18",
+    "created": "2026-11-27",
     "acct": "masa",
     "axis": "insta_pain",
     "variant": null,
@@ -8291,7 +8291,7 @@
     "segment": "QUESTION",
     "hook": "type",
     "variant": 5,
-    "created": "2026-11-17",
+    "created": "2026-11-27",
     "acct": "nagaoka"
   },
   "「まだ大丈夫」と思う前に、まず首を左右に回して引っかかりを確かめてみて。": {
@@ -8338,7 +8338,7 @@
     "segment": "WIN_HOOK",
     "hook": "winning",
     "variant": 16,
-    "created": "2026-11-20"
+    "created": "2026-11-27"
   },
   "雨の日の頭痛薬は、飲む前に首の後ろを温めておくと楽な人もいます。": {
     "segment": "ZUTSUYAKU",
@@ -8518,7 +8518,7 @@
     "segment": "WIN_HOOK",
     "hook": "winning",
     "variant": 0,
-    "created": "2026-11-20"
+    "created": "2026-11-27"
   },
   "頭痛薬を飲む前に、まず今日の睡眠時間を思い出してみて。": {
     "segment": "ZUTSUYAKU",
@@ -8615,7 +8615,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 15,
-    "created": "2026-11-12",
+    "created": "2026-11-27",
     "acct": "nagaoka"
   },
   "雨の朝は、頭が重くて起きにくい人いますか？": {
@@ -8636,7 +8636,7 @@
     "segment": "WEATHER",
     "hook": "type",
     "variant": 9,
-    "created": "2026-11-13",
+    "created": "2026-11-27",
     "acct": "nagaoka"
   },
   "朝、首が固まったまま起きる人はいますか？": {
@@ -8832,7 +8832,7 @@
     "hook": "present",
     "present_key": "insta_kit",
     "variant": 14,
-    "created": "2026-10-27"
+    "created": "2026-11-27"
   },
   "インスタで見られ方を変えるのに、新しいメニューは要りません。": {
     "segment": "WIN_HOOK",
@@ -9482,7 +9482,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 37,
-    "created": "2026-11-16",
+    "created": "2026-11-27",
     "acct": "truth"
   },
   "寝る前に、まず肩を3回落としてみて。": {
@@ -9854,7 +9854,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 38,
-    "created": "2026-11-21",
+    "created": "2026-11-27",
     "acct": "truth"
   },
   "頭痛薬を飲む前に、まず今日どれだけ水を飲んだか思い出してみて。": {
@@ -9882,7 +9882,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 37,
-    "created": "2026-11-21",
+    "created": "2026-11-27",
     "acct": "truth"
   },
   "肩の重さが出る側は、いつも同じですか？": {
@@ -11981,5 +11981,132 @@
     "variant": "S02b",
     "created": "2026-11-26",
     "acct": "nagaoka"
+  },
+  "頭痛薬を飲む日が、週に何日あるか数えてみて。": {
+    "segment": "T2",
+    "hook": "high",
+    "created": "2026-11-27",
+    "acct": "truth",
+    "variant": null,
+    "hypothesis_id": "SN02_truth"
+  },
+  "柏崎市で頭痛に悩んでいる50代の女性へ": {
+    "segment": "NAGAOKA_LOCAL",
+    "hook": "near",
+    "variant": "X-w50-zutsu-b-kashiwazaki",
+    "created": "2026-11-27",
+    "acct": "truth"
+  },
+  "長岡市で肩こりに悩んでいる介護のお仕事の方へ": {
+    "segment": "NAGAOKA_LOCAL",
+    "hook": "target",
+    "variant": "T-kaigo-kata-b",
+    "created": "2026-11-27",
+    "acct": "truth"
+  },
+  "長岡市で頭痛に悩んでいるデスクワークの方へ": {
+    "segment": "NAGAOKA_LOCAL",
+    "hook": "target",
+    "variant": "T-desk-zutsu-b",
+    "created": "2026-11-27",
+    "acct": "truth"
+  },
+  "小千谷市で首こりに悩んでいる40代の女性必見": {
+    "segment": "NAGAOKA_LOCAL",
+    "hook": "near",
+    "variant": "X-w40-kubi-a-ojiya",
+    "created": "2026-11-27",
+    "acct": "truth"
+  },
+  "長岡市で整体院をしている立場から言うと": {
+    "segment": "NAGAOKA_LOCAL",
+    "hook": "owner",
+    "variant": "O09",
+    "created": "2026-11-27",
+    "acct": "truth"
+  },
+  "三条市で頭痛に悩んでいる看護師さんへ": {
+    "segment": "NAGAOKA_LOCAL",
+    "hook": "near",
+    "variant": "X-nurse-zutsu-b-sanjo",
+    "created": "2026-11-27",
+    "acct": "truth"
+  },
+  "長岡市で立ち仕事をしている人": {
+    "segment": "NAGAOKA_LOCAL",
+    "hook": "local",
+    "variant": "N35",
+    "created": "2026-11-27",
+    "acct": "truth"
+  },
+  "長岡市で、寒い日の外仕事や買い出しのあと": {
+    "segment": "NAGAOKA_LOCAL",
+    "hook": "local",
+    "variant": "N49",
+    "created": "2026-11-27",
+    "acct": "truth"
+  },
+  "見附市で肩こりに悩んでいる保育士さんへ": {
+    "segment": "NAGAOKA_LOCAL",
+    "hook": "near",
+    "variant": "X-hoiku-kata-b-mitsuke",
+    "created": "2026-11-27",
+    "acct": "truth"
+  },
+  "長岡市で、朝の冷え込みが強い日": {
+    "segment": "NAGAOKA_LOCAL",
+    "hook": "local",
+    "variant": "N12",
+    "created": "2026-11-27",
+    "acct": "truth"
+  },
+  "頭痛のせいで予定を入れるのが怖い人へ。": {
+    "segment": "T2",
+    "hook": "high",
+    "created": "2026-11-27",
+    "acct": "nagaoka",
+    "variant": 1
+  },
+  "雪囲いはもう済みましたか？": {
+    "segment": "NAGAOKA_STORE_LOCAL",
+    "hook": "yukigakoi",
+    "variant": "S28a",
+    "created": "2026-11-27",
+    "acct": "nagaoka"
+  },
+  "長岡市に山古志があることを": {
+    "segment": "NAGAOKA_STORE_LOCAL",
+    "hook": "nishikigoi",
+    "variant": "S11b",
+    "created": "2026-11-27",
+    "acct": "nagaoka"
+  },
+  "お祝いの赤飯は、小豆の赤？": {
+    "segment": "NAGAOKA_STORE_LOCAL",
+    "hook": "sekihan",
+    "variant": "S05b",
+    "created": "2026-11-27",
+    "acct": "nagaoka"
+  },
+  "タイヤ交換、自分でやる派ですか？": {
+    "segment": "NAGAOKA_STORE_LOCAL",
+    "hook": "tire",
+    "variant": "S29a",
+    "created": "2026-11-27",
+    "acct": "nagaoka"
+  },
+  "雨や雪の日、アオーレ長岡の": {
+    "segment": "NAGAOKA_STORE_LOCAL",
+    "hook": "aore",
+    "variant": "S10a",
+    "created": "2026-11-27",
+    "acct": "nagaoka"
+  },
+  "キャッチコピーは、お客様の口ぐせから作ります。": {
+    "segment": "MASA_OWNER_TOPIC",
+    "hook": "catch_copy",
+    "variant": "CC01",
+    "created": "2026-11-27",
+    "acct": "masa"
   }
 }

@@ -1,20 +1,20 @@
 {
  "account": "truth",
- "generated": "2026-11-25",
+ "generated": "2026-11-26",
  "window_days": 90,
  "note": "自動投稿システム以外から出た本人の投稿のうち伸びたもの。翻案必須・同一文面の再投稿は禁止（型疲労L8）。構造（フックの型・展開・締め）だけを借りる",
- "fetched_posts": 3930,
+ "fetched_posts": 3908,
  "own_posts": 55,
  "classification": {
-  "exact_body80": 3848,
+  "exact_body80": 3826,
   "OWN": 55,
   "exact_line1": 16,
   "skeleton": 4,
   "tail_sig": 6,
   "template_prefix": 1
  },
- "account_median_views": 71.0,
- "winner_threshold": 106.5,
+ "account_median_views": 78.5,
+ "winner_threshold": 117.75,
  "winners": [
   {
    "id": "18125202077514991",

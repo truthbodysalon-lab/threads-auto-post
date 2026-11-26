@@ -4249,7 +4249,18 @@ def _masa_plain_jargon(text: str) -> str:
 
 _MASA_STEP_LINE_RE = re.compile(r"^\s*([①②③④])\s*(.+?)\s*$")
 _MASA_SPOKEN_ORDER = {2: ("まず", "あとは"), 3: ("まず", "次に", "最後に"), 4: ("まず", "次に", "それから", "最後に")}
-_MASA_SPOKEN_LEAD = ("やることは{n}つだけです。", "{n}つだけ、やってください。", "手順は{n}つです。", "難しくないです。{n}つだけ。")
+# コメント1行目＝何の話かを名指しする一言（2026-11-26 masa指摘「『難しくないです。3つだけ。』だと主語が何のことか分からない。
+# 〇〇の情報はこれだけ、のようなフックに」）。固定原稿ごとに書き下ろした一言を masa_comment_leads.LEADS（キー=元のコメントのsha1先頭12桁）
+# から引く。無い原稿（ヒーロー・新しい仮説など）は1行目を足さない（主語のない「3つだけ」は出さない）。
+try:
+    from masa_comment_leads import LEADS as _MASA_COMMENT_LEADS
+except Exception:
+    _MASA_COMMENT_LEADS = {}
+
+
+def _masa_comment_lead(comment: str) -> str | None:
+    import hashlib
+    return _MASA_COMMENT_LEADS.get(hashlib.sha1((comment or "").strip("\n").encode()).hexdigest()[:12])
 _MASA_SPOKEN_TAIL = ("これだけでいいから、やってみてください。", "まずはこれだけ、やってみて。",
                      "難しく考えなくて大丈夫。これだけやってください。", "スマホだけでできます。やってみて。")
 _MASA_CLOSING_RE = re.compile(r"^今日は、(.+?)(?:（(\d+分)）)?。$")
@@ -4269,7 +4280,9 @@ def _masa_spoken_part(part: str, seed: int) -> str:
         for k, i in enumerate(idx):
             step = _MASA_STEP_LINE_RE.match(lines[i]).group(2).rstrip("。")
             out[i] = f"{order[k]}、{step}。"
-        out.insert(idx[0], _MASA_SPOKEN_LEAD[seed % len(_MASA_SPOKEN_LEAD)].format(n=len(idx)))
+        lead = _masa_comment_lead(part)
+        if lead:
+            out.insert(idx[0], lead)
     for j in range(len(out) - 1, -1, -1):
         line = out[j].strip()
         if not line:

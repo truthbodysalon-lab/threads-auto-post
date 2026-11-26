@@ -165,6 +165,19 @@ class TestOwnerRules20261126(unittest.TestCase):
         self.assertIn("3分あれば終わります。", q)
         self.assertEqual(g._abstract_reasons_masa(q), [])
 
+    def test_comment_lead_names_subject(self):
+        # 2026-11-26 masa指摘「『難しくないです。3つだけ。』だと主語が分からない」: 1行目で何の話かを名指しする
+        texts = list(g.INSTA_EASY_TEMPLATES) + list(g.HAKASE_TEMPLATES) + list(m.WINNING_HOOK_TEMPLATES)
+        texts += [m.build_gen_post(0, h) for h in m.INSTA_HURDLES]
+        for t in texts:
+            c = g._masa_finalize([t])[0].split("[COMMENT]", 1)[1].strip("\n")
+            first = c.split("\n")[0]
+            self.assertNotRegex(first, r"^(難しくないです|やることは\d|手順は\d|\dつだけ)", t)
+            self.assertRegex(first, r"\S{2,}(?:は|なら)、", first)
+        # 表に無いコメントには主語のない1行目を足さない
+        q = g._masa_spoken("x\n[COMMENT]\n① インサイトを開く\n② 保存数を見る")
+        self.assertTrue(q.split("[COMMENT]", 1)[1].strip("\n").startswith("まず、"))
+
     def test_spoken_keeps_lists_with_heading(self):
         t = "見出し\n[COMMENT]\n【中身は3つです】\n① A\n② B\n③ C"
         self.assertIn("①", g._masa_spoken(t))

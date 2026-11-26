@@ -334,24 +334,26 @@ def check_generation():
 
 
 def check_list_habit_in_first50():
-    """truth/nagaokaの当日生成キュー前半20本に【◯◯習慣N選】型(LIST_HABIT)が1本以上あるか（無ければWARN・2026-10-06本人指示）。"""
+    """truth/nagaokaの当日生成キュー前半(アカウント別の1日の本数)に【◯◯習慣N選】型(LIST_HABIT)が1本以上あるか（無ければWARN・2026-10-06本人指示）。"""
     import os as _os
     _os.environ["SEGMENT_REGISTRY_DRY"] = "1"
     for acct, fn in (("truth", "generate_30_posts"), ("nagaoka", "generate_40_nagaoka_posts")):
         try:
             import generate_remix as _g
-            posts = getattr(_g, fn)()[:FRONT_N]
+            from daily_budget import front_n as _front_n   # 2026-11-26: truth/nagaokaは前半30本（共通の10本で切ると誤WARN）
+            _n = _front_n(acct)
+            posts = getattr(_g, fn)()[:_n]
             hits = [i for i, t in enumerate(posts) if _g._list_habit_valid(t)]
             # 2026-10-24: 効いていないため truth=毎日1本 / nagaoka=1日0〜1本（隔日）に減らした。0本はnagaokaのみ正常。
             if acct == "nagaoka":
                 ok = len(hits) <= 1
                 add(f"list_habit_in_first50:{acct}", "B.ルール反映", "PASS" if ok else "WARN",
-                    f"{acct}前半20本中LIST_HABIT型{len(hits)}本（位置{hits}）。上限1本" if ok else
-                    f"{acct}前半20本にLIST_HABIT型が{len(hits)}本。1日0〜1本の指示（2026-10-24）を超過")
+                    f"{acct}前半{_n}本中LIST_HABIT型{len(hits)}本（位置{hits}）。上限1本" if ok else
+                    f"{acct}前半{_n}本にLIST_HABIT型が{len(hits)}本。1日0〜1本の指示（2026-10-24）を超過")
             else:
                 add(f"list_habit_in_first50:{acct}", "B.ルール反映", "PASS" if hits else "WARN",
-                    f"{acct}前半20本中LIST_HABIT型{len(hits)}本（位置{hits}）" if hits else
-                    f"{acct}前半20本にLIST_HABIT型(【◯◯習慣N選】)が0本。毎日1本入れる指示の実行ギャップ")
+                    f"{acct}前半{_n}本中LIST_HABIT型{len(hits)}本（位置{hits}）" if hits else
+                    f"{acct}前半{_n}本にLIST_HABIT型(【◯◯習慣N選】)が0本。毎日1本入れる指示の実行ギャップ")
         except Exception as e:
             add(f"list_habit_in_first50:{acct}", "B.ルール反映", "WARN", f"検査失敗: {type(e).__name__}: {e}")
 

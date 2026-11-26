@@ -1,6 +1,6 @@
 {
   "acct": "truth",
-  "generated_at": "2026-11-25 10:43",
+  "generated_at": "2026-11-26 10:43",
   "params": {
     "min_n": 5,
     "loser_min_n": 8,
@@ -12,14 +12,14 @@
       30
     ]
   },
-  "registry_loaded": 265,
-  "log_entries": 8745,
+  "registry_loaded": 269,
+  "log_entries": 8761,
   "windows": {
     "7d": {
       "baseline": {
         "n": 60,
-        "median_views": 115.0,
-        "mean_views": 148.4,
+        "median_views": 138.5,
+        "mean_views": 162.9,
         "p90_views": 337.0
       },
       "unregistered_n": 58,
@@ -61,7 +61,7 @@
           "p90_views": 265,
           "like_rate": 0.0,
           "reply_rate": 0.0038,
-          "index": 2.304,
+          "index": 1.913,
           "verdict": "判定保留"
         },
         "T3_sango__low": {
@@ -111,7 +111,7 @@
           "p90_views": 335,
           "like_rate": 0.0,
           "reply_rate": 0.003,
-          "index": 2.913,
+          "index": 2.419,
           "verdict": "判定保留"
         },
         "T5_suimin__high": {
@@ -163,7 +163,7 @@
           "p90_views": 265,
           "like_rate": 0.0,
           "reply_rate": 0.0038,
-          "index": 2.304,
+          "index": 1.913,
           "verdict": "判定保留"
         },
         "T3_sango": {
@@ -193,7 +193,7 @@
           "p90_views": 335,
           "like_rate": 0.0,
           "reply_rate": 0.003,
-          "index": 2.913,
+          "index": 2.419,
           "verdict": "判定保留"
         },
         "T6_norikae": {
@@ -283,7 +283,7 @@
           "segment": "T2_zutsu",
           "like_rate": 0.0,
           "reply_rate": 0.0038,
-          "index": 2.304,
+          "index": 1.913,
           "verdict": "判定保留"
         },
         "Z11_truth": {
@@ -404,7 +404,7 @@
           "segment": "T5_suimin",
           "like_rate": 0.0,
           "reply_rate": 0.003,
-          "index": 2.913,
+          "index": 2.419,
           "verdict": "判定保留"
         },
         "ZC06_truth": {
@@ -433,12 +433,12 @@
     },
     "14d": {
       "baseline": {
-        "n": 188,
-        "median_views": 73.5,
-        "mean_views": 134.4,
-        "p90_views": 328.7
+        "n": 168,
+        "median_views": 107.5,
+        "mean_views": 152.8,
+        "p90_views": 353.6
       },
-      "unregistered_n": 184,
+      "unregistered_n": 164,
       "segment_hook": {
         "T1_desk__low": {
           "n": 0,
@@ -477,7 +477,7 @@
           "p90_views": 504.2,
           "like_rate": 0.0,
           "reply_rate": 0.0034,
-          "index": 3.605,
+          "index": 2.465,
           "verdict": "判定保留"
         },
         "T3_sango__low": {
@@ -527,7 +527,7 @@
           "p90_views": 335,
           "like_rate": 0.0,
           "reply_rate": 0.003,
-          "index": 4.558,
+          "index": 3.116,
           "verdict": "判定保留"
         },
         "T5_suimin__high": {
@@ -579,7 +579,7 @@
           "p90_views": 504.2,
           "like_rate": 0.0,
           "reply_rate": 0.0034,
-          "index": 3.605,
+          "index": 2.465,
           "verdict": "判定保留"
         },
         "T3_sango": {
@@ -609,7 +609,7 @@
           "p90_views": 335,
           "like_rate": 0.0,
           "reply_rate": 0.003,
-          "index": 4.558,
+          "index": 3.116,
           "verdict": "判定保留"
         },
         "T6_norikae": {
@@ -677,7 +677,7 @@
           "segment": "T2_zutsu",
           "like_rate": 0.0,
           "reply_rate": 0.0179,
-          "index": 0.762,
+          "index": 0.521,
           "verdict": "判定保留"
         },
         "Z07_truth": {
@@ -688,7 +688,7 @@
           "segment": "T2_zutsu",
           "like_rate": 0.0,
           "reply_rate": 0.0018,
-          "index": 7.673,
+          "index": 5.247,
           "verdict": "判定保留"
         },
         "Z09_truth": {
@@ -699,7 +699,7 @@
           "segment": "T2_zutsu",
           "like_rate": 0.0,
           "reply_rate": 0.0038,
-          "index": 3.605,
+          "index": 2.465,
           "verdict": "判定保留"
         },
         "Z11_truth": {
@@ -820,7 +820,7 @@
           "segment": "T5_suimin",
           "like_rate": 0.0,
           "reply_rate": 0.003,
-          "index": 4.558,
+          "index": 3.116,
           "verdict": "判定保留"
         },
         "ZC06_truth": {
@@ -850,8 +850,8 @@
     "30d": {
       "baseline": {
         "n": 188,
-        "median_views": 73.5,
-        "mean_views": 134.4,
+        "median_views": 81.0,
+        "mean_views": 140.8,
         "p90_views": 328.7
       },
       "unregistered_n": 184,
@@ -893,7 +893,7 @@
           "p90_views": 504.2,
           "like_rate": 0.0,
           "reply_rate": 0.0034,
-          "index": 3.605,
+          "index": 3.272,
           "verdict": "判定保留"
         },
         "T3_sango__low": {
@@ -943,7 +943,7 @@
           "p90_views": 335,
           "like_rate": 0.0,
           "reply_rate": 0.003,
-          "index": 4.558,
+          "index": 4.136,
           "verdict": "判定保留"
         },
         "T5_suimin__high": {
@@ -995,7 +995,7 @@
           "p90_views": 504.2,
           "like_rate": 0.0,
           "reply_rate": 0.0034,
-          "index": 3.605,
+          "index": 3.272,
           "verdict": "判定保留"
         },
         "T3_sango": {
@@ -1025,7 +1025,7 @@
           "p90_views": 335,
           "like_rate": 0.0,
           "reply_rate": 0.003,
-          "index": 4.558,
+          "index": 4.136,
           "verdict": "判定保留"
         },
         "T6_norikae": {
@@ -1093,7 +1093,7 @@
           "segment": "T2_zutsu",
           "like_rate": 0.0,
           "reply_rate": 0.0179,
-          "index": 0.762,
+          "index": 0.691,
           "verdict": "判定保留"
         },
         "Z07_truth": {
@@ -1104,7 +1104,7 @@
           "segment": "T2_zutsu",
           "like_rate": 0.0,
           "reply_rate": 0.0018,
-          "index": 7.673,
+          "index": 6.963,
           "verdict": "判定保留"
         },
         "Z09_truth": {
@@ -1115,7 +1115,7 @@
           "segment": "T2_zutsu",
           "like_rate": 0.0,
           "reply_rate": 0.0038,
-          "index": 3.605,
+          "index": 3.272,
           "verdict": "判定保留"
         },
         "Z11_truth": {
@@ -1236,7 +1236,7 @@
           "segment": "T5_suimin",
           "like_rate": 0.0,
           "reply_rate": 0.003,
-          "index": 4.558,
+          "index": 4.136,
           "verdict": "判定保留"
         },
         "ZC06_truth": {
@@ -1282,7 +1282,7 @@
       "p90_views": 504.2,
       "like_rate": 0.0,
       "reply_rate": 0.0034,
-      "index": 3.605,
+      "index": 3.272,
       "verdict": "判定保留"
     },
     "T3_sango": {
@@ -1312,7 +1312,7 @@
       "p90_views": 335,
       "like_rate": 0.0,
       "reply_rate": 0.003,
-      "index": 4.558,
+      "index": 4.136,
       "verdict": "判定保留"
     },
     "T6_norikae": {
@@ -1378,7 +1378,7 @@
       "segment": "T2_zutsu",
       "like_rate": 0.0,
       "reply_rate": 0.0179,
-      "index": 0.762,
+      "index": 0.691,
       "verdict": "判定保留"
     },
     "Z07_truth": {
@@ -1389,7 +1389,7 @@
       "segment": "T2_zutsu",
       "like_rate": 0.0,
       "reply_rate": 0.0018,
-      "index": 7.673,
+      "index": 6.963,
       "verdict": "判定保留"
     },
     "Z09_truth": {
@@ -1400,7 +1400,7 @@
       "segment": "T2_zutsu",
       "like_rate": 0.0,
       "reply_rate": 0.0038,
-      "index": 3.605,
+      "index": 3.272,
       "verdict": "判定保留"
     },
     "Z11_truth": {
@@ -1521,7 +1521,7 @@
       "segment": "T5_suimin",
       "like_rate": 0.0,
       "reply_rate": 0.003,
-      "index": 4.558,
+      "index": 4.136,
       "verdict": "判定保留"
     },
     "ZC06_truth": {
@@ -1782,7 +1782,7 @@
   },
   "type_report": {
     "7d": {
-      "baseline_median": 115.0,
+      "baseline_median": 138.5,
       "n": 60,
       "types": {
         "MAE_MAZU": {
@@ -1815,21 +1815,26 @@
           "median_views": 0,
           "index": 0.0
         },
+        "NAGAOKA_LOCAL": {
+          "n": 0,
+          "median_views": 0,
+          "index": 0.0
+        },
         "own_adapt": {
-          "n": 11,
-          "median_views": 75,
-          "index": 0.65
+          "n": 9,
+          "median_views": 170,
+          "index": 1.23
         },
         "image": {
           "n": 7,
-          "median_views": 20,
-          "index": 0.17
+          "median_views": 9,
+          "index": 0.06
         }
       }
     },
     "14d": {
-      "baseline_median": 73.5,
-      "n": 188,
+      "baseline_median": 107.5,
+      "n": 168,
       "types": {
         "MAE_MAZU": {
           "n": 0,
@@ -1861,20 +1866,25 @@
           "median_views": 0,
           "index": 0.0
         },
+        "NAGAOKA_LOCAL": {
+          "n": 0,
+          "median_views": 0,
+          "index": 0.0
+        },
         "own_adapt": {
-          "n": 27,
-          "median_views": 184,
-          "index": 2.5
+          "n": 30,
+          "median_views": 184.5,
+          "index": 1.72
         },
         "image": {
-          "n": 17,
-          "median_views": 20,
-          "index": 0.27
+          "n": 16,
+          "median_views": 18.0,
+          "index": 0.17
         }
       }
     },
     "30d": {
-      "baseline_median": 73.5,
+      "baseline_median": 81.0,
       "n": 188,
       "types": {
         "MAE_MAZU": {
@@ -1907,15 +1917,20 @@
           "median_views": 0,
           "index": 0.0
         },
+        "NAGAOKA_LOCAL": {
+          "n": 0,
+          "median_views": 0,
+          "index": 0.0
+        },
         "own_adapt": {
-          "n": 27,
-          "median_views": 184,
-          "index": 2.5
+          "n": 30,
+          "median_views": 184.5,
+          "index": 2.28
         },
         "image": {
-          "n": 17,
-          "median_views": 20,
-          "index": 0.27
+          "n": 18,
+          "median_views": 18.0,
+          "index": 0.22
         }
       }
     }

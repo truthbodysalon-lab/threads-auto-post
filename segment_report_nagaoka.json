@@ -1,6 +1,6 @@
 {
   "acct": "nagaoka",
-  "generated_at": "2026-11-25 10:43",
+  "generated_at": "2026-11-26 10:43",
   "params": {
     "min_n": 5,
     "loser_min_n": 8,
@@ -12,17 +12,17 @@
       30
     ]
   },
-  "registry_loaded": 335,
+  "registry_loaded": 340,
   "log_entries": 5659,
   "windows": {
     "7d": {
       "baseline": {
-        "n": 33,
+        "n": 23,
         "median_views": 14,
-        "mean_views": 50.7,
-        "p90_views": 129.8
+        "mean_views": 63.1,
+        "p90_views": 131.4
       },
-      "unregistered_n": 32,
+      "unregistered_n": 22,
       "segment_hook": {
         "T1_desk__low": {
           "n": 0,
@@ -1796,7 +1796,7 @@
   "type_report": {
     "7d": {
       "baseline_median": 14,
-      "n": 33,
+      "n": 23,
       "types": {
         "MAE_MAZU": {
           "n": 0,
@@ -1828,15 +1828,20 @@
           "median_views": 0,
           "index": 0.0
         },
+        "NAGAOKA_LOCAL": {
+          "n": 0,
+          "median_views": 0,
+          "index": 0.0
+        },
         "own_adapt": {
-          "n": 13,
-          "median_views": 7,
-          "index": 0.5
+          "n": 7,
+          "median_views": 4,
+          "index": 0.29
         },
         "image": {
-          "n": 4,
-          "median_views": 19.0,
-          "index": 1.36
+          "n": 3,
+          "median_views": 25,
+          "index": 1.79
         }
       }
     },
@@ -1870,6 +1875,11 @@
           "index": 0.0
         },
         "LIST_HABIT": {
+          "n": 0,
+          "median_views": 0,
+          "index": 0.0
+        },
+        "NAGAOKA_LOCAL": {
           "n": 0,
           "median_views": 0,
           "index": 0.0
@@ -1916,6 +1926,11 @@
           "index": 0.0
         },
         "LIST_HABIT": {
+          "n": 0,
+          "median_views": 0,
+          "index": 0.0
+        },
+        "NAGAOKA_LOCAL": {
           "n": 0,
           "median_views": 0,
           "index": 0.0

@@ -2396,6 +2396,15 @@ def _enforce_diversity(posts: list[str], prefix_len: int = 9) -> list[str]:
     return primary + rest
 
 
+def _drop_nagaoka_phrases(text: str) -> str:
+    """決まり文句(NAGAOKA_PHRASES)だけの行を取り除く。固定テンプレに直接書かれている分も対象
+    （2026-11-25 本人指示: truth には足さない。2026-11-27検証: テンプレ直書きで約6回に1回キュー前半に混入していた）。"""
+    if not any(ph in (text or "") for ph in NAGAOKA_PHRASES):
+        return text
+    alt = "|".join(re.escape(ph) for ph in NAGAOKA_PHRASES)
+    return re.sub(r"\n*^[ \t]*(?:" + alt + r")[ \t]*$", "", text, flags=re.M).strip()
+
+
 def generate_30_posts() -> list[str]:
     w = _load_weights("truth")
     defaults = {
@@ -2460,7 +2469,7 @@ def generate_30_posts() -> list[str]:
             # 2026-11-25 本人指示: truth は「長岡市の整体院でも同じ相談が多いです」等の決まり文句(NAGAOKA_PHRASES)を
             # 本文に足さない（playbook L7/L13 で禁止の伝聞・自己紹介文そのもの。実測でも反応は変わらなかった）。
             # 長岡の人へは地域ネタ型(_insert_nagaoka_local_posts)で届ける。
-            post = _enforce_short_body(raw)
+            post = _enforce_short_body(_drop_nagaoka_phrases(raw))
             key = post[:100]
             first_line = post.split("\n")[0].strip()
             # 1文目NG・NGワード・重複チェック
@@ -2478,7 +2487,7 @@ def generate_30_posts() -> list[str]:
     # feedback の追加テンプレを先頭に差し込む
     for tmpl in _load_extra_templates("truth"):
         try:
-            posts.insert(0, _enforce_short_body(fill(tmpl)))
+            posts.insert(0, _enforce_short_body(_drop_nagaoka_phrases(fill(tmpl))))
         except Exception:
             pass
 

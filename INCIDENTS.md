@@ -67,3 +67,5 @@ C20（台帳整合）が「台帳の検査IDが実コードに実在するか」
 - 2026-11-15追記(1日10本化後の検査しきい値ずれ): 11/14に全アカウント1日10本へ統一したが、C19 `exec:post_interval`・C41 `alive_stall`（90分WARN/180分FAIL＝50〜30本/日前提）とC25 `ledger_gap:masa`（API半数未満でFAIL）が旧前提のまま、truth/masaに正常運転のWARN・FAILが出た（10本/日の最大間隔は約120〜135分が正常・masaは外部uplink約10本/日がAPI合計に数えられ上限到達で自前2本になる設計）。修正: verify_system.py に GAP_WARN_MIN/GAP_FAIL_MIN（1日20本未満は150/240分）を追加しC19/C41へ適用、C25のmasaをnagaoka同様「台帳0行のみFAIL」に緩和。検査: C19, C41, C25。
 
 - 2026-11-26追記: C19 `exec:post_interval:truth` / C41 が11/25 06:02〜の155分でWARN（10本は投稿済み・停止ではない）。発生は上記11/25追記の修正（commit 0c4be60a・11/25 10:47、MAX_GAP_MIN 150→135）より前の時間帯。追加の修正はせず、11/27朝の検証で11/26分を確認する。検査: C19, C41。
+
+- 2026-11-27追記: ①C19 `exec:post_interval:truth` は11/26分が最大69分でPASS（上記11/25・11/26追記の確認完了）。②verify `nagaoka_filler:truth` が11/26 17:44のクラウド検品でFAIL（1本・位置26）。原因=11/25の指示で `_ensure_nagaoka` は外したが、固定テンプレに直接書かれた決まり文句（「長岡市で整体院を兄妹で運営しています。」等と`{nagaoka}`）が残り、模擬60回中10回で前半30本に混入。投稿停止ではない。修正: generate_remix.py `_drop_nagaoka_phrases` を truth の通常テンプレ・追加テンプレに適用（修正後の模擬60回で混入0）。検査: verify `nagaoka_filler:truth`。

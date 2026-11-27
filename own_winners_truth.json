@@ -1,20 +1,20 @@
 {
  "account": "truth",
- "generated": "2026-11-26",
+ "generated": "2026-11-27",
  "window_days": 90,
  "note": "自動投稿システム以外から出た本人の投稿のうち伸びたもの。翻案必須・同一文面の再投稿は禁止（型疲労L8）。構造（フックの型・展開・締め）だけを借りる",
- "fetched_posts": 3908,
- "own_posts": 55,
+ "fetched_posts": 3894,
+ "own_posts": 56,
  "classification": {
-  "exact_body80": 3826,
-  "OWN": 55,
+  "exact_body80": 3811,
+  "OWN": 56,
   "exact_line1": 16,
   "skeleton": 4,
   "tail_sig": 6,
   "template_prefix": 1
  },
- "account_median_views": 78.5,
- "winner_threshold": 117.75,
+ "account_median_views": 88.0,
+ "winner_threshold": 132.0,
  "winners": [
   {
    "id": "18125202077514991",
@@ -180,43 +180,6 @@
    ],
    "repeats_in_window": 1,
    "text": "仕事や家庭を大切にしてるけど\n自分の事は大切にしないのはなんで？"
-  },
-  {
-   "id": "18376965601242124",
-   "views": 130,
-   "date": "2026-10-11",
-   "media": "TEXT_POST",
-   "first_line": "帝京長岡勝った！！",
-   "labels": [
-    "短文"
-   ],
-   "repeats_in_window": 1,
-   "text": "帝京長岡勝った！！\nあと1勝！！"
-  },
-  {
-   "id": "18128534696488181",
-   "views": 127,
-   "date": "2026-10-02",
-   "media": "TEXT_POST",
-   "first_line": "緊張型頭痛で夜に目が覚めた日、週に何回ですか？3回以上なら運動不足という原因を疑ってみて。",
-   "labels": [
-    "短文"
-   ],
-   "repeats_in_window": 1,
-   "text": "緊張型頭痛で夜に目が覚めた日、週に何回ですか？3回以上なら運動不足という原因を疑ってみて。"
-  },
-  {
-   "id": "18112522589462421",
-   "views": 119,
-   "date": "2026-11-11",
-   "media": "TEXT_POST",
-   "first_line": "え！すご！",
-   "labels": [
-    "地名・出来事",
-    "短文"
-   ],
-   "repeats_in_window": 1,
-   "text": "え！すご！\n長岡市でやるんですね！"
   }
  ]
 }

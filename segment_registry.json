@@ -292,7 +292,7 @@
   "産後、体の痛みを我慢するママへ。": {
     "segment": "T3",
     "hook": "low",
-    "created": "2026-11-14",
+    "created": "2026-11-28",
     "acct": "truth",
     "variant": null,
     "hypothesis_id": "Z11_truth"
@@ -550,7 +550,7 @@
   "抱っこ・授乳で背中が丸くなるママへ。": {
     "segment": "T3",
     "hook": "low",
-    "created": "2026-11-10",
+    "created": "2026-11-28",
     "acct": "nagaoka",
     "variant": 0
   },
@@ -4267,7 +4267,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 0,
-    "created": "2026-11-17",
+    "created": "2026-11-28",
     "acct": "nagaoka"
   },
   "インスタで、外注を怖がっている院長へ。": {
@@ -5870,7 +5870,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 37,
-    "created": "2026-11-02",
+    "created": "2026-11-28",
     "acct": "nagaoka"
   },
   "『足を組むとラクで、ついやってしまう』という声を、よく聞きます。": {
@@ -5909,7 +5909,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 14,
-    "created": "2026-11-21",
+    "created": "2026-11-28",
     "acct": "truth"
   },
   "【肩こりを溜めない仕事中の習慣7選】": {
@@ -6084,7 +6084,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 45,
-    "created": "2026-11-12",
+    "created": "2026-11-28",
     "acct": "truth"
   },
   "『休み明けの月曜に、必ず頭が重くなる』という声を、よく聞きます。": {
@@ -6256,7 +6256,7 @@
   "最初から大きなコースを出してしまう院長へ。": {
     "segment": "R05",
     "hook": "low",
-    "created": "2026-11-08",
+    "created": "2026-11-28",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -6973,7 +6973,7 @@
     "hook": "present",
     "present_key": "insta_kit",
     "variant": 18,
-    "created": "2026-10-19"
+    "created": "2026-11-28"
   },
   "インスタ運用で、反応がなくて落ち込む整体院の院長へ。": {
     "segment": "INSTA_EASY",
@@ -7111,7 +7111,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 9,
-    "created": "2026-11-20"
+    "created": "2026-11-28"
   },
   "【今日のストーリーズ、4枚の空欄埋め】": {
     "segment": "PRESENT_CTA",
@@ -8312,7 +8312,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 9,
-    "created": "2026-11-12",
+    "created": "2026-11-28",
     "acct": "nagaoka"
   },
   "ハイライトは、今日1つだけ作れば足ります。": {
@@ -8512,7 +8512,7 @@
     "segment": "WIN_HOOK",
     "hook": "winning",
     "variant": 4,
-    "created": "2026-11-21"
+    "created": "2026-11-28"
   },
   "インスタの更新が続く店ほど、これをやっています。": {
     "segment": "WIN_HOOK",
@@ -9041,7 +9041,7 @@
     "segment": "QUESTION",
     "hook": "type",
     "variant": 10,
-    "created": "2026-11-18",
+    "created": "2026-11-28",
     "acct": "nagaoka"
   },
   "ぶっちゃけ、投稿文はゼロから書くより、直す方が速い。": {
@@ -9352,7 +9352,7 @@
     "segment": "WIN_HOOK",
     "hook": "winning",
     "variant": 10,
-    "created": "2026-11-20"
+    "created": "2026-11-28"
   },
   "写真を並べれば、動画は撮らなくていい。": {
     "segment": "INSTA_EASY",
@@ -9693,14 +9693,14 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 35,
-    "created": "2026-11-17",
+    "created": "2026-11-28",
     "acct": "truth"
   },
   "頭痛薬のあとに眠くなる日は、首の後ろを温めて早めに横になってみて。": {
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 41,
-    "created": "2026-11-21",
+    "created": "2026-11-28",
     "acct": "truth"
   },
   "痛み止めを飲む前に、まず肩を3回ゆっくり落としてみて。": {
@@ -9742,7 +9742,7 @@
     "segment": "WEATHER",
     "hook": "type",
     "variant": 28,
-    "created": "2026-11-14",
+    "created": "2026-11-28",
     "acct": "nagaoka"
   },
   "お風呂のあと、肩が軽くなる人はいますか？": {
@@ -9868,7 +9868,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 36,
-    "created": "2026-11-21",
+    "created": "2026-11-28",
     "acct": "truth"
   },
   "頭痛薬の回数をメモした人は、首を温めた日にも印をつけてみて。": {
@@ -12395,5 +12395,117 @@
     "variant": "S32b",
     "created": "2026-11-27",
     "acct": "nagaoka"
+  },
+  "長岡市で首こりに悩んでいる50代の女性必見": {
+    "segment": "NAGAOKA_LOCAL",
+    "hook": "target",
+    "variant": "T-w50-kubi-a",
+    "created": "2026-11-28",
+    "acct": "truth"
+  },
+  "三条市で肩こりに悩んでいる立ち仕事の方へ": {
+    "segment": "NAGAOKA_LOCAL",
+    "hook": "near",
+    "variant": "X-stand-kata-b-sanjo",
+    "created": "2026-11-28",
+    "acct": "truth"
+  },
+  "小千谷市で肩こりに悩んでいる保育士さん必見": {
+    "segment": "NAGAOKA_LOCAL",
+    "hook": "near",
+    "variant": "X-hoiku-kata-a-ojiya",
+    "created": "2026-11-28",
+    "acct": "truth"
+  },
+  "長岡市で、病院では異常なしと言われた頭痛に": {
+    "segment": "NAGAOKA_LOCAL",
+    "hook": "local",
+    "variant": "N43",
+    "created": "2026-11-28",
+    "acct": "truth"
+  },
+  "柏崎市で肩こりに悩んでいる看護師さん必見": {
+    "segment": "NAGAOKA_LOCAL",
+    "hook": "near",
+    "variant": "X-nurse-kata-a-kashiwazaki",
+    "created": "2026-11-28",
+    "acct": "truth"
+  },
+  "長岡市の広い駐車場でバックするとき": {
+    "segment": "NAGAOKA_LOCAL",
+    "hook": "local",
+    "variant": "N32",
+    "created": "2026-11-28",
+    "acct": "truth"
+  },
+  "長岡市で、自分の体のことは": {
+    "segment": "NAGAOKA_LOCAL",
+    "hook": "local",
+    "variant": "N47",
+    "created": "2026-11-28",
+    "acct": "truth"
+  },
+  "長岡市で頭痛専門の整体師をしていますが": {
+    "segment": "NAGAOKA_LOCAL",
+    "hook": "owner",
+    "variant": "O04",
+    "created": "2026-11-28",
+    "acct": "truth"
+  },
+  "長岡市で肩こりに悩んでいるママさんへ": {
+    "segment": "NAGAOKA_LOCAL",
+    "hook": "target",
+    "variant": "T-mama-kata-b",
+    "created": "2026-11-28",
+    "acct": "truth"
+  },
+  "見附市で頭痛に悩んでいるデスクワークの方必見": {
+    "segment": "NAGAOKA_LOCAL",
+    "hook": "near",
+    "variant": "X-desk-zutsu-a-mitsuke",
+    "created": "2026-11-28",
+    "acct": "truth"
+  },
+  "新米の季節、おかわりが": {
+    "segment": "NAGAOKA_STORE_LOCAL",
+    "hook": "shinmai",
+    "variant": "S21a",
+    "created": "2026-11-28",
+    "acct": "nagaoka"
+  },
+  "長岡で「カツ丼」と頼んだら": {
+    "segment": "NAGAOKA_STORE_LOCAL",
+    "hook": "katsudon",
+    "variant": "S03a",
+    "created": "2026-11-28",
+    "acct": "nagaoka"
+  },
+  "長岡の道の駅で、野菜を": {
+    "segment": "NAGAOKA_STORE_LOCAL",
+    "hook": "michinoeki",
+    "variant": "S31a",
+    "created": "2026-11-28",
+    "acct": "nagaoka"
+  },
+  "「米百俵」の話、子どもの頃に": {
+    "segment": "NAGAOKA_STORE_LOCAL",
+    "hook": "kome100",
+    "variant": "S07a",
+    "created": "2026-11-28",
+    "acct": "nagaoka"
+  },
+  "山古志は錦鯉の発祥の地と言われています。": {
+    "segment": "NAGAOKA_STORE_LOCAL",
+    "hook": "nishikigoi",
+    "variant": "S11a",
+    "created": "2026-11-28",
+    "acct": "nagaoka"
+  },
+  "広告の動画は、スマホのメモ1行から作れます。": {
+    "segment": "MASA_OWNER_TOPIC",
+    "hook": "douga_koukoku",
+    "variant": "DK07",
+    "created": "2026-11-28",
+    "acct": "masa"
   }
 }

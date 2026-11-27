@@ -34,5 +34,7 @@
  "subscription-watch@10:30": "2026-11-27",
  "ig-verify-catchup@10:41": "2026-11-27",
  "ig-reels-catchup": "2026-11-27",
- "ops-watch@10:47": "2026-11-27"
+ "ops-watch@10:47": "2026-11-27",
+ "ig-analyze-catchup": "2026-11-27",
+ "ameba-rank-am": "2026-11-27"
 }

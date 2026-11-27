@@ -1,10 +1,28 @@
 {
-  "updated_at": "2026-11-26 23:22",
+  "updated_at": "2026-11-27 23:23",
   "days": 14,
   "by_cta": {
-    "なし": {
-      "posts": 128,
+    "F1": {
+      "posts": 1,
+      "avg_views": 1.0,
+      "median_views": 1,
+      "text": "長岡の天気と頭痛の話を、毎日書いています。フォローしておくと流れてきます"
+    },
+    "F2": {
+      "posts": 1,
+      "avg_views": 1.0,
+      "median_views": 1,
+      "text": "頭が重くなりやすい季節の話も続けます。気になる方はフォローを"
+    },
+    "S1": {
+      "posts": 1,
       "avg_views": 5.0,
+      "median_views": 5,
+      "text": "頭が重い日に見返せるように、保存しておいてください"
+    },
+    "なし": {
+      "posts": 124,
+      "avg_views": 5.7,
       "median_views": 1.0,
       "text": "締めなし"
     }

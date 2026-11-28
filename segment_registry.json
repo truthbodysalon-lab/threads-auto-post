@@ -439,7 +439,7 @@
   "子育てで腰を痛めたママへ。": {
     "segment": "T3",
     "hook": "low",
-    "created": "2026-11-20",
+    "created": "2026-11-28",
     "acct": "nagaoka",
     "variant": null,
     "hypothesis_id": "Z12_nagaoka"
@@ -521,7 +521,7 @@
   "抱っこ疲れで腰が痛いママへ。": {
     "segment": "T3",
     "hook": "low",
-    "created": "2026-11-20",
+    "created": "2026-11-28",
     "acct": "truth",
     "variant": 1
   },
@@ -3476,7 +3476,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 40,
-    "created": "2026-11-21",
+    "created": "2026-11-28",
     "acct": "truth"
   },
   "【頭痛を遠ざける呼吸の習慣5選】": {
@@ -5387,7 +5387,7 @@
     "segment": "LIST_HABIT",
     "hook": "list",
     "variant": 19,
-    "created": "2026-11-08",
+    "created": "2026-11-28",
     "acct": "nagaoka"
   },
   "【肩こりの人のお風呂上がりの習慣5選】": {
@@ -5877,7 +5877,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 4,
-    "created": "2026-11-19",
+    "created": "2026-11-28",
     "acct": "nagaoka"
   },
   "インスタ運用で、気分に左右されて続かない院長へ。": {
@@ -6149,7 +6149,7 @@
   "回数券を売り込みだと感じる院長へ。": {
     "segment": "R05",
     "hook": "low",
-    "created": "2026-11-16",
+    "created": "2026-11-28",
     "acct": "masa",
     "axis": "repeat_close",
     "variant": null,
@@ -6182,7 +6182,7 @@
     "segment": "CUSTOMER_VOICE",
     "hook": "voice",
     "variant": 7,
-    "created": "2026-11-21",
+    "created": "2026-11-28",
     "acct": "truth"
   },
   "【巻き肩の人が見直すこと6選】": {
@@ -6787,7 +6787,7 @@
     "segment": "HAKASE",
     "hook": "principle",
     "variant": 10,
-    "created": "2026-11-21"
+    "created": "2026-11-28"
   },
   "ハイライトを、後回しにしない。": {
     "segment": "PRESENT_CTA",
@@ -7279,7 +7279,7 @@
     "hook": "present",
     "present_key": "insta_kit",
     "variant": 1,
-    "created": "2026-10-20"
+    "created": "2026-11-28"
   },
   "顔なしでも、お店の雰囲気は伝わる。": {
     "segment": "INSTA_EASY",
@@ -8013,7 +8013,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 17,
-    "created": "2026-11-21",
+    "created": "2026-11-28",
     "acct": "truth"
   },
   "週末に予定を詰める前に、まず平日の疲れを抜く日を作ってみて。": {
@@ -8414,7 +8414,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 25,
-    "created": "2026-11-13",
+    "created": "2026-11-28",
     "acct": "nagaoka"
   },
   "寒暖差が大きい日は、首の後ろが固まりやすい。": {
@@ -8705,7 +8705,7 @@
     "segment": "MAE_MAZU",
     "hook": "type",
     "variant": 14,
-    "created": "2026-11-19",
+    "created": "2026-11-28",
     "acct": "truth"
   },
   "予定を詰め込む前に、まず1日の中で力を抜く時間を決めてみて。": {
@@ -9440,7 +9440,7 @@
     "segment": "ZUTSUYAKU",
     "hook": "type",
     "variant": 45,
-    "created": "2026-11-21",
+    "created": "2026-11-28",
     "acct": "truth"
   },
   "鎮痛剤を飲んだあとも重さが残る日は、水と首の温めをひとつ足してみて。": {
@@ -9559,7 +9559,7 @@
     "segment": "WEATHER",
     "hook": "type",
     "variant": 24,
-    "created": "2026-11-16",
+    "created": "2026-11-28",
     "acct": "nagaoka"
   },
   "『料理をしていると、肩が上がってくる』という声を、よく聞きます。": {
@@ -9903,7 +9903,7 @@
     "segment": "QUESTION",
     "hook": "type",
     "variant": 13,
-    "created": "2026-11-20",
+    "created": "2026-11-28",
     "acct": "nagaoka"
   },
   "風が強い日に、首がこわばる人いますか？": {
@@ -12696,5 +12696,110 @@
     "variant": "X-w40-kubi-b-ojiya",
     "created": "2026-11-28",
     "acct": "truth"
+  },
+  "小千谷市で首こりに悩んでいるスマホをよく見る方必見": {
+    "segment": "NAGAOKA_LOCAL",
+    "hook": "near",
+    "variant": "X-phone-kubi-a-ojiya",
+    "created": "2026-11-28",
+    "acct": "truth"
+  },
+  "三条市で首こりに悩んでいるデスクワークの方へ": {
+    "segment": "NAGAOKA_LOCAL",
+    "hook": "near",
+    "variant": "X-desk-kubi-b-sanjo",
+    "created": "2026-11-28",
+    "acct": "truth"
+  },
+  "長岡市で肩こりに悩んでいる立ち仕事の方必見": {
+    "segment": "NAGAOKA_LOCAL",
+    "hook": "target",
+    "variant": "T-stand-kata-a",
+    "created": "2026-11-28",
+    "acct": "truth"
+  },
+  "見附市で肩こりに悩んでいる車通勤の方必見": {
+    "segment": "NAGAOKA_LOCAL",
+    "hook": "near",
+    "variant": "X-car-kata-a-mitsuke",
+    "created": "2026-11-28",
+    "acct": "truth"
+  },
+  "長岡市で肩こりに悩んでいる看護師さんへ": {
+    "segment": "NAGAOKA_LOCAL",
+    "hook": "target",
+    "variant": "T-nurse-kata-b",
+    "created": "2026-11-28",
+    "acct": "truth"
+  },
+  "長岡市で、朝の車が温まるまでのあいだ": {
+    "segment": "NAGAOKA_LOCAL",
+    "hook": "local",
+    "variant": "N50",
+    "created": "2026-11-28",
+    "acct": "truth"
+  },
+  "長岡市で整体師として毎日体をみていますが": {
+    "segment": "NAGAOKA_LOCAL",
+    "hook": "owner",
+    "variant": "O06",
+    "created": "2026-11-28",
+    "acct": "truth"
+  },
+  "長岡市で、寝る直前まで": {
+    "segment": "NAGAOKA_LOCAL",
+    "hook": "local",
+    "variant": "N46",
+    "created": "2026-11-28",
+    "acct": "truth"
+  },
+  "長岡市で、渋滞にはまると": {
+    "segment": "NAGAOKA_LOCAL",
+    "hook": "local",
+    "variant": "N28",
+    "created": "2026-11-28",
+    "acct": "truth"
+  },
+  "柏崎市で首こりに悩んでいる40代の女性必見": {
+    "segment": "NAGAOKA_LOCAL",
+    "hook": "near",
+    "variant": "X-w40-kubi-a-kashiwazaki",
+    "created": "2026-11-28",
+    "acct": "truth"
+  },
+  "長岡の赤飯って茶色いよね": {
+    "segment": "NAGAOKA_STORE_LOCAL",
+    "hook": "sekihan",
+    "variant": "S05a",
+    "created": "2026-11-28",
+    "acct": "nagaoka"
+  },
+  "柿の種は長岡生まれと言われています。": {
+    "segment": "NAGAOKA_STORE_LOCAL",
+    "hook": "kakinotane",
+    "variant": "S04a",
+    "created": "2026-11-28",
+    "acct": "nagaoka"
+  },
+  "長岡駅前で待ち合わせするとき": {
+    "segment": "NAGAOKA_STORE_LOCAL",
+    "hook": "ekimae",
+    "variant": "S12a",
+    "created": "2026-11-28",
+    "acct": "nagaoka"
+  },
+  "長岡のお米、家では": {
+    "segment": "NAGAOKA_STORE_LOCAL",
+    "hook": "okome",
+    "variant": "S14a",
+    "created": "2026-11-28",
+    "acct": "nagaoka"
+  },
+  "栃尾の油揚げ、何で食べる派ですか？": {
+    "segment": "NAGAOKA_STORE_LOCAL",
+    "hook": "aburage",
+    "variant": "S01a",
+    "created": "2026-11-28",
+    "acct": "nagaoka"
   }
 }

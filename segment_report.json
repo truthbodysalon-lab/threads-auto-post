@@ -1,6 +1,6 @@
 {
   "acct": "masa",
-  "generated_at": "2026-11-27 10:43",
+  "generated_at": "2026-11-28 10:44",
   "params": {
     "min_n": 5,
     "loser_min_n": 8,
@@ -12,17 +12,17 @@
       30
     ]
   },
-  "registry_loaded": 1020,
-  "log_entries": 8699,
+  "registry_loaded": 1023,
+  "log_entries": 8702,
   "windows": {
     "7d": {
       "baseline": {
-        "n": 21,
-        "median_views": 12,
-        "mean_views": 16.6,
-        "p90_views": 40.0
+        "n": 14,
+        "median_views": 7.0,
+        "mean_views": 10.4,
+        "p90_views": 17.5
       },
-      "unregistered_n": 21,
+      "unregistered_n": 14,
       "segment_hook": {
         "I01__low": {
           "n": 0,
@@ -608,18 +608,18 @@
         },
         "それ以外": {
           "n": 1,
-          "median_views": 9,
-          "mean_views": 9,
-          "p90_views": 9,
-          "index": 0.75,
+          "median_views": 10,
+          "mean_views": 10,
+          "p90_views": 10,
+          "index": 1.429,
           "verdict": "判定保留"
         },
         "転載 全体": {
           "n": 1,
-          "median_views": 9,
-          "mean_views": 9,
-          "p90_views": 9,
-          "index": 0.75,
+          "median_views": 10,
+          "mean_views": 10,
+          "p90_views": 10,
+          "index": 1.429,
           "verdict": "判定保留"
         }
       },
@@ -1508,12 +1508,12 @@
     },
     "14d": {
       "baseline": {
-        "n": 53,
-        "median_views": 7,
-        "mean_views": 20.6,
-        "p90_views": 44.0
+        "n": 35,
+        "median_views": 10,
+        "mean_views": 25.9,
+        "p90_views": 43.6
       },
-      "unregistered_n": 53,
+      "unregistered_n": 35,
       "segment_hook": {
         "I01__low": {
           "n": 0,
@@ -2099,18 +2099,18 @@
         },
         "それ以外": {
           "n": 1,
-          "median_views": 9,
-          "mean_views": 9,
-          "p90_views": 9,
-          "index": 1.286,
+          "median_views": 10,
+          "mean_views": 10,
+          "p90_views": 10,
+          "index": 1.0,
           "verdict": "判定保留"
         },
         "転載 全体": {
           "n": 1,
-          "median_views": 9,
-          "mean_views": 9,
-          "p90_views": 9,
-          "index": 1.286,
+          "median_views": 10,
+          "mean_views": 10,
+          "p90_views": 10,
+          "index": 1.0,
           "verdict": "判定保留"
         }
       },
@@ -2999,12 +2999,12 @@
     },
     "30d": {
       "baseline": {
-        "n": 66,
+        "n": 58,
         "median_views": 7.0,
-        "mean_views": 18.6,
-        "p90_views": 42.5
+        "mean_views": 19.4,
+        "p90_views": 41.8
       },
-      "unregistered_n": 66,
+      "unregistered_n": 58,
       "segment_hook": {
         "I01__low": {
           "n": 0,
@@ -3590,18 +3590,18 @@
         },
         "それ以外": {
           "n": 1,
-          "median_views": 9,
-          "mean_views": 9,
-          "p90_views": 9,
-          "index": 1.286,
+          "median_views": 10,
+          "mean_views": 10,
+          "p90_views": 10,
+          "index": 1.429,
           "verdict": "判定保留"
         },
         "転載 全体": {
           "n": 1,
-          "median_views": 9,
-          "mean_views": 9,
-          "p90_views": 9,
-          "index": 1.286,
+          "median_views": 10,
+          "mean_views": 10,
+          "p90_views": 10,
+          "index": 1.429,
           "verdict": "判定保留"
         }
       },

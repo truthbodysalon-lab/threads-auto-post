@@ -2401,8 +2401,8 @@
       ],
       "last_result": {
         "n": 1,
-        "index": 0.596,
-        "updated": "2026-11-27"
+        "index": 0.737,
+        "updated": "2026-11-28"
       }
     },
     {
@@ -2429,8 +2429,8 @@
       ],
       "last_result": {
         "n": 1,
-        "index": 6.0,
-        "updated": "2026-11-27"
+        "index": 7.421,
+        "updated": "2026-11-28"
       }
     },
     {
@@ -2457,8 +2457,8 @@
       ],
       "last_result": {
         "n": 1,
-        "index": 2.819,
-        "updated": "2026-11-27"
+        "index": 3.487,
+        "updated": "2026-11-28"
       }
     },
     {
@@ -2742,7 +2742,7 @@
       "last_result": {
         "n": 1,
         "index": 34.476,
-        "updated": "2026-11-27"
+        "updated": "2026-11-28"
       }
     },
     {
@@ -4980,7 +4980,7 @@
       "last_result": {
         "n": 1,
         "index": 0.714,
-        "updated": "2026-11-27"
+        "updated": "2026-11-28"
       },
       "evidence": "施術中・毎回の会話で通う理由が育たない(根拠4件・中)。出典: L0428 / L0910T（出典IDは repeat_pain_categories.json の source_ids 参照）"
     },
@@ -5031,8 +5031,8 @@
       ],
       "last_result": {
         "n": 1,
-        "index": 6.429,
-        "updated": "2026-11-27"
+        "index": 6.571,
+        "updated": "2026-11-28"
       },
       "evidence": "会計時の次回の話を客に任せてしまう(根拠5件・中)。出典: CNS / G0326/HYP P023 / G0501/HYP P020 / L0307T（出典IDは repeat_pain_categories.json の source_ids 参照）"
     },
@@ -5500,7 +5500,7 @@
       "last_result": {
         "n": 1,
         "index": 1.286,
-        "updated": "2026-11-27"
+        "updated": "2026-11-28"
       },
       "evidence": "口コミ・紹介が自然に生まれない(根拠4件・中)。出典: HYP P070 / HYP P072 / L0307N / L0428（出典IDは repeat_pain_categories.json の source_ids 参照）"
     },
@@ -5552,7 +5552,7 @@
       "last_result": {
         "n": 1,
         "index": 1.0,
-        "updated": "2026-11-27"
+        "updated": "2026-11-28"
       },
       "evidence": "リピート率・次回予約率の見方が分からない(根拠4件・強)。出典: G0326 / HYP P010/VM323 / HYP P026 / L0307T（出典IDは repeat_pain_categories.json の source_ids 参照）"
     },
@@ -5656,8 +5656,8 @@
       ],
       "last_result": {
         "n": 1,
-        "index": 1.713,
-        "updated": "2026-11-27"
+        "index": 2.118,
+        "updated": "2026-11-28"
       }
     },
     {
@@ -5760,8 +5760,8 @@
       ],
       "last_result": {
         "n": 1,
-        "index": 3.564,
-        "updated": "2026-11-27"
+        "index": 4.408,
+        "updated": "2026-11-28"
       }
     },
     {

@@ -1953,6 +1953,9 @@ POSTS_PER_RUN = int(os.environ.get("POSTS_PER_RUN", "3"))  # 後方互換
 # （2026-07-21 全アカウント47/50本: 21:45の実行後、時間帯内にcron未発火）。
 # 21時100%なら、21〜23時のどこか1回の発火で残りを埋め切れる。
 PACE_FULL_HOUR = int(os.environ.get("PACE_FULL_HOUR", "22"))   # 2026-10-06: 21→22（22時台まで均等に出す）
+# 2026-11-28: 1日30本のアカウントは21時台に満了。常駐ループ10分毎＋25分空けで実際は30分に1本のため、
+# 22時満了だと30本目が23時を過ぎて毎日29本になる（11/27 truth 29/30。模擬でも200回すべて29本）。
+PACE_FULL_HOUR_30 = int(os.environ.get("PACE_FULL_HOUR_30", "21"))
 
 
 def _target_cumulative_by_now(hour: int, acct: str | None = None) -> int:
@@ -1961,8 +1964,10 @@ def _target_cumulative_by_now(hour: int, acct: str | None = None) -> int:
     start = POST_HOUR_START
     if hour < start:
         return 0
-    frac = min(1.0, (hour - start + 1) / max(1, PACE_FULL_HOUR - start + 1))
-    return int(_daily_target(acct) * frac)
+    target = _daily_target(acct)
+    full = min(PACE_FULL_HOUR, PACE_FULL_HOUR_30) if target >= 30 else PACE_FULL_HOUR
+    frac = min(1.0, (hour - start + 1) / max(1, full - start + 1))
+    return int(target * frac)
 
 
 # 2026-11-14 masa指示「各アカウント合計1日10本にして」: 1日10本だと全アカウントが毎時の同じ10分に

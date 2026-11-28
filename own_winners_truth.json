@@ -1,20 +1,19 @@
 {
  "account": "truth",
- "generated": "2026-11-27",
+ "generated": "2026-11-28",
  "window_days": 90,
  "note": "自動投稿システム以外から出た本人の投稿のうち伸びたもの。翻案必須・同一文面の再投稿は禁止（型疲労L8）。構造（フックの型・展開・締め）だけを借りる",
- "fetched_posts": 3894,
- "own_posts": 56,
+ "fetched_posts": 3871,
+ "own_posts": 57,
  "classification": {
-  "exact_body80": 3811,
-  "OWN": 56,
+  "exact_body80": 3788,
+  "OWN": 57,
   "exact_line1": 16,
   "skeleton": 4,
-  "tail_sig": 6,
-  "template_prefix": 1
+  "tail_sig": 6
  },
- "account_median_views": 88.0,
- "winner_threshold": 132.0,
+ "account_median_views": 75.0,
+ "winner_threshold": 112.5,
  "winners": [
   {
    "id": "18125202077514991",
@@ -53,6 +52,18 @@
    ],
    "repeats_in_window": 1,
    "text": "こめかみの痛みが月に何日あるか、数えたことはありますか？10日を超えたら寝姿勢の悪さを整えるタイミングです。"
+  },
+  {
+   "id": "18127790473852153",
+   "views": 349,
+   "date": "2026-10-02",
+   "media": "TEXT_POST",
+   "first_line": "病院で『異常なし』と言われた頭の重さ、運動不足が検査に映らないまま原因になっていることも。",
+   "labels": [
+    "短文"
+   ],
+   "repeats_in_window": 1,
+   "text": "病院で『異常なし』と言われた頭の重さ、運動不足が検査に映らないまま原因になっていることも。"
   },
   {
    "id": "18135192001629863",
@@ -180,6 +191,43 @@
    ],
    "repeats_in_window": 1,
    "text": "仕事や家庭を大切にしてるけど\n自分の事は大切にしないのはなんで？"
+  },
+  {
+   "id": "18376965601242124",
+   "views": 130,
+   "date": "2026-10-11",
+   "media": "TEXT_POST",
+   "first_line": "帝京長岡勝った！！",
+   "labels": [
+    "短文"
+   ],
+   "repeats_in_window": 1,
+   "text": "帝京長岡勝った！！\nあと1勝！！"
+  },
+  {
+   "id": "18128534696488181",
+   "views": 127,
+   "date": "2026-10-02",
+   "media": "TEXT_POST",
+   "first_line": "緊張型頭痛で夜に目が覚めた日、週に何回ですか？3回以上なら運動不足という原因を疑ってみて。",
+   "labels": [
+    "短文"
+   ],
+   "repeats_in_window": 1,
+   "text": "緊張型頭痛で夜に目が覚めた日、週に何回ですか？3回以上なら運動不足という原因を疑ってみて。"
+  },
+  {
+   "id": "18112522589462421",
+   "views": 119,
+   "date": "2026-11-11",
+   "media": "TEXT_POST",
+   "first_line": "え！すご！",
+   "labels": [
+    "地名・出来事",
+    "短文"
+   ],
+   "repeats_in_window": 1,
+   "text": "え！すご！\n長岡市でやるんですね！"
   }
  ]
 }
